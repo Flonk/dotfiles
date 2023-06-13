@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Albert
+Exec=/usr/bin/albert
+Comment=Albert is an application that searches the file system like dash on ubuntu
+X-GNOME-Autostart-enabled=true
+
