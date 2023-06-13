@@ -1,0 +1,76 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+plugins=(aliases git docker docker-compose encode64 helm isodate jsontools kubectl npm z wiener-git)
+
+source $ZSH/oh-my-zsh.sh
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nano'
+ else
+  export EDITOR='code-insiders'
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# git
+alias gprune="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\""
+alias gprune!="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\""
+alias squash="git rebase -i HEAD~5"
+
+#gnu
+alias t="tree -L 2"
+alias crepe="grep -Pzao"
+
+ctlf () {
+    sudo systemctl restart $1
+    sudo journalctl -b -u $1
+}
+
+# sytemctl
+alias ctl="sudo systemctl"
+alias ctlx="sudo systemctl stop"
+alias ctls="sudo systemctl start"
+alias ctlr="sudo systemctl restart"
+alias ctll="sudo journalctl -b -u"
+
+# docker
+alias dka="docker ps -q | xargs docker stop | xargs docker rm"
+alias dka!="docker ps -aq | xargs docker stop | xargs docker rm"
+alias dkav!="docker volume ls | xargs docker volume rm"
+alias dk!="dka! && dkav!"
+
+# telnet
+alias telnetssl="openssl s_client -connect"
+
+# java
+eval "$(jenv init -)" > /dev/null
+export PATH="$HOME/.jenv/bin:$PATH"
+
+# android
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="/home/florian-schindler/Android/Sdk/emulator:$PATH"
+
+# brew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+source <(kubectl completion zsh) > /dev/null
+
+eval $(thefuck --alias) > /dev/null
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
+
+export ANSIBLE_NOCOWS=1
+
+fortune | cowsay

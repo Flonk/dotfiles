@@ -1,0 +1,13 @@
+#! /bin/bash
+
+# brewfile hash: {{ include "Brewfile" | sha256sum }}
+
+echo 'checking if homebrew is installed...'
+if ! [ -x "$(command -v brew)" ]; then
+  echo 'homebrew is not installed. Installing...'
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+echo 'installing brew packages...'
+(cd ~ && brew bundle install)

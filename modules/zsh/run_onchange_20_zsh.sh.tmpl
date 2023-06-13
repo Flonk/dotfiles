@@ -1,0 +1,16 @@
+#! /bin/bash
+
+echo "Checking if zsh is installed..."
+if ! [ -x "$(command -v zsh)" ]; then
+  echo "zsh is not installed. Installing..."
+  brew install zsh
+fi
+
+echo 'checking if oh-my-zsh is installed...'
+if ! [ -d ~/.oh-my-zsh ]; then
+	echo "oh-my-zsh is not installed. Installing..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+  echo "Installing powerlevel10k..."
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+fi
