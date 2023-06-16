@@ -11,14 +11,6 @@
 
 set $mod Mod4
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font pango:Liberation Mono 8
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
-
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
@@ -46,7 +38,7 @@ bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
 
 # Lock screen
-bindsym $mod+l exec --no-startup-id i3lock
+bindsym $mod+l exec --no-startup-id ~/.i3/i3lock-multimonitor/lock
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -56,7 +48,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec uxterm
+bindsym $mod+Return exec urxvt
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -192,14 +184,16 @@ bindsym $mod+minus scratchpad show
 # launch polybar
 exec_always --no-startup-id ~/.config/i3/polybar.sh
 
-# color scheme
+# theme
 # class                 border                  bground                 text                    indicator               child_border
-client.focused          {{ .color_accent_300 }} {{ .color_accent_200 }} {{ .color_accent_800 }} {{ .color_accent_900 }} {{ .color_accent_300 }}
-client.focused_inactive {{ .color_gray_200 }}   {{ .color_gray_100 }}   {{ .color_gray_1000  }} {{ .color_gray_300 }}   {{ .color_gray_200 }}
-client.unfocused        {{ .color_gray_200 }}   {{ .color_gray_100 }}   {{ .color_gray_1000  }} {{ .color_gray_300 }}   {{ .color_gray_200 }}
+client.focused          {{ .color_accent_400 }} {{ .color_accent_400 }} {{ .color_accent_900 }} {{ .color_accent_900 }} {{ .color_accent_300 }}
+client.focused_inactive {{ .color_gray_300 }}   {{ .color_gray_300 }}   {{ .color_gray_800  }} {{ .color_gray_400 }}   {{ .color_gray_300 }}
+client.unfocused        {{ .color_gray_200 }}   {{ .color_gray_200 }}   {{ .color_gray_600  }} {{ .color_gray_300 }}   {{ .color_gray_100 }}
 client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
 client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
 
-default_border normal 1
+default_border normal 0
 hide_edge_borders smart
 smart_borders on
+
+font pango:Liberation Mono 9
