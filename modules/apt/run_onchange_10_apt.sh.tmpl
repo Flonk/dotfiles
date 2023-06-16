@@ -22,7 +22,10 @@ fi
 
 echo 'Checking if polybar is installed...'
 if ! [ -x "$(command -v polybar)" ]; then
+  echo 'Installing polybar...'
   sudo apt install -y polybar
+
+  echo 'Allowing polybar to change brightness...'
   sudo chmod ugo+w /sys/class/backlight/intel_backlight/brightness
 fi
 
