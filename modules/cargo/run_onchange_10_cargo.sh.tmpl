@@ -1,0 +1,9 @@
+#! /bin/bash
+
+echo 'Checking if rust is installed...'
+if ! [ -x "$(command -v rustc)" ]; then
+  echo 'Installing rust...'
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
+cargo install alacritty

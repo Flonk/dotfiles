@@ -1,0 +1,108 @@
+configuration {
+  modi: "run,ssh,window,filebrowser";
+  font: "Hasklug Nerd Font Mono 10";
+}
+
+@theme "/dev/null"
+
+/******************************************************************************
+ * ROFI Color theme
+ * User: Rasi
+ * Copyright: Rasmus Steinke
+ ******************************************************************************/
+* {
+    background-color: {{ .nord_blacker }};
+    text-color: {{ .nord_white }};
+
+}
+window {
+    width: 40em;
+    padding: 2em;
+}
+
+mainbox {
+    border:  0;
+    padding: 0;
+}
+
+message {
+    padding: 0;
+}
+
+textbox {
+    text-color: {{ .nord_white }};
+}
+
+listview {
+    columns: 4;
+}
+element {
+    border:  0;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+element-text {
+    background-color: inherit;
+    text-color:       inherit;
+}
+element.normal.normal {
+    text-color: {{ .nord_white }};
+}
+element.alternate.normal {
+    text-color: {{ .nord_white }};
+    backgorund-color: {{ .nord_black }};
+}
+element.normal.urgent {
+}
+element.normal.active {
+    background-color: {{ .nord_blue }};
+    text-color:       {{ .nord_white }};
+}
+element.selected.normal {
+    background-color: {{ .nord_blue }};
+    text-color:       {{ .nord_blackest }};
+}
+element.selected.urgent {
+}
+element.selected.active {
+}
+
+scrollbar {
+    width:        4px;
+    border:       0;
+    handle-width: 8px;
+    padding:      0;
+    background-color: {{ .nord_blacker }};
+}
+mode-switcher {
+    border:       2px dash 0px 0px;
+}
+button.selected {
+}
+inputbar {
+    spacing:    0;
+    background-color: {{ .nord_black }};
+    padding:    0.5em;
+    border-radius: 0.5em;
+}
+case-indicator {
+    spacing:    0;
+    background-color: {{ .nord_black }};
+}
+entry {
+    spacing:    0; 
+    background-color: {{ .nord_black }};
+}
+prompt {
+    spacing:    0; 
+    background-color: {{ .nord_black }}; 
+}
+inputbar {
+    children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
+}
+textbox-prompt-colon {
+    expand:     false;
+    str:        ":";
+    margin:     0px 0.3em 0em 0em;
+    background-color: {{ .nord_black }};
+}

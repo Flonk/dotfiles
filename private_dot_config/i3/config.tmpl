@@ -51,13 +51,13 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
+# bindsym $mod+d exec --no-startup-id dmenu_run
 # run rofi
 bindsym $mod+space exec --no-startup-id rofi -show run
 
@@ -189,11 +189,11 @@ bindsym $mod+minus scratchpad show
 # launch polybar
 exec_always --no-startup-id ~/.config/i3/polybar.sh
 
-# theme
-# class                 border                  bground                 text                    indicator               child_border
-client.focused          {{ .color_accent_400 }} {{ .color_accent_400 }} {{ .color_accent_900 }} {{ .color_accent_900 }} {{ .color_accent_300 }}
-client.focused_inactive {{ .color_gray_300 }}   {{ .color_gray_300 }}   {{ .color_gray_800  }} {{ .color_gray_400 }}   {{ .color_gray_300 }}
-client.unfocused        {{ .color_gray_200 }}   {{ .color_gray_200 }}   {{ .color_gray_600  }} {{ .color_gray_300 }}   {{ .color_gray_100 }}
+# theme   
+# class                 border                  bground                 text                             indicator               child_border
+client.focused          {{ .nord_blue }}        {{ .nord_blue }}        {{ .nord_blackest }}             {{ .nord_white }}       {{ .color_accent_300 }}
+client.focused_inactive {{ .nord_black }}       {{ .nord_black }}     {{ .nord_light_gray_bright  }}   {{ .color_gray_400 }}   {{ .color_gray_300 }}
+client.unfocused        {{ .nord_blacker }}     {{ .nord_blacker }}       {{ .nord_light_gray_bright  }}   {{ .color_gray_300 }}   {{ .nord_black }}
 client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
 client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
 
@@ -201,7 +201,7 @@ default_border normal 0
 hide_edge_borders smart
 smart_borders on
 
-font pango:Liberation Mono 9
+font pango:Hasklug Nerd Font Mono 9
 
 # screenshots
 bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
