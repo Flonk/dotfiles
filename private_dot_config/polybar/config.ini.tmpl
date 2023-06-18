@@ -34,21 +34,33 @@ border-size = 0pt
 border-color = #00000000
 
 padding-left = 0
-padding-right = 1
+padding-right = 0
 
-module-margin = 2
+module-margin = 0
 
-font-0 = Liberation Mono:pixelsize=10;2
-font-1 = feather:pixelsize=14;3
+font-0 = Hasklug Nerd Font Mono:pixelsize=10;2
+font-1 = feather:pixelsize=14;2
+font-2 = Hasklug Nerd Font Mono:pixelsize=20;5
 
 modules-left = xworkspaces
-modules-right = wlan backlight pulseaudio battery date settings
+modules-right = sep-left-teal wlan sep-left-offblue backlight pulseaudio battery sep-left-glacier date sep-left-blue screenshot nautilus settings
 
 cursor-click = pointer
 cursor-scroll = ns-resize
 
 enable-ipc = true
 wm-restack = i3
+
+[module/button]
+type = custom/script
+format-background = {{ .nord_blue }}
+format-foreground = {{ .nord_black }}
+format-padding = 5px
+
+[module/sep-left]
+type = custom/script
+exec = echo ""
+format-font = 3
 
 [module/xworkspaces]
 type = internal/xworkspaces
@@ -70,29 +82,23 @@ label-empty = %name%
 label-empty-foreground = {{ .color_gray_400 }}
 label-empty-padding = 1
 
-[module/pulseaudio]
-type = internal/pulseaudio
-format-volume = <label-volume>
-label-volume = "%{F#FFFFFF}%{F-} %percentage%%"
-label-muted = "%{F#FFFFFF}%{F-} 0%"
+[module/sep-left-teal]
+inherit = module/sep-left
+format-foreground = {{ .nord_teal }}
 
 [module/wlan]
 type = internal/network
 interval = 5
 format-connected = <label-connected>
 format-disconnected = <label-disconnected>
-label-disconnected = "%{F#FFFFFF}%{F-} %ifname%"
+label-disconnected = "%{A:gnome-control-center wifi:}%{B{{ .nord_teal }}}%{F{{ .nord_black }}}%{F{{ .nord_gray }}} disconnected%{A}"
 interface-type = wireless
-label-connected = "%{F#FFFFFF}%{F-} %essid% %local_ip%"
+label-connected = "%{A:gnome-control-center wifi:}%{B{{ .nord_teal }}}%{F{{ .nord_black }}}%{F{{ .nord_gray }}} %essid:0:15:…%%{A}"
 
-[module/date]
-type = internal/date
-interval = 1
-
-date = "%{F#FFFFFF}%{F-} %Y-%m-%d %H:%M:%S"
-date-alt = "%{F#FFFFFF}%{F-} %Y-%m-%d %H:%M:%S"
-label = %date%
-label-foreground = ${colors.primary}
+[module/sep-left-offblue]
+inherit = module/sep-left
+format-background = {{ .nord_teal }}
+format-foreground = {{ .nord_off_blue }}
 
 [module/backlight]
 type = internal/backlight
@@ -100,7 +106,15 @@ card = intel_backlight
 use-actual-brightness = true
 enable-scroll = true
 format = <label>
-label = "%{F#FFFFFF}%{F-} %percentage%%"
+label = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}}%{F{{ .nord_gray }}} %percentage%% "
+format-background = {{ .nord_off_blue }}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+format-volume = <label-volume>
+label-volume = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%% "
+label-muted = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%% "
+format-background = {{ .nord_off_blue }}
 
 [module/battery]
 type = internal/battery
@@ -111,14 +125,43 @@ adapter = AC
 format-charging = <label-charging>
 format-discharging = <label-discharging>
 format-low = <label-low>
-label-charging = "%{F#FFFFFF}%{F-} %percentage%%"
-label-discharging = "%{F#FFFFFF}%{F-} %percentage%%"
-label-low = "%{F#FFFFFF}%{F-} %percentage%%"
+label-charging = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%%"
+label-discharging = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%%"
+label-low = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%%"
+
+[module/sep-left-glacier]
+inherit = module/sep-left
+format-foreground = {{ .nord_glacier }}
+format-background = {{ .nord_off_blue }}
+
+[module/date]
+type = internal/date
+interval = 1
+format-background = {{ .nord_glacier }}
+date = "%{F{{ .nord_black }}}%{F{{ .nord_gray }}} %Y-%m-%d %H:%M:%S"
+label = %date%
+
+[module/sep-left-blue]
+inherit = module/sep-left
+format-foreground = {{ .nord_blue }}
+format-background = {{ .nord_glacier }}
+
+[module/screenshot]
+inherit = module/button
+exec = echo ""
+click-left = "scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png"
+click-right = "nautilus ~/Pictures/Screenshots"
+
+[module/nautilus]
+inherit = module/button
+exec = echo ""
+click-left = "nautilus"
 
 [module/settings]
-type = custom/script
-exec = echo "%{F#FFFFFF}%{F-}"
+inherit = module/button
+exec = echo ""
 click-left = "gnome-control-center"
+
 
 [settings]
 screenchange-reload = true

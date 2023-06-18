@@ -58,9 +58,11 @@ bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id dmenu_run
+# run rofi
+bindsym $mod+space exec --no-startup-id rofi -show run
 
-# run albert
-bindsym $mod+space exec --no-startup-id albert toggle
+# show keybinds
+bindsym $mod+shift+h exec --no-startup-id "$(grep '^bindsym' ~/.config/i3/config | sed 's/bindsym //' | rofi -i -dmenu)"
 
 # change focus
 bindsym $mod+Left focus left
@@ -200,3 +202,9 @@ hide_edge_borders smart
 smart_borders on
 
 font pango:Liberation Mono 9
+
+# screenshots
+bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
+
+# background image
+exec --no-startup-id feh --bg-fill ~/assets/background.png

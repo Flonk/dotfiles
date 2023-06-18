@@ -2,7 +2,7 @@
 
 echo 'installing apt packages...'
 sudo apt install -y \
-  weechat feh rxvt-unicode neofetch
+  weechat feh rxvt-unicode neofetch ffmpeg neovim
 
 echo 'Checking if i3 is installed...'
 if ! [ -x "$(command -v i3)" ]; then
@@ -29,10 +29,8 @@ if ! [ -x "$(command -v polybar)" ]; then
   sudo chmod ugo+w /sys/class/backlight/intel_backlight/brightness
 fi
 
-echo 'Checking if albert is installed...'
-if ! [ -x "$(command -v albert)" ]; then
-  echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.10/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
-  curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.10/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
-  sudo apt update
-  sudo apt install -y albert
+echo 'Checking if rofi is installed...'
+if ! [ -x "$(command -v rofi)" ]; then
+  echo 'Installing rofi...'
+  sudo apt install -y rofi
 fi
