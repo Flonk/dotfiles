@@ -39,11 +39,11 @@ padding-right = 0
 module-margin = 0
 
 font-0 = Hasklug Nerd Font Mono:pixelsize=10;2
-font-1 = feather:pixelsize=14;2
+font-1 = feather:pixelsize=12;2
 font-2 = Hasklug Nerd Font Mono:pixelsize=20;5
 
 modules-left = xworkspaces
-modules-right = sep-left-teal wlan sep-left-offblue backlight pulseaudio battery sep-left-glacier date sep-left-blue screenshot nautilus settings
+modules-right = sep-right-teal wlan sep-right-offblue backlight pulseaudio battery sep-right-glacier date sep-right-blue screenshot nautilus settings
 
 cursor-click = pointer
 cursor-scroll = ns-resize
@@ -57,7 +57,7 @@ format-background = {{ .nord_blue }}
 format-foreground = {{ .nord_black }}
 format-padding = 5px
 
-[module/sep-left]
+[module/sep-right]
 type = custom/script
 exec = echo ""
 format-font = 3
@@ -67,8 +67,9 @@ type = internal/xworkspaces
 pin-workspaces = true
 
 label-active = %name%
-label-active-background = {{ .color_accent_200 }}
-label-active-underline= {{ .color_accent_400 }}
+label-active-background = {{ .nord_blue }}
+label-active-underline = {{ .nord_blue }}
+label-active-foreground = {{ .nord_black }} 
 label-active-padding = 1
 
 label-occupied = %name%
@@ -79,11 +80,11 @@ label-urgent-background = #AA3333
 label-urgent-padding = 1
 
 label-empty = %name%
-label-empty-foreground = {{ .color_gray_400 }}
+label-empty-foreground = {{ .nord_black }}
 label-empty-padding = 1
 
-[module/sep-left-teal]
-inherit = module/sep-left
+[module/sep-right-teal]
+inherit = module/sep-right
 format-foreground = {{ .nord_teal }}
 
 [module/wlan]
@@ -95,8 +96,8 @@ label-disconnected = "%{A:gnome-control-center wifi:}%{B{{ .nord_teal }}}%{F{{ .
 interface-type = wireless
 label-connected = "%{A:gnome-control-center wifi:}%{B{{ .nord_teal }}}%{F{{ .nord_black }}}%{F{{ .nord_gray }}} %essid:0:15:…%%{A}"
 
-[module/sep-left-offblue]
-inherit = module/sep-left
+[module/sep-right-offblue]
+inherit = module/sep-right
 format-background = {{ .nord_teal }}
 format-foreground = {{ .nord_off_blue }}
 
@@ -129,8 +130,8 @@ label-charging = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_g
 label-discharging = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%%"
 label-low = "%{B{{ .nord_off_blue }}}%{F{{ .nord_black }}} %{F{{ .nord_gray }}} %percentage%%"
 
-[module/sep-left-glacier]
-inherit = module/sep-left
+[module/sep-right-glacier]
+inherit = module/sep-right
 format-foreground = {{ .nord_glacier }}
 format-background = {{ .nord_off_blue }}
 
@@ -141,8 +142,8 @@ format-background = {{ .nord_glacier }}
 date = "%{F{{ .nord_black }}}%{F{{ .nord_gray }}} %Y-%m-%d %H:%M:%S"
 label = %date%
 
-[module/sep-left-blue]
-inherit = module/sep-left
+[module/sep-right-blue]
+inherit = module/sep-right
 format-foreground = {{ .nord_blue }}
 format-background = {{ .nord_glacier }}
 

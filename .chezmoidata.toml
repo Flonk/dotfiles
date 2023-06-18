@@ -21,6 +21,8 @@ color_accent_700 = "#66afe0"
 color_accent_800 = "#99caeb"
 color_accent_900 = "#cce4f5"
 
+nord_blackest = "#000000"
+nord_blacker = "#1D222D"
 nord_black = "#2E3440"
 nord_dark_gray = "#3B4252"
 nord_gray = "#434C5E"
