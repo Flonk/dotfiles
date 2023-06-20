@@ -46,6 +46,9 @@ f () {
     fi
 }
 
+# edit
+alias e="$EDITOR"
+
 
 
 ctlf () {

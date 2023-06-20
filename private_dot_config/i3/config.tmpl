@@ -37,8 +37,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5
 
-# Display connected
-bindsym XF86Display exec --no-startup-id echo "TODOOOOOOOOO"
+# Display connected (diched in favour? of autorandr)
+# bindsym XF86Display exec --no-startup-id bash ~/.config/i3/display.sh
 
 # Lock screen
 bindsym $mod+l exec --no-startup-id ~/.i3/i3lock-multimonitor/lock
@@ -51,7 +51,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec WINIT_X11_SCALE_FACTOR=1 alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
