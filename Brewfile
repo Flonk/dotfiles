@@ -14,5 +14,7 @@ brew "jq"
 brew "wader/tap/fq"
 brew "fzf"
 
+brew "direnv"
+
 # Virtualization
 brew "derailed/k9s/k9s"

@@ -1,0 +1,7 @@
+{
+  "connect second monitor": "scripts/connect_second_monitor.sh",
+  "bitwarden": "scripts/bitwarden.sh",
+  "settings": "scripts/settings.sh",
+  "chezmoi: apply": "scripts/chezmoi_apply.sh",
+  "connect airpods": "scripts/connect_airpods.sh"
+}

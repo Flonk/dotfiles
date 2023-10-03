@@ -26,28 +26,45 @@ fi
 alias gprune="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\""
 alias gprune!="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\""
 alias squash="git rebase -i HEAD~5"
+alias glr="git pull --rebase"
 
 #gnu
 alias t="tree -L 2"
 alias crepe="grep -Pzao"
 
+# edit
+alias c=". ranger"
+alias e="$EDITOR"
+
 # find
 f () {
     if [ -z "$1" ]; then
         if [ -p /dev/stdin ]; then
-            tr '\n' '\0' | xargs -0 -I {} find / -type f -name {} -not -path "*/.*" 2>/dev/null
+            tr '\n' '\0' | xargs -0 -I {} find . -type f -name {} -not -path "*/.*" 2>/dev/null
         else
-            echo "Find files in home directory."
+            echo "Find files in current directory."
             echo "Example: f \"docker-compose.yaml\""
             echo "Example: echo \"a.txt\\\\nb.txt\\\\nc.txt\\\\n\" | f"
         fi
     else
-        find / -type f -name "$1" -not -path "*/.*" 2>/dev/null
+        find . -type f -name "$1" -not -path "*/.*" 2>/dev/null
     fi
 }
 
-# edit
-alias e="$EDITOR"
+# find and edit :o
+fe () {
+    if [ -z "$1" ]; then
+        if [ -p /dev/stdin ]; then
+            f | rofi -dmenu | xargs -I {} $EDITOR {}
+        else
+            echo "Find files in current directory and open them in editor."
+            echo "Example: fe \"docker-compose.yaml\""
+            echo "Example: echo \"a.txt\\\\nb.txt\\\\nc.txt\\\\n\" | fe"
+        fi
+    else
+        f $1 | rofi -dmenu | xargs -I {} $EDITOR {}
+    fi
+}
 
 
 
@@ -93,4 +110,7 @@ complete -o nospace -C /usr/bin/terraform terraform
 
 export ANSIBLE_NOCOWS=1
 
+eval "$(direnv hook zsh)"
+
 fortune | cowsay
+

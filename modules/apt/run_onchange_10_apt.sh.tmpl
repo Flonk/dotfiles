@@ -2,7 +2,7 @@
 
 echo 'installing apt packages...'
 sudo apt install -y \
-  weechat feh rxvt-unicode neofetch ffmpeg neovim pip
+  feh rxvt-unicode neofetch ffmpeg neovim pip ranger qalc
 
 echo 'Checking if i3 is installed...'
 if ! [ -x "$(command -v i3)" ]; then
@@ -35,8 +35,23 @@ if ! [ -x "$(command -v rofi)" ]; then
   sudo apt install -y rofi
 fi
 
-echo 'Checking if autorandr is installed...'
-if ! [ -x "$(command -v autorandr)" ]; then
-  echo 'Installing autorandr...'
-  sudo pip install autorandr
+# todo: npm nvm bw
+echo 'Checking if bwmenu is installed...'
+if ! [ -x "$(command -v bwmenu)" ]; then
+  echo 'Installing bwmenu...'
+  git clone https://github.com/mattydebie/bitwarden-rofi.git
+
+  (
+    cd bitwarden-rofi
+    mkdir -p ~/.local/bin && \
+      cp bwmenu ~/.local/bin/bwmenu && \
+      cp lib-bwmenu ~/.local/bin/lib-bwmenu && \
+      chmod +x ~/.local/bin/bwmenu
+  )
 fi
+
+echo 'Checking if maim is installed...'
+if ! [ -x "$(command -v maim)" ]; then
+  sudo apt install maim
+fi
+
