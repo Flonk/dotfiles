@@ -1,5 +1,5 @@
 # Utilities
-brew "chezmoi"
+brew "n"
 
 brew "tree"
 brew "cowsay"

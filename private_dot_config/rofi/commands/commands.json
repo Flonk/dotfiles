@@ -3,5 +3,6 @@
   "bitwarden": "scripts/bitwarden.sh",
   "settings": "scripts/settings.sh",
   "chezmoi: apply": "scripts/chezmoi_apply.sh",
-  "connect airpods": "scripts/connect_airpods.sh"
+  "connect airpods": "scripts/connect_airpods.sh",
+  "connect rise vpn": "scripts/connect_rise_vpn.sh"
 }

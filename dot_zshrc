@@ -100,6 +100,9 @@ export PATH="/home/florian-schindler/Android/Sdk/emulator:$PATH"
 # brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# qalc
+alias calc="qalc -t"
+
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 source <(kubectl completion zsh) > /dev/null
 
@@ -114,3 +117,4 @@ eval "$(direnv hook zsh)"
 
 fortune | cowsay
 
+[ -f "~/.ghcup/env" ] && source "~/.ghcup/env" # ghcup-env
