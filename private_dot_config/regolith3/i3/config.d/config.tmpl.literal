@@ -1,0 +1,25 @@
+bindsym $mod+p exec --no-startup-id bwmenu
+
+
+# move workspace to different monitor
+bindsym $mod+Ctrl+Right move workspace to output right
+bindsym $mod+Ctrl+Left move workspace to output left
+
+# screenshots
+# bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
+bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
+
+# background image
+# exec --no-startup-id feh --bg-fill ~/assets/background.png
+
+# quick commands
+bindsym $mod+y exec --no-startup-id cd ~/.config/rofi/commands && npm run run
+
+default_border normal 0
+hide_edge_borders smart
+smart_borders on
+
+gaps inner 0
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+e layout toggle split

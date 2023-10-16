@@ -1,0 +1,10 @@
+!regolith.look.path: /usr/share/regolith-look/solarized-dark
+regolith.look.path: /usr/share/regolith-look/default
+
+i3-wm.binding.split_h: v
+i3-wm.binding.split_v: h
+i3-wm.program.wifi: ü
+i3-wm.binding.move_left:
+i3-wm.binding.move_right:
+i3-wm.binding.move_up:
+i3-wm.binding.move_down:
