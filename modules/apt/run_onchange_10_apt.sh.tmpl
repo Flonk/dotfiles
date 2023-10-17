@@ -30,3 +30,9 @@ if ! [ -x "$(command -v maim)" ]; then
   sudo apt install maim
 fi
 
+echo 'Checking if micro is installed...'
+if ! [ -x "$(command -v micro)" ]; then
+  curl https://getmic.ro | bash
+  mv micro ~/bin
+fi
+

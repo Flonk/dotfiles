@@ -5,4 +5,8 @@ wm.binding.split_h: v
 wm.binding.split_v: h
 wm.binding.lock: l
 
+wm.binding.layout_tabbed: w
+wm.binding.layout_stacking: s
+
 gnome.terminal.font: Ubuntu Mono 10
+wm.bar.font: Ubuntu Mono 10

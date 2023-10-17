@@ -67,8 +67,11 @@ set_from_resource $wm.binding.focus_toggle wm.binding.focus_toggle Shift+t
 bindsym $mod+$wm.binding.focus_toggle focus mode_toggle
 
 ## Modify // Window Layout Mode // <> t ##
-set_from_resource $wm.binding.layout_mode wm.binding.layout_mode t
-bindsym $mod+$wm.binding.layout_mode layout toggle tabbed splith splitv
+set_from_resource $wm.binding.layout_tabbed wm.binding.layout_tabbed w
+set_from_resource $wm.binding.layout_stacking wm.binding.layout_stacking s
+bindsym $mod+$wm.binding.layout_tabbed layout tabbed
+bindsym $mod+$wm.binding.layout_stacking layout stacking
+
 
 ## Modify // Move Window to Workspace 1 - 10 // <><Shift> 0..9 ##
 bindsym $mod+Shift+$ws1_key move container to workspace number $ws1

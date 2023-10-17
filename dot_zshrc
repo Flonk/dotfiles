@@ -33,8 +33,10 @@ alias t="tree -L 2"
 alias crepe="grep -Pzao"
 
 # edit
-alias c=". ranger"
+alias c=". ranger --show-only-dirs"
 alias e="$EDITOR"
+alias m="micro"
+alias o="EDITOR=micro ranger"
 
 # find
 f () {
@@ -51,7 +53,7 @@ f () {
     fi
 }
 
-# find and edit :o
+# find and edit
 fe () {
     if [ -z "$1" ]; then
         if [ -p /dev/stdin ]; then
