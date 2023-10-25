@@ -27,16 +27,22 @@ alias gprune="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xarg
 alias gprune!="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\""
 alias squash="git rebase -i HEAD~5"
 alias glr="git pull --rebase"
+gbll () {
+    # check git history of a single line of code
+    local file=$(fzf)
+  cat "$file" | awk '{printf("%5d %s\n", NR, $0)}' \
+    | fzf --layout reverse --preview-window up --preview "echo {} | awk '{print \$1}' | xargs -I _ sh -c \"git log --color -L_,'+1:${file}'\""
+}
 
 #gnu
 alias t="tree -L 2"
 alias crepe="grep -Pzao"
 
 # edit
-alias c=". ranger --show-only-dirs"
+alias c='cd $(fzf --layout reverse --preview-window up --preview "dirname {} | xargs -I {} tree -L 2 {}" --preview-window=wrap | xargs dirname)'
 alias e="$EDITOR"
 alias m="micro"
-alias o="EDITOR=micro ranger"
+alias o="fzf | xargs micro"
 
 # find
 f () {
@@ -50,21 +56,6 @@ f () {
         fi
     else
         find . -type f -name "$1" -not -path "*/.*" 2>/dev/null
-    fi
-}
-
-# find and edit
-fe () {
-    if [ -z "$1" ]; then
-        if [ -p /dev/stdin ]; then
-            f | rofi -dmenu | xargs -I {} $EDITOR {}
-        else
-            echo "Find files in current directory and open them in editor."
-            echo "Example: fe \"docker-compose.yaml\""
-            echo "Example: echo \"a.txt\\\\nb.txt\\\\nc.txt\\\\n\" | fe"
-        fi
-    else
-        f $1 | rofi -dmenu | xargs -I {} $EDITOR {}
     fi
 }
 

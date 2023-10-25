@@ -2,7 +2,7 @@
 
 echo 'installing apt packages...'
 sudo apt install -y \
-  feh zsh rxvt-unicode neofetch ffmpeg neovim pip ranger qalc
+  feh zsh rxvt-unicode neofetch ffmpeg neovim pip ranger qalc vlc
 
 echo 'Checking if rofi is installed...'
 if ! [ -x "$(command -v rofi)" ]; then
@@ -35,4 +35,3 @@ if ! [ -x "$(command -v micro)" ]; then
   curl https://getmic.ro | bash
   mv micro ~/bin
 fi
-
