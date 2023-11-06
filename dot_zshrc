@@ -33,13 +33,14 @@ gbll () {
   cat "$file" | awk '{printf("%5d %s\n", NR, $0)}' \
     | fzf --layout reverse --preview-window up --preview "echo {} | awk '{print \$1}' | xargs -I _ sh -c \"git log --color -L_,'+1:${file}'\""
 }
+alias gsearch="git log --source --all -S"
 
 #gnu
 alias t="tree -L 2"
 alias crepe="grep -Pzao"
 
 # edit
-alias c='cd $(fzf --layout reverse --preview-window up --preview "dirname {} | xargs -I {} tree -L 2 {}" --preview-window=wrap | xargs dirname)'
+alias c='cd ~ && cd $(fzf --layout reverse --preview-window up --preview "dirname {} | xargs -I {} tree -L 2 {}" --preview-window=wrap | xargs dirname)'
 alias e="$EDITOR"
 alias m="micro"
 alias o="fzf | xargs micro"
