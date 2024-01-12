@@ -3,7 +3,13 @@
 echo 'Checking if intellij-idea-ultimate is installed...'
 if ! [ -x "$(command -v intellij-idea-ultimate)" ]; then
   echo 'Installing intellij-idea-ultimate...'
-  snap install intellij-idea-ultimate
+  snap install intellij-idea-ultimate --classic
+fi
+
+echo 'Checking if vscode is installed...'
+if ! [ -x "$(command -v code)" ]; then
+  echo 'Installing vscode...'
+  snap install code --classic
 fi
 
 echo 'Checking if bw is installed...'

@@ -27,7 +27,7 @@ bar {
   separator_symbol $wm.bar.separatorchar
   status_command $wm.bar.status_command
   tray_output $wm.bar.trayoutput
-  padding $wm.bar.traypadding
+  # padding $wm.bar.traypadding
   strip_workspace_numbers $wm.bar.stripworkspacenumbers
   workspace_min_width $wm.bar.workspace_min_width
 

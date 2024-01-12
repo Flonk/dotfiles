@@ -14,7 +14,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nano'
+  export EDITOR='micro -softwrap true'
  else
   export EDITOR='code'
 fi
@@ -83,9 +83,7 @@ alias dk!="dka! && dkav!"
 # telnet
 alias telnetssl="openssl s_client -connect"
 
-# java
-eval "$(jenv init -)" > /dev/null
-export PATH="$HOME/.jenv/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
 # brew
 
@@ -95,7 +93,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 alias calc="qalc -t"
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-source <(kubectl completion zsh) > /dev/null
+# source <(kubectl completion zsh) > /dev/null
 
 eval $(thefuck --alias) > /dev/null
 
