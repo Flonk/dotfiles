@@ -12,3 +12,6 @@ bindsym $mod+Shift+$wm.binding.terminal exec --no-startup-id /usr/bin/x-terminal
 #bindsym $mod+$wm.binding.browser exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
 
 for_window [instance="floating"] floating enabled
+
+## Launch // Application Picker // <> Space ##
+bindsym $mod+space exec --no-startup-id rofi -show run
