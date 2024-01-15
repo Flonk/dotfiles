@@ -71,6 +71,7 @@ set_from_resource $wm.binding.layout_tabbed wm.binding.layout_tabbed w
 set_from_resource $wm.binding.layout_stacking wm.binding.layout_stacking s
 bindsym $mod+$wm.binding.layout_tabbed layout tabbed
 bindsym $mod+$wm.binding.layout_stacking layout stacking
+bindsym $mod+Shift+w split h; split v; layout tabbed
 
 
 ## Modify // Move Window to Workspace 1 - 10 // <><Shift> 0..9 ##

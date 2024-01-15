@@ -2,11 +2,6 @@
 # WM Bar
 ###############################################################################
 
-# Toggle bar visibility
-## Modify // Toggle Bar // <> i ##
-set_from_resource $wm.binding.bar_toggle wm.binding.bar_toggle i
-bindsym $mod+$wm.binding.bar_toggle bar mode toggle
-
 set_from_resource $wm.bar.position wm.bar.position bottom
 set_from_resource $wm.bar.font wm.bar.font monospace
 set_from_resource $wm.bar.separatorchar wm.bar.separatorchar " "

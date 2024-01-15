@@ -7,9 +7,8 @@ set_from_resource $wm.binding.terminal wm.binding.terminal Return
 bindsym $mod+$wm.binding.terminal exec --no-startup-id /usr/bin/x-terminal-emulator
 bindsym $mod+Shift+$wm.binding.terminal exec --no-startup-id /usr/bin/x-terminal-emulator --class floating
 
-## Launch // Browser // <><Shift> Enter ##
-#set_from_resource $wm.binding.browser wm.binding.browser Shift+Return
-#bindsym $mod+$wm.binding.browser exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
+## Launch // Browser // <><Ctrl> Enter ##
+bindsym $mod+Ctrl+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
 
 for_window [instance="floating"] floating enabled
 
@@ -17,3 +16,24 @@ for_window [instance="floating"] floating enabled
 bindsym $mod+space exec --no-startup-id rofi -show run
 
 bindsym $mod+c exec --no-startup-id gnome-control-center
+bindsym $mod+p exec --no-startup-id bwmenu
+
+# move workspace to different monitor
+bindsym $mod+Ctrl+Right move workspace to output right
+bindsym $mod+Ctrl+Left move workspace to output left
+
+# screenshots
+# bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
+bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
+
+# background image
+# exec --no-startup-id feh --bg-fill ~/assets/background.png
+
+# quick commands
+bindsym $mod+y exec --no-startup-id $(cd /home/flo/.config/rofi/commands && npm run run)
+
+# default_border normal 0
+# hide_edge_borders smart
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+e layout toggle split

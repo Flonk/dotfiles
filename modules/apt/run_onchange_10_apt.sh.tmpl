@@ -14,6 +14,7 @@ fi
 echo 'Checking if bwmenu is installed...'
 if ! [ -x "$(command -v bwmenu)" ]; then
   echo 'Installing bwmenu...'
+  sudo apt install keyutils xsel xclip xdotool
   git clone https://github.com/mattydebie/bitwarden-rofi.git
 
   (
