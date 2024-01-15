@@ -13,6 +13,10 @@ brew "nmap"
 brew "jq"
 brew "wader/tap/fq"
 brew "fzf"
+brew "bat"
+brew "ripgrep"
+brew "ripgrep-all"
+brew "neovim"
 
 brew "direnv"
 

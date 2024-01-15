@@ -1,6 +1,3 @@
-!regolith.look.path: /usr/share/regolith-look/solarized-dark
-regolith.look.path: /usr/share/regolith-look/default
-
 wm.binding.split_h: v
 wm.binding.split_v: h
 wm.binding.lock: l

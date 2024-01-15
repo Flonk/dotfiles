@@ -15,3 +15,5 @@ for_window [instance="floating"] floating enabled
 
 ## Launch // Application Picker // <> Space ##
 bindsym $mod+space exec --no-startup-id rofi -show run
+
+bindsym $mod+c exec --no-startup-id gnome-control-center

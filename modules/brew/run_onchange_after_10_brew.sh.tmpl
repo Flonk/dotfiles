@@ -12,4 +12,15 @@ fi
 echo 'installing brew packages...'
 brew tap wader/tap
 brew tap derailed/k9s
+
+echo 'checking if neovim is installed...'
+if ! [ -x "$(command -v nvim)" ]; then
+  brew install neovim
+  # nvchad
+  git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+  # copilot
+  git clone https://github.com/github/copilot.vim.git \
+  ~/.vim/pack/github/start/copilot.vim
+fi
+
 (cd ~ && brew bundle install)

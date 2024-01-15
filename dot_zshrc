@@ -36,30 +36,27 @@ gbll () {
 alias gsearch="git log --source --all -S"
 
 #gnu
-alias t="tree -L 2"
+alias t="tree -L 2 --gitignore --dirsfirst"
 alias crepe="grep -Pzao"
 
 # edit
-alias c='cd ~ && cd $(fzf --layout reverse --preview-window up --preview "dirname {} | xargs -I {} tree -L 2 {}" --preview-window=wrap | xargs dirname)'
 alias e="$EDITOR"
 alias m="micro"
-alias o="fzf | xargs micro"
 
-# find
-f () {
-    if [ -z "$1" ]; then
-        if [ -p /dev/stdin ]; then
-            tr '\n' '\0' | xargs -0 -I {} find . -type f -name {} -not -path "*/.*" 2>/dev/null
-        else
-            echo "Find files in current directory."
-            echo "Example: f \"docker-compose.yaml\""
-            echo "Example: echo \"a.txt\\\\nb.txt\\\\nc.txt\\\\n\" | f"
-        fi
-    else
-        find . -type f -name "$1" -not -path "*/.*" 2>/dev/null
-    fi
-}
+export FZF_DEFAULT_COMMAND='rg --files'
+FZF_FILE_PREVIEW_COMMAND='if file --mime {} | grep -q binary; then head -c 1MB {}; else bat --color always {} | head -n 1000; fi'
+FZF_FOLDER_PREVIEW_COMMAND='dirname {} | xargs -I _ tree -C -L 2 --gitignore --dirsfirst _'
 
+alias fzf-preview='fzf --layout reverse \
+  --preview-window up \
+  --preview-window=wrap \
+  --bind "ctrl-f:change-preview:'"$FZF_FILE_PREVIEW_COMMAND"'" \
+  --bind "ctrl-d:change-preview:'"$FZF_FOLDER_PREVIEW_COMMAND"'" \
+  --header "ctrl-f: file preview, ctrl-d: folder preview" \
+  --header-first'
+
+alias c='cd ~ && cd "$(fzf-preview  --preview "'"$FZF_FOLDER_PREVIEW_COMMAND"'" |  xargs  -d "\n" dirname)"'
+alias o='fzf-preview --preview "'"$FZF_FILE_PREVIEW_COMMAND"'" | xargs micro'
 
 
 ctlf () {

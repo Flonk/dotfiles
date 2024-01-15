@@ -2,7 +2,7 @@
 
 echo 'installing apt packages...'
 sudo apt install -y \
-  i3 i3blocks feh zsh rxvt-unicode neofetch ffmpeg neovim pip ranger qalc vlc cmake
+  i3 i3blocks feh zsh rxvt-unicode neofetch ffmpeg pip ranger qalc vlc cmake blueman
 
 echo 'Checking if rofi is installed...'
 if ! [ -x "$(command -v rofi)" ]; then
@@ -34,4 +34,10 @@ echo 'Checking if micro is installed...'
 if ! [ -x "$(command -v micro)" ]; then
   curl https://getmic.ro | bash
   mv micro ~/bin
+fi
+
+echo 'Checking if docker is installed...'
+if ! [ -x "$(command -v docker)" ]; then
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sudo sh ./get-docker.sh
 fi
