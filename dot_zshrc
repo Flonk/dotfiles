@@ -36,7 +36,7 @@ gbll () {
 alias gsearch="git log --source --all -S"
 
 #gnu
-alias t="tree -L 2 --gitignore --dirsfirst"
+alias t="tree -L 2 -a -I '.git' --gitignore --dirsfirst"
 alias crepe="grep -Pzao"
 
 # edit
@@ -44,7 +44,7 @@ alias e="$EDITOR"
 alias m="micro"
 
 export FZF_DEFAULT_COMMAND='rg --files'
-FZF_FILE_PREVIEW_COMMAND='if file --mime {} | grep -q binary; then head -c 1MB {}; else bat --color always {} | head -n 1000; fi'
+FZF_FILE_PREVIEW_COMMAND='if file --mime {} | grep -q binary; then head -c 1MB {}; else bat -p --color always {} | head -n 1000; fi'
 FZF_FOLDER_PREVIEW_COMMAND='dirname {} | xargs -I _ tree -C -L 2 --gitignore --dirsfirst _'
 
 alias fzf-preview='fzf --layout reverse \
@@ -90,7 +90,10 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 alias calc="qalc -t"
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-# source <(kubectl completion zsh) > /dev/null
+
+# kubernetes
+source <(kubectl completion zsh) > /dev/null
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 eval $(thefuck --alias) > /dev/null
 

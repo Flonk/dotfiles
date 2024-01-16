@@ -2,15 +2,9 @@
 
 echo 'installing apt packages...'
 sudo apt install -y \
-  i3 i3blocks feh zsh rxvt-unicode neofetch ffmpeg pip ranger qalc vlc cmake blueman
+  i3 i3blocks rofi feh zsh rxvt-unicode neofetch ffmpeg \
+  pip ranger qalc vlc cmake blueman maim
 
-echo 'Checking if rofi is installed...'
-if ! [ -x "$(command -v rofi)" ]; then
-  echo 'Installing rofi...'
-  sudo apt install -y rofi
-fi
-
-# todo: npm nvm bw
 echo 'Checking if bwmenu is installed...'
 if ! [ -x "$(command -v bwmenu)" ]; then
   echo 'Installing bwmenu...'
@@ -24,11 +18,6 @@ if ! [ -x "$(command -v bwmenu)" ]; then
       cp lib-bwmenu ~/.local/bin/lib-bwmenu && \
       chmod +x ~/.local/bin/bwmenu
   )
-fi
-
-echo 'Checking if maim is installed...'
-if ! [ -x "$(command -v maim)" ]; then
-  sudo apt install maim
 fi
 
 echo 'Checking if micro is installed...'

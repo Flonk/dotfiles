@@ -123,21 +123,8 @@ set_from_resource $wm.bar.workspace.urgent.background.color wm.bar.workspace.urg
 set_from_resource $wm.bar.workspace.urgent.text.color wm.bar.workspace.urgent.text.color "#fdf6e3"
 
 # Sets wm font for dialogs
-set_from_resource $wm.font gtk.font_name Sans 13
+set_from_resource $wm.font gtk.font_name "MesloLGS NF" 13
 font pango:$wm.font
-
-###############################################################################
-# WM Config Partials
-###############################################################################
-
-# Include common partials
-include /usr/share/regolith/common/config.d/*
-
-# Include any regolith i3 partials
-include /usr/share/regolith/i3/config.d/*
-
-# Include any partials common between i3 and sway sessions
-include $HOME/.config/regolith3/common-wm/config.d/*
 
 # Include any user i3 partials
 include $HOME/.config/regolith3/i3/config.d/*
