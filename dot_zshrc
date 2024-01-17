@@ -58,6 +58,20 @@ alias fzf-preview='fzf --layout reverse \
 alias c='cd ~ && cd "$(fzf-preview  --preview "'"$FZF_FOLDER_PREVIEW_COMMAND"'" |  xargs  -d "\n" dirname)"'
 alias o='fzf-preview --preview "'"$FZF_FILE_PREVIEW_COMMAND"'" | xargs micro'
 
+function frg {
+  result=$(rg --ignore-case --color=always --line-number --no-heading "$@" |
+    fzf --ansi \
+        --color 'hl:-1:underline,hl+:-1:underline:reverse' \
+        --delimiter ':' \
+        --preview "bat --color=always {1} --theme='Solarized (light)' --highlight-line {2}" \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3')
+  file=${result%%:*}
+  linenumber=$(echo "${result}" | cut -d: -f2)
+  if [[ -n "$file" ]]; then
+          $EDITOR +"${linenumber}" "$file"
+  fi
+}
+
 
 ctlf () {
     sudo systemctl restart $1
@@ -76,6 +90,7 @@ alias dka="docker ps -q | xargs docker stop | xargs docker rm"
 alias dka!="docker ps -aq | xargs docker stop | xargs docker rm"
 alias dkav!="docker volume ls | xargs docker volume rm"
 alias dk!="dka! && dkav!"
+alias dr!="dk! && dcup > /dev/null"
 
 # telnet
 alias telnetssl="openssl s_client -connect"
@@ -83,7 +98,6 @@ alias telnetssl="openssl s_client -connect"
 export PATH="$HOME/bin:$PATH"
 
 # brew
-
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # qalc
