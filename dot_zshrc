@@ -14,10 +14,11 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='micro -softwrap true'
+  export EDITOR='nano'
  else
-  export EDITOR='code'
+  export EDITOR='micro -softwrap true'
 fi
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -55,8 +56,47 @@ alias fzf-preview='fzf --layout reverse \
   --header "ctrl-f: file preview, ctrl-d: folder preview" \
   --header-first'
 
-alias c='cd ~ && cd "$(fzf-preview  --preview "'"$FZF_FOLDER_PREVIEW_COMMAND"'" |  xargs  -d "\n" dirname)"'
-alias o='fzf-preview --preview "'"$FZF_FILE_PREVIEW_COMMAND"'" | xargs micro'
+alias fzf-file-preview='fzf-preview --preview "'"$FZF_FILE_PREVIEW_COMMAND"'"'
+alias fzf-folder-preview='fzf-preview --preview "'"$FZF_FOLDER_PREVIEW_COMMAND"'"'
+
+alias c='cd ~ && cd "$(fzf-folder-preview | xargs -d "\n" dirname)"'
+alias o='fzf-file-preview | xargs micro'
+
+
+gff() {
+  local git_root=$(git rev-parse --show-toplevel)
+  local directory
+  if [[ -n $1 ]]; then
+    directory="$1"
+  else
+    directory=$git_root
+  fi
+
+  local file=$(cd "$directory" && fzf-file-preview)
+  local relative_path
+
+  if [[ -n $file ]]; then
+    local relative_path=$(realpath --relative-to="$git_root" "$file")
+    echo "Selected file relative to Git root: $relative_path"
+  else
+    echo "No file selected."
+    break
+  fi
+
+  local string=$(echo $file | fzf --layout=reverse \
+      --preview="git log -p --color -S{q} -- $file | delta" \
+      --preview-window "up:99%:wrap" \
+      --prompt="Enter Search String: " \
+      --print-query)
+  
+  local commit=$(git log --color --oneline -S"$string" -- "$file" | fzf \
+      --ansi --layout=reverse \
+      --preview="cd '$directory' && git show {1}:'$relative_path' | bat --color always --file-name '$file'" \
+      --preview-window "up:80%:wrap" \
+      --prompt="Select commit: " | awk '{print $1}')
+
+  git show "$commit:$relative_path"
+}
 
 function frg {
   result=$(rg --ignore-case --color=always --line-number --no-heading "$@" |
@@ -117,7 +157,7 @@ complete -o nospace -C /usr/bin/terraform terraform
 export ANSIBLE_NOCOWS=1
 
 eval "$(direnv hook zsh)"
-
-fortune | cowsay
-
 [ -f "~/.ghcup/env" ] && source "~/.ghcup/env" # ghcup-env
+
+CURRENT_COW=$(fortune | cowsay)
+echo $CURRENT_COW

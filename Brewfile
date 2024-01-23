@@ -17,6 +17,7 @@ brew "bat"
 brew "ripgrep"
 brew "ripgrep-all"
 brew "neovim"
+brew "git-delta"
 
 brew "direnv"
 
