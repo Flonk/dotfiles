@@ -7,7 +7,7 @@
 JSON_FILE="./map2.json"
 
 # Path to your repository or directory where you want to perform search and replace
-REPO_PATH="/home/flo/repos/wireguard-manager"
+REPO_PATH="~/repos/blalbal"
 
 # Read each JSON object from the file
 while IFS= read -r line; do
