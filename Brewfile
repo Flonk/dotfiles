@@ -24,3 +24,4 @@ brew "direnv"
 
 # Virtualization
 brew "derailed/k9s/k9s"
+brew "kubeseal"
