@@ -104,6 +104,23 @@ function frg {
   fi
 }
 
+figlet-all() {
+  for font in /usr/share/figlet/*.tlf; do
+      font_name=$(basename "$font" .tlf)
+      figlet -f $font_name "$1"
+      echo "$font_name"
+      echo
+      echo
+  done
+}
+
+figlet-fzf() {
+  ls /usr/share/figlet/*.tlf | xargs -I {} basename "{}" .tlf | fzf \
+    --phony --no-mouse --multi --layout reverse \
+    --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+    --preview "echo {+} | xargs -d' ' -I _ figlet -f _ '{q}'" \
+    --header "figlet"
+}
 
 ctlf () {
     sudo systemctl restart $1
