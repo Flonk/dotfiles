@@ -1,0 +1,32 @@
+###############################################################################
+# Launcher dialogs
+###############################################################################
+
+# Window modifiers
+for_window [instance="floating"] floating enabled
+
+# Base launchers
+set_from_resource $wm.binding.terminal wm.binding.terminal Return
+bindsym $mod+Return exec --no-startup-id /usr/bin/x-terminal-emulator
+bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/x-terminal-emulator --class floating
+bindsym $mod+Ctrl+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
+
+bindsym $mod+space exec --no-startup-id rofi -show run
+bindsym $mod+y exec --no-startup-id "PATH=$PATH:/home/linuxbrew/.linuxbrew/bin && cd /home/flo/.config/rofi/commands && npm run run"
+bindsym $mod+c exec --no-startup-id gnome-control-center
+bindsym $mod+p exec --no-startup-id bwmenu
+
+bindsym $mod+Shift+q [con_id="__focused__"] kill
+
+# i3 specifics
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Escape exec i3lock
+
+# Screenshots
+# bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
+bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
+
+# Always on
+set_from_resource $wm.program.nm-applet wm.program.nm-applet /usr/bin/nm-applet
+exec --no-startup-id $wm.program.nm-applet

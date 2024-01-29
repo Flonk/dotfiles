@@ -18,6 +18,7 @@ brew "ripgrep"
 brew "ripgrep-all"
 brew "neovim"
 brew "git-delta"
+brew "calcurse"
 
 brew "direnv"
 

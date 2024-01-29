@@ -73,15 +73,7 @@ gff() {
   fi
 
   local file=$(cd "$directory" && fzf-file-preview)
-  local relative_path
-
-  if [[ -n $file ]]; then
-    local relative_path=$(realpath --relative-to="$git_root" "$file")
-    echo "Selected file relative to Git root: $relative_path"
-  else
-    echo "No file selected."
-    break
-  fi
+  local relative_path=$(realpath --relative-to="$git_root" "$file")
 
   local string=$(echo $file | fzf --layout=reverse \
       --preview="git log -p --color -S{q} -- $file | delta" \
