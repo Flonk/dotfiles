@@ -1,5 +1,6 @@
 {
   "connect second monitor": "scripts/connect_second_monitor.sh",
   "settings": "scripts/settings.sh",
-  "connect airpods": "scripts/connect_airpods.sh"
+  "connect airpods": "scripts/connect_airpods.sh",
+  "shutdown": "scripts/shutdown.sh"
 }

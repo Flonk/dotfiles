@@ -31,3 +31,18 @@ bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image
 # Always on
 set_from_resource $wm.program.nm-applet wm.program.nm-applet /usr/bin/nm-applet
 exec --no-startup-id $wm.program.nm-applet
+
+# Media volume controls
+bindsym XF86AudioMute exec amixer -D pulse sset Master toggle
+bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
+bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous

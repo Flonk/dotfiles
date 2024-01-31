@@ -30,6 +30,9 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 source <(kubectl completion zsh) > /dev/null
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+# minikube
+source <(minikube completion zsh) > /dev/null
+
 # thefuck
 eval $(thefuck --alias) > /dev/null
 
