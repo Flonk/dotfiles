@@ -1,14 +1,5 @@
 ###############################################################################
-# i3bar
+# Polybar
 ###############################################################################
 
-bar {
-  position bottom
-  mode dock
-  font pango:monospace 10
-  separator_symbol " "
-  status_command i3blocks
-  tray_output primary
-  strip_workspace_numbers yes
-  workspace_min_width 36
-}
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh

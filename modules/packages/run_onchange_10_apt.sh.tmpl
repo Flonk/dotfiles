@@ -7,9 +7,9 @@ cat << EOF
 EOF
 
 sudo apt install -y \
-  i3blocks rofi feh zsh rxvt-unicode neofetch ffmpeg \
+  rofi feh zsh rxvt-unicode neofetch ffmpeg \
   pip ranger qalc vlc cmake blueman maim xbacklight \
-  playerctl
+  playerctl polybar net-tools compton
 
 echo 'Checking if i3 is installed...'
 if ! [ -x "$(command -v i3)"]; then 
@@ -45,4 +45,11 @@ echo 'Checking if docker is installed...'
 if ! [ -x "$(command -v docker)" ]; then
   curl -fsSL https://get.docker.com -o get-docker.sh
   sudo sh ./get-docker.sh
+fi
+
+echo 'Checking if zscroll is installed...'
+if ! [ -x "$(command -v zscroll)" ]; then
+  git clone https://github.com/noctuid/zscroll
+  cd zscroll
+  sudo python3 setup.py install
 fi

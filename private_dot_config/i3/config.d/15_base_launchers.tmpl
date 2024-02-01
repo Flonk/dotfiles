@@ -2,6 +2,9 @@
 # Launcher dialogs
 ###############################################################################
 
+# Launch window compositor
+exec_always compton --config ~/.config/.compton.conf
+
 # Window modifiers
 for_window [instance="floating"] floating enabled
 
@@ -38,8 +41,8 @@ bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
 bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec xrandr --output $DISPLAY_NAME --brightness $(echo "if($(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) + 0.1 > 1) 1 else $(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) + 0.1" | bc)
+bindsym XF86MonBrightnessDown exec xrandr --output $DISPLAY_NAME --brightness $(echo "if($(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) - 0.1 < 0) 0 else $(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) - 0.1" | bc)
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
