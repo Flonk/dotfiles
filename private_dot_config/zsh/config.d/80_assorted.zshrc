@@ -45,6 +45,9 @@ export ANSIBLE_NOCOWS=1
 # direnv
 eval "$(direnv hook zsh)"
 
+# bat
+alias man="batman"
+
 # ghc
 [ -f "~/.ghcup/env" ] && source "~/.ghcup/env"
 
