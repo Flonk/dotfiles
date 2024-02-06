@@ -3,10 +3,10 @@
 ###############################################################################
 
 # Launch window compositor
-exec_always picom --config ~/.config/.compton.conf
+exec_always --no-startup-id picom --config ~/.config/.compton.conf
 
 # Set background image
-exec_always feh --bg-fill {{ .background_image }}
+exec_always --no-startup-id feh --bg-fill {{ .background_image }}
 
 # Window modifiers
 for_window [instance="floating"] floating enabled
@@ -28,7 +28,7 @@ bindsym --release --border button2 kill
 # i3 specifics
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Escape exec i3lock -k --pass-media-keys --pass-screen-keys --pass-volume-keys --greeter-text="HAAALLLOOOOO" --greeter-pos="100:100" --greeter-size=12 --verif-text="" --wrong-text="nope \!" -B 2 --radius 300 --ring-width 150 --ring-color=fba92233 --inside-color=00000033 --line-color=00000000 --ringver-color=fba92255 --insidever-color=00000033 --ringwrong-color=8c0a0aaa --greeter-font=monospace --date-font=monospace --time-font=monospace --separator-color=00000000 --keyhl-color=fba92288 --bshl-color=000000aa --time-color=ffffffff --timeoutline-color=00000033 --timeoutline-width=1 --date-color=ffffffff --dateoutline-color=00000033 --dateoutline-width=1 --greeter-color=ffffffff --greeteroutline-color=00000033 --greeteroutline-width=1 --date-str="%Y-%m-%d"
+bindsym $mod+Escape exec --no-startup-id i3lock -k --pass-media-keys --pass-screen-keys --pass-volume-keys --greeter-text="HAAALLLOOOOO" --greeter-pos="100:100" --greeter-size=12 --verif-text="" --wrong-text="nope \!" -B 2 --radius 300 --ring-width 150 --ring-color=fba92233 --inside-color=00000033 --line-color=00000000 --ringver-color=fba92255 --insidever-color=00000033 --ringwrong-color=8c0a0aaa --greeter-font=monospace --date-font=monospace --time-font=monospace --separator-color=00000000 --keyhl-color=fba92288 --bshl-color=000000aa --time-color=ffffffff --timeoutline-color=00000033 --timeoutline-width=1 --date-color=ffffffff --dateoutline-color=00000033 --dateoutline-width=1 --greeter-color=ffffffff --greeteroutline-color=00000033 --greeteroutline-width=1 --date-str="%Y-%m-%d"
 
 # Screenshots
 # bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
@@ -44,8 +44,8 @@ bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
 bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xrandr --output $DISPLAY_NAME --brightness $(echo "if($(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) + 0.1 > 1) 1 else $(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) + 0.1" | bc)
-bindsym XF86MonBrightnessDown exec xrandr --output $DISPLAY_NAME --brightness $(echo "if($(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) - 0.1 < 0) 0 else $(xrandr --verbose | grep ^$DISPLAY_NAME -A5 | grep Brightness | cut -d ' ' -f2) - 0.1" | bc)
+bindsym XF86MonBrightnessUp exec xrandr --output {{ .primary_monitor }} --brightness $(echo "if($(xrandr --verbose | grep ^{{ .primary_monitor }} -A5 | grep Brightness | cut -d ' ' -f2) + 0.1 > 1) 1 else $(xrandr --verbose | grep ^{{ .primary_monitor }} -A5 | grep Brightness | cut -d ' ' -f2) + 0.1" | bc)
+bindsym XF86MonBrightnessDown exec xrandr --output {{ .primary_monitor }} --brightness $(echo "if($(xrandr --verbose | grep ^{{ .primary_monitor }} -A5 | grep Brightness | cut -d ' ' -f2) - 0.1 < 0) 0 else $(xrandr --verbose | grep ^{{ .primary_monitor }} -A5 | grep Brightness | cut -d ' ' -f2) - 0.1" | bc)
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause

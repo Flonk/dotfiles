@@ -4,3 +4,5 @@ primary_monitor = "eDP-1"
 primary_network_interface = "wlp0s20f3"
 
 background_image = "~/assets/wallhaven-1pl679.png"
+
+primary_color = "#d78604"

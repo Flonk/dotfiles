@@ -7,8 +7,8 @@ height = 30
 background = #aa000000
 foreground = #ccffffff
 
-line-color = #fba922
-line-size = 1
+line-color = {{ .primary_color }}
+line-size = 3
 
 spacing = 3
 padding-right = 4
@@ -54,7 +54,7 @@ format-discharging = BAT <label-discharging>
 format-full = BAT <label-full>
 
 label-charging = %{F#aaff77}%percentage%%%{F-}
-label-discharging = %{F#fba922}%percentage%%%{F-}
+label-discharging = %{F{{ .primary_color }}}%percentage%%%{F-}
 label-full = %{F#aaff77}%percentage%%%{F-}
 
 [module/cpu]
@@ -77,10 +77,10 @@ ramp-coreload-3-font = 2
 ramp-coreload-3-foreground = #aaff77
 ramp-coreload-4 = ▅
 ramp-coreload-4-font = 2
-ramp-coreload-4-foreground = #fba922
+ramp-coreload-4-foreground = #d78604
 ramp-coreload-5 = ▆
 ramp-coreload-5-font = 2
-ramp-coreload-5-foreground = #fba922
+ramp-coreload-5-foreground = #d78604
 ramp-coreload-6 = ▇
 ramp-coreload-6-font = 2
 ramp-coreload-6-foreground = #ff5555
@@ -90,12 +90,12 @@ ramp-coreload-7-foreground = #ff5555
 
 [module/date]
 type = internal/date
-date = %%{F#99}%Y-%m-%d%%{F-}  %%{F#fba922}%H:%M:%S%
+date = %Y-%m-%d  %%{F{{ .primary_color }}}%H:%M:%S%
 
 [module/memory]
 type = internal/memory
 format = <label>
-label = RAM %{F#fba922}%percentage_used%%%{F-}
+label = RAM %{F{{ .primary_color }}}%percentage_used%%%{F-}
 
 [module/wireless-network]
 type = internal/network
@@ -104,7 +104,7 @@ interval = 3.0
 ping-interval = 10
 
 format-connected = WIFI <label-connected>
-label-connected = %{F#fba922}%essid%%{F-}
+label-connected = %{F{{ .primary_color }}}%essid%%{F-}
 label-disconnected =    not connected
 label-disconnected-foreground = #66
 
@@ -132,33 +132,33 @@ label-open = 
 label-close = 
 
 menu-0-0 = Restart i3
-menu-0-0-foreground = #fba922
+menu-0-0-foreground = {{ .primary_color }}
 menu-0-0-exec = i3-msg restart
 menu-0-1 = Reboot
-menu-0-1-foreground = #fba922
+menu-0-1-foreground = {{ .primary_color }}
 menu-0-1-exec = menu_open-1
 menu-0-2 = Power off
-menu-0-2-foreground = #fba922
+menu-0-2-foreground = {{ .primary_color }}
 menu-0-2-exec = menu_open-2
 
 menu-1-0 = Cancel
-menu-1-0-foreground = #fba922
+menu-1-0-foreground = {{ .primary_color }}
 menu-1-0-exec = menu_open-0
 menu-1-1 = Reboot
-menu-1-1-foreground = #fba922
+menu-1-1-foreground = {{ .primary_color }}
 menu-1-1-exec = sudo reboot
 
 menu-2-0 = Power off
-menu-2-0-foreground = #fba922
+menu-2-0-foreground = {{ .primary_color }}
 menu-2-0-exec = sudo poweroff
 menu-2-1 = Cancel
-menu-2-1-foreground = #fba922
+menu-2-1-foreground = {{ .primary_color }}
 menu-2-1-exec = menu_open-0
 
 [module/clock]
 type = internal/date
 interval = 2
-date = %%{F#999}%Y-%m-%d%%{F-}  %%{F#fba922}%H:%M%%{F-}
+date = %%{F#999}%Y-%m-%d%%{F-}  %%{F{{ .primary_color }}}%H:%M%%{F-}
 
 [module/i3]
 type = internal/i3
@@ -177,7 +177,7 @@ label-mode-background = #e60053
 label-focused = %index%
 label-focused-foreground = #ffffff
 label-focused-background = #3f3f3f
-label-focused-underline = #fba922
+label-focused-underline = {{ .primary_color }}
 label-focused-padding = 4
 
 ; Available tokens:
@@ -241,5 +241,5 @@ interval = 5
 format-volume = VOL <label-volume>
 format-muted = VOL <label-muted>
 
-label-volume = %{F#fba922}%percentage%%%{F-}
-label-muted = %{F#fba922}muted%{F-}
+label-volume = %{F{{ .primary_color }}}%percentage%%%{F-}
+label-muted = %{F{{ .primary_color }}}muted%{F-}

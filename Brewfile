@@ -8,6 +8,7 @@ brew "toilet"
 brew "thefuck"
 
 brew "htop"
+brew "btop"
 brew "nmap"
 
 brew "jq"
