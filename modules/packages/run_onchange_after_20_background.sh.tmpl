@@ -1,8 +1,6 @@
 #! /bin/bash
 
-# background hash: {{ include "assets/background.png" | sha256sum }}
+# background hash: {{ include "assets/wallhaven.png" | sha256sum }}
 
 echo 'setting background...'
-feh --bg-fill ~/assets/background.png
-mkdir -p ~/.i3/i3lock-multimonitor/img
-cp ~/assets/background.png ~/.i3/i3lock-multimonitor/img
+feh --bg-fill ~/assets/wallhaven.png

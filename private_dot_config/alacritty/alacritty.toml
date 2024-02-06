@@ -3,7 +3,7 @@ background = "#1f1f1f"
 foreground = "#FFFFFF"
 
 [font]
-size = 8
+size = 6
 
 [font.normal]
 family = "MesloLGS NF"

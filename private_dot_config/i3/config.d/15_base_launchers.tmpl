@@ -31,8 +31,8 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Escape exec --no-startup-id i3lock -k --pass-media-keys --pass-screen-keys --pass-volume-keys --greeter-text="HAAALLLOOOOO" --greeter-pos="100:100" --greeter-size=12 --verif-text="" --wrong-text="nope \!" -B 2 --radius 300 --ring-width 150 --ring-color=fba92233 --inside-color=00000033 --line-color=00000000 --ringver-color=fba92255 --insidever-color=00000033 --ringwrong-color=8c0a0aaa --greeter-font=monospace --date-font=monospace --time-font=monospace --separator-color=00000000 --keyhl-color=fba92288 --bshl-color=000000aa --time-color=ffffffff --timeoutline-color=00000033 --timeoutline-width=1 --date-color=ffffffff --dateoutline-color=00000033 --dateoutline-width=1 --greeter-color=ffffffff --greeteroutline-color=00000033 --greeteroutline-width=1 --date-str="%Y-%m-%d"
 
 # Screenshots
-# bindsym $mod+Shift+y exec --no-startup-id scrot ~/Pictures/Screenshots/%Y-%m-%d-%H-%M-%S.png
-bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
+bindsym Print exec --no-startup-id "bash ~/.config/scripts/screenshot.sh"
+bindsym Ctrl+Print exec --no-startup-id "bash ~/.config/scripts/colorpicker.sh"
 
 # Always on
 set_from_resource $wm.program.nm-applet wm.program.nm-applet /usr/bin/nm-applet
@@ -51,4 +51,4 @@ bindsym XF86MonBrightnessDown exec xrandr --output {{ .primary_monitor }} --brig
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioPause exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPrev exec playerctl previous 
