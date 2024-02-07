@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "run": "node index.js | rofi -dmenu | xargs -I {} node index.js {} | xargs -I {} bash {}"
+    "run": "node index.js | rofi -i -dmenu -p 'Quick commands' | xargs -I {} node index.js {} | xargs -I {} bash {}"
   },
   "author": "",
   "license": "ISC"

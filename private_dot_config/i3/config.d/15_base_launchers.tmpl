@@ -17,7 +17,7 @@ bindsym $mod+Return exec --no-startup-id /usr/bin/x-terminal-emulator
 bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/x-terminal-emulator --class floating
 bindsym $mod+Ctrl+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
 
-bindsym $mod+space exec --no-startup-id rofi -show run
+bindsym $mod+space exec --no-startup-id rofi -i -show drun -p "Run" -show-icons
 bindsym $mod+y exec --no-startup-id "PATH=$PATH:/home/linuxbrew/.linuxbrew/bin && cd /home/{{ .username }}/.config/rofi/commands && npm run run"
 bindsym $mod+c exec --no-startup-id gnome-control-center
 bindsym $mod+p exec --no-startup-id bwmenu

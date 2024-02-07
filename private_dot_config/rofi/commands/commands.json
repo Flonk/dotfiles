@@ -1,6 +1,8 @@
 {
-  "connect second monitor": "scripts/connect_second_monitor.sh",
-  "settings": "scripts/settings.sh",
-  "connect airpods": "scripts/connect_airpods.sh",
+  "second monitor: connect": "scripts/connect_second_monitor.sh",
+  "airpods: connect": "scripts/connect_airpods.sh",
+  "wifi: connect": "scripts/connect_wifi.sh",
+  "vpn: connect": "scripts/connect_vpn.sh",
+  "vpn: disconnect": "scripts/disconnect_vpn.sh",
   "shutdown": "scripts/shutdown.sh"
 }
