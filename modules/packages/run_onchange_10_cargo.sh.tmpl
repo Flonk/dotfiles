@@ -6,13 +6,6 @@ cat << EOF
 ┗━╸╹ ╹╹┗╸┗━┛┗━┛
 EOF
 
-echo 'Checking if rust is installed...'
-if ! [ -x "$(command -v rustc)" ]; then
-  echo 'Installing rust...'
-  sudo apt install cmake
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-fi
-
 echo 'Checking if alacritty is installed...'
 if ! [ -x "$(command -v alacritty)" ]; then
   sudo apt install pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3

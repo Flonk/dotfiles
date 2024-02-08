@@ -1,0 +1,63 @@
+#! /bin/bash
+
+cat << EOF
+┏━╸╻╺┳╸
+┃╺┓┃ ┃
+┗━┛╹ ╹
+EOF
+
+echo 'Checking if i3 is installed...'
+if ! [ -x "$(command -v i3)" ]; then 
+    /usr/lib/apt/apt-helper download-file https://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2023.02.18_all.deb keyring.deb SHA256:a511ac5f10cd811f8a4ca44d665f2fa1add7a9f09bef238cdfad8461f5239cc4
+    sudo apt install ./keyring.deb
+    echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo tee /etc/apt/sources.list.d/sur5r-i3.list
+    sudo apt update
+    sudo apt install i3
+
+    # install i3lock-color
+    (
+      sudo apt install autoconf gcc make pkg-config libpam0g-dev libcairo2-dev libfontconfig1-dev libxcb-composite0-dev libev-dev libx11-xcb-dev libxcb-xkb-dev libxcb-xinerama0-dev libxcb-randr0-dev libxcb-image0-dev libxcb-util-dev libxcb-xrm-dev libxkbcommon-dev libxkbcommon-x11-dev libjpeg-dev
+      git clone https://github.com/Raymo111/i3lock-color.git
+      cd i3lock-color
+      ./install-i3lock-color.sh
+    )
+fi
+
+echo 'Checking if bwmenu is installed...'
+if ! [ -x "$(command -v bwmenu)" ]; then
+  echo 'Installing bwmenu...'
+  sudo apt install keyutils xsel xclip xdotool
+  git clone https://github.com/mattydebie/bitwarden-rofi.git
+
+  (
+    cd bitwarden-rofi
+    mkdir -p ~/.local/bin && \
+      cp bwmenu ~/.local/bin/bwmenu && \
+      cp lib-bwmenu ~/.local/bin/lib-bwmenu && \
+      chmod +x ~/.local/bin/bwmenu
+  )
+fi
+
+echo 'Checking if micro is installed...'
+if ! [ -x "$(command -v micro)" ]; then
+  curl https://getmic.ro | bash
+  mv micro ~/bin
+fi
+
+echo 'Checking if docker is installed...'
+if ! [ -x "$(command -v docker)" ]; then
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sudo sh ./get-docker.sh
+fi
+
+echo 'Checking if zscroll is installed...'
+if ! [ -x "$(command -v zscroll)" ]; then
+  git clone https://github.com/noctuid/zscroll
+  cd zscroll
+  sudo python3 setup.py install
+fi
+
+echo 'Checking if deno is installed...'
+if ! [ -x "$(command -v deno)" ]; then
+  curl -fsSL https://deno.land/install.sh | sh
+fi

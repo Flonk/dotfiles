@@ -8,13 +8,6 @@ cat << EOF
 ┗━┛╹┗╸┗━╸┗┻┛
 EOF
 
-echo 'checking if homebrew is installed...'
-if ! [ -x "$(command -v brew)" ]; then
-  echo 'homebrew is not installed. Installing...'
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
 echo 'installing brew packages...'
 brew tap wader/tap
 brew tap derailed/k9s

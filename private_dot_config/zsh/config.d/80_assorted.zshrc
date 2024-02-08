@@ -24,7 +24,7 @@ alias telnetssl="openssl s_client -connect"
 alias calc="qalc -t"
 
 # brew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" > /dev/null
 
 # kubernetes
 source <(kubectl completion zsh) > /dev/null
@@ -37,25 +37,26 @@ source <(minikube completion zsh) > /dev/null
 eval $(thefuck --alias) > /dev/null
 
 # terraform
-complete -o nospace -C /usr/bin/terraform terraform
+complete -o nospace -C /usr/bin/terraform terraform > /dev/null
 
 # ansible
 export ANSIBLE_NOCOWS=1
 
 # direnv
-eval "$(direnv hook zsh)"
+eval "$(direnv hook zsh)" > /dev/null
 
 # bat
 alias man="batman"
 
 # ghc
-[ -f "~/.ghcup/env" ] && source "~/.ghcup/env"
+[ -f "~/.ghcup/env" ] && source "~/.ghcup/env" > /dev/null
 
 # deno
 export DENO_INSTALL="/home/flo/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
 # zsh
-autoload -U +X bashcompinit && bashcompinit
+autoload -U +X bashcompinit > /dev/null
+bashcompinit > /dev/null
 
 :

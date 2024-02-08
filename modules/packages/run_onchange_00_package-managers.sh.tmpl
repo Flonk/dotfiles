@@ -1,0 +1,28 @@
+#! /bin/bash
+
+cat << EOF
+┏━┓┏━┓┏━╸╻┏ ┏━┓┏━╸┏━╸   ┏┳┓┏━╸┏━┓┏━┓
+┣━┛┣━┫┃  ┣┻┓┣━┫┃╺┓┣╸    ┃┃┃┃╺┓┣┳┛┗━┓
+╹  ╹ ╹┗━╸╹ ╹╹ ╹┗━┛┗━╸   ╹ ╹┗━┛╹┗╸┗━┛
+EOF
+
+echo 'Checking if flatpak is installed...'
+if ! [ -x "$(command -v flatpak)" ]; then
+  echo 'Installing flatpak...'
+  sudo apt install -y flatpak
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+fi
+
+echo 'Checking if rust/cargo is installed...'
+if ! [ -x "$(command -v rustc)" ]; then
+  echo 'Installing rust/cargo...'
+  sudo apt install cmake
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
+echo 'checking if homebrew is installed...'
+if ! [ -x "$(command -v brew)" ]; then
+  echo 'homebrew is not installed. Installing...'
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi

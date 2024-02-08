@@ -6,10 +6,8 @@ cat << EOF
 ╹  ┗━╸╹ ╹ ╹ ╹  ╹ ╹╹ ╹
 EOF
 
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
 echo 'Checking if gimp is installed...'
-if ! [ -x "$(flatpak list --app | grep GIMP)" ]; then
+if ! [[ "$(flatpak list --app | grep GIMP)" ]]; then
   echo 'Installing gimp...'
   flatpak install flathub org.gimp.GIMP
 
