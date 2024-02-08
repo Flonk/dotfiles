@@ -51,6 +51,10 @@ alias man="batman"
 # ghc
 [ -f "~/.ghcup/env" ] && source "~/.ghcup/env"
 
+# deno
+export DENO_INSTALL="/home/flo/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
 # zsh
 autoload -U +X bashcompinit && bashcompinit
 
