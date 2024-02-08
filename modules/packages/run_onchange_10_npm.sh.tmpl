@@ -1,1 +1,13 @@
 #! /bin/bash
+
+cat << EOF
+
+┏┓╻┏━┓┏┳┓
+┃┗┫┣━┛┃┃┃
+╹ ╹╹  ╹ ╹
+EOF
+
+echo 'Checking if http-server is installed...'
+if ! [ -x "$(command -v alacritty)" ]; then
+    npm install -g http-server
+fi

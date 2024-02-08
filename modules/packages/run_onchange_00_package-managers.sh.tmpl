@@ -1,6 +1,7 @@
 #! /bin/bash
 
 cat << EOF
+
 ┏━┓┏━┓┏━╸╻┏ ┏━┓┏━╸┏━╸   ┏┳┓┏━╸┏━┓┏━┓
 ┣━┛┣━┫┃  ┣┻┓┣━┫┃╺┓┣╸    ┃┃┃┃╺┓┣┳┛┗━┓
 ╹  ╹ ╹┗━╸╹ ╹╹ ╹┗━┛┗━╸   ╹ ╹┗━┛╹┗╸┗━┛
@@ -16,13 +17,25 @@ fi
 echo 'Checking if rust/cargo is installed...'
 if ! [ -x "$(command -v rustc)" ]; then
   echo 'Installing rust/cargo...'
-  sudo apt install cmake
+  sudo apt install -y cmake
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
-echo 'checking if homebrew is installed...'
+echo 'Checking if homebrew is installed...'
 if ! [ -x "$(command -v brew)" ]; then
-  echo 'homebrew is not installed. Installing...'
+  echo 'Installing homebrew...'
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+echo 'Checking if node is installed...'
+if ! [ -x "$(command -v node)" ]; then
+  echo 'Installing node...'
+  brew install node
+fi
+
+echo 'Checking if pip is installed...'
+if ! [ -x "$(command -v pip)" ]; then
+  echo 'Installing pip...'
+  sudo apt install -y pip pipx python-is-python3
 fi
