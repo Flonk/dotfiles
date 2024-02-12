@@ -59,4 +59,7 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 autoload -U +X bashcompinit > /dev/null
 bashcompinit > /dev/null
 
+# xclip
+alias clip="xclip -selection clipboard"
+
 :

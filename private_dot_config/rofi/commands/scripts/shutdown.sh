@@ -13,25 +13,25 @@ confirm_action() {
 
 # Perform the selected action
 case $selected_option in
-    Shutdown)
+    shutdown)
         confirm=$(confirm_action "shutdown")
         if [ "$confirm" == "Yes" ]; then
-            systemctl poweroff
+            shutdown now
         fi
         ;;
-    Reboot)
+    reboot)
         confirm=$(confirm_action "reboot")
         if [ "$confirm" == "Yes" ]; then
-            systemctl reboot
+            reboot now
         fi
         ;;
-    Logout)
+    logout)
         confirm=$(confirm_action "logout")
         if [ "$confirm" == "Yes" ]; then
             i3-msg exit
         fi
         ;;
-    "Restart i3")
+    "restart i3")
         confirm=$(confirm_action "restart i3")
         if [ "$confirm" == "Yes" ]; then
             i3-msg restart
