@@ -62,4 +62,9 @@ bashcompinit > /dev/null
 # xclip
 alias clip="xclip -selection clipboard"
 
+# npm
+npm-shasum() {
+  npm view "$1" dist.integrity
+}
+
 :

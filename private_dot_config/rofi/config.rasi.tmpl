@@ -39,13 +39,15 @@ window {
 mainbox {
     orientation:    horizontal;
     children:       [ inputbar,listview ];
+    width:          calc(100% min 1920px);
+    margin:         0px 0px 0px calc(50% - 960px);
 }
 
 inputbar {
     background-color:   @primary;
     border: 0px 2px 0px 0px;
     border-color: @dark;
-    width:      25%;    
+    width:      calc(25% min 480px);
     padding:    4px 8px;
     spacing:    8px;
     children:   [ prompt, entry ];

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+APPLICATION_TITLE="PgAdmin4"
+CONTAINER_NAME="application-pgadmin"
+DOCKER_IMAGE="dpage/pgadmin4"
+NOTIFICATION_TEXT="Connect to http://localhost:7032/ with pg@pg.local, password pg."
+
+start_new_container() {
+    echo "Starting a new $APPLICATION_TITLE container..."
+    docker run -e PGADMIN_DEFAULT_EMAIL=pg@pg.local \
+        -e PGADMIN_DEFAULT_PASSWORD=pg \
+        -e PGADMIN_CONFIG_SERVER_MODE=False \
+        -e PGADMIN_LISTEN_PORT=7032 \
+        --network host \
+        --detach \
+        --name "$CONTAINER_NAME" \
+        "$DOCKER_IMAGE"
+}
+
+echo "Starting $APPLICATION_TITLE..."
+notify-send "Starting $APPLICATION_TITLE..."
+
+{
+
+    if [[ " $* " == *" --recreate "* ]]; then
+        echo "Removing existing container..."
+        docker rm "$CONTAINER_NAME" &> /dev/null
+    fi
+
+    if docker ps -a | grep -q "$CONTAINER_NAME"; then
+        echo "Container exists, starting it..."
+        docker start "$CONTAINER_NAME"
+    else
+        start_new_container
+    fi
+
+    xdg-open "http://localhost:7032/" 
+
+    notify-send "$APPLICATION_TITLE running!" "$NOTIFICATION_TEXT"
+
+} &
+
+echo "$APPLICATION_TITLE started."

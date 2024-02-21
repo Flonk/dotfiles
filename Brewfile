@@ -13,6 +13,7 @@ brew "nmap"
 
 brew "jq"
 brew "wader/tap/fq"
+brew "jqp"
 brew "fzf"
 brew "bat"
 brew "bat-extras"

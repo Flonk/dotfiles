@@ -14,8 +14,4 @@ source $ZSH/oh-my-zsh.sh
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-# When you tap the Super key, launch a quick menu
-# (configured in i3)
-xcape -e 'Super_L=Super_L|y' > /dev/null
-
 :
