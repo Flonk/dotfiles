@@ -52,3 +52,9 @@ if ! [ -x "$(command -v kubectl)" ]; then
   kubectl krew install ctx
   kubectl krew install ns
 fi
+
+echo 'Checking if bruno is installed...'
+if ! [ -x "$(command -v bruno)" ]; then
+  echo 'Installing bruno...'
+  sudo snap install bruno
+fi

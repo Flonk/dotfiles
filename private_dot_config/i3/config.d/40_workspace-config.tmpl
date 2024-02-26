@@ -2,17 +2,34 @@
 # Window and Workspace Configuration
 ###############################################################################
 
+## Move window left
 bindsym $mod+Shift+Left move left
+
+## Move window down
 bindsym $mod+Shift+Down move down
+
+## Move window up
 bindsym $mod+Shift+Up move up
+
+## Move window right
 bindsym $mod+Shift+Right move right
 
+## Split horizontal
 bindsym $mod+v split vertical
+
+## Split vertical
 bindsym $mod+h split horizontal
 
+## Set layout to tabbed
 bindsym $mod+w layout tabbed
-bindsym $mod+s layout stacking
+
+## Add tabbed container to selected window
 bindsym $mod+Shift+w split h; split v; layout tabbed
+
+## Set layout to stacking
+bindsym $mod+s layout stacking
+
+## Set layout to split
 bindsym $mod+e layout toggle split
 
 bindsym $mod+Shift+1 move container to workspace number 1

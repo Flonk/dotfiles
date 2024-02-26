@@ -44,6 +44,6 @@ rglr () {
     (cd "$dir" && git rev-parse --is-inside-work-tree > /dev/null 2>&1 && glr)
   done
 }
-alias gapf!="gaa && gcan! && gpf || (glr && gp)"
+alias gapf!="gaa && gcan! && (gpf || (glr && gp))"
 
 :

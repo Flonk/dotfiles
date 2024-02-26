@@ -13,13 +13,23 @@ for_window [instance="floating"] floating enabled
 
 # Base launchers
 set_from_resource $wm.binding.terminal wm.binding.terminal Return
+
+## Launch terminal
 bindsym $mod+Return exec --no-startup-id /usr/bin/x-terminal-emulator
+
+## Launch floating terminal 
 bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/x-terminal-emulator --class floating
+
+## Launch browser
 bindsym $mod+Ctrl+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
 
+## Start application launcher
 bindsym $mod+space exec --no-startup-id rofi -p "Launch" -i -show drun -show-icons
+
+## Start quick menu
 bindsym $mod+y exec --no-startup-id "PATH=$PATH:/home/linuxbrew/.linuxbrew/bin && cd /home/{{ .username }}/.config/rofi/commands && npm run run"
 
+## Kill focused window
 bindsym $mod+Shift+q [con_id="__focused__"] kill
 bindsym --release --border button2 kill
 
@@ -29,8 +39,13 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Escape exec --no-startup-id "bash ~/.config/scripts/lockscreen.sh"
 
 # Screenshots
+## Take a screenshot
 bindsym Print exec --no-startup-id "bash ~/.config/scripts/screenshot.sh"
+
+## Take a screenshot of the active window
 bindsym Ctrl+Print exec --no-startup-id "bash ~/.config/scripts/screenshot_active_window.sh"
+
+## Run color picker
 bindsym $mod+c exec --no-startup-id "bash ~/.config/scripts/colorpicker.sh"
 
 # Always on
