@@ -1,0 +1,67 @@
+#!/bin/bash
+# typescript starter v0.1 (eslint, prettier, vitest, esbuild)
+# requires: jq, node
+
+git init
+
+echo "node_modules" > .gitignore
+echo "dist" >> .gitignore
+echo ".env" >> .gitignore
+
+npm init
+npm i -D typescript eslint prettier vitest esbuild dotenv
+
+npx tsc --init
+npm init @eslint/config
+node --eval "fs.writeFileSync('.prettierrc','{}\n')"
+
+jq '.scripts += {"test": "vitest"}' package.json > package.json.tmp && mv package.json.tmp package.json
+jq '.scripts += {"test:watch": "vitest watch"}' package.json > package.json.tmp && mv package.json.tmp package.json
+
+mkdir src test
+echo "console.log('Hello, world!');" > src/index.ts
+echo "import { expect, it } from 'vitest';\it('Hello, world!', () => {\n  expect(1).toBe(1);\n});" > test/index.test.ts
+
+cat <<EOF >> esbuild.mjs
+import * as esbuild from "esbuild";
+
+const watch = process.argv.includes("--watch");
+
+const config = {
+  entryPoints: ["src/main.ts"],
+  platform: "node",
+  bundle: true,
+  minify: true,
+  logLevel: "warning",
+  outfile: "dist/out.js",
+};
+
+if (watch) {
+  console.log("Entering watch mode...");
+  await (await esbuild.context(config)).watch();
+} else {
+  await esbuild.build(config);
+}
+EOF
+
+jq '.scripts += {"build": "esbuild"}' package.json > package.json.tmp && mv package.json.tmp package.json
+jq '.scripts += {"build:watch": "esbuild --watch"}' package.json > package.json.tmp && mv package.json.tmp package.json
+
+cat <<EOF >> vitest.config.ts
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    include: ["test/**/*.test.ts"],
+    setupFiles: ["dotenv/config"],
+    testTimeout: 15000,
+    sequence: {
+      hooks: "stack",
+      concurrent: false,
+    },
+    maxConcurrency: 1,
+    maxWorkers: 1,
+    fileParallelism: false,
+  },
+});
+EOF

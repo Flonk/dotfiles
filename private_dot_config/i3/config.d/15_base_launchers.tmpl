@@ -17,10 +17,8 @@ bindsym $mod+Return exec --no-startup-id /usr/bin/x-terminal-emulator
 bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/x-terminal-emulator --class floating
 bindsym $mod+Ctrl+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
 
-bindsym $mod+space exec --no-startup-id rofi -i -show drun -p "Run" -show-icons
+bindsym $mod+space exec --no-startup-id rofi -p "Launch" -i -show drun -show-icons
 bindsym $mod+y exec --no-startup-id "PATH=$PATH:/home/linuxbrew/.linuxbrew/bin && cd /home/{{ .username }}/.config/rofi/commands && npm run run"
-bindsym $mod+c exec --no-startup-id gnome-control-center
-bindsym $mod+p exec --no-startup-id bwmenu
 
 bindsym $mod+Shift+q [con_id="__focused__"] kill
 bindsym --release --border button2 kill
@@ -28,11 +26,12 @@ bindsym --release --border button2 kill
 # i3 specifics
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Escape exec --no-startup-id i3lock -k --pass-media-keys --pass-screen-keys --pass-volume-keys --greeter-text="" --greeter-pos="100:100" --greeter-size=12 --verif-text="" --wrong-text="nope \!" -B 10 --radius 300 --ring-width 150 --ring-color=fba92233 --inside-color=00000033 --line-color=00000000 --ringver-color=fba92255 --insidever-color=00000033 --ringwrong-color=8c0a0aaa --greeter-font=monospace --date-font=monospace --time-font=monospace --separator-color=00000000 --keyhl-color=fba92288 --bshl-color=000000aa --time-color=ffffffff --timeoutline-color=00000033 --timeoutline-width=1 --date-color=ffffffff --dateoutline-color=00000033 --dateoutline-width=1 --greeter-color=ffffffff --greeteroutline-color=00000033 --greeteroutline-width=1 --date-str="%Y-%m-%d"
+bindsym $mod+Escape exec --no-startup-id "bash ~/.config/scripts/lockscreen.sh"
 
 # Screenshots
 bindsym Print exec --no-startup-id "bash ~/.config/scripts/screenshot.sh"
-bindsym Ctrl+Print exec --no-startup-id "bash ~/.config/scripts/colorpicker.sh"
+bindsym Ctrl+Print exec --no-startup-id "bash ~/.config/scripts/screenshot_active_window.sh"
+bindsym $mod+c exec --no-startup-id "bash ~/.config/scripts/colorpicker.sh"
 
 # Always on
 set_from_resource $wm.program.nm-applet wm.program.nm-applet /usr/bin/nm-applet

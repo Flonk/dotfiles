@@ -1,6 +1,6 @@
 #!/bin/bash
 
-color=$(maim -s | convert - -alpha off -crop 1x1+0+0 +repage -format '#%[hex:u.p{0,0}]' info: | tr -d '\n')
+color=$(maim -st 0 | convert - -alpha off -crop 1x1+0+0 +repage -format '#%[hex:u.p{0,0}]' info: | tr -d '\n')
 
 echo -n $color | xclip -selection clipboard
 convert -size 100x100 xc:"$color" /tmp/color_preview.png

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+i3lock -k \
+    --pass-media-keys \
+    --pass-screen-keys \
+    --pass-volume-keys \
+    --greeter-text="" \
+    --greeter-pos="100:100" \
+    --greeter-size=12 \
+    --verif-text="" \
+    --wrong-text="nope \!" \
+    -B 10 \
+    --radius 300 \
+    --ring-width 150 \
+    --ring-color=fba92233 \
+    --inside-color=00000033 \
+    --line-color=00000000 \
+    --ringver-color=fba92255 \
+    --insidever-color=00000033 \
+    --ringwrong-color=8c0a0aaa \
+    --greeter-font=monospace \
+    --date-font=monospace \
+    --time-font=monospace \
+    --separator-color=00000000 \
+    --keyhl-color=fba92288 \
+    --bshl-color=000000aa \
+    --time-color=ffffffff \
+    --timeoutline-color=00000033 \
+    --timeoutline-width=1 \
+    --date-color=ffffffff \
+    --dateoutline-color=00000033 \
+    --dateoutline-width=1 \
+    --greeter-color=ffffffff \
+    --greeteroutline-color=00000033 \
+    --greeteroutline-width=1 \
+    --date-str="%Y-%m-%d"
