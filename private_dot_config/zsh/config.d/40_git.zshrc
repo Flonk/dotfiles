@@ -1,5 +1,7 @@
 # Aliases and utilities for dealing with git
 
+alias gp="git push --follow-tags"
+
 alias gprune="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\""
 alias gprune!="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\""
 alias squash="git rebase -i HEAD~5"

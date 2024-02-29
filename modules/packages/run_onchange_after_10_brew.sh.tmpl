@@ -25,3 +25,10 @@ if ! [ -x "$(command -v nvim)" ]; then
 fi
 
 (cd ~ && brew bundle install)
+
+echo 'Checking if khal is installed...'
+if ! [ -x "$(command -v khal)" ]; then
+  brew install "vdirsyncer"
+  brew services start vdirsyncer
+  brew install "khal"
+fi
