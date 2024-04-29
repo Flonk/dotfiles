@@ -1,4 +1,5 @@
 {
+  "emoji picker": "scripts/emoji_picker.sh",
   "second monitor: connect": "scripts/connect_second_monitor.sh",
   "second monitor: disconnect": "scripts/disconnect_second_monitor.sh",
   "airpods: connect": "scripts/connect_airpods.sh",

@@ -67,4 +67,28 @@ npm-shasum() {
   npm view "$1" dist.integrity
 }
 
+# example: run_with_caps cap_net_admin "echo 'Hello, World!'"
+run_with_caps() {
+  # The last argument is the command to execute
+  local command="${@: -1}"
+
+  # Start building the capsh command with hardcoded capabilities
+  cmd="sudo capsh --caps=\"cap_setpcap,cap_setuid,cap_setgid+ep\" --keep=1"
+
+  # Loop through all arguments except the last one, which is the command
+  for ((i=1; i<=$#-1; i++)); do
+    local cap="${!i}"
+    cmd+=" --caps=\"${cap}+eip\""
+    cmd+=" --inh=\"${cap}\""
+    cmd+=" --addamb=\"${cap}\""
+  done
+
+  # Append the command to execute
+  cmd+=" -- -c \"${command}\""
+
+  # Execute the command
+  eval $cmd
+}
+
+
 :

@@ -1,6 +1,7 @@
 # Utilities
 brew "n"
 brew "zx"
+brew "go"
 
 brew "tree"
 brew "cowsay"
