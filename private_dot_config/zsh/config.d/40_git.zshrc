@@ -64,5 +64,6 @@ gh () {
       --prompt="Search: "
 }
 
+alias gconflict="git diff --name-only --diff-filter=U"
 
 :

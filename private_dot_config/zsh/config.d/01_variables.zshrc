@@ -3,7 +3,7 @@
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='nano'
  else
-  export EDITOR='micro -softwrap true'
+  export EDITOR='nvim'
 fi
 
 alias e="$EDITOR"
