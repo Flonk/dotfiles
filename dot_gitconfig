@@ -18,3 +18,6 @@
 [rerere]
     enabled = true
     
+[user]
+	email = florian.schindler@rise-world.com
+	name = Florian Schindler

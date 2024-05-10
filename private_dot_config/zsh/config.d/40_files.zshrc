@@ -1,6 +1,8 @@
 # Commands for navigating the file system and finding files
 
+alias squash="git rebase -i HEAD~5"
 alias t="tree -L 2 -a -I '.git' --gitignore --dirsfirst"
+alias cat="bat -P -p --color always --theme 'Visual Studio Dark+'"
 
 export FZF_DEFAULT_COMMAND='rg --files'
 FZF_FILE_PREVIEW_COMMAND='if file --mime {} | grep -q binary; then head -c 1MB {}; else bat -p --color always {} | head -n 1000; fi'

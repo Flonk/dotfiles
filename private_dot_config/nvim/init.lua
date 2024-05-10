@@ -882,5 +882,17 @@ vim.keymap.set("n", "<A-w>", "<Cmd>BufferClose<CR>", { desc = "Close [W]indow" }
 vim.keymap.set("i", "<A-w>", "<Cmd>BufferClose<CR>", { desc = "Close [W]indow" })
 vim.keymap.set("v", "<A-w>", "<Cmd>BufferClose<CR>", { desc = "Close [W]indow" })
 
+-- refresh nvim-tree on focus (for example, when switching branches)
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
+	pattern = "*",
+	callback = function()
+		if vim.bo.filetype ~= "neo-tree" and vim.fn.bufname() ~= "neo-tree" then
+			require("neo-tree.sources.filesystem.commands").refresh(
+				require("neo-tree.sources.manager").get_state("filesystem")
+			)
+		end
+	end,
+})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

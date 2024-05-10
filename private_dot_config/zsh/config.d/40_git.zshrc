@@ -4,7 +4,7 @@ alias gp="git push --follow-tags"
 
 alias gprune="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\""
 alias gprune!="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\""
-alias squash="git rebase -i HEAD~5"
+
 alias glr="git pull --rebase"
 gbll () {
     # check git history of a single line of code
@@ -65,5 +65,8 @@ gh () {
 }
 
 alias gconflict="git diff --name-only --diff-filter=U"
+gcob () {
+  git checkout $(git branch | fzf --height 8 --layout=reverse)
+}
 
 :
