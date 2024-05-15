@@ -4,6 +4,7 @@ brew "zx"
 brew "go"
 
 brew "tree"
+brew "eza"
 brew "cowsay"
 brew "fortune"
 brew "toilet"
@@ -28,6 +29,7 @@ brew "pandoc"
 brew "imagemagick"
 
 brew "direnv"
+brew "superfile"
 
 
 # Virtualization

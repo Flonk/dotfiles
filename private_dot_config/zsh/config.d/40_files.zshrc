@@ -1,6 +1,7 @@
 # Commands for navigating the file system and finding files
 
 alias squash="git rebase -i HEAD~5"
+alias l="eza -l --icons=always --color-scale=size --git-ignore -I ".git" --group-directories-first -a --git -o --no-user"
 alias t="tree -L 2 -a -I '.git' --gitignore --dirsfirst"
 alias cat="bat -P -p --color always --theme 'Visual Studio Dark+'"
 

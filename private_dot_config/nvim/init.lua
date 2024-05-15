@@ -882,6 +882,10 @@ vim.keymap.set("n", "<A-w>", "<Cmd>BufferClose<CR>", { desc = "Close [W]indow" }
 vim.keymap.set("i", "<A-w>", "<Cmd>BufferClose<CR>", { desc = "Close [W]indow" })
 vim.keymap.set("v", "<A-w>", "<Cmd>BufferClose<CR>", { desc = "Close [W]indow" })
 
+vim.keymap.set("n", "<C-a>", "ggVG", { desc = "Select [A]ll" })
+vim.keymap.set("v", "<C-a>", "ggVG", { desc = "Select [A]ll" })
+vim.keymap.set("i", "<C-a>", "<Esc>ggVG", { desc = "Select [A]ll" })
+
 -- refresh nvim-tree on focus (for example, when switching branches)
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
 	pattern = "*",
