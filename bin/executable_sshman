@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+colorize () {
+  cat - | awk -F'\t' '{ printf("\033[38;5;208m%s\033[0m\t%s\t\033[34m%s\033[0m\t\033[38;5;24m%s\033[0m\n", $1, $2, $3, $4) }'
+}
+
+result=$(cat ~/.config/sshman.conf | colorize | fzf --ansi --height 8)
+
+
+if [[ -n "$result" ]]; then
+
+  item=$(echo "$result" | awk -F'\t' '{print $4}')
+  user=$(echo "$result" | awk -F'\t' '{print $3}')
+  host=$(echo "$result" | awk -F'\t' '{print $2}')
+
+  password=$(bw get password $item)
+  password=$(printf '%s\n' "$password" | sed -e 's/[]\/$*.^|[]/\\&/g')
+
+  expect -c "spawn ssh $user@$host ; expect Password: ; send \"$password\r\" ; interact"
+
+fi

@@ -90,5 +90,6 @@ run_with_caps() {
   eval $cmd
 }
 
+alias p="procs --color=always --sortd mem | fzf --ansi --height 12 --header-lines=2 --layout reverse | awk '{print $1}'"
 
 :
