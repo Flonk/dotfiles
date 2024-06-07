@@ -1,0 +1,127 @@
+#!/usr/bin/env zx
+
+const logo = `
+ ░█░█░█▀▀░█░░░█▀▀░█▀█░█▄█░█▀▀░░░▀█▀░█▀█░░░█▀▀░█░█░█░█░█▀█░█▀▀░▀█▀
+ ░█▄█░█▀▀░█░░░█░░░█░█░█░█░█▀▀░░░░█░░█░█░░░▀▀█░█▀▄░░█░░█░█░█▀▀░░█░
+ ░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░░░░▀░░▀▀▀░░░▀▀▀░▀░▀░░▀░░▀░▀░▀▀▀░░▀░
+
+                 ${chalk.grey("https://github.com/Flonk/dotfiles")}
+`;
+console.log(logo);
+
+const BC = {
+    tl: chalk.grey('╭'),
+    tr: chalk.grey('╮'),
+    bl: chalk.grey('╰'),
+    br: chalk.grey('╯'),
+    v: chalk.grey('│'),
+    h: chalk.grey('─'),
+    fl: chalk.grey('├'),
+    fr: chalk.grey('┤'),
+};
+
+const MAX_LEN = 65;
+
+const stripAnsi = str => str.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    ''
+);
+
+const padEnd = str => {
+    const stripped = stripAnsi(str);
+    const spacing = " ".repeat(MAX_LEN - stripped.length);
+    return str + spacing;
+}
+
+const printbox = (header, status, statusCode, str) => {
+    let lines = str.trimEnd().split('\n').filter(x => stripAnsi(x).length >= 0);
+
+    // wrap lines if they are too long, break anywhere
+    lines = lines.flatMap(l => {
+        if (stripAnsi(l).length > MAX_LEN) {
+            const wrapped = [];
+            while (l.length > MAX_LEN) {
+                const line = l.slice(0, MAX_LEN);
+                l = l.slice(MAX_LEN);
+                wrapped.push(line);
+            }
+            wrapped.push(l);
+            return wrapped;
+        }
+        return [l];
+    });
+
+    const statusColored = statusCode === 0 ? chalk.green(status) : chalk.red(status);
+    const headerAndStatus = padEnd(chalk.blue.bold(header) + " " + statusColored);
+
+    const topLine = BC.tl + BC.h.repeat(MAX_LEN) + BC.tr;
+    const bottomLine = BC.bl + BC.h.repeat(MAX_LEN) + BC.br;
+
+    const median = BC.fl + BC.h.repeat(MAX_LEN) + BC.fr;
+    const headerLine = BC.v + headerAndStatus + BC.v;
+    const paddedLines = lines.map(l => BC.v + padEnd(l) + BC.v);
+    const string = [
+        topLine,
+        headerLine,
+        median,
+        ...paddedLines,
+        bottomLine
+    ].join('\n');
+
+    console.log(string);
+}
+
+const ansiTrim = str => str.trim().split('\n').filter(x => stripAnsi(x).trim().length > 0).join('\n');
+
+//////////////////////////
+// Neofetch
+
+const neofetch = await $`neofetch`;
+printbox("System information", "", 0, ansiTrim(neofetch.stdout));
+
+//////////////////////////
+// Outdated apt packages
+
+const aptUpgradeable = await $()`apt list --upgradable 2>/dev/null`;
+const aptOut = ansiTrim(aptUpgradeable.stdout);
+let count = aptOut.split("\n").length;
+count = count === 1 ? 0 : count;
+
+printbox(
+    "Outdated apt packages...",
+    String(count),
+    count === 0 ? 0 : 1,
+    count === 0 ? "None!" : aptOut
+);
+
+//////////////////////////
+// Outdated brew packages
+
+const brewUpgradeable = await $`HOMEBREW_NO_AUTO_UPDATE=true brew outdated`;
+const brewOut = ansiTrim(brewUpgradeable.stdout);
+let brewCount = brewOut.split("\n").length;
+brewCount = brewCount === 1 ? 0 : brewCount;
+
+printbox(
+    "Outdated brew packages...",
+    String(brewCount),
+    brewCount === 0 ? 0 : 1,
+    brewCount === 0 ? "None!" : brewOut
+);
+
+//////////////////////////
+// Do Release Upgrade
+
+const doReleaseUpgrade = await $({ nothrow: true })`do-release-upgrade -c`;
+printbox(
+    "Checking for OS updates...",
+    doReleaseUpgrade.code === 0 ? "Update your System!" : "OK",
+    doReleaseUpgrade.code === 0 ? 1 : 0,
+    doReleaseUpgrade.stdout
+);
+
+//////////////////////////
+// Need help?
+
+printbox("Need help?", "", 0, "Run `help` in your terminal to get a quick overview\nof this system.")
+

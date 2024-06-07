@@ -1,3 +1,48 @@
-#!/bin/bash
+#!/bin/env zx
 
-echo "TODO"
+const help = `
+░█▀▀░█░█░█░█░█▀█░█▀▀░▀█▀░░░█░█░█▀▀░█░░░█▀█
+░▀▀█░█▀▄░░█░░█░█░█▀▀░░█░░░░█▀█░█▀▀░█░░░█▀▀
+░▀▀▀░▀░▀░░▀░░▀░▀░▀▀▀░░▀░░░░▀░▀░▀▀▀░▀▀▀░▀░░
+
+Launch Terminal: Meta+Return
+Launch Browser: Meta+Ctrl+Return
+Launch Program: Meta+Space
+Quick Actions: Meta+y
+
+${chalk.blue("## Window management")}
+You can click and drag a window's titlebar to move it around.
+To close a window, either press Meta+Shift+q, or middle-click
+the window's title bar.
+
+To put a window into float mode, press Meta+Shift+f.
+
+To resize windows, press Meta+r, which will out you in "resize
+mode"--then use the arrow keys to change dimensions, and hit
+Return when you are done.
+
+To switch between horizontal/vertical layout, press Meta+e. For
+tabbed layout, press Meta+w. To turn the current window into a
+tabbed container, press Meta+Shift+w.
+
+${chalk.blue("## Settings")}
+Having audio troubles and need a GUI? Run \`pavucontrol\` in a
+terminal. For managing bluetooth devices, run \`blueman-manager\`.
+
+${chalk.blue("## Etc")}
+To take a screenshot, press the "Print Screen" key. Screenshots
+are saved in \`~/Pictures/screenshots\`.
+
+To lock the screen, press Meta+Escape.
+
+For everything else, refer to config files found in
+\`~/.local/share/chezmoi\`.
+
+This machine is running Ubuntu, the i3 window manager, and
+alacritty+zsh. The compositor is picom, and the statusbar at the
+bottom is polybar. Dotfiles are managed using chezmoi.
+
+Enjoy! 🚀
+`.trim();
+
+echo`${help}`
