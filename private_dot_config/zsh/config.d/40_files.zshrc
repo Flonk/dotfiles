@@ -10,7 +10,7 @@ alias l="$_L_COMMAND"
 alias t="$_T_COMMAND"
 alias cat="$_CAT_COMMAND"
 
-export FZF_DEFAULT_COMMAND='rg --files'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!**/.git/**"'
 FZF_FILE_PREVIEW_COMMAND='if file --mime {} | grep -q binary; then head -c 1MB {}; else '$_CAT_COMMAND' {} | head -n 1000; fi'
 FZF_FOLDER_PREVIEW_COMMAND='dirname {} | xargs -I _ tree -C -L 2 --gitignore --dirsfirst _'
 

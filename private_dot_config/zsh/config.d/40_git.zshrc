@@ -134,7 +134,7 @@ gh () {
 alias gconflict="git diff --name-only --diff-filter=U"
 git_checkout_branch () {
   if [ -n "$1" ]; then
-    git checkout $(git branch | fzf --query="$1" --select-1 --exit-0)
+    git checkout $(git branch | fzf --height 8 --layout=reverse --query="$1" --select-1 --exit-0)
   else
     git checkout $(git branch | fzf --height 8 --layout=reverse)
   fi

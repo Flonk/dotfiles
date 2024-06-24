@@ -66,3 +66,9 @@ bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioPause exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous 
+
+# Monitor
+exec --no-startup-id "xrandr --output DP-1-1 --auto --right-of {{ .primary_monitor }}"
+
+# four terminals
+bindsym $mod+t exec --no-startup-id "xdotool key --repeat 4 --delay 80 Super_L+Return"
