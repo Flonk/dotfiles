@@ -56,6 +56,7 @@ rglr () {
 }
 alias gapf!="gaa && gcan! && (gpf || (glr && gp))"
 alias fgapf!="(npm run -s format || exit 0) && gapf!"
+alias p="fgapf!"
 
 
 _GIT_GET_FILENAME_AT_COMMIT() {
