@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+colorize () {
+  cat - | awk -F'\t' '{ printf("\033[37m%s\033[0m\t\033[38;5;117m%s\033[0m\t\033[30m%s\033[0m\n", $1, $2, $3) }'
+}
+
+numbered_lines=$(awk -F'\t' '{ printf("%d\t%s\t%s\n", NR, $1, $2) }' ~/.config/rise.conf | colorize)
+result=$(echo "$numbered_lines" | fzf --ansi --height 36 --with-nth=1,2 --delimiter='\t')
+
+if [[ -n "$result" ]]; then
+  line_number=$(echo "$result" | awk -F'\t' '{print $1}')
+  original_line=$(sed -n "${line_number}p" ~/.config/rise.conf)
+
+  url=$(echo "$original_line" | awk -F'\t' '{print $2}')
+
+  xdg-open "$url"
+fi

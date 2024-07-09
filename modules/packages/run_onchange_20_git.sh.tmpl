@@ -62,3 +62,8 @@ echo 'Checking if deno is installed...'
 if ! [ -x "$(command -v deno)" ]; then
   curl -fsSL https://deno.land/install.sh | sh
 fi
+
+echo 'Checking if haskell stack is installed...'
+if ! [ -x "$(command -v stack)" ]; then
+  curl -sSL https://get.haskellstack.org/ | sh
+fi

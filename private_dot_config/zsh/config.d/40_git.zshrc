@@ -51,7 +51,7 @@ gff() {
 
 rglr () {
   for dir in */; do
-    (cd "$dir" && git rev-parse --is-inside-work-tree > /dev/null 2>&1 && (gwip || true) && glr && (gunwip || true))
+    (cd "$dir" && git rev-parse --is-inside-work-tree > /dev/null 2>&1 && (gwip || true) && gfa && glr && (gunwip || true))
   done
 }
 alias gapf!="gaa && gcan! && (gpf || (glr && gp))"
