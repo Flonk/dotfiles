@@ -3,7 +3,7 @@
   "password": "scripts/password.sh",
   "second monitor: connect": "scripts/connect_second_monitor.sh",
   "second monitor: disconnect": "scripts/disconnect_second_monitor.sh",
-  "airpods: connect": "scripts/connect_airpods.sh",
+  "headphones: connect": "scripts/connect_headphones.sh",
   "wifi: connect": "scripts/connect_wifi.sh",
   "vpn: connect": "scripts/connect_vpn.sh",
   "vpn: disconnect": "scripts/disconnect_vpn.sh",
