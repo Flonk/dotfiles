@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Configurable variables
-FILE_EXTENSION="kt"
-ROOT_FOLDER="src/main"
+FILE_EXTENSION="js"
+ROOT_FOLDER="src"
 
 # Get the current branch name
 current_branch=$(git branch --show-current)

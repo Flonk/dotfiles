@@ -31,9 +31,9 @@ aspect_ratio() {
     read -r scaled_rows cols <<< "$(get_terminal_size_scaled)"
 
     if (( $(echo "$scaled_rows > $cols" | bc -l) )); then
-        echo "landscape"
-    else
         echo "portrait"
+    else
+        echo "landscape"
     fi
 }
 

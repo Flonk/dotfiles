@@ -1,11 +1,14 @@
 # Aliases and utilities for dealing with git
 
+local HERE=$BASH_SOURCE[0]
+
 alias gp="git push --follow-tags"
 
 alias gprune="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\""
 alias gprune!="git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\""
 
 alias glr="git pull --rebase"
+
 gbll () {
   (
     local repo_root=$(git rev-parse --show-toplevel)
@@ -24,29 +27,32 @@ alias gsearch="git log --source --all -S"
 
 gff() {
   local git_root=$(git rev-parse --show-toplevel)
-  local directory
-  if [[ -n $1 ]]; then
-    directory="$1"
-  else
-    directory=$git_root
-  fi
+  directory=${1:-$git_root}
 
   local file=$(cd "$directory" && fzf-file-preview)
-  local relative_path=$(realpath --relative-to="$git_root" "$file")
+  local relative_path=$(realpath --relative-to="$(pwd)" "$git_root/$file")
 
   local string=$(echo $file | fzf --layout=reverse \
-      --preview="git log -p --color -S{q} -- $file | delta" \
+      --preview="git log -p --color -S{q} -- $relative_path | delta" \
       --preview-window "up:99%:wrap" \
       --prompt="Enter Search String: " \
-      --print-query)
+      --phony \
+      --print-query | head -1)
+
+  echo "Searching for '$string' in '$relative_path'"
   
-  local commit=$(git log --color --oneline -S"$string" -- "$file" | fzf \
+  local commit=$(git log --color --oneline -S"$string" -- "$relative_path" | fzf \
       --ansi --layout=reverse \
-      --preview="cd '$directory' && git show {1}:'$relative_path' | bat --color always --file-name '$file'" \
+      --preview="git show {1}:'$file' | bat --color always --file-name '$file'" \
       --preview-window "up:80%:wrap" \
       --prompt="Select commit: " | awk '{print $1}')
 
-  git show "$commit:$relative_path"
+
+  git show "$commit:$relative_path" | cat --file-name="$file"
+  echo ""
+  echo "────────────────────────────────────────────────────────────"
+  echo ""
+  git show "$commit" --stat
 }
 
 rglr () {
@@ -125,7 +131,7 @@ gh () {
         --preview="bash -c \"$NODIFF_PREVIEW_COMMAND\"" \
         --bind "ctrl-g:change-preview(bash -c \"$DIFF_PREVIEW_COMMAND\")" \
         --bind "ctrl-f:change-preview(bash -c \"$NODIFF_PREVIEW_COMMAND\")" \
-        --header "ctrl-f: disable diff, ctrl-g: enable diff" \
+        --header "ctrl-f: show file, ctrl-g: show diff" \
         --preview-window "up:80%:wrap" \
         --phony \
         --prompt="Search: "
@@ -133,11 +139,36 @@ gh () {
 }
 
 alias gconflict="git diff --name-only --diff-filter=U"
-git_checkout_branch () {
+git_checkout_branch() {
+  local branch
+  local local_branches
+  local remote_branches
+
+  local_branches=$(git branch --format="%(refname:short)")
+  remote_branches=$(git branch -r | sed 's:remotes/::' | sed 's/^ *//;s/ *$//' | grep -v '\->')
+
+  # Pick any branch
+  branch_list=$(echo "$local_branches"; echo "$remote_branches" | grep -v -F "$local_branches" | sort -u)
   if [ -n "$1" ]; then
-    git checkout $(git branch | fzf --height 8 --layout=reverse --query="$1" --select-1 --exit-0)
+    branch=$(echo "$branch_list" | fzf --height 8 --layout=reverse --query="$1" --select-1 --exit-0)
   else
-    git checkout $(git branch | fzf --height 8 --layout=reverse)
+    branch=$(echo "$branch_list" | fzf --height 8 --layout=reverse)
+  fi
+
+  if [ -n "$branch" ]; then
+    local local_branch=$(echo "$branch" | sed 's:.*/::')
+
+    # Check if choice is a local branch
+    if echo "$local_branches" | grep -qw "$local_branch"; then
+      # Checkout the local branch
+      git checkout "$local_branch"
+    else
+      # Checkout the remote branch (create a local branch first)
+      git checkout -b "$local_branch" "$branch"
+      git pull --ff-only
+    fi
+  else
+    echo "No branch selected."
   fi
 }
 alias b="git_checkout_branch"
