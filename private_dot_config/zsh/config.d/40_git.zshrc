@@ -139,6 +139,8 @@ gh () {
 }
 
 alias gconflict="git diff --name-only --diff-filter=U"
+
+# this function is a bit buggy when checking out local branches
 git_checkout_branch() {
   local branch
   local local_branches
@@ -171,6 +173,17 @@ git_checkout_branch() {
     echo "No branch selected."
   fi
 }
-alias b="git_checkout_branch"
+
+gcob () {
+  if [ -n "$1" ]; then
+    # Use the provided argument as a filter for fzf
+    git checkout $(git branch | fzf --query="$1" --select-1 --exit-0)
+  else
+    # No argument provided, just show the branches for selection
+    git checkout $(git branch | fzf --height 8 --layout=reverse)
+  fi
+}
+
+alias b="gcob"
 
 :

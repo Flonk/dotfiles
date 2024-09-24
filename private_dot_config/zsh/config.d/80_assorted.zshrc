@@ -92,4 +92,8 @@ run_with_caps() {
 
 alias psx="procs --color=always --sortd mem | fzf --ansi --height 12 --header-lines=2 --layout reverse | awk '{print $1}'"
 
+# android
+export ANDROID_HOME="$HOME/Android/Sdk"
+alias android="emulator -list-avds | sed '/^INFO/ d' | fzf --height 5 | xargs -I {} bash -c 'emulator -gpu host -avd {} > /dev/null 2>&1 &'"
+
 :
