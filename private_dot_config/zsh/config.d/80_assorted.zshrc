@@ -94,6 +94,7 @@ alias psx="procs --color=always --sortd mem | fzf --ansi --height 12 --header-li
 
 # android
 export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
 alias android="emulator -list-avds | sed '/^INFO/ d' | fzf --height 5 | xargs -I {} bash -c 'emulator -gpu host -avd {} > /dev/null 2>&1 &'"
 
 :
