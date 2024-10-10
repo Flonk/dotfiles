@@ -40,3 +40,5 @@ brew "kubeseal"
 brew "minikube"
 brew "kubeconform"
 brew "jesseduffield/lazydocker/lazydocker"
+
+brew "hashicorp/tap/terraform"

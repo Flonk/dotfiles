@@ -97,4 +97,10 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
 alias android="emulator -list-avds | sed '/^INFO/ d' | fzf --height 5 | xargs -I {} bash -c 'emulator -gpu host -avd {} > /dev/null 2>&1 &'"
 
+
+# azure
+az-select-subscription() {
+  az account list --output table | tail -n +3 | fzf --layout reverse --height 10 --header "Select Azure subscription" | awk '{print $(NF-3)}' | xargs -I {} az account set --subscription {}
+}
+
 :
