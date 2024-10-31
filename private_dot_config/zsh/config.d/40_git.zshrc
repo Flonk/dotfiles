@@ -185,5 +185,14 @@ gcob () {
 }
 
 alias b="gcob"
+gsquash () {
+  git reset --soft HEAD~$1
+}
+
+update-dev-branch () {
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+  gwip && b dev && gfa && glr && b $current_branch
+}
+alias u="update-dev-branch"
 
 :
