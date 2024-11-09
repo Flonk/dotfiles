@@ -11,13 +11,4 @@ echo 'Checking if gimp is installed...'
 if ! [[ "$(flatpak list --app | grep GIMP)" ]]; then
   echo 'Installing gimp...'
   flatpak install flathub org.gimp.GIMP
-
-  echo 'Installing PhotoGIMP'
-  wget https://github.com/Diolinux/PhotoGIMP/releases/download/1.1/PhotoGIMP.zip
-  unzip PhotoGIMP.zip
-  (
-    cd PhotoGIMP-master
-    cp -r .local/* ~/.local/
-    cp -r .var/* ~/.var/
-  )
 fi

@@ -39,3 +39,9 @@ if ! [ -x "$(command -v pip)" ]; then
   echo 'Installing pip...'
   sudo apt install -y pip pipx python-is-python3
 fi
+
+echo 'Checking if nala is installed...'
+if ! [ -x "$(command -v nala)" ]; then
+  echo 'Installing nala...'
+  sudo apt install -y nala
+fi
