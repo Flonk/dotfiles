@@ -19,4 +19,6 @@ figlet-fzf() {
     --header "figlet"
 }
 
+alias future="figlet -f future"
+
 :

@@ -33,6 +33,8 @@ brew "imagemagick"
 brew "direnv"
 brew "superfile"
 
+brew "moreutils"
+
 
 # Virtualization
 brew "derailed/k9s/k9s"

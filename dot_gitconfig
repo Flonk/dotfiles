@@ -13,6 +13,7 @@
 
 [diff]
     colorMoved = default
+	algorithm = histogram
 [credential]
 	helper = store
 [rerere]
@@ -21,3 +22,9 @@
 [user]
 	email = florian.schindler@rise-world.com
 	name = Florian Schindler
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[pull]
+	rebase = true

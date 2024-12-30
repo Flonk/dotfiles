@@ -5,5 +5,5 @@ primary_network_interface = "wlp0s20f3"
 
 background_image = "~/assets/wallhaven.png"
 
-primary_color = "#03c2fc"
+primary_color = "#ffa200"
 taskbar_color = "#000000"
