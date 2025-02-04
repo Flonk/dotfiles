@@ -52,8 +52,8 @@ both () {
   
 }
 
-alias c='cd ~ && cd "$(fzf-folder-preview | xargs -d "\n" dirname)"'
-alias o='fzf-file-preview | xargs micro'
+alias cdf='cd ~ && cd "$(fzf-folder-preview | xargs -d "\n" dirname)"'
+alias cdo='fzf-file-preview | xargs micro'
 
 function frg {
   result=$(rg --ignore-case --color=always --line-number --no-heading "$@" |
@@ -68,5 +68,23 @@ function frg {
           $EDITOR +"${linenumber}" "$file"
   fi
 }
+
+cd_fzf() {
+  # Get all directories in the current folder
+  local dirs=$(find . -maxdepth 1 -type d -printf "%f\n")
+
+  # Use fzf to pick the closest match to $1
+  local selected=$(echo "$dirs" | fzf --query="$1" --select-1 --exit-0)
+
+  # If a directory was selected, cd into it
+  if [[ -n "$selected" ]]; then
+    cd "$selected" || return
+  else
+    echo "No matching directory found."
+  fi
+}
+
+alias c='cd_fzf'
+
 
 :

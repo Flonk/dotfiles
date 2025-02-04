@@ -105,4 +105,14 @@ az-select-subscription() {
   az account list --output table | tail -n +3 | fzf --layout reverse --height 10 --header "Select Azure subscription" | awk '{print $(NF-3)}' | xargs -I {} az account set --subscription {}
 }
 
+# node
+mkdir -p ~/.local/bin
+ln -sf /usr/local/bin/node ~/.local/bin/node
+ln -sf /usr/local/bin/npm ~/.local/bin/npm
+export PATH=~/.local/bin:$PATH
+
+# qr
+alias qr='qrencode -m 4 -t utf8 <<< "$1"'
+
+
 :
