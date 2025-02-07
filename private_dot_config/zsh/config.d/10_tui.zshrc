@@ -1,4 +1,5 @@
-alias columns="git column --mode="column,dense" --padding=3"
+_COLUMNS_COMMAND="git column --mode="column,dense" --padding=3"
+alias columns="$_COLUMNS_COMMAND"
 
 get_terminal_size_scaled() {
     local rows cols scaled_rows

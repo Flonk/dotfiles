@@ -8,34 +8,34 @@ _T_COMMAND="tree -L 2 -a -I '.git' --gitignore --dirsfirst"
 
 alias l="$_L_COMMAND"
 alias t="$_T_COMMAND"
+
 alias cat="$_CAT_COMMAND"
+hexcat () {
+  echo $1 \
+    | xargs -I{} dd if={} bs=1 count=2048 2>/dev/null \
+    | xxd --color=never \
+    | awk 'match($0, /^([^:]+:)([[:space:]]+)([0-9A-Fa-f ]+)([[:space:]]+)(.*)/,a){printf "\033[90m%s\033[0m%s\033[97m%s\033[0m%s\033[33m%s\033[0m\n", a[1], a[2], a[3], a[4], a[5]}' \
+    | git column --mode="column,dense" --padding=3
+}
 
-export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!**/.git/**"'
-FZF_FILE_PREVIEW_COMMAND='if file --mime {} | grep -q binary; then head -c 1MB {}; else '$_CAT_COMMAND' {} | head -n 1000; fi'
-FZF_FOLDER_PREVIEW_COMMAND='dirname {} | xargs -I _ tree -C -L 2 --gitignore --dirsfirst _'
-
-_FILE_PREVIEW () {
-  file=$1
-  if file --mime $1 | grep -q binary; then
-    head -c 1MB $1
-  else
-   bat -P -p --color always --theme 'Visual Studio Dark+' $1 | head -n 1000
+file-summary () {
+  if file --mime $1 | grep -q binary;
+    then hexcat $1;
+    else cat $1 | head -n 1000;
   fi
 }
 
-_FOLDER_PREVIEW () {
-  dirname $1 | xargs -I {_] tree -C -L 2 --gitignore --dirsfirst {_]
+dir-summary () {
+  l $1 | git column --mode="column,dense" --padding=3
 }
 
-_BOTH_PREVIEW () {
-  file=$1
-  term_cols=$(tput cols)
-  cols=$((term_cols / 2))
-  file_preview_wrapped=$(_FILE_PREVIEW $file | bat -P -p --color always --terminal-width=40)
-  folder_preview_wrapped=$(_FOLDER_PREVIEW $file | cut -c 1-40)
-  pr -m <(echo $folder_preview_wrapped) <(echo $file_preview_wrapped)
+tree-summary () {
+  t $1 | git column --mode="column,dense" --padding=3
 }
 
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!**/.git/**"'
+FZF_FILE_PREVIEW_COMMAND='source ~/.config/zsh/config.d/40_files.zshrc; file-summary {}'
+FZF_FOLDER_PREVIEW_COMMAND='source ~/.config/zsh/config.d/40_files.zshrc; dirname {} | dir-summary'
 
 alias fzf-preview='fzf --layout reverse \
   --preview-window up \
@@ -48,11 +48,8 @@ alias fzf-preview='fzf --layout reverse \
 alias fzf-file-preview='fzf-preview --preview "'"$FZF_FILE_PREVIEW_COMMAND"'"'
 alias fzf-folder-preview='fzf-preview --preview "'"$FZF_FOLDER_PREVIEW_COMMAND"'"'
 
-both () {
-  
-}
 
-alias cdf='cd ~ && cd "$(fzf-folder-preview | xargs -d "\n" dirname)"'
+alias cdf='cd ~ && cd "$(fzf-file-preview | xargs -d "\n" dirname)"'
 alias cdo='fzf-file-preview | xargs micro'
 
 function frg {
