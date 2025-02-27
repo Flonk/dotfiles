@@ -35,6 +35,8 @@ brew "superfile"
 
 brew "moreutils"
 
+brew "jenv"
+
 
 # Virtualization
 brew "derailed/k9s/k9s"

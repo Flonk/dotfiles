@@ -98,7 +98,8 @@ export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:
 alias android="emulator -list-avds | sed '/^INFO/ d' | fzf --height 5 | xargs -I {} bash -c 'emulator -gpu host -avd {} > /dev/null 2>&1 &'"
 
 # java
-export PATH="/usr/lib/jvm/bellsoft-java21-amd64/bin:$PATH"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 
 # azure
 az-select-subscription() {
@@ -114,5 +115,10 @@ export PATH=~/.local/bin:$PATH
 # qr
 alias qr='qrencode -m 4 -t utf8 <<< "$1"'
 
+# sudo
+alias x="sudo env \"PATH=$PATH\""
+
+# i3
+alias reload="chezmoi apply && i3-msg reload && source ~/.zshrc"
 
 :

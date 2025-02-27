@@ -64,3 +64,9 @@ if ! [ -x "$(command -v bruno)" ]; then
   echo 'Installing bruno...'
   sudo snap install bruno
 fi
+
+echo 'Checking if spotify is installed...'
+if ! [ -x "$(command -v spotify)" ]; then
+  echo 'Installing spotify...'
+  sudo snap install spotify
+fi
