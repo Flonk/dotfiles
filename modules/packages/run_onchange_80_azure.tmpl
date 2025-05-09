@@ -23,11 +23,3 @@ if ! [ -x "$(command -v func)" ]; then
   sudo nala update
   sudo nala install azure-functions-core-tools-4
 fi
-
-echo 'Checking if storage explorer is installed...'
-if ! [ -x "$(command -v storage-explorer)" ]; then
-  sudo snap install storage-explorer
-  gnome-keyring-daemon --replace --components=pkcs11,secrets,ssh,gpg
-  sudo apt install libsecret-tools
-  secret-tool store --label='Default Keyring' key default
-fi

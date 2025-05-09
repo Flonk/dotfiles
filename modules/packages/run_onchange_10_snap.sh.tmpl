@@ -13,22 +13,10 @@ if ! [ -x "$(command -v intellij-idea-ultimate)" ]; then
   snap install intellij-idea-ultimate --classic
 fi
 
-echo 'Checking if krita is installed...'
-if ! [ -x "$(command -v krita)" ]; then
-  echo 'Installing krita...'
-  snap install krita
-fi
-
 echo 'Checking if vscode is installed...'
 if ! [ -x "$(command -v code)" ]; then
   echo 'Installing vscode...'
   snap install code --classic
-fi
-
-echo 'Checking if bw is installed...'
-if ! [ -x "$(command -v bw)" ]; then
-  echo 'Installing bw...'
-  sudo snap install bw
 fi
 
 echo 'Checking if obsidian is installed...'

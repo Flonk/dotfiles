@@ -117,8 +117,26 @@ alias qr='qrencode -m 4 -t utf8 <<< "$1"'
 
 # sudo
 alias x="sudo env \"PATH=$PATH\""
+__sudo_last_command() {
+  local last_command=$(fc -ln -1)
+  echo "sudo $last_command"
+}
+alias xx=__sudo_last_command
 
 # i3
 alias reload="chezmoi apply && i3-msg reload && source ~/.zshrc"
+
+# chatgpt
+gpt() {
+  # if no arguments, run "chatgpt", else run "chatgpt -p $1"
+  if [ $# -eq 0 ]; then
+    chatgpt
+  else
+    local prompt="$1"
+    shift
+    chatgpt -p "$prompt" "$@"
+  fi
+}
+alias g="gpt"
 
 :
