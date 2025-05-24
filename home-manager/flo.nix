@@ -2,7 +2,7 @@
 {
   home = {
     packages = with pkgs; [
-      hello
+      make
     ];
 
     # This needs to actually be set to your username
