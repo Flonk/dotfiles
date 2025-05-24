@@ -101,8 +101,13 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+  
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
 
-  # Allow unfree packages
+  programs.hyprland.enable = true;
+
+    # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
@@ -117,6 +122,7 @@
     wget
 
     alacritty
+    kitty
   ];
 
   environment.variables.EDITOR = "micro";
