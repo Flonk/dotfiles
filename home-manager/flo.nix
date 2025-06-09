@@ -1,9 +1,10 @@
-{ lib, pkgs, self, ... }:
+{ config, lib, pkgs, self, ... }:
 {
   imports = [
     ./modules/hyprland/hyprland.nix
     ./modules/waybar/waybar.nix
     ./modules/alacritty/alacritty.nix
+    ./modules/rofi/rofi.nix
   ];
 
   home = {
@@ -35,7 +36,8 @@
   
   nixpkgs.config.allowUnfree = true;
 
-  programs.wofi.enable = true;  
+  
+
   programs.waybar.enable = true;
   
   programs.vscode.enable = true;
