@@ -42,7 +42,7 @@
       	"$mainMod, E, exec, $fileManager"
 
         "$mainMod, M, exit"
-        "$mainMod, SPACE, exec, wofi --show drun"
+        "$mainMod, SPACE, exec, rofi -show drun"
         "$mainMod, Q, killactive"
         "$mainMod, F, togglefloating"
 
@@ -196,7 +196,7 @@
       };
 
       decoration = {
-        rounding = 2;
+        rounding = 0;
         blur = {
           enabled = true;
           size = 5;
@@ -257,5 +257,5 @@
       monitor=,preferred,auto,1
     ";
   };
-  
+
 }

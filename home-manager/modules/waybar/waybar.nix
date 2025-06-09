@@ -10,7 +10,7 @@
     package = pkgs.waybar;
     settings = [
       {
-        layer = "top";
+        layer = "bottom";
         position = "bottom";
 
         modules-center = [];
