@@ -1,5 +1,9 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, self, ... }:
 {
+  imports = [
+    ./modules/waybar/waybar.nix
+  ];
+
   home = {
     packages = with pkgs; [
       hello
@@ -12,6 +16,8 @@
       playerctl
       networkmanagerapplet
       pavucontrol
+
+      wl-clipboard
     ];
     
     # This needs to actually be set to your username
@@ -24,16 +30,26 @@
   programs.zsh.shellAliases = {
   	update = "sudo nixos-rebuild --flake .#schnitzelwirt switch && home-manager switch --flake .#flo";
   };
-
-  programs.kitty.enable = true;
-
+  
   nixpkgs.config.allowUnfree = true;
+
+  programs.wofi.enable = true;  
   programs.waybar.enable = true;
+  
   programs.vscode.enable = true;
 
+  programs.alacritty = {
+  	enable = true; 
+  	settings = {
+  	  font.size = 9;
+  	};
+  };
+ 
   wayland.windowManager.hyprland = {
     enable = true;
     package = pkgs.hyprland;
+
+    # plugins = [ pkgs.hyprlandPlugins.hy3 ];
     
     systemd = {
       enable = true;
@@ -46,30 +62,93 @@
     };
     
     settings = {
-      "$terminal" = "kitty";
+      "$terminal" = "alacritty";
       "$fileManager" = "nautilus";
       "$menu" = "walker";
       "$mainMod" = "SUPER";
-      "$code" = "codium";
+      "$code" = "vscode";
       "$browser" = "firefox";
       "$editor" = "micro";
               
       exec-once = [
         "waybar"
-        "kitty"
         "alacritty"
         "firefox"
-        "micro"
       ];
 
       bind = [
-      	"$mainMod, T, exec, $terminal"
-      	"$mainMod, Z, exec, alacritty"
-        "$mainMod, U, exec, xterm"
-      	"$mainMod ALT, RETURN, exec, $browser"
         "$mainMod, RETURN, exec, $terminal"
+      	"$mainMod CTRL, RETURN, exec, $browser"
       	"$mainMod, E, exec, $fileManager"
+
         "$mainMod, M, exit"
+        "$mainMod, SPACE, exec, wofi --show drun"
+        "$mainMod, Q, killactive"
+        "$mainMod, F, togglefloating"
+
+        "$mainMod, left, movefocus, l"
+        "$mainMod, right, movefocus, r"
+        "$mainMod, up, movefocus, u"
+        "$mainMod, down, movefocus, d"
+
+        "$mainMod SHIFT, left, movewindow, l"
+        "$mainMod SHIFT, right, movewindow, r"
+        "$mainMod SHIFT, up, movewindow, u"
+        "$mainMod SHIFT, down, movewindow, d"
+
+        "$mainMod, 1, workspace, 1"
+        "$mainMod, 2, workspace, 2"
+        "$mainMod, 3, workspace, 3"
+        "$mainMod, 4, workspace, 4"
+        "$mainMod, 5, workspace, 5"
+        "$mainMod, 6, workspace, 6"
+        "$mainMod, 7, workspace, 7"
+        "$mainMod, 8, workspace, 8"
+        "$mainMod, 9, workspace, 9"
+        "$mainMod, 0, workspace, 10"
+
+        "$mainMod SHIFT, 1, movetoworkspace, 1"
+        "$mainMod SHIFT, 2, movetoworkspace, 2"
+        "$mainMod SHIFT, 3, movetoworkspace, 3"
+        "$mainMod SHIFT, 4, movetoworkspace, 4"
+        "$mainMod SHIFT, 5, movetoworkspace, 5"
+        "$mainMod SHIFT, 6, movetoworkspace, 6"
+        "$mainMod SHIFT, 7, movetoworkspace, 7"
+        "$mainMod SHIFT, 8, movetoworkspace, 8"
+        "$mainMod SHIFT, 9, movetoworkspace, 9"
+        "$mainMod SHIFT, 0, movetoworkspace, 10"
+
+        "$mainMod, PRINT, exec, hyprshot -m window -m active"
+        "$mainMod SHIFT, PRINT, exec, hyprshot -m output"
+        ", PRINT, exec, hyprshot -m region"
+      ];
+
+      # Move/resize windows with mainMod + LMB/RMB and dragging
+      bindm = [
+        "$mainMod, mouse:272, movewindow"
+        "$mainMod, mouse:273, resizewindow"
+      ];
+
+      bindel = [
+        ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
+        ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ",XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+        ",XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
+        ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
+      ];
+
+      bindl = [
+        ", XF86AudioNext, exec, playerctl next"
+        ", XF86AudioPause, exec, playerctl play-pause"
+        ", XF86AudioPlay, exec, playerctl play-pause"
+        ", XF86AudioPrev, exec, playerctl previous"
+      ];
+
+      windowrule = [
+        # Ignore maximize requests from apps. You'll probably like this.
+        "suppressevent maximize, class:.*"
+        "noshadow, floating:0"
       ];
 
       input = {
@@ -103,11 +182,32 @@
 
       general = {
         "$modifier" = "SUPER";
-        layout = "dwindle";
-        gaps_in = 6;
-        gaps_out = 8;
+        layout = "hy3";
+        gaps_in = 0;
+        gaps_out = 0;
         border_size = 2;
+        "col.active_border" = "rgba(ffa200ff)";
+        "col.inactive_border" = "rgba(000000ff)";
         resize_on_border = true;
+      };
+
+      animations = {
+        enabled = true;
+        bezier = [
+          "pace,0.46, 1, 0.29, 0.99"
+          "overshot,0.13,0.99,0.29,1.1"
+          "md3_decel, 0.05, 0.7, 0.1, 1"
+        ];
+        animation = [
+          "windowsIn,1,2,md3_decel,slide"
+          "windowsOut,1,2,md3_decel,slide"
+          "windowsMove,1,2,md3_decel,slide"
+          "fade,1,10,md3_decel"
+          "workspaces,1,2,md3_decel,slide"
+          "workspaces, 1, 2, default"
+          "specialWorkspace,1,2,md3_decel,slide"
+          "border,1,4,md3_decel"
+        ];
       };
 
       misc = {
@@ -127,8 +227,7 @@
         enable_anr_dialog = true;
         anr_missed_pings = 20;
 
-      };  
-
+      };
 
       dwindle = {
         pseudotile = true;
@@ -137,7 +236,7 @@
       };
 
       decoration = {
-        rounding = 10;
+        rounding = 2;
         blur = {
           enabled = true;
           size = 5;
@@ -147,17 +246,12 @@
         };
         shadow = {
           enabled = true;
-          range = 4;
-          render_power = 3;
-          color = "rgba(1a1a1aee)";
+          range = 3;
+          render_power = 1;
+          offset = "1, 1";
+          color = "rgba(00000022)";
         };
       };
-
-      environment = {
-        no_donation_nag = true;
-        no_update_news = false;
-      };
-      
 
       cursor = {
         sync_gsettings_theme = true;
