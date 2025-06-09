@@ -3,6 +3,7 @@
   imports = [
     ./modules/hyprland/hyprland.nix
     ./modules/waybar/waybar.nix
+    ./modules/alacritty/alacritty.nix
   ];
 
   home = {
@@ -39,13 +40,5 @@
   
   programs.vscode.enable = true;
 
-  programs.alacritty = {
-  	enable = true; 
-  	settings = {
-  	  font.size = 9;
-  	};
-  };
- 
-  
   
 }
