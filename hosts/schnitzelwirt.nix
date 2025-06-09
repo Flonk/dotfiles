@@ -15,8 +15,19 @@
 
   # Bootloader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.efiSupport = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.devices = [ "nodev" ];
   boot.loader.grub.useOSProber = true;
+  boot.initrd.kernelModules = [ "i915" ];
+  boot.kernelModules = [ "i915" "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.extraModprobeConfig = "options nvidia-drm modeset=1";
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+  	modesetting.enable = true;
+  	package = config.boot.kernelPackages.nvidiaPackages.stable;
+  	open = true;
+  };
 
   networking.hostName = "schnitzelwirt"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -122,7 +133,6 @@
     wget
 
     alacritty
-    kitty
   ];
 
   environment.variables.EDITOR = "micro";
