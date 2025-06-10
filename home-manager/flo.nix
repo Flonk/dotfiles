@@ -5,6 +5,7 @@
     ./modules/waybar/waybar.nix
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix
+    ./modules/zsh/zsh.nix
   ];
 
   home = {
@@ -30,17 +31,8 @@
     stateVersion = "25.05";
   };
 
-  programs.zsh.shellAliases = {
-  	update = "sudo nixos-rebuild --flake .#schnitzelwirt switch && home-manager switch --flake .#flo";
-  };
-  
   nixpkgs.config.allowUnfree = true;
 
-  
-
   programs.waybar.enable = true;
-  
   programs.vscode.enable = true;
-
-  
 }
