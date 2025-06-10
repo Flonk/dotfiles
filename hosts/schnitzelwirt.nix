@@ -3,8 +3,14 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
-{
+let fallout = pkgs.fetchFromGitHub
+  {
+    owner = "shvchk";
+    repo = "fallout-grub-theme";
+    rev = "80734103d0b48d724f0928e8082b6755bd3b2078";
+    sha256 = "sha256-7kvLfD6Nz4cEMrmCA9yq4enyqVyqiTkVZV5y4RyUatU=";
+  };
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./schnitzelwirt-hardware.nix
@@ -28,6 +34,7 @@
   	package = config.boot.kernelPackages.nvidiaPackages.stable;
   	open = true;
   };
+  boot.loader.grub.theme = fallout;
 
   networking.hostName = "schnitzelwirt"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
