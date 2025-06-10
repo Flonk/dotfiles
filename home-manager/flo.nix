@@ -22,6 +22,7 @@
       pavucontrol
 
       wl-clipboard
+      tree
     ];
     
     # This needs to actually be set to your username
@@ -32,6 +33,13 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  programs.eza.enable = true;
+  programs.bat.enable = true;
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 
   programs.waybar.enable = true;
   programs.vscode.enable = true;

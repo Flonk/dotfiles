@@ -13,14 +13,14 @@
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     autocd = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     history.size = 10000;
     history.share = true;
 
     plugins = [
       {
         name = "powerlevel10k-config";
-        src = .;
+        src = ./.;
         file = "p10k.zsh";
       }
       {
@@ -40,24 +40,45 @@
     '';
 
     initExtra = ''
-            # autoSuggestions config
+      # autoSuggestions config
 
-            unsetopt correct # autocorrect commands
+      unsetopt correct # autocorrect commands
 
-            setopt hist_ignore_all_dups # remove older duplicate entries from history
-            setopt hist_reduce_blanks # remove superfluous blanks from history items
-            setopt inc_append_history # save history entries as soon as they are entered
+      setopt hist_ignore_all_dups # remove older duplicate entries from history
+      setopt hist_reduce_blanks # remove superfluous blanks from history items
+      setopt inc_append_history # save history entries as soon as they are entered
 
-            # auto complete options
-            setopt auto_list # automatically list choices on ambiguous completion
-            setopt auto_menu # automatically use menu completion
-            zstyle ':completion:*' menu select # select completions with arrow keys
-            zstyle ':completion:*' group-name "" # group results by category
-            zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
+      # auto complete options
+      setopt auto_list # automatically list choices on ambiguous completion
+      setopt auto_menu # automatically use menu completion
+      zstyle ':completion:*' menu select # select completions with arrow keys
+      zstyle ':completion:*' group-name "" # group results by category
+      zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 
-      #      bindkey '^I' forward-word         # tab
-      #      bindkey '^[[Z' backward-word      # shift+tab
-      #      bindkey '^ ' autosuggest-accept   # ctrl+space
+      cd_fzf() {
+        # Get all directories in the current folder
+        local dirs=$(find . -maxdepth 1 -type d -printf "%f\n")
+
+        # Use fzf to pick the closest match to $1
+        local selected=$(echo "$dirs" | fzf --layout reverse --height 8 --query="$1" --select-1 --exit-0)
+
+        # If a directory was selected, cd into it
+        if [[ -n "$selected" ]]; then
+          cd "$selected" || return
+        else
+          echo "No matching directory found."
+        fi
+      }
+
+      gcob () {
+        if [ -n "$1" ]; then
+          # Use the provided argument as a filter for fzf
+          git checkout $(git branch | fzf --query="$1" --select-1 --exit-0)
+        else
+          # No argument provided, just show the branches for selection
+          git checkout $(git branch | fzf --height 8 --layout=reverse)
+        fi
+      }
     '';
 
     oh-my-zsh = {
@@ -66,8 +87,13 @@
       # Custom OMZ plugins are added to $ZSH_CUSTOM/plugins/
       # Enabling too many plugins will slowdown shell startup
       plugins = [
+        "aliases"
         "git"
-        "sudo" # press Esc twice to get the previous command prefixed with sudo https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/sudo
+        "docker"
+        "docker-compose"
+        "isodate"
+        "kubectl"
+        "z"
       ];
       extraConfig = ''
         # Display red dots whilst waiting for completion.
@@ -75,22 +101,21 @@
       '';
     };
 
+    sessionVariables = {
+      EDITOR = "micro";
+    };
+
     shellAliases = {
       # Overrides those provided by OMZ libs, plugins, and themes.
       # For a full list of active aliases, run `alias`.
 
       #-------------Bat related------------
-      cat = "bat";
-      diff = "batdiff";
-      rg = "batgrep";
-      man = "batman";
+      cat = "bat -P -p --color always --theme 'Visual Studio Dark+'";
+      t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
 
       #------------Navigation------------
-      l = "eza -lah";
-      la = "eza -lah";
-      ll = "eza -lh";
-      ls = "eza";
-      lsa = "eza -lah";
+      l = "eza -l --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --no-user --color=always";
+      c = "cd_fzf";
 
       #-----------Nix related----------------
       ne = "nix-instantiate --eval";
@@ -100,7 +125,9 @@
       nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
 
       #-------------Git Goodness-------------
-      # just reference `$ alias` and use the defautls, they're good.
+      gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";
+      "gprune!" = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
+      b = "gcob";
     };
   };
 }
