@@ -10,9 +10,7 @@
 
   home = {
     packages = with pkgs; [
-      hello
       nautilus
-      walker
       hyprpaper
       hyprshot
 
@@ -23,6 +21,9 @@
 
       wl-clipboard
       tree
+      figlet
+
+      google-chrome
     ];
     
     # This needs to actually be set to your username
@@ -43,4 +44,6 @@
 
   programs.waybar.enable = true;
   programs.vscode.enable = true;
+
+  
 }

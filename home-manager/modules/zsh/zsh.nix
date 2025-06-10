@@ -79,6 +79,16 @@
           git checkout $(git branch | fzf --height 8 --layout=reverse)
         fi
       }
+
+      figlet-all() {
+        for font in /usr/share/figlet/*.tlf; do
+            font_name=$(basename "$font" .tlf)
+            figlet -f $font_name "$1"
+            echo "$font_name"
+            echo
+            echo
+        done
+      }
     '';
 
     oh-my-zsh = {
@@ -109,25 +119,52 @@
       # Overrides those provided by OMZ libs, plugins, and themes.
       # For a full list of active aliases, run `alias`.
 
-      #-------------Bat related------------
+      ##### Navigation
       cat = "bat -P -p --color always --theme 'Visual Studio Dark+'";
       t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
-
-      #------------Navigation------------
       l = "eza -l --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --no-user --color=always";
       c = "cd_fzf";
 
-      #-----------Nix related----------------
+      ##### Nix
       ne = "nix-instantiate --eval";
       nb = "nix-build";
       ns = "nix-shell";
+      s = "nix-shell -p";
       nr = "home-manager switch --flake ~/dotfiles#flo";
       nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
 
-      #-------------Git Goodness-------------
+      ##### Git
       gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";
       "gprune!" = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
       b = "gcob";
+      
+      ##### Docker
+      dka = "docker ps -q | xargs docker stop | xargs docker rm";
+      "dka!" = "docker ps -aq | xargs docker stop | xargs docker rm";
+      "dkav!" = "docker volume ls | xargs docker volume rm";
+      "dk!" = "dka! && dkav!";
+
+      ##### Assorted
+      future = "figlet -f future";
+      x = "sudo env \"PATH=$PATH\"";
     };
   };
 }
+/*
+old stuff.. evalulate if still needed
+
+
+# ansible
+export ANSIBLE_NOCOWS=1
+
+# android
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
+alias android="emulator -list-avds | sed '/^INFO/ d' | fzf --height 5 | xargs -I {} bash -c 'emulator -gpu host -avd {} > /dev/null 2>&1 &'"
+
+# azure
+az-select-subscription() {
+  az account list --output table | tail -n +3 | fzf --layout reverse --height 10 --header "Select Azure subscription" | awk '{print $(NF-3)}' | xargs -I {} az account set --subscription {}
+}
+
+*/
