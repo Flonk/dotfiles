@@ -50,6 +50,7 @@ in {
         "$mainMod, SPACE, exec, rofi -show drun"
         "$mainMod, Q, killactive"
         "$mainMod, F, togglefloating"
+        "$mainMod, L, exec, hyprlock"
 
         "$mainMod, left, movefocus, l"
         "$mainMod, right, movefocus, r"
