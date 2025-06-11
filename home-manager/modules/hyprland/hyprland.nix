@@ -33,7 +33,7 @@
       exec-once = [
         "waybar"
         "alacritty"
-        "firefox"
+        "google-chrome"
       ];
 
       bind = [

@@ -2,7 +2,7 @@
 {
   imports = [
     ./modules/hyprland/hyprland.nix
-    ./modules/hyprland/hyprshot.nix
+    ./modules/hyprpaper/hyprpaper.nix
     ./modules/waybar/waybar.nix
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix
@@ -26,6 +26,8 @@
 
       google-chrome
     ];
+
+    file.".config/wallpapers".source = ../assets/wallpapers;
     
     # This needs to actually be set to your username
     username = "flo";

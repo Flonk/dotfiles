@@ -3,14 +3,16 @@
   config,
   lib,
   ...
-}: {
+}: let
+  wallpaper = "${config.home.homeDirectory}/.config/wallpapers/aishot-1910.jpg";
+in {
   
-  programs.hyprpaper = {
+  services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ "../../../assets/wallpapers/aishot-1910.jpg" ];
+      preload = [ wallpaper ];
       wallpaper = [
-        ",../../../assets/wallpapers/aishot-1910.jpg"
+        ",${wallpaper}"
       ];
     };
   };
