@@ -2,8 +2,13 @@
   pkgs,
   config,
   lib,
+  theme,
   ...
-}: {
+}: let
+  hexNoHash = lib.replaceStrings ["#"] [""] theme.color.accent;
+  borderColor = "rgba(${hexNoHash}ff)";
+  inactiveBorderColor = "rgba(000000ff)";
+in {
   
   wayland.windowManager.hyprland = {
     enable = true;
@@ -146,8 +151,8 @@
         gaps_in = 0;
         gaps_out = 0;
         border_size = 2;
-        "col.active_border" = "rgba(ffa200ff)";
-        "col.inactive_border" = "rgba(000000ff)";
+        "col.active_border" = borderColor;
+        "col.inactive_border" = inactiveBorderColor;
         resize_on_border = true;
       };
 

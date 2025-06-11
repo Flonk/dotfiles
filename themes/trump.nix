@@ -1,20 +1,25 @@
 { lib, ... }:
 
 let 
-  primaryColor = "#ffa200";
+  textColor = "#ffffff";
   backgroundColor = "#000000";
+  accentColor = "#ffa200";
 
-  fontSizes = {
-    tiny   = 8;
-    small  = 9;
-    normal = 10;
-    big    = 12;
-    huge   = 16;
+  fontSize = {
+    tiny   = 7.5;
+    small  = 8;
+    normal = 9;
+    big    = 10.5;
+    huge   = 14;
   };
+
+  wallpaper = ../assets/wallpapers/aishot-1910.jpg;
 in {
-  colors = {
-    primary = primaryColor;
+  color = {
+
+    text = textColor;
     background = backgroundColor;
+    accent = accentColor;
 
     notifications = {
       backgroundColor = backgroundColor;
@@ -22,17 +27,20 @@ in {
       low = "#333333";
       lowText = "#aaaaaa";
 
-      normal = primaryColor;
-      normalText = "#ffffff";
+      normal = accentColor;
+      normalText = textColor;
 
       urgent = "#ff0000";
-      urgentText = "#ffffff";
+      urgentText = textColor;
     };
   };
 
   fonts = {
-    ui   = lib.mapAttrs (_: sz: "monospace ${toString sz}") fontSizes;
-    mono = lib.mapAttrs (_: sz: "monospace ${toString sz}") fontSizes;
+    ui   = lib.mapAttrs (_: sz: "monospace ${toString sz}") fontSize;
+    mono = lib.mapAttrs (_: sz: "monospace ${toString sz}") fontSize;
   };
+
+  fontSize = fontSize;
+  wallpaper = wallpaper;
 }
 

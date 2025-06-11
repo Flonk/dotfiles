@@ -2,13 +2,14 @@
   pkgs,
   config,
   lib,
+  theme,
   ...
 }: {
   
   programs.alacritty = {
   	enable = true; 
   	settings = {
-  	  font.size = 9;
+  	  font.size = theme.fontSize.normal;
   	};
   };
   
