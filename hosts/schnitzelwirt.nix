@@ -22,5 +22,12 @@
   	open = true;
   };
 
-  virtualisation.docker.enable = true;
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.flo = {
+    isNormalUser = true;
+    description = "flo";
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
+  };
+
+  services.greetd.settings.default_session.user = "flo";
 }

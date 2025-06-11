@@ -38,6 +38,7 @@
     stateVersion = "25.05";
   };
 
+  services.blueman.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   programs.eza.enable = true;
