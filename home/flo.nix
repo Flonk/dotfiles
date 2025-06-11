@@ -29,7 +29,6 @@
 
     file.".config/wallpapers".source = ../assets/wallpapers;
     
-    # This needs to actually be set to your username
     username = "flo";
     homeDirectory = "/home/flo";
 
@@ -45,7 +44,6 @@
     enableZshIntegration = true;
   };
 
-  programs.waybar.enable = true;
   programs.vscode.enable = true;
 
   

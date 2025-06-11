@@ -15,6 +15,15 @@ in {
   # Nix config.
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
+  system.autoUpgrade.enable  = true;
+  system.autoUpgrade.allowReboot  = true;
+
   # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
@@ -34,10 +43,7 @@ in {
 
   boot.loader.grub.theme = fallout;
 
-  system.autoUpgrade.enable  = true;
-  system.autoUpgrade.allowReboot  = true;
 
-  networking.hostName = "schnitzelwirt"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary

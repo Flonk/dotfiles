@@ -31,7 +31,7 @@
             self = self;
           };
           modules = [
-            ./home-manager/flo.nix
+            ./home/flo.nix
           ];
         };
       };
