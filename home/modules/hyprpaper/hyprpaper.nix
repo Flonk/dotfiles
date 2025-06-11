@@ -2,17 +2,18 @@
   pkgs,
   config,
   lib,
+  theme,
   ...
-}: let
-  wallpaper = "${config.home.homeDirectory}/.config/wallpapers/aishot-1910.jpg";
+}: let 
+  path = builtins.toString theme.wallpaper;
 in {
   
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ wallpaper ];
+      preload = [ path ];
       wallpaper = [
-        ",${wallpaper}"
+        ",${path}"
       ];
     };
   };

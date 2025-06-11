@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  theme,
   ...
 }: with lib; {
   # Configure & Theme Waybar
@@ -83,9 +84,9 @@
         }
 
         window#waybar {
-          background-color: #000000;
+          background-color: ${theme.color.background};
           border-radius: 0px;
-          color: #ffa200;
+          color: ${theme.color.accent};
         }
 
         #workspaces {
@@ -95,18 +96,18 @@
         }
 
         #workspaces button {
-          color: #ffa200;
+          color: ${theme.color.accent};
           border-radius: 0;
         }
 
         #workspaces button:hover {
-          background: #ffa200;
-          color: #000000;
+          background: ${theme.color.accent};
+          color: ${theme.color.background};
           border: 0px solid transparent;
         }
 
         #workspaces button.active {
-          border: 1px solid #ffa200;
+          border: 1px solid ${theme.color.accent};
         }
 
         tooltip {
