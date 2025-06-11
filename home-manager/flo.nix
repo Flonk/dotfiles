@@ -2,6 +2,7 @@
 {
   imports = [
     ./modules/hyprland/hyprland.nix
+    ./modules/hyprland/hyprshot.nix
     ./modules/waybar/waybar.nix
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix

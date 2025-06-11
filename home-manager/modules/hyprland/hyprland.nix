@@ -254,6 +254,7 @@
     };
 
     extraConfig = "
+      monitor=DP-2,5120x1440@120,auto,auto
       monitor=,preferred,auto,1
     ";
   };
