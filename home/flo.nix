@@ -29,8 +29,6 @@
 
       google-chrome
     ];
-
-    file.".config/wallpapers".source = ../assets/wallpapers;
     
     username = "flo";
     homeDirectory = "/home/flo";
