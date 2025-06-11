@@ -1,13 +1,16 @@
-{
+let 
+  primaryColor = "#ff2a00";
+  backgroundColor = "#000000";
+in {
   colors = {
-    primary = "#ff2a00";
-    background = "#000000";
+    primary = primaryColor;
+    background = backgroundColor;
 
     priority = {
       low = "#cccccc";
-      normal = colors.primary;
+      normal = primaryColor;
       urgent = "#ff0000";
-    }
+    };
   };
 
   fonts = {
@@ -15,3 +18,4 @@
     mono = "monospace 10";
   };
 }
+

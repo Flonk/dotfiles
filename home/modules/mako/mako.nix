@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  theme = import ../themes/trump.nix;
+  theme = import ../../../themes/trump.nix;
 in {
   
   # mako notification daemon
@@ -22,8 +22,22 @@ in {
       padding = "10";
       width = 340;
       height = 300;
-      border-color = "#ffa200";
+      border-color = theme.colors.priority.normal;
       background-color = "#000000";
+
+      "urgency=low" = {
+        border-color = theme.colors.priority.low;
+      };
+
+      "urgency=normal" = {
+        border-color = theme.colors.priority.normal;
+      };
+
+      "urgency=high" = {
+        border-color = theme.colors.priority.normal;
+        default-timeout = 0;
+      };
+
     };
   };
   
