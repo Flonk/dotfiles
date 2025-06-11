@@ -20,7 +20,7 @@ let
   };
 
   wallpaper = ../assets/wallpapers/aishot-1910.jpg;
-  lockscreenImage = ../assets/logos/nixos.svg;
+  lockscreenImage = ../assets/logos/andamp.png;
 in {
   color = {
 

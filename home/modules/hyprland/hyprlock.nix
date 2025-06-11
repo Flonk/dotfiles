@@ -33,7 +33,6 @@ in {
         valign = "center";
         border_size = 0;
         rounding = 0;
-        size = 50;
       };
 
       label = {
