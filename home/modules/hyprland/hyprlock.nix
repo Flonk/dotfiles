@@ -26,16 +26,17 @@ in {
       };
 
       image = {
-        monitor = "DP-2";
         path = builtins.toString theme.lockscreenImage;
 
         position = "0, 50";
         halign = "center";
         valign = "center";
+        border_size = 0;
+        rounding = 0;
+        size = 50;
       };
 
       label = {
-        monitor = "DP-2";
         text = "$TIME";
         color = textColor;
         font_size = theme.fontSize.humongous;
