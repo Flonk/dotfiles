@@ -14,7 +14,7 @@
       anchor = "top-right";
       border-radius = 0;
       border-size = 2;
-      font = theme.fonts.ui.normal;
+      font = theme.font.ui.normal;
       default-timeout = 10000;
       layer = "overlay";
       max-visible = 3;
