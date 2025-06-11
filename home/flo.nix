@@ -4,6 +4,7 @@
     ./modules/hyprland/hyprland.nix
     ./modules/hyprpaper/hyprpaper.nix
     ./modules/waybar/waybar.nix
+    ./modules/mako/mako.nix
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix
     ./modules/zsh/zsh.nix
@@ -19,6 +20,7 @@
       playerctl
       networkmanagerapplet
       pavucontrol
+      libnotify
 
       wl-clipboard
       tree
@@ -45,6 +47,5 @@
   };
 
   programs.vscode.enable = true;
-
   
 }
