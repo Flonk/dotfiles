@@ -28,26 +28,37 @@ in {
       image = {
         path = builtins.toString theme.lockscreenImage;
 
-        position = "0, 50";
+        position = "0, -20";
         halign = "center";
-        valign = "center";
+        valign = "top";
         border_size = 0;
         rounding = 0;
+        size = 20;
       };
 
       label = {
-        text = "$TIME";
+        text = "🥸";
         color = textColor;
-        font_size = theme.fontSize.humongous;
+        font_size = 80;
         font_family = theme.fontFamily.ui;
-        position = "0, 200";
+        position = "0, 0";
         halign = "center";
         valign = "center";
       };
 
 
       input-field = {
-        outer_color = borderColor;
+        hide_input = true;
+        outer_color = "rgba(ffffff00)";
+        inner_color = "rgba(ffffff00)";
+        outline_thickness = 30;
+        font_size = 20;
+        font_family = theme.fontFamily.ui;
+        fade_on_empty = false;
+        placeholder_text = "🥸";
+        fail_text = "❌";
+        size = "320, 320";
+        zindex = 100;
       };
     };
   };
