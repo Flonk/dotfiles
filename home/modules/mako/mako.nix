@@ -2,10 +2,9 @@
   pkgs,
   config,
   lib,
+  theme,
   ...
-}: let
-  theme = import ../../../themes/trump.nix;
-in {
+}: {
   
   # mako notification daemon
   services.mako = {
@@ -15,30 +14,33 @@ in {
       anchor = "top-right";
       border-radius = 0;
       border-size = 2;
-      font = "monospace 9";
+      font = theme.fonts.ui.small;
       default-timeout = 10000;
       layer = "overlay";
       max-visible = 3;
       padding = "10";
       width = 340;
       height = 300;
-      border-color = theme.colors.priority.normal;
-      background-color = "#000000";
+      border-color = theme.colors.notifications.normal;
+      background-color = theme.colors.notifications.backgroundColor;
 
       "urgency=low" = {
-        border-color = theme.colors.priority.low;
+        border-color = theme.colors.notifications.low;
+        text-color = theme.colors.notifications.lowText;
       };
 
       "urgency=normal" = {
-        border-color = theme.colors.priority.normal;
+        border-color = theme.colors.notifications.normal;
+        text-color = theme.colors.notifications.normalText;
       };
 
       "urgency=high" = {
-        border-color = theme.colors.priority.normal;
+        border-color = theme.colors.notifications.urgent;
+        text-color = theme.colors.notifications.urgentText;
         default-timeout = 0;
       };
-
     };
+
   };
   
 }
