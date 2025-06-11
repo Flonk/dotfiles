@@ -26,6 +26,8 @@
       wl-clipboard
       tree
       figlet
+      cowsay
+      fortune
 
       google-chrome
     ];
