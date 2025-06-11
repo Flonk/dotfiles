@@ -59,9 +59,15 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd hyprland";
+        user = "flo";
+      };
+    };
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -71,6 +77,10 @@ in {
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # Enable bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -91,15 +101,9 @@ in {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.flo = {
-    isNormalUser = true;
-    description = "flo";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-  };
+
+  # Docker
+  virtualisation.docker.enable = true;
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
@@ -109,18 +113,13 @@ in {
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  programs.firefox.enable = true;
-  
+  programs.firefox.enable = true;  
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
-
   programs.hyprland.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     home-manager
   
