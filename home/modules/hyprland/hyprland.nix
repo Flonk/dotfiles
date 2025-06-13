@@ -5,16 +5,18 @@
   theme,
   ...
 }: let
-  hexNoHash = lib.replaceStrings ["#"] [""] theme.color.accent;
-  borderColor = "rgba(${hexNoHash}ff)";
-  inactiveBorderColor = "rgba(000000ff)";
+  stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
+  toRgba    = hex: "rgba(${ stripHash hex }ff)";
+
+  borderColor = toRgba theme.color.accent;
+  inactiveBorderColor = toRgba theme.color.background;
 in {
   
   wayland.windowManager.hyprland = {
     enable = true;
     package = pkgs.hyprland;
 
-    # plugins = [ pkgs.hyprlandPlugins.hy3 ];
+    plugins = [ pkgs.hyprlandPlugins.hy3 ];
     
     systemd = {
       enable = true;
@@ -32,35 +34,40 @@ in {
       "$menu" = "walker";
       "$mainMod" = "SUPER";
       "$code" = "vscode";
-      "$browser" = "firefox";
+      "$browser" = "google-chrome-stable";
       "$editor" = "micro";
               
       exec-once = [
         "waybar"
         "alacritty"
-        "google-chrome"
+        "google-chrome-stable"
       ];
 
       bind = [
         "$mainMod, RETURN, exec, $terminal"
       	"$mainMod CTRL, RETURN, exec, $browser"
-      	"$mainMod, E, exec, $fileManager"
-
-        "$mainMod, M, exit"
         "$mainMod, SPACE, exec, rofi -show drun"
-        "$mainMod, Q, killactive"
+
+        "$mainMod, A, hy3:changefocus, raise"
+      	"$mainMod, E, hy3:changegroup, opposite"
         "$mainMod, F, togglefloating"
+        "$mainMod, H, hy3:makegroup, h"
         "$mainMod, L, exec, hyprlock"
+        "$mainMod, M, exit"
+        "$mainMod, Q, killactive"
+        "$mainMod, W, hy3:changegroup, tab"
+        "$mainMod SHIFT, W, hy3:makegroup, tab, toggle, ephemeral"
+        "$mainMod, V, hy3:makegroup, v"
 
-        "$mainMod, left, movefocus, l"
-        "$mainMod, right, movefocus, r"
-        "$mainMod, up, movefocus, u"
-        "$mainMod, down, movefocus, d"
+        "$mainMod, left, hy3:movefocus, l"
+        "$mainMod, right, hy3:movefocus, r"
+        "$mainMod, up, hy3:movefocus, u"
+        "$mainMod, down, hy3:movefocus, d"
 
-        "$mainMod SHIFT, left, movewindow, l"
-        "$mainMod SHIFT, right, movewindow, r"
-        "$mainMod SHIFT, up, movewindow, u"
-        "$mainMod SHIFT, down, movewindow, d"
+        "$mainMod SHIFT, left, hy3:movewindow, l"
+        "$mainMod SHIFT, right, hy3:movewindow, r"
+        "$mainMod SHIFT, up, hy3:movewindow, u"
+        "$mainMod SHIFT, down, hy3:movewindow, d"
 
         "$mainMod, 1, workspace, 1"
         "$mainMod, 2, workspace, 2"
@@ -91,8 +98,8 @@ in {
 
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = [
-        "$mainMod, mouse:272, movewindow"
-        "$mainMod, mouse:273, resizewindow"
+        "$mainMod, mouse:273, movewindow"
+        "$mainMod, mouse:272, resizewindow"
       ];
 
       bindel = [
@@ -176,6 +183,42 @@ in {
         ];
       };
 
+      group = {
+        "col.border_active" = borderColor;
+        "col.border_inactive" = inactiveBorderColor;
+        "col.border_locked_active" = borderColor;
+        "col.border_locked_inactive" = inactiveBorderColor;
+
+        groupbar = {
+          "col.active" = borderColor;
+          "col.locked_active" = borderColor;
+          "col.inactive" = "rgba(ffffff33)";
+          "col.locked_inactive" = "rgba(ffffff33)";
+          font_size = theme.fontSize.small;
+          font_family = theme.fontFamily.ui;
+          text_color = toRgba theme.color.text;
+          indicator_height = 3;
+        };
+      };
+
+      plugin = {
+        hy3 = {
+          tabs = {
+				    radius = 0;
+            padding = 0;
+            text_font = theme.fontFamily.ui;
+            "col.active" = inactiveBorderColor;
+            "col.active.border" = borderColor;
+
+            "col.focused" = inactiveBorderColor;
+            "col.focused.border" = inactiveBorderColor;
+
+            "col.inactive" = inactiveBorderColor;
+            "col.inactive.border" = inactiveBorderColor;
+          };
+        };
+      };
+
       misc = {
         layers_hog_keyboard_focus = true;
         initial_workspace_tracking = 0;
@@ -183,6 +226,7 @@ in {
         key_press_enables_dpms = false;
         # disable_hyprland_logo = true;
         disable_splash_rendering = true;
+        disable_hyprland_logo = true;
         enable_swallow = false;
         vfr = true;   # Variable Frame Rate 
         vrr = 2;   #Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
@@ -260,7 +304,8 @@ in {
     };
 
     extraConfig = "
-      monitor=DP-2,5120x1440@120,auto,auto
+      monitor=eDP-1,1920x1080@60,0x0,1.00
+      monitor=DP-2,5120x1440@120,1920x0,1.00
       monitor=,preferred,auto,1
     ";
   };
