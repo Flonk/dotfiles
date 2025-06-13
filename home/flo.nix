@@ -22,6 +22,7 @@
       networkmanagerapplet
       pavucontrol
       libnotify
+      blueman
 
       wl-clipboard
       tree
@@ -30,6 +31,10 @@
       fortune
 
       google-chrome
+
+      musescore
+      spotify
+      discord
     ];
     
     username = "flo";
@@ -38,7 +43,6 @@
     stateVersion = "25.05";
   };
 
-  services.blueman.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   programs.eza.enable = true;
