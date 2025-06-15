@@ -10,6 +10,22 @@
 
   borderColor = toRgba theme.color.accent;
   inactiveBorderColor = toRgba theme.color.background;
+
+  mKeypadBindings = { mod, action, d }:
+  let
+    keys = [
+      { key = "KP_Left";   x = -1; y =  0; }
+      { key = "KP_Right";  x =  1; y =  0; }
+      { key = "KP_Up";     x =  0; y = -1; }
+      { key = "KP_Down";   x =  0; y =  1; }
+      { key = "KP_Begin";  x =  0; y =  1; }
+      { key = "KP_Home";   x = -1; y = -1; }
+      { key = "KP_Prior";  x =  1; y = -1; }
+      { key = "KP_End";    x = -1; y =  1; }
+      { key = "KP_Next";   x =  1; y =  1; }
+    ];
+  in
+    map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
 in {
   
   wayland.windowManager.hyprland = {
@@ -44,21 +60,30 @@ in {
       ];
 
       bind = [
+        # HYPRLAND
         "$mainMod, RETURN, exec, $terminal"
       	"$mainMod CTRL, RETURN, exec, $browser"
         "$mainMod, SPACE, exec, rofi -show drun"
 
-        "$mainMod, A, hy3:changefocus, raise"
-      	"$mainMod, E, hy3:changegroup, opposite"
-        "$mainMod, F, togglefloating"
-        "$mainMod, H, hy3:makegroup, h"
         "$mainMod, L, exec, hyprlock"
         "$mainMod, M, exit"
         "$mainMod, Q, killactive"
+
+        "$mainMod, PRINT, exec, hyprshot -m window -m active"
+        "$mainMod SHIFT, PRINT, exec, hyprshot -m output"
+        ", PRINT, exec, hyprshot -m region"
+
+        # WINDOW MANAGEMENT
+        "$mainMod, A, hy3:changefocus, raise"
+      	"$mainMod, E, hy3:changegroup, opposite"
+        "$mainMod, F, fullscreen"
+        "$mainMod SHIFT, F, togglefloating"
+        "$mainMod, H, hy3:makegroup, h"
         "$mainMod, W, hy3:changegroup, tab"
         "$mainMod SHIFT, W, hy3:makegroup, tab, toggle, ephemeral"
         "$mainMod, V, hy3:makegroup, v"
 
+        # MOVE WINDOWS
         "$mainMod, left, hy3:movefocus, l"
         "$mainMod, right, hy3:movefocus, r"
         "$mainMod, up, hy3:movefocus, u"
@@ -69,6 +94,7 @@ in {
         "$mainMod SHIFT, up, hy3:movewindow, u"
         "$mainMod SHIFT, down, hy3:movewindow, d"
 
+        # MOVE BETWEEN WORKSPACES
         "$mainMod, 1, workspace, 1"
         "$mainMod, 2, workspace, 2"
         "$mainMod, 3, workspace, 3"
@@ -80,21 +106,27 @@ in {
         "$mainMod, 9, workspace, 9"
         "$mainMod, 0, workspace, 10"
 
-        "$mainMod SHIFT, 1, movetoworkspace, 1"
-        "$mainMod SHIFT, 2, movetoworkspace, 2"
-        "$mainMod SHIFT, 3, movetoworkspace, 3"
-        "$mainMod SHIFT, 4, movetoworkspace, 4"
-        "$mainMod SHIFT, 5, movetoworkspace, 5"
-        "$mainMod SHIFT, 6, movetoworkspace, 6"
-        "$mainMod SHIFT, 7, movetoworkspace, 7"
-        "$mainMod SHIFT, 8, movetoworkspace, 8"
-        "$mainMod SHIFT, 9, movetoworkspace, 9"
-        "$mainMod SHIFT, 0, movetoworkspace, 10"
+        "$mainMod CTRL, right, movetoworkspace, +1"
+        "$mainMod CTRL, left, movetoworkspace, +1"
 
-        "$mainMod, PRINT, exec, hyprshot -m window -m active"
-        "$mainMod SHIFT, PRINT, exec, hyprshot -m output"
-        ", PRINT, exec, hyprshot -m region"
-      ];
+        "$mainMod CTRL SHIFT, 1, movetoworkspace, 1"
+        "$mainMod CTRL SHIFT, 2, movetoworkspace, 2"
+        "$mainMod CTRL SHIFT, 3, movetoworkspace, 3"
+        "$mainMod CTRL SHIFT, 4, movetoworkspace, 4"
+        "$mainMod CTRL SHIFT, 5, movetoworkspace, 5"
+        "$mainMod CTRL SHIFT, 6, movetoworkspace, 6"
+        "$mainMod CTRL SHIFT, 7, movetoworkspace, 7"
+        "$mainMod CTRL SHIFT, 8, movetoworkspace, 8"
+        "$mainMod CTRL SHIFT, 9, movetoworkspace, 9"
+        "$mainMod CTRL SHIFT, 0, movetoworkspace, 10"
+
+        # RESIZE MODE / MOVE FLOATING
+      ] ++ (mKeypadBindings { mod = ""; action = "resizeactive"; d = 80; })
+        ++ (mKeypadBindings { mod = "SHIFT"; action = "resizeactive"; d = 20; })
+        ++ (mKeypadBindings { mod = "CTRL SHIFT"; action = "resizeactive"; d = 5; })
+        ++ (mKeypadBindings { mod = "ALT"; action = "moveactive"; d = 160; })
+        ++ (mKeypadBindings { mod = "ALT SHIFT"; action = "moveactive"; d = 40; })
+        ++ (mKeypadBindings { mod = "ALT CTRL SHIFT"; action = "moveactive"; d = 10; });
 
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = [

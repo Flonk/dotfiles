@@ -1,4 +1,4 @@
-{ config, lib, pkgs, self, ... }:
+{ config, lib, pkgs, self, inputs, ... }:
 {
   imports = [
     ./modules/hyprland/hyprland.nix
@@ -9,6 +9,8 @@
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix
     ./modules/zsh/zsh.nix
+
+    inputs.gauntlet.homeManagerModules.default
   ];
 
   home = {
@@ -50,6 +52,11 @@
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  programs.gauntlet = {
+    enable = true;
+    service.enable = true;
   };
 
   programs.vscode.enable = true;

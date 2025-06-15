@@ -8,9 +8,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    gauntlet = {
+      url = github:project-gauntlet/gauntlet;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, inputs, ... }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
@@ -30,6 +35,7 @@
           extraSpecialArgs = {
             self = self;
             theme = import ./themes/trump.nix { lib = pkgs.lib; };
+            inputs = inputs;
           };
           modules = [
             ./home/flo.nix
