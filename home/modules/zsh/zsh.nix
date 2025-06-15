@@ -3,8 +3,9 @@
   config,
   lib,
   ...
-}: {
-  
+}:
+{
+
   programs.zsh = {
     enable = true;
 
@@ -27,68 +28,72 @@
       }
     ];
 
-    initContent = let 
-      init = lib.mkBefore ''
-        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-        # Initialization code that may require console input (password prompts, [y/n]
-        # confirmations, etc.) must go above this block; everything else may go below.
-        if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-          source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-        fi
-
-        # autoSuggestions config
-        setopt hist_reduce_blanks # remove superfluous blanks from history items
-        setopt inc_append_history # save history entries as soon as they are entered
-
-        # auto complete options
-        setopt auto_list # automatically list choices on ambiguous completion
-        setopt auto_menu # automatically use menu completion
-        zstyle ':completion:*' menu select # select completions with arrow keys
-        zstyle ':completion:*' group-name "" # group results by category
-        zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
-
-        cd_fzf() {
-          # Get all directories in the current folder
-          local dirs=$(find . -maxdepth 1 -type d -printf "%f\n")
-
-          # Use fzf to pick the closest match to $1
-          local selected=$(echo "$dirs" | fzf --layout reverse --height 8 --query="$1" --select-1 --exit-0)
-
-          # If a directory was selected, cd into it
-          if [[ -n "$selected" ]]; then
-            cd "$selected" || return
-          else
-            echo "No matching directory found."
+    initContent =
+      let
+        init = lib.mkBefore ''
+          # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+          # Initialization code that may require console input (password prompts, [y/n]
+          # confirmations, etc.) must go above this block; everything else may go below.
+          if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+            source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
           fi
-        }
 
-        gcob () {
-          if [ -n "$1" ]; then
-            # Use the provided argument as a filter for fzf
-            git checkout $(git branch | fzf --query="$1" --select-1 --exit-0)
-          else
-            # No argument provided, just show the branches for selection
-            git checkout $(git branch | fzf --height 8 --layout=reverse)
-          fi
-        }
+          # autoSuggestions config
+          setopt hist_reduce_blanks # remove superfluous blanks from history items
+          setopt inc_append_history # save history entries as soon as they are entered
 
-        figlet-all() {
-          for font in /usr/share/figlet/*.tlf; do
-              font_name=$(basename "$font" .tlf)
-              figlet -f $font_name "$1"
-              echo "$font_name"
-              echo
-              echo
-          done
-        }
-      '';
+          # auto complete options
+          setopt auto_list # automatically list choices on ambiguous completion
+          setopt auto_menu # automatically use menu completion
+          zstyle ':completion:*' menu select # select completions with arrow keys
+          zstyle ':completion:*' group-name "" # group results by category
+          zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 
-      end = lib.mkAfter ''
-      fortune | cowsay
-      '';
+          cd_fzf() {
+            # Get all directories in the current folder
+            local dirs=$(find . -maxdepth 1 -type d -printf "%f\n")
 
-      in lib.mkMerge [init end];
+            # Use fzf to pick the closest match to $1
+            local selected=$(echo "$dirs" | fzf --layout reverse --height 8 --query="$1" --select-1 --exit-0)
 
+            # If a directory was selected, cd into it
+            if [[ -n "$selected" ]]; then
+              cd "$selected" || return
+            else
+              echo "No matching directory found."
+            fi
+          }
+
+          gcob () {
+            if [ -n "$1" ]; then
+              # Use the provided argument as a filter for fzf
+              git checkout $(git branch | fzf --query="$1" --select-1 --exit-0)
+            else
+              # No argument provided, just show the branches for selection
+              git checkout $(git branch | fzf --height 8 --layout=reverse)
+            fi
+          }
+
+          figlet-all() {
+            for font in /usr/share/figlet/*.tlf; do
+                font_name=$(basename "$font" .tlf)
+                figlet -f $font_name "$1"
+                echo "$font_name"
+                echo
+                echo
+            done
+          }
+        '';
+
+        end = lib.mkAfter ''
+          fortune | cowsay
+        '';
+
+      in
+      lib.mkMerge [
+        init
+        end
+      ];
 
     oh-my-zsh = {
       enable = true;
@@ -102,7 +107,7 @@
         "docker-compose"
         "isodate"
         "kubectl"
-        "z" 
+        "z"
       ];
       extraConfig = ''
         # Display red dots whilst waiting for completion.
@@ -134,9 +139,10 @@
 
       ##### Git
       gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";
-      "gprune!" = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
+      "gprune!" =
+        "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
       b = "gcob";
-      
+
       ##### Docker
       dka = "docker ps -q | xargs docker stop | xargs docker rm";
       "dka!" = "docker ps -aq | xargs docker stop | xargs docker rm";
@@ -150,14 +156,13 @@
   };
 }
 /*
-old stuff.. evalulate if still needed
+  old stuff.. evalulate if still needed
 
-# ansible
-export ANSIBLE_NOCOWS=1
+  # ansible
+  export ANSIBLE_NOCOWS=1
 
-# azure
-az-select-subscription() {
-  az account list --output table | tail -n +3 | fzf --layout reverse --height 10 --header "Select Azure subscription" | awk '{print $(NF-3)}' | xargs -I {} az account set --subscription {}
-}
-
+  # azure
+  az-select-subscription() {
+    az account list --output table | tail -n +3 | fzf --layout reverse --height 10 --header "Select Azure subscription" | awk '{print $(NF-3)}' | xargs -I {} az account set --subscription {}
+  }
 */

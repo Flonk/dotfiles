@@ -4,10 +4,12 @@
   lib,
   theme,
   ...
-}: let 
+}:
+let
   path = builtins.toString theme.wallpaper;
-in {
-  
+in
+{
+
   services.hyprpaper = {
     enable = true;
     settings = {
@@ -17,5 +19,5 @@ in {
       ];
     };
   };
-  
+
 }

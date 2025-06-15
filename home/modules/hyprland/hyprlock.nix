@@ -4,21 +4,23 @@
   lib,
   theme,
   ...
-}: let
+}:
+let
   stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
-  toRgba    = hex: "rgba(${ stripHash hex }ff)";
+  toRgba = hex: "rgba(${stripHash hex}ff)";
 
   borderColor = toRgba theme.color.accent;
   textColor = toRgba theme.color.text;
-in {
-  
+in
+{
+
   programs.hyprlock = {
     enable = true;
     settings = {
       background = {
         path = "screenshot";
 
-        blur_passes = 2; 
+        blur_passes = 2;
         blur_size = 7;
         noise = 1.2e-2;
         contrast = 0.6;
@@ -46,7 +48,6 @@ in {
         valign = "center";
       };
 
-
       input-field = {
         hide_input = true;
         outer_color = "rgba(ffffff00)";
@@ -62,5 +63,5 @@ in {
       };
     };
   };
-  
+
 }

@@ -3,17 +3,21 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-let fallout = pkgs.fetchFromGitHub
-  {
+let
+  fallout = pkgs.fetchFromGitHub {
     owner = "shvchk";
     repo = "fallout-grub-theme";
     rev = "80734103d0b48d724f0928e8082b6755bd3b2078";
     sha256 = "sha256-7kvLfD6Nz4cEMrmCA9yq4enyqVyqiTkVZV5y4RyUatU=";
   };
-in {
+in
+{
 
   # Nix config.
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   nix.gc = {
     automatic = true;
@@ -21,8 +25,8 @@ in {
     options = "--delete-older-than 30d";
   };
 
-  system.autoUpgrade.enable  = true;
-  system.autoUpgrade.allowReboot  = true;
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = true;
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -112,7 +116,6 @@ in {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-
   # Docker
   virtualisation.docker.enable = true;
 
@@ -124,7 +127,7 @@ in {
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  programs.firefox.enable = true;  
+  programs.firefox.enable = true;
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
   programs.hyprland.enable = true;
@@ -133,10 +136,10 @@ in {
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     home-manager
-  
+
     git
     micro
-    
+
     curl
     wget
 

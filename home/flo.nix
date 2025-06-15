@@ -1,7 +1,15 @@
-{ config, lib, pkgs, self, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  self,
+  inputs,
+  ...
+}:
 let
   gauntletPkg = inputs.self.packages.x86_64-linux.myGauntletDeps;
-in {
+in
+{
   imports = [
     ./modules/hyprland/hyprland.nix
     ./modules/hyprland/hyprpaper.nix
@@ -44,7 +52,7 @@ in {
       spotify
       discord
     ];
-    
+
     username = "flo";
     homeDirectory = "/home/flo";
 
@@ -52,13 +60,12 @@ in {
   };
 
   nixpkgs.config.allowUnfree = true;
-  
+
   programs.eza.enable = true;
   programs.bat.enable = true;
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
   };
-
 
 }

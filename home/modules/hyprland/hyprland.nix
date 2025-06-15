@@ -4,46 +4,89 @@
   lib,
   theme,
   ...
-}: let
+}:
+let
   stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
-  toRgba    = hex: "rgba(${ stripHash hex }ff)";
+  toRgba = hex: "rgba(${stripHash hex}ff)";
 
   borderColor = toRgba theme.color.accent;
   inactiveBorderColor = toRgba theme.color.background;
 
-  mkKeypadBindings = { mod, action, d }:
-  let
-    keys = [
-      { key = "KP_Left";   x = -1; y =  0; }
-      { key = "KP_Right";  x =  1; y =  0; }
-      { key = "KP_Up";     x =  0; y = -1; }
-      { key = "KP_Down";   x =  0; y =  1; }
-      { key = "KP_Begin";  x =  0; y =  1; }
-      { key = "KP_Home";   x = -1; y = -1; }
-      { key = "KP_Prior";  x =  1; y = -1; }
-      { key = "KP_End";    x = -1; y =  1; }
-      { key = "KP_Next";   x =  1; y =  1; }
-    ];
-  in
+  mkKeypadBindings =
+    {
+      mod,
+      action,
+      d,
+    }:
+    let
+      keys = [
+        {
+          key = "KP_Left";
+          x = -1;
+          y = 0;
+        }
+        {
+          key = "KP_Right";
+          x = 1;
+          y = 0;
+        }
+        {
+          key = "KP_Up";
+          x = 0;
+          y = -1;
+        }
+        {
+          key = "KP_Down";
+          x = 0;
+          y = 1;
+        }
+        {
+          key = "KP_Begin";
+          x = 0;
+          y = 1;
+        }
+        {
+          key = "KP_Home";
+          x = -1;
+          y = -1;
+        }
+        {
+          key = "KP_Prior";
+          x = 1;
+          y = -1;
+        }
+        {
+          key = "KP_End";
+          x = -1;
+          y = 1;
+        }
+        {
+          key = "KP_Next";
+          x = 1;
+          y = 1;
+        }
+      ];
+    in
     map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
-in {
-  
+in
+{
+
   wayland.windowManager.hyprland = {
     enable = true;
     package = pkgs.hyprland;
 
     plugins = [ pkgs.hyprlandPlugins.hy3 ];
-    
+
     systemd = {
       enable = true;
       enableXdgAutostart = true;
-      variables = ["--all"];
+      variables = [ "--all" ];
     };
-    
+
     xwayland = {
       enable = true;
     };
-    
+
     settings = {
       "$terminal" = "alacritty";
       "$fileManager" = "nautilus";
@@ -51,7 +94,7 @@ in {
       "$code" = "vscode";
       "$browser" = "google-chrome-stable";
       "$editor" = "micro";
-              
+
       exec-once = [
         "waybar"
         "alacritty"
@@ -59,74 +102,100 @@ in {
         "hyprctl setcursor macOS-White 28"
       ];
 
-      bind = [
-        # HYPRLAND
-        "$mainMod, RETURN, exec, $terminal"
-      	"$mainMod CTRL, RETURN, exec, $browser"
-        "$mainMod, SPACE, exec, rofi -show drun"
+      bind =
+        [
+          # HYPRLAND
+          "$mainMod, RETURN, exec, $terminal"
+          "$mainMod CTRL, RETURN, exec, $browser"
+          "$mainMod, SPACE, exec, rofi -show drun"
 
-        "$mainMod, L, exec, hyprlock"
-        "$mainMod, M, exit"
-        "$mainMod, Q, killactive"
+          "$mainMod, L, exec, hyprlock"
+          "$mainMod, M, exit"
+          "$mainMod, Q, killactive"
 
-        "$mainMod, PRINT, exec, hyprshot -m window -m active"
-        "$mainMod SHIFT, PRINT, exec, hyprshot -m output"
-        ", PRINT, exec, hyprshot -m region"
+          "$mainMod, PRINT, exec, hyprshot -m window -m active"
+          "$mainMod SHIFT, PRINT, exec, hyprshot -m output"
+          ", PRINT, exec, hyprshot -m region"
 
-        # WINDOW MANAGEMENT
-        "$mainMod, A, hy3:changefocus, raise"
-      	"$mainMod, E, hy3:changegroup, opposite"
-        "$mainMod, F, fullscreen"
-        "$mainMod SHIFT, F, togglefloating"
-        "$mainMod, H, hy3:makegroup, h"
-        "$mainMod, W, hy3:changegroup, tab"
-        "$mainMod SHIFT, W, hy3:makegroup, tab, toggle, ephemeral"
-        "$mainMod, V, hy3:makegroup, v"
+          # WINDOW MANAGEMENT
+          "$mainMod, A, hy3:changefocus, raise"
+          "$mainMod, E, hy3:changegroup, opposite"
+          "$mainMod, F, fullscreen"
+          "$mainMod SHIFT, F, togglefloating"
+          "$mainMod, H, hy3:makegroup, h"
+          "$mainMod, W, hy3:changegroup, tab"
+          "$mainMod SHIFT, W, hy3:makegroup, tab, toggle, ephemeral"
+          "$mainMod, V, hy3:makegroup, v"
 
-        # MOVE WINDOWS
-        "$mainMod, left, hy3:movefocus, l"
-        "$mainMod, right, hy3:movefocus, r"
-        "$mainMod, up, hy3:movefocus, u"
-        "$mainMod, down, hy3:movefocus, d"
+          # MOVE WINDOWS
+          "$mainMod, left, hy3:movefocus, l"
+          "$mainMod, right, hy3:movefocus, r"
+          "$mainMod, up, hy3:movefocus, u"
+          "$mainMod, down, hy3:movefocus, d"
 
-        "$mainMod SHIFT, left, hy3:movewindow, l"
-        "$mainMod SHIFT, right, hy3:movewindow, r"
-        "$mainMod SHIFT, up, hy3:movewindow, u"
-        "$mainMod SHIFT, down, hy3:movewindow, d"
+          "$mainMod SHIFT, left, hy3:movewindow, l"
+          "$mainMod SHIFT, right, hy3:movewindow, r"
+          "$mainMod SHIFT, up, hy3:movewindow, u"
+          "$mainMod SHIFT, down, hy3:movewindow, d"
 
-        # MOVE BETWEEN WORKSPACES
-        "$mainMod, 1, workspace, 1"
-        "$mainMod, 2, workspace, 2"
-        "$mainMod, 3, workspace, 3"
-        "$mainMod, 4, workspace, 4"
-        "$mainMod, 5, workspace, 5"
-        "$mainMod, 6, workspace, 6"
-        "$mainMod, 7, workspace, 7"
-        "$mainMod, 8, workspace, 8"
-        "$mainMod, 9, workspace, 9"
-        "$mainMod, 0, workspace, 10"
+          # MOVE BETWEEN WORKSPACES
+          "$mainMod, 1, workspace, 1"
+          "$mainMod, 2, workspace, 2"
+          "$mainMod, 3, workspace, 3"
+          "$mainMod, 4, workspace, 4"
+          "$mainMod, 5, workspace, 5"
+          "$mainMod, 6, workspace, 6"
+          "$mainMod, 7, workspace, 7"
+          "$mainMod, 8, workspace, 8"
+          "$mainMod, 9, workspace, 9"
+          "$mainMod, 0, workspace, 10"
 
-        "$mainMod CTRL, right, movetoworkspace, +1"
-        "$mainMod CTRL, left, movetoworkspace, +1"
+          "$mainMod CTRL, right, movetoworkspace, +1"
+          "$mainMod CTRL, left, movetoworkspace, +1"
 
-        "$mainMod CTRL SHIFT, 1, movetoworkspace, 1"
-        "$mainMod CTRL SHIFT, 2, movetoworkspace, 2"
-        "$mainMod CTRL SHIFT, 3, movetoworkspace, 3"
-        "$mainMod CTRL SHIFT, 4, movetoworkspace, 4"
-        "$mainMod CTRL SHIFT, 5, movetoworkspace, 5"
-        "$mainMod CTRL SHIFT, 6, movetoworkspace, 6"
-        "$mainMod CTRL SHIFT, 7, movetoworkspace, 7"
-        "$mainMod CTRL SHIFT, 8, movetoworkspace, 8"
-        "$mainMod CTRL SHIFT, 9, movetoworkspace, 9"
-        "$mainMod CTRL SHIFT, 0, movetoworkspace, 10"
+          "$mainMod CTRL SHIFT, 1, movetoworkspace, 1"
+          "$mainMod CTRL SHIFT, 2, movetoworkspace, 2"
+          "$mainMod CTRL SHIFT, 3, movetoworkspace, 3"
+          "$mainMod CTRL SHIFT, 4, movetoworkspace, 4"
+          "$mainMod CTRL SHIFT, 5, movetoworkspace, 5"
+          "$mainMod CTRL SHIFT, 6, movetoworkspace, 6"
+          "$mainMod CTRL SHIFT, 7, movetoworkspace, 7"
+          "$mainMod CTRL SHIFT, 8, movetoworkspace, 8"
+          "$mainMod CTRL SHIFT, 9, movetoworkspace, 9"
+          "$mainMod CTRL SHIFT, 0, movetoworkspace, 10"
 
-        # RESIZE MODE / MOVE FLOATING
-      ] ++ (mkKeypadBindings { mod = ""; action = "resizeactive"; d = 80; })
-        ++ (mkKeypadBindings { mod = "SHIFT"; action = "resizeactive"; d = 20; })
-        ++ (mkKeypadBindings { mod = "CTRL SHIFT"; action = "resizeactive"; d = 5; })
-        ++ (mkKeypadBindings { mod = "ALT"; action = "moveactive"; d = 160; })
-        ++ (mkKeypadBindings { mod = "ALT SHIFT"; action = "moveactive"; d = 40; })
-        ++ (mkKeypadBindings { mod = "ALT CTRL SHIFT"; action = "moveactive"; d = 10; });
+          # RESIZE MODE / MOVE FLOATING
+        ]
+        ++ (mkKeypadBindings {
+          mod = "";
+          action = "resizeactive";
+          d = 80;
+        })
+        ++ (mkKeypadBindings {
+          mod = "SHIFT";
+          action = "resizeactive";
+          d = 20;
+        })
+        ++ (mkKeypadBindings {
+          mod = "CTRL SHIFT";
+          action = "resizeactive";
+          d = 5;
+        })
+        ++ (mkKeypadBindings {
+          mod = "ALT";
+          action = "moveactive";
+          d = 160;
+        })
+        ++ (mkKeypadBindings {
+          mod = "ALT SHIFT";
+          action = "moveactive";
+          d = 40;
+        })
+        ++ (mkKeypadBindings {
+          mod = "ALT CTRL SHIFT";
+          action = "moveactive";
+          d = 10;
+        });
 
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = [
@@ -236,7 +305,7 @@ in {
       plugin = {
         hy3 = {
           tabs = {
-				    radius = 0;
+            radius = 0;
             padding = 0;
             text_font = theme.fontFamily.ui;
             "col.active" = borderColor;
@@ -260,8 +329,8 @@ in {
         disable_splash_rendering = true;
         disable_hyprland_logo = true;
         enable_swallow = false;
-        vfr = true;   # Variable Frame Rate 
-        vrr = 2;   #Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
+        vfr = true; # Variable Frame Rate
+        vrr = 2; # Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
         # Screen flashing to black momentarily or going black when app is fullscreen
         # Try setting vrr to 0
 

@@ -4,8 +4,9 @@
   lib,
   theme,
   ...
-}: {
-  
+}:
+{
+
   # mako notification daemon
   services.mako = {
     enable = true;
@@ -42,5 +43,5 @@
     };
 
   };
-  
+
 }

@@ -1,16 +1,16 @@
 { lib, ... }:
 
-let 
+let
   textColor = "#ffffff";
   backgroundColor = "#000000";
   accentColor = "#ffa200";
 
   fontSize = {
-    tiny      = 7.5;
-    small     = 8;
-    normal    = 9;
-    big       = 10.5;
-    huge      = 14;
+    tiny = 7.5;
+    small = 8;
+    normal = 9;
+    big = 10.5;
+    huge = 14;
     humongous = 20;
   };
 
@@ -21,7 +21,8 @@ let
 
   wallpaper = ../assets/wallpapers/aishot-1910.jpg;
   lockscreenImage = ../assets/logos/andamp.png;
-in {
+in
+{
   color = {
 
     text = textColor;
@@ -42,17 +43,13 @@ in {
     };
   };
 
-
   fontFamily = fontFamily;
   fontSize = fontSize;
 
-  font = lib.mapAttrs (famName: famVal:
-    lib.mapAttrs (sizeName: sz:
-      "${famVal} ${toString sz}"
-    ) fontSize
+  font = lib.mapAttrs (
+    famName: famVal: lib.mapAttrs (sizeName: sz: "${famVal} ${toString sz}") fontSize
   ) fontFamily;
 
   wallpaper = wallpaper;
-  lockscreenImage = lockscreenImage;  
+  lockscreenImage = lockscreenImage;
 }
-

@@ -4,13 +4,14 @@
   lib,
   theme,
   ...
-}: {
-  
+}:
+{
+
   programs.alacritty = {
-  	enable = true; 
-  	settings = {
-  	  font.size = theme.fontSize.normal;
-  	};
+    enable = true;
+    settings = {
+      font.size = theme.fontSize.normal;
+    };
   };
-  
+
 }

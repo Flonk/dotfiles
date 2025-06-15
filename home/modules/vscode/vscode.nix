@@ -5,10 +5,11 @@
   theme,
   inputs,
   ...
-}: {
-  
+}:
+{
+
   programs.vscode = {
     enable = true;
   };
-  
+
 }

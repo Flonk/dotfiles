@@ -4,7 +4,9 @@
   lib,
   theme,
   ...
-}: with lib; {
+}:
+with lib;
+{
   # Configure & Theme Waybar
   programs.waybar = {
     enable = true;
@@ -14,9 +16,20 @@
         layer = "bottom";
         position = "bottom";
 
-        modules-center = [];
-        modules-left = [ "custom/startmenu" "hyprland/workspaces" "hyprland/window"];
-        modules-right = ["pulseaudio" "cpu" "memory" "battery" "tray" "clock"];
+        modules-center = [ ];
+        modules-left = [
+          "custom/startmenu"
+          "hyprland/workspaces"
+          "hyprland/window"
+        ];
+        modules-right = [
+          "pulseaudio"
+          "cpu"
+          "memory"
+          "battery"
+          "tray"
+          "clock"
+        ];
 
         "hyprland/workspaces" = {
           format = "{name}";
