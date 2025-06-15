@@ -9,18 +9,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    gauntlet = {
-      url = github:project-gauntlet/gauntlet;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-vscode-extensions, ... }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
     in {
+
+      nixpkgs.overlays = [
+        nix-vscode-extensions.overlays.default
+      ];
 
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
@@ -34,9 +35,8 @@
         flo = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
-            self = self;
-            theme = import ./themes/trump.nix { lib = pkgs.lib; };
             inherit inputs;
+            theme = import ./themes/trump.nix { lib = pkgs.lib; };
           };
           modules = [
             ./home/flo.nix

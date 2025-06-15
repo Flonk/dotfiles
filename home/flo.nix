@@ -14,6 +14,7 @@ in {
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix
     ./modules/zsh/zsh.nix
+    ./modules/vscode/vscode.nix
   ];
 
   home = {
