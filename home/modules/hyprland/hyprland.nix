@@ -57,6 +57,7 @@ in {
         "waybar"
         "alacritty"
         "google-chrome-stable"
+        "hyprctl setcursor macOS-White 28"
       ];
 
       bind = [
@@ -239,7 +240,7 @@ in {
 				    radius = 0;
             padding = 0;
             text_font = theme.fontFamily.ui;
-            "col.active" = inactiveBorderColor;
+            "col.active" = borderColor;
             "col.active.border" = borderColor;
 
             "col.focused" = inactiveBorderColor;

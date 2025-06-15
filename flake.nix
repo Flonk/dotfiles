@@ -8,20 +8,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-vscode-extensions, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
     in {
-
-      nixpkgs.overlays = [
-        nix-vscode-extensions.overlays.default
-      ];
 
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
