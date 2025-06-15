@@ -11,9 +11,6 @@
     # relative to ~
     dotDir = ".config/zsh";
     enableCompletion = true;
-    syntaxHighlighting.enable = true;
-    autocd = true;
-    autosuggestion.enable = true;
     history.size = 10000;
     history.share = true;
 
@@ -105,7 +102,7 @@
         "docker-compose"
         "isodate"
         "kubectl"
-        "z"
+        "z" 
       ];
       extraConfig = ''
         # Display red dots whilst waiting for completion.

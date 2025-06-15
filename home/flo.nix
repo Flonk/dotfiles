@@ -8,6 +8,7 @@ in {
     ./modules/hyprland/hyprlock.nix
     ./modules/hyprland/hyprcursor.nix
     ./modules/git/git.nix
+    ./modules/direnv/direnv.nix
     ./modules/waybar/waybar.nix
     ./modules/mako/mako.nix
     ./modules/alacritty/alacritty.nix

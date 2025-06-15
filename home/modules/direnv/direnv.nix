@@ -15,6 +15,8 @@
       load_dotenv = true;
       hide_env_diff = true;
       log_format = "-";
+      log_filter = "ancestor";
+      silent = true;
       warn_timeout = "10s";
       whitelist = {
         prefix = [
