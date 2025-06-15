@@ -1,5 +1,7 @@
 { config, lib, pkgs, self, inputs, ... }:
-{
+let
+  gauntletPkg = inputs.self.packages.x86_64-linux.myGauntletDeps;
+in {
   imports = [
     ./modules/hyprland/hyprland.nix
     ./modules/hyprland/hyprpaper.nix
@@ -9,8 +11,6 @@
     ./modules/alacritty/alacritty.nix
     ./modules/rofi/rofi.nix
     ./modules/zsh/zsh.nix
-
-    inputs.gauntlet.homeManagerModules.default
   ];
 
   home = {
@@ -25,8 +25,8 @@
       pavucontrol
       libnotify
       blueman
-
       wl-clipboard
+
       tree
       figlet
       cowsay
@@ -54,9 +54,21 @@
     enableZshIntegration = true;
   };
 
-  programs.gauntlet = {
+  programs.direnv = {
     enable = true;
-    service.enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
+
+    config = {
+      load_dotenv = true;
+      whitelist = {
+        prefix = [
+          "~/repos"
+        ];
+      };
+    };
+
+    nix-direnv.enable = true;
   };
 
   programs.vscode.enable = true;
