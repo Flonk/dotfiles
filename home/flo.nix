@@ -59,6 +59,5 @@ in {
     enableZshIntegration = true;
   };
 
-  programs.vscode.enable = true;
 
 }
