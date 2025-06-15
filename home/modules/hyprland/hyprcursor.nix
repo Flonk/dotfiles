@@ -6,7 +6,7 @@
   ...
 }: {
   
-  shome.pointerCursor = {
+  home.pointerCursor = {
     package = pkgs.apple-cursor;
     name = "Apple Cursor";
     size = 24;
