@@ -147,7 +147,7 @@
       "dk!" = "dka! && dkav!";
 
       ##### Assorted
-      future = "figlet -f future";
+      future = "toilet -f future";
       x = "sudo env \"PATH=$PATH\"";
     };
   };
