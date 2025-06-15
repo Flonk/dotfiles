@@ -19,9 +19,13 @@
     "nvidia_modeset"
     "nvidia_uvm"
     "nvidia_drm"
+    "usb"
+    "btusb"
+    "bluetooth"
   ];
   boot.extraModprobeConfig = "options nvidia-drm modeset=1";
   services.xserver.videoDrivers = [ "nvidia" ];
+
   hardware.nvidia = {
     modesetting.enable = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -40,4 +44,6 @@
   };
 
   services.greetd.settings.default_session.user = "flo";
+
+  programs.steam.enable = true;
 }

@@ -96,6 +96,11 @@ in
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.settings = {
+    Policy = {
+      AutoEnable = "true";
+    };
+  };
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -126,6 +131,17 @@ in
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
+  systemd.services.bluetooth = {
+    enable = true;
+    description = "Bluetooth service";
+    wantedBy = [ "basic.target" ];
+    after = [ "sysinit.target" ];
+    before = [
+      "network.target"
+      "multi-user.target"
+      "graphical.target"
+    ];
+  };
 
   programs.firefox.enable = true;
   programs.zsh.enable = true;
