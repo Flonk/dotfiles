@@ -4,8 +4,9 @@
   lib,
   theme,
   ...
-}: {
-  
+}:
+{
+
   home.pointerCursor = {
     package = pkgs.apple-cursor;
     name = "Apple Cursor";

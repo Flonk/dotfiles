@@ -4,8 +4,9 @@
   lib,
   theme,
   ...
-}: {
-  
+}:
+{
+
   programs.git = {
     enable = true;
 
@@ -18,7 +19,7 @@
       fetch.prune = true;
       pull.rebase = true;
       diff.algorithm = "histogram";
-    }; 
+    };
   };
-  
+
 }
