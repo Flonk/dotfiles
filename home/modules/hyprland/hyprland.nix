@@ -11,7 +11,7 @@
   borderColor = toRgba theme.color.accent;
   inactiveBorderColor = toRgba theme.color.background;
 
-  mKeypadBindings = { mod, action, d }:
+  mkKeypadBindings = { mod, action, d }:
   let
     keys = [
       { key = "KP_Left";   x = -1; y =  0; }
@@ -47,7 +47,6 @@ in {
     settings = {
       "$terminal" = "alacritty";
       "$fileManager" = "nautilus";
-      "$menu" = "walker";
       "$mainMod" = "SUPER";
       "$code" = "vscode";
       "$browser" = "google-chrome-stable";
@@ -122,12 +121,12 @@ in {
         "$mainMod CTRL SHIFT, 0, movetoworkspace, 10"
 
         # RESIZE MODE / MOVE FLOATING
-      ] ++ (mKeypadBindings { mod = ""; action = "resizeactive"; d = 80; })
-        ++ (mKeypadBindings { mod = "SHIFT"; action = "resizeactive"; d = 20; })
-        ++ (mKeypadBindings { mod = "CTRL SHIFT"; action = "resizeactive"; d = 5; })
-        ++ (mKeypadBindings { mod = "ALT"; action = "moveactive"; d = 160; })
-        ++ (mKeypadBindings { mod = "ALT SHIFT"; action = "moveactive"; d = 40; })
-        ++ (mKeypadBindings { mod = "ALT CTRL SHIFT"; action = "moveactive"; d = 10; });
+      ] ++ (mkKeypadBindings { mod = ""; action = "resizeactive"; d = 80; })
+        ++ (mkKeypadBindings { mod = "SHIFT"; action = "resizeactive"; d = 20; })
+        ++ (mkKeypadBindings { mod = "CTRL SHIFT"; action = "resizeactive"; d = 5; })
+        ++ (mkKeypadBindings { mod = "ALT"; action = "moveactive"; d = 160; })
+        ++ (mkKeypadBindings { mod = "ALT SHIFT"; action = "moveactive"; d = 40; })
+        ++ (mkKeypadBindings { mod = "ALT CTRL SHIFT"; action = "moveactive"; d = 10; });
 
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = [
