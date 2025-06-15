@@ -27,6 +27,8 @@ in
 
   home = {
     packages = with pkgs; [
+      nixfmt-rfc-style
+
       nautilus
       hyprpaper
       hyprshot
