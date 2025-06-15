@@ -172,7 +172,7 @@ in
           d = 80;
         })
         ++ (mkKeypadBindings {
-          mod = "SHIFT";
+          mod = "CTRL";
           action = "resizeactive";
           d = 20;
         })
@@ -187,7 +187,7 @@ in
           d = 160;
         })
         ++ (mkKeypadBindings {
-          mod = "ALT SHIFT";
+          mod = "ALT CTRL";
           action = "moveactive";
           d = 40;
         })
