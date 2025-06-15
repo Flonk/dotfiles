@@ -15,12 +15,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, inputs, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
     in {
+
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
           modules = [
@@ -35,7 +36,7 @@
           extraSpecialArgs = {
             self = self;
             theme = import ./themes/trump.nix { lib = pkgs.lib; };
-            inputs = inputs;
+            inherit inputs;
           };
           modules = [
             ./home/flo.nix
