@@ -223,6 +223,7 @@ in
         # Ignore maximize requests from apps. You'll probably like this.
         "suppressevent maximize, class:.*"
         "noshadow, floating:0"
+        "opacity 1 0.92, class:^(Alacritty|code)$"
       ];
 
       input = {
@@ -259,7 +260,7 @@ in
         layout = "hy3";
         gaps_in = 0;
         gaps_out = 0;
-        border_size = 2;
+        border_size = 3;
         "col.active_border" = borderColor;
         "col.inactive_border" = inactiveBorderColor;
         resize_on_border = true;
@@ -280,19 +281,19 @@ in
           "workspaces,1,2,md3_decel,slide"
           "workspaces, 1, 2, default"
           "specialWorkspace,1,2,md3_decel,slide"
-          "border,1,4,md3_decel"
+          "border,0,2,md3_decel"
         ];
       };
 
       group = {
         "col.border_active" = borderColor;
         "col.border_inactive" = inactiveBorderColor;
-        "col.border_locked_active" = borderColor;
+        "col.border_locked_active" = inactiveBorderColor;
         "col.border_locked_inactive" = inactiveBorderColor;
 
         groupbar = {
           "col.active" = borderColor;
-          "col.locked_active" = borderColor;
+          "col.locked_active" = inactiveBorderColor;
           "col.inactive" = "rgba(ffffff33)";
           "col.locked_inactive" = "rgba(ffffff33)";
           font_size = theme.fontSize.small;

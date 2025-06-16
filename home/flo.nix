@@ -42,17 +42,23 @@ in
       nwg-look
       wl-clipboard
 
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
+
       tree
       figlet
       toilet
       cowsay
       fortune
 
+      postman
+
       google-chrome
 
       musescore
       spotify
       discord
+      obsidian
     ];
 
     username = "flo";
