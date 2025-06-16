@@ -43,7 +43,8 @@ with lib;
         };
 
         "clock" = {
-          format = ''{:%H:%M:%S}'';
+          interval = 1;
+          format = ''{:%Y-%m-%d %H:%M:%S}'';
         };
 
         "hyprland/window" = {
