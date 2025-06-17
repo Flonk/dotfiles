@@ -20,6 +20,7 @@ in
     ./modules/waybar/waybar.nix
     ./modules/mako/mako.nix
     ./modules/alacritty/alacritty.nix
+    ./modules/neofetch/neofetch.nix
     ./modules/rofi/rofi.nix
     ./modules/zsh/zsh.nix
     ./modules/vscode/vscode.nix
@@ -50,6 +51,8 @@ in
       toilet
       cowsay
       fortune
+      btop
+      neofetch
 
       postman
 
@@ -75,5 +78,7 @@ in
     enable = true;
     enableZshIntegration = true;
   };
+
+  programs.distrobox.enable = true;
 
 }
