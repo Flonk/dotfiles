@@ -124,7 +124,7 @@ in
           "$mainMod SHIFT, F, togglefloating"
           "$mainMod, H, hy3:makegroup, h"
           "$mainMod, W, hy3:changegroup, tab"
-          "$mainMod SHIFT, W, hy3:makegroup, tab, toggle, ephemeral"
+          "$mainMod SHIFT, W, hy3:makegroup, tab, toggle"
           "$mainMod, V, hy3:makegroup, v"
 
           # MOVE WINDOWS
