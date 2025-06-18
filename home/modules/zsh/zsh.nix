@@ -83,6 +83,10 @@
                 echo
             done
           }
+
+          _nix-shell-run() {
+            nix-shell -p "$1" --command "$1"
+          }
         '';
 
         end = lib.mkAfter ''
@@ -134,6 +138,7 @@
       nb = "nix-build";
       ns = "nix-shell";
       s = "nix-shell -p";
+      run = "_nix-shell-run";
       nr = "home-manager switch --flake ~/dotfiles#flo";
       nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
 

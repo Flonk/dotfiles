@@ -32,6 +32,22 @@
     open = true;
   };
 
+  # Hardware graphics acceleration
+  hardware.graphics = {
+    enable = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      vaapiVdpau
+      libvdpau-va-gl
+      nvidia-vaapi-driver
+    ];
+  };
+
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "nvidia";
+    NIXOS_OZONE_WL = "1";
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.flo = {
     isNormalUser = true;
