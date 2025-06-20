@@ -1,9 +1,0 @@
-username = "flo"
-
-primary_monitor = "eDP-1"
-primary_network_interface = "wlp0s20f3"
-
-background_image = "~/assets/wallhaven.png"
-
-primary_color = "#ffa200"
-taskbar_color = "#000000"

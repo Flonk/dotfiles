@@ -1,5 +1,0 @@
-for config_file in ~/.config/zsh/config.d/**/*.zshrc; do
-    if [[ -f "$config_file" ]]; then
-        source "$config_file"
-    fi
-done

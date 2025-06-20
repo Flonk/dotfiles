@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=MuseScore
-Comment=Music composition and notation software
-Exec=/usr/bin/MuseScore.AppImage
-Terminal=false
-Type=Application
-Categories=Audio;Music;Education;
-Icon=application-default-icon
