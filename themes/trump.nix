@@ -10,13 +10,14 @@ let
     small = 8;
     normal = 9;
     big = 10.5;
+    bigger = 12.5;
     huge = 14;
     humongous = 20;
   };
 
   fontFamily = {
-    ui = "monospace";
-    mono = "monospace";
+    ui = "DejaVu Sans Mono";
+    mono = "DejaVu Sans Mono";
   };
 
   wallpaper = ../assets/wallpapers/aishot-1910.jpg;

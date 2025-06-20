@@ -15,7 +15,7 @@
       in
       {
         "*" = {
-          font = mkLiteral "\"DejaVu Sans Mono 10\"";
+          font = mkLiteral "\"${theme.font.ui.normal}\"";
           background-color = mkLiteral "transparent";
           text-color = mkLiteral theme.color.background;
           accent-color = mkLiteral theme.color.text;

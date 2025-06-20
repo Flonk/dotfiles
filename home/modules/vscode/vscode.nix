@@ -12,6 +12,10 @@
     enable = true;
 
     profiles.default.userSettings = {
+      "editor.fontFamily" = theme.fontFamily.mono;
+      "editor.fontSize" = theme.fontSize.bigger;
+      "window.zoomLevel" = -1;
+
       "workbench.colorTheme" = "Dainty – Nord (chroma 0, lightness 0)";
       "workbench.colorCustomizations" = {
         "editor.findMatchBackground" = "${theme.color.accent}77";
