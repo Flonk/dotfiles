@@ -42,15 +42,13 @@ in
       nwg-look
       wl-clipboard
 
-      nerd-fonts.fira-code
-      nerd-fonts.fira-mono
-
       tree
       figlet
       toilet
       cowsay
       fortune
       btop
+      chafa
 
       postman
 
@@ -69,6 +67,7 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
+  fonts.fontconfig.enable = true;
 
   programs.eza.enable = true;
   programs.bat.enable = true;
