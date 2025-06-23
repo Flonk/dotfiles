@@ -90,7 +90,11 @@
         '';
 
         end = lib.mkAfter ''
-          fortune | cowsay
+          if [[ -n "$IS_INITIAL_SHELL" ]]; then
+            
+          else
+            fortune | cowsay
+          fi
         '';
 
       in

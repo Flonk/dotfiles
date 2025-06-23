@@ -3,6 +3,7 @@
   lib,
   pkgs,
   self,
+  theme,
   inputs,
   ...
 }:
@@ -23,6 +24,7 @@ in
     ./modules/rofi/rofi.nix
     ./modules/zsh/zsh.nix
     ./modules/vscode/vscode.nix
+    ./modules/fastfetch/fastfetch.nix
   ];
 
   home = {
@@ -51,6 +53,7 @@ in
       chafa
 
       postman
+      jq
 
       google-chrome
 
@@ -77,148 +80,5 @@ in
   };
 
   programs.distrobox.enable = true;
-
-  programs.fastfetch = {
-    enable = true;
-    settings = {
-      modules = [
-        "break"
-        {
-          type = "title";
-          key = "";
-          keyColor = "yellow";
-        }
-        {
-          type = "custom";
-          format = "┌────────────────────────────────────────────────────┐";
-        }
-        {
-          type = "os";
-          key = "OS";
-          keyColor = "yellow";
-        }
-        {
-          type = "host";
-          key = "Host";
-          keyColor = "green";
-        }
-        {
-          type = "kernel";
-          key = "Kernel";
-          keyColor = "yellow";
-        }
-        {
-          type = "cpu";
-          key = "│ ├";
-          showPeCoreCount = true;
-          keyColor = "green";
-        }
-        {
-          type = "gpu";
-          key = "│ ├󰍛";
-          keyColor = "green";
-        }
-        {
-          type = "memory";
-          key = "└ └";
-          keyColor = "green";
-        }
-        {
-          type = "custom";
-          format = "└────────────────────────────────────────────────────┘";
-        }
-        "break"
-        {
-          type = "custom";
-          format = "┌──────────────────────Software──────────────────────┐";
-        }
-        {
-          type = "vulkan";
-          key = "│ ├";
-          keyColor = "yellow";
-        }
-        {
-          type = "packages";
-          key = "└ └";
-          keyColor = "yellow";
-        }
-        "break"
-        {
-          type = "wm";
-          key = "󰇄 DE";
-          keyColor = "blue";
-        }
-        {
-          type = "lm";
-          key = "│ ├󰍂";
-          keyColor = "blue";
-        }
-        {
-          type = "terminal";
-          key = "│ ├";
-          keyColor = "blue";
-        }
-        {
-          type = "shell";
-          key = "└ └";
-          keyColor = "blue";
-        }
-        {
-          type = "custom";
-          format = "└────────────────────────────────────────────────────┘";
-        }
-        "break"
-        {
-          type = "custom";
-          format = "┌──────────────────────Theming───────────────────────┐";
-        }
-        {
-          type = "theme";
-          key = "󰉼 GTK";
-          keyColor = "cyan";
-        }
-        {
-          type = "cursor";
-          key = "│  ├󰇀";
-          keyColor = "cyan";
-        }
-        {
-          type = "icons";
-          key = "│  ├";
-          keyColor = "cyan";
-        }
-        {
-          type = "font";
-          key = "└  └󰗧";
-          keyColor = "cyan";
-        }
-        {
-          type = "custom";
-          format = "└────────────────────────────────────────────────────┘";
-        }
-        "break"
-        {
-          type = "custom";
-          format = "┌────────────────────Uptime / Age────────────────────┐";
-        }
-        {
-          type = "command";
-          key = "  OS Age ";
-          keyColor = "magenta";
-          text = "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days";
-        }
-        {
-          type = "uptime";
-          key = "  Uptime ";
-          keyColor = "magenta";
-        }
-        {
-          type = "custom";
-          format = "└────────────────────────────────────────────────────┘";
-        }
-        "break"
-      ];
-    };
-  };
 
 }

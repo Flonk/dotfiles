@@ -65,6 +65,26 @@ let
           x = 1;
           y = 1;
         }
+        {
+          key = "i";
+          x = 0;
+          y = -1;
+        }
+        {
+          key = "j";
+          x = -1;
+          y = 0;
+        }
+        {
+          key = "k";
+          x = 0;
+          y = 1;
+        }
+        {
+          key = "l";
+          x = 1;
+          y = 0;
+        }
       ];
     in
     map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
@@ -97,7 +117,7 @@ in
 
       exec-once = [
         "waybar"
-        "alacritty"
+        "IS_INITIAL_SHELL=1 alacritty --title initial-shell -e zsh -l -c \"fastfetch; exec zsh\""
         "google-chrome-stable"
         "hyprctl setcursor macOS-White 28"
       ];
@@ -109,12 +129,12 @@ in
           "$mainMod CTRL, RETURN, exec, $browser"
           "$mainMod, SPACE, exec, rofi -show drun"
 
-          "$mainMod, L, exec, hyprlock"
+          "$mainMod, ESCAPE, exec, hyprlock"
           "$mainMod, M, exit"
           "$mainMod, Q, killactive"
 
           "$mainMod, PRINT, exec, hyprshot -m window -m active"
-          "$mainMod SHIFT, PRINT, exec, hyprshot -m output"
+          "$mainMod SHIFT, PRINT, exec, hyprshot -m output -m active"
           ", PRINT, exec, hyprshot -m region"
 
           # WINDOW MANAGEMENT
@@ -229,6 +249,7 @@ in
         "size >900 >600, class:org.pulseaudio.pavucontrol"
         "noshadow, floating:0"
         "opacity 1 0.92, class:^(Alacritty|code)$"
+        "size 500 >100, class:Alacritty title:^(initial-shell)$"
       ];
 
       input = {
