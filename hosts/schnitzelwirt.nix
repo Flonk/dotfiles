@@ -35,7 +35,6 @@
   # Hardware graphics acceleration
   hardware.graphics = {
     enable = true;
-    driSupport32Bit = true;
     extraPackages = with pkgs; [
       vaapiVdpau
       libvdpau-va-gl
@@ -49,6 +48,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.groups.plugdev = { };
   users.users.flo = {
     isNormalUser = true;
     description = "flo";
@@ -56,8 +56,14 @@
       "networkmanager"
       "wheel"
       "docker"
+      "plugdev"
     ];
   };
+
+  # whitelist Google Pixel 9
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb", ENV{DEVNAME}=="/dev/bus/usb/*", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4ee7", MODE="0664", GROUP="plugdev"
+  '';
 
   services.greetd.settings.default_session.user = "flo";
 

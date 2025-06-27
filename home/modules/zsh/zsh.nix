@@ -87,6 +87,16 @@
           _nix-shell-run() {
             nix-shell -p "$1" --command "$1"
           }
+
+          qr() {
+            nix-shell -p qrencode --run "qrencode -t UTF8i \"''${*}\""
+          }
+
+          mount-sd-card() {
+            sudo mkdir -p /mnt/sdcard
+            sudo mount /dev/mmcblk0p1 /mnt/sdcard
+            cd /mnt/sdcard || return 1
+          }
         '';
 
         end = lib.mkAfter ''
@@ -134,7 +144,7 @@
       ##### Navigation
       cat = "bat -P -p --color always --theme 'Visual Studio Dark+'";
       t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
-      l = "eza -l --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --no-user --color=always";
+      l = "eza -l --group --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --color=always";
       c = "cd_fzf";
 
       ##### Nix
@@ -161,6 +171,9 @@
       ##### Assorted
       future = "toilet -f future";
       x = "sudo env \"PATH=$PATH\"";
+
+      ##### Musescore -- the nix package does not work
+      musescore = "nix run nixpkgs#appimage-run -- ~/Downloads/MuseScore-Studio-4.5.2.251141401-x86_64.AppImage &";
     };
   };
 }
