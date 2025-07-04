@@ -74,7 +74,7 @@ with lib;
         "custom/startmenu" = {
           tooltip = false;
           format = "😬";
-          on-click = "wofi --show drun";
+          on-click = "rofi --show drun";
         };
 
         "battery" = {

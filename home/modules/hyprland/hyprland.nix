@@ -221,8 +221,8 @@ in
 
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = [
-        "$mainMod, mouse:273, movewindow"
-        "$mainMod, mouse:272, resizewindow"
+        "$mainMod, mouse:272, movewindow"
+        "$mainMod, mouse:273, resizewindow"
       ];
 
       bindel = [
@@ -248,7 +248,7 @@ in
         "float, class:org.pulseaudio.pavucontrol"
         "size >900 >600, class:org.pulseaudio.pavucontrol"
         "noshadow, floating:0"
-        "opacity 1 0.92, class:^(Alacritty|code)$"
+        "opacity 1 0.90, class:^(Alacritty|code)$"
         "size 500 >100, class:Alacritty title:^(initial-shell)$"
       ];
 
