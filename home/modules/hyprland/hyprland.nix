@@ -244,12 +244,12 @@ in
       windowrule = [
         # Ignore maximize requests from apps. You'll probably like this.
         "suppressevent maximize, class:.*"
-        "float, title:Bitwarden"
-        "float, class:org.pulseaudio.pavucontrol"
         "size >900 >600, class:org.pulseaudio.pavucontrol"
         "noshadow, floating:0"
         "opacity 1 0.90, class:^(Alacritty|code)$"
         "size 500 >100, class:Alacritty title:^(initial-shell)$"
+        "float, class:^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
+        "float, class:org.pulseaudio.pavucontrol"
       ];
 
       input = {

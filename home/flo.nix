@@ -85,7 +85,7 @@ in
   xdg.mimeApps = {
     enable = true;
     defaultApplications = lib.mkMerge [
-      (import ./google-chrome/mimeApps.nix)
+      (import ./modules/google-chrome/mimeApps.nix)
     ];
   };
 
