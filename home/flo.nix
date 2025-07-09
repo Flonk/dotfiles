@@ -25,6 +25,7 @@ in
     ./modules/zsh/zsh.nix
     ./modules/vscode/vscode.nix
     ./modules/fastfetch/fastfetch.nix
+    ./modules/google-chrome/google-chrome.nix
   ];
 
   home = {
@@ -54,8 +55,6 @@ in
 
       postman
       jq
-
-      google-chrome
 
       musescore
       spotify
