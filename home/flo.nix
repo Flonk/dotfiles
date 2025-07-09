@@ -16,6 +16,7 @@ in
     ./modules/hyprland/hyprpaper.nix
     ./modules/hyprland/hyprlock.nix
     ./modules/hyprland/hyprcursor.nix
+    ./modules/google-chrome/google-chrome.nix
     ./modules/git/git.nix
     ./modules/direnv/direnv.nix
     ./modules/waybar/waybar.nix
@@ -25,7 +26,7 @@ in
     ./modules/zsh/zsh.nix
     ./modules/vscode/vscode.nix
     ./modules/fastfetch/fastfetch.nix
-    ./modules/google-chrome/google-chrome.nix
+    ./modules/obs-studio/obs-studio.nix
   ];
 
   home = {
@@ -80,37 +81,12 @@ in
   };
 
   programs.distrobox.enable = true;
-  programs.obs-studio = {
+
+  xdg.mimeApps = {
     enable = true;
-
-    # optional Nvidia hardware acceleration
-    package = (
-      pkgs.obs-studio.override {
-        cudaSupport = true;
-      }
-    );
-
-    plugins = with pkgs.obs-studio-plugins; [
-      wlrobs
-      obs-backgroundremoval
-      obs-pipewire-audio-capture
-      obs-gstreamer
-      obs-vkcapture
-    ];
-  };
-
-  systemd.user.services.force-a2dp = {
-    Unit = {
-      Description = "Force A2DP profile on Bluetooth headset";
-      After = [ "pipewire.service" ];
-    };
-    Service = {
-      Type = "oneshot";
-      ExecStart = [ "pactl set-card-profile bluez_card.80_C3_BA_53_78_8B a2dp_sink" ];
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
+    defaultApplications = lib.mkMerge [
+      (import ./google-chrome/mimeApps.nix)
+    ]
   };
 
 }
