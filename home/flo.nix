@@ -86,7 +86,7 @@ in
     enable = true;
     defaultApplications = lib.mkMerge [
       (import ./google-chrome/mimeApps.nix)
-    ]
+    ];
   };
 
 }
