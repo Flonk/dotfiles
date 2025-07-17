@@ -73,6 +73,10 @@ in
   nixpkgs.config.allowUnfree = true;
   fonts.fontconfig.enable = true;
 
+  programs.bash.bashrcExtra = ''
+    [[ $- == *i* ]] && shopt -s xpg_echo
+  '';
+
   programs.eza.enable = true;
   programs.bat.enable = true;
   programs.fzf = {

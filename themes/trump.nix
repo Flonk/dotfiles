@@ -1,9 +1,10 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 let
   textColor = "#ffffff";
   backgroundColor = "#000000";
-  accentColor = "#ffa200";
+  # accentColor = "#ffa200";
+  accentColor = "#0090b1";
 
   fontSize = {
     tiny = 7.5;
@@ -20,8 +21,20 @@ let
     mono = "DejaVu Sans Mono";
   };
 
-  wallpaper = ../assets/wallpapers/aishot-1910.jpg;
   lockscreenImage = ../assets/logos/andamp.png;
+  # wallpaper = ../assets/wallpapers/aishot-1910.jpg;
+
+  wallpaper =
+    pkgs.runCommand "../assets/wallpapers/company_wallpaper.png"
+      {
+        buildInputs = [ pkgs.imagemagick ];
+      }
+      ''
+        convert -size 3440x1440 canvas:"${accentColor}" \
+          \( ${lockscreenImage} -channel rgba -fill black -colorize 100% \) \
+          -gravity center -compose over -composite \
+        $out
+      '';
 in
 {
   color = {

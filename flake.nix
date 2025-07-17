@@ -39,7 +39,10 @@
           inherit pkgs;
           extraSpecialArgs = {
             inherit inputs;
-            theme = import ./themes/trump.nix { lib = pkgs.lib; };
+            theme = import ./themes/trump.nix {
+              lib = pkgs.lib;
+              pkgs = pkgs;
+            };
           };
           modules = [
             ./home/flo.nix
