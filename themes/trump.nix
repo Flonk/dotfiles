@@ -31,7 +31,7 @@ let
       }
       ''
         convert -size 3440x1440 canvas:"${accentColor}" \
-          \( ${lockscreenImage} -channel rgba -fill black -colorize 100% \) \
+          \( ${lockscreenImage} -channel rgba -fill black -colorize 100% -resize 150x150 \) \
           -gravity center -compose over -composite \
         $out
       '';

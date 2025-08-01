@@ -38,7 +38,7 @@
       "urgency=high" = {
         border-color = theme.color.notifications.urgent;
         text-color = theme.color.notifications.urgentText;
-        default-timeout = 0;
+        default-timeout = 30000;
       };
     };
 
