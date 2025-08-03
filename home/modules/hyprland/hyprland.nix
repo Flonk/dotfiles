@@ -246,10 +246,12 @@ in
         "suppressevent maximize, class:.*"
         "size >900 >600, class:org.pulseaudio.pavucontrol"
         "noshadow, floating:0"
-        "opacity 1 0.90, class:^(Alacritty|code)$"
+        "opacity 1 1, class:^(Alacritty|code)$"
         "size 500 >100, class:Alacritty title:^(initial-shell)$"
         "float, class:^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
         "float, class:org.pulseaudio.pavucontrol"
+        "float, class:Rofi"
+        "stayfocused, class:Rofi"
       ];
 
       input = {

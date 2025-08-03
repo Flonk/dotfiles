@@ -3,8 +3,9 @@
 let
   textColor = "#ffffff";
   backgroundColor = "#000000";
-  # accentColor = "#ffa200";
-  accentColor = "#0090b1";
+  accentColor = "#ffa200"; # trump
+  # accentColor = "#0090b1"; # andamp blue
+  # accentColor = "#f2493d";
 
   fontSize = {
     tiny = 7.5;

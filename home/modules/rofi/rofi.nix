@@ -43,7 +43,7 @@
           border = mkLiteral "0px 2px 0px 0px";
           border-color = mkLiteral theme.color.background;
           width = mkLiteral "calc(25% min 480px)";
-          padding = mkLiteral "6px 8px";
+          padding = mkLiteral "8px 8px";
           spacing = mkLiteral "8px";
           children = mkLiteral "[ prompt, entry ]";
         };
@@ -62,7 +62,7 @@
         };
 
         element = {
-          padding = mkLiteral "6px 8px 5px 8px";
+          padding = mkLiteral "8px 8px 8px 8px";
           spacing = mkLiteral "4px";
           text-color = mkLiteral theme.color.accent;
         };
