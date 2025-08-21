@@ -27,6 +27,8 @@ in
     ./modules/vscode/vscode.nix
     ./modules/fastfetch/fastfetch.nix
     ./modules/obs-studio/obs-studio.nix
+
+    inputs.gauntlet.nixosModules.default
   ];
 
   home = {
@@ -85,6 +87,11 @@ in
   };
 
   programs.distrobox.enable = true;
+
+  programs.gauntlet = {
+    enable = true;
+    service.enable = true;
+  };
 
   xdg.mimeApps = {
     enable = true;
