@@ -1,0 +1,3 @@
+{
+  "text/csv" = "csvlens.desktop";
+}

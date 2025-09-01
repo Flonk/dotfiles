@@ -28,7 +28,7 @@ in
     ./modules/fastfetch/fastfetch.nix
     ./modules/obs-studio/obs-studio.nix
 
-    inputs.gauntlet.nixosModules.default
+    # inputs.gauntlet.homeManagerModules.default
   ];
 
   home = {
@@ -88,16 +88,19 @@ in
 
   programs.distrobox.enable = true;
 
-  programs.gauntlet = {
-    enable = true;
-    service.enable = true;
-  };
+  # programs.gauntlet = {
+  #  enable = true;
+  #  service.enable = true;
+  #};
 
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = lib.mkMerge [
-      (import ./modules/google-chrome/mimeApps.nix)
-    ];
+  xdg = {
+    mimeApps = {
+      enable = true;
+      defaultApplications = lib.mkMerge [
+        (import ./modules/google-chrome/mimeApps.nix)
+        (import ./modules/csvlens/mimeApps.nix)
+      ];
+    };
   };
 
 }

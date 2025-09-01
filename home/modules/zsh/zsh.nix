@@ -171,6 +171,7 @@
       ##### Assorted
       future = "toilet -f future";
       x = "sudo env \"PATH=$PATH\"";
+      appimage = "nix run nixpkgs#appimage-run --";
 
       ##### Musescore -- the nix package does not work
       musescore = "nix run nixpkgs#appimage-run -- ~/Downloads/MuseScore-Studio-4.5.2.251141401-x86_64.AppImage &";
