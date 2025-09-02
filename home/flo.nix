@@ -27,6 +27,7 @@ in
     ./modules/vscode/vscode.nix
     ./modules/fastfetch/fastfetch.nix
     ./modules/obs-studio/obs-studio.nix
+    ./modules/csvlens/csvlens.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];

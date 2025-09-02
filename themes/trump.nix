@@ -3,8 +3,8 @@
 let
   textColor = "#ffffff";
   backgroundColor = "#000000";
-  accentColor = "#ffa200"; # trump
-  # accentColor = "#0090b1"; # andamp blue
+  # accentColor = "#ffa200"; # trump
+  accentColor = "#0090b1"; # andamp blue
   # accentColor = "#f2493d";
 
   fontSize = {
@@ -23,9 +23,9 @@ let
   };
 
   lockscreenImage = ../assets/logos/andamp.png;
-  # wallpaper = ../assets/wallpapers/aishot-1910.jpg;
+  wallpaper = ../assets/wallpapers/out.jpg;
 
-  wallpaper =
+  _wallpaper =
     pkgs.runCommand "../assets/wallpapers/company_wallpaper.png"
       {
         buildInputs = [ pkgs.imagemagick ];

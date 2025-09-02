@@ -10,7 +10,7 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      font.size = theme.fontSize.normal;
+      font.size = theme.fontSize.small;
       font.normal.family = theme.fontFamily.mono;
     };
   };
