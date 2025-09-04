@@ -169,7 +169,7 @@
       ns = "nix-shell";
       s = "nix-shell -p";
       run = "_nix-shell-run";
-      nr = "home-manager switch --flake ~/dotfiles#flo";
+      nr = "home-manager switch --impure --flake ~/dotfiles#flo";
       nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
 
       ##### Git

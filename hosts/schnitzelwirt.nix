@@ -66,6 +66,5 @@
   '';
 
   services.greetd.settings.default_session.user = "flo";
-
   programs.steam.enable = true;
 }

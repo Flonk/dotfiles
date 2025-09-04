@@ -127,7 +127,7 @@ in
           # HYPRLAND
           "$mainMod, RETURN, exec, $terminal"
           "$mainMod CTRL, RETURN, exec, $browser"
-          "$mainMod, SPACE, exec, rofi -show drun"
+          "$mainMod, SPACE, exec, walker"
 
           "$mainMod, ESCAPE, exec, hyprlock"
           "$mainMod, M, exit"
@@ -250,8 +250,9 @@ in
         "size 500 >100, class:Alacritty title:^(initial-shell)$"
         "float, class:^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
         "float, class:org.pulseaudio.pavucontrol"
-        "float, class:Rofi"
-        "stayfocused, class:Rofi"
+
+        # "float, class:Rofi"
+        # "stayfocused, class:Rofi"
       ];
 
       input = {
