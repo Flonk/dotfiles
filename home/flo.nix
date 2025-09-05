@@ -30,7 +30,6 @@ in
     ./modules/csvlens/csvlens.nix
 
     # inputs.gauntlet.homeManagerModules.default
-    inputs.walker.homeManagerModules.default
   ];
 
   home = {
@@ -92,37 +91,10 @@ in
 
   programs.distrobox.enable = true;
 
-  # programs.gauntlet = {
+  #programs.gauntlet = {
   #  enable = true;
   #  service.enable = true;
   #};
-
-  programs.walker = {
-    enable = true;
-    runAsService = true;
-
-    # All options from the config.json can be used here.
-    config = {
-      search.placeholder = "Example";
-      ui.fullscreen = true;
-      list = {
-        height = 200;
-      };
-      websearch.prefix = "?";
-      switcher.prefix = "/";
-    };
-
-  };
-
-  home.activation.walkerTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    cat > "${config.xdg.configHome}/walker/themes/default.css" <<'CSS'
-    .box-wrapper {
-      border-radius: 0px;
-      border: 4px solid ${theme.color.accent};
-      background-color: ${theme.color.background};
-    }
-    CSS
-  '';
 
   xdg = {
     mimeApps = {
