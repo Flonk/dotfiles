@@ -127,7 +127,7 @@ in
           # HYPRLAND
           "$mainMod, RETURN, exec, $terminal"
           "$mainMod CTRL, RETURN, exec, $browser"
-          "$mainMod, SPACE, exec, rofi -show drun"
+          "$mainMod, SPACE, exec, walker -t mytheme"
 
           "$mainMod, ESCAPE, exec, hyprlock"
           "$mainMod, M, exit"

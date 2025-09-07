@@ -28,6 +28,7 @@ in
     ./modules/fastfetch/fastfetch.nix
     ./modules/obs-studio/obs-studio.nix
     ./modules/csvlens/csvlens.nix
+    ./modules/walker/walker.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
@@ -91,7 +92,7 @@ in
 
   programs.distrobox.enable = true;
 
-  #programs.gauntlet = {
+  # programs.gauntlet = {
   #  enable = true;
   #  service.enable = true;
   #};

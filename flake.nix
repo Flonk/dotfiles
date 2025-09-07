@@ -13,6 +13,8 @@
       url = "github:project-gauntlet/gauntlet";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    walker.url = "github:abenz1267/walker";
   };
 
   outputs =
