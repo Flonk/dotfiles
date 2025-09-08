@@ -65,20 +65,33 @@
           }
 
           npmrun_fzf() {
-            if [ -n "$1" ]; then
-              # Use the provided argument as a filter for fzf
-              local script=$(jq -r '."scripts" | keys[]' package.json | fzf --query="$1" --select-1 --exit-0)
-            else
-              # No argument provided, just show the scripts for selection
-              local script=$(jq -r '."scripts" | keys[]' package.json | fzf --height 8 --layout=reverse)
-            fi
+            (
+              set -e
 
-            if [ -n "$script" ]; then
-              npm run "$script"
-            else
-              echo "No matching script found."
-            fi
+              local root
+              root=$(npm prefix 2>/dev/null) || { echo "Not inside an npm project." >&2; exit 1; }
+              cd "$root" || exit 1
+
+              # List script names (safe if no scripts)
+              local scripts
+              scripts=$(jq -r '.scripts | keys[]?' package.json) || { echo "Failed to read package.json" >&2; exit 1; }
+
+              local script
+              if [ -n "$1" ]; then
+                script=$(printf '%s\n' "$scripts" | fzf --query="$1" --select-1 --exit-0)
+              else
+                script=$(printf '%s\n' "$scripts" | fzf --height 8 --layout=reverse)
+              fi
+
+              if [ -n "$script" ]; then
+                echo "+ npm run $script" >&2
+                npm run "$script"
+              else
+                echo "No matching script found."
+              fi
+            )
           }
+
 
           gcob () {
             if [ -n "$1" ]; then
