@@ -169,8 +169,9 @@
       ns = "nix-shell";
       s = "nix-shell -p";
       run = "_nix-shell-run";
-      nr = "home-manager switch --impure --flake ~/dotfiles#flo";
+      nr = "pkill walker && home-manager switch --impure --flake ~/dotfiles#flo";
       nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
+      appimage = "nix run nixpkgs#appimage-run --";
 
       ##### Git
       gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";
@@ -187,7 +188,6 @@
       ##### Assorted
       future = "toilet -f future";
       x = "sudo env \"PATH=$PATH\"";
-      appimage = "nix run nixpkgs#appimage-run --";
       n = "npmrun_fzf";
 
       ##### Musescore -- the nix package does not work

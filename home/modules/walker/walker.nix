@@ -29,6 +29,16 @@
       };
       websearch.prefix = "?";
       switcher.prefix = "/";
+
+      providers = {
+        default = [
+          "desktopapplications"
+          "calc"
+          "menus"
+          "websearch"
+        ];
+        empty = [ "desktopapplications" ];
+      };
     };
 
   };
