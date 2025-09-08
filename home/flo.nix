@@ -31,6 +31,7 @@ in
     ./modules/walker/walker.nix
 
     # inputs.gauntlet.homeManagerModules.default
+    # inputs.stylix.homeModules.stylix
   ];
 
   home = {
@@ -91,6 +92,9 @@ in
   };
 
   programs.distrobox.enable = true;
+
+  # stylix.enable = true;
+  # stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/nord.yaml";
 
   # programs.gauntlet = {
   #  enable = true;
