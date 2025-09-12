@@ -15,11 +15,6 @@
     };
 
     walker.url = "github:abenz1267/walker";
-
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =

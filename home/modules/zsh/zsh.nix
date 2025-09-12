@@ -10,7 +10,7 @@
     enable = true;
 
     # relative to ~
-    dotDir = ".config/zsh";
+    dotDir = "${config.home.homeDirectory}/.config/zsh";
     enableCompletion = true;
     history.size = 10000;
     history.share = true;
