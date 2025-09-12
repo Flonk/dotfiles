@@ -15,6 +15,8 @@
     };
 
     walker.url = "github:abenz1267/walker";
+
+    nix-colorizer.url = "github:nutsalhan87/nix-colorizer";
   };
 
   outputs =
@@ -22,6 +24,7 @@
       self,
       nixpkgs,
       home-manager,
+      nix-colorizer,
       ...
     }:
     let
@@ -46,9 +49,11 @@
           inherit pkgs;
           extraSpecialArgs = {
             inherit inputs;
+            inherit nix-colorizer;
             theme = import ./themes/trump.nix {
               lib = pkgs.lib;
               pkgs = pkgs;
+              nix-colorizer = inputs.nix-colorizer;
             };
           };
           modules = [

@@ -1,11 +1,25 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  nix-colorizer,
+  ...
+}:
 
 let
+  pi = 3.141592653589793;
+  toRad = deg: deg * pi / 180.0;
+
   textColor = "#ffffff";
   backgroundColor = "#000000";
-  accentColor = "#ffa200"; # trump
   # accentColor = "#0090b1"; # andamp blue
-  # accentColor = "#f2493d"; # red
+
+  accentColor = {
+    L = 0.7874;
+    C = 0.1715;
+    # h = toRad 69.12;
+    h = toRad 120.0;
+    a = 1.0;
+  };
 
   fontSize = {
     tiny = 7.5;
@@ -36,13 +50,58 @@ let
           -gravity center -compose over -composite \
         $out
       '';
+
+  mkPalette =
+    {
+      c,
+      h,
+      lCap ? 0.99,
+    }:
+    lib.listToAttrs (
+      map
+        (
+          key:
+          let
+            l = lib.min lCap (key / 1000.0);
+            col = {
+              L = l;
+              C = c;
+              h = h;
+              a = 1.0;
+            };
+            hex = nix-colorizer.oklch.to.hex col;
+          in
+          lib.nameValuePair (toString key) hex
+        )
+        [
+          50
+          100
+          200
+          300
+          400
+          500
+          600
+          700
+          800
+          900
+          950
+        ]
+    );
+
+  colorMain = mkPalette {
+    c = accentColor.C;
+    h = accentColor.h;
+  };
+
 in
 {
   color = {
 
     text = textColor;
     background = backgroundColor;
-    accent = accentColor;
+
+    accent = colorMain."800";
+    main = colorMain;
 
     notifications = {
       backgroundColor = backgroundColor;
@@ -50,7 +109,7 @@ in
       low = "#333333";
       lowText = "#aaaaaa";
 
-      normal = accentColor;
+      normal = colorMain."800";
       normalText = textColor;
 
       urgent = "#ff0000";

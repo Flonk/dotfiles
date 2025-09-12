@@ -112,6 +112,21 @@
         "type": "github"
       }
     },
+    "nix-colorizer": {
+      "locked": {
+        "lastModified": 1750078528,
+        "narHash": "sha256-NuGAJx61f/r0xrpyOTUEsO+MDNpso0qE99k2/apv3as=",
+        "owner": "nutsalhan87",
+        "repo": "nix-colorizer",
+        "rev": "c9ce6c710f4ed749f773104a8092a3e542dd1d7c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nutsalhan87",
+        "repo": "nix-colorizer",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1749285348,
@@ -179,6 +194,7 @@
       "inputs": {
         "gauntlet": "gauntlet",
         "home-manager": "home-manager",
+        "nix-colorizer": "nix-colorizer",
         "nixpkgs": "nixpkgs",
         "walker": "walker"
       }
