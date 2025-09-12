@@ -51,45 +51,70 @@ let
         $out
       '';
 
+  chromaFactorQuad =
+    {
+      peakKey ? 800,
+      rightKey ? 900,
+      rightFactor ? 0.8,
+      floor ? 0.6,
+    }:
+    key:
+    let
+      dxR = rightKey - peakKey;
+      k = (1.0 - rightFactor) / (dxR * dxR);
+      raw = 1.0 - k * (key - peakKey) * (key - peakKey);
+    in
+    lib.max floor raw;
+
+  tailwindKeys = [
+    50
+    100
+    150
+    200
+    300
+    400
+    500
+    600
+    700
+    800
+    900
+    950
+  ];
+
+  # Palette builder: L from key/1000, C from quadratic factor * Cmax
   mkPalette =
     {
-      c,
+      cMax,
       h,
       lCap ? 0.99,
+      keys ? tailwindKeys,
+      factorFn ? chromaFactorQuad {
+        peakKey = 800;
+        rightKey = 900;
+        rightFactor = 0.8;
+        floor = 0.6;
+      },
     }:
     lib.listToAttrs (
-      map
-        (
-          key:
-          let
-            l = lib.min lCap (key / 1000.0);
-            col = {
-              L = l;
-              C = c;
-              h = h;
-              a = 1.0;
-            };
-            hex = nix-colorizer.oklch.to.hex col;
-          in
-          lib.nameValuePair (toString key) hex
-        )
-        [
-          50
-          100
-          200
-          300
-          400
-          500
-          600
-          700
-          800
-          900
-          950
-        ]
+      map (
+        key:
+        let
+          l = lib.min lCap (key / 1000.0);
+          c = cMax * (factorFn key);
+          col = {
+            L = l;
+            C = c;
+            h = h;
+            a = 1.0;
+          };
+          hex = nix-colorizer.oklch.to.hex col;
+        in
+        lib.nameValuePair (toString key) hex
+      ) keys
     );
 
   colorMain = mkPalette {
-    c = accentColor.C;
+    cMax = accentColor.C;
     h = accentColor.h;
   };
 

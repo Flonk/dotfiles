@@ -29,6 +29,7 @@ in
     ./modules/obs-studio/obs-studio.nix
     ./modules/csvlens/csvlens.nix
     ./modules/walker/walker.nix
+    ./modules/render-configuration/render-configuration.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
