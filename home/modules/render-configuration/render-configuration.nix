@@ -5,51 +5,59 @@
   theme,
   ...
 }:
-{
-  # Example usage of theme (your snippet style)
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      font.size = theme.fontSize.small;
-      font.normal.family = theme.fontFamily.mono;
-      colors.primary.background = theme.color.main."150";
-    };
-  };
+let
+  keys = [
+    "50"
+    "100"
+    "150"
+    "200"
+    "300"
+    "400"
+    "500"
+    "600"
+    "700"
+    "800"
+    "900"
+    "950"
+  ];
 
-  home.file.".config/system/palette.html".text =
+  # Pick the root attrset: prefer `colors`, fall back to `color`.
+  colorRoot =
+    if builtins.hasAttr "colors" theme then
+      theme.colors
+    else if builtins.hasAttr "color" theme then
+      theme.color
+    else
+      throw "Theme is missing `colors`/`color`.";
+
+  # Resolve a hex for a given step:
+  # 1) try ergonomic alias like `wm800`
+  # 2) fall back to nested `wm."800"`
+  get =
+    k:
     let
-      keys = [
-        "50"
-        "100"
-        "150"
-        "200"
-        "300"
-        "400"
-        "500"
-        "600"
-        "700"
-        "800"
-        "900"
-        "950"
-      ];
-      get = k: builtins.getAttr k theme.color.main;
+      alias = "wm" + k;
+    in
+    if builtins.hasAttr alias colorRoot then
+      builtins.getAttr alias colorRoot
+    else
+      builtins.getAttr k colorRoot.wm;
 
-      mkSwatch =
-        k:
-        let
-          hex = get k;
-        in
-        ''
-          <div class="swatch">
-            <div class="chip" style="background:${hex}"></div>
-            <div class="meta">
-              <div class="step">${k}</div>
-              <div class="hex">${hex}</div>
-            </div>
-          </div>
-        '';
+  swatch =
+    k:
+    let
+      hex = get k;
+    in
+    ''
+      <div class="swatch">
+        <div class="chip" style="background:${hex}"></div>
+        <div class="meta"><div class="step">${k}</div><div class="hex">${hex}</div></div>
+      </div>
+    '';
 
-      swatches = lib.concatStringsSep "\n" (map mkSwatch keys);
+  html =
+    let
+      swatches = lib.concatStringsSep "\n" (map swatch keys);
       bars = lib.concatStringsSep "\n" (
         map (
           k:
@@ -61,44 +69,32 @@
       );
     in
     ''
-      <!doctype html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>Palette Preview</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <style>
-          :root { --bg:#0b0b0b; --fg:#eaeaea; --card:#161616; }
-          * { box-sizing:border-box; }
-          body { margin:0; padding:24px; background:var(--bg); color:var(--fg);
-                 font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-                              "Liberation Mono","DejaVu Sans Mono", monospace; }
-          h1 { margin:0 0 16px; font-size:18px; }
-          .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
-          .swatch { background:var(--card); border-radius:12px; padding:10px;
-                    box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 4px 16px rgba(0,0,0,.35);
-                    display:flex; gap:10px; align-items:center; }
-          .chip { width:64px; height:48px; border-radius:8px; border:1px solid rgba(255,255,255,.1);
-                  box-shadow: 0 2px 8px rgba(0,0,0,.35) inset; }
-          .meta { display:flex; flex-direction:column; line-height:1.25; }
-          .step { font-weight:700; font-size:14px; opacity:.9; }
-          .hex  { font-size:12px; opacity:.8; }
-          .ramp { margin-top:18px; display:grid; grid-template-columns:repeat(12,1fr); gap:6px; }
-          .bar { height:28px; border-radius:6px; border:1px solid rgba(255,255,255,.12); }
-          .caption { margin-top:12px; font-size:12px; opacity:.7; }
-        </style>
-      </head>
-      <body>
-        <h1>theme.color.main</h1>
-        <div class="grid">
-          ${swatches}
-        </div>
-
-        <div class="ramp" style="margin-top:28px">
-          ${bars}
-        </div>
+      <!doctype html><html lang="en"><head><meta charset="utf-8">
+      <title>Palette Preview</title><meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>
+        :root{--bg:#0b0b0b;--fg:#eaeaea;--card:#161616}
+        *{box-sizing:border-box} body{margin:0;padding:24px;background:var(--bg);color:var(--fg);
+        font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace}
+        h1{margin:0 0 16px;font-size:18px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+        .swatch{background:var(--card);border-radius:12px;padding:10px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 4px 16px rgba(0,0,0,.35);display:flex;gap:10px;align-items:center}
+        .chip{width:64px;height:48px;border-radius:8px;border:1px solid rgba(255,255,255,.1);box-shadow:0 2px 8px rgba(0,0,0,.35) inset}
+        .meta{display:flex;flex-direction:column;line-height:1.25}.step{font-weight:700;font-size:14px;opacity:.9}
+        .hex{font-size:12px;opacity:.8}.ramp{margin-top:18px;display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
+        .bar{height:28px;border-radius:6px;border:1px solid rgba(255,255,255,.12)}.caption{margin-top:12px;font-size:12px;opacity:.7}
+      </style></head><body>
+        <h1>theme.colors / theme.color — wm ramp</h1>
+        <div class="grid">${swatches}</div>
+        <div class="ramp" style="margin-top:28px">${bars}</div>
         <div class="caption">Hover bars for labels; generated by Home Manager.</div>
-      </body>
-      </html>
+      </body></html>
     '';
+
+  paletteHtml = pkgs.writeText "palette.html" html;
+in
+{
+  xdg.configFile."system/palette.html" = {
+    source = paletteHtml;
+    force = true;
+  };
 }

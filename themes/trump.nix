@@ -10,8 +10,7 @@ let
   toRad = deg: deg * pi / 180.0;
 
   textColor = "#ffffff";
-  backgroundColor = "#000000";
-  # accentColor = "#0090b1"; # andamp blue
+  backgroundColor = "#0B0C08";
 
   accentColor = {
     L = 0.7874;
@@ -40,10 +39,7 @@ let
   wallpaper = ../assets/wallpapers/out.jpg;
 
   _wallpaper =
-    pkgs.runCommand "../assets/wallpapers/company_wallpaper.png"
-      {
-        buildInputs = [ pkgs.imagemagick ];
-      }
+    pkgs.runCommand "../assets/wallpapers/company_wallpaper.png" { buildInputs = [ pkgs.imagemagick ]; }
       ''
         convert -size 3440x1440 canvas:"${accentColor}" \
           \( ${lockscreenImage} -channel rgba -fill black -colorize 100% -resize 150x150 \) \
@@ -51,104 +47,142 @@ let
         $out
       '';
 
-  chromaFactorQuad =
+  chromaPoints = [
     {
-      peakKey ? 800,
-      rightKey ? 900,
-      rightFactor ? 0.8,
-      floor ? 0.6,
-    }:
-    key:
-    let
-      dxR = rightKey - peakKey;
-      k = (1.0 - rightFactor) / (dxR * dxR);
-      raw = 1.0 - k * (key - peakKey) * (key - peakKey);
-    in
-    lib.max floor raw;
-
-  tailwindKeys = [
-    50
-    100
-    150
-    200
-    300
-    400
-    500
-    600
-    700
-    800
-    900
-    950
+      k = 50;
+      v = 0.02;
+    }
+    {
+      k = 100;
+      v = 0.03;
+    }
+    {
+      k = 150;
+      v = 0.04;
+    }
+    {
+      k = 200;
+      v = 0.11;
+    }
+    {
+      k = 300;
+      v = 0.26;
+    }
+    {
+      k = 400;
+      v = 0.39;
+    }
+    {
+      k = 500;
+      v = 0.57;
+    }
+    {
+      k = 600;
+      v = 0.75;
+    }
+    {
+      k = 700;
+      v = 0.90;
+    }
+    {
+      k = 800;
+      v = 1.00;
+    }
+    {
+      k = 900;
+      v = 0.95;
+    }
+    {
+      k = 950;
+      v = 0.80;
+    }
   ];
 
-  # Palette builder: L from key/1000, C from quadratic factor * Cmax
-  mkPalette =
+  mkPaletteFromPoints =
     {
       cMax,
       h,
       lCap ? 0.99,
-      keys ? tailwindKeys,
-      factorFn ? chromaFactorQuad {
-        peakKey = 800;
-        rightKey = 900;
-        rightFactor = 0.8;
-        floor = 0.6;
-      },
+      points ? chromaPoints,
     }:
     lib.listToAttrs (
       map (
-        key:
+        p:
         let
-          l = lib.min lCap (key / 1000.0);
-          c = cMax * (factorFn key);
-          col = {
+          l = lib.min lCap (p.k / 1000.0);
+          c = cMax * p.v;
+          hex = nix-colorizer.oklch.to.hex {
             L = l;
             C = c;
             h = h;
             a = 1.0;
           };
-          hex = nix-colorizer.oklch.to.hex col;
         in
-        lib.nameValuePair (toString key) hex
-      ) keys
+        lib.nameValuePair (toString p.k) hex
+      ) points
     );
 
-  colorMain = mkPalette {
+  # helper: mirror numeric keys with identifier-safe aliases, e.g. "800" -> "main800"
+  prefixKeys =
+    prefix: attrs:
+    lib.listToAttrs (
+      lib.mapAttrsToList (k: v: {
+        name = prefix + k;
+        value = v;
+      }) attrs
+    );
+
+  colorMain = mkPaletteFromPoints {
     cMax = accentColor.C;
     h = accentColor.h;
   };
 
-in
-{
-  color = {
+  floatMod =
+    a: b:
+    let
+      r = builtins.floor (a / b);
+    in
+    a - r * b;
 
-    text = textColor;
-    background = backgroundColor;
-
-    accent = colorMain."800";
-    main = colorMain;
-
-    notifications = {
-      backgroundColor = backgroundColor;
-
-      low = "#333333";
-      lowText = "#aaaaaa";
-
-      normal = colorMain."800";
-      normalText = textColor;
-
-      urgent = "#ff0000";
-      urgentText = textColor;
-    };
+  colorOpp = mkPaletteFromPoints {
+    cMax = 0.13;
+    h = floatMod (accentColor.h + pi) (2.0 * pi);
   };
 
-  fontFamily = fontFamily;
-  fontSize = fontSize;
+in
+rec {
+  color =
+    {
+      text = textColor;
+      background = colorMain."150";
+
+      wm = colorMain;
+      app = colorOpp;
+
+      notifications = {
+        backgroundColor = colorMain."150";
+
+        low = "#333333";
+        lowText = "#aaaaaa";
+
+        normal = colorMain."800";
+        normalText = textColor;
+
+        urgent = "#ff0000";
+        urgentText = textColor;
+      };
+    }
+    // (prefixKeys "wm" colorMain)
+    // (prefixKeys "app" colorOpp);
+
+  inherit
+    fontFamily
+    fontSize
+    wallpaper
+    lockscreenImage
+    ;
 
   font = lib.mapAttrs (
-    famName: famVal: lib.mapAttrs (sizeName: sz: "${famVal} ${toString sz}") fontSize
+    _famName: famVal: lib.mapAttrs (_sizeName: sz: "${famVal} ${toString sz}") fontSize
   ) fontFamily;
-
-  wallpaper = wallpaper;
-  lockscreenImage = lockscreenImage;
 }

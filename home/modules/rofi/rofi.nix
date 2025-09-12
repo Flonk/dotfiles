@@ -17,7 +17,7 @@
         "*" = {
           font = mkLiteral "\"${theme.font.ui.normal}\"";
           background-color = mkLiteral "transparent";
-          text-color = mkLiteral theme.color.background;
+          text-color = mkLiteral theme.color.wm150;
           accent-color = mkLiteral theme.color.text;
           margin = mkLiteral "0px";
           padding = mkLiteral "0px";
@@ -27,7 +27,7 @@
         window = {
           location = mkLiteral "south";
           width = mkLiteral "100%";
-          background-color = mkLiteral theme.color.background;
+          background-color = mkLiteral theme.color.wm150;
           children = mkLiteral "[ mainbox ]";
         };
 
@@ -39,9 +39,9 @@
         };
 
         inputbar = {
-          background-color = mkLiteral theme.color.accent;
+          background-color = mkLiteral theme.color.wm800;
           border = mkLiteral "0px 2px 0px 0px";
-          border-color = mkLiteral theme.color.background;
+          border-color = mkLiteral theme.color.wm150;
           width = mkLiteral "calc(25% min 480px)";
           padding = mkLiteral "8px 8px";
           spacing = mkLiteral "8px";
@@ -49,7 +49,7 @@
         };
 
         prompt = {
-          text-color = mkLiteral theme.color.background;
+          text-color = mkLiteral theme.color.wm150;
           vertical-align = mkLiteral "0.5";
         };
 
@@ -64,28 +64,28 @@
         element = {
           padding = mkLiteral "8px 8px 8px 8px";
           spacing = mkLiteral "4px";
-          text-color = mkLiteral theme.color.accent;
+          text-color = mkLiteral theme.color.wm800;
         };
 
         "element normal urgent" = {
-          text-color = mkLiteral theme.color.accent;
+          text-color = mkLiteral theme.color.wm800;
         };
         "element normal active" = {
           text-color = mkLiteral theme.color.text;
         };
         "element selected" = {
-          text-color = mkLiteral theme.color.accent;
+          text-color = mkLiteral theme.color.wm800;
         };
         "element selected normal" = {
-          background-color = mkLiteral theme.color.accent;
-          text-color = mkLiteral theme.color.background;
+          background-color = mkLiteral theme.color.wm800;
+          text-color = mkLiteral theme.color.wm150;
         };
         "element selected urgent" = {
-          background-color = mkLiteral theme.color.accent;
+          background-color = mkLiteral theme.color.wm800;
         };
         "element selected active" = {
-          background-color = mkLiteral theme.color.accent;
-          text-color = mkLiteral theme.color.background;
+          background-color = mkLiteral theme.color.wm800;
+          text-color = mkLiteral theme.color.wm150;
         };
 
         element-icon = {

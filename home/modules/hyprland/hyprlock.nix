@@ -9,7 +9,7 @@ let
   stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
   toRgba = hex: "rgba(${stripHash hex}ff)";
 
-  borderColor = toRgba theme.color.accent;
+  borderColor = toRgba theme.color.wm800;
   textColor = toRgba theme.color.text;
 in
 {

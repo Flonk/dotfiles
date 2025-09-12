@@ -98,9 +98,9 @@ with lib;
         }
 
         window#waybar {
-          background-color: ${theme.color.background};
+          background-color: ${theme.color.app150};
           border-radius: 0px;
-          color: ${theme.color.accent};
+          color: ${theme.color.wm800};
         }
 
         #workspaces {
@@ -110,18 +110,18 @@ with lib;
         }
 
         #workspaces button {
-          color: ${theme.color.accent};
+          color: ${theme.color.wm800};
           border-radius: 0;
         }
 
         #workspaces button:hover {
-          background: ${theme.color.accent};
-          color: ${theme.color.background};
+          background: ${theme.color.wm800};
+          color: ${theme.color.wm150};
           border: 0px solid transparent;
         }
 
         #workspaces button.active {
-          border: 1px solid ${theme.color.accent};
+          border: 1px solid ${theme.color.wm800};
         }
 
         tooltip {

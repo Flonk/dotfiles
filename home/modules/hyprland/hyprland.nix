@@ -9,8 +9,8 @@ let
   stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
   toRgba = hex: "rgba(${stripHash hex}ff)";
 
-  borderColor = toRgba theme.color.accent;
-  inactiveBorderColor = toRgba theme.color.background;
+  borderColor = toRgba theme.color.wm800;
+  inactiveBorderColor = toRgba theme.color.app150;
 
   mkKeypadBindings =
     {
@@ -340,7 +340,7 @@ in
             text_font = theme.fontFamily.ui;
             "col.active" = borderColor;
             "col.active.border" = borderColor;
-            "col.active.text" = toRgba theme.color.background;
+            "col.active.text" = toRgba theme.color.wm150;
 
             "col.focused" = inactiveBorderColor;
             "col.focused.border" = inactiveBorderColor;
