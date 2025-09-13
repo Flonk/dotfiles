@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   inputs,
   ...
 }:
@@ -46,10 +45,10 @@
   home.activation.walkerTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p "${config.xdg.configHome}/walker/themes/mytheme"
     cat > "${config.xdg.configHome}/walker/themes/mytheme/style.css" <<'CSS'
-    @define-color window_bg_color ${theme.color.wm100};
-    @define-color accent_bg_color ${theme.color.wm800};
-    @define-color theme_fg_color ${theme.color.wm800};
-    @define-color theme_fg_dark ${theme.color.wm600};
+    @define-color window_bg_color ${config.theme.color.wm100};
+    @define-color accent_bg_color ${config.theme.color.wm800};
+    @define-color theme_fg_color ${config.theme.color.wm800};
+    @define-color theme_fg_dark ${config.theme.color.wm600};
 
     * {
       all: unset;

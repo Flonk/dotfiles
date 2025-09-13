@@ -2,15 +2,15 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 let
   stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
   toRgba = hex: "rgba(${stripHash hex}ff)";
+  toRgb = hex: "rgb(${stripHash hex})";
 
-  borderColor = toRgba theme.color.wm800;
-  inactiveBorderColor = toRgba theme.color.app150;
+  borderColor = toRgba config.theme.color.wm800;
+  inactiveBorderColor = toRgba config.theme.color.app150;
 
   mkKeypadBindings =
     {
@@ -287,7 +287,7 @@ in
       general = {
         "$modifier" = "SUPER";
         layout = "hy3";
-        gaps_in = 0;
+        gaps_in = 1;
         gaps_out = 0;
         border_size = 4;
         "col.active_border" = borderColor;
@@ -325,9 +325,9 @@ in
           "col.locked_active" = inactiveBorderColor;
           "col.inactive" = "rgba(ffffff33)";
           "col.locked_inactive" = "rgba(ffffff33)";
-          font_size = theme.fontSize.small;
-          font_family = theme.fontFamily.ui;
-          text_color = toRgba theme.color.text;
+          font_size = config.theme.fontSize.small;
+          font_family = config.theme.fontFamily.ui;
+          text_color = toRgba config.theme.color.wm950;
           indicator_height = 3;
         };
       };
@@ -337,20 +337,22 @@ in
           tabs = {
             radius = 0;
             padding = 0;
-            text_font = theme.fontFamily.ui;
+            text_font = config.theme.fontFamily.ui;
             "col.active" = borderColor;
             "col.active.border" = borderColor;
-            "col.active.text" = toRgba theme.color.wm150;
+            "col.active.text" = toRgba config.theme.color.wm150;
 
-            "col.focused" = inactiveBorderColor;
+            "col.focused" = toRgba config.theme.color.app200;
             "col.focused.border" = inactiveBorderColor;
+            "col.focused.text" = toRgba config.theme.color.app600;
 
-            "col.inactive" = inactiveBorderColor;
+            "col.inactive" = toRgba config.theme.color.app200;
             "col.inactive.border" = inactiveBorderColor;
+            "col.inactive.text" = toRgba config.theme.color.app600;
 
-            "col.urgent" = toRgba theme.color.notifications.urgent;
-            "col.urgent.border" = toRgba theme.color.notifications.urgent;
-            "col.urgent.text" = toRgba theme.color.notifications.urgentText;
+            "col.urgent" = toRgba config.theme.color.error600;
+            "col.urgent.border" = toRgba config.theme.color.error600;
+            "col.urgent.text" = toRgba config.theme.color.text;
           };
         };
       };

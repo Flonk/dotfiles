@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 with lib;
@@ -98,9 +97,10 @@ with lib;
         }
 
         window#waybar {
-          background-color: ${theme.color.app150};
+          background-color: ${config.theme.color.app150};
           border-radius: 0px;
-          color: ${theme.color.wm800};
+          color: ${config.theme.color.wm800};
+          border-top: 1px solid ${config.theme.color.app200};
         }
 
         #workspaces {
@@ -110,18 +110,18 @@ with lib;
         }
 
         #workspaces button {
-          color: ${theme.color.wm800};
+          color: ${config.theme.color.wm800};
           border-radius: 0;
         }
 
         #workspaces button:hover {
-          background: ${theme.color.wm800};
-          color: ${theme.color.wm150};
+          background: ${config.theme.color.wm800};
+          color: ${config.theme.color.wm150};
           border: 0px solid transparent;
         }
 
         #workspaces button.active {
-          border: 1px solid ${theme.color.wm800};
+          border: 1px solid ${config.theme.color.wm800};
         }
 
         tooltip {

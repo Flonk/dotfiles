@@ -3,94 +3,88 @@
   pkgs,
   config,
   lib,
-  theme,
   inputs,
   ...
 }:
-let
-  color = theme.color.app;
-in
 {
   programs.vscode = {
     enable = true;
 
     profiles.default.userSettings = {
-      "editor.fontFamily" = theme.fontFamily.mono;
-      "editor.fontSize" = theme.fontSize.bigger;
+      "editor.fontFamily" = config.theme.fontFamily.mono;
+      "editor.fontSize" = config.theme.fontSize.bigger;
       "window.zoomLevel" = -1;
 
       "workbench.colorTheme" = "Dainty – Nord (chroma 0, lightness 0)";
       "workbench.colorCustomizations" = {
         # backgrounds (all 150)
-        "editor.background" = color."150";
-        "terminal.background" = color."150";
-        "peekViewEditor.background" = color."150";
-        "editorGutter.background" = color."150";
-        "editorPane.background" = color."150";
+        "editor.background" = config.theme.color.app150;
+        "terminal.background" = config.theme.color.app150;
+        "peekViewEditor.background" = config.theme.color.app150;
+        "editorGutter.background" = config.theme.color.app150;
+        "editorPane.background" = config.theme.color.app150;
 
-        "sideBar.background" = color."150";
-        "activityBar.background" = color."150";
-        "panel.background" = color."150";
-        "editorGroupHeader.tabsBackground" = color."150";
-        "tab.activeBackground" = color."150";
-        "tab.inactiveBackground" = color."150";
-        "titleBar.activeBackground" = color."150";
-        "titleBar.inactiveBackground" = color."150";
-        "statusBar.background" = color."150";
-        "statusBar.noFolderBackground" = color."150";
-        "statusBar.debuggingBackground" = color."150";
-        "breadcrumb.background" = color."150";
+        "sideBar.background" = config.theme.color.app150;
+        "activityBar.background" = config.theme.color.app150;
+        "panel.background" = config.theme.color.app150;
+        "editorGroupHeader.tabsBackground" = config.theme.color.app150;
+        "tab.activeBackground" = config.theme.color.app150;
+        "tab.inactiveBackground" = config.theme.color.app150;
+        "titleBar.activeBackground" = config.theme.color.app150;
+        "titleBar.inactiveBackground" = config.theme.color.app150;
+        "statusBar.background" = config.theme.color.app150;
+        "statusBar.noFolderBackground" = config.theme.color.app150;
+        "statusBar.debuggingBackground" = config.theme.color.app150;
+        "breadcrumb.background" = config.theme.color.app150;
 
-        "editorWidget.background" = color."150";
-        "input.background" = color."150";
-        "dropdown.background" = color."150";
-        "menu.background" = color."150";
-        "notifications.background" = color."150";
+        "editorWidget.background" = config.theme.color.app150;
+        "input.background" = config.theme.color.app150;
+        "dropdown.background" = config.theme.color.app150;
+        "menu.background" = config.theme.color.app150;
+        "notifications.background" = config.theme.color.app150;
 
         # borders (use solid main."200")
-        "panel.border" = color."200";
-        "sideBar.border" = color."200";
-        "activityBar.border" = color."200";
-        "editorGroup.border" = color."200";
-        "editorGroupHeader.border" = color."200";
-        "tab.border" = color."200";
-        "titleBar.border" = color."200";
-        "statusBar.border" = color."200";
-        "editorWidget.border" = color."200";
-        "dropdown.border" = color."200";
-        "menu.border" = color."200";
-        "notifications.border" = color."200";
-
-        "focusBorder" = color."200";
-        "contrastActiveBorder" = color."200";
+        "panel.border" = config.theme.color.app200;
+        "sideBar.border" = config.theme.color.app200;
+        "activityBar.border" = config.theme.color.app200;
+        "editorGroup.border" = config.theme.color.app200;
+        "editorGroupHeader.border" = config.theme.color.app200;
+        "tab.border" = config.theme.color.app200;
+        "titleBar.border" = config.theme.color.app200;
+        "statusBar.border" = config.theme.color.app200;
+        "editorWidget.border" = config.theme.color.app200;
+        "dropdown.border" = config.theme.color.app200;
+        "menu.border" = config.theme.color.app200;
+        "notifications.border" = config.theme.color.app200;
 
         # sidebar section headers (e.g. “OPEN EDITORS”, “TIMELINE”, “OUTLINE”)
-        "sideBarSectionHeader.background" = color."150";
-        "sideBarSectionHeader.border" = color."200";
+        "sideBarSectionHeader.background" = config.theme.color.app150;
+        "sideBarSectionHeader.border" = config.theme.color.app200;
 
         # optional: tree views inside side bar (file explorer, outline, timeline rows)
-        "tree.indentGuidesStroke" = color."200";
-        "list.dropBackground" = color."200";
-        "list.activeSelectionBackground" = color."200";
-        "list.inactiveSelectionBackground" = color."200";
+        "tree.indentGuidesStroke" = config.theme.color.app200;
+        "list.dropBackground" = config.theme.color.app200;
+        "list.activeSelectionBackground" = config.theme.color.app200;
+        "list.inactiveSelectionBackground" = config.theme.color.app200;
 
         # Activity Bar (left ribbon)
-        "activityBar.foreground" = theme.color.wm800;
-        "activityBar.inactiveForeground" = theme.color.app400;
-        "activityBar.activeBorder" = theme.color.wm800; # thin highlight on the active icon
-        "activityBarBadge.background" = theme.color.wm800; # badge (e.g., updates)
-        "activityBarBadge.foreground" = theme.color.wm50; # badge text
+        "activityBar.foreground" = config.theme.color.wm800;
+        "activityBar.inactiveForeground" = config.theme.color.app400;
+        "activityBarBadge.background" = config.theme.color.wm800; # badge (e.g., updates)
+        "activityBarBadge.foreground" = config.theme.color.wm50; # badge text
+        "activityBar.activeBorder" = "#00000000";
+        "activityBar.activeFocusBorder" = "#00000000";
 
         # existing highlights
-        "editor.findMatchBackground" = "${color."800"}77";
-        "editor.findMatchHighlightBackground" = "${color."800"}77";
-        "editor.selectionBackground" = "${color."800"}55";
-        "editor.selectionHighlightBackground" = "${color."800"}55";
+        "editor.findMatchBackground" = "${config.theme.color.app800}77";
+        "editor.findMatchHighlightBackground" = "${config.theme.color.app800}77";
+        "editor.selectionBackground" = "${config.theme.color.app800}55";
+        "editor.selectionHighlightBackground" = "${config.theme.color.app800}55";
         "editorError.background" = "#ff000049";
         "editorError.border" = "#ff0000";
         "editorRuler.foreground" = "#ffffff11";
 
-        "editor.lineHighlightBackground" = color."200";
+        "editor.lineHighlightBackground" = config.theme.color.app200;
       };
 
       "workbench.editor.showTabs" = "none";

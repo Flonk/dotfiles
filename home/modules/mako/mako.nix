@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 {
@@ -15,29 +14,29 @@
       anchor = "top-right";
       border-radius = 0;
       border-size = 2;
-      font = theme.font.ui.normal;
+      font = config.theme.font.ui.normal;
       default-timeout = 10000;
       layer = "overlay";
       max-visible = 3;
       padding = "10";
       width = 340;
       height = 300;
-      border-color = theme.color.notifications.normal;
-      background-color = theme.color.notifications.backgroundColor;
+      border-color = config.theme.color.wm800;
+      background-color = config.theme.color.app150;
 
       "urgency=low" = {
-        border-color = theme.color.notifications.low;
-        text-color = theme.color.notifications.lowText;
+        border-color = config.theme.color.app300;
+        text-color = config.theme.color.app300;
       };
 
       "urgency=normal" = {
-        border-color = theme.color.notifications.normal;
-        text-color = theme.color.notifications.normalText;
+        border-color = config.theme.color.wm800;
+        text-color = config.theme.color.text;
       };
 
       "urgency=high" = {
-        border-color = theme.color.notifications.urgent;
-        text-color = theme.color.notifications.urgentText;
+        border-color = config.theme.color.error600;
+        text-color = config.theme.color.text;
         default-timeout = 30000;
       };
     };

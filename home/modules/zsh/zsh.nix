@@ -182,8 +182,6 @@
       ns = "nix-shell";
       s = "nix-shell -p";
       run = "_nix-shell-run";
-      nr = "(pkill walker || echo 0) && home-manager switch --impure --flake ~/dotfiles#flo";
-      nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
       appimage = "nix run nixpkgs#appimage-run --";
 
       ##### Git

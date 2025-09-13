@@ -2,15 +2,14 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 let
   stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
   toRgba = hex: "rgba(${stripHash hex}ff)";
 
-  borderColor = toRgba theme.color.wm800;
-  textColor = toRgba theme.color.text;
+  borderColor = toRgba config.theme.color.wm800;
+  textColor = toRgba config.theme.color.text;
 in
 {
 
@@ -28,7 +27,7 @@ in
       };
 
       image = {
-        path = builtins.toString theme.lockscreenImage;
+        path = builtins.toString config.theme.lockscreenImage;
 
         position = "0, -20";
         halign = "center";
@@ -42,7 +41,7 @@ in
         text = "🥸";
         color = textColor;
         font_size = 80;
-        font_family = theme.fontFamily.ui;
+        font_family = config.theme.fontFamily.ui;
         position = "0, 0";
         halign = "center";
         valign = "center";
@@ -54,7 +53,7 @@ in
         inner_color = "rgba(ffffff00)";
         outline_thickness = 30;
         font_size = 20;
-        font_family = theme.fontFamily.ui;
+        font_family = config.theme.fontFamily.ui;
         fade_on_empty = false;
         placeholder_text = "🥸";
         fail_text = "❌";

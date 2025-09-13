@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 {
@@ -11,7 +10,7 @@
     enable = true;
     settings = {
       logo = {
-        source = builtins.toString theme.lockscreenImage;
+        source = builtins.toString config.theme.lockscreenImage;
         padding = {
           top = 10;
           right = 3;

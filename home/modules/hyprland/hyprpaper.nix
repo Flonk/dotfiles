@@ -2,11 +2,10 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 let
-  path = builtins.toString theme.wallpaper;
+  path = builtins.toString config.theme.wallpaper;
 in
 {
 

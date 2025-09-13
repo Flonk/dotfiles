@@ -39,25 +39,20 @@
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
           modules = [
-            ./hosts/schnitzelwirt.nix
+            ./hosts/schnitzelwirt/schnitzelwirt.nix
           ];
         };
       };
 
       homeConfigurations = {
-        flo = home-manager.lib.homeManagerConfiguration {
+        flo-schnitzelwirt = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
             inherit inputs;
             inherit nix-colorizer;
-            theme = import ./themes/trump.nix {
-              lib = pkgs.lib;
-              pkgs = pkgs;
-              nix-colorizer = inputs.nix-colorizer;
-            };
           };
           modules = [
-            ./home/flo.nix
+            ./home/flo-schnitzelwirt.nix
           ];
         };
       };

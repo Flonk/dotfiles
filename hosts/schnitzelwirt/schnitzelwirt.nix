@@ -1,8 +1,10 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ../../config/types
     ./schnitzelwirt-hardware.nix
-    ./common.nix
+    ./schnitzelwirt-hostconfig.nix
+    ../common.nix
   ];
 
   networking.hostName = "schnitzelwirt";

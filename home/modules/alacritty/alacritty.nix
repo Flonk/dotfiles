@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 {
@@ -10,9 +9,9 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      font.size = theme.fontSize.small;
-      font.normal.family = theme.fontFamily.mono;
-      colors.primary.background = theme.color.app150;
+      font.size = config.theme.fontSize.small;
+      font.normal.family = config.theme.fontFamily.mono;
+      colors.primary.background = config.theme.color.app150;
     };
   };
 

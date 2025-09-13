@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  theme,
   ...
 }:
 {
@@ -15,10 +14,10 @@
       in
       {
         "*" = {
-          font = mkLiteral "\"${theme.font.ui.normal}\"";
+          font = mkLiteral "\"${config.theme.font.ui.normal}\"";
           background-color = mkLiteral "transparent";
-          text-color = mkLiteral theme.color.wm150;
-          accent-color = mkLiteral theme.color.text;
+          text-color = mkLiteral config.theme.color.wm150;
+          accent-color = mkLiteral config.theme.color.text;
           margin = mkLiteral "0px";
           padding = mkLiteral "0px";
           spacing = mkLiteral "0px";
@@ -27,7 +26,7 @@
         window = {
           location = mkLiteral "south";
           width = mkLiteral "100%";
-          background-color = mkLiteral theme.color.wm150;
+          background-color = mkLiteral config.theme.color.wm150;
           children = mkLiteral "[ mainbox ]";
         };
 
@@ -39,9 +38,9 @@
         };
 
         inputbar = {
-          background-color = mkLiteral theme.color.wm800;
+          background-color = mkLiteral config.theme.color.wm800;
           border = mkLiteral "0px 2px 0px 0px";
-          border-color = mkLiteral theme.color.wm150;
+          border-color = mkLiteral config.theme.color.wm150;
           width = mkLiteral "calc(25% min 480px)";
           padding = mkLiteral "8px 8px";
           spacing = mkLiteral "8px";
@@ -49,7 +48,7 @@
         };
 
         prompt = {
-          text-color = mkLiteral theme.color.wm150;
+          text-color = mkLiteral config.theme.color.wm150;
           vertical-align = mkLiteral "0.5";
         };
 
@@ -64,28 +63,28 @@
         element = {
           padding = mkLiteral "8px 8px 8px 8px";
           spacing = mkLiteral "4px";
-          text-color = mkLiteral theme.color.wm800;
+          text-color = mkLiteral config.theme.color.wm800;
         };
 
         "element normal urgent" = {
-          text-color = mkLiteral theme.color.wm800;
+          text-color = mkLiteral config.theme.color.wm800;
         };
         "element normal active" = {
-          text-color = mkLiteral theme.color.text;
+          text-color = mkLiteral config.theme.color.text;
         };
         "element selected" = {
-          text-color = mkLiteral theme.color.wm800;
+          text-color = mkLiteral config.theme.color.wm800;
         };
         "element selected normal" = {
-          background-color = mkLiteral theme.color.wm800;
-          text-color = mkLiteral theme.color.wm150;
+          background-color = mkLiteral config.theme.color.wm800;
+          text-color = mkLiteral config.theme.color.wm150;
         };
         "element selected urgent" = {
-          background-color = mkLiteral theme.color.wm800;
+          background-color = mkLiteral config.theme.color.wm800;
         };
         "element selected active" = {
-          background-color = mkLiteral theme.color.wm800;
-          text-color = mkLiteral theme.color.wm150;
+          background-color = mkLiteral config.theme.color.wm800;
+          text-color = mkLiteral config.theme.color.wm150;
         };
 
         element-icon = {
