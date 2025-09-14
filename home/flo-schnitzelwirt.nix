@@ -12,6 +12,6 @@
     ../users/flo.nix
   ];
 
-  programs.zsh.shellAliases.nr = "(pkill walker || echo 0) && home-manager switch --impure --flake ~/dotfiles#flo-schnitzelwirt";
+  programs.zsh.shellAliases.nr = "home-manager switch --flake ~/dotfiles#flo-schnitzelwirt";
   programs.zsh.shellAliases.nrsys = "sudo nixos-rebuild switch --flake ~/dotfiles#schnitzelwirt";
 }

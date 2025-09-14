@@ -45,10 +45,10 @@
   home.activation.walkerTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p "${config.xdg.configHome}/walker/themes/mytheme"
     cat > "${config.xdg.configHome}/walker/themes/mytheme/style.css" <<'CSS'
-    @define-color window_bg_color ${config.theme.color.wm100};
+    @define-color window_bg_color ${config.theme.color.app200};
     @define-color accent_bg_color ${config.theme.color.wm800};
     @define-color theme_fg_color ${config.theme.color.wm800};
-    @define-color theme_fg_dark ${config.theme.color.wm600};
+    @define-color theme_fg_dark ${config.theme.color.app500};
 
     * {
       all: unset;
@@ -143,7 +143,7 @@
     }
 
     .item-subtext {
-      font-size: 12px;
+      font-size: 11px;
       color: @theme_fg_dark;
     }
 
@@ -154,6 +154,7 @@
     .keybind-hints {
       opacity: 0.5;
       color: @theme_fg_color;
+      font-size: 10px;
     }
 
     .preview {
