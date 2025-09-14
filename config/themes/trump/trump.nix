@@ -51,7 +51,7 @@ let
   };
 
   colorApp = colorUtils.mkPalette {
-    cMax = mainC * 0.6;
+    cMax = 0.03;
     h = math.floatMod (mainH + math.pi) (2.0 * math.pi);
   };
 

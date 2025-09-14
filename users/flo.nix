@@ -29,6 +29,7 @@ in
     ../home/modules/obs-studio/obs-studio.nix
     ../home/modules/csvlens/csvlens.nix
     ../home/modules/walker/walker.nix
+    ../home/modules/obsidian/obsidian.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
@@ -64,17 +65,9 @@ in
       musescore
       spotify
       discord
-      obsidian
       vlc
 
       code-cursor
-
-      (pkgs.nerdfonts.override {
-        fonts = [
-          "FiraCode"
-          "DroidSansMono"
-        ];
-      })
     ];
 
     username = "flo";

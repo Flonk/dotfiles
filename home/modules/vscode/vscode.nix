@@ -62,10 +62,12 @@
         "sideBarSectionHeader.border" = config.theme.color.app200;
 
         # optional: tree views inside side bar (file explorer, outline, timeline rows)
-        "tree.indentGuidesStroke" = config.theme.color.app200;
+        "tree.indentGuidesStroke" = "${config.theme.color.app300}44";
         "list.dropBackground" = config.theme.color.app200;
         "list.activeSelectionBackground" = config.theme.color.app200;
         "list.inactiveSelectionBackground" = config.theme.color.app200;
+        "list.focusBackground" = config.theme.color.app200;
+        "list.hoverBackground" = config.theme.color.app200;
 
         # Activity Bar (left ribbon)
         "activityBar.foreground" = config.theme.color.wm800;
@@ -78,11 +80,19 @@
         # existing highlights
         "editor.findMatchBackground" = "${config.theme.color.app800}77";
         "editor.findMatchHighlightBackground" = "${config.theme.color.app800}77";
-        "editor.selectionBackground" = "${config.theme.color.app800}55";
-        "editor.selectionHighlightBackground" = "${config.theme.color.app800}55";
-        "editorError.background" = "#ff000049";
+        "editor.selectionBackground" = "${config.theme.color.app800}33";
+        "editor.selectionHighlightBackground" = "${config.theme.color.app800}33";
+        "minimap.selectionHighlight" = "${config.theme.color.app800}33";
+        "minimap.findMatchHighlight" = "${config.theme.color.app800}77";
+        "minimap.findMatchHighlightForeground" = "${config.theme.color.app800}22";
+
+        "editorError.background" = "${config.theme.color.error600}49";
         "editorError.border" = "#ff0000";
         "editorRuler.foreground" = "#ffffff11";
+
+        "minimap.errorHighlight" = "${config.theme.color.error600}aa";
+        "minimap.warningHighlight" = "#ffaa00aa";
+        "minimap.infoHighlight" = "#00aaffaa";
 
         "editor.lineHighlightBackground" = config.theme.color.app200;
       };

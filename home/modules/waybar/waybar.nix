@@ -15,17 +15,23 @@ with lib;
         layer = "bottom";
         position = "bottom";
 
-        modules-center = [ ];
+        modules-center = [
+          "pulseaudio"
+          "cava"
+          "mpris"
+        ];
         modules-left = [
           "custom/startmenu"
           "hyprland/workspaces"
           "hyprland/window"
         ];
         modules-right = [
-          "pulseaudio"
           "cpu"
+          "custom/label-cpu"
           "memory"
+          "custom/label-mem"
           "battery"
+          "custom/label-bat"
           "tray"
           "clock"
         ];
@@ -41,24 +47,59 @@ with lib;
           on-scroll-down = "hyprctl dispatch workspace e-1";
         };
 
+        "cava" = {
+          framerate = 30;
+          autosens = 1;
+          sensitivity = 3;
+          bars = 16;
+          lower_cutoff_freq = 50;
+          higher_cutoff_freq = 10000;
+          hide_on_silence = false;
+          # "format_silent" = "quiet";
+          method = "pulse";
+          source = "auto";
+          stereo = false;
+          noise_reduction = 0.3;
+          bar_delimiter = 0;
+          input_delay = 0.25;
+          format-icons = [
+            " "
+            "▂"
+            "▃"
+            "▄"
+            "▅"
+            "▆"
+            "▇"
+            "█"
+          ];
+        };
+
+        "mpris" = {
+          format = "{artist} - {title}";
+          max-length = 40;
+          on-click = "playerctl play-pause";
+          on-scroll-up = "playerctl next";
+          on-scroll-down = "playerctl previous";
+        };
+
         "clock" = {
           interval = 1;
           format = ''{:%Y-%m-%d %H:%M:%S}'';
         };
 
         "hyprland/window" = {
-          max-length = 60;
+          max-length = 40;
           separate-outputs = false;
         };
 
         "memory" = {
           interval = 5;
-          format = "MEM {}%";
+          format = "{}%";
         };
 
         "cpu" = {
           interval = 5;
-          format = "CPU {usage:2}%";
+          format = "{usage:2}%";
         };
 
         "tray" = {
@@ -66,14 +107,29 @@ with lib;
         };
 
         "pulseaudio" = {
-          format = "VOL {volume}%";
+          format = "{volume}%";
           on-click = "pavucontrol";
+        };
+
+        "custom/label-cpu" = {
+          format = "CPU";
+          tooltip = false;
+        };
+
+        "custom/label-mem" = {
+          format = "MEM";
+          tooltip = false;
+        };
+
+        "custom/label-bat" = {
+          format = "BAT";
+          tooltip = false;
         };
 
         "custom/startmenu" = {
           tooltip = false;
           format = "😬";
-          on-click = "rofi --show drun";
+          on-click = "walker -t mytheme";
         };
 
         "battery" = {
@@ -81,9 +137,9 @@ with lib;
             warning = 30;
             critical = 15;
           };
-          format = "BAT {capacity}%";
-          format-charging = "BAT+ {capacity}%";
-          format-plugged = "BAT+ {capacity}%";
+          format = "{capacity}%";
+          format-charging = "+{capacity}%";
+          format-plugged = "+{capacity}%";
         };
       }
     ];
@@ -100,7 +156,7 @@ with lib;
           background-color: ${config.theme.color.app150};
           border-radius: 0px;
           color: ${config.theme.color.wm800};
-          border-top: 1px solid ${config.theme.color.app200};
+          border-top: 2px solid ${config.theme.color.app200};
         }
 
         #workspaces {
@@ -129,6 +185,24 @@ with lib;
         }
 
         tooltip label {
+        }
+
+        #cava {
+          color: ${config.theme.color.wm800};
+        }
+
+        #mpris, #window, #clock {
+          color: ${config.theme.color.app600};
+        }
+
+        #cpu, #memory, #battery {
+          margin: 0;
+          padding: 0;
+        }
+
+        #custom-label-cpu, #custom-label-mem, #custom-label-bat {
+          color: ${config.theme.color.app600};
+          margin-right: 12px;
         }
       ''
     ];
