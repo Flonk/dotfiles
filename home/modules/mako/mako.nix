@@ -25,8 +25,8 @@
       background-color = config.theme.color.app150;
 
       "urgency=low" = {
-        border-color = config.theme.color.app300;
-        text-color = config.theme.color.app300;
+        border-color = config.theme.color.app600;
+        text-color = config.theme.color.app600;
       };
 
       "urgency=normal" = {

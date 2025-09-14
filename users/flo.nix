@@ -97,6 +97,14 @@ in
   #  service.enable = true;
   #};
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Nordic";
+      package = pkgs.nordic;
+    };
+  };
+
   xdg = {
     mimeApps = {
       enable = true;

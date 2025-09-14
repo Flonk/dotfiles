@@ -61,7 +61,7 @@ with lib;
           stereo = false;
           noise_reduction = 0.3;
           bar_delimiter = 0;
-          input_delay = 0.25;
+          input_delay = 0.1;
           format-icons = [
             " "
             "▂"

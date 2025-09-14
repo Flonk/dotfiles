@@ -16,7 +16,7 @@ let
   swatchH = swatchW;
   swatchGap = 1;
 
-  canvasW = 3440;
+  canvasW = 5120;
   canvasH = 1440;
 
   padding = 20;

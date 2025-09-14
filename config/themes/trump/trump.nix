@@ -41,9 +41,10 @@ let
       }) attrs
     );
 
-  mainC = 0.15;
+  mainC = 0.19;
   # mainH = math.toRad 162.0; # mint
-  mainH = math.toRad 110.0; # lime
+  # mainH = math.toRad 110.0; # lime
+  mainH = math.toRad 50.0; # trump
 
   colorWm = colorUtils.mkPalette {
     cMax = mainC;
@@ -51,7 +52,7 @@ let
   };
 
   colorApp = colorUtils.mkPalette {
-    cMax = 0.03;
+    cMax = 0.07;
     h = math.floatMod (mainH + math.pi) (2.0 * math.pi);
   };
 

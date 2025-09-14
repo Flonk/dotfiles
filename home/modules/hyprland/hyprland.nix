@@ -342,13 +342,13 @@ in
             "col.active.border" = borderColor;
             "col.active.text" = toRgba config.theme.color.wm150;
 
-            "col.focused" = toRgba config.theme.color.app200;
+            "col.focused" = toRgba config.theme.color.app150;
             "col.focused.border" = inactiveBorderColor;
-            "col.focused.text" = toRgba config.theme.color.app600;
+            "col.focused.text" = toRgba config.theme.color.wm400;
 
-            "col.inactive" = toRgba config.theme.color.app200;
+            "col.inactive" = toRgba config.theme.color.app150;
             "col.inactive.border" = inactiveBorderColor;
-            "col.inactive.text" = toRgba config.theme.color.app600;
+            "col.inactive.text" = toRgba config.theme.color.wm400;
 
             "col.urgent" = toRgba config.theme.color.error600;
             "col.urgent.border" = toRgba config.theme.color.error600;

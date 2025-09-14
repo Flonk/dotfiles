@@ -73,7 +73,7 @@
         "activityBar.foreground" = config.theme.color.wm800;
         "activityBar.inactiveForeground" = config.theme.color.app400;
         "activityBarBadge.background" = config.theme.color.wm800; # badge (e.g., updates)
-        "activityBarBadge.foreground" = config.theme.color.wm50; # badge text
+        "activityBarBadge.foreground" = config.theme.color.wm100; # badge text
         "activityBar.activeBorder" = "#00000000";
         "activityBar.activeFocusBorder" = "#00000000";
 
