@@ -22,7 +22,6 @@ in
     ../home/modules/waybar/waybar.nix
     ../home/modules/mako/mako.nix
     ../home/modules/alacritty/alacritty.nix
-    ../home/modules/rofi/rofi.nix
     ../home/modules/zsh/zsh.nix
     ../home/modules/vscode/vscode.nix
     ../home/modules/fastfetch/fastfetch.nix
@@ -66,8 +65,6 @@ in
       spotify
       discord
       vlc
-
-      code-cursor
     ];
 
     username = "flo";
