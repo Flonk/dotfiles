@@ -12,23 +12,23 @@ let
 in
 {
   imports = [
-    ../home/modules/hyprland/hyprland.nix
-    ../home/modules/hyprland/hyprpaper.nix
-    ../home/modules/hyprland/hyprlock.nix
-    ../home/modules/hyprland/hyprcursor.nix
-    ../home/modules/google-chrome/google-chrome.nix
-    ../home/modules/git/git.nix
-    ../home/modules/direnv/direnv.nix
-    ../home/modules/waybar/waybar.nix
-    ../home/modules/mako/mako.nix
-    ../home/modules/alacritty/alacritty.nix
-    ../home/modules/zsh/zsh.nix
-    ../home/modules/vscode/vscode.nix
-    ../home/modules/fastfetch/fastfetch.nix
-    ../home/modules/obs-studio/obs-studio.nix
-    ../home/modules/csvlens/csvlens.nix
-    ../home/modules/walker/walker.nix
-    ../home/modules/obsidian/obsidian.nix
+    ../modules/hyprland/hyprland.nix
+    ../modules/hyprland/hyprpaper.nix
+    ../modules/hyprland/hyprlock.nix
+    ../modules/hyprland/hyprcursor.nix
+    ../modules/google-chrome/google-chrome.nix
+    ../modules/git/git.nix
+    ../modules/direnv/direnv.nix
+    ../modules/waybar/waybar.nix
+    ../modules/mako/mako.nix
+    ../modules/alacritty/alacritty.nix
+    ../modules/zsh/zsh.nix
+    ../modules/vscode/vscode.nix
+    ../modules/fastfetch/fastfetch.nix
+    ../modules/obs-studio/obs-studio.nix
+    ../modules/csvlens/csvlens.nix
+    ../modules/walker/walker.nix
+    ../modules/obsidian/obsidian.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
@@ -102,8 +102,8 @@ in
     mimeApps = {
       enable = true;
       defaultApplications = lib.mkMerge [
-        (import ../home/modules/google-chrome/mimeApps.nix)
-        (import ../home/modules/csvlens/mimeApps.nix)
+        (import ../modules/google-chrome/mimeApps.nix)
+        (import ../modules/csvlens/mimeApps.nix)
       ];
     };
   };
