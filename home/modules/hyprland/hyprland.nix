@@ -119,7 +119,7 @@ in
         "hyprctl setcursor macOS-White 28"
         "waybar"
         # "IS_INITIAL_SHELL=1 alacritty --title initial-shell -e zsh -l -c \"fastfetch; exec zsh\""
-        "google-chrome-stable"
+        # "google-chrome-stable"
       ];
 
       bind =
@@ -344,11 +344,11 @@ in
 
             "col.focused" = toRgba config.theme.color.app150;
             "col.focused.border" = inactiveBorderColor;
-            "col.focused.text" = toRgba config.theme.color.wm400;
+            "col.focused.text" = toRgba config.theme.color.wm500;
 
             "col.inactive" = toRgba config.theme.color.app150;
             "col.inactive.border" = inactiveBorderColor;
-            "col.inactive.text" = toRgba config.theme.color.wm400;
+            "col.inactive.text" = toRgba config.theme.color.wm500;
 
             "col.urgent" = toRgba config.theme.color.error600;
             "col.urgent.border" = toRgba config.theme.color.error600;
