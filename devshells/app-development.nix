@@ -3,9 +3,7 @@ with import <nixpkgs> {
 };
 
 let
-  pkgs = import <nixpkgs> {
-    config.android_sdk.accept_license = true;
-  };
+  pkgs = import <nixpkgs> { config.android_sdk.accept_license = true; };
 
   android = pkgs.androidenv.composeAndroidPackages {
     platformVersions = [
@@ -32,78 +30,77 @@ let
   '';
 
   setupTransporter = pkgs.writeShellScriptBin "setup-transporter" ''
-    set -euo pipefail
-    [ "''${TRANSPORTER_DEBUG:-}" = "1" ] && set -x
+        set -euo pipefail
+        [ "''${TRANSPORTER_DEBUG:-}" = "1" ] && set -x
 
-    PROJ_ROOT="$(${repoRootBin}/bin/repo-root)"
-    INSTALL_BASE="''${PROJ_ROOT}/install"
-    INSTALL_DIR="''${INSTALL_BASE}/itms"
-    INSTALLER="''${INSTALL_BASE}/iTMSTransporter_installer_linux.sh"
-    DRIVER="''${INSTALL_BASE}/itms_installer_expect.exp"
-    mkdir -p "''${INSTALL_BASE}"
+        PROJ_ROOT="$(${repoRootBin}/bin/repo-root)"
+        INSTALL_BASE="''${PROJ_ROOT}/install"
+        INSTALL_DIR="''${INSTALL_BASE}/itms"
+        INSTALLER="''${INSTALL_BASE}/iTMSTransporter_installer_linux.sh"
+        DRIVER="''${INSTALL_BASE}/itms_installer_expect.exp"
+        mkdir -p "''${INSTALL_BASE}"
 
-    # Already installed? Bail.
-    if [ -e "''${INSTALL_DIR}/bin/iTMSTransporter" ] || [ -e "''${INSTALL_DIR}/lib/itmstransporter.jar" ]; then
-      exit 0
-    fi
+        # Already installed? Bail quietly.
+        if [ -e "''${INSTALL_DIR}/bin/iTMSTransporter" ] || [ -e "''${INSTALL_DIR}/lib/itmstransporter.jar" ] || [ -e "''${INSTALL_DIR}/lib/osgibootstrapper.jar" ]; then
+          exit 0
+        fi
 
-    # Reuse existing installer unless forced
-    if [ -s "''${INSTALLER}" ] && [ "''${TRANSPORTER_FORCE:-0}" != "1" ]; then
-      echo "Using existing installer at ''${INSTALLER} (set TRANSPORTER_FORCE=1 to re-download)"
-    else
-      : "''${TRANSPORTER_URL:=https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/resources/download/public/Transporter__Linux/bin}"
-      echo "Downloading Apple Transporter → ''${INSTALLER}"
-      ${pkgs.curl}/bin/curl -fL --retry 3 --connect-timeout 15 \
-        -o "''${INSTALLER}.tmp" "''${TRANSPORTER_URL}"
-      mv -f "''${INSTALLER}.tmp" "''${INSTALLER}" || true
-      chmod +x "''${INSTALLER}"
-    fi
-    [ -s "''${INSTALLER}" ] || { echo "Installer missing/empty at ''${INSTALLER}"; exit 1; }
+        # Reuse existing installer unless forced
+        if [ ! -s "''${INSTALLER}" ] || [ "''${TRANSPORTER_FORCE:-0}" = "1" ]; then
+          : "''${TRANSPORTER_URL:=https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/resources/download/public/Transporter__Linux/bin}"
+          # Quiet download; still fail if it breaks
+          ${pkgs.curl}/bin/curl -sS -fL --retry 3 --connect-timeout 15 \
+            -o "''${INSTALLER}.tmp" "''${TRANSPORTER_URL}"
+          mv -f "''${INSTALLER}.tmp" "''${INSTALLER}" || true
+          chmod +x "''${INSTALLER}"
+        fi
+        [ -s "''${INSTALLER}" ] || { echo "Transporter installer missing/empty at ''${INSTALLER}" >&2; exit 1; }
 
-    # Write the expect driver (outside sandbox)
-    cat > "''${DRIVER}" <<'EOF'
-      log_user 1
-      set timeout -1
-      set inst $env(INSTALLER)
-      spawn sh $inst
-      expect {
-        -re {--More--}                       { send "q"; exp_continue }
-        -re {Do you agree.*\[yes or no\]}    { send "yes\r"; exp_continue }
-        -re {Continue\?.*\[yes or no\]}      { send "yes\r"; exp_continue }
-        eof
-      }
+        # Expect driver (no output)
+        cat > "''${DRIVER}" <<'EOF'
+    log_user 0
+    set timeout -1
+    set inst $env(INSTALLER)
+    spawn sh $inst
+    expect {
+      -re {--More--}                       { send "q"; exp_continue }
+      -re {Do you agree.*\[yes or no\]}    { send "yes\r"; exp_continue }
+      -re {Continue\?.*\[yes or no\]}      { send "yes\r"; exp_continue }
+      eof
+    }
     EOF
 
-    echo "Running installer in sandbox (''${INSTALL_BASE} ↔ /usr/local)…"
-    ${pkgs.bubblewrap}/bin/bwrap \
-      --ro-bind /nix /nix \
-      --dev-bind /dev /dev \
-      --proc /proc \
-      --tmpfs /tmp \
-      --bind "''${INSTALL_BASE}" /usr/local \
-      --bind "''${INSTALL_BASE}" "''${INSTALL_BASE}" \
-      --dir /bin \
-      --ro-bind ${pkgs.bash}/bin/sh /bin/sh \
-      --ro-bind ${pkgs.coreutils}/bin/cat /bin/more \
-      --ro-bind ${pkgs.coreutils}/bin/cat /bin/less \
-      --dir /usr/bin \
-      --ro-bind ${pkgs.coreutils}/bin/env /usr/bin/env \
-      --ro-bind ${pkgs.coreutils}/bin/cat /usr/bin/more \
-      --ro-bind ${pkgs.coreutils}/bin/cat /usr/bin/less \
-      --setenv TMPDIR /tmp \
-      --setenv TEMP /tmp \
-      --setenv TMP /tmp \
-      --setenv PAGER cat \
-      --setenv INSTALLER "''${INSTALLER}" \
-      --setenv PATH '${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.gnused}/bin:${pkgs.util-linux}/bin:${pkgs.procps}/bin:${pkgs.gzip}/bin:${pkgs.gnutar}/bin:${pkgs.which}/bin:${pkgs.diffutils}/bin:${pkgs.gnupatch}/bin:/bin:/usr/bin' \
-      --unshare-all --die-with-parent \
-      ${pkgs.bash}/bin/bash -c 'export HOME=/tmp; exec '"${pkgs.expect}/bin/expect"' "$1"' _ "''${DRIVER}"
+        # Run installer inside sandbox, completely silent; preserve exit code
+        ${pkgs.bubblewrap}/bin/bwrap \
+          --ro-bind /nix /nix \
+          --dev-bind /dev /dev \
+          --proc /proc \
+          --tmpfs /tmp \
+          --bind "''${INSTALL_BASE}" /usr/local \
+          --bind "''${INSTALL_BASE}" "''${INSTALL_BASE}" \
+          --dir /bin \
+          --ro-bind ${pkgs.bash}/bin/sh /bin/sh \
+          --ro-bind ${pkgs.coreutils}/bin/cat /bin/more \
+          --ro-bind ${pkgs.coreutils}/bin/cat /bin/less \
+          --dir /usr/bin \
+          --ro-bind ${pkgs.coreutils}/bin/env /usr/bin/env \
+          --ro-bind ${pkgs.coreutils}/bin/cat /usr/bin/more \
+          --ro-bind ${pkgs.coreutils}/bin/cat /usr/bin/less \
+          --setenv TMPDIR /tmp \
+          --setenv TEMP /tmp \
+          --setenv TMP /tmp \
+          --setenv PAGER cat \
+          --setenv INSTALLER "''${INSTALLER}" \
+          --setenv PATH '${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.gnused}/bin:${pkgs.util-linux}/bin:${pkgs.procps}/bin:${pkgs.gzip}/bin:${pkgs.gnutar}/bin:${pkgs.which}/bin:${pkgs.diffutils}/bin:${pkgs.gnupatch}/bin:/bin:/usr/bin' \
+          --unshare-all --die-with-parent \
+          ${pkgs.bash}/bin/bash -c 'export HOME=/tmp; exec '"${pkgs.expect}/bin/expect"' "$1"' _ "''${DRIVER}" \
+          >/dev/null 2>&1
 
-    if [ ! -e "''${INSTALL_DIR}/bin/iTMSTransporter" ] && [ ! -e "''${INSTALL_DIR}/lib/itmstransporter.jar" ]; then
-      echo "Transporter install failed (no itms/ under ''${INSTALL_BASE})"; exit 1
-    fi
-
-    echo "Transporter installed to ''${INSTALL_DIR}"
+        # Verify result; print nothing on success, error on failure
+        if [ ! -x "''${INSTALL_DIR}/bin/iTMSTransporter" ] && [ ! -e "''${INSTALL_DIR}/lib/osgibootstrapper.jar" ] && [ ! -e "''${INSTALL_DIR}/lib/itmstransporter.jar" ]; then
+          echo "Transporter install failed (no itms/ under ''${INSTALL_BASE})" >&2
+          exit 1
+        fi
   '';
 
   transporterBin = pkgs.writeShellScriptBin "iTMSTransporter" ''
@@ -126,13 +123,11 @@ let
     fi
 
     if [ "''${ITMS_QUIET:-1}" = "1" ]; then
-      # Run and capture; preserve exit code
       set +e
       out="$(${pkgs.steam-run}/bin/steam-run ${pkgs.bash}/bin/bash \
         "''${ITMS_HOME}/bin/iTMSTransporter" "''${args[@]}" 2>&1)"
       rc=$?
       set -e
-      # Keep non-bracketed payload lines; from bracketed logs only keep ERROR/CRITICAL
       printf '%s\n' "$out" | ${pkgs.gawk}/bin/awk '
         $0 !~ /^\[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [A-Z]+] <[^>]+> / { print; next }
         / ERROR: / || / CRITICAL:/ { print }
@@ -143,7 +138,6 @@ let
         "''${ITMS_HOME}/bin/iTMSTransporter" "''${args[@]}"
     fi
   '';
-
 in
 
 pkgs.mkShell {
@@ -158,6 +152,7 @@ pkgs.mkShell {
     eas-cli
 
     steam-run
+    gawk
 
     android.androidsdk
     android.platform-tools
@@ -178,11 +173,11 @@ pkgs.mkShell {
     export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=''${ANDROID_SDK_ROOT}/build-tools/35.0.0/aapt2"
 
     PROJ_ROOT="$(repo-root)"
-    if [ ! -e "''${PROJ_ROOT}/install/itms/bin/iTMSTransporter" ] && [ ! -e "''${PROJ_ROOT}/install/itms/lib/itmstransporter.jar" ]; then
-      echo "Bootstrapping Apple Transporter into ./install/itms…"
-      setup-transporter || {
-        echo "Transporter bootstrap failed. You can run 'setup-transporter' manually." >&2
-      }
+    if [ ! -e "''${PROJ_ROOT}/install/itms/bin/iTMSTransporter" ] && \
+       [ ! -e "''${PROJ_ROOT}/install/itms/lib/osgibootstrapper.jar" ] && \
+       [ ! -e "''${PROJ_ROOT}/install/itms/lib/itmstransporter.jar" ]; then
+      echo "Installing Apple Transporter..."
+      setup-transporter || echo "Transporter bootstrap failed. Run 'setup-transporter' manually." >&2
     fi
 
     export TRANSPORTER_HOME="''${PROJ_ROOT}/install/itms"
