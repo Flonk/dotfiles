@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     gauntlet = {
       url = "github:project-gauntlet/gauntlet";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,6 +30,7 @@
       nixpkgs,
       home-manager,
       nix-colorizer,
+      sops-nix,
       ...
     }:
     let
@@ -52,7 +58,8 @@
             inherit nix-colorizer;
           };
           modules = [
-            ./home/flo-schnitzelwirt.nix
+            inputs.sops-nix.homeManagerModules.sops
+            ./home/configurations/flo-schnitzelwirt.nix
           ];
         };
       };

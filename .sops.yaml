@@ -1,0 +1,9 @@
+keys:
+  - &user_flowork age17ctlfnf2dtpmhk9chk59d0aj9ranmtaz9esckqqhhslylaawvemq69qdpn
+  - &server_schnitzelwirt age1jdngvt8rjryavachuvvgxr8pe99l6h9wpmk94aa6n0m0cea4vpys6mt2w2
+creation_rules:
+  - path_regex: assets/secrets/[^/]+\.(yaml|json|env|ini|ovpn)$
+    key_groups:
+      - age:
+          - *user_flowork
+          - *server_schnitzelwirt
