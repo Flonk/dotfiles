@@ -7,10 +7,10 @@
 }:
 {
   imports = [
-    ../../config/types
-    ../../hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
-    ../../config/themes/trump/trump.nix
-    ../users/flo.nix
+    ../config/types
+    ../hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
+    ../config/themes/trump/trump.nix
+    ./users/flo.nix
   ];
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
@@ -19,12 +19,12 @@
 
   sops.secrets.andamp-vpn = {
     format = "binary";
-    sopsFile = ../../assets/secrets/andamp-vpn.ovpn;
+    sopsFile = ../assets/secrets/andamp-vpn.ovpn;
   };
 
   sops.secrets.hello = {
     format = "yaml";
-    sopsFile = ../../assets/secrets/example.yaml;
+    sopsFile = ../assets/secrets/example.yaml;
   };
 
   systemd.user.services.import-andamp-vpn = {

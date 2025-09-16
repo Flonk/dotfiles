@@ -45,7 +45,7 @@
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
           modules = [
-            ./hosts/schnitzelwirt/schnitzelwirt.nix
+            ./hosts/schnitzelwirt
           ];
         };
       };
@@ -59,7 +59,7 @@
           };
           modules = [
             inputs.sops-nix.homeManagerModules.sops
-            ./home/configurations/flo-schnitzelwirt.nix
+            ./home/flo-schnitzelwirt.nix
           ];
         };
       };
