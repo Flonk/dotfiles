@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (deflisten workspace "~/.config/eww/scripts/workspace")

@@ -1,4 +1,4 @@
-{ }:
+{ pkgs, ... }:
 {
   yuck = ''
     (defpoll song :interval "2s"  "~/.config/eww/scripts/music_info --song")

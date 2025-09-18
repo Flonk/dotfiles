@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (defpoll memory :interval "15s" "~/.config/eww/scripts/memory")

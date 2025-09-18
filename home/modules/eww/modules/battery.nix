@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (defpoll battery :interval "15s" "~/.config/eww/scripts/battery --bat")

@@ -1,4 +1,4 @@
-{ }:
+{ pkgs, ... }:
 {
   yuck = ''
     (defpoll volume_percent :interval "3s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")

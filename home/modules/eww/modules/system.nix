@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (defwidget system []

@@ -1,4 +1,4 @@
-{ }:
+{ pkgs, ... }:
 {
   yuck = ''
     (defpoll clock_time :interval "5m" "date +\%I")

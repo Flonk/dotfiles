@@ -2,6 +2,7 @@
   lib ? null,
   pkgs ? null,
   config ? null,
+  ...
 }:
 {
   yuck = ''

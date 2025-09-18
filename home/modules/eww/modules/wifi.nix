@@ -1,5 +1,7 @@
 {
   lib ? null,
+  pkgs,
+  ...
 }:
 {
   yuck = ''

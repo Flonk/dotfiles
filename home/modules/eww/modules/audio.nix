@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (defwidget audio []
@@ -15,7 +15,7 @@
           (box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
             (label :class "mic_text" :text "mic" :valign "center" :halign "left")
             (box :class "mic_bar" :halign "center" :vexpand "false" :hexpand "false"
-              (scale :value mic_percent :space-evenly "false" :orientation "h" :tooltip "mic on ''${mic_percent}%" :onchange "amixer -D pulse sset Capture {}%" :max 100 :min 0)))))
+              (scale :value mic_percent :space-evenly "false" :orientation "h" :tooltip "mic on ''${mic_percent}%" :onchange "amixer -D pulse sset Capture {}%" :max 100 :min 0))))))
 
     (defwindow audio_ctl :geometry (geometry :x "-20px" :y "7%" :anchor "top right" :width "280px" :height "60px") (audio))
   '';

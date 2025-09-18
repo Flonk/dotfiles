@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (defpoll calendar_day :interval "20h" "date '+%d'")

@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 {
   yuck = ''
     (defwidget music_pop []
@@ -12,7 +12,7 @@
             (button :class "music_btn_play" :onclick "~/.config/eww/scripts/music_info --toggle" song_status)
             (button :class "music_btn_next" :onclick "~/.config/eww/scripts/music_info --next" ""))
           (box :class "music_bar" :halign "center" :vexpand "false" :hexpand "false" :space-evenly "false"
-            (scale :onscroll "mpc -q seek {}" :min 0 :active "true" :max 100 :value current_status))))
+            (scale :onscroll "mpc -q seek {}" :min 0 :active "true" :max 100 :value current_status)))))
 
     (defwindow music_win :stacking "fg" :focusable "false" :screen 1
       :geometry (geometry :x "0" :y "7%" :width 428 :height 104 :anchor "top center")
