@@ -55,4 +55,44 @@
     /* Generic scales */
     scale trough { all: unset; background-color: #22242b; box-shadow: 0 2px 3px 2px #06060b; border-radius: 16px; min-height: 10px; min-width: 70px; margin: 0px 10px 0px 0px; }
   '';
+
+  scripts = [
+    {
+      path = "eww/scripts/pop";
+      text = ''
+        #!/usr/bin/env bash
+        set -euo pipefail
+        EWW="${pkgs.eww-wayland}/bin/eww"
+        CFG="$HOME/.config/eww"
+        eww() { "$EWW" -c "$CFG" "$@"; }
+        case "''${1:-}" in
+          calendar) win="calendar" ;;
+          audio) win="audio_ctl" ;;
+          system) win="system" ;;
+          music) win="music_win" ;;
+          *) echo "usage: $0 {calendar|audio|system|music}" >&2; exit 1 ;;
+        esac
+        if eww windows | grep -q "^$win\\s\+open"; then
+          eww close "$win"
+        else
+          eww open "$win"
+        fi
+      '';
+    }
+    {
+      path = "eww/scripts/workspace";
+      text = ''
+        #!/usr/bin/env bash
+        set -euo pipefail
+        # Requires: hyprctl, jq
+        active=$(hyprctl -j activeworkspace 2>/dev/null | jq -r '.id' 2>/dev/null || echo 1)
+        echo -n "(box :class \"works\" :orientation \"h\" "
+        for i in 1 2 3 4 5 6; do
+          if [ "$i" = "$active" ]; then cls="0''${i}''${i}"; else cls="0''${i}"; fi
+          echo -n "(button :class \"$cls\" :onclick \"hyprctl dispatch workspace $i\" \"$i\")"
+        done
+        echo ")"
+      '';
+    }
+  ];
 }

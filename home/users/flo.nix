@@ -101,6 +101,8 @@ in
       pkgs.nerd-fonts.dejavu-sans-mono
 
       alsa-utils # for amixer used by Eww volume/mic widgets
+      upower # for battery script
+      networkmanager # for nmcli used by wifi script
     ];
 
     username = "flo";

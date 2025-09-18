@@ -36,6 +36,8 @@ let
   audio = import ./modules/audio.nix { };
   music_pop = import ./modules/music_pop.nix { };
 
+  scripts = import ./modules/scripts.nix { inherit pkgs; };
+
   # Order of yuck parts
   yuckAll = concatStrings [
     base.yuck
@@ -89,8 +91,50 @@ in
   };
 
   config = mkIf cfg.enable {
-    xdg.configFile."eww/eww.yuck".text = yuckAll;
-    xdg.configFile."eww/eww.scss".text = scssAll;
+    # Build script attrset from base.scripts array
+    xdg.configFile =
+      let
+        baseScriptAttrs = builtins.listToAttrs (
+          map (s: {
+            name = s.path;
+            value = {
+              text = s.text;
+              executable = true;
+            };
+          }) (base.scripts or [ ])
+        );
+      in
+      baseScriptAttrs
+      // {
+        # Main files
+        "eww/eww.yuck".text = yuckAll;
+        "eww/eww.scss".text = scssAll;
+
+        # Scripts from scripts.nix
+        "${scripts.battery.path}" = {
+          text = scripts.battery.text;
+          executable = true;
+        };
+        "${scripts.mem_ad.path}" = {
+          text = scripts.mem_ad.text;
+          executable = true;
+        };
+        "${scripts.memory.path}" = {
+          text = scripts.memory.text;
+          executable = true;
+        };
+        "${scripts.wifi.path}" = {
+          text = scripts.wifi.text;
+          executable = true;
+        };
+        "${scripts.music_info.path}" = {
+          text = scripts.music_info.text;
+          executable = true;
+        };
+
+        # Placeholder assets to avoid missing images errors
+        "eww/images/.keep".text = "";
+      };
 
     systemd.user.services.eww-daemon = {
       Unit = {
