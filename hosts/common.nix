@@ -67,7 +67,7 @@ in
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd hyprland";
         user = "flo";
       };
     };
@@ -169,9 +169,12 @@ in
     wget
 
     alacritty
+    upower
   ];
 
   environment.variables.EDITOR = "micro";
+
+  services.upower.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

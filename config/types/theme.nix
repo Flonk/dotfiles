@@ -9,19 +9,19 @@ let
 in
 {
   options.theme = {
-    color =
-      {
-        text = mkOption { type = types.str; };
+    color = {
+      text = mkOption { type = types.str; };
 
-        error600 = mkOption { type = types.str; };
-        error400 = mkOption { type = types.str; };
-        error300 = mkOption { type = types.str; };
-      }
-      // (mkShadeOptions "app")
-      // (mkShadeOptions "wm");
+      error600 = mkOption { type = types.str; };
+      error400 = mkOption { type = types.str; };
+      error300 = mkOption { type = types.str; };
+    }
+    // (mkShadeOptions "app")
+    // (mkShadeOptions "wm");
 
     fontFamily = {
       ui = mkOption { type = types.str; };
+      uiNf = mkOption { type = types.str; };
       mono = mkOption { type = types.str; };
       monoNf = mkOption { type = types.str; };
     };

@@ -16,10 +16,9 @@ let
 
   cfg = config.programs.ewwBar;
 
-  # Only import the bar, which now aggregates everything
-  bar = import ./windows/bar.nix {
+  bar = import ./windows/activate-linux.nix {
     inherit lib pkgs config;
-    monitor = cfg.monitor;
+    # monitor = cfg.monitor;
   };
 
 in

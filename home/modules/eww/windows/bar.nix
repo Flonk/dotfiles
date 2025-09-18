@@ -40,27 +40,31 @@ let
 
   barWidgetsYuck = ''
     (defwidget left []
-      (box :orientation "h" :space-evenly false :halign "end" :class "left_modules"
+      (box :orientation "h" :space-evenly false :halign "start" :class "left_modules"
         (bright)
         (volume)
         (wifi)
         (sep)
         (bat)
-        (mem)
         (sep)
-        (clock_module)
-        (music)))
+        (music)
+        (workspaces)))
+
+    (defwidget noright []
+      (box :orientation "h" :space-evenly false :halign "start" :class "right_modules"
+        ))
 
     (defwidget right []
-      (box :orientation "h" :space-evenly false :halign "start" :class "right_modules"
-        (workspaces)))
+      (box :orientation "h" :space-evenly false :halign "end" :class "right_modules"
+        (clock_module)
+        (mem)))
 
     (defwidget center []
       (box :orientation "h" :space-evenly false :halign "center" :class "center_modules"
-        (clock_module)))
+        (mem)))
 
     (defwidget bar_1 []
-      (box :class "bar_class" :orientation "h" (left) (center) (right)))
+      (box :class "bar_class" :orientation "h" (center) (right)))
 
     (defwindow bar
       :geometry (geometry :x "0%" :y "0" :width "100%" :height "30px" :anchor "top center")
@@ -69,45 +73,53 @@ let
   '';
 
   barScss = ''
-    .bar_class { background-color: #0f0f17; border-radius: 16px; }
+    .bar_class {
+      background-color: ${config.theme.color.app150};
+      color: ${config.theme.color.app600};
+    }
   '';
 
-  inherit (lib) concatStrings;
+  # Use a newline as the joiner when concatenating strings in this file
+  concatStrings = lib.concatStringsSep "\n";
 
   yuckAll = concatStrings [
+    /*
+      wifi.yuck
+      workspaces.yuck
+      battery.yuck
+      sep.yuck
+      volume.yuck
+      bright.yuck
+      music.yuck
+      system.yuck
+      cal.yuck
+      audio.yuck
+      music_pop.yuck
+    */
     base.yuck
-    wifi.yuck
-    workspaces.yuck
-    battery.yuck
-    memory.yuck
-    sep.yuck
     clock.yuck
-    volume.yuck
-    bright.yuck
-    music.yuck
-    system.yuck
-    cal.yuck
-    audio.yuck
-    music_pop.yuck
+    memory.yuck
     barWidgetsYuck
   ];
 
   scssAll = concatStrings [
+    /*
+      wifi.scss
+      battery.scss
+      bright.scss
+      volume.scss
+      sep.scss
+      workspaces.scss
+      music.scss
+      cal.scss
+      system.scss
+      music_pop.scss
+      audio.scss
+    */
     base.scss
     barScss
-    wifi.scss
-    clock.scss
     memory.scss
-    battery.scss
-    bright.scss
-    volume.scss
-    sep.scss
-    workspaces.scss
-    music.scss
-    cal.scss
-    system.scss
-    music_pop.scss
-    audio.scss
+    clock.scss
   ];
 
   scriptsAll = builtins.concatLists (map (m: m.scripts or [ ]) modulesList);

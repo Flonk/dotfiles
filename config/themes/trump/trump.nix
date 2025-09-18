@@ -28,6 +28,7 @@ let
 
   fontFamily = {
     ui = "DejaVu Sans Mono";
+    uiNf = "DejaVuSansM Nerd Font";
     mono = "DejaVu Sans Mono";
     monoNf = "DejaVuSansM Nerd Font";
   };
@@ -98,16 +99,15 @@ let
 in
 {
   config.theme = rec {
-    color =
-      {
-        text = textColor;
+    color = {
+      text = textColor;
 
-        error600 = colorError600;
-        error400 = colorError400;
-        error300 = colorError300;
-      }
-      // (prefixKeys "wm" colorWm)
-      // (prefixKeys "app" colorApp);
+      error600 = colorError600;
+      error400 = colorError400;
+      error300 = colorError300;
+    }
+    // (prefixKeys "wm" colorWm)
+    // (prefixKeys "app" colorApp);
 
     inherit
       fontFamily

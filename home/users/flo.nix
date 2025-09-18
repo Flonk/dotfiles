@@ -57,11 +57,6 @@ in
     # inputs.gauntlet.homeManagerModules.default
   ];
 
-  programs.ewwBar = {
-    enable = true;
-    # monitor = "eDP-1"; # set if different
-  };
-
   home = {
     packages = with pkgs; [
       wrapper
@@ -88,6 +83,7 @@ in
       fortune
       btop
       chafa
+      cool-retro-term
 
       postman
       jq
@@ -131,6 +127,12 @@ in
   #  enable = true;
   #  service.enable = true;
   #};
+
+  programs.ewwBar = {
+    enable = true;
+    # monitor = "eDP-1"; # set if different
+  };
+
   xdg.desktopEntries.chrome-app-tabbed = {
     name = "Chrome (app, tabbed)";
     exec = "${wrapper}/bin/xdg-open-tabbed %u";

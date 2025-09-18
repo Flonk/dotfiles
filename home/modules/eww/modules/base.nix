@@ -13,19 +13,21 @@
     (defvar wifi_rev false)
     (defvar time_rev false)
 
-    (defvar eww "${pkgs.eww-wayland}/bin/eww -c $HOME/.config/eww")
+    (defvar eww "${pkgs.eww}/bin/eww -c $HOME/.config/eww")
   '';
 
   scss = ''
-    /** EWW.SCSS\n    Created by saimoom **/
-    *{ all: unset; font-family: feather; font-family: DaddyTimeMono NF; }
+    *{
+      all: unset;
+      font-family: ${config.theme.fontFamily.uiNf};
+      font-size: ${builtins.toString config.theme.fontSize.big}px;
+    }
 
-    /** tooltip!! **/
-    tooltip.background { background-color: #0f0f17; font-size: 18; border-radius: 10px; color: #bfc9db; }
+    tooltip.background { background-color: #0f0f17;  border-radius: 0px; color: #555555; }
     tooltip label { margin: 6px; }
 
     /** General **/
-    .module { margin: 0px 0px 0px 0px; border-radius: 10px 16px 0px 10px; }
+    .module { margin: 0; border-radius: 0; }
 
     /* Generic scales */
     scale trough { all: unset; background-color: #22242b; box-shadow: 0 2px 3px 2px #06060b; border-radius: 16px; min-height: 10px; min-width: 70px; margin: 0px 10px 0px 0px; }
