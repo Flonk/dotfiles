@@ -37,7 +37,6 @@ in
     ../modules/hyprland/hyprpaper.nix
     ../modules/hyprland/hyprlock.nix
     ../modules/hyprland/hyprcursor.nix
-    ../modules/hyprland/hyprpanel.nix
     ../modules/google-chrome/google-chrome.nix
     ../modules/git/git.nix
     ../modules/direnv/direnv.nix
@@ -53,6 +52,7 @@ in
     ../modules/obsidian/obsidian.nix
     ../modules/nchat/nchat.nix
     ../modules/superfile/superfile.nix
+    ../modules/eww/eww.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
@@ -91,6 +91,7 @@ in
       spotify
       discord
       vlc
+      eww-wayland
 
       pkgs.nerd-fonts.dejavu-sans-mono
     ];
@@ -198,5 +199,13 @@ in
       ];
     };
   };
+
+  # Removed inline Eww config; moved to ../modules/eww/eww.nix
+  # xdg.configFile."eww/eww.yuck".text = '' ... '';
+  # xdg.configFile."eww/eww.scss".text = '' ... '';
+
+  # Removed Eww services here; moved to ../modules/eww/eww.nix
+  # systemd.user.services.eww-daemon = { ... };
+  # systemd.user.services.eww-bar = { ... };
 
 }
