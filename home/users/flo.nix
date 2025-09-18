@@ -37,6 +37,7 @@ in
     ../modules/hyprland/hyprpaper.nix
     ../modules/hyprland/hyprlock.nix
     ../modules/hyprland/hyprcursor.nix
+    ../modules/hyprland/hyprpanel.nix
     ../modules/google-chrome/google-chrome.nix
     ../modules/git/git.nix
     ../modules/direnv/direnv.nix
@@ -142,6 +143,8 @@ in
       "audio/mpeg"
       "audio/mp3"
       "audio/ogg"
+      "audio/x-ogg"
+      "application/ogg"
       "video/ogg"
       "audio/webm"
       "video/webm"
@@ -179,7 +182,9 @@ in
 
           "audio/mpeg" = [ "chrome-app-tabbed.desktop" ];
           "audio/mp3" = [ "chrome-app-tabbed.desktop" ];
+          "audio/x-ogg" = [ "chrome-app-tabbed.desktop" ];
           "audio/ogg" = [ "chrome-app-tabbed.desktop" ];
+          "application/ogg" = [ "chrome-app-tabbed.desktop" ];
           "video/ogg" = [ "chrome-app-tabbed.desktop" ];
           "audio/webm" = [ "chrome-app-tabbed.desktop" ];
           "video/webm" = [ "chrome-app-tabbed.desktop" ];
