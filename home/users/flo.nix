@@ -29,6 +29,7 @@ in
     ../modules/csvlens/csvlens.nix
     ../modules/walker/walker.nix
     ../modules/obsidian/obsidian.nix
+    ../modules/nchat/nchat.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];

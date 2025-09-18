@@ -29,12 +29,25 @@
 
   systemd.user.services.import-andamp-vpn = {
     Unit = {
-      Description = "Import andamp-vpn profile to NetworkManager";
-      After = [ "network-manager.service" ];
+      Description = "Import andamp-vpn profile to NetworkManager (idempotent)";
+      # You can't order a user unit After=NetworkManager.service (system unit).
+      # If you want it at login, default.target is fine.
+      After = [ "default.target" ];
     };
     Service = {
       Type = "oneshot";
-      ExecStart = ''${pkgs.networkmanager}/bin/nmcli connection import type openvpn file ${config.sops.secrets.andamp-vpn.path}'';
+      ExecStart = (
+        pkgs.writeShellScript "import-andamp-vpn" ''
+          set -euo pipefail
+          NAME="andamp-vpn"
+          if ! ${pkgs.networkmanager}/bin/nmcli -t -f NAME con show | grep -Fxq "$NAME"; then
+            echo "Importing $NAME from ${config.sops.secrets.andamp-vpn.path}"
+            exec ${pkgs.networkmanager}/bin/nmcli connection import type openvpn file "${config.sops.secrets.andamp-vpn.path}"
+          else
+            echo "$NAME already present; skipping import."
+          fi
+        ''
+      );
     };
     Install = {
       WantedBy = [ "default.target" ];

@@ -183,6 +183,7 @@
       s = "nix-shell -p";
       run = "_nix-shell-run";
       appimage = "nix run nixpkgs#appimage-run --";
+      hash = "nix-prefetch-url --unpack"; # url is ref like https://github.com/normen/whatscli/archive/refs/tags/v1.0.11.tar.gz
 
       ##### Git
       gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";
