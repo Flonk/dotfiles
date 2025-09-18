@@ -1,6 +1,8 @@
 { }:
 {
   yuck = ''
+    (defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
+
     (defwidget bright []
       (eventbox :onhover "''${eww} update br_reveal=true" :onhoverlost "''${eww} update br_reveal=false"
         (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3"

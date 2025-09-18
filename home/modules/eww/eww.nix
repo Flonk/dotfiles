@@ -27,16 +27,35 @@ let
   volume = import ./modules/volume.nix { };
   bright = import ./modules/bright.nix { };
   music = import ./modules/music.nix { };
-  left = import ./modules/left.nix { };
-  right = import ./modules/right.nix { };
-  center = import ./modules/center.nix { };
-  bar = import ./modules/bar.nix { monitor = cfg.monitor; };
+  # Windows now live under ./windows, with bar aggregating left/right/center
+  bar = import ./windows/bar.nix { monitor = cfg.monitor; };
   system = import ./modules/system.nix { };
   cal = import ./modules/cal.nix { };
   audio = import ./modules/audio.nix { };
   music_pop = import ./modules/music_pop.nix { };
 
-  scripts = import ./modules/scripts.nix { inherit pkgs; };
+  # List of all module records (some may not export scripts)
+  modulesList = [
+    base
+    wifi
+    workspaces
+    battery
+    memory
+    sep
+    clock
+    volume
+    bright
+    music
+    # left/right/center merged into bar
+    bar
+    system
+    cal
+    audio
+    music_pop
+  ];
+
+  # Collect scripts from modules that export them
+  moduleScripts = builtins.concatLists (map (m: m.scripts or [ ]) modulesList);
 
   # Order of yuck parts
   yuckAll = concatStrings [
@@ -50,14 +69,12 @@ let
     volume.yuck
     bright.yuck
     music.yuck
-    left.yuck
-    right.yuck
-    center.yuck
-    bar.yuck
     system.yuck
     cal.yuck
     audio.yuck
     music_pop.yuck
+    # left/right/center are included by bar
+    bar.yuck
   ];
 
   # Order of scss parts
@@ -91,46 +108,35 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Build script attrset from base.scripts array
+    # Ensure runtime dependencies for scripts/widgets are present
+    home.packages = with pkgs; [
+      eww
+      brightnessctl
+      playerctl
+      jq
+      networkmanager # provides nmcli
+      upower
+      alsa-utils
+    ];
+
+    # Build script attrset from scripts provided by modules
     xdg.configFile =
       let
-        baseScriptAttrs = builtins.listToAttrs (
+        scriptAttrs = builtins.listToAttrs (
           map (s: {
             name = s.path;
             value = {
               text = s.text;
               executable = true;
             };
-          }) (base.scripts or [ ])
+          }) moduleScripts
         );
       in
-      baseScriptAttrs
+      scriptAttrs
       // {
         # Main files
         "eww/eww.yuck".text = yuckAll;
         "eww/eww.scss".text = scssAll;
-
-        # Scripts from scripts.nix
-        "${scripts.battery.path}" = {
-          text = scripts.battery.text;
-          executable = true;
-        };
-        "${scripts.mem_ad.path}" = {
-          text = scripts.mem_ad.text;
-          executable = true;
-        };
-        "${scripts.memory.path}" = {
-          text = scripts.memory.text;
-          executable = true;
-        };
-        "${scripts.wifi.path}" = {
-          text = scripts.wifi.text;
-          executable = true;
-        };
-        "${scripts.music_info.path}" = {
-          text = scripts.music_info.text;
-          executable = true;
-        };
 
         # Placeholder assets to avoid missing images errors
         "eww/images/.keep".text = "";

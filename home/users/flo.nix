@@ -96,7 +96,6 @@ in
       spotify
       discord
       vlc
-      eww-wayland
 
       pkgs.nerd-fonts.dejavu-sans-mono
 

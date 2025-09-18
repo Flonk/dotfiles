@@ -5,40 +5,14 @@
 }:
 {
   yuck = ''
-    ;; Variables
-    (defpoll clock_time :interval "5m" "date +\%I")
-    (defpoll clock_minute :interval "5s" "date +\%M")
-    (defpoll clock_date :interval "10h" "date '+%d/%m'")
-    (defpoll volume_percent :interval "3s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
-    (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
-    (defpoll brightness_percent :interval "5s" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
-    (defpoll battery :interval "15s" "~/.config/eww/scripts/battery --bat")
-    (defpoll battery_status :interval "1m" "~/.config/eww/scripts/battery --bat-st")
-    (defpoll memory :interval "15s" "~/.config/eww/scripts/memory")
-    (defpoll memory_used_mb :interval "2m" "~/.config/eww/scripts/mem-ad used")
-    (defpoll memory_total_mb :interval "2m" "~/.config/eww/scripts/mem-ad total")
-    (defpoll memory_free_mb :interval "2m" "~/.config/eww/scripts/mem-ad free")
+    ;; Common variables (no defpolls here)
     (defvar vol_reveal false)
     (defvar br_reveal false)
     (defvar music_reveal false)
     (defvar wifi_rev false)
     (defvar time_rev false)
-    (deflisten workspace "~/.config/eww/scripts/workspace")
 
     (defvar eww "${pkgs.eww-wayland}/bin/eww -c $HOME/.config/eww")
-
-    (defpoll COL_WLAN :interval "1m" "~/.config/eww/scripts/wifi --COL")
-    (defpoll ESSID_WLAN :interval "1m" "~/.config/eww/scripts/wifi --ESSID")
-    (defpoll WLAN_ICON :interval "1m" "~/.config/eww/scripts/wifi --ICON")
-
-    (defpoll song :interval "2s"  "~/.config/eww/scripts/music_info --song")
-    (defpoll song_artist :interval "2s"  "~/.config/eww/scripts/music_info --artist")
-    (defpoll current_status :interval "1s"  "~/.config/eww/scripts/music_info --time")
-    (defpoll song_status :interval "2s"  "~/.config/eww/scripts/music_info --status")
-    (defpoll cover_art :interval "2s"  "~/.config/eww/scripts/music_info --cover")
-
-    (defpoll calendar_day :interval "20h" "date '+%d'")
-    (defpoll calendar_year :interval "20h" "date '+%Y'")
   '';
 
   scss = ''
@@ -77,21 +51,6 @@
         else
           eww open "$win"
         fi
-      '';
-    }
-    {
-      path = "eww/scripts/workspace";
-      text = ''
-        #!/usr/bin/env bash
-        set -euo pipefail
-        # Requires: hyprctl, jq
-        active=$(hyprctl -j activeworkspace 2>/dev/null | jq -r '.id' 2>/dev/null || echo 1)
-        echo -n "(box :class \"works\" :orientation \"h\" "
-        for i in 1 2 3 4 5 6; do
-          if [ "$i" = "$active" ]; then cls="0''${i}''${i}"; else cls="0''${i}"; fi
-          echo -n "(button :class \"$cls\" :onclick \"hyprctl dispatch workspace $i\" \"$i\")"
-        done
-        echo ")"
       '';
     }
   ];

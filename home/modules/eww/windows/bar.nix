@@ -1,8 +1,11 @@
 {
   monitor ? "eDP-1",
 }:
-{
-  yuck = ''
+let
+  left = import ./left.nix { };
+  right = import ./right.nix { };
+  center = import ./center.nix { };
+  barYuck = ''
     (defwidget bar_1 []
       (box :class "bar_class" :orientation "h" (right) (center) (left)))
 
@@ -11,8 +14,11 @@
       :stacking "fg" :windowtype "dock" :monitor "${monitor}"
       (bar_1))
   '';
-
-  scss = ''
+  barScss = ''
     .bar_class { background-color: #0f0f17; border-radius: 16px; }
   '';
+in
+{
+  yuck = left.yuck + right.yuck + center.yuck + barYuck;
+  scss = left.scss + right.scss + center.scss + barScss;
 }

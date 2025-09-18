@@ -1,6 +1,10 @@
 { }:
 {
   yuck = ''
+    (defpoll clock_time :interval "5m" "date +\%I")
+    (defpoll clock_minute :interval "5s" "date +\%M")
+    (defpoll clock_date :interval "10h" "date '+%d/%m'")
+
     (defwidget clock_module []
       (eventbox :onhover "''${eww} update time_rev=true" :onhoverlost "''${eww} update time_rev=false"
         (box :class "module" :space-evenly "false" :orientation "h" :spacing "3"

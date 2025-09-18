@@ -1,6 +1,9 @@
 { }:
 {
   yuck = ''
+    (defpoll calendar_day :interval "20h" "date '+%d'")
+    (defpoll calendar_year :interval "20h" "date '+%Y'")
+
     (defwidget cal []
       (box :class "cal" :orientation "v"
         (box :class "cal-in"

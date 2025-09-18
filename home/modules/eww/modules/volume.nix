@@ -1,10 +1,13 @@
 { }:
 {
   yuck = ''
+    (defpoll volume_percent :interval "3s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+    (defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+
     (defwidget volume []
       (eventbox :onhover "''${eww} update vol_reveal=true" :onhoverlost "''${eww} update vol_reveal=false"
         (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3"
-          (button :onclick "scripts/pop audio" :class "volume_icon" "")
+          (button :onclick "$HOME/.config/eww/scripts/pop audio" :class "volume_icon" "")
           (revealer :transition "slideleft" :reveal vol_reveal :duration "350ms"
             (scale :class "volbar" :value volume_percent :orientation "h" :tooltip "''${volume_percent}%" :max 100 :min 0 :onchange "amixer -D pulse sset Master {}%")))))
   '';
