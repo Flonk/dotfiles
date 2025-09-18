@@ -6,8 +6,7 @@ There are many dotfiles but these ones are mine.
 
 I use NixOS with Hyprland (hy3) and waybar. App launcher is walker.
 
-The theme is designed for work, so no transparent terminals or huge
-gaps; also faster and less animations.
+This is my workhorse setup; no transparent terminals, no gaps, few animations.
 
 Kinda cool: The entire theme is parametrized on a single primary
 color (orange in the screenshots); all other colors are generated
