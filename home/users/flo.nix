@@ -9,6 +9,27 @@
 }:
 let
   gauntletPkg = inputs.self.packages.x86_64-linux.myGauntletDeps;
+
+  wrapper = pkgs.writeShellScriptBin "xdg-open-tabbed" ''
+    set -euo pipefail
+    ${pkgs.hyprland}/bin/hyprctl dispatch 'hy3:makegroup tab' || true
+    open_one() {
+      local arg="$1" uri
+      if [ -n "$arg" ] && ! printf '%s' "$arg" | grep -q '://'; then
+        uri="file://$(${pkgs.coreutils}/bin/realpath "$arg")"
+      else
+        uri="$arg"ch
+      fi
+      ${pkgs.hyprland}/bin/hyprctl dispatch 'hy3:setephemeral true' || true
+      exec google-chrome-stable --app="$uri"
+    }
+    if [ "$#" -ge 1 ]; then
+      open_one "$1"
+    else
+      echo "xdg-open-tabbed: nothing to open" >&2
+      exit 1
+    fi
+  '';
 in
 {
   imports = [
@@ -30,12 +51,15 @@ in
     ../modules/walker/walker.nix
     ../modules/obsidian/obsidian.nix
     ../modules/nchat/nchat.nix
+    ../modules/superfile/superfile.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
 
   home = {
     packages = with pkgs; [
+      wrapper
+
       nixfmt-rfc-style
 
       nautilus
@@ -66,6 +90,8 @@ in
       spotify
       discord
       vlc
+
+      pkgs.nerd-fonts.dejavu-sans-mono
     ];
 
     username = "flo";
@@ -75,6 +101,7 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
+
   fonts.fontconfig.enable = true;
 
   programs.bash.bashrcExtra = ''
@@ -94,6 +121,40 @@ in
   #  enable = true;
   #  service.enable = true;
   #};
+  xdg.desktopEntries.chrome-app-tabbed = {
+    name = "Chrome (app, tabbed)";
+    exec = "${wrapper}/bin/xdg-open-tabbed %u";
+    terminal = false;
+    type = "Application";
+    mimeType = [
+      # Images
+      "image/jpeg"
+      "image/png"
+      "image/gif"
+      "image/webp"
+      "image/apng"
+      "image/avif"
+      "image/svg+xml"
+      "image/bmp"
+      "image/x-icon"
+
+      # Audio / Video
+      "audio/mpeg"
+      "audio/mp3"
+      "audio/ogg"
+      "video/ogg"
+      "audio/webm"
+      "video/webm"
+      "video/mp4"
+      "audio/wav"
+      "audio/x-wav"
+      "audio/flac"
+
+      # Docs
+      "application/pdf"
+    ];
+    noDisplay = true;
+  };
 
   gtk = {
     enable = true;
@@ -105,6 +166,30 @@ in
       defaultApplications = lib.mkMerge [
         (import ../modules/google-chrome/mimeApps.nix)
         (import ../modules/csvlens/mimeApps.nix)
+        {
+          "image/jpeg" = [ "chrome-app-tabbed.desktop" ];
+          "image/png" = [ "chrome-app-tabbed.desktop" ];
+          "image/gif" = [ "chrome-app-tabbed.desktop" ];
+          "image/webp" = [ "chrome-app-tabbed.desktop" ];
+          "image/apng" = [ "chrome-app-tabbed.desktop" ];
+          "image/avif" = [ "chrome-app-tabbed.desktop" ];
+          "image/svg+xml" = [ "chrome-app-tabbed.desktop" ];
+          "image/bmp" = [ "chrome-app-tabbed.desktop" ];
+          "image/x-icon" = [ "chrome-app-tabbed.desktop" ];
+
+          "audio/mpeg" = [ "chrome-app-tabbed.desktop" ];
+          "audio/mp3" = [ "chrome-app-tabbed.desktop" ];
+          "audio/ogg" = [ "chrome-app-tabbed.desktop" ];
+          "video/ogg" = [ "chrome-app-tabbed.desktop" ];
+          "audio/webm" = [ "chrome-app-tabbed.desktop" ];
+          "video/webm" = [ "chrome-app-tabbed.desktop" ];
+          "video/mp4" = [ "chrome-app-tabbed.desktop" ];
+          "audio/wav" = [ "chrome-app-tabbed.desktop" ];
+          "audio/x-wav" = [ "chrome-app-tabbed.desktop" ];
+          "audio/flac" = [ "chrome-app-tabbed.desktop" ];
+
+          "application/pdf" = [ "chrome-app-tabbed.desktop" ];
+        }
       ];
     };
   };

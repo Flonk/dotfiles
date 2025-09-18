@@ -92,6 +92,14 @@
             )
           }
 
+          open_fzf () {
+            if [ -n "$1" ]; then
+              xdg-open "$(find . -maxdepth 1 | fzf --query="$1" --select-1 --exit-0)"
+            else
+              xdg-open "$(find . -maxdepth 1 | fzf --height 8 --layout=reverse)"
+            fi
+          }
+
 
           gcob () {
             if [ -n "$1" ]; then
@@ -175,6 +183,7 @@
       t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
       l = "eza -l --group --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --color=always";
       c = "cd_fzf";
+      o = "open_fzf";
 
       ##### Nix
       ne = "nix-instantiate --eval";

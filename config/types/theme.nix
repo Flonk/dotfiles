@@ -23,6 +23,7 @@ in
     fontFamily = {
       ui = mkOption { type = types.str; };
       mono = mkOption { type = types.str; };
+      monoNf = mkOption { type = types.str; };
     };
 
     fontSize = {

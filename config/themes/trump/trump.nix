@@ -29,6 +29,7 @@ let
   fontFamily = {
     ui = "DejaVu Sans Mono";
     mono = "DejaVu Sans Mono";
+    monoNf = "DejaVuSansM Nerd Font";
   };
 
   # helper: mirror numeric keys with identifier-safe aliases, e.g. "800" -> "main800"
