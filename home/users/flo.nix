@@ -57,6 +57,11 @@ in
     # inputs.gauntlet.homeManagerModules.default
   ];
 
+  programs.ewwBar = {
+    enable = true;
+    # monitor = "eDP-1"; # set if different
+  };
+
   home = {
     packages = with pkgs; [
       wrapper
@@ -94,6 +99,8 @@ in
       eww-wayland
 
       pkgs.nerd-fonts.dejavu-sans-mono
+
+      alsa-utils # for amixer used by Eww volume/mic widgets
     ];
 
     username = "flo";
