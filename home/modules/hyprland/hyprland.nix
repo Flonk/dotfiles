@@ -118,106 +118,106 @@ in
       exec-once = [
         "hyprctl setcursor macOS-White 28"
         "waybar"
+        "${pkgs.eww}/bin/eww open activate-linux --screen eDP-1"
         # "IS_INITIAL_SHELL=1 alacritty --title initial-shell -e zsh -l -c \"fastfetch; exec zsh\""
         # "google-chrome-stable"
       ];
 
-      bind =
-        [
-          # HYPRLAND
-          "$mainMod, RETURN, exec, $terminal"
-          "$mainMod CTRL, RETURN, exec, $browser"
-          "$mainMod, SPACE, exec, walker -t mytheme"
+      bind = [
+        # HYPRLAND
+        "$mainMod, RETURN, exec, $terminal"
+        "$mainMod CTRL, RETURN, exec, $browser"
+        "$mainMod, SPACE, exec, walker -t mytheme"
 
-          "$mainMod, ESCAPE, exec, hyprlock"
-          "$mainMod, M, exit"
-          "$mainMod, Q, killactive"
+        "$mainMod, ESCAPE, exec, hyprlock"
+        "$mainMod, M, exit"
+        "$mainMod, Q, killactive"
 
-          "$mainMod, PRINT, exec, hyprshot -m window -m active"
-          "$mainMod SHIFT, PRINT, exec, hyprshot -m output -m active"
-          ", PRINT, exec, hyprshot -m region"
+        "$mainMod, PRINT, exec, hyprshot -m window -m active"
+        "$mainMod SHIFT, PRINT, exec, hyprshot -m output -m active"
+        ", PRINT, exec, hyprshot -m region"
 
-          # WINDOW MANAGEMENT
-          "$mainMod, A, hy3:changefocus, raise"
-          "$mainMod, E, hy3:changegroup, opposite"
-          "$mainMod, F, fullscreen"
-          "$mainMod SHIFT, F, togglefloating"
-          "$mainMod, H, hy3:makegroup, h"
-          "$mainMod, W, hy3:changegroup, tab"
-          "$mainMod SHIFT, W, hy3:makegroup, tab, toggle"
-          "$mainMod, V, hy3:makegroup, v"
+        # WINDOW MANAGEMENT
+        "$mainMod, A, hy3:changefocus, raise"
+        "$mainMod, E, hy3:changegroup, opposite"
+        "$mainMod, F, fullscreen"
+        "$mainMod SHIFT, F, togglefloating"
+        "$mainMod, H, hy3:makegroup, h"
+        "$mainMod, W, hy3:changegroup, tab"
+        "$mainMod SHIFT, W, hy3:makegroup, tab, toggle"
+        "$mainMod, V, hy3:makegroup, v"
 
-          "$mainMod, Tab, focusurgentorlast"
+        "$mainMod, Tab, focusurgentorlast"
 
-          # MOVE WINDOWS
-          "$mainMod, left, hy3:movefocus, l"
-          "$mainMod, right, hy3:movefocus, r"
-          "$mainMod, up, hy3:movefocus, u"
-          "$mainMod, down, hy3:movefocus, d"
+        # MOVE WINDOWS
+        "$mainMod, left, hy3:movefocus, l"
+        "$mainMod, right, hy3:movefocus, r"
+        "$mainMod, up, hy3:movefocus, u"
+        "$mainMod, down, hy3:movefocus, d"
 
-          "$mainMod SHIFT, left, hy3:movewindow, l"
-          "$mainMod SHIFT, right, hy3:movewindow, r"
-          "$mainMod SHIFT, up, hy3:movewindow, u"
-          "$mainMod SHIFT, down, hy3:movewindow, d"
+        "$mainMod SHIFT, left, hy3:movewindow, l"
+        "$mainMod SHIFT, right, hy3:movewindow, r"
+        "$mainMod SHIFT, up, hy3:movewindow, u"
+        "$mainMod SHIFT, down, hy3:movewindow, d"
 
-          # MOVE BETWEEN WORKSPACES
-          "$mainMod, 1, workspace, 1"
-          "$mainMod, 2, workspace, 2"
-          "$mainMod, 3, workspace, 3"
-          "$mainMod, 4, workspace, 4"
-          "$mainMod, 5, workspace, 5"
-          "$mainMod, 6, workspace, 6"
-          "$mainMod, 7, workspace, 7"
-          "$mainMod, 8, workspace, 8"
-          "$mainMod, 9, workspace, 9"
-          "$mainMod, 0, workspace, 10"
+        # MOVE BETWEEN WORKSPACES
+        "$mainMod, 1, workspace, 1"
+        "$mainMod, 2, workspace, 2"
+        "$mainMod, 3, workspace, 3"
+        "$mainMod, 4, workspace, 4"
+        "$mainMod, 5, workspace, 5"
+        "$mainMod, 6, workspace, 6"
+        "$mainMod, 7, workspace, 7"
+        "$mainMod, 8, workspace, 8"
+        "$mainMod, 9, workspace, 9"
+        "$mainMod, 0, workspace, 10"
 
-          "$mainMod CTRL, left, movecurrentworkspacetomonitor, l"
-          "$mainMod CTRL, right, movecurrentworkspacetomonitor, r"
+        "$mainMod CTRL, left, movecurrentworkspacetomonitor, l"
+        "$mainMod CTRL, right, movecurrentworkspacetomonitor, r"
 
-          "$mainMod SHIFT, 1, movetoworkspacesilent, 1"
-          "$mainMod SHIFT, 2, movetoworkspacesilent, 2"
-          "$mainMod SHIFT, 3, movetoworkspacesilent, 3"
-          "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
-          "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
-          "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
-          "$mainMod SHIFT, 7, movetoworkspacesilent, 7"
-          "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
-          "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
-          "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
+        "$mainMod SHIFT, 1, movetoworkspacesilent, 1"
+        "$mainMod SHIFT, 2, movetoworkspacesilent, 2"
+        "$mainMod SHIFT, 3, movetoworkspacesilent, 3"
+        "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
+        "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
+        "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
+        "$mainMod SHIFT, 7, movetoworkspacesilent, 7"
+        "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
+        "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
+        "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
 
-          # RESIZE MODE / MOVE FLOATING
-        ]
-        ++ (mkKeypadBindings {
-          mod = "";
-          action = "resizeactive";
-          d = 80;
-        })
-        ++ (mkKeypadBindings {
-          mod = "CTRL";
-          action = "resizeactive";
-          d = 20;
-        })
-        ++ (mkKeypadBindings {
-          mod = "CTRL SHIFT";
-          action = "resizeactive";
-          d = 5;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT";
-          action = "moveactive";
-          d = 160;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT CTRL";
-          action = "moveactive";
-          d = 40;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT CTRL SHIFT";
-          action = "moveactive";
-          d = 10;
-        });
+        # RESIZE MODE / MOVE FLOATING
+      ]
+      ++ (mkKeypadBindings {
+        mod = "";
+        action = "resizeactive";
+        d = 80;
+      })
+      ++ (mkKeypadBindings {
+        mod = "CTRL";
+        action = "resizeactive";
+        d = 20;
+      })
+      ++ (mkKeypadBindings {
+        mod = "CTRL SHIFT";
+        action = "resizeactive";
+        d = 5;
+      })
+      ++ (mkKeypadBindings {
+        mod = "ALT";
+        action = "moveactive";
+        d = 160;
+      })
+      ++ (mkKeypadBindings {
+        mod = "ALT CTRL";
+        action = "moveactive";
+        d = 40;
+      })
+      ++ (mkKeypadBindings {
+        mod = "ALT CTRL SHIFT";
+        action = "moveactive";
+        d = 10;
+      });
 
       # Move/resize windows with mainMod + LMB/RMB and dragging
       bindm = [
@@ -274,8 +274,6 @@ in
       };
 
       gestures = {
-        workspace_swipe = 1;
-        workspace_swipe_fingers = 3;
         workspace_swipe_distance = 500;
         workspace_swipe_invert = 1;
         workspace_swipe_min_speed_to_force = 30;
@@ -410,8 +408,6 @@ in
       };
 
       render = {
-        explicit_sync = 1; # Change to 1 to disable
-        explicit_sync_kms = 1;
         direct_scanout = 0;
       };
 

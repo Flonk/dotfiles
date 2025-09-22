@@ -14,7 +14,6 @@ let
   math = import ../../utils/math.nix { inherit lib; };
 
   textColor = "#ffffff";
-  backgroundColor = "#0B0C08";
 
   fontSize = {
     tiny = 7;
@@ -45,9 +44,11 @@ let
 
   mainC = 0.19;
   # mainH = math.toRad 162.0; # mint
-  mainH = math.toRad 110.0; # lime
+  # mainH = math.toRad 110.0; # lime
   # mainH = math.toRad 256.0; # blue
-  # mainH = math.toRad 50.0; # trump
+  # mainH = math.toRad 0.0; # pink
+  # mainH = math.toRad 87.0; # ocre
+  mainH = math.toRad 50.0; # trump
 
   colorWm = colorUtils.mkPalette {
     cMax = mainC;

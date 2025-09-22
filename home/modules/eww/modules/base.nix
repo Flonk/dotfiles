@@ -39,7 +39,7 @@
       text = ''
         #!/usr/bin/env bash
         set -euo pipefail
-        EWW="${pkgs.eww-wayland}/bin/eww"
+        EWW="${pkgs.eww}/bin/eww"
         CFG="$HOME/.config/eww"
         eww() { "$EWW" -c "$CFG" "$@"; }
         case "''${1:-}" in

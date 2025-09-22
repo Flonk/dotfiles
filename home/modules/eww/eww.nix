@@ -69,7 +69,7 @@ in
         PartOf = [ "graphical-session.target" ];
       };
       Service = {
-        ExecStart = "${pkgs.eww-wayland}/bin/eww daemon";
+        ExecStart = "${pkgs.eww}/bin/eww daemon";
         Restart = "on-failure";
       };
       Install.WantedBy = [ "graphical-session.target" ];
@@ -84,27 +84,13 @@ in
           };
           Service = {
             Type = "oneshot";
-            ExecStart = "${pkgs.eww-wayland}/bin/eww open bar";
-            ExecStop = "${pkgs.eww-wayland}/bin/eww close bar";
+            ExecStart = "${pkgs.eww}/bin/eww open bar";
+            ExecStop = "${pkgs.eww}/bin/eww close bar";
             RemainAfterExit = true;
           };
           Install.WantedBy = [ "graphical-session.target" ];
         };
     */
 
-    systemd.user.services.eww-activate-linux = {
-      Unit = {
-        Description = "Open Eww bar";
-        After = [ "eww-daemon.service" ];
-        Requires = [ "eww-daemon.service" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.eww-wayland}/bin/eww open activate-linux --screen eDP-1";
-        ExecStop = "${pkgs.eww-wayland}/bin/eww close activate-linux";
-        RemainAfterExit = true;
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
-    };
   };
 }

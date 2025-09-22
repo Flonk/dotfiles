@@ -78,13 +78,13 @@
         "activityBar.activeFocusBorder" = "#00000000";
 
         # existing highlights
-        "editor.findMatchBackground" = "${config.theme.color.app800}77";
-        "editor.findMatchHighlightBackground" = "${config.theme.color.app800}77";
-        "editor.selectionBackground" = "${config.theme.color.app800}33";
-        "editor.selectionHighlightBackground" = "${config.theme.color.app800}33";
-        "minimap.selectionHighlight" = "${config.theme.color.app800}33";
-        "minimap.findMatchHighlight" = "${config.theme.color.app800}77";
-        "minimap.findMatchHighlightForeground" = "${config.theme.color.app800}22";
+        "editor.findMatchBackground" = "${config.theme.color.wm800}77";
+        "editor.findMatchHighlightBackground" = "${config.theme.color.wm800}77";
+        "editor.selectionBackground" = "${config.theme.color.wm800}33";
+        "editor.selectionHighlightBackground" = "${config.theme.color.wm800}33";
+        "minimap.selectionHighlight" = "${config.theme.color.wm800}33";
+        "minimap.findMatchHighlight" = "${config.theme.color.wm800}77";
+        "minimap.findMatchHighlightForeground" = "${config.theme.color.wm800}22";
 
         "editorError.background" = "${config.theme.color.error600}49";
         "editorError.border" = "#ff0000";

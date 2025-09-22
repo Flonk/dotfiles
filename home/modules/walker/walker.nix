@@ -13,6 +13,9 @@
 
   home.packages = with pkgs; [
     csvlens
+    (pkgs.writeShellScriptBin "walker-cairo" ''
+      exec env GSK_RENDERER=cairo walker -t mytheme "$@"
+    '')
   ];
 
   programs.walker = {
