@@ -1,0 +1,4 @@
+module CavaPlugin
+plugin cavaproviderplugin
+CavaDisplay 1.0 CavaDisplay.qml
+MicrophoneCavaDisplay 1.0 MicrophoneCavaDisplay.qml

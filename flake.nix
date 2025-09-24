@@ -22,6 +22,7 @@
     walker.url = "github:abenz1267/walker";
 
     nix-colorizer.url = "github:nutsalhan87/nix-colorizer";
+
   };
 
   outputs =

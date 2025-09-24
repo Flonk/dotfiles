@@ -118,7 +118,6 @@ in
       exec-once = [
         "hyprctl setcursor macOS-White 28"
         "waybar"
-        "${pkgs.eww}/bin/eww open activate-linux --screen eDP-1"
         # "IS_INITIAL_SHELL=1 alacritty --title initial-shell -e zsh -l -c \"fastfetch; exec zsh\""
         # "google-chrome-stable"
       ];

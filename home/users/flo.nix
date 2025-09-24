@@ -52,7 +52,7 @@ in
     ../modules/obsidian/obsidian.nix
     ../modules/nchat/nchat.nix
     ../modules/superfile/superfile.nix
-    ../modules/eww/eww.nix
+    ../modules/quickshell/quickshell.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
@@ -93,6 +93,8 @@ in
       discord
       vlc
 
+      jetbrains.idea-ultimate
+
       pkgs.nerd-fonts.dejavu-sans-mono
 
       alsa-utils # for amixer used by Eww volume/mic widgets
@@ -127,11 +129,6 @@ in
   #  enable = true;
   #  service.enable = true;
   #};
-
-  programs.ewwBar = {
-    enable = true;
-    # monitor = "eDP-1"; # set if different
-  };
 
   xdg.desktopEntries.chrome-app-tabbed = {
     name = "Chrome (app, tabbed)";

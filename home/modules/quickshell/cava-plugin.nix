@@ -1,0 +1,57 @@
+{
+  pkgs,
+  stdenv,
+  cmake,
+  qt6,
+  libcava,
+  pipewire,
+  pkg-config,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "quickshell-cava-plugin";
+  version = "1.0.0";
+
+  src = ./components/cava-plugin;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtdeclarative
+    libcava
+    pipewire
+    pkgs.fftw
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_SKIP_BUILD_RPATH=TRUE"
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE"
+    "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE"
+  ];
+
+  installPhase = ''
+    mkdir -p $out/lib/qt-6/qml/CavaPlugin
+    # Install both the backing library and plugin library
+    cp libcavaprovider.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaprovider.so not found"
+    cp libcavaproviderplugin.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaproviderplugin.so not found"
+    # Copy our QML files
+    cp $src/qmldir $out/lib/qt-6/qml/CavaPlugin/
+    cp $src/CavaDisplay.qml $out/lib/qt-6/qml/CavaPlugin/
+    cp $src/MicrophoneCavaDisplay.qml $out/lib/qt-6/qml/CavaPlugin/
+    # List what we installed for debugging
+    echo "Installed files in CavaPlugin:"
+    ls -la $out/lib/qt-6/qml/CavaPlugin/
+  '';
+
+  meta = with pkgs.lib; {
+    description = "Cava audio visualizer plugin for Quickshell";
+    license = licenses.mit;
+    platforms = platforms.linux;
+  };
+}
