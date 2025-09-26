@@ -37,15 +37,32 @@ Scope {
         SystemDisplay {}
         ActiveWindowDisplay {}
         MprisDisplay {}
-        CavaDisplay {
-          barCount: 20
-          maxBarHeight: 18
-          barColor: Theme.wm800  // regular bars
-        }
-        MicrophoneCavaDisplay {
-          barCount: 15
-          maxBarHeight: 15
-          barColor: Theme.app800  // microphone visualizer
+        StackedCavaDisplay {
+          barCount: 40
+          barWidth: 4
+          barSpacing: 1
+          maxBarHeight: 30
+          systemAudioColorLow: Theme.wm400
+          systemAudioColorHigh: Theme.wm700
+          microphoneColorLow: Theme.app300
+          microphoneColorHigh: Theme.app400
+          backdropColor: Theme.app150
+          systemAudioAnchor: "center"
+          microphoneAnchor: "top"
+          topRadius: 2
+          bottomRadius: 2
+          backdropRadius: 0
+          borderColor: Theme.app200
+          borderWidth: 2
+          horizontalPadding: 8
+          verticalPadding: 2
+          noiseReduction: 0.2
+          enableMonstercatFilter: true
+          volumeSliderColor: Theme.app200
+          volumeSliderOpacity: 0.8
+          volumeSliderForegroundOpacity: 0.0
+          systemAudioCompressionFactor: 1.5
+          microphoneCompressionFactor: 0.9
         }
       }
 

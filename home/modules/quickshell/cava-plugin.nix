@@ -9,9 +9,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "quickshell-cava-plugin";
-  version = "1.0.0";
+  pname = "cava-plugin";
+  version = "1.0.4"; # Bumped version to force rebuild
 
+  # Force rebuild when QML files change
   src = ./components/cava-plugin;
 
   nativeBuildInputs = [

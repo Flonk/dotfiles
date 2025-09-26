@@ -1,10 +1,10 @@
 #include "cavaprovider.h"
 #include "audiocollector.h"
 #include <QDebug>
-#include <QTimer>
 #include <cava/cavacore.h>
 #include <cmath>
 #include <algorithm>
+#include <vector>
 
 namespace cava_plugin {
 
@@ -13,33 +13,32 @@ CavaProvider::CavaProvider(QObject* parent)
 
 CavaProvider::CavaProvider(AudioSource source, QObject* parent)
     : QObject(parent)
-    , m_timer(new QTimer(this))
     , m_audioSource(source)
 {
     m_values.resize(m_bars, 0.0);
-    m_input_buffer = new double[ac::CHUNK_SIZE];
+    m_input_buffer_f = new float[ac::CHUNK_SIZE];
+    m_input_buffer_d = new double[ac::CHUNK_SIZE];
     
     // Create audio collector for specified source
     m_audioCollector = new AudioCollector(source, this);
     
-    // Set up processing timer (60 FPS)
-    m_timer->setInterval(16);
-    connect(m_timer, &QTimer::timeout, this, &CavaProvider::processAudio);
+    // Connect audio-driven processing (queued connection for thread safety)
+    connect(m_audioCollector, &AudioCollector::dataAvailable, 
+            this, &CavaProvider::processAudio, Qt::QueuedConnection);
     
     initCava();
     
-    // Start audio collection and processing
+    // Start audio collection
     m_audioCollector->start();
-    m_timer->start();
 }
 
 CavaProvider::~CavaProvider() {
-    m_timer->stop();
     if (m_audioCollector) {
         m_audioCollector->stop();
     }
     cleanupCava();
-    delete[] m_input_buffer;
+    delete[] m_input_buffer_f;
+    delete[] m_input_buffer_d;
 }
 
 void CavaProvider::setBars(int bars) {
@@ -61,21 +60,50 @@ void CavaProvider::setBars(int bars) {
     emit valuesChanged();
 }
 
+void CavaProvider::setNoiseReduction(double noiseReduction) {
+    if (noiseReduction < 0.0) noiseReduction = 0.0;
+    if (noiseReduction > 1.0) noiseReduction = 1.0;
+    
+    if (qFuzzyCompare(m_noiseReduction, noiseReduction)) return;
+    
+    m_noiseReduction = noiseReduction;
+    
+    // Reinitialize cava with new noise reduction
+    cleanupCava();
+    initCava();
+    
+    emit noiseReductionChanged();
+}
+
+void CavaProvider::setEnableMonstercatFilter(bool enable) {
+    if (m_enableMonstercatFilter == enable) return;
+    
+    m_enableMonstercatFilter = enable;
+    emit enableMonstercatFilterChanged();
+}
+
 
 
 void CavaProvider::processAudio() {
     if (!m_audioCollector || !m_plan || !m_initialized) return;
     
-    // Read audio data from collector
-    const size_t samples_read = m_audioCollector->readChunk(m_input_buffer);
+    // Read audio data from collector as float
+    const size_t samples_read = m_audioCollector->readChunk(m_input_buffer_f);
     
     if (samples_read == 0) return;
     
-    // Process audio through cava
-    cava_execute(m_input_buffer, static_cast<int>(samples_read), m_output_buffer, m_plan);
+    // Convert float to double in tight loop (vectorized by compiler with -O3)
+    for (int i = 0; i < ac::CHUNK_SIZE; ++i) {
+        m_input_buffer_d[i] = static_cast<double>(m_input_buffer_f[i]);
+    }
     
-    // Apply monstercat smoothing filter (from caelestia) - disabled to avoid skewing data
-    // applyMonstercatFilter(m_output_buffer, m_bars);
+    // Process audio through cava
+    cava_execute(m_input_buffer_d, static_cast<int>(samples_read), m_output_buffer, m_plan);
+    
+    // Apply monstercat smoothing filter if enabled
+    if (m_enableMonstercatFilter) {
+        applyMonstercatFilter(m_output_buffer, m_bars);
+    }
     
     // Update values
     QVector<double> newValues(m_bars);
@@ -95,7 +123,7 @@ void CavaProvider::initCava() {
     
     // Initialize cava plan
     // Parameters: bars, sample_rate, input_channels, mono_opt, noise_reduction, lower_cutoff, upper_cutoff
-    m_plan = cava_init(m_bars, ac::SAMPLE_RATE, 1, 1, 0.3, 50, 10000);
+    m_plan = cava_init(m_bars, ac::SAMPLE_RATE, 1, 1, m_noiseReduction, 50, 10000);
     
     if (!m_plan || m_plan->status == -1) {
         qWarning() << "CavaProvider: Failed to initialize cava plan";
@@ -125,18 +153,16 @@ void CavaProvider::cleanupCava() {
     m_initialized = false;
 }
 
-void CavaProvider::applyMonstercatFilter(double* data, int size) {
-    // Apply monstercat smoothing filter (spreads peaks to neighboring bars)
-    for (int i = 0; i < size; i++) {
-        // Spread to the left
-        for (int j = i - 1; j >= 0; j--) {
-            data[j] = std::max(data[i] / std::pow(1.5, i - j), data[j]);
-        }
-        // Spread to the right  
-        for (int j = i + 1; j < size; j++) {
-            data[j] = std::max(data[i] / std::pow(1.5, j - i), data[j]);
-        }
-    }
+void CavaProvider::applyMonstercatFilter(double* data, int n) {
+    if (n <= 0) return;
+    static thread_local std::vector<double> src;
+    src.assign(data, data+n);        // no re-alloc if capacity large enough
+
+    const double inv = 1.0 / 1.5;
+    double carry = 0.0;
+    for (int i=0; i<n; ++i) { carry = std::max(src[i], carry*inv); data[i] = carry; }
+    carry = 0.0;
+    for (int i=n-1; i>=0; --i) { carry = std::max(src[i], carry*inv); data[i] = std::max(data[i], carry); }
 }
 
 } // namespace cava_plugin

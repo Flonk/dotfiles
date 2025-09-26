@@ -17,3 +17,4 @@ ActiveWindowDisplay 1.0 ActiveWindowDisplay.qml
 MprisDisplay 1.0 MprisDisplay.qml
 WorkspacesDisplay 1.0 WorkspacesDisplay.qml
 Shortcuts 1.0 Shortcuts.qml
+StackedCavaDisplay 1.0 StackedCavaDisplay.qml

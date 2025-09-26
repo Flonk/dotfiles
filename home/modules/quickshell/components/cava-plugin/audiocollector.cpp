@@ -4,6 +4,8 @@
 #include <pipewire/pipewire.h>
 #include <spa/param/audio/format-utils.h>
 #include <spa/param/props.h>
+#include <spa/param/latency-utils.h>
+#include <spa/param/buffers.h>
 #include <cstring>
 
 namespace cava_plugin {
@@ -20,7 +22,6 @@ static const struct pw_stream_events stream_events = {
 
 AudioCollector::AudioCollector(AudioSource source, QObject* parent)
     : QObject(parent), m_audioSource(source) {
-    m_audioBuffer.resize(ac::CHUNK_SIZE * 4); // Buffer for multiple chunks
     pw_init(nullptr, nullptr);
 }
 
@@ -165,37 +166,48 @@ void AudioCollector::cleanupPipeWire() {
     }
 }
 
-size_t AudioCollector::readChunk(double* buffer) {
-    QMutexLocker locker(&m_mutex);
+size_t AudioCollector::readChunk(float* buffer) {
+    // If we have too much data buffered (more than ~50ms), skip ahead to reduce latency
+    size_t available = m_ring.available();
+    const size_t max_latency_samples = ac::SAMPLE_RATE / 20; // 50ms worth of samples
     
-    size_t samples_to_copy = std::min(static_cast<size_t>(ac::CHUNK_SIZE), m_audioBuffer.size());
-    
-    if (samples_to_copy > 0) {
-        std::copy(m_audioBuffer.begin(), m_audioBuffer.begin() + samples_to_copy, buffer);
-        // Remove copied samples
-        m_audioBuffer.erase(m_audioBuffer.begin(), m_audioBuffer.begin() + samples_to_copy);
-    } else {
-        // Fill with silence if no data
-        std::fill(buffer, buffer + ac::CHUNK_SIZE, 0.0);
-        samples_to_copy = ac::CHUNK_SIZE;
+    if (available > max_latency_samples) {
+        // Skip ahead by discarding old data, keeping only the most recent ~25ms
+        size_t skip_amount = available - (ac::SAMPLE_RATE / 40);
+        float discard_buffer[1024];
+        while (skip_amount > 0) {
+            size_t to_skip = std::min(skip_amount, sizeof(discard_buffer) / sizeof(float));
+            size_t skipped = m_ring.read(discard_buffer, to_skip);
+            m_data_counter.fetch_sub(skipped, std::memory_order_relaxed);
+            skip_amount -= skipped;
+        }
     }
     
-    return samples_to_copy;
+    size_t got = m_ring.read(buffer, ac::CHUNK_SIZE);
+    
+    // Update counter to reflect consumed data
+    if (got > 0) {
+        m_data_counter.fetch_sub(got, std::memory_order_relaxed);
+    }
+    
+    // Zero-fill remaining if underfilled
+    if (got < ac::CHUNK_SIZE) {
+        std::memset(buffer + got, 0, (ac::CHUNK_SIZE - got) * sizeof(float));
+    }
+    
+    return ac::CHUNK_SIZE;
 }
 
 void AudioCollector::writeAudioData(const float* data, size_t frames) {
-    QMutexLocker locker(&m_mutex);
+    size_t written = m_ring.write(data, frames);
     
-    // Convert float to double and add to buffer
-    for (size_t i = 0; i < frames; ++i) {
-        m_audioBuffer.push_back(static_cast<double>(data[i]));
-    }
+    // Update counter and check if we have enough data for processing
+    size_t new_count = m_data_counter.fetch_add(written, std::memory_order_relaxed) + written;
     
-    // Keep buffer from growing too large
-    const size_t max_buffer_size = ac::CHUNK_SIZE * 8;
-    if (m_audioBuffer.size() > max_buffer_size) {
-        m_audioBuffer.erase(m_audioBuffer.begin(), 
-                           m_audioBuffer.begin() + (m_audioBuffer.size() - max_buffer_size));
+    // Emit signal when we have at least CHUNK_SIZE samples available
+    // Use a simple threshold to avoid too frequent signaling
+    if ((new_count / ac::CHUNK_SIZE) > ((new_count - written) / ac::CHUNK_SIZE)) {
+        emit dataAvailable();
     }
 }
 

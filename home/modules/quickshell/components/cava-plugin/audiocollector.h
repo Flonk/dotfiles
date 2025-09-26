@@ -1,12 +1,12 @@
 #pragma once
 
 #include <QObject>
-#include <QMutex>
 #include <QThread>
 #include <atomic>
 #include <vector>
 #include <memory>
 #include <qqmlintegration.h>
+#include "spsc_ring.h"
 
 // Forward declarations
 struct pw_main_loop;
@@ -40,7 +40,7 @@ public:
     AudioSource audioSource() const { return m_audioSource; }
     
     // Read audio chunk data (returns number of samples read)
-    size_t readChunk(double* buffer);
+    size_t readChunk(float* buffer);
     
     // Audio data handling (public for PipeWire callbacks)
     void writeAudioData(const float* data, size_t frames);
@@ -48,14 +48,17 @@ public:
     // Stream access for callbacks
     ::pw_stream* getStream() { return m_stream; }
 
+signals:
+    void dataAvailable(); // Emitted when enough data is available for processing
+
 private:
     
     // PipeWire integration
     void initPipeWire();
     void cleanupPipeWire();
     
-    QMutex m_mutex;
-    std::vector<double> m_audioBuffer;
+    SpscRing m_ring{1 << 12}; // 4K samples ring buffer (~93ms at 44.1kHz)
+    std::atomic<size_t> m_data_counter{0}; // Track total data written for signaling
     std::atomic<bool> m_running{false};
     AudioSource m_audioSource = static_cast<AudioSource>(0); // SystemAudio
     
