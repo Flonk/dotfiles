@@ -6,6 +6,7 @@
 }:
 let
   cavaPlugin = pkgs.callPackage ./cava-plugin.nix { };
+  barHeight = 30; # Configurable bar height
   wrappedQuickshell = pkgs.writeShellScriptBin "quickshell" ''
     export QML2_IMPORT_PATH="${cavaPlugin}/lib/qt-6/qml:$QML2_IMPORT_PATH"
     exec ${pkgs.quickshell}/bin/quickshell "$@"
@@ -52,6 +53,9 @@ let
     import QtQuick
 
     QtObject {
+        // Bar Settings
+        readonly property int barHeight: ${toString barHeight}
+
         // Colors
         ${colorsToQml}
 

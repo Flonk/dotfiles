@@ -45,28 +45,9 @@ Item {
         z: 0
     }
     
-    // Left border
-    Rectangle {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: root.borderWidth
-        color: root.borderColor
-        z: 4
-    }
-    
-    // Right border
-    Rectangle {
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: root.borderWidth
-        color: root.borderColor
-        z: 4
-    }
-    
-    // System audio - top layer (more important), grows from bottom up
+        // System audio - top layer (more important), grows from bottom up
     CavaDisplay {
+        providerType: "cava"
         barCount: root.barCount
         maxBarHeight: root.effectiveBarHeight
         barWidth: root.barWidth
@@ -102,7 +83,8 @@ Item {
     }
     
     // Microphone audio - bottom layer, grows from top down  
-    MicrophoneCavaDisplay {
+    CavaDisplay {
+        providerType: "microphone"
         barCount: root.barCount
         maxBarHeight: root.effectiveBarHeight
         barWidth: root.barWidth
@@ -138,27 +120,46 @@ Item {
         }
     }
     
-    // Volume Slider Overlay (fill only, no background)
+    // Volume Indicator (triangle at volume position)
     Rectangle {
-        id: volumeSlider
+        id: volumeIndicator
         anchors.left: parent.left
         anchors.right: parent.right  
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         
         color: "transparent" // No background
-        z: 0 // Top layer
+        z: 1
         
-        // Volume level indicator (smart mapping: 0% = horizontalPadding, 100% = full width)
-        Rectangle {
-            id: volumeFill
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: root.horizontalPadding + (parent.width - root.horizontalPadding) * VolumeWidget.volume
-            color: root.volumeSliderColor
-            opacity: root.volumeSliderOpacity
-            radius: root.backdropRadius
+        // Triangle volume indicator
+        Canvas {
+            id: volumeTriangle
+            x: root.horizontalPadding + (parent.width - root.horizontalPadding) * VolumeWidget.volume - 3  // Center the 6px wide triangle
+            y: 0  // Stick to the top without padding
+            width: 6
+            height: 4  // Made shorter (less high)
+            
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.reset();
+                ctx.fillStyle = Theme.app300;
+                
+                // Draw downward-pointing triangle (since it's at the top now)
+                ctx.beginPath();
+                ctx.moveTo(3, 3);    // Bottom point (center)
+                ctx.lineTo(0, 0);    // Top left
+                ctx.lineTo(6, 0);    // Top right
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Repaint when volume changes
+            Connections {
+                target: VolumeWidget
+                function onVolumeChanged() {
+                    volumeTriangle.requestPaint();
+                }
+            }
         }
         
         // Mouse interaction (full width but respects mapping)
@@ -179,30 +180,14 @@ Item {
                     VolumeWidget.setVolume(newVolume);
                 }
             }
-        }
-    }
-    
-    // Foreground Volume Slider Overlay
-    Rectangle {
-        id: volumeSliderForeground
-        anchors.left: parent.left
-        anchors.right: parent.right  
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        
-        color: "transparent" // No background
-        z: 5 // Foreground layer (above everything else)
-        
-        // Volume level indicator (smart mapping: 0% = horizontalPadding, 100% = full width)
-        Rectangle {
-            id: volumeFillForeground
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: root.horizontalPadding + (parent.width - root.horizontalPadding) * VolumeWidget.volume
-            color: root.volumeSliderColor
-            opacity: root.volumeSliderForegroundOpacity
-            radius: root.backdropRadius
+            
+            onWheel: (wheel) => {
+                if (wheel.angleDelta.y > 0) {
+                    VolumeWidget.incrementVolume();
+                } else if (wheel.angleDelta.y < 0) {
+                    VolumeWidget.decrementVolume();
+                }
+            }
         }
     }
 }

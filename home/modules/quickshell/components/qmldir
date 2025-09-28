@@ -2,19 +2,19 @@ singleton VolumeWidget 1.0 VolumeWidget.qml
 singleton Theme Theme.qml
 singleton BrightnessWidget 1.0 BrightnessWidget.qml
 singleton SystemMonitor 1.0 SystemMonitor.qml
-singleton BatteryWidget 1.0 BatteryWidget.qml
 singleton ActiveWindowWidget 1.0 ActiveWindowWidget.qml
 singleton MprisWidget 1.0 MprisWidget.qml
 singleton Time 1.0 Time.qml
 WorkspacesWidget 1.0 WorkspacesWidget.qml
 Bar 1.0 Bar.qml
 ClockWidget 1.0 ClockWidget.qml
-VolumeDisplay 1.0 VolumeDisplay.qml
-BrightnessDisplay 1.0 BrightnessDisplay.qml
-SystemDisplay 1.0 SystemDisplay.qml
-BatteryDisplay 1.0 BatteryDisplay.qml
+CpuDisplay 1.0 CpuDisplay.qml
+MemoryDisplay 1.0 MemoryDisplay.qml
 ActiveWindowDisplay 1.0 ActiveWindowDisplay.qml
 MprisDisplay 1.0 MprisDisplay.qml
 WorkspacesDisplay 1.0 WorkspacesDisplay.qml
+AppLauncherDisplay 1.0 AppLauncherDisplay.qml
+SystemBar 1.0 SystemBar.qml
+SystemBarsDisplay 1.0 SystemBarsDisplay.qml
 Shortcuts 1.0 Shortcuts.qml
 StackedCavaDisplay 1.0 StackedCavaDisplay.qml

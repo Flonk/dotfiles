@@ -134,6 +134,45 @@
             sudo mount /dev/mmcblk0p1 /mnt/sdcard
             cd /mnt/sdcard || return 1
           }
+
+          squash_wip() {
+            local WIP_MSG="--wip-- [skip ci]"
+            local count=0
+
+            # ensure we're in a git repo
+            git rev-parse --git-dir >/dev/null 2>&1 || {
+              echo "❌ Not a git repository."
+              return 1
+            }
+
+            # count consecutive WIP commits from HEAD
+            while read -r sha; do
+              local subj
+              subj="$(git show -s --format=%s "$sha")"
+              if [[ "$subj" == "$WIP_MSG" ]]; then
+                ((count++))
+              else
+                break
+              fi
+            done < <(git rev-list --first-parent HEAD)
+
+            if (( count == 0 )); then
+              echo "ℹ️  No WIP commits at HEAD with subject: \"$WIP_MSG\""
+              return 0
+            fi
+
+            if (( count == 1 )); then
+              echo "✏️  Only one WIP commit — opening editor to reword it..."
+              git commit --amend
+              return 0
+            fi
+
+            echo "🔨 Squashing $count WIP commits into one..."
+            git reset --soft "HEAD~$count"
+            git commit
+            echo "✅ Done."
+          }
+
         '';
 
         end = lib.mkAfter ''
@@ -199,6 +238,7 @@
       "gprune!" =
         "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
       b = "gcob";
+      squash = "squash_wip";
 
       ##### Docker
       dka = "docker ps -q | xargs docker stop | xargs docker rm";

@@ -9,6 +9,10 @@
   colorError600,
   colorError400,
   colorError300,
+  colorError800,
+  colorSuccess400,
+  colorSuccess600,
+  colorSuccess800,
   enableSwatches ? true,
 }:
 

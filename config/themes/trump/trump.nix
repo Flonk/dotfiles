@@ -81,6 +81,35 @@ let
     a = 1.0;
   };
 
+  colorError800 = nix-colorizer.oklch.to.hex {
+    L = 0.8;
+    C = 0.16;
+    h = math.toRad 30;
+    a = 1.0;
+  };
+
+  # Success color palette
+  colorSuccess400 = nix-colorizer.oklch.to.hex {
+    L = 0.4;
+    C = 0.15; # 0.135 * 0.39 * 2.8 (approximate scaling)
+    h = math.toRad 140;
+    a = 1.0;
+  };
+
+  colorSuccess600 = nix-colorizer.oklch.to.hex {
+    L = 0.60;
+    C = 0.135;
+    h = math.toRad 140;
+    a = 1.0;
+  };
+
+  colorSuccess800 = nix-colorizer.oklch.to.hex {
+    L = 0.8;
+    C = 0.16; # bit more chroma than 600
+    h = math.toRad 140;
+    a = 1.0;
+  };
+
   lockscreenImage = ../../../assets/logos/andamp.png;
   wallpaper = (import ./wallpaper.nix) {
     inherit
@@ -94,6 +123,10 @@ let
       colorError600
       colorError400
       colorError300
+      colorError800
+      colorSuccess400
+      colorSuccess600
+      colorSuccess800
       ;
   };
 
@@ -106,6 +139,10 @@ in
       error600 = colorError600;
       error400 = colorError400;
       error300 = colorError300;
+      error800 = colorError800;
+      success400 = colorSuccess400;
+      success600 = colorSuccess600;
+      success800 = colorSuccess800;
     }
     // (prefixKeys "wm" colorWm)
     // (prefixKeys "app" colorApp);

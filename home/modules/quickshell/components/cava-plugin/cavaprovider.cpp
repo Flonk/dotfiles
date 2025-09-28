@@ -123,7 +123,7 @@ void CavaProvider::initCava() {
     
     // Initialize cava plan
     // Parameters: bars, sample_rate, input_channels, mono_opt, noise_reduction, lower_cutoff, upper_cutoff
-    m_plan = cava_init(m_bars, ac::SAMPLE_RATE, 1, 1, m_noiseReduction, 50, 10000);
+    m_plan = cava_init(m_bars, ac::SAMPLE_RATE, 1, 1, m_noiseReduction, 20, 20000);
     
     if (!m_plan || m_plan->status == -1) {
         qWarning() << "CavaProvider: Failed to initialize cava plan";

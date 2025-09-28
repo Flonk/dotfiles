@@ -24,6 +24,18 @@ Singleton {
     property real memoryTotal: 1
     property real memoryUsage: memoryTotal > 0 ? memoryUsed / memoryTotal : 0
 
+    // Battery properties
+    property real batteryLevel: 0.5
+    property bool isCharging: false
+    property bool hasBattery: false
+    property string batteryStatus: "Unknown"
+
+    // Disk space properties
+    property real diskUsed: 0
+    property real diskTotal: 1
+    property real diskFree: 0
+    property real diskUsage: diskTotal > 0 ? diskUsed / diskTotal : 0
+
     // Update interval
     property int updateInterval: 3000
 
@@ -51,6 +63,8 @@ Singleton {
         onTriggered: {
             cpuStatFile.reload();
             memInfoFile.reload();
+            updateBatteryInfo();
+            updateDiskInfo();
         }
     }
 
@@ -139,6 +153,66 @@ Singleton {
         }
     }
 
+    // Battery monitoring functions and process
+    function updateBatteryInfo(): void {
+        batteryProc.running = true;
+    }
+
+    Process {
+        id: batteryProc
+        
+        command: ["sh", "-c", "find /sys/class/power_supply -name 'BAT*' | head -1 | xargs -I {} sh -c 'echo $(cat {}/capacity) $(cat {}/status)'"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const output = text.trim();
+                if (output && output !== "") {
+                    const parts = output.split(/\s+/);
+                    if (parts.length >= 2) {
+                        root.hasBattery = true;
+                        root.batteryLevel = parseInt(parts[0], 10) / 100.0;
+                        root.batteryStatus = parts[1];
+                        root.isCharging = parts[1] === "Charging";
+                    } else {
+                        root.hasBattery = false;
+                    }
+                } else {
+                    root.hasBattery = false;
+                }
+            }
+        }
+        
+        onExited: (code) => {
+            if (code !== 0) {
+                root.hasBattery = false;
+            }
+        }
+    }
+
+    // Disk space monitoring functions and process
+    function updateDiskInfo(): void {
+        diskProc.running = true;
+    }
+
+    Process {
+        id: diskProc
+        
+        command: ["df", "-B1", "/"]  // Get disk usage in bytes for root filesystem
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const output = text.trim();
+                const lines = output.split('\n');
+                if (lines.length >= 2) {
+                    const parts = lines[1].split(/\s+/);
+                    if (parts.length >= 4) {
+                        root.diskTotal = parseInt(parts[1], 10);
+                        root.diskUsed = parseInt(parts[2], 10);
+                        root.diskFree = parseInt(parts[3], 10);
+                    }
+                }
+            }
+        }
+    }
+
     // Helper functions for display
     function getCpuText(): string {
         return `${Math.round(cpuUsage * 100)}%`;
@@ -149,7 +223,54 @@ Singleton {
         return `${fmt.value.toFixed(1)}${fmt.unit}`;
     }
 
+    // Battery helper functions
+    function getBatteryIcon(): string {
+        if (!hasBattery) return "";
+        
+        if (isCharging) {
+            return "🔌";
+        }
+        
+        if (batteryLevel > 0.9) return "🔋";
+        if (batteryLevel > 0.75) return "🔋";
+        if (batteryLevel > 0.5) return "🔋";
+        if (batteryLevel > 0.25) return "🪫";
+        return "🪫";
+    }
+
+    function getBatteryText(): string {
+        return hasBattery ? `${Math.round(batteryLevel * 100)}%` : "";
+    }
+    
+    function getChargingIndicator(): string {
+        if (!hasBattery) return "";
+        return isCharging ? " ⚡" : "";
+    }
+
+    // Battery color helper - determines appropriate color based on level and charging state
+    function getBatteryColorState(): string {
+        if (!hasBattery) return "charging";        // Green - no battery means plugged in
+        
+        if (batteryLevel >= 0.95) return "charging";  // Green - full battery (must be charging to stay full)
+        if (isCharging) return "charging";         // Green - actively charging
+        if (batteryLevel <= 0.2) return "critical";   // Red - critically low
+        
+        return "normal";                           // Window manager color for everything else
+    }
+
+    // Disk helper functions
+    function getDiskText(): string {
+        const fmt = formatBytes(diskFree);
+        return `${fmt.value.toFixed(1)}${fmt.unit}`;
+    }
+
+    function getDiskUsageText(): string {
+        return `${Math.round(diskUsage * 100)}%`;
+    }
+
     // Icons for different metrics
     function getCpuIcon(): string { return "💻"; }
     function getMemoryIcon(): string { return "🧠"; }
+    function getBatteryIconForDisplay(): string { return getBatteryIcon(); }
+    function getDiskIcon(): string { return "💾"; }
 }

@@ -40,7 +40,6 @@ in
     ../modules/google-chrome/google-chrome.nix
     ../modules/git/git.nix
     ../modules/direnv/direnv.nix
-    ../modules/waybar/waybar.nix
     ../modules/mako/mako.nix
     ../modules/alacritty/alacritty.nix
     ../modules/zsh/zsh.nix
@@ -52,6 +51,7 @@ in
     ../modules/obsidian/obsidian.nix
     ../modules/nchat/nchat.nix
     ../modules/superfile/superfile.nix
+    ../modules/waybar/waybar.nix
     ../modules/quickshell/quickshell.nix
 
     # inputs.gauntlet.homeManagerModules.default

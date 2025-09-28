@@ -1,4 +1,4 @@
-// CavaDisplay.qml - Audio visualizer component
+// BaseCavaDisplay.qml - Base audio visualizer component
 import QtQuick
 import CavaPlugin 1.0
 
@@ -12,41 +12,37 @@ Row {
     property int barWidth: 4
     property int barSpacing: 0
     property string anchorMode: "bottom"  // "bottom", "top", "center"
-    property color barColor: "#7dc383"
-    property color barGradientColor: "#a8e6a3"
+    property color barColor
+    property color barGradientColor
     property int topRadius: 2
     property int bottomRadius: 0
     property real noiseReduction: 0.3
     property bool enableMonstercatFilter: false
     property int frame: 0 
     property real compressionFactor: 1.0 
+    property string providerType: "cava"  // "cava" or "microphone"
     
-    CavaProvider {
-        id: cavaProvider
-        bars: root.barCount
-        noiseReduction: root.noiseReduction
-        enableMonstercatFilter: root.enableMonstercatFilter
+    property var activeProvider: root.providerType === "microphone" ? CavaMicrophoneWidget : CavaWidget
+    
+    Component.onCompleted: {
+        // Configure the singleton provider
+        activeProvider.bars = root.barCount
+        activeProvider.noiseReduction = root.noiseReduction
+        activeProvider.enableMonstercatFilter = root.enableMonstercatFilter
         
-        Component.onCompleted: {
-            console.log("CavaDisplay: CavaProvider created with bars:", bars, "barCount:", root.barCount);
-        }
-        
-        onBarsChanged: {
-            console.log("CavaDisplay: bars changed to:", bars);
-        }
-        
-        onValuesChanged: {
+        // Connect to the provider's signal
+        activeProvider.valuesChanged.connect(function() {
             root.frame++;
             if (root.frame % 2 != 0) { return; }
             
             // Update bar heights based on spectrum data
             for (let i = 0; i < repeater.count; i++) {
-                let item = repeater.itemAt(i);
-                if (item) {
-                    item.normalizedValue = values[i]; // Store normalized value directly
+                let barItem = repeater.itemAt(i);
+                if (barItem) {
+                    barItem.normalizedValue = activeProvider.values[i];
                 }
             }
-        }
+        });
     }
     
     Repeater {
@@ -84,7 +80,7 @@ Row {
             bottomLeftRadius: root.bottomRadius
             bottomRightRadius: root.bottomRadius
             
-            property real normalizedValue: 0  
+            property real normalizedValue: 0
             
             Behavior on height {
                 NumberAnimation { 

@@ -9,7 +9,7 @@ Row {
     // This will be set by the Bar to the current screen's monitor
     required property var monitor
     
-    spacing: 3
+    spacing: 0  // no margin between squares
     
     // Use WorkspacesWidget to handle workspace logic
     WorkspacesWidget {
@@ -27,26 +27,24 @@ Row {
         delegate: Rectangle {
             required property var modelData
             
-            width: 25
-            height: 18
-            radius: 3
+            width: Theme.barHeight  // square: barHeight x barHeight
+            height: Theme.barHeight  // barHeight high
+            radius: 0  // sharp corners for seamless connection
             
-            // Color based on workspace state
-            color: {
-                if (modelData.focused) return Theme.wm800;  // focused workspace uses wm800
-                if (modelData.toplevels && modelData.toplevels.length > 0) return Theme.app200; // occupied workspaces use borders color
-                return Theme.app150;  // empty workspaces use background color
-            }
+            // app150 backdrop for all
+            color: Theme.app150
             
-            border.color: modelData.focused ? Theme.app400 : "transparent"  // text color for border
-            border.width: 1
+            // Active workspace gets 1px wm800 border
+            border.color: modelData.focused ? Theme.wm800 : "transparent"
+            border.width: modelData.focused ? 1 : 0
             
             Text {
                 anchors.centerIn: parent
                 text: modelData.name
                 font.pointSize: Theme.fontSizeSmall
                 font.family: Theme.fontFamilyUiNf
-                color: Theme.app400  // text color
+                // Active workspace: wm800 text, others: app600 text
+                color: modelData.focused ? Theme.wm800 : Theme.app600
                 font.bold: modelData.focused
             }
             

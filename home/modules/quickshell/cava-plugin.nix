@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cava-plugin";
-  version = "1.0.4"; # Bumped version to force rebuild
+  version = "1.0.12"; # Fixed singleton widgets to use Singleton component following QuickShell pattern
 
   # Force rebuild when QML files change
   src = ./components/cava-plugin;
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     # Copy our QML files
     cp $src/qmldir $out/lib/qt-6/qml/CavaPlugin/
     cp $src/CavaDisplay.qml $out/lib/qt-6/qml/CavaPlugin/
-    cp $src/MicrophoneCavaDisplay.qml $out/lib/qt-6/qml/CavaPlugin/
+    cp $src/CavaWidget.qml $out/lib/qt-6/qml/CavaPlugin/
+    cp $src/CavaMicrophoneWidget.qml $out/lib/qt-6/qml/CavaPlugin/
     # List what we installed for debugging
     echo "Installed files in CavaPlugin:"
     ls -la $out/lib/qt-6/qml/CavaPlugin/

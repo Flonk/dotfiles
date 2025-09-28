@@ -7,6 +7,7 @@
 #include <spa/param/latency-utils.h>
 #include <spa/param/buffers.h>
 #include <cstring>
+#include <vector>
 
 namespace cava_plugin {
 
@@ -33,27 +34,27 @@ AudioCollector::~AudioCollector() {
 
 void AudioCollector::start() {
     if (m_running) return;
-    
+
     qDebug() << "AudioCollector: Starting audio capture";
-    
+
     m_running = true;
     initPipeWire();
 }
 
 void AudioCollector::stop() {
     if (!m_running) return;
-    
+
     qDebug() << "AudioCollector: Stopping audio capture";
-    
+
     m_running = false;
     cleanupPipeWire();
 }
 
 void AudioCollector::setAudioSource(AudioSource source) {
     if (m_audioSource == source) return;
-    
+
     m_audioSource = source;
-    
+
     // Restart PipeWire with new source if running
     if (m_running) {
         cleanupPipeWire();
@@ -67,79 +68,109 @@ void AudioCollector::initPipeWire() {
         qWarning() << "AudioCollector: Failed to create PipeWire main loop";
         return;
     }
-    
+
     struct pw_context* context = pw_context_new(pw_main_loop_get_loop(m_loop), nullptr, 0);
     if (!context) {
         qWarning() << "AudioCollector: Failed to create PipeWire context";
         return;
     }
-    
+
     struct pw_core* core = pw_context_connect(context, nullptr, 0);
     if (!core) {
         qWarning() << "AudioCollector: Failed to connect to PipeWire";
         return;
     }
-    
-    // Create audio stream name and properties based on audio source
-    const char* streamName;
-    struct pw_properties* props;
-    
-    if (m_audioSource == static_cast<AudioSource>(0)) { // SystemAudio
-        streamName = "cava-plugin-system-audio";
-        props = pw_properties_new(
-            PW_KEY_MEDIA_TYPE, "Audio",
-            PW_KEY_MEDIA_CATEGORY, "Capture",
-            PW_KEY_MEDIA_ROLE, "Music", 
-            PW_KEY_TARGET_OBJECT, "@DEFAULT_SINK@",  // Target default sink for monitor
-            PW_KEY_STREAM_CAPTURE_SINK, "true",      // Capture sink output (monitor)
-            nullptr);
-    } else { // Microphone
-        streamName = "cava-plugin-microphone";
-        props = pw_properties_new(
-            PW_KEY_MEDIA_TYPE, "Audio",
-            PW_KEY_MEDIA_CATEGORY, "Capture",
-            PW_KEY_MEDIA_ROLE, "Communication",
-            PW_KEY_TARGET_OBJECT, "@DEFAULT_SOURCE@", // Target default source (microphone)
-            nullptr);
+
+    // ---- Stream props ----
+    const char* streamName = (m_audioSource == static_cast<AudioSource>(0))
+        ? "cava-plugin-system-audio"
+        : "cava-plugin-microphone";
+
+    pw_properties* props = pw_properties_new(
+        PW_KEY_MEDIA_TYPE, "Audio",
+        PW_KEY_MEDIA_CATEGORY, "Capture",
+        PW_KEY_NODE_LATENCY, "128/48000",   // tighten quantum; try "64/48000" if stable
+        PW_KEY_NODE_RATE,    "48000/1",
+        nullptr
+    );
+    if (m_audioSource == static_cast<AudioSource>(0)) {
+        pw_properties_set(props, PW_KEY_MEDIA_ROLE, "Music");
+        pw_properties_set(props, PW_KEY_TARGET_OBJECT, "@DEFAULT_SINK@");
+        pw_properties_set(props, PW_KEY_STREAM_CAPTURE_SINK, "true");
+    } else {
+        pw_properties_set(props, PW_KEY_MEDIA_ROLE, "Communication");
+        pw_properties_set(props, PW_KEY_TARGET_OBJECT, "@DEFAULT_SOURCE@");
     }
-    
+
     m_stream = pw_stream_new_simple(
         pw_main_loop_get_loop(m_loop),
         streamName,
         props,
         &stream_events,
         this);
-    
+
     if (!m_stream) {
         qWarning() << "AudioCollector: Failed to create PipeWire stream";
         return;
     }
-    
-    // Set up audio format
-    uint8_t buffer[1024];
-    struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-    
-    struct spa_audio_info_raw audio_info = {};
-    audio_info.format = SPA_AUDIO_FORMAT_F32_LE;
-    audio_info.channels = 1;
-    audio_info.rate = ac::SAMPLE_RATE;
-    
-    const struct spa_pod* params[1] = {
-        spa_format_audio_raw_build(&b, SPA_PARAM_EnumFormat, &audio_info)
-    };
-    
-    // Connect stream with autoconnect to the targeted sink monitor
+
+    // ---- Params: format + small buffers + latency hint ----
+    uint8_t paramBuf[1024];
+    spa_pod_builder b = SPA_POD_BUILDER_INIT(paramBuf, sizeof(paramBuf));
+
+    spa_audio_info_raw ai{};
+    ai.format   = SPA_AUDIO_FORMAT_F32_LE;
+    ai.channels = 1;
+    ai.rate     = ac::SAMPLE_RATE;
+
+    const uint32_t bytesPerFrame = sizeof(float); // mono f32
+    const uint32_t minFrames     = 64;
+    const uint32_t defFrames     = 128;
+    const uint32_t maxFrames     = 1024;
+
+    const struct spa_pod* params[3];
+    uint32_t n_params = 0;
+
+    // 1) format
+    params[n_params++] = spa_format_audio_raw_build(&b, SPA_PARAM_EnumFormat, &ai);
+
+    // 2) buffers (cast the macro's void* to const spa_pod*)
+    params[n_params++] = static_cast<const struct spa_pod*>(
+        spa_pod_builder_add_object(
+            &b, SPA_TYPE_OBJECT_ParamBuffers, SPA_PARAM_Buffers,
+            SPA_PARAM_BUFFERS_buffers, SPA_POD_CHOICE_RANGE_Int(3, 2, 8),
+            SPA_PARAM_BUFFERS_blocks,  SPA_POD_Int(1),
+            SPA_PARAM_BUFFERS_size,    SPA_POD_CHOICE_RANGE_Int(defFrames * bytesPerFrame,
+                                                                 minFrames * bytesPerFrame,
+                                                                 maxFrames * bytesPerFrame),
+            SPA_PARAM_BUFFERS_stride,  SPA_POD_Int(bytesPerFrame)
+        )
+    );
+
+    // 3) latency hint (input); spa_latency_build already returns const spa_pod*
+    spa_latency_info lat = SPA_LATENCY_INFO(
+        SPA_DIRECTION_INPUT,
+        .min_quantum = 2,
+        .max_quantum = 4
+    );
+    params[n_params++] = spa_latency_build(&b, SPA_PARAM_Latency, &lat);
+
+    const pw_stream_flags flags =
+        (pw_stream_flags)(
+            PW_STREAM_FLAG_AUTOCONNECT |
+            PW_STREAM_FLAG_MAP_BUFFERS |
+            PW_STREAM_FLAG_RT_PROCESS
+        );
+
     if (pw_stream_connect(m_stream,
-                         PW_DIRECTION_INPUT,
-                         PW_ID_ANY,
-                         static_cast<pw_stream_flags>(
-                             PW_STREAM_FLAG_AUTOCONNECT |
-                             PW_STREAM_FLAG_MAP_BUFFERS),
-                         params, 1) < 0) {
-        qWarning() << "AudioCollector: Failed to connect PipeWire stream to speaker monitor";
+                          PW_DIRECTION_INPUT,
+                          PW_ID_ANY,
+                          flags,
+                          params, n_params) < 0) {
+        qWarning() << "AudioCollector: Failed to connect PipeWire stream";
         return;
     }
-    
+
     // Run PipeWire loop in separate thread
     m_thread = std::make_unique<QThread>();
     QObject::connect(m_thread.get(), &QThread::started, [this]() {
@@ -154,12 +185,12 @@ void AudioCollector::cleanupPipeWire() {
         m_thread->quit();
         m_thread->wait();
     }
-    
+
     if (m_stream) {
         pw_stream_destroy(m_stream);
         m_stream = nullptr;
     }
-    
+
     if (m_loop) {
         pw_main_loop_destroy(m_loop);
         m_loop = nullptr;
@@ -170,7 +201,7 @@ size_t AudioCollector::readChunk(float* buffer) {
     // If we have too much data buffered (more than ~50ms), skip ahead to reduce latency
     size_t available = m_ring.available();
     const size_t max_latency_samples = ac::SAMPLE_RATE / 20; // 50ms worth of samples
-    
+
     if (available > max_latency_samples) {
         // Skip ahead by discarding old data, keeping only the most recent ~25ms
         size_t skip_amount = available - (ac::SAMPLE_RATE / 40);
@@ -182,30 +213,29 @@ size_t AudioCollector::readChunk(float* buffer) {
             skip_amount -= skipped;
         }
     }
-    
+
     size_t got = m_ring.read(buffer, ac::CHUNK_SIZE);
-    
+
     // Update counter to reflect consumed data
     if (got > 0) {
         m_data_counter.fetch_sub(got, std::memory_order_relaxed);
     }
-    
+
     // Zero-fill remaining if underfilled
     if (got < ac::CHUNK_SIZE) {
         std::memset(buffer + got, 0, (ac::CHUNK_SIZE - got) * sizeof(float));
     }
-    
+
     return ac::CHUNK_SIZE;
 }
 
 void AudioCollector::writeAudioData(const float* data, size_t frames) {
     size_t written = m_ring.write(data, frames);
-    
+
     // Update counter and check if we have enough data for processing
     size_t new_count = m_data_counter.fetch_add(written, std::memory_order_relaxed) + written;
-    
+
     // Emit signal when we have at least CHUNK_SIZE samples available
-    // Use a simple threshold to avoid too frequent signaling
     if ((new_count / ac::CHUNK_SIZE) > ((new_count - written) / ac::CHUNK_SIZE)) {
         emit dataAvailable();
     }
@@ -213,30 +243,58 @@ void AudioCollector::writeAudioData(const float* data, size_t frames) {
 
 // PipeWire callback implementations
 static void on_stream_param_changed(void *data, uint32_t id, const struct spa_pod *param) {
-    Q_UNUSED(data)
-    Q_UNUSED(id) 
-    Q_UNUSED(param)
-    // Handle parameter changes if needed
+    Q_UNUSED(id);
+    if (!param) return;
+
+    // Optional: log negotiated latency
+    spa_latency_info info{};
+    if (spa_latency_parse(param, &info) == 0) {
+        qDebug() << "PipeWire latency changed:"
+                 << (info.direction == SPA_DIRECTION_INPUT ? "input" : "output")
+                 << "min-quantum=" << info.min_quantum
+                 << "max-quantum=" << info.max_quantum;
+    }
 }
 
 static void on_stream_process(void *data) {
-    AudioCollector* collector = static_cast<AudioCollector*>(data);
-    
-    struct pw_buffer* pw_buf = pw_stream_dequeue_buffer(collector->getStream());
-    if (!pw_buf) return;
-    
-    struct spa_buffer* buf = pw_buf->buffer;
-    if (!buf->datas[0].data) {
-        pw_stream_queue_buffer(collector->getStream(), pw_buf);
+    auto* collector = static_cast<AudioCollector*>(data);
+
+    pw_buffer* pwb = pw_stream_dequeue_buffer(collector->getStream());
+    if (!pwb) return;
+
+    spa_buffer* b = pwb->buffer;
+    if (!b || b->n_datas == 0) {
+        pw_stream_queue_buffer(collector->getStream(), pwb);
         return;
     }
-    
-    const float* audio_data = static_cast<const float*>(buf->datas[0].data);
-    const size_t frames = buf->datas[0].chunk->size / sizeof(float);
-    
-    collector->writeAudioData(audio_data, frames);
-    
-    pw_stream_queue_buffer(collector->getStream(), pw_buf);
+
+    spa_data& d = b->datas[0];
+    if (!d.data || !d.chunk) {
+        pw_stream_queue_buffer(collector->getStream(), pwb);
+        return;
+    }
+
+    const uint32_t offs   = d.chunk->offset;
+    const uint32_t nbytes = d.chunk->size;
+    const uint32_t stride = d.chunk->stride ? d.chunk->stride : static_cast<uint32_t>(sizeof(float)); // bytes per frame (mono f32 = 4)
+
+    if (nbytes >= stride) {
+        const uint8_t* base = static_cast<const uint8_t*>(d.data) + offs;
+        const size_t frames = nbytes / stride;
+
+        if (stride == sizeof(float)) {
+            const float* samples = reinterpret_cast<const float*>(base);
+            collector->writeAudioData(samples, frames);
+        } else {
+            std::vector<float> tmp(frames);
+            for (size_t i = 0; i < frames; ++i) {
+                tmp[i] = *reinterpret_cast<const float*>(base + i * stride);
+            }
+            collector->writeAudioData(tmp.data(), frames);
+        }
+    }
+
+    pw_stream_queue_buffer(collector->getStream(), pwb);
 }
 
 } // namespace cava_plugin
