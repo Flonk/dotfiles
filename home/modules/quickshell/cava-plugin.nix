@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     cp libcavaproviderplugin.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaproviderplugin.so not found"
     # Copy our QML files
     cp $src/qmldir $out/lib/qt-6/qml/CavaPlugin/
-    cp $src/CavaDisplay.qml $out/lib/qt-6/qml/CavaPlugin/
     cp $src/CavaWidget.qml $out/lib/qt-6/qml/CavaPlugin/
     cp $src/CavaMicrophoneWidget.qml $out/lib/qt-6/qml/CavaPlugin/
     # List what we installed for debugging

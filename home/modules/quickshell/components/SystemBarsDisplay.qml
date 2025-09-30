@@ -85,7 +85,7 @@ Item {
                 anchors.right: parent.right
                 height: parent.height / 2
                 
-                label: "BRIT"
+                label: "BRT"
                 value: BrightnessWidget.brightness
                 backgroundBarColor: root.backgroundBarColor
                 foregroundBarColor: root.foregroundBarColor

@@ -2,4 +2,3 @@ module CavaPlugin
 plugin cavaproviderplugin
 singleton CavaWidget 1.0 CavaWidget.qml
 singleton CavaMicrophoneWidget 1.0 CavaMicrophoneWidget.qml
-CavaDisplay 1.0 CavaDisplay.qml

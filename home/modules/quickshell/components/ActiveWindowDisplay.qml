@@ -16,7 +16,7 @@ Rectangle {
         id: titleText
         text: ActiveWindowWidget.displayTitle
         font.pointSize: Theme.fontSizeNormal  // normal size
-        font.family: Theme.fontFamilyUiNf  // uiNf font
+        font.family: Theme.fontFamilyUi  // uiNf font
         color: Theme.app600  // text color
         
         // Center the text within the rectangle

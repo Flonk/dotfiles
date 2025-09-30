@@ -92,14 +92,19 @@ in
       spotify
       discord
       vlc
+      networkmanager
 
       jetbrains.idea-ultimate
-
       pkgs.nerd-fonts.dejavu-sans-mono
-
-      alsa-utils # for amixer used by Eww volume/mic widgets
-      upower # for battery script
-      networkmanager # for nmcli used by wifi script
+      (pkgs.stdenvNoCC.mkDerivation {
+        pname = "teko";
+        version = "1.0";
+        src = ../../assets/fonts/teko;
+        installPhase = ''
+          mkdir -p $out/share/fonts/truetype
+          cp *.ttf $out/share/fonts/truetype/
+        '';
+      })
     ];
 
     username = "flo";

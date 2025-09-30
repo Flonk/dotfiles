@@ -5,8 +5,10 @@ singleton SystemMonitor 1.0 SystemMonitor.qml
 singleton ActiveWindowWidget 1.0 ActiveWindowWidget.qml
 singleton MprisWidget 1.0 MprisWidget.qml
 singleton Time 1.0 Time.qml
+AppController 1.0 AppController.qml
 WorkspacesWidget 1.0 WorkspacesWidget.qml
 Bar 1.0 Bar.qml
+BarWindow 1.0 BarWindow.qml
 ClockWidget 1.0 ClockWidget.qml
 CpuDisplay 1.0 CpuDisplay.qml
 MemoryDisplay 1.0 MemoryDisplay.qml
@@ -17,4 +19,6 @@ AppLauncherDisplay 1.0 AppLauncherDisplay.qml
 SystemBar 1.0 SystemBar.qml
 SystemBarsDisplay 1.0 SystemBarsDisplay.qml
 Shortcuts 1.0 Shortcuts.qml
+CavaDisplay 1.0 CavaDisplay.qml
 StackedCavaDisplay 1.0 StackedCavaDisplay.qml
+CavaWindow 1.0 CavaWindow.qml

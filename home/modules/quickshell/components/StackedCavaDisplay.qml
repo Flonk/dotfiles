@@ -45,7 +45,7 @@ Item {
         z: 0
     }
     
-        // System audio - top layer (more important), grows from bottom up
+    // System audio - top layer (more important), grows from bottom up
     CavaDisplay {
         providerType: "cava"
         barCount: root.barCount

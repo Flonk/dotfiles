@@ -26,8 +26,6 @@ qt6_add_qml_module(cavaprovider
         audiocollector.h
         microphonecavaprovider.cpp
         microphonecavaprovider.h
-    QML_FILES
-        CavaDisplay.qml
 )
 
 target_link_libraries(cavaprovider PRIVATE
