@@ -1,4 +1,3 @@
-// CavaWindow.qml - Standalone Cava visualizer window
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
@@ -16,17 +15,17 @@ PanelWindow {
 
   WlrLayershell.layer: WlrLayer.Top
   exclusionMode: ExclusionMode.Ignore
-
-  // No window-level margin - let the backdrop create the drawer effect
   margins.bottom: 0
 
   property int cavaWidth: 214
-  property int backdropBorderWidth: 8
+  property int backdropBorderWidth: 2
+  property int borderRadius: 2
+  property int extendedOffset: backdropBorderWidth + 20
 
-  implicitWidth: cavaWidth + (backdropBorderWidth * 2)  // Expand to fit backdrop
-  implicitHeight: appController.isExtended ? (Theme.barHeight + appController.extendedOffset) : Theme.barHeight
+  implicitWidth: cavaWidth + (backdropBorderWidth * 2)
+  implicitHeight: Theme.barHeight + extendedOffset
+  color: "transparent"
   
-  // Animate window height changes
   Behavior on implicitHeight {
     NumberAnimation {
       duration: 300
@@ -34,79 +33,53 @@ PanelWindow {
     }
   }
 
-  // Get the Hyprland monitor for this window's screen
   property var hyprlandMonitor: Hyprland.monitorFor(screen)
 
-  // Backdrop rectangle behind StackedCava - extends like a drawer
-  Rectangle {
-    id: backdrop
+  Item {
+    id: backdropContainer
     width: parent.width
-    height: appController.isExtended ? parent.height : Theme.barHeight
-    color: Theme.app900
+    height: Theme.barHeight + extendedOffset + backdropBorderWidth
+    clip: true
     
-    // In retracted state: no top border (radius only on top)
-    // In extended state: top border visible (radius on top)
-    topLeftRadius: appController.isExtended ? 2 : 0
-    topRightRadius: appController.isExtended ? 2 : 0
-    bottomLeftRadius: 0
-    bottomRightRadius: 0
-    
-    // Always anchor to bottom of window
     anchors.bottom: parent.bottom
+    anchors.bottomMargin: appController.isExtended ? -backdropBorderWidth : -(Theme.barHeight + extendedOffset + backdropBorderWidth)
     anchors.horizontalCenter: parent.horizontalCenter
     
-    // Animate backdrop height changes
-    Behavior on height {
-      NumberAnimation {
-        duration: 300
-        easing.type: Easing.OutCubic
+    Behavior on anchors.bottomMargin {
+      NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+    }
+    
+    z: 1
+    
+    Rectangle {
+      id: backdrop
+      width: parent.width
+      height: Theme.barHeight + extendedOffset + backdropBorderWidth + borderRadius
+      color: Theme.app300
+      radius: borderRadius
+      
+      anchors.top: parent.top
+      anchors.horizontalCenter: parent.horizontalCenter
+      
+      Behavior on anchors.bottomMargin {
+        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
       }
+      z: 2
     }
-    
-    Behavior on topLeftRadius {
-      NumberAnimation { duration: 300 }
-    }
-    
-    Behavior on topRightRadius {
-      NumberAnimation { duration: 300 }
-    }
-    
-    z: 100  // Behind the cavaDisplay
   }
 
-  // Position StackedCava - moves up when extended
-  StackedCavaDisplay {
-    id: cavaDisplay
-    barCount: 40
-    barWidth: 4
-    barSpacing: 1
-    maxBarHeight: Theme.barHeight
-    systemAudioColorLow: Theme.wm400
-    systemAudioColorHigh: Theme.wm700
-    microphoneColorLow: Theme.app300
-    microphoneColorHigh: Theme.app400
-    backdropColor: Theme.app100
-    systemAudioAnchor: "center"
-    microphoneAnchor: "top"
-    topRadius: 2
-    bottomRadius: 2
-    backdropRadius: 0
-    horizontalPadding: 8
-    verticalPadding: 2
-    noiseReduction: 0.2
-    enableMonstercatFilter: true
-    volumeSliderColor: Theme.app200
-    volumeSliderOpacity: 0.8
-    volumeSliderForegroundOpacity: 0.0
-    systemAudioCompressionFactor: 1.4
-    microphoneCompressionFactor: 1.1
+  Item {
+    id: cavaContainer
+    width: cavaWidth
+    height: appController.isExtended ? (Theme.barHeight + extendedOffset - backdropBorderWidth) : Theme.barHeight
+    clip: true
     
-    // Move up when extended - but 8px less than backdrop to show top border
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: appController.isExtended ? (appController.extendedOffset - backdropBorderWidth) : 0
+    // Keep the container fully within the window's bounds to avoid PanelWindow clipping the top.
+    // When extended, the correct bottomMargin to align the container's top with the window's top is the border width.
+    anchors.bottomMargin: appController.isExtended ? backdropBorderWidth : 0
     anchors.horizontalCenter: parent.horizontalCenter
     
-    // Animate StackedCava movement
     Behavior on anchors.bottomMargin {
       NumberAnimation {
         duration: 300
@@ -114,6 +87,59 @@ PanelWindow {
       }
     }
     
-    z: 101  // In front of the backdrop
+    Behavior on height {
+      NumberAnimation {
+        duration: 300
+        easing.type: Easing.OutCubic
+      }
+    }
+    
+    z: 2
+    
+    StackedCavaDisplay {
+      id: cavaDisplay
+      barCount: 40
+      barWidth: 4
+      barSpacing: 1
+      maxBarHeight: appController.isExtended ? (Theme.barHeight + extendedOffset - backdropBorderWidth) : Theme.barHeight
+      systemAudioColorLow: Theme.wm400
+      systemAudioColorHigh: Theme.wm700
+      microphoneColorLow: Theme.app300
+      microphoneColorHigh: Theme.app400
+      backdropColor: Theme.app100
+      systemAudioAnchor: "center"
+      microphoneAnchor: "top"
+      topRadius: 2
+      bottomRadius: 2
+      backdropRadius: 0
+      horizontalPadding: 8
+      verticalPadding: 2
+      noiseReduction: 0.2
+      enableMonstercatFilter: true
+      volumeSliderColor: Theme.app200
+      volumeSliderOpacity: 0.8
+      volumeSliderForegroundOpacity: 0.0
+      systemAudioCompressionFactor: 1.4
+      microphoneCompressionFactor: 1.1
+      
+      width: cavaWidth
+      height: maxBarHeight
+      anchors.bottom: parent.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      
+      Behavior on maxBarHeight {
+        NumberAnimation {
+          duration: 300
+          easing.type: Easing.OutCubic
+        }
+      }
+      
+      Behavior on height {
+        NumberAnimation {
+          duration: 300
+          easing.type: Easing.OutCubic
+        }
+      }
+    }
   }
 }

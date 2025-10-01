@@ -7,6 +7,7 @@ Item {
     id: root
     width: (barCount * barWidth) + ((barCount - 1) * barSpacing) + (horizontalPadding * 2)
     height: maxBarHeight
+    clip: true
     
     property int barCount: 40
     property int maxBarHeight: 30
