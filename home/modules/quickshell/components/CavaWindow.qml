@@ -28,11 +28,15 @@ PanelWindow {
     }
   }
 
-  implicitWidth: 214
+  property int cavaWidth: 214
+  property int backdropBorderWidth: 8
+
+  implicitWidth: cavaWidth + (backdropBorderWidth * 2)  // Expand to fit backdrop
   implicitHeight: Theme.barHeight
 
   // Get the Hyprland monitor for this window's screen
   property var hyprlandMonitor: Hyprland.monitorFor(screen)
+  
 
   StackedCavaDisplay {
     id: cavaDisplay
@@ -59,5 +63,22 @@ PanelWindow {
     volumeSliderForegroundOpacity: 0.0
     systemAudioCompressionFactor: 1.4
     microphoneCompressionFactor: 1.1
+    
+    // Position the StackedCava explicitly
+    anchors.centerIn: parent
+    z: 101  // In front of the backdrop
+  }
+
+  // Backdrop rectangle behind StackedCava
+  Rectangle {
+    id: backdrop
+    width: parent.width  // Fill the expanded window width
+    height: Theme.barHeight
+    color: Theme.app900
+    radius: 2
+    
+    // Center in parent window
+    anchors.centerIn: parent
+    z: 100  // Behind the cavaDisplay
   }
 }
