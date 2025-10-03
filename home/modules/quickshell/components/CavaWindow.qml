@@ -55,15 +55,12 @@ PanelWindow {
       id: backdrop
       width: parent.width
       height: Theme.barHeight + extendedOffset + backdropBorderWidth + borderRadius
-      color: Theme.app300
+      color: Theme.app200
       radius: borderRadius
       
       anchors.top: parent.top
       anchors.horizontalCenter: parent.horizontalCenter
       
-      Behavior on anchors.bottomMargin {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-      }
       z: 2
     }
   }
@@ -75,18 +72,9 @@ PanelWindow {
     clip: true
     
     anchors.bottom: parent.bottom
-    // Keep the container fully within the window's bounds to avoid PanelWindow clipping the top.
-    // When extended, the correct bottomMargin to align the container's top with the window's top is the border width.
-    anchors.bottomMargin: appController.isExtended ? backdropBorderWidth : 0
+    anchors.bottomMargin: 0
     anchors.horizontalCenter: parent.horizontalCenter
-    
-    Behavior on anchors.bottomMargin {
-      NumberAnimation {
-        duration: 300
-        easing.type: Easing.OutCubic
-      }
-    }
-    
+        
     Behavior on height {
       NumberAnimation {
         duration: 300
@@ -108,7 +96,7 @@ PanelWindow {
       microphoneColorHigh: Theme.app400
       backdropColor: Theme.app100
       systemAudioAnchor: "center"
-      microphoneAnchor: "top"
+      microphoneAnchor: "bottom"
       topRadius: 2
       bottomRadius: 2
       backdropRadius: 0
@@ -126,13 +114,6 @@ PanelWindow {
       height: maxBarHeight
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
-      
-      Behavior on maxBarHeight {
-        NumberAnimation {
-          duration: 300
-          easing.type: Easing.OutCubic
-        }
-      }
       
       Behavior on height {
         NumberAnimation {

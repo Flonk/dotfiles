@@ -34,7 +34,6 @@ Row {
     property var activeProvider: root.providerType === "microphone" ? CavaMicrophoneWidget : CavaWidget
     
     Component.onCompleted: {
-        // Configure the singleton provider
         activeProvider.bars = root.barCount
         activeProvider.noiseReduction = root.noiseReduction
         activeProvider.enableMonstercatFilter = root.enableMonstercatFilter
@@ -46,14 +45,12 @@ Row {
             root.frame++;
             if (root.frame % 2 != 0) { return; }
 
-            // Calculate total audio level for silence detection
             root.totalAudioLevel = 0;
             for (let i = 0; i < root.activeProvider.values.length; i++) {
                 root.totalAudioLevel += root.activeProvider.values[i];
             }
             root.totalAudioLevel /= root.activeProvider.values.length; // Average level
 
-            // Update bar heights based on spectrum data
             for (let i = 0; i < repeater.count; i++) {
                 let barItem = repeater.itemAt(i);
                 if (barItem) {
@@ -61,10 +58,8 @@ Row {
                 }
             }
 
-            // Reset silence timer if audio is detected
             if (root.totalAudioLevel > root.silenceThreshold) {
                 if (root.isSilent) {
-                    // Audio resumed - trigger return animation with wave effect
                     root.isSilent = false;
                     for (let i = 0; i < repeater.count; i++) {
                         let barItem = repeater.itemAt(i);
@@ -79,7 +74,6 @@ Row {
         }
     }
     
-    // Timer to detect prolonged silence
     Timer {
         id: silenceTimer
         interval: root.silenceTimeoutMs
@@ -87,7 +81,6 @@ Row {
         repeat: false
         onTriggered: {
             if (root.totalAudioLevel <= root.silenceThreshold) {
-                // Enter silent mode - trigger disappearing animation with wave effect
                 root.isSilent = true;
                 for (let i = 0; i < repeater.count; i++) {
                     let barItem = repeater.itemAt(i);
@@ -130,11 +123,9 @@ Row {
                 onTriggered: parent.isOffScreen = false
             }
             
-            // Transform for off-screen animation (only when center-anchored)
             transform: Translate {
                 y: {
                     if (root.anchorMode !== "center" || !isOffScreen) return 0;
-                    // Slide bars off screen - alternating up and down for wave effect
                     let direction = index % 2 === 0 ? 1 : 1;
                     return direction * (root.maxBarHeight + 4);
                 }
