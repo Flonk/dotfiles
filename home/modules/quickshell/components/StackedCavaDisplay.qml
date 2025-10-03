@@ -61,7 +61,6 @@ Item {
         noiseReduction: root.noiseReduction
         enableMonstercatFilter: root.enableMonstercatFilter
         compressionFactor: root.systemAudioCompressionFactor
-        z: 3
         anchors.left: parent.left
         anchors.leftMargin: root.horizontalPadding
         anchors.right: parent.right
@@ -81,6 +80,8 @@ Item {
             origin.y: parent ? parent.height / 2 : 0
             yScale: root.systemAudioAnchor === "top" ? -1 : 1
         }
+
+        z: 3
     }
     
     // Microphone audio - bottom layer, grows from top down  
@@ -98,7 +99,6 @@ Item {
         noiseReduction: root.noiseReduction
         enableMonstercatFilter: root.enableMonstercatFilter
         compressionFactor: root.microphoneCompressionFactor
-        z: 2
         
         anchors.left: parent.left
         anchors.leftMargin: root.horizontalPadding
@@ -119,6 +119,8 @@ Item {
             origin.y: parent ? parent.height / 2 : 0
             yScale: root.microphoneAnchor === "top" ? -1 : 1
         }
+
+        z: 2
     }
     
     // Volume Indicator (triangle at volume position)
@@ -143,7 +145,7 @@ Item {
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.reset();
-                ctx.fillStyle = Theme.app300;
+                ctx.fillStyle = Theme.app900;
                 
                 // Draw downward-pointing triangle (since it's at the top now)
                 ctx.beginPath();

@@ -8,7 +8,7 @@ Item {
     // Theme colors - using app colors instead of wm colors
     property color backgroundBarColor: "transparent"
     property color foregroundBarColor: Theme.app400
-    property color backgroundTextColor: Theme.app300
+    property color backgroundTextColor: Theme.app400
     property color foregroundTextColor: Theme.app800
     property color errorColor: Theme.error400
     property color chargingColor: Theme.success600     // New charging bar color
@@ -121,9 +121,7 @@ Item {
                 
                 // Custom battery colors based on charging state
                 useCustomColors: {
-                    if (!SystemMonitor.hasBattery) return true;
-                    const colorState = SystemMonitor.getBatteryColorState();
-                    return colorState === "charging" || colorState === "critical";
+                    return true;
                 }
                 
                 customBarColor: {

@@ -23,6 +23,7 @@ Rectangle {
             font.family: Theme.fontFamilyUi
             color: Theme.app800
             clip: true
+            opacity: 0.4
             
             // Center the emoji properly
             horizontalAlignment: Text.AlignHCenter
