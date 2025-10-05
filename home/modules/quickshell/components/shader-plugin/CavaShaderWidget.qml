@@ -59,7 +59,7 @@ Rectangle {
         }
         updateDataTexture();
     }
-    
+
     onMicrophoneProviderChanged: {
         if (microphoneProvider && typeof microphoneProvider.start === "function") {
             microphoneProvider.start();
@@ -116,7 +116,6 @@ Rectangle {
         id: shader
         anchors.fill: parent
 
-        property real iTime: 0
         property vector2d iResolution: Qt.vector2d(width, height)
         property real iBarCount: root.barCount
         property real iSystemAnchor: root.anchorToEnum(root.systemAnchor)
@@ -128,16 +127,6 @@ Rectangle {
         property var iDataTexture: dataTextureSource
 
         fragmentShader: "cava_bars.frag.qsb"
-
-        // Animation timer for smooth updates
-        Timer {
-            interval: 1000 / root.fps
-            running: true
-            repeat: true
-            onTriggered: {
-                shader.iTime += interval / 1000.0
-            }
-        }
     }
     
     // Update shader when cava values change

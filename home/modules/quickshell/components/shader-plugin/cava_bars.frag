@@ -37,10 +37,8 @@ LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor
         return layer;
     }
 
-    // Color gradient based on bar height (value), not position
+    // Color gradient based solely on bar height (value)
     vec3 barColor = mix(lowColor.rgb, highColor.rgb, value);
-    float glow = smoothstep(0.75, 1.0, value);
-    barColor += glow * 0.25;
     barColor = clamp(barColor, 0.0, 1.0);
 
     float px = 1.0 / max(ubuf.iResolution.y, 1.0);
@@ -93,8 +91,7 @@ void main() {
 
     vec3 color = combinedAlpha > 0.0 ? premultiplied / combinedAlpha : vec3(0.0);
 
-    float pulse = 0.03 * sin(ubuf.iTime * 5.5 + barIndex * 0.35);
-    color = clamp(color + pulse, 0.0, 1.0);
+    color = clamp(color, 0.0, 1.0);
 
     fragColor = vec4(color, ubuf.qt_Opacity * combinedAlpha);
 }
