@@ -18,6 +18,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 systemColorHigh;
     vec4 microphoneColorLow;
     vec4 microphoneColorHigh;
+    vec4 backgroundColor;
 } ubuf;
 
 layout(binding = 1) uniform sampler2D iDataTexture;
@@ -98,30 +99,37 @@ LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor
     coverage = clamp(coverage, 0.0, 1.0);
 
     layer.coverage = coverage;
-    layer.color = baseColor * coverage;
+    layer.color = baseColor;
     return layer;
+}
+
+vec3 evaluateLayers(float sampleX, float uvY) {
+    vec2 samples = sampleAudio(sampleX);
+    float systemValue = samples.x;
+    float microphoneValue = samples.y;
+
+    LayerSample micLayer = renderLayer(microphoneValue, ubuf.iMicrophoneAnchor, ubuf.microphoneColorLow, ubuf.microphoneColorHigh, uvY);
+    LayerSample sysLayer = renderLayer(systemValue, ubuf.iSystemAnchor, ubuf.systemColorLow, ubuf.systemColorHigh, uvY);
+
+    vec3 color = ubuf.backgroundColor.rgb;
+    color = mix(color, micLayer.color, micLayer.coverage);
+    color = mix(color, sysLayer.color, sysLayer.coverage);
+    return clamp(color, 0.0, 1.0);
 }
 
 void main() {
     vec2 uv = qt_TexCoord0;
+    float pixelWidth = 1.0 / max(ubuf.iResolution.x, 1.0);
+    float halfStep = pixelWidth * 0.5;
 
-    vec2 samples = sampleAudio(uv.x);
-    float systemValue = samples.x;
-    float microphoneValue = samples.y;
+    float leftX = clamp(uv.x - halfStep, 0.0, 0.9999);
+    float rightX = clamp(uv.x + halfStep, 0.0, 0.9999);
 
-    LayerSample micLayer = renderLayer(microphoneValue, ubuf.iMicrophoneAnchor, ubuf.microphoneColorLow, ubuf.microphoneColorHigh, uv.y);
-    LayerSample sysLayer = renderLayer(systemValue, ubuf.iSystemAnchor, ubuf.systemColorLow, ubuf.systemColorHigh, uv.y);
+    vec3 leftColor = evaluateLayers(leftX, uv.y);
+    vec3 centerColor = evaluateLayers(uv.x, uv.y);
+    vec3 rightColor = evaluateLayers(rightX, uv.y);
 
-    vec3 sysPremul = sysLayer.color;
-    float sysAlpha = sysLayer.coverage;
+    vec3 color = (leftColor + centerColor + rightColor) / 3.0;
 
-    vec3 micPremul = micLayer.color;
-    float micAlpha = micLayer.coverage;
-
-    vec3 premultiplied = sysPremul + micPremul * (1.0 - sysAlpha);
-    float combinedAlpha = sysAlpha + micAlpha * (1.0 - sysAlpha);
-
-    vec3 color = combinedAlpha > 0.0 ? premultiplied / combinedAlpha : vec3(0.0);
-
-    fragColor = vec4(color, ubuf.qt_Opacity * combinedAlpha);
+    fragColor = vec4(color, ubuf.qt_Opacity);
 }

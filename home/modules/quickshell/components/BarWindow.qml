@@ -84,44 +84,6 @@ PanelWindow {
         layoutDirection: Qt.RightToLeft
         spacing: 0
         
-        // Cava toggle button
-        Rectangle {
-          width: Theme.barHeight / 1.5
-          height: Theme.barHeight / 1.5
-          color: appController.isExtended ? Theme.wm400 : Theme.app200
-          radius: Theme.barHeight
-          
-          // Animated color transition
-          Behavior on color {
-            ColorAnimation {
-              duration: 200
-              easing.type: Easing.OutCubic
-            }
-          }
-          
-          // Up/down arrow icon
-          Text {
-            anchors.centerIn: parent
-            text: appController.isExtended ? " " : " "
-            font.pointSize: Theme.fontSizeSmall
-            font.family: Theme.fontFamilyUi
-            color: appController.isExtended ? Theme.wm800 : Theme.app600
-            
-            // Animate text color
-            Behavior on color {
-              ColorAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
-              }
-            }
-          }
-          
-          MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: appController.toggle()
-          }
-        }
       }
     }
 
@@ -140,6 +102,7 @@ PanelWindow {
       systemColorHigh: Theme.wm700
       microphoneColorLow: Theme.app300
       microphoneColorHigh: Theme.app600
+  backgroundColor: Theme.app150
       
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter

@@ -26,6 +26,7 @@ Rectangle {
     property color systemColorHigh: Theme.wm700
     property color microphoneColorLow: Theme.app300
     property color microphoneColorHigh: Theme.app400
+    property color backgroundColor: Theme.app150
 
     property int barCount: 1
 
@@ -125,6 +126,7 @@ Rectangle {
         property color systemColorHigh: root.systemColorHigh
         property color microphoneColorLow: root.microphoneColorLow
         property color microphoneColorHigh: root.microphoneColorHigh
+        property color backgroundColor: root.backgroundColor
         property var iDataTexture: dataTextureSource
 
         fragmentShader: "cava_bars.frag.qsb"
