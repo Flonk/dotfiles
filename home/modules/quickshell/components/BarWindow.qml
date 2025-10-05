@@ -133,20 +133,18 @@ PanelWindow {
       systemProvider: CavaWidget
       microphoneProvider: CavaMicrophoneWidget
       fps: 30
+      maxBars: 40
       systemAnchor: "center"
       microphoneAnchor: "bottom"
       systemColorLow: Theme.wm400
       systemColorHigh: Theme.wm700
-  microphoneColorLow: Theme.app300
-  microphoneColorHigh: Theme.app600
+      microphoneColorLow: Theme.app300
+      microphoneColorHigh: Theme.app600
       
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
     }
     
-  // Old StackedCavaDisplay - kept for reference but hidden
-   
-
     // Right of center section
     Rectangle {
       anchors.left: parent.horizontalCenter

@@ -15,7 +15,7 @@ Rectangle {
     
     // Configurable FPS for the animation
     property int fps: 30
-    property int maxBars: 128
+    property int maxBars: 40
 
     // Anchoring behavior ("bottom", "top", "center")
     property string systemAnchor: "center"
@@ -54,14 +54,21 @@ Rectangle {
         if (systemProvider && systemProvider.bars !== undefined) {
             systemProvider.bars = maxBars;
         }
+        if (systemProvider && systemProvider.enableMonstercatFilter !== undefined) {
+            systemProvider.enableMonstercatFilter = true;
+        }
         updateDataTexture();
     }
+    
     onMicrophoneProviderChanged: {
         if (microphoneProvider && typeof microphoneProvider.start === "function") {
             microphoneProvider.start();
         }
         if (microphoneProvider && microphoneProvider.bars !== undefined) {
             microphoneProvider.bars = maxBars;
+        }
+        if (microphoneProvider && microphoneProvider.enableMonstercatFilter !== undefined) {
+            microphoneProvider.enableMonstercatFilter = true;
         }
         updateDataTexture();
     }
@@ -151,11 +158,17 @@ Rectangle {
         if (systemProvider && systemProvider.bars !== undefined) {
             systemProvider.bars = maxBars;
         }
+        if (systemProvider && systemProvider.enableMonstercatFilter !== undefined) {
+            systemProvider.enableMonstercatFilter = true;
+        }
         if (microphoneProvider && typeof microphoneProvider.start === "function") {
             microphoneProvider.start();
         }
         if (microphoneProvider && microphoneProvider.bars !== undefined) {
             microphoneProvider.bars = maxBars;
+        }
+        if (microphoneProvider && microphoneProvider.enableMonstercatFilter !== undefined) {
+            microphoneProvider.enableMonstercatFilter = true;
         }
         updateDataTexture();
     }
