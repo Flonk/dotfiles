@@ -48,19 +48,10 @@ vec2 sampleAudio(float coord) {
     return mix(baseSample.rg, nextSample.rg, t);
 }
 
-float anchorTargetY(float value, float anchor) {
-    value = clamp(value, 0.0, 1.0);
-
-    float normalized;
-    if (anchor > 1.5) {
-        normalized = 0.5 + value * 0.5;
-    } else if (anchor > 0.5) {
-        normalized = 1.0 - value;
-    } else {
-        normalized = value;
-    }
-
-    return 1.0 - normalized;
+float bandCoverage(float y, float upper, float lower, float softness) {
+    float enter = smoothstep(upper - softness, upper + softness, y);
+    float exit = smoothstep(lower - softness, lower + softness, y);
+    return clamp(enter - exit, 0.0, 1.0);
 }
 
 LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor, float uvY) {
@@ -69,16 +60,42 @@ LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor
     layer.coverage = 0.0;
 
     value = clamp(value, 0.0, 1.0);
-    if (value <= 0.001) {
-        return layer;
+    vec3 baseColor = mix(lowColor.rgb, highColor.rgb, value);
+    float pixelHeight = 1.0 / max(ubuf.iResolution.y, 1.0);
+    float minSpan = pixelHeight;
+
+    float topY;
+    float bottomY;
+
+    if (anchor > 1.5) {
+        float halfSpan = max(value * 0.5, minSpan * 0.5);
+        float center = 0.5;
+        topY = clamp(center - halfSpan, 0.0, 1.0);
+        bottomY = clamp(center + halfSpan, 0.0, 1.0);
+    } else if (anchor > 0.5) {
+        float span = max(value, minSpan);
+        topY = 0.0;
+        bottomY = clamp(span, 0.0, 1.0);
+    } else {
+        float span = max(value, minSpan);
+        topY = clamp(1.0 - span, 0.0, 1.0);
+        bottomY = 1.0;
     }
 
-    vec3 baseColor = mix(lowColor.rgb, highColor.rgb, value);
-    float targetY = anchorTargetY(value, anchor);
+    float upper = min(topY, bottomY);
+    float lower = max(topY, bottomY);
+    float span = max(lower - upper, minSpan);
+    float baseSoftness = pixelHeight * 0.75;
+    float adaptiveSoftness = max(baseSoftness, fwidth(uvY));
+    float maxSoftness = span * 0.45;
+    float softness = clamp(adaptiveSoftness, pixelHeight * 0.25, maxSoftness);
 
-    float thickness = max(1.5 / max(ubuf.iResolution.y, 1.0), 0.002);
-    float dist = abs(uvY - targetY);
-    float coverage = 1.0 - smoothstep(0.0, thickness, dist);
+    float coverageCenter = bandCoverage(uvY, upper, lower, softness);
+    float offset = pixelHeight * 0.5;
+    float coverageUp = bandCoverage(clamp(uvY - offset, 0.0, 1.0), upper, lower, softness);
+    float coverageDown = bandCoverage(clamp(uvY + offset, 0.0, 1.0), upper, lower, softness);
+    float coverage = (coverageCenter + coverageUp + coverageDown) / 3.0;
+    coverage = clamp(coverage, 0.0, 1.0);
 
     layer.coverage = coverage;
     layer.color = baseColor * coverage;
