@@ -116,7 +116,8 @@ Rectangle {
         id: shader
         anchors.fill: parent
 
-        property vector2d iResolution: Qt.vector2d(width, height)
+    property real iTime: 0
+    property vector2d iResolution: Qt.vector2d(width, height)
         property real iBarCount: root.barCount
         property real iSystemAnchor: root.anchorToEnum(root.systemAnchor)
         property real iMicrophoneAnchor: root.anchorToEnum(root.microphoneAnchor)
