@@ -37,40 +37,28 @@ LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor
         return layer;
     }
 
+    // Color gradient based on bar height (value), not position
+    vec3 barColor = mix(lowColor.rgb, highColor.rgb, value);
+    float glow = smoothstep(0.75, 1.0, value);
+    barColor += glow * 0.25;
+    barColor = clamp(barColor, 0.0, 1.0);
+
     float px = 1.0 / max(ubuf.iResolution.y, 1.0);
     float edge = px * 1.5;
-    float gradient = 0.0;
 
     if (anchor > 1.5) { // center
         float halfValue = value * 0.5;
         float distance = abs(yCoord - 0.5);
         layer.coverage = smoothstep(-edge, edge, halfValue - distance);
-        if (layer.coverage <= 0.0) {
-            return layer;
-        }
-        float halfSafe = max(halfValue, 1e-3);
-        gradient = distance / halfSafe;
     } else if (anchor > 0.5) { // top
         float distance = yCoord;
         layer.coverage = smoothstep(-edge, edge, value - distance);
-        if (layer.coverage <= 0.0) {
-            return layer;
-        }
-        gradient = distance / max(value, 1e-3);
     } else { // bottom
         float distance = 1.0 - yCoord;
         layer.coverage = smoothstep(-edge, edge, value - distance);
-        if (layer.coverage <= 0.0) {
-            return layer;
-        }
-        gradient = distance / max(value, 1e-3);
     }
 
-    gradient = clamp(gradient, 0.0, 1.0);
-    vec3 baseColor = mix(lowColor.rgb, highColor.rgb, gradient);
-    float glow = smoothstep(0.75, 1.0, gradient);
-    baseColor += glow * 0.25;
-    layer.color = clamp(baseColor, 0.0, 1.0);
+    layer.color = barColor;
     return layer;
 }
 
