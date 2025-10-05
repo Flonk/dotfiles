@@ -158,7 +158,7 @@ Row {
                 return Qt.rgba(r, g, b, a);
             }
             
-            anchors.bottom: root.anchorMode === "bottom" ? parent.bottom : undefined
+            anchors.bottom: root.anchorMode === "bottom" ? root.bottom : undefined
             anchors.top: root.anchorMode === "top" ? parent.top : undefined
             anchors.verticalCenter: root.anchorMode === "center" ? parent.verticalCenter : undefined
             

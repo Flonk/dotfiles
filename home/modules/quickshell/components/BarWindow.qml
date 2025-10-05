@@ -142,7 +142,7 @@ PanelWindow {
       bottomRadius: 2
       backdropRadius: 0
       horizontalPadding: 8
-      verticalPadding: 6
+      verticalPadding: 0
       noiseReduction: 0.2
       enableMonstercatFilter: true
       volumeSliderColor: Theme.app200
@@ -163,7 +163,7 @@ PanelWindow {
       }
     }
 
-    // Right of center section - modules with left border only (since cava provides right border)
+    // Right of center section
     Rectangle {
       anchors.left: parent.horizontalCenter
       anchors.leftMargin: cavaDisplay.width / 2 + cavaMargin
@@ -176,17 +176,10 @@ PanelWindow {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         spacing: 0
-        
-        Rectangle {
-          width: mprisDisplay.implicitWidth + 4
-          height: Theme.barHeight
-          color: Theme.app200
-          
-          MprisDisplay {
-            id: mprisDisplay
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-          }
+
+        MprisDisplay {
+          id: mprisDisplay
+          anchors.verticalCenter: parent.verticalCenter
         }
       }
     }

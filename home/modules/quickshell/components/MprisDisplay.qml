@@ -8,9 +8,6 @@ MouseArea {
     acceptedButtons: Qt.LeftButton
     hoverEnabled: true
     
-    // Hide when no track info
-    visible: MprisWidget.currentTrack !== ""
-    
     // Debounce scroll events
     property var pendingScrollDirection: null
     property var scrollDebounceTimer: Timer {
@@ -37,7 +34,7 @@ MouseArea {
     Rectangle {
         id: displayRect
         color: Theme.app150  // backdrop color
-        width: Math.min(trackText.implicitWidth + 16, 300)  // maxWidth 300 with 8px padding on each side
+        width: Math.min(trackText.implicitWidth, 300)  // maxWidth 300 with 8px padding on each side
         height: Theme.barHeight  // barHeight high
         radius: 2  // match other components
         
@@ -54,7 +51,7 @@ MouseArea {
             
             // Truncate long text
             elide: Text.ElideRight
-            width: Math.min(implicitWidth, parent.width - 16)  // Account for padding
+            width: Math.min(implicitWidth, parent.width)  // Account for padding
             
             // Smooth color transition
             Behavior on color {
