@@ -84,12 +84,6 @@ PanelWindow {
         layoutDirection: Qt.RightToLeft
         spacing: 0
         
-        // XOR Shader Widget
-        XorShaderWidget {
-          width: Theme.barHeight
-          height: Theme.barHeight
-        }
-        
         // Cava toggle button
         Rectangle {
           width: Theme.barHeight / 1.5
@@ -131,49 +125,25 @@ PanelWindow {
       }
     }
 
-    // Center container - placeholder rectangle for cava positioning
-    StackedCavaDisplay {
-      id: cavaDisplay
-      barCount: 60
-      barWidth: 4
-      barSpacing: 1
-      maxBarHeight: Theme.barHeight
-      systemAudioColorLow: Theme.wm400
-      systemAudioColorHigh: Theme.wm700
-      microphoneColorLow: Theme.app300
-      microphoneColorHigh: Theme.app400
-      backdropColor: Theme.app100
-      systemAudioAnchor: "center"
-      microphoneAnchor: "bottom"
-      topRadius: 2
-      bottomRadius: 2
-      backdropRadius: 0
-      horizontalPadding: 8
-      verticalPadding: 0
-      noiseReduction: 0.2
-      enableMonstercatFilter: true
-      volumeSliderColor: Theme.app200
-      volumeSliderOpacity: 0.8
-      volumeSliderForegroundOpacity: 0.0
-      systemAudioCompressionFactor: 1.4
-      microphoneCompressionFactor: 1.1
+    // Center container - shader-based cava visualizer with real audio data
+    CavaShaderWidget {
+      id: cavaShaderDisplay
+      width: 300
+      height: Theme.barHeight
+      cavaProvider: CavaWidget
+      fps: 30
       
-      height: maxBarHeight
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
-      
-      Behavior on height {
-        NumberAnimation {
-          duration: 300
-          easing.type: Easing.OutCubic
-        }
-      }
     }
+    
+  // Old StackedCavaDisplay - kept for reference but hidden
+   
 
     // Right of center section
     Rectangle {
       anchors.left: parent.horizontalCenter
-      anchors.leftMargin: cavaDisplay.width / 2 + cavaMargin
+      anchors.leftMargin: cavaShaderDisplay.width / 2 + cavaMargin
       anchors.verticalCenter: parent.verticalCenter
       height: Theme.barHeight
       color: "transparent"

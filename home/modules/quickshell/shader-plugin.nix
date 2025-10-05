@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     # Install QML files
     cp $src/qmldir $out/lib/qt-6/qml/ShaderPlugin/
     cp $src/XorShaderWidget.qml $out/lib/qt-6/qml/ShaderPlugin/
+    cp $src/CavaShaderWidget.qml $out/lib/qt-6/qml/ShaderPlugin/
 
     # List what we installed for debugging
     echo "Installed files in ShaderPlugin:"
     ls -la $out/lib/qt-6/qml/ShaderPlugin/
   '';
-
   meta = with pkgs.lib; {
     description = "GLSL shader plugin for Quickshell";
     license = licenses.mit;

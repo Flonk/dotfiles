@@ -21,7 +21,7 @@ Rectangle {
         
         // Animation timer
         Timer {
-            interval: 16 // ~60 fps
+            interval: 16
             running: true
             repeat: true
             onTriggered: {

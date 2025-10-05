@@ -1,2 +1,3 @@
 module ShaderPlugin
 XorShaderWidget 1.0 XorShaderWidget.qml
+CavaShaderWidget 1.0 CavaShaderWidget.qml
