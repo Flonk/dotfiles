@@ -6,9 +6,10 @@
 }:
 let
   cavaPlugin = pkgs.callPackage ./cava-plugin.nix { };
+  shaderPlugin = pkgs.callPackage ./shader-plugin.nix { };
   barHeight = 30; # Configurable bar height
   wrappedQuickshell = pkgs.writeShellScriptBin "quickshell" ''
-    export QML2_IMPORT_PATH="${cavaPlugin}/lib/qt-6/qml:$QML2_IMPORT_PATH"
+    export QML2_IMPORT_PATH="${cavaPlugin}/lib/qt-6/qml:${shaderPlugin}/lib/qt-6/qml:$QML2_IMPORT_PATH"
     exec ${pkgs.quickshell}/bin/quickshell "$@"
   '';
 
@@ -19,7 +20,7 @@ let
     SOURCE_CONFIG="''${HOME}/.config/quickshell"         # managed by nix
     DOTFILES_DIR="''${HOME}/dotfiles/home/modules/quickshell/components"
     QS_BIN='${pkgs.quickshell}/bin/quickshell'           # Quickshell binary
-    export QML2_IMPORT_PATH='${cavaPlugin}/lib/qt-6/qml:'"''${QML2_IMPORT_PATH-}"
+    export QML2_IMPORT_PATH='${cavaPlugin}/lib/qt-6/qml:${shaderPlugin}/lib/qt-6/qml:'"''${QML2_IMPORT_PATH-}"
 
     # Force copy from ~/.config/quickshell to ~/quickshell-impure and initialize git
     echo "[quickshell-dev] Setting up ''${CONFIG_DIR} from ''${SOURCE_CONFIG}"
@@ -187,6 +188,7 @@ in
     lm_sensors # For temperature monitoring
     pipewire # For audio capture
     cavaPlugin # Include our custom cava plugin
+    shaderPlugin # Include our custom shader plugin
     wrappedQuickshell # Wrapped quickshell with cava plugin path
     wrappedQuickshellDev # Development script for quickshell
   ];

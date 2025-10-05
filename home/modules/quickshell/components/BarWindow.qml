@@ -4,6 +4,7 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 import QtQuick
 import CavaPlugin
+import ShaderPlugin
 
 PanelWindow {
   required property var screenInfo
@@ -82,6 +83,12 @@ PanelWindow {
         anchors.verticalCenter: parent.verticalCenter
         layoutDirection: Qt.RightToLeft
         spacing: 0
+        
+        // XOR Shader Widget
+        XorShaderWidget {
+          width: Theme.barHeight
+          height: Theme.barHeight
+        }
         
         // Cava toggle button
         Rectangle {
