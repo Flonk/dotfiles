@@ -44,7 +44,7 @@ MouseArea {
         Text {
             id: trackText
             text: MprisWidget.currentTrack || "No media playing"
-            color: MprisWidget.isPlaying ? Theme.app600 : Theme.app300  // Dynamic color based on playing state
+            color: MprisWidget.isPlaying ? Theme.app600 : Theme.app400  // Dynamic color based on playing state
             font.family: Theme.fontFamilyUi  // uiNf font
             font.pointSize: Theme.fontSizeSmall  // normal size
             

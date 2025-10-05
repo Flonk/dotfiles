@@ -17,13 +17,13 @@ Rectangle {
         
         // Grimace emoji with large font size, clipped
         Text {
-            text: "😬"
+            text: "😸"
             anchors.centerIn: parent
             font.pointSize: Theme.barHeight * 1.25
             font.family: Theme.fontFamilyUi
             color: Theme.app800
             clip: true
-            opacity: 0.4
+            opacity: 1
             
             // Center the emoji properly
             horizontalAlignment: Text.AlignHCenter

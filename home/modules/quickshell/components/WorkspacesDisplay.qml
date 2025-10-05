@@ -9,7 +9,8 @@ Row {
     // This will be set by the Bar to the current screen's monitor
     required property var monitor
     
-    spacing: 0  // no margin between squares
+    spacing: 4  // no margin between squares
+    height: Theme.barHeight
     
     // Use WorkspacesWidget to handle workspace logic
     WorkspacesWidget {
@@ -27,16 +28,16 @@ Row {
         delegate: Rectangle {
             required property var modelData
             
-            width: Theme.barHeight  // square: barHeight x barHeight
-            height: Theme.barHeight  // barHeight high
-            radius: 0  // sharp corners for seamless connection
-            
-            // app150 backdrop for all
-            color: Theme.app150
+            width: Theme.barHeight / 1.5  // square: barHeight x barHeight
+            height: Theme.barHeight / 1.5  // barHeight high
+            radius: Theme.barHeight  // sharp corners for seamless connection
             
             // Active workspace gets 1px wm800 border
             border.color: modelData.focused ? Theme.wm800 : "transparent"
-            border.width: modelData.focused ? 1 : 0
+            border.width: modelData.focused ? 0 : 0
+            color: modelData.focused ? Theme.wm800 : Theme.app150
+
+            anchors.verticalCenter: root.verticalCenter
             
             Text {
                 anchors.centerIn: parent
@@ -44,7 +45,7 @@ Row {
                 font.pointSize: Theme.fontSizeSmall
                 font.family: Theme.fontFamilyUiNf
                 // Active workspace: wm800 text, others: app600 text
-                color: modelData.focused ? Theme.wm800 : Theme.app600
+                color: modelData.focused ? Theme.app150 : Theme.app600
                 font.bold: modelData.focused
             }
             
@@ -55,8 +56,7 @@ Row {
                 }
                 
                 hoverEnabled: true
-                ToolTip.visible: containsMouse
-                ToolTip.text: `Workspace ${modelData.name}${modelData.toplevels && modelData.toplevels.length > 0 ? ` (${modelData.toplevels.length} windows)` : " (empty)"}`
+                cursorShape: Qt.PointingHandCursor
             }
         }
     }

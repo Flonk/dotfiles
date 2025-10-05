@@ -17,11 +17,11 @@ Scope {
         Component.onCompleted: console.log("BarWindow completed on screen:", screen ? screen.name : "<none>")
       }
 
-      CavaWindow {
+      /*CavaWindow {
         screenInfo: modelData
         appController: screenAppController
         Component.onCompleted: console.log("CavaWindow completed on screen:", screen ? screen.name : "<none>")
-      }
+      }*/
     }
   }
 }

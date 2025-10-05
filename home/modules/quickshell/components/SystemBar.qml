@@ -58,13 +58,13 @@ Item {
     Rectangle {
         id: foregroundBar
         anchors.left: parent.left
-        anchors.leftMargin: 1
+        anchors.leftMargin: 0
         anchors.top: parent.top
-        anchors.topMargin: 1
+        anchors.topMargin: 0
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 1
         width: Math.max(1, (parent.width - 2) * root.value)
-        radius: (parent.height - 2) / 2
+        radius: 0
         visible: root.barVisible
         clip: true
         

@@ -84,43 +84,6 @@ PanelWindow {
     
     z: 2
     
-    StackedCavaDisplay {
-      id: cavaDisplay
-      barCount: 40
-      barWidth: 4
-      barSpacing: 1
-      maxBarHeight: appController.isExtended ? (Theme.barHeight + extendedOffset - backdropBorderWidth) : Theme.barHeight
-      systemAudioColorLow: Theme.wm400
-      systemAudioColorHigh: Theme.wm700
-      microphoneColorLow: Theme.app300
-      microphoneColorHigh: Theme.app400
-      backdropColor: Theme.app100
-      systemAudioAnchor: "center"
-      microphoneAnchor: "bottom"
-      topRadius: 2
-      bottomRadius: 2
-      backdropRadius: 0
-      horizontalPadding: 8
-      verticalPadding: 2
-      noiseReduction: 0.2
-      enableMonstercatFilter: true
-      volumeSliderColor: Theme.app200
-      volumeSliderOpacity: 0.8
-      volumeSliderForegroundOpacity: 0.0
-      systemAudioCompressionFactor: 1.4
-      microphoneCompressionFactor: 1.1
-      
-      width: cavaWidth
-      height: maxBarHeight
-      anchors.bottom: parent.bottom
-      anchors.horizontalCenter: parent.horizontalCenter
-      
-      Behavior on height {
-        NumberAnimation {
-          duration: 300
-          easing.type: Easing.OutCubic
-        }
-      }
-    }
+    
   }
 }

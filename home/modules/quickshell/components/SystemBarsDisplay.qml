@@ -7,12 +7,12 @@ Item {
     
     // Theme colors - using app colors instead of wm colors
     property color backgroundBarColor: "transparent"
-    property color foregroundBarColor: Theme.app400
-    property color backgroundTextColor: Theme.app400
-    property color foregroundTextColor: Theme.app800
+    property color foregroundBarColor: Theme.wm900
+    property color backgroundTextColor: Theme.app800
+    property color foregroundTextColor: Theme.app100
     property color errorColor: Theme.error400
     property color chargingColor: Theme.success600     // New charging bar color
-    property color chargingTextColor: Theme.success800 // Bright text when charging
+    property color chargingTextColor: Theme.app100 // Bright text when charging
     property color chargingTextColorDark: Theme.success400 // Darker text when charging
     
     // Calculate total dimensions - two containers side by side + padding
@@ -22,9 +22,9 @@ Item {
     // Content container with padding
     Item {
         anchors.fill: parent
-        anchors.margins: 5  // 5px horizontal padding
-        anchors.topMargin: 3  // 2px vertical padding
-        anchors.bottomMargin: 3  // 2px vertical padding
+        anchors.margins: 0  // 5px horizontal padding
+        anchors.topMargin: 0  // 2px vertical padding
+        anchors.bottomMargin: 0  // 2px vertical padding
     
         // Left container - MEM (top) and DISK (bottom)
         Item {

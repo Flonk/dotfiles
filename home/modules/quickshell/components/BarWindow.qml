@@ -32,7 +32,7 @@ PanelWindow {
 
   // Get the Hyprland monitor for this window's screen
   property var hyprlandMonitor: Hyprland.monitorFor(screen)
-  property int cavaMargin: 110
+  property int cavaMargin: 10
 
   // Content area below the border
   Item {
@@ -47,7 +47,7 @@ PanelWindow {
       anchors.left: parent.left
       anchors.leftMargin: 2
       anchors.verticalCenter: parent.verticalCenter
-      color: Theme.app200
+      color: "transparent"
       
       implicitWidth: leftRow.implicitWidth
       implicitHeight: Theme.barHeight
@@ -57,7 +57,7 @@ PanelWindow {
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 2  // 2px spacing between elements
+        spacing: 5
 
         AppLauncherDisplay {}
         WorkspacesDisplay {
@@ -71,7 +71,7 @@ PanelWindow {
     Rectangle {
       anchors.left: parent.left
       anchors.right: parent.horizontalCenter
-      anchors.rightMargin: cavaMargin
+      anchors.rightMargin: cavaDisplay.width / 2 + cavaMargin
       anchors.verticalCenter: parent.verticalCenter
       height: Theme.barHeight
       color: "transparent"
@@ -85,9 +85,10 @@ PanelWindow {
         
         // Cava toggle button
         Rectangle {
-          width: 30
-          height: Theme.barHeight
+          width: Theme.barHeight / 1.5
+          height: Theme.barHeight / 1.5
           color: appController.isExtended ? Theme.wm400 : Theme.app200
+          radius: Theme.barHeight
           
           // Animated color transition
           Behavior on color {
@@ -100,7 +101,7 @@ PanelWindow {
           // Up/down arrow icon
           Text {
             anchors.centerIn: parent
-            text: appController.isExtended ? "▼" : "▲"
+            text: appController.isExtended ? " " : " "
             font.pointSize: Theme.fontSizeSmall
             font.family: Theme.fontFamilyUi
             color: appController.isExtended ? Theme.wm800 : Theme.app600
@@ -108,7 +109,7 @@ PanelWindow {
             // Animate text color
             Behavior on color {
               ColorAnimation {
-                duration: 200
+                duration: 300
                 easing.type: Easing.OutCubic
               }
             }
@@ -124,20 +125,48 @@ PanelWindow {
     }
 
     // Center container - placeholder rectangle for cava positioning
-    Rectangle {
-      id: centerCavaContainer
+    StackedCavaDisplay {
+      id: cavaDisplay
+      barCount: 60
+      barWidth: 4
+      barSpacing: 1
+      maxBarHeight: Theme.barHeight
+      systemAudioColorLow: Theme.wm400
+      systemAudioColorHigh: Theme.wm700
+      microphoneColorLow: Theme.app300
+      microphoneColorHigh: Theme.app400
+      backdropColor: Theme.app100
+      systemAudioAnchor: "center"
+      microphoneAnchor: "bottom"
+      topRadius: 2
+      bottomRadius: 2
+      backdropRadius: 0
+      horizontalPadding: 8
+      verticalPadding: 6
+      noiseReduction: 0.2
+      enableMonstercatFilter: true
+      volumeSliderColor: Theme.app200
+      volumeSliderOpacity: 0.8
+      volumeSliderForegroundOpacity: 0.0
+      systemAudioCompressionFactor: 1.4
+      microphoneCompressionFactor: 1.1
+      
+      height: maxBarHeight
+      anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
-      anchors.verticalCenter: parent.verticalCenter
-      width: 214  // Keep same width for spacing
-      height: Theme.barHeight
-      z: 10
-      color: "#000000"
+      
+      Behavior on height {
+        NumberAnimation {
+          duration: 300
+          easing.type: Easing.OutCubic
+        }
+      }
     }
 
     // Right of center section - modules with left border only (since cava provides right border)
     Rectangle {
       anchors.left: parent.horizontalCenter
-      anchors.leftMargin: cavaMargin
+      anchors.leftMargin: cavaDisplay.width / 2 + cavaMargin
       anchors.verticalCenter: parent.verticalCenter
       height: Theme.barHeight
       color: "transparent"
