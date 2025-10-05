@@ -1,5 +1,6 @@
 // CavaShaderWidget.qml - Music visualizer using GLSL shader
 import QtQuick
+import CavaPlugin 1.0
 
 Rectangle {
     id: root
@@ -8,14 +9,72 @@ Rectangle {
     height: 30
     color: "transparent"
     
-    // Required: Pass in the cava provider (CavaWidget or CavaMicrophoneWidget)
-    required property var cavaProvider
+    // Providers for system and microphone audio
+    property var systemProvider: CavaWidget
+    property var microphoneProvider: CavaMicrophoneWidget
     
     // Configurable FPS for the animation
     property int fps: 30
     property int maxBars: 128
-    
-    property int barCount: Math.max(1, Math.min(maxBars, cavaProvider ? cavaProvider.values.length : 0))
+
+    // Anchoring behavior ("bottom", "top", "center")
+    property string systemAnchor: "center"
+    property string microphoneAnchor: "bottom"
+
+    // Theme-driven colors
+    property color systemColorLow: Theme.wm400
+    property color systemColorHigh: Theme.wm700
+    property color microphoneColorLow: Theme.app300
+    property color microphoneColorHigh: Theme.app400
+
+    property int barCount: 1
+
+    function anchorToEnum(anchor) {
+        switch ((anchor || "").toLowerCase()) {
+        case "top": return 1;
+        case "center": return 2;
+        default: return 0; // bottom
+        }
+    }
+
+    function updateDataTexture() {
+        const sysValues = systemProvider && systemProvider.values ? systemProvider.values : [];
+        const micValues = microphoneProvider && microphoneProvider.values ? microphoneProvider.values : [];
+        const count = Math.max(1, Math.min(maxBars, Math.max(sysValues.length, micValues.length)));
+
+        barCount = count;
+        dataCanvas.requestPaint();
+        dataTextureSource.scheduleUpdate();
+    }
+
+    onSystemProviderChanged: {
+        if (systemProvider && typeof systemProvider.start === "function") {
+            systemProvider.start();
+        }
+        if (systemProvider && systemProvider.bars !== undefined) {
+            systemProvider.bars = maxBars;
+        }
+        updateDataTexture();
+    }
+    onMicrophoneProviderChanged: {
+        if (microphoneProvider && typeof microphoneProvider.start === "function") {
+            microphoneProvider.start();
+        }
+        if (microphoneProvider && microphoneProvider.bars !== undefined) {
+            microphoneProvider.bars = maxBars;
+        }
+        updateDataTexture();
+    }
+
+    onMaxBarsChanged: {
+        if (systemProvider && systemProvider.bars !== undefined) {
+            systemProvider.bars = maxBars;
+        }
+        if (microphoneProvider && microphoneProvider.bars !== undefined) {
+            microphoneProvider.bars = maxBars;
+        }
+        updateDataTexture();
+    }
 
     Canvas {
         id: dataCanvas
@@ -26,23 +85,17 @@ Rectangle {
             const ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
 
-            const values = root.cavaProvider ? root.cavaProvider.values : [];
-            const count = Math.min(values.length, width);
-            for (let i = 0; i < count; ++i) {
-                const value = Math.max(0, Math.min(1, values[i] ?? 0));
-                const intensity = Math.round(value * 255);
-                ctx.fillStyle = `rgba(${intensity},0,0,1)`;
+            const sysValues = root.systemProvider && root.systemProvider.values ? root.systemProvider.values : [];
+            const micValues = root.microphoneProvider && root.microphoneProvider.values ? root.microphoneProvider.values : [];
+            for (let i = 0; i < width; ++i) {
+                const sys = Math.max(0, Math.min(1, sysValues[i] ?? 0));
+                const mic = Math.max(0, Math.min(1, micValues[i] ?? 0));
+                const r = Math.round(sys * 255);
+                const g = Math.round(mic * 255);
+                ctx.fillStyle = `rgba(${r},${g},0,1)`;
                 ctx.fillRect(i, 0, 1, 1);
             }
         }
-    }
-
-    Component.onCompleted: {
-        root.barCount = Math.max(1, Math.min(root.maxBars, root.cavaProvider ? root.cavaProvider.values.length : 0));
-        dataCanvas.width = root.barCount;
-        dataCanvas.requestPaint();
-        dataTextureSource.scheduleUpdate();
-        shader.iBarCount = root.barCount;
     }
 
     ShaderEffectSource {
@@ -55,14 +108,20 @@ Rectangle {
     ShaderEffect {
         id: shader
         anchors.fill: parent
-        
+
         property real iTime: 0
         property vector2d iResolution: Qt.vector2d(width, height)
         property real iBarCount: root.barCount
+        property real iSystemAnchor: root.anchorToEnum(root.systemAnchor)
+        property real iMicrophoneAnchor: root.anchorToEnum(root.microphoneAnchor)
+        property color systemColorLow: root.systemColorLow
+        property color systemColorHigh: root.systemColorHigh
+        property color microphoneColorLow: root.microphoneColorLow
+        property color microphoneColorHigh: root.microphoneColorHigh
         property var iDataTexture: dataTextureSource
-        
+
         fragmentShader: "cava_bars.frag.qsb"
-        
+
         // Animation timer for smooth updates
         Timer {
             interval: 1000 / root.fps
@@ -76,15 +135,28 @@ Rectangle {
     
     // Update shader when cava values change
     Connections {
-        target: root.cavaProvider
-        function onValuesChanged() {
-            root.barCount = Math.max(1, Math.min(root.maxBars, root.cavaProvider.values.length));
-            dataCanvas.width = root.barCount;
-            dataCanvas.requestPaint();
-            dataTextureSource.scheduleUpdate();
-            shader.iBarCount = root.barCount;
-        }
+        target: root.systemProvider
+        function onValuesChanged() { root.updateDataTexture(); }
     }
-    
-    property var barValues: root.cavaProvider ? root.cavaProvider.values : []
+
+    Connections {
+        target: root.microphoneProvider
+        function onValuesChanged() { root.updateDataTexture(); }
+    }
+
+    Component.onCompleted: {
+        if (systemProvider && typeof systemProvider.start === "function") {
+            systemProvider.start();
+        }
+        if (systemProvider && systemProvider.bars !== undefined) {
+            systemProvider.bars = maxBars;
+        }
+        if (microphoneProvider && typeof microphoneProvider.start === "function") {
+            microphoneProvider.start();
+        }
+        if (microphoneProvider && microphoneProvider.bars !== undefined) {
+            microphoneProvider.bars = maxBars;
+        }
+        updateDataTexture();
+    }
 }

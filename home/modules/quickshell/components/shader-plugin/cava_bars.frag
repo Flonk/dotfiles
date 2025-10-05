@@ -12,12 +12,67 @@ layout(std140, binding = 0) uniform buf {
     float iTime;
     vec2 iResolution;
     float iBarCount;
+    float iSystemAnchor;
+    float iMicrophoneAnchor;
+    vec4 systemColorLow;
+    vec4 systemColorHigh;
+    vec4 microphoneColorLow;
+    vec4 microphoneColorHigh;
 } ubuf;
 
 layout(binding = 1) uniform sampler2D iDataTexture;
 
-const vec3 bottomColor = vec3(0.2, 0.8, 1.0);
-const vec3 topColor = vec3(1.0, 0.3, 0.8);
+struct LayerSample {
+    vec3 color;
+    float coverage;
+};
+
+LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor, float yCoord) {
+    LayerSample layer;
+    layer.color = vec3(0.0);
+    layer.coverage = 0.0;
+
+    value = clamp(value, 0.0, 1.0);
+    if (value <= 0.001) {
+        return layer;
+    }
+
+    float px = 1.0 / max(ubuf.iResolution.y, 1.0);
+    float edge = px * 1.5;
+    float gradient = 0.0;
+
+    if (anchor > 1.5) { // center
+        float halfValue = value * 0.5;
+        float distance = abs(yCoord - 0.5);
+        layer.coverage = smoothstep(-edge, edge, halfValue - distance);
+        if (layer.coverage <= 0.0) {
+            return layer;
+        }
+        float halfSafe = max(halfValue, 1e-3);
+        gradient = distance / halfSafe;
+    } else if (anchor > 0.5) { // top
+        float distance = yCoord;
+        layer.coverage = smoothstep(-edge, edge, value - distance);
+        if (layer.coverage <= 0.0) {
+            return layer;
+        }
+        gradient = distance / max(value, 1e-3);
+    } else { // bottom
+        float distance = 1.0 - yCoord;
+        layer.coverage = smoothstep(-edge, edge, value - distance);
+        if (layer.coverage <= 0.0) {
+            return layer;
+        }
+        gradient = distance / max(value, 1e-3);
+    }
+
+    gradient = clamp(gradient, 0.0, 1.0);
+    vec3 baseColor = mix(lowColor.rgb, highColor.rgb, gradient);
+    float glow = smoothstep(0.75, 1.0, gradient);
+    baseColor += glow * 0.25;
+    layer.color = clamp(baseColor, 0.0, 1.0);
+    return layer;
+}
 
 void main() {
     vec2 uv = qt_TexCoord0;
@@ -26,26 +81,32 @@ void main() {
     float barIndex = floor(uv.x * bars);
     float barCoord = (barIndex + 0.5) / bars;
 
-    float barHeight = texture(iDataTexture, vec2(barCoord, 0.5)).r;
-    barHeight = clamp(barHeight, 0.0, 1.0);
+    vec4 sampleData = texture(iDataTexture, vec2(barCoord, 0.5));
+    float systemValue = clamp(sampleData.r, 0.0, 1.0);
+    float microphoneValue = clamp(sampleData.g, 0.0, 1.0);
 
-    float pixelHeight = 1.0 - uv.y;
-    vec3 color = vec3(0.0);
+    LayerSample micLayer = renderLayer(microphoneValue, ubuf.iMicrophoneAnchor, ubuf.microphoneColorLow, ubuf.microphoneColorHigh, uv.y);
+    LayerSample sysLayer = renderLayer(systemValue, ubuf.iSystemAnchor, ubuf.systemColorLow, ubuf.systemColorHigh, uv.y);
 
-    if (pixelHeight <= barHeight) {
-        float heightRatio = barHeight > 0.0 ? pixelHeight / barHeight : 0.0;
-        color = mix(bottomColor, topColor, heightRatio);
+    vec3 micPremul = micLayer.color * micLayer.coverage;
+    float micAlpha = micLayer.coverage;
 
-        float glow = smoothstep(0.8, 1.0, heightRatio);
-        color += vec3(glow * 0.35);
-    }
+    vec3 sysPremul = sysLayer.color * sysLayer.coverage;
+    float sysAlpha = sysLayer.coverage;
+
+    vec3 premultiplied = sysPremul + micPremul * (1.0 - sysAlpha);
+    float combinedAlpha = sysAlpha + micAlpha * (1.0 - sysAlpha);
 
     float barX = fract(uv.x * bars);
     float gap = smoothstep(0.45, 0.5, abs(barX - 0.5));
-    color *= mix(1.0, 0.35, gap);
+    float spacingMask = mix(1.0, 0.35, gap);
+    premultiplied *= spacingMask;
+    combinedAlpha *= spacingMask;
 
-    float pulse = 0.05 * sin(ubuf.iTime * 6.0 + barIndex * 0.35);
+    vec3 color = combinedAlpha > 0.0 ? premultiplied / combinedAlpha : vec3(0.0);
+
+    float pulse = 0.03 * sin(ubuf.iTime * 5.5 + barIndex * 0.35);
     color = clamp(color + pulse, 0.0, 1.0);
 
-    fragColor = vec4(color, ubuf.qt_Opacity);
+    fragColor = vec4(color, ubuf.qt_Opacity * combinedAlpha);
 }
