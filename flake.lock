@@ -190,12 +190,33 @@
         "type": "github"
       }
     },
+    "openconnect-pulse-launcher": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1757702589,
+        "narHash": "sha256-BHmo/YcE6hxlMHkP8JeIYYsxMX/UOTCY9RCYgm6wab8=",
+        "owner": "erahhal",
+        "repo": "openconnect-pulse-launcher",
+        "rev": "2964a371088d8dc2abf39097a4c37571ef2b0767",
+        "type": "github"
+      },
+      "original": {
+        "owner": "erahhal",
+        "repo": "openconnect-pulse-launcher",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "gauntlet": "gauntlet",
         "home-manager": "home-manager",
         "nix-colorizer": "nix-colorizer",
         "nixpkgs": "nixpkgs",
+        "openconnect-pulse-launcher": "openconnect-pulse-launcher",
         "sops-nix": "sops-nix",
         "walker": "walker"
       }

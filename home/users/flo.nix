@@ -105,6 +105,8 @@ in
           cp *.ttf $out/share/fonts/truetype/
         '';
       })
+
+      inputs.openconnect-pulse-launcher.packages."${pkgs.system}".openconnect-pulse-launcher
     ];
 
     username = "flo";

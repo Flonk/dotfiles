@@ -23,6 +23,11 @@
 
     nix-colorizer.url = "github:nutsalhan87/nix-colorizer";
 
+    openconnect-pulse-launcher = {
+      url = "github:erahhal/openconnect-pulse-launcher";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -45,6 +50,9 @@
 
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs;
+          };
           modules = [
             ./hosts/schnitzelwirt
           ];
