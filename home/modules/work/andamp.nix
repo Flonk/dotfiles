@@ -1,8 +1,23 @@
-{ pkgs, config, ... }:
 {
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
+{
+
+  home.packages = with pkgs; [
+    inputs.openconnect-pulse-launcher.packages."${pkgs.system}".openconnect-pulse-launcher
+  ];
+
   sops.secrets.andamp-vpn = {
     format = "binary";
     sopsFile = ../../../assets/secrets/andamp-vpn.ovpn;
+  };
+
+  sops.secrets.vpn3ithost = {
+    key = "vpn3ithost";
+    sopsFile = ../../../assets/secrets/secrets.json;
   };
 
   systemd.user.services.import-andamp-vpn = {
@@ -32,4 +47,6 @@
       WantedBy = [ "default.target" ];
     };
   };
+
+  programs.zsh.shellAliases.vpn_obk = "openconnect-pulse-launcher \"$(bat -pp ${config.sops.secrets.vpn3ithost.path})\"";
 }
