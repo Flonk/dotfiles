@@ -64,6 +64,8 @@
       "wheel"
       "docker"
       "plugdev"
+      "libvirtd"
+      "kvm"
     ];
   };
 
@@ -74,4 +76,23 @@
 
   services.greetd.settings.default_session.user = "flo";
   programs.steam.enable = true;
+
+  programs.nix-ld.enable = true;
+  # 1) Libvirt (QEMU/KVM) + UEFI firmware
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      swtpm.enable = true; # TPM 2.0 (some guests expect it)
+      ovmf.enable = true; # UEFI firmware
+      ovmf.packages = [ pkgs.OVMFFull.fd ];
+    };
+  };
+
+  # 2) GUI manager
+  programs.virt-manager.enable = true;
+
+  # (optional) Autostart the default NAT network
+  systemd.services."virtnetwork@default".wantedBy = [ "multi-user.target" ];
+
 }

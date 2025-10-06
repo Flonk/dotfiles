@@ -90,7 +90,7 @@ PanelWindow {
     // Center container - shader-based cava visualizer with real audio data
     CavaShaderWidget {
       id: cavaShaderDisplay
-      width: 300
+      width: 220
       height: Theme.barHeight
       systemProvider: CavaWidget
       microphoneProvider: CavaMicrophoneWidget
@@ -98,9 +98,9 @@ PanelWindow {
       maxBars: 40
       systemAnchor: "center"
       microphoneAnchor: "bottom"
-      systemColorLow: Theme.wm400
-      systemColorHigh: Theme.wm700
-      microphoneColorLow: Theme.app300
+      systemColorLow: Theme.wm200
+      systemColorHigh: Theme.wm800
+      microphoneColorLow: Theme.app100
       microphoneColorHigh: Theme.app600
       backgroundColor: Theme.app150
       

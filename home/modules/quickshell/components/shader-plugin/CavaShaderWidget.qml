@@ -5,7 +5,7 @@ import CavaPlugin 1.0
 Rectangle {
     id: root
     
-    width: 200
+    width: 150
     height: 30
     color: "transparent"
     
@@ -130,6 +130,14 @@ Rectangle {
         property var iDataTexture: dataTextureSource
 
         fragmentShader: "cava_bars.frag.qsb"
+        
+        NumberAnimation on iTime {
+            from: 0
+            to: 1000000
+            duration: 1000000000
+            loops: Animation.Infinite
+            running: true
+        }
     }
     
     // Update shader when cava values change
