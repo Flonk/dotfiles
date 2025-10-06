@@ -55,8 +55,8 @@ Rectangle {
         if (systemProvider && systemProvider.bars !== undefined) {
             systemProvider.bars = maxBars;
         }
-        if (systemProvider && systemProvider.enableMonstercatFilter !== undefined) {
-            systemProvider.enableMonstercatFilter = true;
+        if (systemProvider && systemProvider.enableMonstercatFilter !== false) {
+            systemProvider.enableMonstercatFilter = false;
         }
         updateDataTexture();
     }
@@ -68,8 +68,8 @@ Rectangle {
         if (microphoneProvider && microphoneProvider.bars !== undefined) {
             microphoneProvider.bars = maxBars;
         }
-        if (microphoneProvider && microphoneProvider.enableMonstercatFilter !== undefined) {
-            microphoneProvider.enableMonstercatFilter = true;
+        if (microphoneProvider && microphoneProvider.enableMonstercatFilter !== false) {
+            microphoneProvider.enableMonstercatFilter = false;
         }
         updateDataTexture();
     }

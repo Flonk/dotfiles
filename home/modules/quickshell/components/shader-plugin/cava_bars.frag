@@ -65,40 +65,40 @@ LayerSample renderLayer(float value, float anchor, vec4 lowColor, vec4 highColor
     float pixelHeight = 1.0 / max(ubuf.iResolution.y, 1.0);
     float minSpan = pixelHeight;
 
-    float topY;
-    float bottomY;
-
     if (anchor > 1.5) {
         float halfSpan = max(value * 0.5, minSpan * 0.5);
         float center = 0.5;
-        topY = clamp(center - halfSpan, 0.0, 1.0);
-        bottomY = clamp(center + halfSpan, 0.0, 1.0);
-    } else if (anchor > 0.5) {
-        float span = max(value, minSpan);
-        topY = 0.0;
-        bottomY = clamp(span, 0.0, 1.0);
-    } else {
-        float span = max(value, minSpan);
-        topY = clamp(1.0 - span, 0.0, 1.0);
-        bottomY = 1.0;
+        float topY = clamp(center - halfSpan, 0.0, 1.0);
+        float bottomY = clamp(center + halfSpan, 0.0, 1.0);
+
+        float upper = min(topY, bottomY);
+        float lower = max(topY, bottomY);
+        float span = max(lower - upper, minSpan);
+        float baseSoftness = pixelHeight * 0.4;
+        float adaptiveSoftness = max(baseSoftness, fwidth(uvY) * 0.7);
+        float maxSoftness = span * 0.3;
+        float softness = clamp(adaptiveSoftness, pixelHeight * 0.15, maxSoftness);
+
+        float coverageCenter = bandCoverage(uvY, upper, lower, softness);
+        float offset = pixelHeight * 0.4;
+        float coverageUp = bandCoverage(clamp(uvY - offset, 0.0, 1.0), upper, lower, softness);
+        float coverageDown = bandCoverage(clamp(uvY + offset, 0.0, 1.0), upper, lower, softness);
+        float coverage = (coverageCenter + coverageUp + coverageDown) / 3.0;
+
+        layer.coverage = clamp(coverage, 0.0, 1.0);
+        layer.color = baseColor;
+        return layer;
     }
 
-    float upper = min(topY, bottomY);
-    float lower = max(topY, bottomY);
-    float span = max(lower - upper, minSpan);
-    float baseSoftness = pixelHeight * 0.75;
-    float adaptiveSoftness = max(baseSoftness, fwidth(uvY));
-    float maxSoftness = span * 0.45;
-    float softness = clamp(adaptiveSoftness, pixelHeight * 0.25, maxSoftness);
+    float targetY = anchor > 0.5 ? clamp(value, 0.0, 1.0) : clamp(1.0 - value, 0.0, 1.0);
+    float thickness = max(pixelHeight * 1.5, 0.0015);
+    float inner = thickness * 0.4;
+    float outer = thickness;
 
-    float coverageCenter = bandCoverage(uvY, upper, lower, softness);
-    float offset = pixelHeight * 0.5;
-    float coverageUp = bandCoverage(clamp(uvY - offset, 0.0, 1.0), upper, lower, softness);
-    float coverageDown = bandCoverage(clamp(uvY + offset, 0.0, 1.0), upper, lower, softness);
-    float coverage = (coverageCenter + coverageUp + coverageDown) / 3.0;
-    coverage = clamp(coverage, 0.0, 1.0);
+    float dist = abs(uvY - targetY);
+    float coverage = 1.0 - smoothstep(inner, outer, dist);
 
-    layer.coverage = coverage;
+    layer.coverage = clamp(coverage, 0.0, 1.0);
     layer.color = baseColor;
     return layer;
 }
@@ -119,17 +119,6 @@ vec3 evaluateLayers(float sampleX, float uvY) {
 
 void main() {
     vec2 uv = qt_TexCoord0;
-    float pixelWidth = 1.0 / max(ubuf.iResolution.x, 1.0);
-    float halfStep = pixelWidth * 0.5;
-
-    float leftX = clamp(uv.x - halfStep, 0.0, 0.9999);
-    float rightX = clamp(uv.x + halfStep, 0.0, 0.9999);
-
-    vec3 leftColor = evaluateLayers(leftX, uv.y);
-    vec3 centerColor = evaluateLayers(uv.x, uv.y);
-    vec3 rightColor = evaluateLayers(rightX, uv.y);
-
-    vec3 color = (leftColor + centerColor + rightColor) / 3.0;
-
+    vec3 color = evaluateLayers(uv.x, uv.y);
     fragColor = vec4(color, ubuf.qt_Opacity);
 }

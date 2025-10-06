@@ -102,7 +102,7 @@ PanelWindow {
       systemColorHigh: Theme.wm700
       microphoneColorLow: Theme.app300
       microphoneColorHigh: Theme.app600
-  backgroundColor: Theme.app150
+      backgroundColor: Theme.app150
       
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
