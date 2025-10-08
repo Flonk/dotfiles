@@ -19,6 +19,3 @@ AppLauncherDisplay 1.0 AppLauncherDisplay.qml
 SystemBar 1.0 SystemBar.qml
 SystemBarsDisplay 1.0 SystemBarsDisplay.qml
 Shortcuts 1.0 Shortcuts.qml
-CavaDisplay 1.0 CavaDisplay.qml
-StackedCavaDisplay 1.0 StackedCavaDisplay.qml
-CavaWindow 1.0 CavaWindow.qml

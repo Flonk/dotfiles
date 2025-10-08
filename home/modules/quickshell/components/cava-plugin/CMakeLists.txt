@@ -24,8 +24,10 @@ qt6_add_qml_module(cavaprovider
         cavaprovider.h
         audiocollector.cpp  
         audiocollector.h
-        microphonecavaprovider.cpp
-        microphonecavaprovider.h
+    audiohub.cpp
+    audiohub.h
+        datatexture.cpp
+        datatexture.h
 )
 
 target_link_libraries(cavaprovider PRIVATE

@@ -19,6 +19,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 microphoneColorLow;
     vec4 microphoneColorHigh;
     vec4 backgroundColor;
+    vec4 volumeBarColor;
 } ubuf;
 
 layout(binding = 1) uniform sampler2D iDataTexture;
@@ -47,6 +48,16 @@ vec2 sampleAudio(float coord) {
     vec4 nextSample = texture(iDataTexture, vec2(nextCoord, 0.5));
 
     return mix(baseSample.rg, nextSample.rg, t);
+}
+
+vec2 getVolumeData() {
+    // Sample from first pixel to get volume and dragging state
+    vec4 texSample = texture(iDataTexture, vec2(0.5 / max(ubuf.iBarCount, 1.0), 0.5));
+    // Blue channel: 0-127 = volume (0.0-1.0), 128-255 = dragging flag
+    float blueChannel = texSample.b;
+    float isDragging = step(0.5, blueChannel); // > 0.5 means dragging (>= 128/255)
+    float volume = isDragging > 0.5 ? (blueChannel - 0.5) * 2.0 : blueChannel * 2.0;
+    return vec2(volume, isDragging);
 }
 
 float bandCoverage(float y, float upper, float lower, float softness) {
@@ -169,8 +180,36 @@ vec3 evaluateLayers(float sampleX, float uvY) {
     return clamp(color, 0.0, 1.0);
 }
 
+vec3 renderVolumeBar(vec2 uv) {
+    vec2 volumeData = getVolumeData();
+    float volume = volumeData.x;
+    float isDragging = volumeData.y;
+    
+    // Only render if dragging
+    if (isDragging < 0.5) {
+        return evaluateLayers(uv.x, uv.y);
+    }
+    
+    // Volume bar takes up full height
+    float pixelHeight = 1.0 / max(ubuf.iResolution.y, 1.0);
+    float thickness = max(pixelHeight * 1.5, 0.0015);
+    
+    // Create dot pattern for volume bar
+    float dots = dotPattern(uv, thickness, 1.0);
+    vec3 dotColor = mix(ubuf.backgroundColor.rgb, ubuf.volumeBarColor.rgb, dots);
+    
+    // Check if we're before the volume position (filled area)
+    float filled = step(uv.x, volume);
+    
+    // Background for unfilled area
+    vec3 backgroundColor = ubuf.backgroundColor.rgb;
+    
+    // Mix filled dots with background based on position
+    return mix(backgroundColor, dotColor, filled);
+}
+
 void main() {
     vec2 uv = qt_TexCoord0;
-    vec3 color = evaluateLayers(uv.x, uv.y);
+    vec3 color = renderVolumeBar(uv);
     fragColor = vec4(color, ubuf.qt_Opacity);
 }

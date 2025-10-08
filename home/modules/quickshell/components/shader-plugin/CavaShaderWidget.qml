@@ -9,9 +9,8 @@ Rectangle {
     height: 30
     color: "transparent"
     
-    // Providers for system and microphone audio
-    property var systemProvider: CavaWidget
-    property var microphoneProvider: CavaMicrophoneWidget
+    // Volume control - must be provided externally
+    property var volumeWidget: null
     
     // Configurable FPS for the animation
     property int fps: 30
@@ -27,8 +26,31 @@ Rectangle {
     property color microphoneColorLow: Theme.app300
     property color microphoneColorHigh: Theme.app400
     property color backgroundColor: Theme.app150
+    property color volumeBarColor: Theme.success600
+    property bool monstercatFilter: true
 
-    property int barCount: 1
+    property int barCount: dataTexture.barCount
+    property bool isDragging: false
+    property real pendingVolume: volumeWidget ? volumeWidget.volume : 0.5
+    property bool hasPendingVolume: false
+
+    function requestVolumeChange(value, immediate) {
+        if (!root.volumeWidget || !root.volumeWidget.setVolume) {
+            return;
+        }
+        const clamped = Math.max(0, Math.min(1, value));
+        if (immediate === true) {
+            root.volumeWidget.setVolume(clamped);
+            return;
+        }
+        root.pendingVolume = clamped;
+        root.hasPendingVolume = true;
+        if (!volumeApplyTimer.running) {
+            volumeApplyTimer.start();
+        }
+    }
+
+    // Update texture when dragging state changes handled by CavaDataTexture
 
     function anchorToEnum(anchor) {
         switch ((anchor || "").toLowerCase()) {
@@ -38,77 +60,50 @@ Rectangle {
         }
     }
 
-    function updateDataTexture() {
-        const sysValues = systemProvider && systemProvider.values ? systemProvider.values : [];
-        const micValues = microphoneProvider && microphoneProvider.values ? microphoneProvider.values : [];
-        const count = Math.max(1, Math.min(maxBars, Math.max(sysValues.length, micValues.length)));
-
-        barCount = count;
-        dataCanvas.requestPaint();
-        dataTextureSource.scheduleUpdate();
+    Timer {
+        id: volumeApplyTimer
+        interval: 33
+        repeat: true
+        running: false
+        onTriggered: {
+            if (!root.hasPendingVolume) {
+                if (!root.isDragging) {
+                    stop();
+                }
+                return;
+            }
+            root.hasPendingVolume = false;
+            root.volumeWidget.setVolume(root.pendingVolume);
+            if (!root.isDragging) {
+                stop();
+            }
+        }
     }
 
-    onSystemProviderChanged: {
-        if (systemProvider && typeof systemProvider.start === "function") {
-            systemProvider.start();
-        }
-        if (systemProvider && systemProvider.bars !== undefined) {
-            systemProvider.bars = maxBars;
-        }
-        if (systemProvider && systemProvider.enableMonstercatFilter !== false) {
-            systemProvider.enableMonstercatFilter = false;
-        }
-        updateDataTexture();
-    }
-
-    onMicrophoneProviderChanged: {
-        if (microphoneProvider && typeof microphoneProvider.start === "function") {
-            microphoneProvider.start();
-        }
-        if (microphoneProvider && microphoneProvider.bars !== undefined) {
-            microphoneProvider.bars = maxBars;
-        }
-        if (microphoneProvider && microphoneProvider.enableMonstercatFilter !== false) {
-            microphoneProvider.enableMonstercatFilter = false;
-        }
-        updateDataTexture();
-    }
-
-    onMaxBarsChanged: {
-        if (systemProvider && systemProvider.bars !== undefined) {
-            systemProvider.bars = maxBars;
-        }
-        if (microphoneProvider && microphoneProvider.bars !== undefined) {
-            microphoneProvider.bars = maxBars;
-        }
-        updateDataTexture();
-    }
-
-    Canvas {
-        id: dataCanvas
+    CavaDataTexture {
+        id: dataTexture
         visible: false
-        width: root.barCount
+        width: barCount
         height: 1
-        onPaint: {
-            const ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
+        volumeWidget: root.volumeWidget
+        maxBars: root.maxBars
+        maxFps: root.fps
+        dragging: root.isDragging
+        monstercatFilter: root.monstercatFilter
+    }
 
-            const sysValues = root.systemProvider && root.systemProvider.values ? root.systemProvider.values : [];
-            const micValues = root.microphoneProvider && root.microphoneProvider.values ? root.microphoneProvider.values : [];
-            for (let i = 0; i < width; ++i) {
-                const sys = Math.max(0, Math.min(1, sysValues[i] ?? 0));
-                const mic = Math.max(0, Math.min(1, micValues[i] ?? 0));
-                const r = Math.round(sys * 255);
-                const g = Math.round(mic * 255);
-                ctx.fillStyle = `rgba(${r},${g},0,1)`;
-                ctx.fillRect(i, 0, 1, 1);
+    Connections {
+        target: volumeWidget
+        function onVolumeChanged() {
+            if (!root.isDragging && volumeWidget) {
+                root.pendingVolume = volumeWidget.volume;
             }
         }
     }
 
     ShaderEffectSource {
         id: dataTextureSource
-        sourceItem: dataCanvas
+        sourceItem: dataTexture
         hideSource: true
         live: true
     }
@@ -116,9 +111,8 @@ Rectangle {
     ShaderEffect {
         id: shader
         anchors.fill: parent
-
-    property real iTime: 0
-    property vector2d iResolution: Qt.vector2d(width, height)
+        property real iTime: 0
+        property vector2d iResolution: Qt.vector2d(width, height)
         property real iBarCount: root.barCount
         property real iSystemAnchor: root.anchorToEnum(root.systemAnchor)
         property real iMicrophoneAnchor: root.anchorToEnum(root.microphoneAnchor)
@@ -127,6 +121,7 @@ Rectangle {
         property color microphoneColorLow: root.microphoneColorLow
         property color microphoneColorHigh: root.microphoneColorHigh
         property color backgroundColor: root.backgroundColor
+        property color volumeBarColor: root.volumeBarColor
         property var iDataTexture: dataTextureSource
 
         fragmentShader: "cava_bars.frag.qsb"
@@ -140,36 +135,50 @@ Rectangle {
         }
     }
     
-    // Update shader when cava values change
-    Connections {
-        target: root.systemProvider
-        function onValuesChanged() { root.updateDataTexture(); }
-    }
-
-    Connections {
-        target: root.microphoneProvider
-        function onValuesChanged() { root.updateDataTexture(); }
+    // Mouse area for volume control
+    MouseArea {
+        anchors.fill: parent
+        
+        onPressed: function(mouse) {
+            root.isDragging = true;
+            const newVolume = mouse.x / width;
+            root.requestVolumeChange(newVolume);
+            // Don't call updateDataTexture - onVolumeChanged will handle it
+        }
+        
+        onReleased: {
+            root.isDragging = false;
+            if (root.hasPendingVolume) {
+                root.volumeWidget.setVolume(root.pendingVolume);
+                root.hasPendingVolume = false;
+            }
+            volumeApplyTimer.stop();
+            // Don't call updateDataTexture - onIsDraggingChanged will handle it
+        }
+        
+        onPositionChanged: function(mouse) {
+            if (pressed) {
+                const newVolume = mouse.x / width;
+                root.requestVolumeChange(newVolume);
+                // Don't call updateDataTexture - onVolumeChanged will handle it
+            }
+        }
+        
+        onWheel: (wheel) => {
+            if (root.volumeWidget) {
+                if (wheel.angleDelta.y > 0 && root.volumeWidget.incrementVolume) {
+                    root.volumeWidget.incrementVolume();
+                } else if (wheel.angleDelta.y < 0 && root.volumeWidget.decrementVolume) {
+                    root.volumeWidget.decrementVolume();
+                }
+                // Don't call updateDataTexture - onVolumeChanged will handle it
+            }
+        }
     }
 
     Component.onCompleted: {
-        if (systemProvider && typeof systemProvider.start === "function") {
-            systemProvider.start();
+        if (volumeWidget) {
+            root.pendingVolume = volumeWidget.volume;
         }
-        if (systemProvider && systemProvider.bars !== undefined) {
-            systemProvider.bars = maxBars;
-        }
-        if (systemProvider && systemProvider.enableMonstercatFilter !== undefined) {
-            systemProvider.enableMonstercatFilter = true;
-        }
-        if (microphoneProvider && typeof microphoneProvider.start === "function") {
-            microphoneProvider.start();
-        }
-        if (microphoneProvider && microphoneProvider.bars !== undefined) {
-            microphoneProvider.bars = maxBars;
-        }
-        if (microphoneProvider && microphoneProvider.enableMonstercatFilter !== undefined) {
-            microphoneProvider.enableMonstercatFilter = true;
-        }
-        updateDataTexture();
     }
 }

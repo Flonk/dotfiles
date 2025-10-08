@@ -37,17 +37,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/lib/qt-6/qml/CavaPlugin
-    # Install both the backing library and plugin library
-    cp libcavaprovider.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaprovider.so not found"
-    cp libcavaproviderplugin.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaproviderplugin.so not found"
-    # Copy our QML files
+      mkdir -p $out/lib/qt-6/qml/CavaPlugin
+      # Install both the backing library and plugin library
+      cp libcavaprovider.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaprovider.so not found"
+      cp libcavaproviderplugin.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaproviderplugin.so not found"
+    # Copy qmldir
     cp $src/qmldir $out/lib/qt-6/qml/CavaPlugin/
-    cp $src/CavaWidget.qml $out/lib/qt-6/qml/CavaPlugin/
-    cp $src/CavaMicrophoneWidget.qml $out/lib/qt-6/qml/CavaPlugin/
     # List what we installed for debugging
-    echo "Installed files in CavaPlugin:"
-    ls -la $out/lib/qt-6/qml/CavaPlugin/
+      echo "Installed files in CavaPlugin:"
+      ls -la $out/lib/qt-6/qml/CavaPlugin/
   '';
 
   meta = with pkgs.lib; {

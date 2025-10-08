@@ -72,7 +72,7 @@ PanelWindow {
     Rectangle {
       anchors.left: parent.left
       anchors.right: parent.horizontalCenter
-      anchors.rightMargin: cavaDisplay.width / 2 + cavaMargin
+      anchors.rightMargin: cavaShaderDisplay.width / 2 + cavaMargin
       anchors.verticalCenter: parent.verticalCenter
       height: Theme.barHeight
       color: "transparent"
@@ -92,8 +92,7 @@ PanelWindow {
       id: cavaShaderDisplay
       width: 220
       height: Theme.barHeight
-      systemProvider: CavaWidget
-      microphoneProvider: CavaMicrophoneWidget
+      volumeWidget: VolumeWidget
       fps: 30
       maxBars: 40
       systemAnchor: "center"
@@ -103,6 +102,7 @@ PanelWindow {
       microphoneColorLow: Theme.app100
       microphoneColorHigh: Theme.app600
       backgroundColor: Theme.app150
+      volumeBarColor: Theme.success600
       
       anchors.bottom: parent.bottom
       anchors.horizontalCenter: parent.horizontalCenter
