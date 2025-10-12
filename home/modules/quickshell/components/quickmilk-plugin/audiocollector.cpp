@@ -9,7 +9,7 @@
 #include <cstring>
 #include <vector>
 
-namespace cava_plugin {
+namespace quickmilk {
 
 // PipeWire callbacks
 static void on_stream_param_changed(void *data, uint32_t id, const struct spa_pod *param);
@@ -69,22 +69,10 @@ void AudioCollector::initPipeWire() {
         return;
     }
 
-    struct pw_context* context = pw_context_new(pw_main_loop_get_loop(m_loop), nullptr, 0);
-    if (!context) {
-        qWarning() << "AudioCollector: Failed to create PipeWire context";
-        return;
-    }
-
-    struct pw_core* core = pw_context_connect(context, nullptr, 0);
-    if (!core) {
-        qWarning() << "AudioCollector: Failed to connect to PipeWire";
-        return;
-    }
-
     // ---- Stream props ----
     const char* streamName = (m_audioSource == static_cast<AudioSource>(0))
-        ? "cava-plugin-system-audio"
-        : "cava-plugin-microphone";
+    ? "quickmilk-plugin-system-audio"
+    : "quickmilk-plugin-microphone";
 
     pw_properties* props = pw_properties_new(
         PW_KEY_MEDIA_TYPE, "Audio",
@@ -205,7 +193,7 @@ size_t AudioCollector::readChunk(float* buffer) {
     if (available > max_latency_samples) {
         // Skip ahead by discarding old data, keeping only the most recent ~25ms
         size_t skip_amount = available - (ac::SAMPLE_RATE / 40);
-        float discard_buffer[1024];
+        static float discard_buffer[1024];
         while (skip_amount > 0) {
             size_t to_skip = std::min(skip_amount, sizeof(discard_buffer) / sizeof(float));
             size_t skipped = m_ring.read(discard_buffer, to_skip);
@@ -297,4 +285,4 @@ static void on_stream_process(void *data) {
     pw_stream_queue_buffer(collector->getStream(), pwb);
 }
 
-} // namespace cava_plugin
+} // namespace quickmilk

@@ -12,7 +12,7 @@
 struct pw_main_loop;
 struct pw_stream;
 
-namespace cava_plugin {
+namespace quickmilk {
 Q_NAMESPACE
 
 enum class AudioSource {
@@ -22,7 +22,7 @@ enum class AudioSource {
 Q_ENUM_NS(AudioSource)
 
 namespace ac {
-    constexpr quint32 SAMPLE_RATE = 44100;
+    constexpr quint32 SAMPLE_RATE = 48000;
     constexpr quint32 CHUNK_SIZE = 512;
 }
 
@@ -70,4 +70,4 @@ private:
     friend class PipeWireWorker;
 };
 
-} // namespace cava_plugin
+} // namespace quickmilk

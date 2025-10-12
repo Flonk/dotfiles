@@ -8,6 +8,7 @@ singleton Time 1.0 Time.qml
 AppController 1.0 AppController.qml
 WorkspacesWidget 1.0 WorkspacesWidget.qml
 Bar 1.0 Bar.qml
+AudioOrbWindow 1.0 AudioOrbWindow.qml
 BarWindow 1.0 BarWindow.qml
 ClockWidget 1.0 ClockWidget.qml
 CpuDisplay 1.0 CpuDisplay.qml

@@ -1,6 +1,7 @@
 // CavaShaderWidget.qml - Music visualizer using GLSL shader
 import QtQuick
-import CavaPlugin 1.0
+import QtQml
+import Quickmilk 1.0
 
 Rectangle {
     id: root
@@ -28,6 +29,14 @@ Rectangle {
     property color backgroundColor: Theme.app150
     property color volumeBarColor: Theme.success600
     property bool monstercatFilter: true
+    property real gravityDecay: 0.97
+
+    Quickmilk {
+        id: quickmilk
+        maxBars: root.maxBars
+        enableMonstercatFilter: root.monstercatFilter
+        gravityDecay: root.gravityDecay
+    }
 
     property int barCount: dataTexture.barCount
     property bool isDragging: false
@@ -50,7 +59,7 @@ Rectangle {
         }
     }
 
-    // Update texture when dragging state changes handled by CavaDataTexture
+    // Update texture when dragging state changes handled by QuickmilkDataTexture
 
     function anchorToEnum(anchor) {
         switch ((anchor || "").toLowerCase()) {
@@ -80,7 +89,7 @@ Rectangle {
         }
     }
 
-    CavaDataTexture {
+    QuickmilkDataTexture {
         id: dataTexture
         visible: false
         width: barCount
@@ -89,7 +98,7 @@ Rectangle {
         maxBars: root.maxBars
         maxFps: root.fps
         dragging: root.isDragging
-        monstercatFilter: root.monstercatFilter
+        hub: quickmilk.hub
     }
 
     Connections {

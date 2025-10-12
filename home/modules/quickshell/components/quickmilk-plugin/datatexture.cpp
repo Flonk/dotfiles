@@ -9,8 +9,7 @@
 #include <QSGImageNode>
 #include <QSGSimpleTextureNode>
 #include <QSGTexture>
-#include "audiohub.h"
-#include "cavaprovider.h"
+#include "quickmilk.h"
 
 namespace {
 
@@ -26,9 +25,9 @@ int clampToByte(double value) {
 
 } // namespace
 
-namespace cava_plugin {
+namespace quickmilk {
 
-CavaDataTexture::CavaDataTexture(QQuickItem* parent)
+QuickmilkDataTexture::QuickmilkDataTexture(QQuickItem* parent)
     : QQuickItem(parent) {
     setFlag(ItemHasContents, true);
 
@@ -40,27 +39,9 @@ CavaDataTexture::CavaDataTexture(QQuickItem* parent)
             m_throttleTimer.start(interval);
         }
     });
-
-    auto* hub = AudioHub::instance();
-    if (hub) {
-        hub->setMaxBars(m_maxBars);
-        m_systemProvider = hub->systemProvider();
-        m_microphoneProvider = hub->microphoneProvider();
-        m_monstercatFilter = hub->monstercatFilter();
-    }
-
-    if (m_systemProvider) {
-        m_systemConnection = connect(m_systemProvider, &CavaProvider::valuesChanged,
-                                      this, &CavaDataTexture::handleValuesChanged);
-    }
-    if (m_microphoneProvider) {
-        m_microphoneConnection = connect(m_microphoneProvider, &CavaProvider::valuesChanged,
-                                          this, &CavaDataTexture::handleValuesChanged);
-    }
-
 }
 
-CavaDataTexture::~CavaDataTexture() {
+QuickmilkDataTexture::~QuickmilkDataTexture() {
     if (m_systemConnection) {
         disconnect(m_systemConnection);
     }
@@ -70,14 +51,23 @@ CavaDataTexture::~CavaDataTexture() {
     if (m_volumeWidget) {
         disconnect(m_volumeConnection);
     }
+    if (m_hubSystemConnection) {
+        disconnect(m_hubSystemConnection);
+    }
+    if (m_hubMicrophoneConnection) {
+        disconnect(m_hubMicrophoneConnection);
+    }
+    if (m_hubMaxBarsConnection) {
+        disconnect(m_hubMaxBarsConnection);
+    }
 }
 
-void CavaDataTexture::componentComplete() {
+void QuickmilkDataTexture::componentComplete() {
     QQuickItem::componentComplete();
     performRefresh();
 }
 
-void CavaDataTexture::setVolumeWidget(QObject* widget) {
+void QuickmilkDataTexture::setVolumeWidget(QObject* widget) {
     if (m_volumeWidget == widget) {
         return;
     }
@@ -101,22 +91,28 @@ void CavaDataTexture::setVolumeWidget(QObject* widget) {
     performRefresh();
 }
 
-void CavaDataTexture::setMaxBars(int bars) {
+void QuickmilkDataTexture::setMaxBars(int bars) {
+    applyMaxBars(bars, true);
+}
+
+void QuickmilkDataTexture::applyMaxBars(int bars, bool propagateToHub) {
     if (bars <= 0) {
         bars = 1;
     }
     if (m_maxBars == bars) {
         return;
     }
+
     m_maxBars = bars;
-    if (auto* hub = AudioHub::instance()) {
-        hub->setMaxBars(m_maxBars);
+    if (propagateToHub && m_quickmilk) {
+        m_quickmilk->setMaxBars(m_maxBars);
     }
+
     emit maxBarsChanged();
     performRefresh();
 }
 
-void CavaDataTexture::setMaxFps(int fps) {
+void QuickmilkDataTexture::setMaxFps(int fps) {
     if (fps <= 0) {
         fps = 1;
     }
@@ -128,7 +124,45 @@ void CavaDataTexture::setMaxFps(int fps) {
     performRefresh();
 }
 
-void CavaDataTexture::setDragging(bool dragging) {
+void QuickmilkDataTexture::setHubObject(QObject* hub) {
+    setHub(qobject_cast<QuickmilkHub*>(hub));
+}
+
+void QuickmilkDataTexture::setHub(QuickmilkHub* hub) {
+    if (m_quickmilk == hub) {
+        return;
+    }
+
+    if (m_hubSystemConnection) {
+        disconnect(m_hubSystemConnection);
+        m_hubSystemConnection = {};
+    }
+    if (m_hubMicrophoneConnection) {
+        disconnect(m_hubMicrophoneConnection);
+        m_hubMicrophoneConnection = {};
+    }
+    if (m_hubMaxBarsConnection) {
+        disconnect(m_hubMaxBarsConnection);
+        m_hubMaxBarsConnection = {};
+    }
+
+    m_quickmilk = hub;
+
+    if (m_quickmilk) {
+    m_hubSystemConnection = connect(m_quickmilk, &QuickmilkHub::systemVisualizerChanged,
+                    this, &QuickmilkDataTexture::handleVisualizersUpdated);
+    m_hubMicrophoneConnection = connect(m_quickmilk, &QuickmilkHub::microphoneVisualizerChanged,
+                        this, &QuickmilkDataTexture::handleVisualizersUpdated);
+        m_hubMaxBarsConnection = connect(m_quickmilk, &QuickmilkHub::maxBarsChanged,
+                                         this, &QuickmilkDataTexture::handleHubMaxBarsChanged);
+        applyMaxBars(m_quickmilk->maxBars(), false);
+    }
+
+    handleVisualizersUpdated();
+    emit hubChanged();
+}
+
+void QuickmilkDataTexture::setDragging(bool dragging) {
     if (m_dragging == dragging) {
         return;
     }
@@ -137,29 +171,18 @@ void CavaDataTexture::setDragging(bool dragging) {
     scheduleRefresh();
 }
 
-void CavaDataTexture::setMonstercatFilter(bool enabled) {
-    if (m_monstercatFilter == enabled) {
-        return;
-    }
-    m_monstercatFilter = enabled;
-    if (auto* hub = AudioHub::instance()) {
-        hub->setMonstercatFilter(enabled);
-    }
-    emit monstercatFilterChanged();
-}
-
-void CavaDataTexture::handleValuesChanged() {
+void QuickmilkDataTexture::handleValuesChanged() {
     scheduleRefresh();
 }
 
-void CavaDataTexture::handleVolumeChanged() {
+void QuickmilkDataTexture::handleVolumeChanged() {
     if (m_volumeWidget) {
         m_volume = m_volumeWidget->property("volume").toDouble();
     }
     scheduleRefresh();
 }
 
-void CavaDataTexture::scheduleRefresh() {
+void QuickmilkDataTexture::scheduleRefresh() {
     if (!isComponentComplete()) {
         return;
     }
@@ -173,7 +196,50 @@ void CavaDataTexture::scheduleRefresh() {
     }
 }
 
-void CavaDataTexture::performRefresh() {
+void QuickmilkDataTexture::handleVisualizersUpdated() {
+    updateVisualizerConnections();
+    scheduleRefresh();
+}
+
+void QuickmilkDataTexture::handleHubMaxBarsChanged() {
+    if (!m_quickmilk) {
+        return;
+    }
+    applyMaxBars(m_quickmilk->maxBars(), false);
+}
+
+void QuickmilkDataTexture::updateVisualizerConnections() {
+    QuickmilkVisualizer* newSystem = m_quickmilk ? m_quickmilk->systemVisualizerTyped() : nullptr;
+    QuickmilkVisualizer* newMicrophone = m_quickmilk ? m_quickmilk->microphoneVisualizerTyped() : nullptr;
+
+    if (newSystem != m_systemProvider) {
+        if (m_systemConnection) {
+            disconnect(m_systemConnection);
+            m_systemConnection = {};
+        }
+        m_systemProvider = newSystem;
+        if (m_systemProvider) {
+            m_systemConnection = connect(m_systemProvider, &QuickmilkVisualizer::valuesChanged,
+                                         this, &QuickmilkDataTexture::handleValuesChanged);
+        }
+        emit systemVisualizerChanged();
+    }
+
+    if (newMicrophone != m_microphoneProvider) {
+        if (m_microphoneConnection) {
+            disconnect(m_microphoneConnection);
+            m_microphoneConnection = {};
+        }
+        m_microphoneProvider = newMicrophone;
+        if (m_microphoneProvider) {
+            m_microphoneConnection = connect(m_microphoneProvider, &QuickmilkVisualizer::valuesChanged,
+                                             this, &QuickmilkDataTexture::handleValuesChanged);
+        }
+        emit microphoneVisualizerChanged();
+    }
+}
+
+void QuickmilkDataTexture::performRefresh() {
     m_pendingRefresh = false;
 
     m_systemValues = m_systemProvider ? m_systemProvider->values() : QVector<double>();
@@ -213,7 +279,7 @@ void CavaDataTexture::performRefresh() {
     markTextureDirty();
 }
 
-void CavaDataTexture::rebuildImage(int width) {
+void QuickmilkDataTexture::rebuildImage(int width) {
     if (m_image.width() == width && m_image.height() == 1) {
         return;
     }
@@ -221,7 +287,7 @@ void CavaDataTexture::rebuildImage(int width) {
     m_image.fill(Qt::transparent);
 }
 
-uchar CavaDataTexture::encodeVolumeChannel() const {
+uchar QuickmilkDataTexture::encodeVolumeChannel() const {
     const double volume = std::clamp(m_volume, 0.0, 1.0);
     const int base = static_cast<int>(std::round(volume * 127.0));
     if (m_dragging) {
@@ -230,12 +296,12 @@ uchar CavaDataTexture::encodeVolumeChannel() const {
     return static_cast<uchar>(base);
 }
 
-void CavaDataTexture::markTextureDirty() {
+void QuickmilkDataTexture::markTextureDirty() {
     m_textureDirty = true;
     update();
 }
 
-QSGNode* CavaDataTexture::updatePaintNode(QSGNode* node, UpdatePaintNodeData*) {
+QSGNode* QuickmilkDataTexture::updatePaintNode(QSGNode* node, UpdatePaintNodeData*) {
     QSGSimpleTextureNode* textureNode = static_cast<QSGSimpleTextureNode*>(node);
     if (!window()) {
         delete textureNode;
@@ -257,4 +323,4 @@ QSGNode* CavaDataTexture::updatePaintNode(QSGNode* node, UpdatePaintNodeData*) {
     return textureNode;
 }
 
-} // namespace cava_plugin
+} // namespace quickmilk

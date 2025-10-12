@@ -1,0 +1,3 @@
+module Quickmilk
+plugin quickmilkplugin
+Quickmilk 1.0 Quickmilk.qml

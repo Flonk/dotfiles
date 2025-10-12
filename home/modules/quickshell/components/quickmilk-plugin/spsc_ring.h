@@ -5,7 +5,7 @@
 #include <cstring>
 #include <algorithm>
 
-namespace cava_plugin {
+namespace quickmilk {
 
 struct SpscRing {
     alignas(64) std::vector<float> buf;
@@ -51,4 +51,4 @@ struct SpscRing {
     }
 };
 
-} // namespace cava_plugin
+} // namespace quickmilk

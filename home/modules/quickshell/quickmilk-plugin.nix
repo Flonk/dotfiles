@@ -3,17 +3,16 @@
   stdenv,
   cmake,
   qt6,
-  libcava,
   pipewire,
   pkg-config,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cava-plugin";
+  pname = "quickmilk-plugin";
   version = "1.0.12"; # Fixed singleton widgets to use Singleton component following QuickShell pattern
 
   # Force rebuild when QML files change
-  src = ./components/cava-plugin;
+  src = ./components/quickmilk-plugin;
 
   nativeBuildInputs = [
     cmake
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qt6.qtbase
     qt6.qtdeclarative
-    libcava
     pipewire
     pkgs.fftw
   ];
@@ -37,19 +35,24 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-      mkdir -p $out/lib/qt-6/qml/CavaPlugin
-      # Install both the backing library and plugin library
-      cp libcavaprovider.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaprovider.so not found"
-      cp libcavaproviderplugin.so $out/lib/qt-6/qml/CavaPlugin/ 2>/dev/null || echo "libcavaproviderplugin.so not found"
-    # Copy qmldir
-    cp $src/qmldir $out/lib/qt-6/qml/CavaPlugin/
-    # List what we installed for debugging
-      echo "Installed files in CavaPlugin:"
-      ls -la $out/lib/qt-6/qml/CavaPlugin/
+    runHook preInstall
+    
+    mkdir -p $out/lib/qt-6/qml/Quickmilk
+    
+    # Copy the built plugin files
+    cp libquickmilk.so $out/lib/qt-6/qml/Quickmilk/
+    cp libquickmilkplugin.so $out/lib/qt-6/qml/Quickmilk/
+    cp qmldir $out/lib/qt-6/qml/Quickmilk/
+    cp Quickmilk.qml $out/lib/qt-6/qml/Quickmilk/
+    
+    echo "=== Installed files in Quickmilk ==="
+    ls -la $out/lib/qt-6/qml/Quickmilk/
+    
+    runHook postInstall
   '';
 
   meta = with pkgs.lib; {
-    description = "Cava audio visualizer plugin for Quickshell";
+    description = "Quickmilk audio visualizer plugin for Quickshell";
     license = licenses.mit;
     platforms = platforms.linux;
   };

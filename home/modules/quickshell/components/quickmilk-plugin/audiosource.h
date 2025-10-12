@@ -2,7 +2,7 @@
 
 #include <qqmlintegration.h>
 
-namespace cava_plugin {
+namespace quickmilk {
 Q_NAMESPACE
 
 enum class AudioSource {
@@ -11,4 +11,4 @@ enum class AudioSource {
 };
 Q_ENUM_NS(AudioSource)
 
-} // namespace cava_plugin
+} // namespace quickmilk

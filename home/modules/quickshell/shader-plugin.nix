@@ -17,13 +17,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    # Compile each .frag shader to .frag.qsb
-    for shader in *.frag; do
+    compile_shader() {
+      local shader="$1"
       if [ -f "$shader" ]; then
         echo "Compiling $shader..."
         qsb --glsl "100 es,120,150" --hlsl 50 --msl 12 \
           -o "''${shader}.qsb" "$shader"
       fi
+    }
+
+    for shader in *.frag *.vert; do
+      compile_shader "$shader"
     done
   '';
 
@@ -31,12 +35,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/qt-6/qml/ShaderPlugin
 
     # Install compiled shaders
-    cp *.frag.qsb $out/lib/qt-6/qml/ShaderPlugin/ 2>/dev/null || echo "No compiled shaders found"
+    for shader in *.frag.qsb *.vert.qsb; do
+      if [ -f "$shader" ]; then
+        cp "$shader" $out/lib/qt-6/qml/ShaderPlugin/
+      fi
+    done
 
     # Install QML files
     cp $src/qmldir $out/lib/qt-6/qml/ShaderPlugin/
-    cp $src/XorShaderWidget.qml $out/lib/qt-6/qml/ShaderPlugin/
-    cp $src/CavaShaderWidget.qml $out/lib/qt-6/qml/ShaderPlugin/
+    cp $src/*.qml $out/lib/qt-6/qml/ShaderPlugin/
 
     # List what we installed for debugging
     echo "Installed files in ShaderPlugin:"

@@ -3,8 +3,8 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
 import QtQuick
-import CavaPlugin
-import ShaderPlugin
+import Quickmilk 1.0
+import ShaderPlugin 1.0
 
 PanelWindow {
   required property var screenInfo

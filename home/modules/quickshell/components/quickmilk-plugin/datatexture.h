@@ -7,26 +7,28 @@
 #include <QMetaObject>
 #include <qqmlintegration.h>
 
+#include "quickmilk.h"
+
 class QSGTexture;
 
-namespace cava_plugin {
+namespace quickmilk {
 
-class CavaProvider;
-
-class CavaDataTexture : public QQuickItem {
+class QuickmilkDataTexture : public QQuickItem {
     Q_OBJECT
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(QuickmilkDataTexture)
 
     Q_PROPERTY(QObject* volumeWidget READ volumeWidget WRITE setVolumeWidget NOTIFY volumeWidgetChanged)
     Q_PROPERTY(int maxBars READ maxBars WRITE setMaxBars NOTIFY maxBarsChanged)
     Q_PROPERTY(int maxFps READ maxFps WRITE setMaxFps NOTIFY maxFpsChanged)
     Q_PROPERTY(int barCount READ barCount NOTIFY barCountChanged)
     Q_PROPERTY(bool dragging READ dragging WRITE setDragging NOTIFY draggingChanged)
-    Q_PROPERTY(bool monstercatFilter READ monstercatFilter WRITE setMonstercatFilter NOTIFY monstercatFilterChanged)
+    Q_PROPERTY(QObject* hub READ hubObject WRITE setHubObject NOTIFY hubChanged)
+    Q_PROPERTY(QuickmilkVisualizer* systemVisualizer READ systemVisualizer NOTIFY systemVisualizerChanged)
+    Q_PROPERTY(QuickmilkVisualizer* microphoneVisualizer READ microphoneVisualizer NOTIFY microphoneVisualizerChanged)
 
 public:
-    explicit CavaDataTexture(QQuickItem* parent = nullptr);
-    ~CavaDataTexture() override;
+    explicit QuickmilkDataTexture(QQuickItem* parent = nullptr);
+    ~QuickmilkDataTexture() override;
 
     QObject* volumeWidget() const { return m_volumeWidget; }
     void setVolumeWidget(QObject* widget);
@@ -42,8 +44,12 @@ public:
     bool dragging() const { return m_dragging; }
     void setDragging(bool dragging);
 
-    bool monstercatFilter() const { return m_monstercatFilter; }
-    void setMonstercatFilter(bool enabled);
+    QObject* hubObject() const { return m_quickmilk; }
+    void setHubObject(QObject* hub);
+    void setHub(QuickmilkHub* hub);
+
+    QuickmilkVisualizer* systemVisualizer() const { return m_systemProvider; }
+    QuickmilkVisualizer* microphoneVisualizer() const { return m_microphoneProvider; }
 
 signals:
     void volumeWidgetChanged();
@@ -51,7 +57,9 @@ signals:
     void maxFpsChanged();
     void barCountChanged();
     void draggingChanged();
-    void monstercatFilterChanged();
+    void hubChanged();
+    void systemVisualizerChanged();
+    void microphoneVisualizerChanged();
 
 protected:
     QSGNode* updatePaintNode(QSGNode* node, UpdatePaintNodeData* data) override;
@@ -59,29 +67,36 @@ protected:
     void componentComplete() override;
 
 private:
+    void applyMaxBars(int bars, bool propagateToHub);
     void scheduleRefresh();
     void performRefresh();
     void rebuildImage(int width);
     uchar encodeVolumeChannel() const;
     void markTextureDirty();
+    void updateVisualizerConnections();
 
 private slots:
     void handleValuesChanged();
     void handleVolumeChanged();
+    void handleVisualizersUpdated();
+    void handleHubMaxBarsChanged();
 
 private:
-    CavaProvider* m_systemProvider = nullptr;
-    CavaProvider* m_microphoneProvider = nullptr;
+    QuickmilkHub* m_quickmilk = nullptr;
+    QuickmilkVisualizer* m_systemProvider = nullptr;
+    QuickmilkVisualizer* m_microphoneProvider = nullptr;
     QObject* m_volumeWidget = nullptr;
     QMetaObject::Connection m_systemConnection;
     QMetaObject::Connection m_microphoneConnection;
     QMetaObject::Connection m_volumeConnection;
+    QMetaObject::Connection m_hubSystemConnection;
+    QMetaObject::Connection m_hubMicrophoneConnection;
+    QMetaObject::Connection m_hubMaxBarsConnection;
 
     int m_maxBars = 40;
     int m_maxFps = 30;
     int m_barCount = 1;
     bool m_dragging = false;
-    bool m_monstercatFilter = true;
 
     QVector<double> m_systemValues;
     QVector<double> m_microphoneValues;
@@ -94,4 +109,4 @@ private:
     QTimer m_throttleTimer;
 };
 
-} // namespace cava_plugin
+} // namespace quickmilk
