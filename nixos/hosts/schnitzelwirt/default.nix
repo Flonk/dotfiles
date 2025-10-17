@@ -32,13 +32,20 @@
     "btusb"
     "bluetooth"
   ];
+
   boot.extraModprobeConfig = "options nvidia-drm modeset=1";
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
+    open = false; # switch off the open module
     modesetting.enable = true;
+    powerManagement.enable = true; # NVreg_DynamicPowerManagement=0x02 + nvidia-powerd
+    prime = {
+      offload.enable = true; # iGPU drives display; dGPU only on demand
+      intelBusId = "PCI:0:2:0"; # from lspci: 00:02.0
+      nvidiaBusId = "PCI:1:0:0"; # from lspci: 01:00.0
+    };
     package = config.boot.kernelPackages.nvidiaPackages.stable;
-    open = true;
   };
 
   # Hardware graphics acceleration

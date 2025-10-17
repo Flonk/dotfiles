@@ -17,20 +17,42 @@ with lib;
 
         modules-center = [
         ];
-
         modules-left = [
+          "hyprland/workspaces"
+          "hyprland/window"
         ];
 
         modules-right = [
           "pulseaudio"
           "battery"
           "custom/label-bat"
+          "tray"
           "clock"
         ];
+
+        "hyprland/workspaces" = {
+          format = "{name}";
+          format-icons = {
+            default = " ";
+            active = " ";
+            urgent = " ";
+          };
+          on-scroll-up = "hyprctl dispatch workspace e+1";
+          on-scroll-down = "hyprctl dispatch workspace e-1";
+        };
 
         "clock" = {
           interval = 1;
           format = ''{:%Y-%m-%d %H:%M:%S}'';
+        };
+
+        "hyprland/window" = {
+          max-length = 40;
+          separate-outputs = false;
+        };
+
+        "tray" = {
+          spacing = 12;
         };
 
         "pulseaudio" = {
@@ -117,5 +139,21 @@ with lib;
         }
       ''
     ];
+  };
+
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Waybar panel";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      EnvironmentFile = "-%t/quickshell.env";
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      Restart = "on-failure";
+      RestartSec = 1;
+    };
+    # No Install section -> not started automatically; managed by powersaver.
   };
 }

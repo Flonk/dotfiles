@@ -53,6 +53,7 @@ in
     ../modules/superfile/superfile.nix
     ../modules/waybar/waybar.nix
     ../modules/quickshell/quickshell.nix
+    ../modules/powersaver/powersaver.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];

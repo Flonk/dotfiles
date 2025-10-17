@@ -184,6 +184,7 @@ in
 
     alacritty
     upower
+    linuxKernel.packages.linux_6_1.turbostat
 
     iproute2
     nettools

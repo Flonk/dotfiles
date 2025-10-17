@@ -15,6 +15,7 @@
     CPU_SCALING_GOVERNOR_ON_AC = "performance";
 
     # PCIe link power management
+    PCIE_ASPM_ON_AC = "performance";
     PCIE_ASPM_ON_BAT = "powersupersave";
 
     # USB autosuspend
@@ -26,6 +27,9 @@
     # AMD/ATI knobs (harmless if not present)
     RADEON_POWER_PROFILE_ON_BAT = "low";
     RADEON_DPM_STATE_ON_BAT = "battery";
+
+    RUNTIME_PM_ON_AC = "on";
+    RUNTIME_PM_ON_BAT = "auto";
   };
 
   # Intel/AMD CPU thermal management
