@@ -16,94 +16,21 @@ with lib;
         position = "bottom";
 
         modules-center = [
-          "pulseaudio"
-          "cava"
-          "mpris"
         ];
+
         modules-left = [
-          "custom/startmenu"
-          "hyprland/workspaces"
-          "hyprland/window"
         ];
+
         modules-right = [
-          "cpu"
-          "custom/label-cpu"
-          "memory"
-          "custom/label-mem"
+          "pulseaudio"
           "battery"
           "custom/label-bat"
-          "tray"
           "clock"
         ];
-
-        "hyprland/workspaces" = {
-          format = "{name}";
-          format-icons = {
-            default = " ";
-            active = " ";
-            urgent = " ";
-          };
-          on-scroll-up = "hyprctl dispatch workspace e+1";
-          on-scroll-down = "hyprctl dispatch workspace e-1";
-        };
-
-        "cava" = {
-          framerate = 30;
-          autosens = 1;
-          sensitivity = 3;
-          bars = 16;
-          lower_cutoff_freq = 50;
-          higher_cutoff_freq = 10000;
-          hide_on_silence = false;
-          # "format_silent" = "quiet";
-          method = "pulse";
-          source = "auto";
-          stereo = false;
-          noise_reduction = 0.3;
-          bar_delimiter = 0;
-          input_delay = 0.1;
-          format-icons = [
-            " "
-            "▂"
-            "▃"
-            "▄"
-            "▅"
-            "▆"
-            "▇"
-            "█"
-          ];
-        };
-
-        "mpris" = {
-          format = "{artist} - {title}";
-          max-length = 40;
-          on-click = "playerctl play-pause";
-          on-scroll-up = "playerctl next";
-          on-scroll-down = "playerctl previous";
-        };
 
         "clock" = {
           interval = 1;
           format = ''{:%Y-%m-%d %H:%M:%S}'';
-        };
-
-        "hyprland/window" = {
-          max-length = 40;
-          separate-outputs = false;
-        };
-
-        "memory" = {
-          interval = 5;
-          format = "{}%";
-        };
-
-        "cpu" = {
-          interval = 5;
-          format = "{usage:2}%";
-        };
-
-        "tray" = {
-          spacing = 12;
         };
 
         "pulseaudio" = {
@@ -111,25 +38,9 @@ with lib;
           on-click = "pavucontrol";
         };
 
-        "custom/label-cpu" = {
-          format = "CPU";
-          tooltip = false;
-        };
-
-        "custom/label-mem" = {
-          format = "MEM";
-          tooltip = false;
-        };
-
         "custom/label-bat" = {
           format = "BAT";
           tooltip = false;
-        };
-
-        "custom/startmenu" = {
-          tooltip = false;
-          format = "😬";
-          on-click = "walker -t mytheme";
         };
 
         "battery" = {

@@ -55,7 +55,7 @@
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
-            ./hosts/schnitzelwirt
+            ./nixos/hosts/schnitzelwirt
           ];
         };
       };

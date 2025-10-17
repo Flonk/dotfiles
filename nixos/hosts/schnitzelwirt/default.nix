@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 {
   imports = [
-    ../../config/types
-    ../../home/modules/work/andamp-host.nix
+    ../../../config/types
+    ../../../home/modules/work/andamp-host.nix
     ./schnitzelwirt-hardware.nix
     ./schnitzelwirt-hostconfig.nix
     ../common.nix

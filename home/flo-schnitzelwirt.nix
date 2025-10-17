@@ -8,7 +8,7 @@
 {
   imports = [
     ../config/types
-    ../hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
+    ../nixos/hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
     ../config/themes/trump/trump.nix
     ./users/flo.nix
     ./modules/work/andamp.nix

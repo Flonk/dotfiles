@@ -117,7 +117,6 @@ in
 
       exec-once = [
         "hyprctl setcursor macOS-White 28"
-        "quickshell"
         # "IS_INITIAL_SHELL=1 alacritty --title initial-shell -e zsh -l -c \"fastfetch; exec zsh\""
         # "google-chrome-stable"
       ];

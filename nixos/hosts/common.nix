@@ -17,6 +17,9 @@ let
   };
 in
 {
+  imports = [
+    ../modules/powersaver/powersaver.nix
+  ];
 
   # Nix config.
   nix.settings.experimental-features = [
