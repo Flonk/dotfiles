@@ -2,12 +2,19 @@
 {
   imports = [
     ../../config/types
+    ../../home/modules/work/andamp-host.nix
     ./schnitzelwirt-hardware.nix
     ./schnitzelwirt-hostconfig.nix
     ../common.nix
   ];
 
   networking.hostName = "schnitzelwirt";
+
+  sops.age = {
+    sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    keyFile = "/var/lib/sops-nix/key.txt";
+    generateKey = true;
+  };
 
   # Bootloader config
   boot.loader.grub.efiSupport = true;
@@ -94,5 +101,23 @@
 
   # (optional) Autostart the default NAT network
   systemd.services."virtnetwork@default".wantedBy = [ "multi-user.target" ];
+
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      listen-address = "127.0.0.1";
+      bind-interfaces = true;
+      no-resolv = true;
+
+      server = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
+
+      # (i.e., DON'T set domain-needed=true)
+      bogus-priv = true;
+      cache-size = 1000;
+    };
+  };
 
 }

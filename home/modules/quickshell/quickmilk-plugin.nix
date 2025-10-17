@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "quickmilk-plugin";
-  version = "1.0.12"; # Fixed singleton widgets to use Singleton component following QuickShell pattern
+  version = "1.0.13"; # Performance optimizations: reduced allocations and improved math
 
   # Force rebuild when QML files change
   src = ./components/quickmilk-plugin;
@@ -36,18 +36,18 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    
+
     mkdir -p $out/lib/qt-6/qml/Quickmilk
-    
+
     # Copy the built plugin files
     cp libquickmilk.so $out/lib/qt-6/qml/Quickmilk/
     cp libquickmilkplugin.so $out/lib/qt-6/qml/Quickmilk/
     cp qmldir $out/lib/qt-6/qml/Quickmilk/
     cp Quickmilk.qml $out/lib/qt-6/qml/Quickmilk/
-    
+
     echo "=== Installed files in Quickmilk ==="
     ls -la $out/lib/qt-6/qml/Quickmilk/
-    
+
     runHook postInstall
   '';
 

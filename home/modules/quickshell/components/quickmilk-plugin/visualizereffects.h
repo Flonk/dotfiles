@@ -40,8 +40,8 @@ private:
     std::vector<double> m_smoothedBars;
     std::vector<double> m_peakBars;
 
-    double m_smoothingAlpha = 0.35;
-    double m_gravityDecay = 0.85;
+    double m_smoothingAlpha = 0.7;
+    double m_gravityDecay = 0.9;
 
     double m_noiseFloorMinDecay = 0.90;
     double m_noiseFloorMaxDecay = 0.9995;

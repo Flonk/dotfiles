@@ -47,6 +47,11 @@ in
   # Enable networking
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
+  networking.nameservers = [ "127.0.0.1" ];
+
+  services.dnsmasq = {
+    enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Vienna";
@@ -176,6 +181,13 @@ in
 
     alacritty
     upower
+
+    iproute2
+    nettools
+    bind
+    iputils
+    nmap
+    whois
   ];
 
   environment.variables.EDITOR = "micro";

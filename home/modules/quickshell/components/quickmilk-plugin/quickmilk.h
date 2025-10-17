@@ -24,11 +24,9 @@ class QuickmilkVisualizer : public QObject {
 
     Q_PROPERTY(double minFrequency READ minFrequency WRITE setMinFrequency NOTIFY minFrequencyChanged)
     Q_PROPERTY(double maxFrequency READ maxFrequency WRITE setMaxFrequency NOTIFY maxFrequencyChanged)
-    Q_PROPERTY(double logScale READ logScale WRITE setLogScale NOTIFY logScaleChanged)
     Q_PROPERTY(double dynamicFalloff READ dynamicFalloff WRITE setDynamicFalloff NOTIFY dynamicFalloffChanged)
     Q_PROPERTY(double dynamicRise READ dynamicRise WRITE setDynamicRise NOTIFY dynamicRiseChanged)
-    Q_PROPERTY(double amplitudeGamma READ amplitudeGamma WRITE setAmplitudeGamma NOTIFY amplitudeGammaChanged)
-    Q_PROPERTY(double bandTailMix READ bandTailMix WRITE setBandTailMix NOTIFY bandTailMixChanged)
+    Q_PROPERTY(double autoGainFloor READ autoGainFloor WRITE setAutoGainFloor NOTIFY autoGainFloorChanged)
 
     Q_PROPERTY(double smoothingAlpha READ smoothingAlpha WRITE setSmoothingAlpha NOTIFY smoothingAlphaChanged)
     Q_PROPERTY(double gravityDecay READ gravityDecay WRITE setGravityDecay NOTIFY gravityDecayChanged)
@@ -61,20 +59,14 @@ public:
     double maxFrequency() const { return m_maxFrequency; }
     void setMaxFrequency(double value);
 
-    double logScale() const { return m_logScale; }
-    void setLogScale(double value);
-
     double dynamicFalloff() const { return m_dynamicFalloff; }
     void setDynamicFalloff(double value);
 
     double dynamicRise() const { return m_dynamicRise; }
     void setDynamicRise(double value);
 
-    double amplitudeGamma() const { return m_amplitudeGamma; }
-    void setAmplitudeGamma(double value);
-
-    double bandTailMix() const { return m_bandTailMix; }
-    void setBandTailMix(double value);
+    double autoGainFloor() const { return m_autoGainFloor; }
+    void setAutoGainFloor(double value);
 
     double smoothingAlpha() const { return m_effects.smoothingAlpha(); }
     void setSmoothingAlpha(double value);
@@ -105,11 +97,9 @@ signals:
 
     void minFrequencyChanged();
     void maxFrequencyChanged();
-    void logScaleChanged();
     void dynamicFalloffChanged();
     void dynamicRiseChanged();
-    void amplitudeGammaChanged();
-    void bandTailMixChanged();
+    void autoGainFloorChanged();
 
     void smoothingAlphaChanged();
     void gravityDecayChanged();
@@ -133,13 +123,11 @@ private:
     double m_noiseReduction = 0.3;
     bool m_enableMonstercatFilter = false;
 
-    double m_minFrequency = 40.0;
+    double m_minFrequency = 20.0;
     double m_maxFrequency = 20000.0;
-    double m_logScale = 4.0;
     double m_dynamicFalloff = 0.995;
     double m_dynamicRise = 0.2;
-    double m_amplitudeGamma = 1.6;
-    double m_bandTailMix = 0.25;
+    double m_autoGainFloor = 0.02;
 
     QVector<double> m_workingBars;
 

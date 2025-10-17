@@ -25,8 +25,6 @@ public:
     double minFrequency() const { return m_minFrequency; }
     double maxFrequency() const { return m_maxFrequency; }
 
-    void setLogScale(double logScale);
-    double logScale() const { return m_logScale; }
 
     void setDynamicFalloff(double falloff);
     double dynamicFalloff() const { return m_dynamicFalloff; }
@@ -34,11 +32,8 @@ public:
     void setDynamicRise(double rise);
     double dynamicRise() const { return m_dynamicRise; }
 
-    void setAmplitudeGamma(double gamma);
-    double amplitudeGamma() const { return m_amplitudeGamma; }
-
-    void setBandTailMix(double mix);
-    double bandTailMix() const { return m_bandTailMix; }
+    void setAutoGainFloor(double floor);
+    double autoGainFloor() const { return m_autoGainFloor; }
 
     bool consume(const float* samples, std::size_t count, QVector<double>& outBars);
 
@@ -49,13 +44,11 @@ private:
 
     int m_bars;
     double m_sampleRate;
-    double m_minFrequency = 40.0;
+    double m_minFrequency = 20.0;
     double m_maxFrequency = 20000.0;
-    double m_logScale = 1.0;
-    double m_dynamicFalloff = 0.99;
-    double m_dynamicRise = 0.95;
-    double m_amplitudeGamma = 8;
-    double m_bandTailMix = 0.2;
+    double m_dynamicFalloff = 0.5;
+    double m_dynamicRise = 0.0005;
+    double m_autoGainFloor = 0.01;
     const std::size_t m_frameSize;
     const std::size_t m_hopSize;
 
@@ -63,6 +56,7 @@ private:
 
     std::vector<double> m_window;
     std::vector<double> m_magnitudes;
+    std::vector<double> m_binWeights;
 
     std::vector<std::size_t> m_binStart;
     std::vector<std::size_t> m_binEnd;
@@ -71,7 +65,7 @@ private:
     double* m_fftInput = nullptr;
     fftw_complex* m_fftOutput = nullptr;
 
-    double m_dynamicMax = 1.0;
+    double m_dynamicMax = 1;
 };
 
 } // namespace quickmilk

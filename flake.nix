@@ -54,6 +54,7 @@
             inherit inputs;
           };
           modules = [
+            inputs.sops-nix.nixosModules.sops
             ./hosts/schnitzelwirt
           ];
         };

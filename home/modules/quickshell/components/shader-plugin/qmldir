@@ -1,3 +1,4 @@
 module ShaderPlugin
 CavaShaderWidget 1.0 CavaShaderWidget.qml
 AudioShaderWidget 1.0 AudioShaderWidget.qml
+CavaLegacyShaderWidget 1.0 CavaLegacyShaderWidget.qml

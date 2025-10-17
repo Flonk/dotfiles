@@ -93,17 +93,6 @@ void QuickmilkVisualizer::setMaxFrequency(double value) {
     emit maxFrequencyChanged();
 }
 
-void QuickmilkVisualizer::setLogScale(double value) {
-    value = std::max(0.1, value);
-    if (qFuzzyCompare(m_logScale, value)) {
-        return;
-    }
-
-    m_logScale = value;
-    configureAnalyzer();
-    emit logScaleChanged();
-}
-
 void QuickmilkVisualizer::setDynamicFalloff(double value) {
     value = std::clamp(value, 0.0, 0.9999);
     if (qFuzzyCompare(m_dynamicFalloff, value)) {
@@ -126,26 +115,15 @@ void QuickmilkVisualizer::setDynamicRise(double value) {
     emit dynamicRiseChanged();
 }
 
-void QuickmilkVisualizer::setAmplitudeGamma(double value) {
-    value = std::clamp(value, 0.1, 10.0);
-    if (qFuzzyCompare(m_amplitudeGamma, value)) {
+void QuickmilkVisualizer::setAutoGainFloor(double value) {
+    value = std::clamp(value, 1e-4, 10.0);
+    if (qFuzzyCompare(m_autoGainFloor, value)) {
         return;
     }
 
-    m_amplitudeGamma = value;
+    m_autoGainFloor = value;
     configureAnalyzer();
-    emit amplitudeGammaChanged();
-}
-
-void QuickmilkVisualizer::setBandTailMix(double value) {
-    value = std::clamp(value, 0.0, 1.0);
-    if (qFuzzyCompare(m_bandTailMix, value)) {
-        return;
-    }
-
-    m_bandTailMix = value;
-    configureAnalyzer();
-    emit bandTailMixChanged();
+    emit autoGainFloorChanged();
 }
 
 void QuickmilkVisualizer::setSmoothingAlpha(double value) {
@@ -267,11 +245,9 @@ void QuickmilkVisualizer::configureAnalyzer() {
     m_analyzer->setSampleRate(ac::SAMPLE_RATE);
     m_analyzer->setBarCount(m_bars);
     m_analyzer->setFrequencyRange(m_minFrequency, m_maxFrequency);
-    m_analyzer->setLogScale(m_logScale);
     m_analyzer->setDynamicFalloff(m_dynamicFalloff);
     m_analyzer->setDynamicRise(m_dynamicRise);
-    m_analyzer->setAmplitudeGamma(m_amplitudeGamma);
-    m_analyzer->setBandTailMix(m_bandTailMix);
+    m_analyzer->setAutoGainFloor(m_autoGainFloor);
 }
 
 QuickmilkHub::QuickmilkHub(QObject* parent)

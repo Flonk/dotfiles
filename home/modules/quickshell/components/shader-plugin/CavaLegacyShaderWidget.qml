@@ -1,18 +1,18 @@
-// CavaShaderWidget.qml - Music visualizer using GLSL shader
+// CavaLegacyShaderWidget.qml - Legacy CAVA-based visualizer using the original data texture
 import QtQuick
 import QtQml
-import Quickmilk 1.0
+import CavaPlugin 1.0
 
 Rectangle {
     id: root
-    
+
     width: 150
     height: 30
     color: "transparent"
-    
+
     // Volume control - must be provided externally
     property var volumeWidget: null
-    
+
     // Configurable FPS for the animation
     property int fps: 30
     property int maxBars: 40
@@ -29,12 +29,6 @@ Rectangle {
     property color backgroundColor: Theme.app150
     property color volumeBarColor: Theme.success600
     property bool monstercatFilter: true
-
-    Quickmilk {
-        id: quickmilk
-        maxBars: root.maxBars
-        enableMonstercatFilter: root.monstercatFilter
-    }
 
     property int barCount: dataTexture.barCount
     property bool isDragging: false
@@ -56,8 +50,6 @@ Rectangle {
             volumeApplyTimer.start();
         }
     }
-
-    // Update texture when dragging state changes handled by QuickmilkDataTexture
 
     function anchorToEnum(anchor) {
         switch ((anchor || "").toLowerCase()) {
@@ -87,7 +79,7 @@ Rectangle {
         }
     }
 
-    QuickmilkDataTexture {
+    CavaDataTexture {
         id: dataTexture
         visible: false
         width: barCount
@@ -96,7 +88,7 @@ Rectangle {
         maxBars: root.maxBars
         maxFps: root.fps
         dragging: root.isDragging
-        hub: quickmilk.hub
+        monstercatFilter: root.monstercatFilter
     }
 
     Connections {
@@ -132,7 +124,7 @@ Rectangle {
         property var iDataTexture: dataTextureSource
 
         fragmentShader: "cava_bars.frag.qsb"
-        
+
         NumberAnimation on iTime {
             from: 0
             to: 1000000
@@ -141,18 +133,16 @@ Rectangle {
             running: true
         }
     }
-    
-    // Mouse area for volume control
+
     MouseArea {
         anchors.fill: parent
-        
+
         onPressed: function(mouse) {
             root.isDragging = true;
             const newVolume = mouse.x / width;
             root.requestVolumeChange(newVolume);
-            // Don't call updateDataTexture - onVolumeChanged will handle it
         }
-        
+
         onReleased: {
             root.isDragging = false;
             if (root.hasPendingVolume) {
@@ -160,17 +150,15 @@ Rectangle {
                 root.hasPendingVolume = false;
             }
             volumeApplyTimer.stop();
-            // Don't call updateDataTexture - onIsDraggingChanged will handle it
         }
-        
+
         onPositionChanged: function(mouse) {
             if (pressed) {
                 const newVolume = mouse.x / width;
                 root.requestVolumeChange(newVolume);
-                // Don't call updateDataTexture - onVolumeChanged will handle it
             }
         }
-        
+
         onWheel: (wheel) => {
             if (root.volumeWidget) {
                 if (wheel.angleDelta.y > 0 && root.volumeWidget.incrementVolume) {
@@ -178,7 +166,6 @@ Rectangle {
                 } else if (wheel.angleDelta.y < 0 && root.volumeWidget.decrementVolume) {
                     root.volumeWidget.decrementVolume();
                 }
-                // Don't call updateDataTexture - onVolumeChanged will handle it
             }
         }
     }

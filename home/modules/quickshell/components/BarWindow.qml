@@ -71,8 +71,8 @@ PanelWindow {
     // Left of center section - modules with right border only (since cava provides left border)
     Rectangle {
       anchors.left: parent.left
-      anchors.right: parent.horizontalCenter
-      anchors.rightMargin: cavaShaderDisplay.width / 2 + cavaMargin
+      anchors.right: centerStack.left
+      anchors.rightMargin: cavaMargin
       anchors.verticalCenter: parent.verticalCenter
       height: Theme.barHeight
       color: "transparent"
@@ -87,31 +87,56 @@ PanelWindow {
       }
     }
 
-    // Center container - shader-based cava visualizer with real audio data
-    CavaShaderWidget {
-      id: cavaShaderDisplay
-      width: 220
-      height: Theme.barHeight
-      volumeWidget: VolumeWidget
-      fps: 30
-      maxBars: 40
-      systemAnchor: "center"
-      microphoneAnchor: "bottom"
-      systemColorLow: Theme.wm200
-      systemColorHigh: Theme.wm800
-      microphoneColorLow: Theme.app100
-      microphoneColorHigh: Theme.app600
-      backgroundColor: Theme.app150
-      volumeBarColor: Theme.success600
-      
-      anchors.bottom: parent.bottom
+    // Center container - stack Quickmilk (top) over legacy CAVA (bottom) for comparison
+    Column {
+      id: centerStack
       anchors.horizontalCenter: parent.horizontalCenter
+      anchors.bottom: parent.bottom
+      spacing: cavaMargin
+      height: Theme.barHeight
+
+      /*/
+      CavaShaderWidget {
+        id: cavaShaderDisplay
+        width: 220
+        height: Theme.barHeight
+        volumeWidget: VolumeWidget
+        fps: 30
+        maxBars: 40
+        systemAnchor: "center"
+        microphoneAnchor: "bottom"
+        systemColorLow: Theme.wm200
+        systemColorHigh: Theme.wm800
+        microphoneColorLow: Theme.app100
+        microphoneColorHigh: Theme.app600
+        backgroundColor: Theme.app150
+        volumeBarColor: Theme.success600
+      }
+      /*/
+      CavaLegacyShaderWidget {
+        id: legacyCavaDisplay
+        width: 220
+        height: Theme.barHeight
+        volumeWidget: VolumeWidget
+        fps: 30
+        maxBars: 40
+        systemAnchor: "center"
+        microphoneAnchor: "bottom"
+        systemColorLow: Theme.wm200
+        systemColorHigh: Theme.wm800
+        microphoneColorLow: Theme.app100
+        microphoneColorHigh: Theme.app600
+        backgroundColor: Theme.app150
+        volumeBarColor: Theme.success600
+        monstercatFilter: true
+      }
+      //*/
     }
-    
+
     // Right of center section
     Rectangle {
-      anchors.left: parent.horizontalCenter
-      anchors.leftMargin: cavaShaderDisplay.width / 2 + cavaMargin
+      anchors.left: centerStack.right
+      anchors.leftMargin: cavaMargin
       anchors.verticalCenter: parent.verticalCenter
       height: Theme.barHeight
       color: "transparent"

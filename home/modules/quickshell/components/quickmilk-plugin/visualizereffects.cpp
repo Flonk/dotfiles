@@ -99,6 +99,7 @@ void VisualizerEffects::applyMonstercatFilter(QVector<double>& values) {
 
 void VisualizerEffects::applyTemporalEffects(QVector<double>& values) {
     constexpr double kMinValue = 1e-4;
+    constexpr double kDecayPower = 2.0;
 
     for (int i = 0; i < values.size(); ++i) {
         double current = std::clamp(values[i], 0.0, 1.0);
@@ -112,7 +113,10 @@ void VisualizerEffects::applyTemporalEffects(QVector<double>& values) {
         if (smoothed >= peak) {
             peak = smoothed;
         } else {
-            peak *= m_gravityDecay;
+            const double diff = std::clamp(peak - smoothed, 0.0, 1.0);
+            const double releaseFactor = 1.0 + diff * kDecayPower;
+            const double decay = std::pow(std::clamp(m_gravityDecay, 0.0, 0.9999), releaseFactor);
+            peak = smoothed + (peak - smoothed) * decay;
             if (peak < smoothed) {
                 peak = smoothed;
             }
@@ -120,7 +124,8 @@ void VisualizerEffects::applyTemporalEffects(QVector<double>& values) {
 
         m_smoothedBars[i] = smoothed;
         m_peakBars[i] = peak;
-        values[i] = peak;
+
+        values[i] = std::clamp(peak, 0.0, 1.0);
     }
 }
 
