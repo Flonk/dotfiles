@@ -135,6 +135,24 @@
             cd /mnt/sdcard || return 1
           }
 
+          download-cert-chain() {
+            local url="$1"
+            if [[ -z "$url" ]]; then
+              echo "Usage: download-cert-chain <url>"
+              return 1
+            fi
+            
+            openssl s_client -connect "$url:443" -servername "$url" -showcerts </dev/null 2>/dev/null \
+              | sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' > chain.pem
+            
+            awk 'BEGIN{c=0} /BEGIN CERTIFICATE/{c++} {print > ("chain-" c ".crt")}' chain.pem
+            
+            for f in chain-*.crt; do
+              echo "== $f =="
+              openssl x509 -in "$f" -noout -subject -issuer -ext basicConstraints
+            done
+          }
+
           squash_wip() {
             local WIP_MSG="--wip-- [skip ci]"
             local count=0
@@ -172,6 +190,8 @@
             git commit
             echo "✅ Done."
           }
+
+
 
         '';
 

@@ -5,6 +5,9 @@
   ...
 }:
 {
+
+  services.upower.enable = true;
+
   ############################################
   # Core power-saving services (system level)
   ############################################

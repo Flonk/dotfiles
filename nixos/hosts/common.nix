@@ -19,6 +19,7 @@ in
 {
   imports = [
     ../modules/powersaver/powersaver.nix
+    ../modules/dnsmasq/dnsmasq.nix
   ];
 
   # Nix config.
@@ -169,6 +170,7 @@ in
   programs.firefox.enable = true;
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
+
   programs.hyprland.enable = true;
 
   # Allow unfree packages
@@ -196,7 +198,11 @@ in
 
   environment.variables.EDITOR = "micro";
 
-  services.upower.enable = true;
+  sops.age = {
+    sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    keyFile = "/var/lib/sops-nix/key.txt";
+    generateKey = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
