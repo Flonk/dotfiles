@@ -9,6 +9,7 @@ shaders=(
 	"shaders/cava/cava_bars.frag"
 	"shaders/common/flat.vert"
 	"shaders/common/experiment.frag"
+	"shaders/common/mandel.frag"
 	"shaders/common/experiment.vert"
 )
 

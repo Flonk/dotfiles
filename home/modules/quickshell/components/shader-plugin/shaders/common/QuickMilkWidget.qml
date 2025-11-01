@@ -7,8 +7,8 @@ Rectangle {
     id: root
     color: "transparent"
 
-    property real initialWidth: 300
-    property real initialHeight: 300
+    property real initialWidth: 500
+    property real initialHeight: 500
     width: initialWidth
     height: initialHeight
 
@@ -16,8 +16,8 @@ Rectangle {
     property int maxBars: 80
 
     property color backgroundColor: Qt.rgba(0.05, 0.05, 0.08, 0.9)
-    property color accentColorA: Qt.rgba(0.65, 0.47, 0.92, 1.0)
-    property color accentColorB: Qt.rgba(0.25, 0.72, 0.96, 1.0)
+    property color accentColorA: Qt.rgba(0.573, 0.227, 1.0, 1.0)
+    property color accentColorB: Qt.rgba(1.0, 0.82, 0.306, 1.0)
 
     // Allow callers to override the compiled shader paths
     readonly property string defaultFragmentShaderSource: "experiment.frag.qsb"
@@ -28,8 +28,8 @@ Rectangle {
     // Mesh resolution overrides; negative values fall back to width/height
     property int meshColumns: -1
     property int meshRows: -1
-    readonly property int resolvedMeshColumns: meshColumns > 0 ? meshColumns : Math.max(1, Math.round(width))
-    readonly property int resolvedMeshRows: meshRows > 0 ? meshRows : Math.max(1, Math.round(height))
+    readonly property int resolvedMeshColumns: meshColumns > 0 ? meshColumns : 2
+    readonly property int resolvedMeshRows: meshRows > 0 ? meshRows : 2
 
     property alias shaderEffect: effect
     readonly property var levelsTexture: dataTextureSource

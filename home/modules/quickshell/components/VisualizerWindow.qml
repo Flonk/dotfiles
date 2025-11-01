@@ -18,8 +18,8 @@ PanelWindow {
   margins.top: 48
   margins.left: 48
 
-  implicitWidth: 320
-  implicitHeight: 320
+  implicitWidth: 500
+  implicitHeight: 500
   color: "transparent"
 
   Rectangle {
