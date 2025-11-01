@@ -29,7 +29,7 @@ PanelWindow {
     border.color: Qt.rgba(1, 1, 1, 0.08)
     border.width: 1
 
-    QuickMilkExperimentWidget {
+    QuickMilkWidget {
       anchors.fill: parent
       anchors.margins: 12
     }

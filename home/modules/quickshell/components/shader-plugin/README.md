@@ -19,8 +19,9 @@ shader-plugin/
     │   ├── CavaLegacyShaderWidget.qml
     │   ├── CavaShaderWidget.qml
     │   └── cava_bars.frag
-    └── experiment/                # Experimental, audio-reactive orb shader
-        ├── QuickMilkExperimentWidget.qml
+    └── common/                    # Reusable Quickmilk-driven shader helpers
+        ├── QuickMilkWidget.qml
+        ├── flat.vert
         ├── experiment.frag
         └── experiment.vert
 ```
@@ -99,10 +100,11 @@ The Nix build automatically:
 ```qml
 import ShaderPlugin
 
-// Use the widget
-XorShaderWidget {
-    width: 30
-    height: 30
+// Use the generic QuickMilkWidget with a custom shader pair
+QuickMilkWidget {
+    initialWidth: 320
+    initialHeight: 320
+    // Optional: override fragmentShaderSource / vertexShaderSource here
 }
 ```
 

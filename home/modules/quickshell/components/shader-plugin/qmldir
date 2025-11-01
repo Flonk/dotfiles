@@ -1,4 +1,4 @@
 module ShaderPlugin
 CavaShaderWidget 1.0 shaders/cava/CavaShaderWidget.qml
-QuickMilkExperimentWidget 1.0 shaders/experiment/QuickMilkExperimentWidget.qml
+QuickMilkWidget 1.0 shaders/common/QuickMilkWidget.qml
 CavaLegacyShaderWidget 1.0 shaders/cava/CavaLegacyShaderWidget.qml

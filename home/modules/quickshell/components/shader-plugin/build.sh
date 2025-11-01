@@ -7,8 +7,9 @@ cd "$script_dir"
 # Compile GLSL shaders to QSB format using Qt's shader tools
 shaders=(
 	"shaders/cava/cava_bars.frag"
-	"shaders/experiment/experiment.frag"
-	"shaders/experiment/experiment.vert"
+	"shaders/common/flat.vert"
+	"shaders/common/experiment.frag"
+	"shaders/common/experiment.vert"
 )
 
 for shader in "${shaders[@]}"; do
