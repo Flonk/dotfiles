@@ -134,6 +134,7 @@ in
         "$mainMod, Q, killactive"
 
         "$mainMod, PRINT, exec, hyprshot -m window -m active"
+        ''$mainMod, O, exec, bash -lc 'text="$(hyprshot -m region --raw | tesseract stdin stdout -l deu 2>/dev/null)"; wl-copy <<< "$text"; notify-send "📸 OCR copied" "$(echo "$text" | head -c 300)"' ''
         "$mainMod SHIFT, PRINT, exec, hyprshot -m output -m active"
         ", PRINT, exec, hyprshot -m region"
 

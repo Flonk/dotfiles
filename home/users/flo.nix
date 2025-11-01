@@ -54,6 +54,7 @@ in
     ../modules/waybar/waybar.nix
     ../modules/quickshell/quickshell.nix
     ../modules/powersaver/powersaver.nix
+    ../modules/insomnia/insomnia.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
@@ -67,6 +68,7 @@ in
       nautilus
       hyprpaper
       hyprshot
+      tesseract
 
       brightnessctl
       playerctl

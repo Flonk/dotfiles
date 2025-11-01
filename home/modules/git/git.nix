@@ -17,6 +17,7 @@
       fetch.prune = true;
       pull.rebase = true;
       diff.algorithm = "histogram";
+      http.sslVerify = "false";
     };
   };
 

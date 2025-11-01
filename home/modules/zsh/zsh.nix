@@ -191,8 +191,14 @@
             echo "✅ Done."
           }
 
+          ocr() {
+            local text
+            text="$(hyprshot -m region --raw | tesseract stdin stdout -l deu 2>/dev/null)"
+            wl-copy <<< "$text"
+            notify-send "📸 OCR copied" "$(echo "$text" | head -c 300)"
+          }
 
-
+          export GIT_SSL_NO_VERIFY=1
         '';
 
         end = lib.mkAfter ''
