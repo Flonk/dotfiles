@@ -13,10 +13,10 @@ PanelWindow {
 
   anchors {
     top: true
-    right: true
+    left: true
   }
   margins.top: 48
-  margins.right: 48
+  margins.left: 48
 
   implicitWidth: 320
   implicitHeight: 320
@@ -29,7 +29,7 @@ PanelWindow {
     border.color: Qt.rgba(1, 1, 1, 0.08)
     border.width: 1
 
-    AudioShaderWidget {
+    QuickMilkExperimentWidget {
       anchors.fill: parent
       anchors.margins: 12
     }

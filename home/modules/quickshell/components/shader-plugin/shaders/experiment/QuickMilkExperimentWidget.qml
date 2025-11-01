@@ -1,4 +1,4 @@
-// AudioShaderWidget.qml - Floating audio-reactive shader visualization
+// QuickMilkExperimentWidget.qml - Floating audio-reactive shader visualization
 import QtQuick
 import QtQml
 import Quickmilk 1.0
@@ -56,8 +56,8 @@ Rectangle {
             resolution: Qt.size(192, 64)
         }
 
-        vertexShader: "audio_orb.vert.qsb"
-        fragmentShader: "audio_orb.frag.qsb"
+        vertexShader: "experiment.vert.qsb"
+        fragmentShader: "experiment.frag.qsb"
 
         NumberAnimation on time {
             from: 0

@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$script_dir"
+
 # Compile GLSL shaders to QSB format using Qt's shader tools
 shaders=(
-	cava_bars.frag
-	audio_orb.frag
-	audio_orb.vert
+	"shaders/cava/cava_bars.frag"
+	"shaders/experiment/experiment.frag"
+	"shaders/experiment/experiment.vert"
 )
-)
+
 for shader in "${shaders[@]}"; do
 	if [[ ! -f "$shader" ]]; then
 		echo "Warning: shader source $shader not found, skipping"

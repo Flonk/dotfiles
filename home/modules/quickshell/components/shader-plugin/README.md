@@ -12,10 +12,17 @@ This plugin provides GLSL shader support for Quickshell, allowing you to render 
 
 ```
 shader-plugin/
-├── xor_texture.frag         # GLSL fragment shader source
-├── build.sh                 # Manual build script (for testing)
-├── qmldir                   # QML module definition
-└── XorShaderWidget.qml      # QML wrapper widget
+├── build.sh                       # Manual build script (for testing)
+├── qmldir                         # QML module definition
+└── shaders/
+    ├── cava/                      # Legacy and modern cava-based visualisers
+    │   ├── CavaLegacyShaderWidget.qml
+    │   ├── CavaShaderWidget.qml
+    │   └── cava_bars.frag
+    └── experiment/                # Experimental, audio-reactive orb shader
+        ├── QuickMilkExperimentWidget.qml
+        ├── experiment.frag
+        └── experiment.vert
 ```
 
 ## Shader Format
@@ -46,10 +53,10 @@ void main() {
 
 ## Adding New Shaders
 
-1. Create a new `.frag` file in `shader-plugin/`
-2. Create a corresponding QML widget (e.g., `MyShaderWidget.qml`)
-3. Add the widget to `qmldir`
-4. Rebuild your Nix configuration
+1. Create a new `.frag` (and optional `.vert`) file inside `shaders/<category>/`
+2. Create a corresponding QML widget beside it (e.g., `MyShaderWidget.qml`)
+3. Add the widget entry to `qmldir` with the relative `shaders/<category>/...` path
+4. Rebuild your Nix configuration (or run `./build.sh` for a quick manual compile)
 
 Example widget:
 

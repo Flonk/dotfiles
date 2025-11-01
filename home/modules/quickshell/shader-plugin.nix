@@ -17,37 +17,39 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    shopt -s nullglob
+
     compile_shader() {
       local shader="$1"
       if [ -f "$shader" ]; then
-        echo "Compiling $shader..."
-        qsb --glsl "100 es,120,150" --hlsl 50 --msl 12 \
-          -o "''${shader}.qsb" "$shader"
+        local output="''${shader}.qsb"
+        echo "Compiling ''${shader} -> ''${output}"
+        qsb --glsl "100 es,120,150" --hlsl 50 --msl 12 -o "$output" "$shader"
       fi
     }
 
-    for shader in *.frag *.vert; do
-      compile_shader "$shader"
-    done
+    # Compile shaders within the new nested directory structure
+    if [ -d shaders ]; then
+      find shaders -type f \( -name '*.frag' -o -name '*.vert' \) -print |
+        while IFS= read -r shader; do
+          compile_shader "$shader"
+        done
+    fi
   '';
 
   installPhase = ''
     mkdir -p $out/lib/qt-6/qml/ShaderPlugin
 
-    # Install compiled shaders
-    for shader in *.frag.qsb *.vert.qsb; do
-      if [ -f "$shader" ]; then
-        cp "$shader" $out/lib/qt-6/qml/ShaderPlugin/
-      fi
-    done
+    # Install module definition
+    install -Dm644 qmldir "$out/lib/qt-6/qml/ShaderPlugin/qmldir"
 
-    # Install QML files
-    cp $src/qmldir $out/lib/qt-6/qml/ShaderPlugin/
-    cp $src/*.qml $out/lib/qt-6/qml/ShaderPlugin/
+    # Copy shader directories (sources + compiled outputs + QML widgets)
+    if [ -d shaders ]; then
+      cp -r shaders "$out/lib/qt-6/qml/ShaderPlugin/"
+    fi
 
-    # List what we installed for debugging
     echo "Installed files in ShaderPlugin:"
-    ls -la $out/lib/qt-6/qml/ShaderPlugin/
+    find "$out/lib/qt-6/qml/ShaderPlugin" -maxdepth 5 -type f | sort
   '';
   meta = with pkgs.lib; {
     description = "GLSL shader plugin for Quickshell";

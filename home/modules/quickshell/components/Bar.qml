@@ -17,11 +17,11 @@ Scope {
         Component.onCompleted: console.log("BarWindow completed on screen:", screen ? screen.name : "<none>")
       }
 
-      /*
-      AudioOrbWindow {
+      
+      VisualizerWindow {
         screenInfo: modelData
       }
-      */
+      
     }
   }
 }

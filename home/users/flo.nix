@@ -217,12 +217,4 @@ in
     };
   };
 
-  # Removed inline Eww config; moved to ../modules/eww/eww.nix
-  # xdg.configFile."eww/eww.yuck".text = '' ... '';
-  # xdg.configFile."eww/eww.scss".text = '' ... '';
-
-  # Removed Eww services here; moved to ../modules/eww/eww.nix
-  # systemd.user.services.eww-daemon = { ... };
-  # systemd.user.services.eww-bar = { ... };
-
 }
