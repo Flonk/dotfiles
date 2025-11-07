@@ -21,6 +21,7 @@ in
     ../modules/direnv/direnv.nix
     ../modules/mako/mako.nix
     ../modules/alacritty/alacritty.nix
+    ../modules/foot/foot.nix
     ../modules/zsh/zsh.nix
     ../modules/vscode/vscode.nix
     ../modules/fastfetch/fastfetch.nix
@@ -112,11 +113,6 @@ in
   };
 
   programs.distrobox.enable = true;
-
-  # programs.gauntlet = {
-  #  enable = true;
-  #  service.enable = true;
-  #};
 
   gtk = {
     enable = true;
