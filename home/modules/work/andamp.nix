@@ -8,6 +8,7 @@
 let
   vpnLauncher =
     inputs.openconnect-pulse-launcher.packages."${pkgs.system}".openconnect-pulse-launcher;
+
   vpnLite = pkgs.writeShellScriptBin "vpn-obk" ''
     set -euo pipefail
     PRE_DEV="$(${pkgs.iproute2}/bin/ip route show default | ${pkgs.gawk}/bin/awk '/^default/ {print $5; exit}')"
@@ -39,17 +40,16 @@ in
     vpnLite
   ];
 
-  # your secrets (unchanged)
   sops.secrets.andamp-vpn = {
     format = "binary";
     sopsFile = ../../../assets/secrets/andamp-vpn.ovpn;
   };
+
   sops.secrets.vpn3ithost = {
     key = "vpn3ithost";
     sopsFile = ../../../assets/secrets/secrets.json;
   };
 
-  # keep your idempotent import service as before (if you still need it)
   systemd.user.services.import-andamp-vpn = {
     Unit = {
       Description = "Import andamp-vpn profile to NetworkManager (idempotent)";

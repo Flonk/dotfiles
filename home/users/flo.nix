@@ -78,6 +78,7 @@ in
       blueman
       nwg-look
       wl-clipboard
+      bluetui
 
       tree
       figlet
