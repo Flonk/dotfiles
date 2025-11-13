@@ -184,6 +184,7 @@ in
     curl
     wget
 
+    foot
     alacritty
     upower
     linuxKernel.packages.linux_6_1.turbostat

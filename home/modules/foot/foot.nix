@@ -248,4 +248,18 @@ in
       };
     };
   };
+
+  xdg.desktopEntries.foot = {
+    name = "Foot Terminal";
+    genericName = "Terminal";
+    comment = "Fast, lightweight and minimalistic Wayland terminal emulator";
+    exec = "foot";
+    icon = "foot";
+    terminal = false;
+    type = "Application";
+    categories = [
+      "System"
+      "TerminalEmulator"
+    ];
+  };
 }
