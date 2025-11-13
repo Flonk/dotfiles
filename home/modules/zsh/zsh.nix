@@ -30,6 +30,47 @@
 
     initContent =
       let
+        helpText = ''
+          \e[38;5;208m╔════════════════════════════════════════════════════════════════════════════╗\e[0m
+          \e[38;5;208m║  Welcome to my setup                                                       ║\e[0m
+          \e[38;5;208m╚════════════════════════════════════════════════════════════════════════════╝\e[0m
+
+          \e[38;5;33mNAVIGATION\e[0m
+            cat                   - Pretty print files with syntax highlighting (bat)
+            t                     - Tree view (2 levels, git-aware)
+            l                     - Enhanced ls with git status (eza)
+            c <query>             - Fuzzy find and cd into directory
+            o <query>             - Fuzzy find and open file with xdg-open
+
+          \e[38;5;33mNIX\e[0m
+            ne                    - Evaluate nix expression (nix-instantiate --eval)
+            nb                    - Build nix expression (nix-build)
+            nh <url>              - Get nix hash for tarball URL
+            nr                    - Rebuild home-manager configuration
+            nrsys                 - Rebuild system configuration
+            s <pkg>               - Quick nix-shell with package
+            run <pkg>             - Run package in nix-shell environment
+            appimage <file>       - Run AppImage files
+
+          \e[38;5;33mGIT\e[0m
+            gprune                - Remove local branches that are gone on remote (safe)
+            gprune!               - Force remove local branches that are gone on remote
+            b <query>             - Fuzzy checkout git branch
+            squash                - Squash consecutive WIP commits
+
+          \e[38;5;33mFUNCTIONS\e[0m
+            n <query>             - Fuzzy find and run npm script
+            qr <text>             - Generate QR code in terminal
+            hex <file>            - Colorized hexdump
+            mount-sd-card         - Mount SD card to /mnt/sdcard
+            dk!                   - Nuclear option: remove all containers and volumes
+            x <cmd>               - Run command as sudo with current PATH
+
+          \e[38;5;33mMISC\e[0m
+            future <text>         - ASCII art with toilet future font
+            figlet-all <text>     - Show text in all available figlet fonts
+        '';
+
         init = lib.mkBefore ''
           # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
           # Initialization code that may require console input (password prompts, [y/n]
@@ -191,19 +232,16 @@
             echo "✅ Done."
           }
 
-          ocr() {
-            local text
-            text="$(hyprshot -m region --raw | tesseract stdin stdout -l deu 2>/dev/null)"
-            wl-copy <<< "$text"
-            notify-send "📸 OCR copied" "$(echo "$text" | head -c 300)"
-          }
-
           hex() {
             hexdump -L \
               -e '"%07.7_ax_L[yellow]   "' \
               -e '16/1 "%02x_L[blue] " "   "' \
               -e '16/1 "%_p_L[brightyellow] " "\n"' \
               "$@"
+          }
+
+          help() {
+            echo -e "${helpText}"
           }
 
           export GIT_SSL_NO_VERIFY=1
@@ -265,7 +303,7 @@
       s = "nix-shell -p";
       run = "_nix-shell-run";
       appimage = "nix run nixpkgs#appimage-run --";
-      hash = "nix-prefetch-url --unpack"; # url is ref like https://github.com/normen/whatscli/archive/refs/tags/v1.0.11.tar.gz
+      nh = "nix-prefetch-url --unpack"; # url is ref like https://github.com/normen/whatscli/archive/refs/tags/v1.0.11.tar.gz
 
       ##### Git
       gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";

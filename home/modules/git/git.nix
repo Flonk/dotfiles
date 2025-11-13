@@ -8,9 +8,8 @@
 
   programs.git = {
     enable = true;
-    delta.enable = true;
 
-    extraConfig = {
+    settings = {
       core.askPass = "";
       rerere.enabled = true;
       push.autosetupRemote = true;
@@ -19,6 +18,11 @@
       diff.algorithm = "histogram";
       http.sslVerify = "false";
     };
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
   };
 
 }

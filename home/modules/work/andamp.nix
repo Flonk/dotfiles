@@ -7,7 +7,8 @@
 }:
 let
   vpnLauncher =
-    inputs.openconnect-pulse-launcher.packages."${pkgs.system}".openconnect-pulse-launcher;
+    inputs.openconnect-pulse-launcher.packages."${pkgs.stdenv.hostPlatform.system
+    }".openconnect-pulse-launcher;
 
   vpnLite = pkgs.writeShellScriptBin "vpn-obk" ''
     set -euo pipefail

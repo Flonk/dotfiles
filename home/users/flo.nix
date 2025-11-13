@@ -7,9 +7,6 @@
   inputs,
   ...
 }:
-let
-  gauntletPkg = inputs.self.packages.x86_64-linux.myGauntletDeps;
-in
 {
   imports = [
     ../modules/hyprland/hyprland.nix
@@ -30,13 +27,10 @@ in
     ../modules/walker/walker.nix
     ../modules/obsidian/obsidian.nix
     ../modules/nchat/nchat.nix
-    ../modules/superfile/superfile.nix
     ../modules/waybar/waybar.nix
     ../modules/quickshell/quickshell.nix
     ../modules/powersaver/powersaver.nix
     ../modules/work/insomnia.nix
-
-    # inputs.gauntlet.homeManagerModules.default
   ];
 
   home = {
@@ -87,8 +81,6 @@ in
           cp *.ttf $out/share/fonts/truetype/
         '';
       })
-
-      inputs.openconnect-pulse-launcher.packages."${pkgs.system}".openconnect-pulse-launcher
     ];
 
     username = "flo";
