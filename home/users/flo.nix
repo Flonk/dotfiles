@@ -34,7 +34,7 @@ in
     ../modules/waybar/waybar.nix
     ../modules/quickshell/quickshell.nix
     ../modules/powersaver/powersaver.nix
-    ../modules/insomnia/insomnia.nix
+    ../modules/work/insomnia.nix
 
     # inputs.gauntlet.homeManagerModules.default
   ];
