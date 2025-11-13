@@ -198,6 +198,14 @@
             notify-send "📸 OCR copied" "$(echo "$text" | head -c 300)"
           }
 
+          hex() {
+            hexdump -L \
+              -e '"%07.7_ax_L[yellow]   "' \
+              -e '16/1 "%02x_L[blue] " "   "' \
+              -e '16/1 "%_p_L[brightyellow] " "\n"' \
+              "$@"
+          }
+
           export GIT_SSL_NO_VERIFY=1
         '';
 
