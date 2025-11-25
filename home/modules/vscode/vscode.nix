@@ -10,6 +10,31 @@
   programs.vscode = {
     enable = true;
 
+    profiles.default.keybindings = [
+      {
+        key = "ctrl+y";
+        command = "runCommands";
+        args = {
+          commands = [
+            "workbench.files.action.collapseExplorerFolders"
+            "workbench.files.action.showActiveFileInExplorer"
+          ];
+        };
+      }
+      {
+        key = "enter";
+        command = "runCommands";
+        args = {
+          commands = [
+            "workbench.action.acceptSelectedQuickOpenItem"
+            "workbench.files.action.collapseExplorerFolders"
+            "workbench.files.action.showActiveFileInExplorer"
+          ];
+        };
+        when = "inQuickOpen";
+      }
+    ];
+
     profiles.default.userSettings = {
       "editor.fontFamily" = config.theme.fontFamily.mono;
       "editor.fontSize" = config.theme.fontSize.bigger;
@@ -129,6 +154,12 @@
         "markdown" = false;
         "scminput" = false;
       };
+
+      "chat.tools.terminal.autoApprove" = {
+        "fortune" = true;
+      };
+
+      "chat.tools.browsing.autoApprove" = true;
 
       "indentRainbow.colors" = [
         "#2e344022"

@@ -22,7 +22,7 @@
     ../modules/zsh/zsh.nix
     ../modules/vscode/vscode.nix
     ../modules/fastfetch/fastfetch.nix
-    ../modules/obs-studio/obs-studio.nix
+    # ../modules/obs-studio/obs-studio.nix
     ../modules/csvlens/csvlens.nix
     ../modules/walker/walker.nix
     ../modules/obsidian/obsidian.nix

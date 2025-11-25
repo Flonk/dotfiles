@@ -17,7 +17,7 @@ Rectangle {
         
         // Grimace emoji with large font size, clipped
         Text {
-            text: "😸"
+            text: "🥸"
             anchors.centerIn: parent
             font.pointSize: Theme.barHeight * 1.25
             font.family: Theme.fontFamilyUi

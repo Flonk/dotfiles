@@ -46,7 +46,7 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
       nvidia-vaapi-driver
     ];
@@ -92,8 +92,6 @@
     qemu = {
       package = pkgs.qemu_kvm;
       swtpm.enable = true; # TPM 2.0 (some guests expect it)
-      ovmf.enable = true; # UEFI firmware
-      ovmf.packages = [ pkgs.OVMFFull.fd ];
     };
   };
 
