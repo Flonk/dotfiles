@@ -23,6 +23,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    quickmilk = {
+      url = "path:/home/flo/repos/personal/quickmilk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =

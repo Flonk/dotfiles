@@ -2,14 +2,17 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }:
 let
   barHeight = 30;
+  system = pkgs.stdenv.hostPlatform.system;
 
-  quickmilkPlugin = pkgs.callPackage ./quickmilk-plugin.nix { };
-  cavaPlugin = pkgs.callPackage ./cava-plugin.nix { };
-  shaderPlugin = pkgs.callPackage ./shader-plugin.nix { };
+  quickmilkPackages = inputs.quickmilk.packages.${system};
+  quickmilkPlugin = quickmilkPackages.quickmilk;
+  shaderPlugin = quickmilkPackages.shaderPlugin;
+  cavaPlugin = quickmilkPackages.cavaPlugin;
 
   wrappedQuickshell = pkgs.writeShellScriptBin "quickshell" ''
     export QML2_IMPORT_PATH="${quickmilkPlugin}/lib/qt-6/qml:${cavaPlugin}/lib/qt-6/qml:${shaderPlugin}/lib/qt-6/qml:$QML2_IMPORT_PATH"
