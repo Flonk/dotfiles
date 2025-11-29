@@ -87,7 +87,7 @@ PanelWindow {
       }
     }
 
-    // Center container - stack Quickmilk (top) over legacy CAVA (bottom) for comparison
+    // Center container - stack legacy CAVA (default) with optional shader variant
     Column {
       id: centerStack
       anchors.horizontalCenter: parent.horizontalCenter

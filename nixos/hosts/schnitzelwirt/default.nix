@@ -36,6 +36,7 @@
     powerManagement.enable = true; # NVreg_DynamicPowerManagement=0x02 + nvidia-powerd
     prime = {
       offload.enable = true; # iGPU drives display; dGPU only on demand
+      offload.enableOffloadCmd = true; # sets up __NV_PRIME_RENDER_OFFLOAD=1 etc.
       intelBusId = "PCI:0:2:0"; # from lspci: 00:02.0
       nvidiaBusId = "PCI:1:0:0"; # from lspci: 01:00.0
     };
@@ -45,6 +46,7 @@
   # Hardware graphics acceleration
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       libva-vdpau-driver
       libvdpau-va-gl

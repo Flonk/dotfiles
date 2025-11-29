@@ -32,6 +32,11 @@ PanelWindow {
     QuickMilkWidget {
       anchors.fill: parent
       anchors.margins: 12
+      colorScheme: ({
+        backgroundColor: Theme.app150,
+        accentColorA: Theme.wm400,
+        accentColorB: Theme.wm700,
+      })
     }
   }
 }

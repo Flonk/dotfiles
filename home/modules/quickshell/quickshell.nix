@@ -10,14 +10,14 @@ let
   system = pkgs.stdenv.hostPlatform.system;
 
   quickmilkPackages = inputs.quickmilk.packages.${system};
-  quickmilkPlugin = quickmilkPackages.quickmilk;
-  shaderPlugin = quickmilkPackages.shaderPlugin;
-  cavaPlugin = quickmilkPackages.cavaPlugin;
+  quickmilkQmlPath = "${quickmilkSuite}/lib/qt-6/qml";
+  wrapQuickshell = inputs.quickmilk.lib.wrapQuickshell;
 
-  wrappedQuickshell = pkgs.writeShellScriptBin "quickshell" ''
-    export QML2_IMPORT_PATH="${quickmilkPlugin}/lib/qt-6/qml:${cavaPlugin}/lib/qt-6/qml:${shaderPlugin}/lib/qt-6/qml:$QML2_IMPORT_PATH"
-      exec ${pkgs.quickshell}/bin/quickshell "$@"
-  '';
+  wrappedQuickshell = wrapQuickshell {
+    inherit pkgs;
+    quickshellPkg = pkgs.quickshell;
+    name = "quickshell";
+  };
 
   wrappedQuickshellDev = pkgs.writeShellScriptBin "quickshell-dev" ''
         set -euo pipefail
@@ -26,7 +26,7 @@ let
         SOURCE_CONFIG="''${HOME}/.config/quickshell"         # managed by nix
         DOTFILES_DIR="''${HOME}/dotfiles/home/modules/quickshell/components"
         QS_BIN='${pkgs.quickshell}/bin/quickshell'           # Quickshell binary
-    export QML2_IMPORT_PATH='${quickmilkPlugin}/lib/qt-6/qml:${cavaPlugin}/lib/qt-6/qml:${shaderPlugin}/lib/qt-6/qml:'"''${QML2_IMPORT_PATH-}"
+    export QML2_IMPORT_PATH='${quickmilkQmlPath}:'"''${QML2_IMPORT_PATH-}"
 
         # Force copy from ~/.config/quickshell to ~/quickshell-impure and initialize git
         echo "[quickshell-dev] Setting up ''${CONFIG_DIR} from ''${SOURCE_CONFIG}"
@@ -224,9 +224,7 @@ in
     brightnessctl # For brightness control
     lm_sensors # For temperature monitoring
     pipewire # For audio capture
-    quickmilkPlugin # Include our Quickmilk audio visualizer plugin
-    cavaPlugin # Include legacy CAVA visualizer plugin
-    shaderPlugin # Include our custom shader plugin
+    quickmilkSuite # Bundle containing Quickmilk + Shader + legacy Cava modules
     wrappedQuickshell # Wrapped quickshell with cava plugin path
     wrappedQuickshellDev # Development script for quickshell
 
