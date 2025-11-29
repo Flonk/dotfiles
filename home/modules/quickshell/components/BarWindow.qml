@@ -7,99 +7,116 @@ import Quickmilk 1.0
 import ShaderPlugin 1.0
 
 PanelWindow {
+  id: barWindow
   required property var screenInfo
   required property var appController
   screen: screenInfo
 
   anchors {
-    bottom: true
-    left: true
     right: true
+    top: true
+    bottom: true
   }
 
   WlrLayershell.layer: WlrLayer.Bottom
 
-  implicitHeight: Theme.barHeight + 2  // Just bar + border, no extension
+  implicitWidth: Theme.barSize
   color: Theme.app150  // bar background
-  
-  // Top border only
-  Rectangle {
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 2
-    color: Theme.app200
-  }
 
   // Get the Hyprland monitor for this window's screen
   property var hyprlandMonitor: Hyprland.monitorFor(screen)
   property int cavaMargin: 10
+  property int sectionMargin: 0  // Global section margin
+  property int sectionRadius: 0  // Global section border radius
+  property int sectionHorizontalPadding: 0  // Global section horizontal padding
+  property int sectionVerticalPadding: 4  // Global section vertical padding
+  property bool sectionClipContent: true
+  property color sectionBackgroundColor: "transparent"
+  property color sectionTopBorderColor: Theme.app200
+  property int sectionTopBorderHeight: 1
+  property bool sectionShowTopBorder: true
 
-  // Content area below the border
+  // Content area
   Item {
-    anchors.top: parent.top
-    anchors.topMargin: 2  // Below the 2px border
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
+    anchors.fill: parent
 
-    // Left flex container
+    // Top flex container
     Rectangle {
-      anchors.left: parent.left
-      anchors.leftMargin: 2
-      anchors.verticalCenter: parent.verticalCenter
+      anchors.top: parent.top
+      anchors.topMargin: 2
+      anchors.horizontalCenter: parent.horizontalCenter
       color: "transparent"
       
-      implicitWidth: leftRow.implicitWidth
-      implicitHeight: Theme.barHeight
+      implicitWidth: Theme.barSize
+      implicitHeight: topColumn.implicitHeight
       
-      Row {
-        id: leftRow
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
+      Column {
+        id: topColumn
+        anchors.top: parent.top
+        anchors.topMargin: 0
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
 
         AppLauncherDisplay {}
         WorkspacesDisplay {
           monitor: hyprlandMonitor
         }
-        ActiveWindowDisplay {}
       }
     }
 
-    // Left of center section - modules with right border only (since cava provides left border)
+    // Top of center section - modules with bottom border only (since cava provides top border)
     Rectangle {
-      anchors.left: parent.left
-      anchors.right: centerStack.left
-      anchors.rightMargin: cavaMargin
-      anchors.verticalCenter: parent.verticalCenter
-      height: Theme.barHeight
+      anchors.top: parent.top
+      anchors.bottom: centerStack.top
+      anchors.bottomMargin: cavaMargin
+      anchors.horizontalCenter: parent.horizontalCenter
+      width: Theme.barSize
       color: "transparent"
       
-      Row {
-        id: leftOfCenterRow
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        layoutDirection: Qt.RightToLeft
+      Column {
+        id: topOfCenterColumn
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 0
         
+        Section {
+          width: Theme.barSize
+          topMargin: sectionMargin
+          bottomMargin: sectionMargin
+          leftMargin: sectionMargin
+          rightMargin: sectionMargin
+          radius: sectionRadius
+          topPadding: sectionVerticalPadding
+          bottomPadding: sectionVerticalPadding
+          leftPadding: sectionHorizontalPadding
+          rightPadding: sectionHorizontalPadding
+          clip: sectionClipContent
+          backgroundColor: sectionBackgroundColor
+          topBorderColor: sectionTopBorderColor
+          topBorderHeight: sectionTopBorderHeight
+          showTopBorder: sectionShowTopBorder
+          
+          MprisDisplay {
+            id: mprisDisplay
+            width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
+          }
+        }
       }
     }
 
     // Center container - stack legacy CAVA (default) with optional shader variant
     Column {
       id: centerStack
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.bottom: parent.bottom
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.right: parent.right
       spacing: cavaMargin
-      height: Theme.barHeight
+      width: Theme.barSize
 
       /*/
       CavaShaderWidget {
         id: cavaShaderDisplay
         width: 220
-        height: Theme.barHeight
+        height: Theme.barSize
         volumeWidget: VolumeWidget
         fps: 30
         maxBars: 40
@@ -113,93 +130,87 @@ PanelWindow {
         volumeBarColor: Theme.success600
       }
       /*/
-      CavaLegacyShaderWidget {
-        id: legacyCavaDisplay
-        width: 220
-        height: Theme.barHeight
-        volumeWidget: VolumeWidget
-        fps: 30
-        maxBars: 40
-        systemAnchor: "center"
-        microphoneAnchor: "bottom"
-        systemColorLow: Theme.wm200
-        systemColorHigh: Theme.wm800
-        microphoneColorLow: Theme.app100
-        microphoneColorHigh: Theme.app600
-        backgroundColor: Theme.app150
-        volumeBarColor: Theme.success600
-        monstercatFilter: true
+      Section {
+        width: Theme.barSize
+        topMargin: sectionMargin
+        bottomMargin: sectionMargin
+        leftMargin: sectionMargin
+        rightMargin: sectionMargin
+        radius: sectionRadius
+        topPadding: sectionVerticalPadding
+        bottomPadding: sectionVerticalPadding
+        leftPadding: sectionHorizontalPadding
+        rightPadding: sectionHorizontalPadding
+        clip: sectionClipContent
+        backgroundColor: sectionBackgroundColor
+        topBorderColor: sectionTopBorderColor
+        topBorderHeight: sectionTopBorderHeight
+        showTopBorder: sectionShowTopBorder
+        
+        CavaLegacyShaderWidget {
+          id: legacyCavaDisplay
+          width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
+          height: 220
+          volumeWidget: VolumeWidget
+          fps: 30
+          maxBars: 40
+          systemAnchor: "center"
+          microphoneAnchor: "bottom"
+          systemColorLow: Theme.wm200
+          systemColorHigh: Theme.wm800
+          microphoneColorLow: Theme.app100
+          microphoneColorHigh: Theme.app600
+          backgroundColor: Theme.app150
+          volumeBarColor: Theme.success600
+          monstercatFilter: true
+        }
       }
       //*/
     }
 
-    // Right of center section
+    // Bottom of center section
     Rectangle {
-      anchors.left: centerStack.right
-      anchors.leftMargin: cavaMargin
-      anchors.verticalCenter: parent.verticalCenter
-      height: Theme.barHeight
+      anchors.top: centerStack.bottom
+      anchors.topMargin: cavaMargin
+      anchors.horizontalCenter: parent.horizontalCenter
+      width: Theme.barSize
       color: "transparent"
       
-      Row {
-        id: rightOfCenterRow
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+      Column {
+        id: bottomOfCenterColumn
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 0
-
-        MprisDisplay {
-          id: mprisDisplay
-          anchors.verticalCenter: parent.verticalCenter
-        }
       }
     }
 
-    // Right flex container
-    Rectangle {
-      anchors.right: parent.right
-      anchors.rightMargin: 2
-      anchors.verticalCenter: parent.verticalCenter
-      color: Theme.app200
+    // Bottom flex container
+    Item {
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 2
+      anchors.horizontalCenter: parent.horizontalCenter
       
-      implicitWidth: rightRow.implicitWidth + 2
-      implicitHeight: Theme.barHeight
+      implicitWidth: Theme.barSize
+      implicitHeight: bottomColumn.implicitHeight
       
-      Row {
-        id: rightRow
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 2  // 2px spacing between elements
+      Column {
+        id: bottomColumn
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: barWindow.sectionMargin
 
-        // CPU Display with backdrop
-        Rectangle {
-          color: Theme.app150
-          width: cpuDisplay.width
-          height: cpuDisplay.height
-          
-          CpuDisplay {
-            id: cpuDisplay
-            barWidth: 4
-            barSpacing: 1
-            topRadius: 2
-            bottomRadius: 2
-            maxBarHeight: Theme.barHeight
-          }
+        SystemBarsDisplay {
+          id: systemBars
+          sectionMargin: barWindow.sectionMargin
+          sectionRadius: barWindow.sectionRadius
+          sectionVerticalPadding: barWindow.sectionVerticalPadding
+          sectionHorizontalPadding: barWindow.sectionHorizontalPadding
+          sectionClip: barWindow.sectionClipContent
+          sectionBackgroundColor: barWindow.sectionBackgroundColor
+          sectionTopBorderColor: barWindow.sectionTopBorderColor
+          sectionTopBorderHeight: barWindow.sectionTopBorderHeight
+          sectionShowTopBorder: barWindow.sectionShowTopBorder
         }
-
-        // System Bars Display with backdrop
-        Rectangle {
-          color: Theme.app150
-          width: systemBars.width
-          height: systemBars.height
-          radius: 2
-          
-          SystemBarsDisplay {
-            id: systemBars
-          }
-        }
-
-        ClockWidget {}
       }
     }
   } // End of content Item

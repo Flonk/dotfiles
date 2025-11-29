@@ -34,30 +34,73 @@ MouseArea {
     Rectangle {
         id: displayRect
         color: Theme.app150  // backdrop color
-        width: Math.min(trackText.implicitWidth, 300)  // maxWidth 300 with 8px padding on each side
-        height: Theme.barHeight  // barHeight high
+        width: Theme.barSize  // fit to bar width
+        height: rotatedWrapper.width  // After rotation, wrapper width becomes display height
         radius: 2  // match other components
         
-        Text {
-            id: trackText
-            text: MprisWidget.currentTrack || "No media playing"
-            color: MprisWidget.isPlaying ? Theme.app600 : Theme.app400  // Dynamic color based on playing state
-            font.family: Theme.fontFamilyUi  // uiNf font
-            font.pointSize: Theme.fontSizeSmall  // normal size
+        // Wrapper Item that gets rotated
+        Item {
+            id: rotatedWrapper
+            anchors.bottom: parent.bottom  // Anchor to bottom since rotation goes upward
+            anchors.left: parent.left
+            width: Math.min(contentColumn.implicitWidth + 8, 180)  // Add padding, max 140
+            height: Theme.barSize
             
-            // Center the text within the rectangle
-            anchors.centerIn: parent
-            anchors.margins: 8
+            // Set transform origin to center of barSize dimension, rotate 270 for bottom-to-top reading
+            transform: Rotation {
+                origin.x: Theme.barSize / 2
+                origin.y: Theme.barSize / 2
+                angle: 270
+            }
             
-            // Truncate long text
-            elide: Text.ElideRight
-            width: Math.min(implicitWidth, parent.width)  // Account for padding
-            
-            // Smooth color transition
-            Behavior on color {
-                ColorAnimation {
-                    duration: 300
-                    easing.type: Easing.OutCubic
+            Column {
+                id: contentColumn
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 6  // bottom padding (becomes right padding after rotation)
+                anchors.left: parent.left
+                spacing: 2
+                
+                // Artist name
+                Text {
+                    id: artistText
+                    text: (MprisWidget.currentArtist || "").toUpperCase()
+                    color: MprisWidget.isPlaying ? Theme.app600 : Theme.app400
+                    font.family: Theme.fontFamilyUiNf
+                    font.pointSize: Theme.fontSizeSmall
+                    font.weight: Font.Bold
+                    font.letterSpacing: 1.5
+                    opacity: 0.7
+                    
+                    elide: Text.ElideRight
+                    width: Math.min(implicitWidth, 140)
+                    
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 300
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                }
+                
+                // Title
+                Text {
+                    id: titleText
+                    text: (MprisWidget.currentTitle || "No media").toUpperCase()
+                    color: MprisWidget.isPlaying ? Theme.app800 : Theme.app500
+                    font.family: Theme.fontFamilyUiNf
+                    font.pointSize: Theme.fontSizeSmall
+                    font.weight: Font.Bold
+                    font.letterSpacing: 1.5
+                    
+                    elide: Text.ElideRight
+                    width: Math.min(implicitWidth, 140)
+                    
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: 300
+                            easing.type: Easing.OutCubic
+                        }
+                    }
                 }
             }
         }

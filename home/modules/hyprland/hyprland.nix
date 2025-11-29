@@ -284,7 +284,7 @@ in
       general = {
         "$modifier" = "SUPER";
         layout = "hy3";
-        gaps_in = 1;
+        gaps_in = 0;
         gaps_out = 0;
         border_size = 4;
         "col.active_border" = borderColor;

@@ -41,6 +41,10 @@ Singleton {
         
         return `${artist} - ${title}`;
     }
+    
+    // Individual properties for separate display
+    property string currentArtist: currentPlayer?.trackArtist || ""
+    property string currentTitle: currentPlayer?.trackTitle || ""
 
     // Whether any player is currently playing
     property bool isPlaying: currentPlayer?.isPlaying || false

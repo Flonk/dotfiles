@@ -6,10 +6,11 @@
   ...
 }:
 let
-  barHeight = 30;
+  barSize = 50;
   system = pkgs.stdenv.hostPlatform.system;
 
   quickmilkPackages = inputs.quickmilk.packages.${system};
+  quickmilkSuite = quickmilkPackages.quickmilkSuite;
   quickmilkQmlPath = "${quickmilkSuite}/lib/qt-6/qml";
   wrapQuickshell = inputs.quickmilk.lib.wrapQuickshell;
 
@@ -124,6 +125,28 @@ let
     n: v: !(lib.hasPrefix "wm" n || lib.hasPrefix "app" n)
   ) config.theme.color;
 
+  quickshellAssets = [
+    {
+      name = "logoAndampAmpBlue";
+      relPath = "logos/andamp-amp-blue.png";
+    }
+  ];
+
+  assetQmlProperties = lib.concatStringsSep "\n        " (
+    map (
+      asset: ''readonly property url ${asset.name}: Qt.resolvedUrl("assets/${asset.relPath}")''
+    ) quickshellAssets
+  );
+
+  assetQmlBlock =
+    if quickshellAssets == [ ] then
+      ""
+    else
+      ''
+        // Asset URLs
+        ${assetQmlProperties}
+      '';
+
   # Helper to convert font sizes to QML properties
   fontSizesToQml = lib.concatStringsSep "\n    " (
     lib.mapAttrsToList (
@@ -152,27 +175,36 @@ let
   );
 
   themeQml = ''
-    pragma Singleton
-    import QtQuick
+        pragma Singleton
+        import QtQuick
 
-    QtObject {
-        // Bar Settings
-        readonly property int barHeight: ${toString barHeight}
+        QtObject {
+            // Bar Settings
+            readonly property int barSize: ${toString barSize}
 
-        // Colors
-        ${colorsToQml}
+            // Colors
+            ${colorsToQml}
 
-        // Font Sizes
-        ${fontSizesToQml}
+            // Font Sizes
+            ${fontSizesToQml}
 
-        // Font Families
-        ${fontFamiliesToQml}
-    }
+            // Font Families
+            ${fontFamiliesToQml}
+
+    ${assetQmlBlock}
+        }
   '';
+
+  assetCopyCommands = lib.concatStringsSep "\n        " (
+    map (
+      asset: ''install -Dm644 "${../../../assets}/${asset.relPath}" "$out/assets/${asset.relPath}"''
+    ) quickshellAssets
+  );
 
   componentsOut = pkgs.runCommand "quickshell-components" { inherit (pkgs) stdenv; } ''
         mkdir -p "$out"
         cp -r "${./components}/"* "$out/" || true
+        ${assetCopyCommands}
         cat > "$out/Theme.qml" <<'EOF'
     ${themeQml}
     EOF

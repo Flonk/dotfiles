@@ -170,8 +170,9 @@ Singleton {
                     if (parts.length >= 2) {
                         root.hasBattery = true;
                         root.batteryLevel = parseInt(parts[0], 10) / 100.0;
-                        root.batteryStatus = parts[1];
-                        root.isCharging = parts[1] === "Charging";
+                        // Join all parts after the first (capacity) to handle multi-word status like "Not charging"
+                        root.batteryStatus = parts.slice(1).join(" ");
+                        root.isCharging = root.batteryStatus === "Charging";
                     } else {
                         root.hasBattery = false;
                     }
@@ -251,8 +252,8 @@ Singleton {
     function getBatteryColorState(): string {
         if (!hasBattery) return "charging";        // Green - no battery means plugged in
         
-        if (batteryLevel >= 0.95) return "charging";  // Green - full battery (must be charging to stay full)
         if (isCharging) return "charging";         // Green - actively charging
+        if (batteryLevel >= 0.95) return "charging";  // Green - full battery (must be charging to stay full)
         if (batteryLevel <= 0.2) return "critical";   // Red - critically low
         
         return "normal";                           // Window manager color for everything else

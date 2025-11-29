@@ -111,24 +111,27 @@ let
   };
 
   lockscreenImage = ../../../assets/logos/andamp.png;
-  wallpaper = (import ./wallpaper.nix) {
-    inherit
-      lib
-      pkgs
-      config
-      colorWm
-      colorApp
-      colorUtils
-      lockscreenImage
-      colorError600
-      colorError400
-      colorError300
-      colorError800
-      colorSuccess400
-      colorSuccess600
-      colorSuccess800
-      ;
-  };
+  # wallpaper = (import ./wallpaper.nix) {
+  #   inherit
+  #     lib
+  #     pkgs
+  #     config
+  #     colorWm
+  #     colorApp
+  #     colorUtils
+  #     lockscreenImage
+  #     colorError600
+  #     colorError400
+  #     colorError300
+  #     colorError800
+  #     colorSuccess400
+  #     colorSuccess600
+  #     colorSuccess800
+  #     ;
+  # };
+  wallpaper = pkgs.runCommand "wallpaper.jpg" { } ''
+    cp ${../../../assets/wallpapers/wallhaven-o5qwl7.jpg} $out
+  '';
 
 in
 {
