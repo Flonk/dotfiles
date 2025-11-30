@@ -6,7 +6,6 @@ singleton ActiveWindowWidget 1.0 ActiveWindowWidget.qml
 singleton MprisWidget 1.0 MprisWidget.qml
 singleton WifiWidget 1.0 WifiWidget.qml
 singleton BluetoothWidget 1.0 BluetoothWidget.qml
-singleton Time 1.0 Time.qml
 AppController 1.0 AppController.qml
 WorkspacesWidget 1.0 WorkspacesWidget.qml
 Bar 1.0 Bar.qml
