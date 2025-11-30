@@ -5,6 +5,7 @@ singleton SystemMonitor 1.0 SystemMonitor.qml
 singleton ActiveWindowWidget 1.0 ActiveWindowWidget.qml
 singleton MprisWidget 1.0 MprisWidget.qml
 singleton WifiWidget 1.0 WifiWidget.qml
+singleton BluetoothWidget 1.0 BluetoothWidget.qml
 singleton Time 1.0 Time.qml
 AppController 1.0 AppController.qml
 WorkspacesWidget 1.0 WorkspacesWidget.qml
@@ -12,6 +13,7 @@ Bar 1.0 Bar.qml
 VisualizerWindow 1.0 VisualizerWindow.qml
 BarWindow 1.0 BarWindow.qml
 ClockWidget 1.0 ClockWidget.qml
+ClockDisplay 1.0 ClockDisplay.qml
 CpuDisplay 1.0 CpuDisplay.qml
 MemoryDisplay 1.0 MemoryDisplay.qml
 ActiveWindowDisplay 1.0 ActiveWindowDisplay.qml
@@ -25,4 +27,5 @@ SystemBarsDisplay 1.0 SystemBarsDisplay.qml
 Section 1.0 Section.qml
 DropDown 1.0 DropDown.qml
 WifiDisplay 1.0 WifiDisplay.qml
+BluetoothDisplay 1.0 BluetoothDisplay.qml
 Shortcuts 1.0 Shortcuts.qml

@@ -7,17 +7,20 @@ Rectangle {
     
     width: Theme.barSize
     height: Theme.barSize
-    color: Theme.app200
+    color: "transparent"
     clip: true  // Clip at the rectangle level too
+    property real hoverScale: 1.0
     property var iconOptions: [
         {
-            type: "text",
-            value: "🥸"
+            type: "image",
+            value: Theme.logoAndampAmpBlue,
+            zoom: 0.6
         },
         {
-            type: "image",
-            value: Theme.logoAndampAmpBlue
-        }
+            type: "text",
+            value: "🥸",
+            zoom: 1.25
+        }        
     ]
     property int iconIndex: 0
     readonly property var currentIcon: iconOptions.length > 0 ? iconOptions[iconIndex % iconOptions.length] : null
@@ -33,13 +36,18 @@ Rectangle {
     Item {
         anchors.fill: parent
         clip: true  // Force clipping at container level
+        scale: root.hoverScale
+        
+        Behavior on scale {
+            NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+        }
         
         // Render either emoji text or image source based on current icon
         Text {
             anchors.centerIn: parent
             text: currentIcon && currentIcon.type === "text" ? currentIcon.value : ""
             visible: currentIcon && currentIcon.type === "text"
-            font.pointSize: Theme.barSize * 1.25
+            font.pointSize: Theme.barSize * (currentIcon && currentIcon.zoom ? currentIcon.zoom : 1.0)
             font.family: Theme.fontFamilyUi
             color: Theme.app800
             clip: true
@@ -49,8 +57,8 @@ Rectangle {
 
         Image {
             anchors.centerIn: parent
-            width: Theme.barSize * 0.85
-            height: Theme.barSize * 0.85
+            width: Theme.barSize * (currentIcon && currentIcon.zoom ? currentIcon.zoom : 0.85)
+            height: Theme.barSize * (currentIcon && currentIcon.zoom ? currentIcon.zoom : 0.85)
             source: currentIcon && currentIcon.type === "image" ? currentIcon.value : ""
             visible: currentIcon && currentIcon.type === "image"
             fillMode: Image.PreserveAspectFit
@@ -77,10 +85,10 @@ Rectangle {
         // Visual feedback on hover
         hoverEnabled: true
         onEntered: {
-            root.color = Qt.lighter(Theme.app200, 1.1);
+            root.hoverScale = 1.1;
         }
         onExited: {
-            root.color = Theme.app200;
+            root.hoverScale = 1.0;
         }
     }
 }

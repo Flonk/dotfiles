@@ -37,8 +37,18 @@ PanelWindow {
   property bool sectionShowTopBorder: true
 
   // Content area
+  Rectangle {
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    width: 1
+    color: Theme.app200
+    z: 1
+  }
+
   Item {
     anchors.fill: parent
+    anchors.leftMargin: 1
 
     // Top flex container
     Rectangle {

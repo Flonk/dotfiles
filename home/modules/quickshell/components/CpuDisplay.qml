@@ -13,13 +13,14 @@ Item {
     property string cpuIcon: "\uf4bc"
     property int iconLeftPadding: 0
     property bool fillFromRight: false
-    property int horizontalPadding: 2
+    property int horizontalPadding: 0
     property int barHeight: 16  // Fixed height for vertical bars
+    property int labelToBarSpacing: 0
     
     width: parent.width
     implicitHeight: {
         const topMargin = 0;
-        const spacing = 2;
+        const spacing = root.labelToBarSpacing;
         const bottomPadding = 0;
         return topMargin + labelColumn.implicitHeight + spacing + root.barHeight + bottomPadding;
     }
@@ -48,22 +49,22 @@ Item {
         Row {
             id: barRow
             anchors.top: labelColumn.bottom
-            anchors.topMargin: 2
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
+            anchors.topMargin: root.labelToBarSpacing
+            anchors.horizontalCenter: parent.horizontalCenter
             height: root.barHeight
             spacing: root.barSpacing
             z: 2
+            property int coreCount: Math.max(1, SystemMonitor.coreCount)
+            property int totalSpacing: Math.max(0, (coreCount - 1) * root.barSpacing)
+            property int availableWidth: Math.max(0, parent.width - (root.horizontalPadding * 2))
+            property int computedBarWidth: Math.max(1, Math.floor((availableWidth - totalSpacing) / coreCount))
+            property int usedWidth: Math.max(0, (computedBarWidth * coreCount) + totalSpacing)
+            width: usedWidth
+
             Repeater {
-                model: SystemMonitor.coreCount
+                model: barRow.coreCount
                 delegate: Item {
-                    width: {
-                        const totalSpacing = (SystemMonitor.coreCount - 1) * root.barSpacing;
-                        const availableWidth = barRow.width - totalSpacing;
-                        return Math.floor(availableWidth / SystemMonitor.coreCount);
-                    }
+                    width: barRow.computedBarWidth
                     height: barRow.height
                     
                     Rectangle {

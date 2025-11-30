@@ -23,6 +23,9 @@ Item {
     property color topBorderColor: Theme.app200
     property int topBorderHeight: 1
     property bool showTopBorder: true
+    property color bottomBorderColor: Theme.app200
+    property int bottomBorderHeight: 0
+    property bool showBottomBorder: false
     clip: true
     
     // Default container for children
@@ -49,6 +52,15 @@ Item {
             height: root.topBorderHeight
             visible: root.showTopBorder && root.topBorderHeight > 0
             color: root.topBorderColor
+        }
+        
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: root.bottomBorderHeight
+            visible: root.showBottomBorder && root.bottomBorderHeight > 0
+            color: root.bottomBorderColor
         }
         
         // Content item with padding

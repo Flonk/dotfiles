@@ -8,12 +8,10 @@ Item {
     // Public properties
     property string label: ""
     property real value: 0.0  // 0.0 to 1.0
-    property color barColor: Theme.wm800
     property color textColor: Theme.app600
     property color errorColor: Theme.error400
     property real errorThreshold: 0.9
     property bool enableErrorThreshold: true
-    property bool barVisible: true
     property string icon: ""
     property bool displayAsPercent: true
     property string valueSuffix: ""
@@ -22,7 +20,6 @@ Item {
         : root.value.toString()
     
     // Custom color override
-    property color customBarColor: "transparent"
     property color customTextColor: "transparent"
     property bool useCustomColors: false
     
@@ -32,16 +29,10 @@ Item {
     property real mouseStep: 0.01
     
     // Layout options
-    property bool barOnTop: false  // If true, bar is above label, otherwise below
-    property bool showBar: true    // If false, hide the bar completely
     property int verticalPadding: 3
-    property int barSpacing: 3
-    property int barHeight: 8
-    property int horizontalPadding: 2
     property int iconLeftPadding: 0
     property int iconPointSize: Theme.fontSizeBig
     property int valuePointSize: Theme.fontSizeBig
-    property bool fillFromRight: false
     implicitHeight: contentColumn.implicitHeight
     height: implicitHeight
 
@@ -52,33 +43,6 @@ Item {
         spacing: 0
 
         Item { width: 1; height: root.verticalPadding }
-
-        Item {
-            id: topBarWrapper
-            width: parent.width
-            height: (root.barOnTop && root.showBar && root.barVisible) ? root.barHeight : 0
-            visible: height > 0
-
-            MiniBar {
-                anchors.fill: parent
-                anchors.leftMargin: root.horizontalPadding
-                anchors.rightMargin: root.horizontalPadding
-                value: root.value
-                fillFromRight: root.fillFromRight
-                barColor: {
-                    if (root.useCustomColors) return root.customBarColor;
-                    return root.barColor;
-                }
-                errorColor: root.errorColor
-                errorThreshold: root.errorThreshold
-                enableErrorThreshold: root.enableErrorThreshold
-            }
-        }
-
-        Item {
-            width: parent.width
-            height: topBarWrapper.height > 0 ? root.barSpacing : 0
-        }
 
         KeyValuePair {
             id: labelLine
@@ -96,33 +60,6 @@ Item {
                 if (root.useCustomColors) return root.customTextColor;
                 if (root.enableErrorThreshold && root.value > root.errorThreshold) return root.errorColor;
                 return root.textColor;
-            }
-        }
-
-        Item {
-            width: parent.width
-            height: (!root.barOnTop && root.showBar && root.barVisible) ? root.barSpacing : 0
-        }
-
-        Item {
-            id: bottomBarWrapper
-            width: parent.width
-            height: (!root.barOnTop && root.showBar && root.barVisible) ? root.barHeight : 0
-            visible: height > 0
-
-            MiniBar {
-                anchors.fill: parent
-                anchors.leftMargin: root.horizontalPadding
-                anchors.rightMargin: root.horizontalPadding
-                value: root.value
-                fillFromRight: root.fillFromRight
-                barColor: {
-                    if (root.useCustomColors) return root.customBarColor;
-                    return root.barColor;
-                }
-                errorColor: root.errorColor
-                errorThreshold: root.errorThreshold
-                enableErrorThreshold: root.enableErrorThreshold
             }
         }
 
