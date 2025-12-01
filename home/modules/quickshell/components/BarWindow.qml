@@ -156,7 +156,7 @@ PanelWindow {
         topBorderColor: sectionTopBorderColor
         topBorderHeight: sectionTopBorderHeight
         showTopBorder: sectionShowTopBorder
-        
+        /*
         CavaLegacyShaderWidget {
           id: legacyCavaDisplay
           width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
@@ -174,6 +174,7 @@ PanelWindow {
           volumeBarColor: Theme.success600
           monstercatFilter: true
         }
+        */
       }
       //*/
     }

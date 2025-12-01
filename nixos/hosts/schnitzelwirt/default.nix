@@ -79,6 +79,8 @@
     ];
   };
 
+  services.thinkfan.enable = true;
+
   # whitelist Google Pixel 9
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ENV{DEVNAME}=="/dev/bus/usb/*", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4ee7", MODE="0664", GROUP="plugdev"

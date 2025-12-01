@@ -13,12 +13,22 @@
   ############################################
   services.tlp.enable = true;
   services.tlp.settings = {
-    # CPU
+    # CPU - powersave governor dynamically scales frequency based on load
     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-    CPU_SCALING_GOVERNOR_ON_AC = "performance";
+    CPU_SCALING_GOVERNOR_ON_AC = "powersave";
+
+    CPU_BOOST_ON_BAT = "0";
+
+    # Platform profile (if supported by your hardware)
+    PLATFORM_PROFILE_ON_AC = "low-power";
+    PLATFORM_PROFILE_ON_BAT = "low-power";
+
+    # Fan control
+    FAN_SPEED_ON_AC = "auto";
+    FAN_SPEED_ON_BAT = "auto";
 
     # PCIe link power management
-    PCIE_ASPM_ON_AC = "performance";
+    PCIE_ASPM_ON_AC = "powersupersave";
     PCIE_ASPM_ON_BAT = "powersupersave";
 
     # USB autosuspend
@@ -31,7 +41,7 @@
     RADEON_POWER_PROFILE_ON_BAT = "low";
     RADEON_DPM_STATE_ON_BAT = "battery";
 
-    RUNTIME_PM_ON_AC = "on";
+    RUNTIME_PM_ON_AC = "auto";
     RUNTIME_PM_ON_BAT = "auto";
   };
 
