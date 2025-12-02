@@ -42,6 +42,12 @@ Singleton {
         notificationProcess.running = true;
     }
 
+    function copyToClipboard(text) {
+        if (!text || !text.length) return;
+        clipboardProcess.command = ["wl-copy", text];
+        clipboardProcess.running = true;
+    }
+
     function toggleWifi() {
         if (root.isEnabled) {
             disableWifi.running = true;
@@ -281,6 +287,10 @@ Singleton {
 
     Process {
         id: notificationProcess
+    }
+
+    Process {
+        id: clipboardProcess
     }
 
     Timer {

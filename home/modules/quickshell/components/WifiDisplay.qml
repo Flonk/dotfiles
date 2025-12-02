@@ -31,10 +31,7 @@ DropDown {
 
     function copyIpToClipboard(label, value) {
         if (!value || !value.length) return;
-        const clipboard = Qt.application && Qt.application.clipboard ? Qt.application.clipboard() : null;
-        if (clipboard && clipboard.setText) {
-            clipboard.setText(value);
-        }
+        WifiWidget.copyToClipboard(value);
         const messageLabel = label && label.length ? label : "IP";
         WifiWidget.sendNotification(messageLabel + " Copied to Clipboard", value);
     }
@@ -118,17 +115,18 @@ DropDown {
                         opacity: localIpMouseArea.containsMouse ? 0.85 : 0
                         radius: 2
                     }
-                    Text {
+                    MarqueeText {
                         id: localIpText
                         text: root.formatIpValue(WifiWidget.localIp)
                         font.pointSize: 6
                         font.family: Theme.fontFamilyUiNf
-                        color: localIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
-                        opacity: WifiWidget.isConnected ? 0.9 : 0.5
+                        textColor: localIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
+                        textOpacity: WifiWidget.isConnected ? 0.9 : 0.5
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        horizontalAlignment: Text.AlignHCenter
-                        elide: Text.ElideLeft
+                        alignment: Qt.AlignRight
+                        hovered: localIpMouseArea.containsMouse
+                        height: implicitHeight
                     }
                     MouseArea {
                         id: localIpMouseArea
@@ -148,17 +146,18 @@ DropDown {
                         opacity: gatewayIpMouseArea.containsMouse ? 0.85 : 0
                         radius: 2
                     }
-                    Text {
+                    MarqueeText {
                         id: gatewayIpText
                         text: root.formatIpValue(WifiWidget.gatewayIp)
                         font.pointSize: 6
                         font.family: Theme.fontFamilyUiNf
-                        color: gatewayIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
-                        opacity: WifiWidget.isConnected ? 0.9 : 0.5
+                        textColor: gatewayIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
+                        textOpacity: WifiWidget.isConnected ? 0.9 : 0.5
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        horizontalAlignment: Text.AlignHCenter
-                        elide: Text.ElideLeft
+                        alignment: Qt.AlignRight
+                        hovered: gatewayIpMouseArea.containsMouse
+                        height: implicitHeight
                     }
                     MouseArea {
                         id: gatewayIpMouseArea
@@ -178,17 +177,18 @@ DropDown {
                         opacity: publicIpMouseArea.containsMouse ? 0.85 : 0
                         radius: 2
                     }
-                    Text {
+                    MarqueeText {
                         id: publicIpText
                         text: root.formatIpValue(WifiWidget.publicIp)
                         font.pointSize: 6
                         font.family: Theme.fontFamilyUiNf
-                        color: publicIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
-                        opacity: WifiWidget.isConnected ? 0.9 : 0.5
+                        textColor: publicIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
+                        textOpacity: WifiWidget.isConnected ? 0.9 : 0.5
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        horizontalAlignment: Text.AlignHCenter
-                        elide: Text.ElideLeft
+                        alignment: Qt.AlignRight
+                        hovered: publicIpMouseArea.containsMouse
+                        height: implicitHeight
                     }
                     MouseArea {
                         id: publicIpMouseArea

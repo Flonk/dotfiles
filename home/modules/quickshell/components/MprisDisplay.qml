@@ -33,76 +33,24 @@ MouseArea {
     
     Rectangle {
         id: displayRect
-        color: Theme.app150  // backdrop color
-        width: Theme.barSize  // fit to bar width
-        height: rotatedWrapper.width  // After rotation, wrapper width becomes display height
-        radius: 2  // match other components
-        
-        // Wrapper Item that gets rotated
-        Item {
-            id: rotatedWrapper
-            anchors.bottom: parent.bottom  // Anchor to bottom since rotation goes upward
-            anchors.left: parent.left
-            width: Math.min(contentColumn.implicitWidth + 8, 180)  // Add padding, max 140
-            height: Theme.barSize
-            
-            // Set transform origin to center of barSize dimension, rotate 270 for bottom-to-top reading
-            transform: Rotation {
-                origin.x: Theme.barSize / 2
-                origin.y: Theme.barSize / 2
-                angle: 270
-            }
-            
-            Column {
-                id: contentColumn
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 6  // bottom padding (becomes right padding after rotation)
-                anchors.left: parent.left
-                spacing: 2
-                
-                // Artist name
-                Text {
-                    id: artistText
-                    text: (MprisWidget.currentArtist || "").toUpperCase()
-                    color: MprisWidget.isPlaying ? Theme.app600 : Theme.app400
-                    font.family: Theme.fontFamilyUiNf
-                    font.pointSize: Theme.fontSizeSmall
-                    font.weight: Font.Bold
-                    font.letterSpacing: 1.5
-                    opacity: 0.7
-                    
-                    elide: Text.ElideRight
-                    width: Math.min(implicitWidth, 140)
-                    
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                }
-                
-                // Title
-                Text {
-                    id: titleText
-                    text: (MprisWidget.currentTitle || "No media").toUpperCase()
-                    color: MprisWidget.isPlaying ? Theme.app800 : Theme.app500
-                    font.family: Theme.fontFamilyUiNf
-                    font.pointSize: Theme.fontSizeSmall
-                    font.weight: Font.Bold
-                    font.letterSpacing: 1.5
-                    
-                    elide: Text.ElideRight
-                    width: Math.min(implicitWidth, 140)
-                    
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: 300
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                }
-            }
+        color: Theme.app150
+        width: Theme.barSize
+        height: 18
+        radius: 2
+
+        MarqueeText {
+            id: titleText
+            anchors.fill: parent
+            anchors.margins: 3
+            text: (MprisWidget.currentTitle || "No media").toUpperCase()
+            font.family: Theme.fontFamilyUiNf
+            font.pointSize: Theme.fontSizeSmall
+            font.weight: Font.Bold
+            textColor: MprisWidget.isPlaying ? Theme.app800 : Theme.app500
+            textOpacity: 0.95
+            alignment: Qt.AlignRight
+            marqueeDelay: 800
+            hovered: mouseArea.containsMouse
         }
     }
     

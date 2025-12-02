@@ -89,28 +89,7 @@ PanelWindow {
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 0
         
-        Section {
-          width: Theme.barSize
-          topMargin: sectionMargin
-          bottomMargin: sectionMargin
-          leftMargin: sectionMargin
-          rightMargin: sectionMargin
-          radius: sectionRadius
-          topPadding: sectionVerticalPadding
-          bottomPadding: sectionVerticalPadding
-          leftPadding: sectionHorizontalPadding
-          rightPadding: sectionHorizontalPadding
-          clip: sectionClipContent
-          backgroundColor: sectionBackgroundColor
-          topBorderColor: sectionTopBorderColor
-          topBorderHeight: sectionTopBorderHeight
-          showTopBorder: sectionShowTopBorder
-          
-          MprisDisplay {
-            id: mprisDisplay
-            width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
-          }
-        }
+        // (was MprisDisplay section; now handled by MediaControlDisplay below)
       }
     }
 
@@ -192,6 +171,28 @@ PanelWindow {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 0
+        
+        Section {
+          width: Theme.barSize
+          topMargin: sectionMargin
+          bottomMargin: sectionMargin
+          leftMargin: sectionMargin
+          rightMargin: sectionMargin
+          radius: sectionRadius
+          topPadding: sectionVerticalPadding
+          bottomPadding: sectionVerticalPadding
+          leftPadding: sectionHorizontalPadding
+          rightPadding: sectionHorizontalPadding
+          clip: sectionClipContent
+          backgroundColor: sectionBackgroundColor
+          topBorderColor: sectionTopBorderColor
+          topBorderHeight: sectionTopBorderHeight
+          showTopBorder: sectionShowTopBorder
+          
+          MediaControlDisplay {
+            width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
+          }
+        }
       }
     }
 
