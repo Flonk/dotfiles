@@ -135,25 +135,11 @@ PanelWindow {
         topBorderColor: sectionTopBorderColor
         topBorderHeight: sectionTopBorderHeight
         showTopBorder: sectionShowTopBorder
-        /*
-        CavaLegacyShaderWidget {
-          id: legacyCavaDisplay
+
+        MediaControlDisplay {
+          anchors.horizontalCenter: parent.horizontalCenter
           width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
-          height: 220
-          volumeWidget: VolumeWidget
-          fps: 30
-          maxBars: 40
-          systemAnchor: "center"
-          microphoneAnchor: "bottom"
-          systemColorLow: Theme.wm200
-          systemColorHigh: Theme.wm800
-          microphoneColorLow: Theme.app100
-          microphoneColorHigh: Theme.app600
-          backgroundColor: Theme.app150
-          volumeBarColor: Theme.success600
-          monstercatFilter: true
         }
-        */
       }
       //*/
     }
@@ -171,28 +157,6 @@ PanelWindow {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 0
-        
-        Section {
-          width: Theme.barSize
-          topMargin: sectionMargin
-          bottomMargin: sectionMargin
-          leftMargin: sectionMargin
-          rightMargin: sectionMargin
-          radius: sectionRadius
-          topPadding: sectionVerticalPadding
-          bottomPadding: sectionVerticalPadding
-          leftPadding: sectionHorizontalPadding
-          rightPadding: sectionHorizontalPadding
-          clip: sectionClipContent
-          backgroundColor: sectionBackgroundColor
-          topBorderColor: sectionTopBorderColor
-          topBorderHeight: sectionTopBorderHeight
-          showTopBorder: sectionShowTopBorder
-          
-          MediaControlDisplay {
-            width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
-          }
-        }
       }
     }
 

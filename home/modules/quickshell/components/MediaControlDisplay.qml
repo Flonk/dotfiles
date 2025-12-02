@@ -3,7 +3,6 @@ import QtQuick
 
 Item {
     id: root
-    width: parent.width
     height: infoRow.height + 1 + albumArt.height + 1 + progressBar.height + 1 + controlRow.height
 
     // Root hover area for triggering marquee anywhere in the display
@@ -120,8 +119,9 @@ Item {
         height: Theme.barSize
         source: MediaControlWidget.albumArtUrl
         visible: MediaControlWidget.albumArtUrl !== ""
-        fillMode: Image.PreserveAspectFit
+        fillMode: Image.PreserveAspectCrop
         smooth: true
+        mipmap: true
         cache: true
         
         MouseArea {
