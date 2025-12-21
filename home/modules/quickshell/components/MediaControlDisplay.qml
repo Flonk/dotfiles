@@ -3,7 +3,19 @@ import QtQuick
 
 Item {
     id: root
-    height: infoRow.height + 1 + albumArt.height + 1 + progressBar.height + 1 + controlRow.height
+    width: parent.width
+    implicitHeight: layoutColumn.implicitHeight
+    height: implicitHeight
+
+    property int artistTopPadding: 7
+    property int titleBottomPadding: 6
+    property int titleGap: -2
+    property int imageTopMargin: 1
+    property int imageBottomMargin: 1
+    property int progressBarHeight: 4
+    property int buttonHeight: 22
+    property int buttonFontSize: 8
+    property int marqueeSpeed: 15
 
     // Root hover area for triggering marquee anywhere in the display
     MouseArea {
@@ -50,117 +62,254 @@ Item {
         }
     }
 
-    // Artist / title marquee row (top)
     Column {
-        id: infoRow
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: 1
+        id: layoutColumn
+        anchors.fill: parent
+        spacing: 0
 
-        MarqueeText {
-            id: mediaArtist
-            height: 12
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 3
-            anchors.rightMargin: 3
-            text: (MediaControlWidget.currentArtist || "").toUpperCase()
-            font.family: Theme.fontFamilyUiNf
-            font.pointSize: Theme.fontSizeTiny
-            font.weight: Font.Bold
-            textColor: MediaControlWidget.isPlaying ? Theme.app600 : Theme.app400
-            textOpacity: 0.8
-            alignment: Qt.AlignLeft
-            marqueeBehavior: "repeat"
-            marqueeDelay: 800
-            marqueeSpeed: 30
-            hovered: MediaControlWidget.isPlaying && (rootHoverArea.containsMouse || controlRowMouseArea.containsMouse)
-        }
-
-        MarqueeText {
-            id: mediaTitle
-            height: 12
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 3
-            anchors.rightMargin: 3
-            text: (MediaControlWidget.currentTitle || "No media").toUpperCase()
-            font.family: Theme.fontFamilyUiNf
-            font.pointSize: Theme.fontSizeSmall
-            font.weight: Font.Bold
-            textColor: MediaControlWidget.isPlaying ? Theme.app800 : Theme.app500
-            textOpacity: 0.95
-            alignment: Qt.AlignLeft
-            marqueeBehavior: "repeat"
-            marqueeDelay: 800
-            marqueeSpeed: 30
-            hovered: MediaControlWidget.isPlaying && (rootHoverArea.containsMouse || controlRowMouseArea.containsMouse)
-        }
-    }
-
-    // Hover area for triggering marquee on artist/title (now redundant but kept for reference)
-    MouseArea {
-        id: infoHoverArea
-        anchors.fill: infoRow
-        hoverEnabled: true
-        acceptedButtons: Qt.NoButton
-        cursorShape: Qt.ArrowCursor
-        visible: false
-    }
-
-    // Album art
-    Image {
-        id: albumArt
-        anchors.top: infoRow.bottom
-        anchors.topMargin: 4
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: Theme.barSize
-        height: Theme.barSize
-        source: MediaControlWidget.albumArtUrl
-        visible: MediaControlWidget.albumArtUrl !== ""
-        fillMode: Image.PreserveAspectCrop
-        smooth: true
-        mipmap: true
-        cache: true
-        
-        MouseArea {
-            anchors.fill: parent
-            onClicked: MediaControlWidget.togglePlaying()
-        }
-    }
-
-    // Progress bar
-    Rectangle {
-        id: progressBar
-        anchors.top: albumArt.bottom
-        anchors.topMargin: 1
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 4
-        color: Theme.app150
-        visible: MediaControlWidget.albumArtUrl !== ""
-
+        // <div backdrop><artist /><title /></div>
         Rectangle {
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: {
-                const player = MediaControlWidget.currentPlayer;
-                if (!player) return 0;
-                const pos = player.position || 0;
-                const len = player.length || 1;
-                return parent.width * Math.min(1, Math.max(0, pos / len));
-            }
-            color: Theme.error600
+            id: infoContainer
+            width: parent.width
+            color: Theme.app700
 
-            Behavior on width {
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.Linear
+            implicitHeight: root.artistTopPadding + mediaArtist.height + root.titleGap + mediaTitle.height + root.titleBottomPadding
+            height: implicitHeight
+
+            Column {
+                id: infoColumn
+                anchors.top: parent.top
+                anchors.topMargin: root.artistTopPadding
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: root.titleGap
+
+                MarqueeText {
+                    id: mediaArtist
+                    height: 12
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 3
+                    anchors.rightMargin: 3
+                    text: (MediaControlWidget.currentArtist || "").toUpperCase()
+                    font.family: Theme.fontFamilyUiNf
+                    font.pointSize: Theme.fontSizeTiny
+                    font.weight: Font.Bold
+                    textColor: "#000000"
+                    textOpacity: MediaControlWidget.isPlaying ? 0.85 : 0.55
+                    alignment: Qt.AlignLeft
+                    marqueeBehavior: "repeat"
+                    marqueeDelay: 800
+                    marqueeSpeed: root.marqueeSpeed
+                    hovered: MediaControlWidget.isPlaying
+                }
+
+                MarqueeText {
+                    id: mediaTitle
+                    height: 12
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 3
+                    anchors.rightMargin: 3
+                    text: (MediaControlWidget.currentTitle || "No media").toUpperCase()
+                    font.family: Theme.fontFamilyUiNf
+                    font.pointSize: Theme.fontSizeSmall
+                    font.weight: Font.Bold
+                    textColor: "#000000"
+                    textOpacity: MediaControlWidget.isPlaying ? 0.95 : 0.65
+                    alignment: Qt.AlignLeft
+                    marqueeBehavior: "repeat"
+                    marqueeDelay: 800
+                    marqueeSpeed: root.marqueeSpeed
+                    hovered: MediaControlWidget.isPlaying
                 }
             }
         }
+
+        // <div><img /><progress /></div>
+        Rectangle {
+            id: mediaContainer
+            width: parent.width
+            color: "#000000"
+            visible: true
+
+            implicitHeight: Theme.barSize + root.imageTopMargin + root.imageBottomMargin + root.progressBarHeight
+            height: implicitHeight
+
+            Image {
+                id: albumArt
+                anchors.top: parent.top
+                anchors.topMargin: root.imageTopMargin
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Theme.barSize
+                height: Theme.barSize
+                source: MediaControlWidget.albumArtUrl || ""
+                visible: (MediaControlWidget.albumArtUrl || "") !== ""
+                fillMode: Image.PreserveAspectCrop
+                smooth: true
+                cache: true
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: MediaControlWidget.togglePlaying()
+                }
+            }
+
+            Rectangle {
+                id: progressBar
+                anchors.top: albumArt.bottom
+                anchors.topMargin: root.imageBottomMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: root.progressBarHeight
+                color: Theme.app150
+
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: {
+                        const player = MediaControlWidget.currentPlayer;
+                        if (!player) return 0;
+                        const pos = player.position || 0;
+                        const len = player.length || 1;
+                        return parent.width * Math.min(1, Math.max(0, pos / len));
+                    }
+                    color: Theme.error600
+
+                    Behavior on width {
+                        NumberAnimation {
+                            duration: 200
+                            easing.type: Easing.Linear
+                        }
+                    }
+                }
+            }
+        }
+
+        // <div><buttons /></div> (buttons area is full-width so its backdrop is full-width)
+        Rectangle {
+            id: buttonsContainer
+            width: parent.width
+            color: Theme.app700
+            height: root.buttonHeight
+
+            property int thirdWidth: Math.floor(width / 3)
+            property int remainderWidth: width - (thirdWidth * 3)
+
+            // Top border separator
+            Rectangle {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 1
+                color: "#000000"
+            }
+
+            Row {
+                id: controlRow
+                anchors.fill: parent
+                spacing: 0
+
+                // Play/Pause (left third + remainder)
+                Item {
+                    id: playZone
+                    width: buttonsContainer.thirdWidth + buttonsContainer.remainderWidth
+                    height: parent.height
+
+                    Text {
+                        anchors.centerIn: parent
+                        anchors.horizontalCenterOffset: MediaControlWidget.isPlaying ? 0 : 1
+                        text: MediaControlWidget.isPlaying ? "\uf04c" : "\uf04b"
+                        font.family: Theme.fontFamilyUiNf
+                        font.pointSize: root.buttonFontSize
+                        color: "#000000"
+                        opacity: 0.95
+                    }
+
+                    Rectangle {
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 1
+                        color: "#000000"
+                        opacity: 1.0
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: MediaControlWidget.togglePlaying()
+                    }
+                }
+
+                // Previous (middle third)
+                Item {
+                    id: prevZone
+                    width: buttonsContainer.thirdWidth
+                    height: parent.height
+
+                    Text {
+                        anchors.centerIn: parent
+                        anchors.horizontalCenterOffset: -0.5
+                        text: "\uf048"
+                        font.family: Theme.fontFamilyUiNf
+                        font.pointSize: root.buttonFontSize
+                        color: "#000000"
+                        opacity: 0.95
+                    }
+
+                    Rectangle {
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 1
+                        color: "#000000"
+                        opacity: 1.0
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: MediaControlWidget.previous()
+                    }
+                }
+
+                // Next (right third)
+                Item {
+                    id: nextZone
+                    width: buttonsContainer.thirdWidth
+                    height: parent.height
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: "\uf051"
+                        font.family: Theme.fontFamilyUiNf
+                        font.pointSize: root.buttonFontSize
+                        color: "#000000"
+                        opacity: 0.95
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: MediaControlWidget.next()
+                    }
+                }
+            }
+        }
+    }
+
+    // Bottom border separator
+    Rectangle {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 1
+        color: Theme.app200
     }
 
     Timer {
@@ -170,111 +319,6 @@ Item {
         onTriggered: {
             if (MediaControlWidget.currentPlayer) {
                 MediaControlWidget.currentPlayer.positionChanged();
-            }
-        }
-    }
-
-    // Control buttons row (bottom)
-    MouseArea {
-        id: controlRowMouseArea
-        anchors.top: progressBar.bottom
-        anchors.topMargin: 1
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: controlRow.width
-        height: controlRow.height
-        hoverEnabled: true
-        cursorShape: Qt.ArrowCursor
-        acceptedButtons: Qt.NoButton
-
-        Row {
-            id: controlRow
-            anchors.centerIn: parent
-            spacing: 0
-
-            // Play/Pause button
-            Item {
-                width: 16
-                height: 17
-
-                Text {
-                    anchors.centerIn: parent
-                    anchors.horizontalCenterOffset: MediaControlWidget.isPlaying ? 0 : 1
-                    text: MediaControlWidget.isPlaying ? "\uf04c" : "\uf04b"
-                    font.family: Theme.fontFamilyUiNf
-                    font.pointSize: MediaControlWidget.isPlaying ? 8 : 7
-                    color: Theme.app800
-                    opacity: 0.95
-                }
-
-                MouseArea {
-                    id: playPauseMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    propagateComposedEvents: false
-                    onClicked: MediaControlWidget.togglePlaying()
-                }
-            }
-
-            Rectangle {
-                width: 1
-                height: 15
-                color: Theme.app150
-            }
-
-            // Previous button
-            Item {
-                width: 15
-                height: 17
-
-                Text {
-                    anchors.centerIn: parent
-                    anchors.horizontalCenterOffset: -0.5
-                    text: "\uf048"
-                    font.family: Theme.fontFamilyUiNf
-                    font.pointSize: 8
-                    color: Theme.app600
-                    opacity: 0.95
-                }
-
-                MouseArea {
-                    id: prevMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    propagateComposedEvents: false
-                    onClicked: MediaControlWidget.previous()
-                }
-            }
-
-            Rectangle {
-                width: 1
-                height: 15
-                color: Theme.app150
-            }
-
-            // Next button
-            Item {
-                width: 16
-                height: 17
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "\uf051"
-                    font.family: Theme.fontFamilyUiNf
-                    font.pointSize: 8
-                    color: Theme.app600
-                    opacity: 0.95
-                }
-
-                MouseArea {
-                    id: nextMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    propagateComposedEvents: false
-                    onClicked: MediaControlWidget.next()
-                }
             }
         }
     }

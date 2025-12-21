@@ -135,29 +135,27 @@ PanelWindow {
         topBorderColor: sectionTopBorderColor
         topBorderHeight: sectionTopBorderHeight
         showTopBorder: sectionShowTopBorder
-
-        MediaControlDisplay {
-          anchors.horizontalCenter: parent.horizontalCenter
+        /*
+        CavaLegacyShaderWidget {
+          id: legacyCavaDisplay
           width: Theme.barSize - (sectionMargin * 2) - (sectionHorizontalPadding * 2)
+          height: 220
+          volumeWidget: VolumeWidget
+          fps: 30
+          maxBars: 40
+          systemAnchor: "center"
+          microphoneAnchor: "bottom"
+          systemColorLow: Theme.wm200
+          systemColorHigh: Theme.wm800
+          microphoneColorLow: Theme.app100
+          microphoneColorHigh: Theme.app600
+          backgroundColor: Theme.app150
+          volumeBarColor: Theme.success600
+          monstercatFilter: true
         }
+        */
       }
       //*/
-    }
-
-    // Bottom of center section
-    Rectangle {
-      anchors.top: centerStack.bottom
-      anchors.topMargin: cavaMargin
-      anchors.horizontalCenter: parent.horizontalCenter
-      width: Theme.barSize
-      color: "transparent"
-      
-      Column {
-        id: bottomOfCenterColumn
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 0
-      }
     }
 
     // Bottom flex container

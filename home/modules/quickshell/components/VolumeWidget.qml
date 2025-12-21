@@ -84,11 +84,10 @@ Singleton {
 
     // Helper property for volume icon
     property string volumeIcon: {
-        if (muted) return "🔇";
-        if (volume > 0.66) return "🔊";
-        if (volume > 0.33) return "🔉";
-        if (volume > 0) return "🔈";
-        return "🔇";
+        if (muted) return "\ueee8";
+        if (volume > 0.35) return "\uf028";
+        if (volume > 0) return "\uf027";
+        return "\uf026";
     }
 
     // Helper function for volume text
