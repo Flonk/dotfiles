@@ -31,6 +31,7 @@
     ../modules/quickshell/quickshell.nix
     ../modules/powersaver/powersaver.nix
     ../modules/work/insomnia.nix
+    ../modules/minecraft/minecraft.nix
   ];
 
   home = {
