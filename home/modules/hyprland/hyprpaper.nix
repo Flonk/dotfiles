@@ -8,15 +8,15 @@ let
   path = builtins.toString config.theme.wallpaper;
 in
 {
-
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = [ path ];
-      wallpaper = [
-        ",${path}"
-      ];
+  config = lib.mkIf config.skynet.module.home.hyprland {
+    services.hyprpaper = {
+      enable = true;
+      settings = {
+        preload = [ path ];
+        wallpaper = [
+          ",${path}"
+        ];
+      };
     };
   };
-
 }

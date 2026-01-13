@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   imports = [
-    ./hostconfig.nix
+    ./skynet.nix
     ./theme.nix
   ];
 }

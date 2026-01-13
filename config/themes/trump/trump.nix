@@ -110,7 +110,7 @@ let
     a = 1.0;
   };
 
-  lockscreenImage = ../../../assets/logos/andamp.png;
+  lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
   # wallpaper = (import ./wallpaper.nix) {
   #   inherit
   #     lib

@@ -1,2 +1,4 @@
 # Ignore private keys used for age recipients
 assets/keys/
+node_modules/
+.direnv/

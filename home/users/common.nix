@@ -1,0 +1,29 @@
+{ ... }:
+{
+  imports = [
+    ../modules/alacritty/alacritty.nix
+    ../modules/csvlens/csvlens.nix
+    ../modules/direnv/direnv.nix
+    ../modules/fastfetch/fastfetch.nix
+    ../modules/foot/foot.nix
+    ../modules/git/git.nix
+    ../modules/google-chrome/google-chrome.nix
+    ../modules/hyprland/hyprcursor.nix
+    ../modules/hyprland/hyprland.nix
+    ../modules/hyprland/hyprlock.nix
+    ../modules/hyprland/hyprpaper.nix
+    ../modules/jiratui/jiratui.nix
+    ../modules/mako/mako.nix
+    ../modules/minecraft/minecraft.nix
+    ../modules/nchat/nchat.nix
+    ../modules/obsidian/obsidian.nix
+    ../modules/powersaver/powersaver.nix
+    ../modules/quickshell/quickshell.nix
+    ../modules/skynet-scripts/skynet-scripts.nix
+    ../modules/vscode/vscode.nix
+    ../modules/walker/walker.nix
+    ../modules/waybar/waybar.nix
+    ../modules/work/work.nix
+    ../modules/zsh/zsh.nix
+  ];
+}

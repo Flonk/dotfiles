@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   sops,
   config,
@@ -10,8 +11,7 @@
     ../config/types
     ../nixos/hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
     ../config/themes/trump/trump.nix
-    ./users/flo.nix
-    ./modules/work/andamp.nix
+    ./users/flo
   ];
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

@@ -1,7 +1,7 @@
-# vpn-obk-split.nix (Home-Manager)
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   inputs,
   ...
 }:
@@ -10,6 +10,8 @@ let
     inputs.openconnect-pulse-launcher.packages."${pkgs.stdenv.hostPlatform.system
     }".openconnect-pulse-launcher;
 
+  # vpn lite via ssh tunnels; doesn't work for everything (especially kube port forwards
+  # collide with this), but for simple tasks this is enough
   vpnLite = pkgs.writeShellScriptBin "vpn-obk" ''
     set -euo pipefail
     PRE_DEV="$(${pkgs.iproute2}/bin/ip route show default | ${pkgs.gawk}/bin/awk '/^default/ {print $5; exit}')"
@@ -36,45 +38,19 @@ let
   '';
 in
 {
-  home.packages = [
-    vpnLauncher
-    vpnLite
+  imports = [
+    ./insomnia.nix
   ];
 
-  sops.secrets.andamp-vpn = {
-    format = "binary";
-    sopsFile = ../../../assets/secrets/andamp-vpn.ovpn;
-  };
+  config = lib.mkIf config.skynet.module.work.andamp.CEFKM {
+    home.packages = [
+      vpnLauncher
+      vpnLite
+    ];
 
-  sops.secrets.vpn3ithost = {
-    key = "vpn3ithost";
-    sopsFile = ../../../assets/secrets/secrets.json;
-  };
-
-  systemd.user.services.import-andamp-vpn = {
-    Unit = {
-      Description = "Import andamp-vpn profile to NetworkManager (idempotent)";
-      After = [ "default.target" ];
-      ConditionPathExists = "${config.sops.secrets.andamp-vpn.path}";
-    };
-    Service = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = (
-        pkgs.writeShellScript "import-andamp-vpn" ''
-          set -euo pipefail
-          NAME="andamp-vpn"
-          if ${pkgs.networkmanager}/bin/nmcli -t -f NAME con show | ${pkgs.gnugrep}/bin/grep -Fq "$NAME"; then
-            echo "$NAME already present; skipping import."
-            exit 0
-          fi
-          echo "Importing $NAME from ${config.sops.secrets.andamp-vpn.path}"
-          ${pkgs.networkmanager}/bin/nmcli connection import type openvpn file "${config.sops.secrets.andamp-vpn.path}"
-        ''
-      );
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
+    sops.secrets.vpn3ithost = {
+      key = "vpn3ithost";
+      sopsFile = ../../../../../assets/work/andamp/CEFKM/secrets/secrets.json;
     };
   };
 }

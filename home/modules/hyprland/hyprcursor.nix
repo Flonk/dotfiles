@@ -5,18 +5,18 @@
   ...
 }:
 {
+  config = lib.mkIf config.skynet.module.home.hyprland {
+    home.pointerCursor = {
+      package = pkgs.apple-cursor;
+      name = "Apple Cursor";
+      size = 24;
 
-  home.pointerCursor = {
-    package = pkgs.apple-cursor;
-    name = "Apple Cursor";
-    size = 24;
+      hyprcursor = {
+        enable = true;
+        size = config.home.pointerCursor.size;
+      };
 
-    hyprcursor = {
-      enable = true;
-      size = config.home.pointerCursor.size;
+      gtk.enable = true;
     };
-
-    gtk.enable = true;
   };
-
 }

@@ -1,5 +1,7 @@
 {
   pkgs,
+  config,
+  lib,
   ...
 }:
 let
@@ -110,19 +112,21 @@ let
 
 in
 {
-  systemd.user.services.quickshell-power-toggle = {
-    Unit = {
-      Description = "Toggle QuickShell on AC/battery (sysfs+UPower, with env capture)";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+  config = lib.mkIf config.skynet.module.home.powersaver {
+    systemd.user.services.quickshell-power-toggle = {
+      Unit = {
+        Description = "Toggle QuickShell on AC/battery (sysfs+UPower, with env capture)";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        Environment = [ "QS_ENV_FILE=${qsEnvPath}" ];
+        ExecStart = qsPowerToggle;
+        Restart = "always";
+        RestartSec = 2;
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
     };
-    Service = {
-      Type = "simple";
-      Environment = [ "QS_ENV_FILE=${qsEnvPath}" ];
-      ExecStart = qsPowerToggle;
-      Restart = "always";
-      RestartSec = 2;
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
   };
 }

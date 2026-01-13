@@ -5,6 +5,7 @@
   ...
 }:
 {
+  hostconfig.module.home.obs-studio = true;
 
   programs.obs-studio = {
     enable = true;

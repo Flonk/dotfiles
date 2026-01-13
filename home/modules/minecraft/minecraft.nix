@@ -5,20 +5,20 @@
   ...
 }:
 {
+  config = lib.mkIf config.skynet.module.home.minecraft {
+    home.packages = with pkgs; [
+      prismlauncher
+    ];
 
-  home.packages = with pkgs; [
-    prismlauncher
-  ];
-
-  xdg.desktopEntries = {
-    prismlauncher = {
-      name = "Prism Launcher";
-      comment = "A custom launcher for Minecraft";
-      exec = "prismlauncher";
-      icon = "prismlauncher";
-      categories = [ "Game" ];
-      terminal = false;
+    xdg.desktopEntries = {
+      prismlauncher = {
+        name = "Prism Launcher";
+        comment = "A custom launcher for Minecraft";
+        exec = "prismlauncher";
+        icon = "prismlauncher";
+        categories = [ "Game" ];
+        terminal = false;
+      };
     };
   };
-
 }

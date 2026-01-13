@@ -247,39 +247,39 @@ let
   '';
 in
 {
+  config = lib.mkIf config.skynet.module.home.quickshell {
+    # Use the generated components directory (componentsOut) as the xdg source.
+    xdg.configFile."quickshell".source = componentsOut;
 
-  # Use the generated components directory (componentsOut) as the xdg source.
-  xdg.configFile."quickshell".source = componentsOut;
+    # Add required packages for system monitoring and brightness control
+    home.packages = with pkgs; [
+      brightnessctl # For brightness control
+      lm_sensors # For temperature monitoring
+      pipewire # For audio capture
+      quickmilkSuite # Bundle containing Quickmilk + Shader + legacy Cava modules
+      wrappedQuickshell # Wrapped quickshell with cava plugin path
+      wrappedQuickshellDev # Development script for quickshell
 
-  # Add required packages for system monitoring and brightness control
-  home.packages = with pkgs; [
-    brightnessctl # For brightness control
-    lm_sensors # For temperature monitoring
-    pipewire # For audio capture
-    quickmilkSuite # Bundle containing Quickmilk + Shader + legacy Cava modules
-    wrappedQuickshell # Wrapped quickshell with cava plugin path
-    wrappedQuickshellDev # Development script for quickshell
+      inotify-tools # For inotifywait used in power toggle script
+    ];
 
-    inotify-tools # For inotifywait used in power toggle script
-  ];
-
-  # Systemd service for QuickShell
-  systemd.user.services.quickshell = {
-    Unit = {
-      Description = "QuickShell Wayland compositor shell";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+    # Systemd service for QuickShell
+    systemd.user.services.quickshell = {
+      Unit = {
+        Description = "QuickShell Wayland compositor shell";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        # Also pass path of env file for the launcher (not required, but handy)
+        Environment = [ "QS_ENV_FILE=${qsEnvPath}" ];
+        ExecStart = qsLaunch;
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
     };
-    Service = {
-      Type = "simple";
-      # Also pass path of env file for the launcher (not required, but handy)
-      Environment = [ "QS_ENV_FILE=${qsEnvPath}" ];
-      ExecStart = qsLaunch;
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
   };
-
 }

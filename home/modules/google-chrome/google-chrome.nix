@@ -9,8 +9,9 @@
     ./file-viewer.nix
   ];
 
-  home.packages = lib.mkBefore [
-    pkgs.google-chrome
-  ];
-
+  config = lib.mkIf config.skynet.module.home.google-chrome {
+    home.packages = lib.mkBefore [
+      pkgs.google-chrome
+    ];
+  };
 }

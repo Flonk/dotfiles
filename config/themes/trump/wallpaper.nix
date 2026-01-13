@@ -29,8 +29,8 @@ let
   padding = 20;
 
   # Monitor dims
-  mw = config.hostconfig.primaryMonitor.width;
-  mh = config.hostconfig.primaryMonitor.height;
+  mw = config.skynet.primaryMonitor.width;
+  mh = config.skynet.primaryMonitor.height;
 
   # Scale canvas to monitor height, then crop width centrally (use float math)
   scale = (1.0 * mh) / (1.0 * canvasH);

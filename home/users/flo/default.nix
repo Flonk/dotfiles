@@ -9,30 +9,8 @@
 }:
 {
   imports = [
-    ../modules/hyprland/hyprland.nix
-    ../modules/hyprland/hyprpaper.nix
-    ../modules/hyprland/hyprlock.nix
-    ../modules/hyprland/hyprcursor.nix
-    ../modules/google-chrome/google-chrome.nix
-    ../modules/git/git.nix
-    ../modules/direnv/direnv.nix
-    ../modules/mako/mako.nix
-    ../modules/alacritty/alacritty.nix
-    ../modules/foot/foot.nix
-    ../modules/zsh/zsh.nix
-    ../modules/vscode/vscode.nix
-    ../modules/fastfetch/fastfetch.nix
-    # ../modules/obs-studio/obs-studio.nix
-    ../modules/csvlens/csvlens.nix
-    ../modules/walker/walker.nix
-    ../modules/obsidian/obsidian.nix
-    ../modules/nchat/nchat.nix
-    ../modules/waybar/waybar.nix
-    ../modules/quickshell/quickshell.nix
-    ../modules/powersaver/powersaver.nix
-    ../modules/work/insomnia.nix
-    ../modules/jiratui/jiratui.nix
-    ../modules/minecraft/minecraft.nix
+    ./flo-userconfig.nix
+    ../common.nix
   ];
 
   home = {
@@ -77,7 +55,7 @@
       (pkgs.stdenvNoCC.mkDerivation {
         pname = "teko";
         version = "1.0";
-        src = ../../assets/fonts/teko;
+        src = ../../../assets/fonts/teko;
         installPhase = ''
           mkdir -p $out/share/fonts/truetype
           cp *.ttf $out/share/fonts/truetype/
@@ -116,9 +94,9 @@
     mimeApps = {
       enable = true;
       defaultApplications = lib.mkMerge [
-        (import ../modules/google-chrome/mimeApps.nix)
-        (import ../modules/google-chrome/file-viewer-mimeApps.nix)
-        (import ../modules/csvlens/mimeApps.nix)
+        (import ../../modules/google-chrome/mimeApps.nix)
+        (import ../../modules/google-chrome/file-viewer-mimeApps.nix)
+        (import ../../modules/csvlens/mimeApps.nix)
       ];
     };
   };

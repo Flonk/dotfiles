@@ -214,7 +214,7 @@ let
 
     /* CodeMirror selection layers */
     .theme-dark .cm-selectionBackground,
-    .theme-light .cm-selectionBackground { background-color: var(--text-selection) !important; }
+    .theme-dark .cm-selectionBackground { background-color: var(--text-selection) !important; }
     .theme-dark .cm-content ::selection,
     .theme-light .cm-content ::selection { background: var(--text-selection) !important; }
 
@@ -224,7 +224,9 @@ let
   '';
 in
 {
-  home.packages = with pkgs; [ obsidian ];
+  config = lib.mkIf config.skynet.module.home.obsidian {
+    home.packages = with pkgs; [ obsidian ];
 
-  home.file."Documents/Vault/.obsidian/snippets/style.css".text = lib.mkForce themeCss;
+    home.file."Documents/Vault/.obsidian/snippets/style.css".text = lib.mkForce themeCss;
+  };
 }

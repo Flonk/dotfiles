@@ -1,11 +1,15 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   imports = [
     ../../../config/types
     ./schnitzelwirt-hardware.nix
     ./schnitzelwirt-hostconfig.nix
     ../common.nix
-    ../../../home/modules/work/andamp-host.nix
   ];
 
   networking.hostName = "schnitzelwirt";
@@ -74,8 +78,6 @@
       "wheel"
       "docker"
       "plugdev"
-      "libvirtd"
-      "kvm"
     ];
   };
 
@@ -88,19 +90,4 @@
   programs.steam.enable = true;
 
   programs.nix-ld.enable = true;
-  # 1) Libvirt (QEMU/KVM) + UEFI firmware
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = pkgs.qemu_kvm;
-      swtpm.enable = true; # TPM 2.0 (some guests expect it)
-    };
-  };
-
-  # 2) GUI manager
-  programs.virt-manager.enable = true;
-
-  # (optional) Autostart the default NAT network
-  systemd.services."virtnetwork@default".wantedBy = [ "multi-user.target" ];
-
 }
