@@ -9,20 +9,13 @@
   inputs,
   ...
 }:
-let
-  fallout = pkgs.fetchFromGitHub {
-    owner = "shvchk";
-    repo = "fallout-grub-theme";
-    rev = "80734103d0b48d724f0928e8082b6755bd3b2078";
-    sha256 = "sha256-7kvLfD6Nz4cEMrmCA9yq4enyqVyqiTkVZV5y4RyUatU=";
-  };
-in
 {
   imports = [
     ../modules/work/andamp/CEFKM/CEFKM.nix
     ../modules/dnsmasq/dnsmasq.nix
     ../modules/fingerprint/fingerprint.nix
     ../modules/greetd/greetd.nix
+    ../modules/grub/grub.nix
     ../modules/powersaver/powersaver.nix
     ../modules/qemu/qemu.nix
   ];
@@ -41,11 +34,6 @@ in
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
-
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.useOSProber = true;
-  boot.loader.grub.theme = fallout;
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -134,6 +122,7 @@ in
     };
   };
 
+  # I enabled this to enable my phone to act as a MIDI device over bluetooth.
   services.avahi = {
     enable = true;
     nssmdns4 = true;

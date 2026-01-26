@@ -11,6 +11,7 @@
       dnsmasq = true;
       fingerprint = true;
       greetd = true;
+      grub = true;
       powersaver = true;
       qemu = true;
     };

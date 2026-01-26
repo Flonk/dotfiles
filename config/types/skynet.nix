@@ -133,6 +133,10 @@ in
           type = types.bool;
           default = false;
         };
+        grub = mkOption {
+          type = types.bool;
+          default = false;
+        };
         powersaver = mkOption {
           type = types.bool;
           default = false;
