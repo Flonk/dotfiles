@@ -1,5 +1,7 @@
 { ... }:
 {
+  config.skynet.mimeapps = true;
+
   config.skynet.module.home = {
     alacritty = true;
     csvlens = true;

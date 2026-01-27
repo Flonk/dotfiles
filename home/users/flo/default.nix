@@ -90,15 +90,4 @@
     enable = true;
   };
 
-  xdg = {
-    mimeApps = {
-      enable = true;
-      defaultApplications = lib.mkMerge [
-        (import ../../modules/google-chrome/mimeApps.nix)
-        (import ../../modules/google-chrome/file-viewer-mimeApps.nix)
-        (import ../../modules/csvlens/mimeApps.nix)
-      ];
-    };
-  };
-
 }

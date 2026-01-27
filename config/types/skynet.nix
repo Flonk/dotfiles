@@ -4,6 +4,11 @@ let
 in
 {
   options.skynet = {
+    mimeapps = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
     primaryMonitor = {
       width = mkOption {
         type = types.int;
