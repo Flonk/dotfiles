@@ -18,6 +18,7 @@
 
     security.pki.certificateFiles = [
       ../../../../../assets/work/andamp/CEFKM/certs/obk-dev.crt
+      ../../../../../assets/work/andamp/CEFKM/certs/obk-int.crt
     ];
   };
 }

@@ -13,7 +13,7 @@ let
   };
 in
 {
-  config = lib.mkIf config.skynet.grub.enable {
+  config = lib.mkIf config.skynet.module.system.grub {
     boot.loader.grub.enable = true;
     boot.loader.grub.useOSProber = true;
     boot.loader.grub.theme = fallout;

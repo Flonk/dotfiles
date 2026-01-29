@@ -20,7 +20,7 @@
     ../modules/qemu/qemu.nix
   ];
 
-  # Nix config.
+  # Nix config.w
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
