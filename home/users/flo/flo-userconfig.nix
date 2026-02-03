@@ -18,6 +18,7 @@
     obsidian = true;
     quickshell = true;
     skynet-scripts = true;
+    spotify = true;
     vscode = true;
     walker = true;
     waybar = true;

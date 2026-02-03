@@ -45,7 +45,6 @@
       jq
 
       musescore
-      spotify
       discord
       vlc
       networkmanager

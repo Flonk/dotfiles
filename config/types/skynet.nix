@@ -90,6 +90,10 @@ in
           type = types.bool;
           default = false;
         };
+        spotify = mkOption {
+          type = types.bool;
+          default = false;
+        };
         vscode = mkOption {
           type = types.bool;
           default = false;

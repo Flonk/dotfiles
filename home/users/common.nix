@@ -21,6 +21,7 @@
     ../modules/powersaver/powersaver.nix
     ../modules/quickshell/quickshell.nix
     ../modules/skynet-scripts/skynet-scripts.nix
+    ../modules/spotify/spotify.nix
     ../modules/vscode/vscode.nix
     ../modules/walker/walker.nix
     ../modules/waybar/waybar.nix
