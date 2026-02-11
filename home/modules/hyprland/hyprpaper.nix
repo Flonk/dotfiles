@@ -14,7 +14,7 @@ in
       settings = {
         preload = [ path ];
         wallpaper = [
-          ",${path}"
+          ",contain:${path}"
         ];
       };
     };
