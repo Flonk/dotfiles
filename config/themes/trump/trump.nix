@@ -130,7 +130,7 @@ let
   #     ;
   # };
   wallpaper = pkgs.runCommand "wallpaper.jpg" { } ''
-    cp ${../../../assets/wallpapers/wallhaven-o5qwl7.jpg} $out
+    cp ${../../../assets/wallpapers/marli.jpg} $out
   '';
 
 in
