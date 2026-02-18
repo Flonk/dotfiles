@@ -74,6 +74,10 @@ in
           type = types.bool;
           default = false;
         };
+        openclaw = mkOption {
+          type = types.bool;
+          default = false;
+        };
         obs-studio = mkOption {
           type = types.bool;
           default = false;
@@ -130,6 +134,10 @@ in
       };
 
       system = {
+        chrome-remote-desktop = mkOption {
+          type = types.bool;
+          default = false;
+        };
         dnsmasq = mkOption {
           type = types.bool;
           default = false;

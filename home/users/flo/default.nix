@@ -49,7 +49,9 @@
       vlc
       networkmanager
 
-      jetbrains.idea-ultimate
+      jetbrains.idea
+      unityhub
+
       pkgs.nerd-fonts.dejavu-sans-mono
       (pkgs.stdenvNoCC.mkDerivation {
         pname = "teko";

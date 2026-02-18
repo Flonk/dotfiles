@@ -18,6 +18,7 @@
     ../modules/minecraft/minecraft.nix
     ../modules/nchat/nchat.nix
     ../modules/obsidian/obsidian.nix
+    ../modules/openclaw/openclaw.nix
     ../modules/powersaver/powersaver.nix
     ../modules/quickshell/quickshell.nix
     ../modules/skynet-scripts/skynet-scripts.nix

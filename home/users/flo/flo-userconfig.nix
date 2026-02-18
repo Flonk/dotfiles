@@ -16,6 +16,7 @@
     minecraft = true;
     nchat = true;
     obsidian = true;
+    openclaw = true;
     quickshell = true;
     skynet-scripts = true;
     spotify = true;

@@ -11,6 +11,7 @@
 }:
 {
   imports = [
+    ../modules/chrome-remote-desktop/chrome-remote-desktop.nix
     ../modules/work/andamp/CEFKM/CEFKM.nix
     ../modules/dnsmasq/dnsmasq.nix
     ../modules/fingerprint/fingerprint.nix

@@ -241,17 +241,17 @@ in
         ];
 
         windowrule = [
-          # Ignore maximize requests from apps. You'll probably like this.
-          "suppressevent maximize, class:.*"
-          "size >900 >600, class:org.pulseaudio.pavucontrol"
-          "noshadow, floating:0"
-          "opacity 1 1, class:^(Alacritty|code)$"
-          "size 500 >100, class:Alacritty title:^(initial-shell)$"
-          "float, class:^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
-          "float, class:org.pulseaudio.pavucontrol"
+          # Ignore maximize requests from apps.
+          "suppress_event maximize, match:class .*"
+          "size 900 600, match:class org.pulseaudio.pavucontrol"
+          "no_shadow on, match:float false"
+          "opacity 1 1, match:class ^(Alacritty|code)$"
+          "size 500 100, match:class Alacritty, match:title ^(initial-shell)$"
+          "float on, match:class ^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
+          "float on, match:class org.pulseaudio.pavucontrol"
 
-          # "float, class:Rofi"
-          # "stayfocused, class:Rofi"
+          # "float on, match:class Rofi"
+          # "stay_focused on, match:class Rofi"
         ];
 
         input = {
@@ -428,7 +428,7 @@ in
           "QT_QPA_PLATFORM=wayland;xcb"
           "QT_WAYLAND_DISABLE_WINDOWDECORATION, 1"
           "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
-          "SDL_VIDEODRIVER, x11"
+          #     "SDL_VIDEODRIVER, x11"
           "MOZ_ENABLE_WAYLAND, 1"
           "AQ_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
           "GDK_SCALE,1"
