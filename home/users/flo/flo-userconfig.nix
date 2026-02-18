@@ -2,6 +2,8 @@
 {
   config.skynet.mimeapps = true;
 
+  config.skynet.discordId = "140292365435797504";
+
   config.skynet.module.home = {
     alacritty = true;
     csvlens = true;

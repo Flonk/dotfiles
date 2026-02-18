@@ -9,6 +9,12 @@ in
       default = false;
     };
 
+    discordId = mkOption {
+      type = types.str;
+      default = "";
+      description = "Discord user ID for allow-listing in OpenClaw";
+    };
+
     primaryMonitor = {
       width = mkOption {
         type = types.int;
@@ -159,6 +165,10 @@ in
           default = false;
         };
         qemu = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        ollama = mkOption {
           type = types.bool;
           default = false;
         };

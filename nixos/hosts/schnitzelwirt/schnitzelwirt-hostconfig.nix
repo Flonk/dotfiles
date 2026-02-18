@@ -13,6 +13,7 @@
       fingerprint = true;
       greetd = true;
       grub = true;
+      ollama = true;
       powersaver = true;
       qemu = true;
     };

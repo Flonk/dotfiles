@@ -17,6 +17,7 @@
     ../modules/fingerprint/fingerprint.nix
     ../modules/greetd/greetd.nix
     ../modules/grub/grub.nix
+    ../modules/ollama/ollama.nix
     ../modules/powersaver/powersaver.nix
     ../modules/qemu/qemu.nix
   ];
