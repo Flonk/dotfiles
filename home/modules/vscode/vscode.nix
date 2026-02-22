@@ -156,11 +156,10 @@
           "scminput" = false;
         };
 
-        "chat.tools.terminal.autoApprove" = {
-          "fortune" = true;
-        };
-
+        "chat.tools.autoApprove" = true;
+        "chat.tools.terminal.autoApprove" = true;
         "chat.tools.browsing.autoApprove" = true;
+        "chat.tools.global.autoApprove" = true;
 
         "indentRainbow.colors" = [
           "#2e344022"
