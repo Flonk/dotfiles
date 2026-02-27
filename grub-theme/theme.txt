@@ -1,0 +1,82 @@
+# Skynet GRUB Theme
+# Boot menu on the left half, company logo on the right
+
+# Global options
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#141519"
+terminal-font: "DejaVu Sans Mono Regular 14"
+terminal-box: "terminal_*.png"
+
+# Boot menu - left half of screen
++ boot_menu {
+    left = 5%
+    top = 20%
+    width = 40%
+    height = 60%
+
+    item_font = "DejaVu Sans Mono Regular 18"
+    item_color = "#8B92A8"
+    selected_item_font = "DejaVu Sans Mono Bold 18"
+    selected_item_color = "#ffffff"
+
+    selected_item_pixmap_style = "select_*.png"
+    item_pixmap_style = "item_*.png"
+
+    icon_width = 0
+    icon_height = 0
+    item_icon_space = 0
+
+    item_height = 36
+    item_padding = 12
+    item_spacing = 8
+
+    scrollbar = false
+}
+
+# Timeout bar at the bottom
++ progress_bar {
+    left = 5%
+    top = 90%
+    width = 40%
+    height = 4
+
+    id = "__timeout__"
+
+    bg_color = "#1C1D24"
+    fg_color = "#8B92A8"
+    border_color = "#1C1D24"
+}
+
+# Timeout text
++ label {
+    left = 5%
+    top = 85%
+    width = 40%
+    height = 20
+
+    id = "__timeout__"
+    color = "#555560"
+    font = "DejaVu Sans Mono Regular 12"
+    align = "left"
+}
+
+# Keyboard hints
++ label {
+    left = 5%
+    top = 95%
+    width = 40%
+    height = 20
+
+    color = "#555560"
+    font = "DejaVu Sans Mono Regular 12"
+    align = "left"
+    text = "enter: boot | e: edit | c: command line"
+}
+
+# Company logo on the right half (centered at 75%, 50%)
++ image {
+    left = 75%-65
+    top = 50%-75
+    file = "logo.png"
+}
