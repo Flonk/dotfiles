@@ -29,8 +29,18 @@ let
     done
 
     if [ -n "''${NEW_DEV}" ]; then
-      sudo ${pkgs.iproute2}/bin/ip route del default dev "''${NEW_DEV}" || true
+      # The VPN device appears before the VPN client finishes configuring routes.
+      # Enforcing routing immediately causes a race: openconnect's setup script
+      # may add/re-add the default route *after* we've already removed it.
+      # Wait for the client to settle, then enforce twice to catch late additions.
+      echo "VPN device ''${NEW_DEV} up, waiting for client to finish route setup..."
+      sleep 4
+      sudo ${pkgs.iproute2}/bin/ip route del default dev "''${NEW_DEV}" 2>/dev/null || true
       sudo ${pkgs.iproute2}/bin/ip route replace default via "''${PRE_GW}" dev "''${PRE_DEV}" metric 100
+      # Second pass: catch anything the client added during or after the first pass
+      sleep 3
+      sudo ${pkgs.iproute2}/bin/ip route del default dev "''${NEW_DEV}" 2>/dev/null || true
+      sudo ${pkgs.iproute2}/bin/ip route replace default via "''${PRE_GW}" dev "''${PRE_DEV}" metric 100 2>/dev/null || true
     fi
 
     echo "VPN up; internet via ''${PRE_DEV}. Ctrl+C to stop."
