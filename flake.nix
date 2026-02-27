@@ -55,14 +55,14 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-        inputs.nix-openclaw.overlays.default
-        inputs.antigravity-nix.overlays.default
-      ];
+          inputs.nix-openclaw.overlays.default
+          inputs.antigravity-nix.overlays.default
+        ];
       };
     in
     {
 
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {

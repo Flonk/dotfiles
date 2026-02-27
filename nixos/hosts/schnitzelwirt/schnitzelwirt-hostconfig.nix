@@ -8,7 +8,8 @@
     };
 
     module.system = {
-      chrome-remote-desktop = true;
+      avahi = false;
+      chrome-remote-desktop = false;
       dnsmasq = true;
       fingerprint = true;
       greetd = true;

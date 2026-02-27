@@ -11,6 +11,7 @@
 }:
 {
   imports = [
+    ../modules/avahi/avahi.nix
     ../modules/chrome-remote-desktop/chrome-remote-desktop.nix
     ../modules/work/andamp/CEFKM/CEFKM.nix
     ../modules/dnsmasq/dnsmasq.nix
@@ -21,6 +22,9 @@
     ../modules/powersaver/powersaver.nix
     ../modules/qemu/qemu.nix
   ];
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
   # Nix config.w
   nix.settings.experimental-features = [
@@ -37,20 +41,16 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
 
+  # Enable networking
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
+  networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
+  networking.wireless.iwd.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-  networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
-  networking.nameservers = [ "127.0.0.1" ];
-
-  services.dnsmasq = {
-    enable = true;
-  };
 
   # Set your time zone.
   time.timeZone = "Europe/Vienna";
@@ -124,13 +124,6 @@
     };
   };
 
-  # I enabled this to enable my phone to act as a MIDI device over bluetooth.
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -162,8 +155,6 @@
 
   programs.hyprland.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     home-manager
 
@@ -206,9 +197,6 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  networking.wireless.iwd.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [

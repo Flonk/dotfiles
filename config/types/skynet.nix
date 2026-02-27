@@ -169,6 +169,10 @@ in
       };
 
       system = {
+        avahi = mkOption {
+          type = types.bool;
+          default = false;
+        };
         chrome-remote-desktop = mkOption {
           type = types.bool;
           default = false;
