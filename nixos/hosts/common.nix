@@ -207,6 +207,9 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
+  networking.wireless.iwd.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     7071

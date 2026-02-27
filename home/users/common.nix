@@ -29,5 +29,6 @@
     ../modules/work/work.nix
     ../modules/zsh/zsh.nix
     ../modules/antigravity/antigravity.nix
+    ../modules/peripherals/peripherals.nix
   ];
 }

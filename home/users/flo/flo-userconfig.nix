@@ -29,6 +29,16 @@
     zsh = true;
   };
 
+  config.skynet.module.home.peripherals = {
+    enabled = true;
+    trustedDevices = [
+      {
+        mac = "80:C3:BA:53:78:8B";
+        description = "Sennheiser MOMENTUM TW 4";
+      }
+    ];
+  };
+
   config.skynet.module.work.andamp = {
     enabled = true;
     CEFKM = true;
