@@ -12,11 +12,14 @@ cd "$(dirname "$0")"
 
 RESOLUTION="${1:-1920x1080}"
 
-# Generate assets first if background.png doesn't exist
-if [[ ! -f background.png ]]; then
-    echo "Assets not found, generating..."
-    bash generate-assets.sh
-fi
+# Set defaults for generate-assets.sh (logo path relative to this dir)
+export GRUB_LOGO="${GRUB_LOGO:-$(pwd)/../assets/logos/andamp-amp-blue.png}"
+export GRUB_WIDTH="${GRUB_WIDTH:-${RESOLUTION%x*}}"
+export GRUB_HEIGHT="${GRUB_HEIGHT:-${RESOLUTION#*x}}"
+
+# Generate/regenerate assets
+echo "Generating assets..."
+bash generate-assets.sh
 
 # Set up a Python venv with grub2-theme-preview if not already done
 VENV_DIR=".venv"

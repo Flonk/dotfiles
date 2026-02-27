@@ -67,7 +67,7 @@
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs;
+            inherit inputs nix-colorizer;
           };
           modules = [
             inputs.sops-nix.nixosModules.sops

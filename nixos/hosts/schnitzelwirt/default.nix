@@ -7,6 +7,7 @@
 {
   imports = [
     ../../../config/types
+    ../../../config/themes/trump/trump.nix
     ./schnitzelwirt-hardware.nix
     ./schnitzelwirt-hostconfig.nix
     ../common.nix
