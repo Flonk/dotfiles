@@ -124,6 +124,10 @@ in
           type = types.bool;
           default = false;
         };
+        antigravity = mkOption {
+          type = types.bool;
+          default = false;
+        };
       };
 
       work = {

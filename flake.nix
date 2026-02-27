@@ -33,6 +33,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -49,7 +54,10 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ inputs.nix-openclaw.overlays.default ];
+        overlays = [
+        inputs.nix-openclaw.overlays.default
+        inputs.antigravity-nix.overlays.default
+      ];
       };
     in
     {

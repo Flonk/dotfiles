@@ -20,6 +20,7 @@
     obsidian = true;
     openclaw = true;
     quickshell = true;
+    antigravity = true;
     skynet-scripts = true;
     spotify = true;
     vscode = true;

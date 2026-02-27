@@ -23,6 +23,18 @@
           };
         }
         {
+          key = "ctrl+shift+y";
+          command = "runCommands";
+          args = {
+            commands = [
+              "workbench.action.editorLayoutSingle"
+              "workbench.action.closeOtherEditors"
+              "workbench.files.action.collapseExplorerFolders"
+              "workbench.files.action.showActiveFileInExplorer"
+            ];
+          };
+        }
+        {
           key = "enter";
           command = "runCommands";
           args = {

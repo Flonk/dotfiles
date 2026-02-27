@@ -28,5 +28,6 @@
     ../modules/waybar/waybar.nix
     ../modules/work/work.nix
     ../modules/zsh/zsh.nix
+    ../modules/antigravity/antigravity.nix
   ];
 }
