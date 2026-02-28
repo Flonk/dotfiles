@@ -6,6 +6,6 @@
 }:
 {
   imports = [
-    ./andamp/andamp.nix
+    ./andamp/home.nix
   ];
 }

@@ -11,16 +11,16 @@
 }:
 {
   imports = [
-    ../modules/avahi/avahi.nix
-    ../modules/chrome-remote-desktop/chrome-remote-desktop.nix
-    ../modules/work/andamp/CEFKM/CEFKM.nix
-    ../modules/dnsmasq/dnsmasq.nix
-    ../modules/fingerprint/fingerprint.nix
-    ../modules/greetd/greetd.nix
-    ../modules/grub/grub.nix
-    ../modules/ollama/ollama.nix
-    ../modules/powersaver/powersaver.nix
-    ../modules/qemu/qemu.nix
+    ../modules/avahi/system.nix
+    ../modules/chrome-remote-desktop/system.nix
+    ../modules/dnsmasq/system.nix
+    ../modules/fingerprint/system.nix
+    ../modules/greetd/system.nix
+    ../modules/grub/system.nix
+    ../modules/ollama/system.nix
+    ../modules/powersaver/system.nix
+    ../modules/qemu/system.nix
+    ../modules/work/andamp/CEFKM/system.nix
   ];
 
   # Allow unfree packages

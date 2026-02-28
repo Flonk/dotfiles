@@ -1,34 +1,31 @@
 { ... }:
 {
   imports = [
-    ../modules/alacritty/alacritty.nix
-    ../modules/csvlens/csvlens.nix
-    ../modules/direnv/direnv.nix
-    ../modules/fastfetch/fastfetch.nix
-    ../modules/foot/foot.nix
-    ../modules/git/git.nix
-    ../modules/google-chrome/google-chrome.nix
-    ../modules/hyprland/hyprcursor.nix
-    ../modules/hyprland/hyprland.nix
-    ../modules/hyprland/hyprlock.nix
-    ../modules/hyprland/hyprpaper.nix
-    ../modules/jiratui/jiratui.nix
-    ../modules/mako/mako.nix
-    ../modules/mimeapps/mimeapps.nix
-    ../modules/minecraft/minecraft.nix
-    ../modules/nchat/nchat.nix
-    ../modules/obsidian/obsidian.nix
-    ../modules/openclaw/openclaw.nix
-    ../modules/powersaver/powersaver.nix
-    ../modules/quickshell/quickshell.nix
-    ../modules/skynet-scripts/skynet-scripts.nix
-    ../modules/spotify/spotify.nix
-    ../modules/vscode/vscode.nix
-    ../modules/walker/walker.nix
-    ../modules/waybar/waybar.nix
-    ../modules/work/work.nix
-    ../modules/zsh/zsh.nix
-    ../modules/antigravity/antigravity.nix
-    ../modules/peripherals/peripherals.nix
+    ../modules/alacritty/home.nix
+    ../modules/antigravity/home.nix
+    ../modules/csvlens/home.nix
+    ../modules/direnv/home.nix
+    ../modules/fastfetch/home.nix
+    ../modules/foot/home.nix
+    ../modules/git/home.nix
+    ../modules/google-chrome/home.nix
+    ../modules/hyprland/home.nix
+    ../modules/jiratui/home.nix
+    ../modules/mako/home.nix
+    ../modules/mimeapps/home.nix
+    ../modules/minecraft/home.nix
+    ../modules/nchat/home.nix
+    ../modules/obsidian/home.nix
+    ../modules/openclaw/home.nix
+    ../modules/peripherals/home.nix
+    ../modules/powersaver/home.nix
+    ../modules/quickshell/home.nix
+    ../modules/skynet-scripts/home.nix
+    ../modules/spotify/home.nix
+    ../modules/vscode/home.nix
+    ../modules/walker/home.nix
+    ../modules/waybar/home.nix
+    ../modules/work/home.nix
+    ../modules/zsh/home.nix
   ];
 }
