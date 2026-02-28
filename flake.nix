@@ -71,7 +71,7 @@
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
-            ./nixos/hosts/schnitzelwirt
+            ./config/hosts/schnitzelwirt
           ];
         };
       };
@@ -86,7 +86,7 @@
           modules = [
             inputs.sops-nix.homeManagerModules.sops
             inputs.nix-openclaw.homeManagerModules.openclaw
-            ./home/flo-schnitzelwirt.nix
+            ./config/flo-schnitzelwirt.nix
           ];
         };
       };

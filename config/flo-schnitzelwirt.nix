@@ -8,9 +8,9 @@
 }:
 {
   imports = [
-    ../config/types
-    ../nixos/hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
-    ../config/themes/trump/trump.nix
+    ./types
+    ./hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
+    ./themes/trump/trump.nix
     ./users/flo
   ];
 

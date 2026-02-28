@@ -25,7 +25,7 @@ let
 
         CONFIG_DIR="''${HOME}/quickshell-impure"             # your editable copy
         SOURCE_CONFIG="''${HOME}/.config/quickshell"         # managed by nix
-        DOTFILES_DIR="''${HOME}/dotfiles/home/modules/quickshell/components"
+        DOTFILES_DIR="''${HOME}/dotfiles/modules/quickshell/components"
         QS_BIN='${pkgs.quickshell}/bin/quickshell'           # Quickshell binary
     export QML2_IMPORT_PATH='${quickmilkQmlPath}:'"''${QML2_IMPORT_PATH-}"
 
