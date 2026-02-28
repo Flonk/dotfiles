@@ -39,7 +39,7 @@ let
       ''
         export GRUB_OUTPUT_DIR="$out"
         mkdir -p "$out"
-        bash ${../../../grub-theme/generate-assets.sh}
+        bash ${./src/generate-assets.sh}
       '';
 in
 {

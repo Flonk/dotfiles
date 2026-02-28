@@ -4,6 +4,36 @@ let
 in
 {
   options.skynet = {
+    cli = {
+      scripts = mkOption {
+        type = types.listOf (
+          types.submodule {
+            options = {
+              command = mkOption {
+                type = types.listOf types.str;
+                description = "Command path, e.g. ['fingerprint' 'enroll'] becomes `skynet fingerprint enroll`";
+              };
+              description = mkOption {
+                type = types.str;
+                description = "Human-readable description shown in help and fzf UI";
+              };
+              script = mkOption {
+                type = types.path;
+                description = "Path to the script file (.ts or .sh)";
+              };
+              preview = mkOption {
+                type = types.str;
+                default = "";
+                description = "Optional shell command for fzf preview pane";
+              };
+            };
+          }
+        );
+        default = [ ];
+        description = "Scripts registered by modules, collected into the skynet CLI";
+      };
+    };
+
     mimeapps = mkOption {
       type = types.bool;
       default = false;
@@ -120,10 +150,7 @@ in
           type = types.bool;
           default = false;
         };
-        skynet-scripts = mkOption {
-          type = types.bool;
-          default = false;
-        };
+
         antigravity = mkOption {
           type = types.bool;
           default = false;
