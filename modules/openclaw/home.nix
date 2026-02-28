@@ -8,22 +8,22 @@
   config = lib.mkIf config.skynet.module.openclaw.enable {
     sops.secrets.discord_bot_token = {
       key = "discord_bot_token";
-      sopsFile = ../../../assets/secrets/secrets.json;
+      sopsFile = ../../assets/secrets/secrets.json;
     };
 
     sops.secrets.anthropic_api_key = {
       key = "anthropic_api_key";
-      sopsFile = ../../../assets/secrets/secrets.json;
+      sopsFile = ../../assets/secrets/secrets.json;
     };
 
     sops.secrets.openrouter_api_key = {
       key = "openrouter_api_key";
-      sopsFile = ../../../assets/secrets/secrets.json;
+      sopsFile = ../../assets/secrets/secrets.json;
     };
 
     sops.secrets.whatsapp_phone_number = {
       key = "whatsapp_phone_number";
-      sopsFile = ../../../assets/secrets/secrets.json;
+      sopsFile = ../../assets/secrets/secrets.json;
     };
 
     programs.openclaw = {

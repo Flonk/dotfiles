@@ -1,31 +1,32 @@
 { ... }:
 {
   imports = [
-    ../modules/alacritty/home.nix
-    ../modules/antigravity/home.nix
-    ../modules/csvlens/home.nix
-    ../modules/direnv/home.nix
-    ../modules/fastfetch/home.nix
-    ../modules/foot/home.nix
-    ../modules/git/home.nix
-    ../modules/google-chrome/home.nix
-    ../modules/hyprland/home.nix
-    ../modules/jiratui/home.nix
-    ../modules/mako/home.nix
-    ../modules/mimeapps/home.nix
-    ../modules/minecraft/home.nix
-    ../modules/nchat/home.nix
-    ../modules/obsidian/home.nix
-    ../modules/openclaw/home.nix
-    ../modules/peripherals/home.nix
-    ../modules/powersaver/home.nix
-    ../modules/quickshell/home.nix
-    ../modules/skynet-scripts/home.nix
-    ../modules/spotify/home.nix
-    ../modules/vscode/home.nix
-    ../modules/walker/home.nix
-    ../modules/waybar/home.nix
-    ../modules/work/home.nix
-    ../modules/zsh/home.nix
+    ../../modules/alacritty/home.nix
+    ../../modules/antigravity/home.nix
+    ../../modules/csvlens/home.nix
+    ../../modules/direnv/home.nix
+    ../../modules/fastfetch/home.nix
+    ../../modules/fingerprint/home.nix
+    ../../modules/foot/home.nix
+    ../../modules/git/home.nix
+    ../../modules/google-chrome/home.nix
+    ../../modules/hyprland/home.nix
+    ../../modules/jiratui/home.nix
+    ../../modules/mako/home.nix
+    ../../modules/mimeapps/home.nix
+    ../../modules/minecraft/home.nix
+    ../../modules/nchat/home.nix
+    ../../modules/obsidian/home.nix
+    ../../modules/openclaw/home.nix
+    ../../modules/peripherals/home.nix
+    ../../modules/powersaver/home.nix
+    ../../modules/quickshell/home.nix
+    ../../modules/skynet-scripts/home.nix
+    ../../modules/spotify/home.nix
+    ../../modules/vscode/home.nix
+    ../../modules/walker/home.nix
+    ../../modules/waybar/home.nix
+    ../../modules/work/home.nix
+    ../../modules/zsh/home.nix
   ];
 }

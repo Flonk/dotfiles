@@ -197,7 +197,7 @@ let
 
   assetCopyCommands = lib.concatStringsSep "\n        " (
     map (
-      asset: ''install -Dm644 "${../../../assets}/${asset.relPath}" "$out/assets/${asset.relPath}"''
+      asset: ''install -Dm644 "${../../assets}/${asset.relPath}" "$out/assets/${asset.relPath}"''
     ) quickshellAssets
   );
 

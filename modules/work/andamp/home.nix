@@ -12,7 +12,7 @@
   config = lib.mkIf config.skynet.module.andamp.enable {
     sops.secrets.andamp-vpn = {
       format = "binary";
-      sopsFile = ../../../../assets/secrets/andamp-vpn.ovpn;
+      sopsFile = ../../../assets/secrets/andamp-vpn.ovpn;
     };
 
     systemd.user.services.import-andamp-vpn = {
