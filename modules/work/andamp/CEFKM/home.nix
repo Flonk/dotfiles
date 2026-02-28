@@ -60,7 +60,7 @@ in
 
     sops.secrets.vpn3ithost = {
       key = "vpn3ithost";
-      sopsFile = ../../../../assets/work/andamp/CEFKM/secrets/secrets.json;
+      sopsFile = ./secrets/secrets.json;
     };
   };
 }

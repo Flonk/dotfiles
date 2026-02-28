@@ -22,6 +22,7 @@
     ../../modules/powersaver/home.nix
     ../../modules/quickshell/home.nix
     ../../modules/skynet-scripts/home.nix
+    ../../modules/sops/home.nix
     ../../modules/spotify/home.nix
     ../../modules/vscode/home.nix
     ../../modules/walker/home.nix

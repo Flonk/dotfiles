@@ -21,6 +21,7 @@
     openclaw.enable = true;
     quickshell.enable = true;
     antigravity.enable = true;
+    sops.enable = true;
     spotify.enable = true;
     vscode.enable = true;
     walker.enable = true;

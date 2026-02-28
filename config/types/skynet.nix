@@ -5,6 +5,12 @@ in
 {
   options.skynet = {
     cli = {
+      fzfThemeArgs = mkOption {
+        type = types.str;
+        default = "";
+        description = "Common fzf theme args (style + colors) set by skynet-scripts module";
+      };
+
       scripts = mkOption {
         type = types.listOf (
           types.submodule {
@@ -187,6 +193,10 @@ in
         default = false;
       };
       quickshell.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      sops.enable = mkOption {
         type = types.bool;
         default = false;
       };

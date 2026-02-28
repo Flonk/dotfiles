@@ -8,7 +8,7 @@
     sops = {
       secrets."vpn3itdnsmasq" = {
         path = "/etc/dnsmasq.d/vpn3it.conf";
-        sopsFile = ../../../../assets/work/andamp/CEFKM/secrets/secrets.json;
+        sopsFile = ./secrets/secrets.json;
       };
     };
 
@@ -17,9 +17,9 @@
     };
 
     security.pki.certificateFiles = [
-      ../../../../assets/work/andamp/CEFKM/certs/ROOTCA2020.crt
-      ../../../../assets/work/andamp/CEFKM/certs/obk-dev.crt
-      ../../../../assets/work/andamp/CEFKM/certs/obk-int-server.crt
+      ./certs/ROOTCA2020.crt
+      ./certs/obk-dev.crt
+      ./certs/obk-int-server.crt
     ];
   };
 }
