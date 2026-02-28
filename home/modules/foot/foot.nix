@@ -10,7 +10,7 @@ let
   hexToRgb = hexColor: lib.removePrefix "#" hexColor;
 in
 {
-  config = lib.mkIf config.skynet.module.home.foot {
+  config = lib.mkIf config.skynet.module.foot.enable {
     programs.foot = {
       enable = true;
 

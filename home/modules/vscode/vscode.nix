@@ -7,7 +7,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.vscode {
+  config = lib.mkIf config.skynet.module.vscode.enable {
     programs.vscode = {
       enable = true;
 

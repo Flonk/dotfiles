@@ -12,7 +12,7 @@ let
   textColor = toRgba config.theme.color.text;
 in
 {
-  config = lib.mkIf config.skynet.module.home.hyprland {
+  config = lib.mkIf config.skynet.module.hyprland.enable {
     programs.hyprlock = {
       enable = true;
       settings = {
@@ -20,7 +20,7 @@ in
           {
             "pam:enabled" = true;
           }
-          (lib.mkIf config.skynet.module.system.fingerprint {
+          (lib.mkIf config.skynet.module.fingerprint.enable {
             "fingerprint:enabled" = true;
             "fingerprint:ready_message" = "(Scan fingerprint to unlock)";
             "fingerprint:present_message" = "Scanning fingerprint";

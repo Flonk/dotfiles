@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.system.qemu {
+  config = lib.mkIf config.skynet.module.qemu.enable {
     # Libvirt (QEMU/KVM) + UEFI firmware
     virtualisation.libvirtd = {
       enable = true;

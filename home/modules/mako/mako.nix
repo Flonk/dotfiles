@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.mako {
+  config = lib.mkIf config.skynet.module.mako.enable {
     # mako notification daemon
     services.mako = {
       enable = true;

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.home.peripherals;
+  cfg = config.skynet.module.peripherals;
 
   trustScript = pkgs.writeShellScript "bluetooth-trust-peripherals" (
     lib.concatMapStrings (p: ''
@@ -14,7 +14,7 @@ let
     '') cfg.trustedDevices
   );
 in
-lib.mkIf (cfg.enabled && cfg.trustedDevices != [ ]) {
+lib.mkIf (cfg.enable && cfg.trustedDevices != [ ]) {
   systemd.user.services.bluetooth-trust-peripherals = {
     Unit = {
       Description = "Auto-trust configured Bluetooth peripherals";

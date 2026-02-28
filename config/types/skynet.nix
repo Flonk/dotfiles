@@ -61,174 +61,161 @@ in
     };
 
     module = {
-      home = {
-        alacritty = mkOption {
+      alacritty.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      antigravity.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      avahi.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      chrome-remote-desktop.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      csvlens.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      direnv.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      dnsmasq.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      fastfetch.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      fingerprint.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      foot.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      git.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      google-chrome.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      greetd.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      grub.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      hyprland.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      jiratui.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      mako.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      minecraft.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      nchat.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      obs-studio.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      obsidian.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      ollama.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      openclaw.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      peripherals = {
+        enable = mkOption {
           type = types.bool;
           default = false;
         };
-        csvlens = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        direnv = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        fastfetch = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        foot = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        git = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        google-chrome = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        hyprland = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        jiratui = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        mako = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        minecraft = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        nchat = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        openclaw = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        obs-studio = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        obsidian = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        powersaver = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        quickshell = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        spotify = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        vscode = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        walker = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        waybar = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        zsh = mkOption {
-          type = types.bool;
-          default = false;
-        };
-
-        antigravity = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        peripherals = {
-          enabled = mkOption {
-            type = types.bool;
-            default = false;
-          };
-          trustedDevices = mkOption {
-            type = types.listOf (
-              types.submodule {
-                options = {
-                  mac = mkOption {
-                    type = types.str;
-                    description = "Bluetooth MAC address, e.g. AA:BB:CC:DD:EE:FF";
-                  };
-                  description = mkOption {
-                    type = types.str;
-                    default = "";
-                    description = "Human-readable label for this device";
-                  };
+        trustedDevices = mkOption {
+          type = types.listOf (
+            types.submodule {
+              options = {
+                mac = mkOption {
+                  type = types.str;
+                  description = "Bluetooth MAC address, e.g. AA:BB:CC:DD:EE:FF";
                 };
-              }
-            );
-            default = [ ];
-            description = "Bluetooth devices to auto-trust so they never trigger authorization prompts";
-          };
+                description = mkOption {
+                  type = types.str;
+                  default = "";
+                  description = "Human-readable label for this device";
+                };
+              };
+            }
+          );
+          default = [ ];
+          description = "Bluetooth devices to auto-trust so they never trigger authorization prompts";
         };
       };
-
-      work = {
-        andamp = {
-          enabled = mkOption {
-            type = types.bool;
-            default = false;
-          };
-          CEFKM = mkOption {
-            type = types.bool;
-            default = false;
-          };
-        };
+      powersaver.enable = mkOption {
+        type = types.bool;
+        default = false;
       };
-
-      system = {
-        avahi = mkOption {
+      qemu.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      quickshell.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      spotify.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      vscode.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      walker.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      waybar.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      zsh.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      andamp = {
+        enable = mkOption {
           type = types.bool;
           default = false;
         };
-        chrome-remote-desktop = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        dnsmasq = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        fingerprint = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        greetd = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        grub = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        powersaver = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        qemu = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        ollama = mkOption {
+        CEFKM = mkOption {
           type = types.bool;
           default = false;
         };

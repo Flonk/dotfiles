@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.skynet.module.system.chrome-remote-desktop;
+  cfg = config.skynet.module.chrome-remote-desktop.enable;
 
   chrome-remote-desktop = pkgs.stdenv.mkDerivation rec {
     pname = "chrome-remote-desktop";
@@ -74,12 +74,14 @@ let
 
       # Patch the Python script to fix hardcoded paths
       substituteInPlace $out/opt/google/chrome-remote-desktop/chrome-remote-desktop \
-        --replace-fail '#!/usr/bin/python3' '#!${pkgs.python3.withPackages (ps: [
-          ps.dbus-python
-          ps.packaging
-          ps.psutil
-          ps.pyxdg
-        ])}/bin/python3' \
+        --replace-fail '#!/usr/bin/python3' '#!${
+          pkgs.python3.withPackages (ps: [
+            ps.dbus-python
+            ps.packaging
+            ps.psutil
+            ps.pyxdg
+          ])
+        }/bin/python3' \
         --replace-fail '"/usr/bin/pkexec"' '"${pkgs.polkit}/bin/pkexec"' \
         --replace-fail '"/usr/bin/sudo"' '"${pkgs.sudo}/bin/sudo"' \
         --replace-fail '/usr/lib/xorg/Xorg' '${pkgs.xorg.xorgserver}/bin/Xorg' \

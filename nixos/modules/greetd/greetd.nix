@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.system.greetd {
+  config = lib.mkIf config.skynet.module.greetd.enable {
     services.greetd = {
       enable = true;
       settings = {

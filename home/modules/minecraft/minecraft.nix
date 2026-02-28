@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.minecraft {
+  config = lib.mkIf config.skynet.module.minecraft.enable {
     home.packages = with pkgs; [
       prismlauncher
     ];

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.system.powersaver {
+  config = lib.mkIf config.skynet.module.powersaver.enable {
     services.upower.enable = true;
 
     ############################################

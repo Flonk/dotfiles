@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.hyprland {
+  config = lib.mkIf config.skynet.module.hyprland.enable {
     home.pointerCursor = {
       package = pkgs.apple-cursor;
       name = "Apple Cursor";

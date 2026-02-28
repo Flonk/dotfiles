@@ -90,7 +90,7 @@ let
     map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
 in
 {
-  config = lib.mkIf config.skynet.module.home.hyprland {
+  config = lib.mkIf config.skynet.module.hyprland.enable {
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;

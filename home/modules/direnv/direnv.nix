@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.direnv {
+  config = lib.mkIf config.skynet.module.direnv.enable {
     programs.direnv = {
       enable = true;
       enableZshIntegration = true;

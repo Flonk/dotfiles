@@ -10,7 +10,7 @@
     inputs.walker.homeManagerModules.default
   ];
 
-  config = lib.mkIf config.skynet.module.home.walker {
+  config = lib.mkIf config.skynet.module.walker.enable {
     home.packages = with pkgs; [
       csvlens
       (pkgs.writeShellScriptBin "walker-cairo" ''

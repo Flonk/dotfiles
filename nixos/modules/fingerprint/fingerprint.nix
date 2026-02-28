@@ -6,7 +6,7 @@
 }:
 
 {
-  config = lib.mkIf config.skynet.module.system.fingerprint {
+  config = lib.mkIf config.skynet.module.fingerprint.enable {
     # Enable fingerprint reader daemon
     services.fprintd.enable = true;
 

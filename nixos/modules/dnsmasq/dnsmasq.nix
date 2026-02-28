@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.system.dnsmasq {
+  config = lib.mkIf config.skynet.module.dnsmasq.enable {
     networking.nameservers = [ "127.0.0.1" ];
 
     services.dnsmasq = {

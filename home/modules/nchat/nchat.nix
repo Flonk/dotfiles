@@ -20,7 +20,7 @@ let
   meBg = hexTo0x config.theme.color.app200;
 in
 {
-  config = lib.mkIf config.skynet.module.home.nchat {
+  config = lib.mkIf config.skynet.module.nchat.enable {
     home.packages = with pkgs; [
       nchat
     ];

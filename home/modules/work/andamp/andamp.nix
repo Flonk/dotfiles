@@ -9,7 +9,7 @@
     ./CEFKM/CEFKM.nix
   ];
 
-  config = lib.mkIf config.skynet.module.work.andamp.enabled {
+  config = lib.mkIf config.skynet.module.andamp.enable {
     sops.secrets.andamp-vpn = {
       format = "binary";
       sopsFile = ../../../../assets/secrets/andamp-vpn.ovpn;

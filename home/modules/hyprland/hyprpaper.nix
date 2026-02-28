@@ -8,7 +8,7 @@ let
   path = builtins.toString config.theme.wallpaper;
 in
 {
-  config = lib.mkIf config.skynet.module.home.hyprland {
+  config = lib.mkIf config.skynet.module.hyprland.enable {
     services.hyprpaper = {
       enable = true;
       settings = {

@@ -7,21 +7,21 @@
       hz = 60;
     };
 
-    module.system = {
-      avahi = false;
-      chrome-remote-desktop = false;
-      dnsmasq = true;
-      fingerprint = true;
-      greetd = true;
-      grub = true;
-      ollama = true;
-      powersaver = true;
-      qemu = true;
-    };
+    module = {
+      avahi.enable = false;
+      chrome-remote-desktop.enable = false;
+      dnsmasq.enable = true;
+      fingerprint.enable = true;
+      greetd.enable = true;
+      grub.enable = true;
+      ollama.enable = true;
+      powersaver.enable = true;
+      qemu.enable = true;
 
-    module.work.andamp = {
-      enabled = true;
-      CEFKM = true;
+      andamp = {
+        enable = true;
+        CEFKM = true;
+      };
     };
   };
 }

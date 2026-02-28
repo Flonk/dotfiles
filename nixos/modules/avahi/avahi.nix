@@ -1,6 +1,6 @@
 { config, lib, ... }:
 {
-  config = lib.mkIf config.skynet.module.system.avahi {
+  config = lib.mkIf config.skynet.module.avahi.enable {
     services.avahi = {
       enable = true;
       nssmdns4 = true;

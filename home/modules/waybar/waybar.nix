@@ -6,7 +6,7 @@
 }:
 with lib;
 {
-  config = lib.mkIf config.skynet.module.home.waybar {
+  config = lib.mkIf config.skynet.module.waybar.enable {
     # Configure & Theme Waybar
     programs.waybar = {
       enable = true;
@@ -44,7 +44,7 @@ with lib;
 
           "clock" = {
             interval = 1;
-            format = ''{:%Y-%m-%d %H:%M:%S}'';
+            format = "{:%Y-%m-%d %H:%M:%S}";
           };
 
           "hyprland/window" = {

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.antigravity {
+  config = lib.mkIf config.skynet.module.antigravity.enable {
     home.packages = [
       pkgs.google-antigravity
     ];

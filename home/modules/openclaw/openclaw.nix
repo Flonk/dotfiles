@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.openclaw {
+  config = lib.mkIf config.skynet.module.openclaw.enable {
     sops.secrets.discord_bot_token = {
       key = "discord_bot_token";
       sopsFile = ../../../assets/secrets/secrets.json;

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.csvlens {
+  config = lib.mkIf config.skynet.module.csvlens.enable {
     home.packages = with pkgs; [
       csvlens
       xlsx2csv

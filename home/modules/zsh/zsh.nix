@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.home.zsh {
+  config = lib.mkIf config.skynet.module.zsh.enable {
     programs.zsh = {
       enable = true;
 

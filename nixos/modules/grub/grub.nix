@@ -43,7 +43,7 @@ let
       '';
 in
 {
-  config = lib.mkIf config.skynet.module.system.grub {
+  config = lib.mkIf config.skynet.module.grub.enable {
     boot.loader.grub.enable = true;
     boot.loader.grub.useOSProber = true;
     boot.loader.grub.theme = skynetGrubTheme;
