@@ -115,9 +115,19 @@ in
         type = types.bool;
         default = false;
       };
-      greetd.enable = mkOption {
-        type = types.bool;
-        default = false;
+      greetd = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        greeter = mkOption {
+          type = types.enum [
+            "custom"
+            "tuigreet"
+          ];
+          default = "custom";
+          description = "Which greeter to use: 'custom' (pygame-based matching GRUB theme) or 'tuigreet' (TUI-based)";
+        };
       };
       grub.enable = mkOption {
         type = types.bool;

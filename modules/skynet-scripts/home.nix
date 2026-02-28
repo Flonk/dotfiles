@@ -128,8 +128,17 @@ let
     #compdef skynet
 
     _skynet() {
-      local -a top_commands
-      top_commands=(
+      local curcontext="$curcontext" state line
+
+      _arguments -C \
+        '1:command:->cmd' \
+        '2:subcommand:->sub' \
+        && return
+
+      case "$state" in
+        cmd)
+          local -a top_commands
+          top_commands=(
     ${lib.concatMapStringsSep "\n" (
       w:
       let
@@ -145,18 +154,11 @@ let
       in
       "    '${w}:${lib.escape [ "'" ":" ] desc}'"
     ) firstWords}
-      )
-
-      _arguments -C \
-        '1:command:->cmd' \
-        '*::arg:->args'
-
-      case "$state" in
-        cmd)
+          )
           _describe 'skynet command' top_commands
           ;;
-        args)
-          case "$words[1]" in
+        sub)
+          case "$line[1]" in
     ${lib.concatMapStringsSep "\n" (
       w:
       let

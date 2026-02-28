@@ -10,6 +10,7 @@
     ../../modules/foot/home.nix
     ../../modules/git/home.nix
     ../../modules/google-chrome/home.nix
+    ../../modules/greetd/home.nix
     ../../modules/grub/home.nix
     ../../modules/hyprland/home.nix
     ../../modules/jiratui/home.nix
