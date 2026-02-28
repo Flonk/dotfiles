@@ -10,6 +10,9 @@ let
   hasScripts = scripts != [ ];
   hasTs = builtins.any (s: lib.hasSuffix ".ts" (toString s.script)) scripts;
 
+  # Theme colors
+  c = config.theme.color;
+
   # Build node_modules from package.json (only needed if TS scripts exist)
   nodeModules = pkgs.buildNpmPackage {
     pname = "skynet-scripts-deps";
@@ -146,18 +149,36 @@ let
     # --- Interactive fzf picker ---
     interactive() {
       local entries
-      entries=$(printf '%s\n' \
+      entries=$(printf '%b\n' \
         ${lib.concatMapStringsSep " \\\n        " (s: ''"${cmdStr s}\t${s.description}"'') scripts}
       )
 
       local selected
       selected=$(echo "$entries" | ${pkgs.fzf}/bin/fzf \
-        --ansi \
+        --style full \
+        --border --padding 1,2 \
+        --border-label ' SKYNET TUI ' \
+        --input-label ' Search ' \
+        --header-label ' SKYNET ' \
+        --header 'Select a script to run' \
         --delimiter=$'\t' \
-        --with-nth=1.. \
-        --header="skynet — select a script to run" \
+        --with-nth=1 \
         --preview='skynet _preview {1}' \
         --preview-window=right:50%:wrap \
+        --bind 'result:transform-list-label:
+          if [[ -z $FZF_QUERY ]]; then
+            echo " $FZF_MATCH_COUNT scripts "
+          else
+            echo " $FZF_MATCH_COUNT matches for [$FZF_QUERY] "
+          fi
+          ' \
+        --bind 'focus:transform-preview-label:[[ -n {1} ]] && printf " %s " {1}' \
+        --bind 'focus:+transform-header:{2}' \
+        --color 'border:${c.wm800},label:${c.wm800}' \
+        --color 'preview-border:${c.app500},preview-label:${c.app800}' \
+        --color 'list-border:${c.app400},list-label:${c.app600}' \
+        --color 'input-border:${c.wm800},input-label:${c.wm800}' \
+        --color 'header-border:${c.app500},header-label:${c.app800}' \
       ) || exit 0
 
       local cmd
