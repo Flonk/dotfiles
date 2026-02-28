@@ -19,18 +19,18 @@ in
                 type = types.listOf types.str;
                 description = "Command path, e.g. ['fingerprint' 'enroll'] becomes `skynet fingerprint enroll`";
               };
-              description = mkOption {
+              title = mkOption {
                 type = types.str;
-                description = "Human-readable description shown in help and fzf UI";
+                description = "Human-readable title shown in fzf selection list";
               };
               script = mkOption {
                 type = types.path;
                 description = "Path to the script file (.ts or .sh)";
               };
-              preview = mkOption {
+              usage = mkOption {
                 type = types.str;
                 default = "";
-                description = "Optional shell command for fzf preview pane";
+                description = "Usage description shown below the ASCII art in preview";
               };
             };
           }

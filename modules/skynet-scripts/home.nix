@@ -106,22 +106,127 @@ let
         }
         ;;'';
 
-  # Generate fzf entries: "command path | description"
-  mkFzfEntry = s: "${cmdStr s}\t${s.description}";
+  # Generate fzf entries: "command\ttitle"
+  mkFzfEntry = s: "${cmdStr s}\t${s.title}";
 
-  # Build the preview dispatch for fzf
-  mkPreviewCase =
-    s:
-    let
-      cmd = cmdStr s;
-    in
-    if s.preview != "" then ''"${cmd}") ${s.preview} ;;'' else ''"${cmd}") echo "${s.description}" ;;'';
+  # --- Zsh completions ---
+  # Group scripts by their first command word
+  firstWords = lib.unique (map (s: builtins.head s.command) scripts);
+
+  # Scripts that are a single word (leaf commands at top level)
+  topLeafs = builtins.filter (s: builtins.length s.command == 1) scripts;
+
+  # For a given first word, get all scripts that start with it and have more words
+  subCommandsFor =
+    word: builtins.filter (s: builtins.length s.command > 1 && builtins.head s.command == word) scripts;
+
+  # First words that have subcommands
+  categories = builtins.filter (w: (subCommandsFor w) != [ ]) firstWords;
+
+  # Generate the _skynet completion function
+  skynetCompletion = pkgs.writeText "_skynet" ''
+    #compdef skynet
+
+    _skynet() {
+      local -a top_commands
+      top_commands=(
+    ${lib.concatMapStringsSep "\n" (
+      w:
+      let
+        subs = subCommandsFor w;
+        leaf = builtins.filter (s: builtins.head s.command == w && builtins.length s.command == 1) scripts;
+        desc =
+          if leaf != [ ] then
+            (builtins.head leaf).title
+          else if subs != [ ] then
+            "${w} commands"
+          else
+            w;
+      in
+      "    '${w}:${lib.escape [ "'" ":" ] desc}'"
+    ) firstWords}
+      )
+
+      _arguments -C \
+        '1:command:->cmd' \
+        '*::arg:->args'
+
+      case "$state" in
+        cmd)
+          _describe 'skynet command' top_commands
+          ;;
+        args)
+          case "$words[1]" in
+    ${lib.concatMapStringsSep "\n" (
+      w:
+      let
+        subs = subCommandsFor w;
+        subEntries = lib.concatMapStringsSep "\n" (
+          s:
+          let
+            sub = lib.concatStringsSep " " (builtins.tail s.command);
+          in
+          "            '${sub}:${lib.escape [ "'" ":" ] s.title}'"
+        ) subs;
+      in
+      ''
+            ${w})
+                  local -a ${w}_commands
+                  ${w}_commands=(
+        ${subEntries}
+                  )
+                  _describe '${w} subcommand' ${w}_commands
+                  ;;''
+    ) categories}
+            *)
+              ;;
+          esac
+          ;;
+      esac
+    }
+
+    _skynet "$@"
+  '';
 
   # The main skynet CLI script
   skynetBin = pkgs.writeShellScriptBin "skynet" ''
     set -euo pipefail
 
     SCRIPTS_DIR="$HOME/.skynet/scripts"
+
+    # --- Colorize toilet output with app800 ---
+    _skynet_colorize() {
+      local hex="${c.app800}"
+      hex="''${hex#\#}"
+      local r=$((16#''${hex:0:2}))
+      local g=$((16#''${hex:2:2}))
+      local b=$((16#''${hex:4:2}))
+      ${pkgs.gnused}/bin/sed "s/\x1b\[0m/\x1b[0m/g; s/^/\x1b[38;2;''${r};''${g};''${b}m/; s/$/\x1b[0m/"
+    }
+
+    # --- Render preview for a command ---
+    _skynet_preview() {
+      local cmd="$1"
+      # Render ASCII art, one word per line
+      if [[ "$cmd" == "skynet" ]]; then
+        for word in skynet system config; do
+          ${pkgs.toilet}/bin/toilet -f future "$word" | _skynet_colorize
+        done
+      else
+        for word in skynet $cmd; do
+          ${pkgs.toilet}/bin/toilet -f future "$word" | _skynet_colorize
+        done
+      fi
+
+      echo ""
+
+      # Show usage text
+      case "$cmd" in
+        ${lib.concatMapStringsSep "\n        " (s: ''"${cmdStr s}") echo "${s.usage}" ;;'') scripts}
+        "skynet") echo "Welcome to skynet." ;;
+        *) echo "No usage info available" ;;
+      esac
+    }
 
     # --- Dispatch subcommands ---
     dispatch() {
@@ -148,24 +253,16 @@ let
       echo ""
       echo "Available commands:"
       ${lib.concatMapStringsSep "\n      " (
-        s: ''echo "  ${lib.fixedWidthString 30 " " (cmdStr s)}${s.description}"''
+        s: ''echo "  ${lib.fixedWidthString 30 " " (cmdStr s)}${s.title}"''
       ) scripts}
-    }
-
-    # --- fzf preview script (called internally) ---
-    _skynet_preview() {
-      local cmd="$1"
-      case "$cmd" in
-        ${lib.concatMapStringsSep "\n        " mkPreviewCase scripts}
-        *) echo "No preview available" ;;
-      esac
     }
 
     # --- Interactive fzf picker ---
     interactive() {
       local entries
       entries=$(printf '%b\n' \
-        ${lib.concatMapStringsSep " \\\n        " (s: ''"${cmdStr s}\t${s.description}"'') scripts}
+        "skynet\tSkynet System Config" \
+        ${lib.concatMapStringsSep " \\\n        " (s: ''"${cmdStr s}\t${s.title}"'') scripts}
       )
 
       local selected
@@ -175,13 +272,16 @@ let
         --header-label ' SKYNET ' \
         --header 'Select a script to run' \
         --delimiter=$'\t' \
-        --with-nth=1 \
+        --with-nth=2 \
         --preview='skynet _preview {1}' \
         --bind 'focus:+transform-header:{2}' \
       ) || exit 0
 
       local cmd
       cmd=$(echo "$selected" | cut -f1)
+      if [[ "$cmd" == "skynet" ]]; then
+        exec skynet
+      fi
       # shellcheck disable=SC2086
       dispatch $cmd
     }
@@ -206,7 +306,7 @@ let
       local matches=()
       ${lib.concatMapStringsSep "\n      " (s: ''
         if [[ "${cmdStr s}" == "$prefix "* || "${cmdStr s}" == "$prefix" ]]; then
-          matches+=("${cmdStr s}\t${s.description}")
+          matches+=("${cmdStr s}\t${s.title}")
         fi'') scripts}
 
       if [[ ''${#matches[@]} -gt 0 ]]; then
@@ -230,6 +330,12 @@ in
 
     # Symlink the scripts directory to ~/.skynet/scripts
     home.file.".skynet/scripts".source = scriptsDir;
+
+    # Zsh completions — fpath must be added before compinit (order 570)
+    home.file.".skynet/completions/_skynet".source = skynetCompletion;
+    programs.zsh.initContent = lib.mkOrder 550 ''
+      fpath=(~/.skynet/completions $fpath)
+    '';
 
     # Add the skynet CLI to PATH
     home.packages = [ skynetBin ];

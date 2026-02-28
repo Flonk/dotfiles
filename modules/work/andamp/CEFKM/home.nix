@@ -55,7 +55,18 @@ in
   config = lib.mkIf config.skynet.module.andamp.CEFKM {
     home.packages = [
       vpnLauncher
-      vpnLite
+    ];
+
+    skynet.cli.scripts = [
+      {
+        command = [
+          "cefkm"
+          "vpn"
+        ];
+        title = "Connect to CEFKM VPN";
+        script = "${vpnLite}/bin/vpn-obk";
+        usage = "Connect to CEFKM VPN via openconnect-pulse-launcher.";
+      }
     ];
 
     sops.secrets.vpn3ithost = {

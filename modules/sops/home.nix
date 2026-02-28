@@ -29,8 +29,8 @@ let
 
     selected=$(echo "$entries" | ${pkgs.fzf}/bin/fzf \
       ${fzfThemeArgs} \
-      --border-label ' SKYNET SOPS ' \
-      --header-label ' SKYNET SOPS ' \
+      --border-label ' SKYNET SECRETS ' \
+      --header-label ' SKYNET SECRETS ' \
       --header 'Select a secrets file to edit' \
       --preview='${pkgs.sops}/bin/sops -d $REPO_ROOT/{} | ${pkgs.bat}/bin/bat -p -l json --color=always' \
       --preview-window=right:60%:wrap \
@@ -43,10 +43,10 @@ in
   config = lib.mkIf config.skynet.module.sops.enable {
     skynet.cli.scripts = [
       {
-        command = [ "sops" ];
-        description = "Browse and edit encrypted secrets";
+        command = [ "secrets" ];
+        title = "Browse and edit encrypted secrets";
         script = "${sopsFzf}/bin/skynet-sops";
-        preview = "echo 'Interactive sops secrets browser'";
+        usage = "Browse and edit all sops-nix secrets in the dotfiles repository.";
       }
     ];
   };

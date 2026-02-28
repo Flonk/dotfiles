@@ -13,9 +13,9 @@
           "fingerprint"
           "enroll"
         ];
-        description = "Interactively enroll fingerprints via fprintd";
+        title = "Set up the fingerprint reader";
         script = ./skynet-scripts/enroll-fingerprints.ts;
-        preview = "echo 'Launches an interactive wizard to enroll one or more fingerprints using fprintd.'";
+        usage = "Launches an interactive wizard to enroll one or more fingerprints using fprintd.";
       }
     ];
   };
