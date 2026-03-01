@@ -129,8 +129,8 @@ let
   #     colorSuccess800
   #     ;
   # };
-  wallpaper = pkgs.runCommand "wallpaper.png" { } ''
-    cp ${../../../assets/wallpapers/marli.png} $out
+  wallpaper = pkgs.runCommand "wallpaper.jpg" { } ''
+    cp ${../../../assets/wallpapers/wallhaven-o5qwl7.jpg} $out
   '';
 
 in

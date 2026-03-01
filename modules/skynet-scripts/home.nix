@@ -343,7 +343,7 @@ let
       resolved=$(_skynet_resolve "$@")
 
       # shellcheck disable=SC2086
-      if dispatch $resolved 2>/dev/null; then
+      if dispatch $resolved; then
         exit 0
       fi
 

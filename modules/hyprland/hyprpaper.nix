@@ -12,10 +12,13 @@ in
     services.hyprpaper = {
       enable = true;
       settings = {
-        preload = [ path ];
-        wallpaper = [
-          ",contain:${path}"
-        ];
+        splash = false;
+        preload = path;
+        wallpaper = {
+          monitor = "";
+          path = path;
+          fit_mode = "cover";
+        };
       };
     };
   };
