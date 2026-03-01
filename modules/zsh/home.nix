@@ -87,7 +87,8 @@
         ne = "nix-instantiate --eval";
         nb = "nix-build";
         ns = "nix-shell";
-        s = "nix-shell -p";
+        s = "skynet";
+        p = "nix-shell -p";
         run = "_nix-shell-run";
         appimage = "nix run nixpkgs#appimage-run --";
         nh = "nix-prefetch-url --unpack"; # url is ref like https://github.com/normen/whatscli/archive/refs/tags/v1.0.11.tar.gz

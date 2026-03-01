@@ -230,6 +230,48 @@ let
       esac
     }
 
+    # --- All registered commands ---
+    _SKYNET_CMDS=(
+      ${lib.concatMapStringsSep "\n      " (s: ''"${cmdStr s}"'') scripts}
+    )
+
+    # --- Resolve prefix-abbreviated args to full command words ---
+    # e.g. "f e" -> "fingerprint enroll"
+    _skynet_resolve() {
+      local -a resolved=()
+      local -a candidates=("''${_SKYNET_CMDS[@]}")
+      local pos=0
+
+      for arg in "$@"; do
+        local -a word_matches=()
+        local -a next_candidates=()
+
+        for cmd in "''${candidates[@]}"; do
+          read -ra words <<< "$cmd"
+          if [[ $pos -lt ''${#words[@]} && "''${words[$pos]}" == "''${arg}"* ]]; then
+            next_candidates+=("$cmd")
+            local w="''${words[$pos]}"
+            local dup=0
+            for m in "''${word_matches[@]+"''${word_matches[@]}"}"; do
+              [[ "$m" == "$w" ]] && dup=1 && break
+            done
+            [[ $dup -eq 0 ]] && word_matches+=("$w")
+          fi
+        done
+
+        if [[ ''${#word_matches[@]} -eq 1 ]]; then
+          resolved+=("''${word_matches[0]}")
+          candidates=("''${next_candidates[@]}")
+          ((pos++))
+        else
+          # No unique prefix match — pass arg through verbatim
+          resolved+=("$arg")
+        fi
+      done
+
+      echo "''${resolved[*]}"
+    }
+
     # --- Dispatch subcommands ---
     dispatch() {
       local args=""
@@ -297,15 +339,17 @@ let
       shift
       _skynet_preview "$*"
     else
-      # Try progressive dispatch: "a b c", then "a b", then "a"
-      # This allows partial matches to show subcommand help
-      if dispatch "$@" 2>/dev/null; then
+      # Resolve prefix-abbreviated args (e.g. "f e" -> "fingerprint enroll")
+      resolved=$(_skynet_resolve "$@")
+
+      # shellcheck disable=SC2086
+      if dispatch $resolved 2>/dev/null; then
         exit 0
       fi
 
       # Check if it's a partial match (category)
-      local prefix="$*"
-      local matches=()
+      prefix="$resolved"
+      matches=()
       ${lib.concatMapStringsSep "\n      " (s: ''
         if [[ "${cmdStr s}" == "$prefix "* || "${cmdStr s}" == "$prefix" ]]; then
           matches+=("${cmdStr s}\t${s.title}")
