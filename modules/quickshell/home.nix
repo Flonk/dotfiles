@@ -125,10 +125,32 @@ let
     n: v: !(lib.hasPrefix "wm" n || lib.hasPrefix "app" n)
   ) config.theme.color;
 
+  # Generated tile pattern from the andamp logo
+  tileGreyPng = pkgs.runCommand "tile-grey.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+    magick ${../../assets/logos/andamp-amp-blue.png} \
+      -resize 10x10 -background transparent -gravity center -extent 15x15 \
+      -channel RGB -evaluate set 0 +channel \
+      -channel A -evaluate multiply 0.65 +channel \
+      -type TrueColorAlpha PNG32:$TMPDIR/logo-unit.png
+
+    magick -size 30x30 xc:transparent \
+      $TMPDIR/logo-unit.png -geometry +0+0 -composite \
+      $TMPDIR/logo-unit.png -geometry +15+0 -composite \
+      $TMPDIR/logo-unit.png -geometry +7+15 -composite \
+      $TMPDIR/logo-unit.png -geometry +22+15 -composite \
+      $TMPDIR/logo-unit.png -geometry -8+15 -composite \
+      -type TrueColorAlpha PNG32:$out
+  '';
+
   quickshellAssets = [
     {
       name = "logoAndampAmpBlue";
       relPath = "logos/andamp-amp-blue.png";
+    }
+    {
+      name = "tileGrey";
+      relPath = "logos/tile-grey.png";
+      src = tileGreyPng; # generated, not from assets/
     }
   ];
 
@@ -197,7 +219,11 @@ let
 
   assetCopyCommands = lib.concatStringsSep "\n        " (
     map (
-      asset: ''install -Dm644 "${../../assets}/${asset.relPath}" "$out/assets/${asset.relPath}"''
+      asset:
+      let
+        src = asset.src or "${../../assets}/${asset.relPath}";
+      in
+      ''install -Dm644 "${src}" "$out/assets/${asset.relPath}"''
     ) quickshellAssets
   );
 

@@ -5,6 +5,7 @@ DropDown {
     id: root
     
     property color wifiTextColor: Theme.app600
+    property color wifiIconColor: Theme.app600
     property color wifiBarColor: Theme.app600
     property color wifiHoverColor: Theme.app600
     property color wifiHoverBackground: "#000000"
@@ -42,7 +43,7 @@ DropDown {
     textColor: root.wifiTextColor
     headerRightClickEnabled: true
     disabled: !WifiWidget.isEnabled
-    headerHeight: 90
+    headerHeight: 98
     headerContent: Component {
         Item {
             anchors.fill: parent
@@ -70,7 +71,7 @@ DropDown {
                         text: root.icon
                         font.pointSize: 10
                         font.family: Theme.fontFamilyUiNf
-                        color: "#000000"
+                        color: root.wifiIconColor
                         opacity: 0.95
                         width: implicitWidth
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -78,12 +79,13 @@ DropDown {
                         anchors.horizontalCenterOffset: iconContainer.iconOffset
                     }
                 }
+                Item { width: 1; height: 4 }
                 Text {
                     id: upstreamText
                     text: root.formatSpeedLabel("\uf062", WifiWidget.uploadRate)
                     font.pointSize: 6
                     font.family: Theme.fontFamilyUiNf
-                    color: "#000000"
+                    color: root.wifiTextColor
                     opacity: WifiWidget.isConnected ? 0.9 : 0.5
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -95,13 +97,14 @@ DropDown {
                     text: root.formatSpeedLabel("\uf063", WifiWidget.downloadRate)
                     font.pointSize: 6
                     font.family: Theme.fontFamilyUiNf
-                    color: "#000000"
+                    color: root.wifiTextColor
                     opacity: WifiWidget.isConnected ? 0.9 : 0.5
                     anchors.left: parent.left
                     anchors.right: parent.right
                     horizontalAlignment: Text.AlignHCenter
                     elide: Text.ElideNone
                 }
+                Item { width: 1; height: 4 }
                 Item {
                     width: parent.width
                     height: 2
@@ -120,7 +123,7 @@ DropDown {
                         text: root.formatIpValue(WifiWidget.localIp)
                         font.pointSize: 6
                         font.family: Theme.fontFamilyUiNf
-                        textColor: localIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
+                        textColor: localIpMouseArea.containsMouse ? root.wifiHoverColor : root.wifiTextColor
                         textOpacity: WifiWidget.isConnected ? 0.9 : 0.5
                         anchors.left: parent.left
                         anchors.right: parent.right
@@ -151,7 +154,7 @@ DropDown {
                         text: root.formatIpValue(WifiWidget.gatewayIp)
                         font.pointSize: 6
                         font.family: Theme.fontFamilyUiNf
-                        textColor: gatewayIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
+                        textColor: gatewayIpMouseArea.containsMouse ? root.wifiHoverColor : root.wifiTextColor
                         textOpacity: WifiWidget.isConnected ? 0.9 : 0.5
                         anchors.left: parent.left
                         anchors.right: parent.right
@@ -182,7 +185,7 @@ DropDown {
                         text: root.formatIpValue(WifiWidget.publicIp)
                         font.pointSize: 6
                         font.family: Theme.fontFamilyUiNf
-                        textColor: publicIpMouseArea.containsMouse ? root.wifiHoverColor : "#000000"
+                        textColor: publicIpMouseArea.containsMouse ? root.wifiHoverColor : root.wifiTextColor
                         textOpacity: WifiWidget.isConnected ? 0.9 : 0.5
                         anchors.left: parent.left
                         anchors.right: parent.right

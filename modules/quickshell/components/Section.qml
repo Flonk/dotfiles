@@ -18,15 +18,18 @@ Item {
     property int rightPadding: padding
     
     // Visual properties
-    property alias radius: sectionRect.radius
+    property int radius: 0
     property color backgroundColor: "#000000"
+    property url tileSource: ""
+    property real tileOpacity: 1.0
+    property bool glassEffect: false
     property color topBorderColor: Theme.app200
     property int topBorderHeight: 1
     property bool showTopBorder: true
     property color bottomBorderColor: Theme.app200
     property int bottomBorderHeight: 0
     property bool showBottomBorder: false
-    clip: true
+    clip: false
     
     // Default container for children
     default property alias contentData: contentItem.children
@@ -41,9 +44,19 @@ Item {
         anchors.rightMargin: root.rightMargin
         
         color: root.backgroundColor
-        border.color: "transparent"
-        border.width: 0
-        radius: 0
+        border.color: root.glassEffect ? Qt.rgba(1, 1, 1, 0.1) : "transparent"
+        border.width: root.glassEffect ? 1 : 0
+        radius: root.radius
+        layer.enabled: root.radius > 0
+
+        // Tiled background overlay
+        Image {
+            anchors.fill: parent
+            source: root.tileSource
+            fillMode: Image.Tile
+            opacity: root.tileOpacity
+            visible: root.tileSource != ""
+        }
         
         Rectangle {
             anchors.top: parent.top
@@ -71,6 +84,19 @@ Item {
             anchors.bottomMargin: root.bottomPadding
             anchors.leftMargin: root.leftPadding
             anchors.rightMargin: root.rightPadding
+        }
+
+        // Glassy emboss gradient overlay
+        Rectangle {
+            anchors.fill: parent
+            radius: root.radius
+            visible: root.glassEffect
+            gradient: Gradient {
+                GradientStop { position: 0; color: Qt.rgba(1, 1, 1, 0.2) }
+                GradientStop { position: 0.3; color: "transparent" }
+                GradientStop { position: 0.8; color: "transparent" }
+                GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.3) }
+            }
         }
     }
     

@@ -35,7 +35,7 @@ Column {
             // Active workspace gets 1px wm800 border
             border.color: modelData.focused ? Theme.wm800 : "transparent"
             border.width: modelData.focused ? 0 : 0
-            color: modelData.focused ? Theme.wm800 : Theme.app150
+            color: modelData.focused ? Theme.wm800 : "transparent"
 
             anchors.horizontalCenter: root.horizontalCenter
             

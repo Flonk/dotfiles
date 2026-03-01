@@ -6,6 +6,8 @@ import Quickshell.Io
 Item {
     id: root
     
+    property color textColor: "#000000"
+    
     width: parent ? parent.width : Theme.barSize
     height: {
         let total = 0;
@@ -17,7 +19,7 @@ Item {
                 total += child.implicitHeight;
             }
         }
-        return total + clockColumn.spacing * (clockColumn.children.length - 1) + 6;
+        return total + clockColumn.spacing * (clockColumn.children.length - 1) + 9;
     }
     
     Column {
@@ -31,7 +33,7 @@ Item {
             text: Qt.formatDateTime(new Date(), "HH")
             font.pointSize: Theme.fontSizeHuge
             font.family: Theme.fontFamilyUiNf
-            color: "#000000"
+            color: root.textColor
             anchors.horizontalCenter: parent.horizontalCenter
             font.bold: true
         }
@@ -41,7 +43,7 @@ Item {
             text: Qt.formatDateTime(new Date(), "mm")
             font.pointSize: Theme.fontSizeHuge
             font.family: Theme.fontFamilyUiNf
-            color: "#000000"
+            color: root.textColor
             anchors.horizontalCenter: parent.horizontalCenter
             font.bold: true
         }
@@ -65,7 +67,7 @@ Item {
             font.pointSize: Theme.fontSizeSmall
             font.family: Theme.fontFamilyUiNf
             font.bold: true
-            color: "#000000"
+            color: root.textColor
             opacity: 0.6
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter

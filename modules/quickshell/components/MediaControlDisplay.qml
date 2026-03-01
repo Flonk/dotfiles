@@ -16,6 +16,7 @@ Item {
     property int buttonHeight: 22
     property int buttonFontSize: 8
     property int marqueeSpeed: 15
+    property color textColor: "#000000"
 
     // Root hover area for triggering marquee anywhere in the display
     MouseArea {
@@ -71,7 +72,7 @@ Item {
         Rectangle {
             id: infoContainer
             width: parent.width
-            color: Theme.app700
+            color: "transparent"
 
             implicitHeight: root.artistTopPadding + mediaArtist.height + root.titleGap + mediaTitle.height + root.titleBottomPadding
             height: implicitHeight
@@ -95,7 +96,7 @@ Item {
                     font.family: Theme.fontFamilyUiNf
                     font.pointSize: Theme.fontSizeTiny
                     font.weight: Font.Bold
-                    textColor: "#000000"
+                    textColor: root.textColor
                     textOpacity: MediaControlWidget.isPlaying ? 0.85 : 0.55
                     alignment: Qt.AlignLeft
                     marqueeBehavior: "repeat"
@@ -115,7 +116,7 @@ Item {
                     font.family: Theme.fontFamilyUiNf
                     font.pointSize: Theme.fontSizeSmall
                     font.weight: Font.Bold
-                    textColor: "#000000"
+                    textColor: root.textColor
                     textOpacity: MediaControlWidget.isPlaying ? 0.95 : 0.65
                     alignment: Qt.AlignLeft
                     marqueeBehavior: "repeat"
@@ -148,6 +149,11 @@ Item {
                 fillMode: Image.PreserveAspectCrop
                 smooth: true
                 cache: true
+                opacity: rootHoverArea.containsMouse ? 1.0 : 0.5
+
+                Behavior on opacity {
+                    NumberAnimation { duration: 200 }
+                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -191,20 +197,11 @@ Item {
         Rectangle {
             id: buttonsContainer
             width: parent.width
-            color: Theme.app700
+            color: "transparent"
             height: root.buttonHeight
 
             property int thirdWidth: Math.floor(width / 3)
             property int remainderWidth: width - (thirdWidth * 3)
-
-            // Top border separator
-            Rectangle {
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 1
-                color: "#000000"
-            }
 
             Row {
                 id: controlRow
@@ -223,17 +220,8 @@ Item {
                         text: MediaControlWidget.isPlaying ? "\uf04c" : "\uf04b"
                         font.family: Theme.fontFamilyUiNf
                         font.pointSize: root.buttonFontSize
-                        color: "#000000"
+                        color: root.textColor
                         opacity: 0.95
-                    }
-
-                    Rectangle {
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: 1
-                        color: "#000000"
-                        opacity: 1.0
                     }
 
                     MouseArea {
@@ -256,17 +244,8 @@ Item {
                         text: "\uf048"
                         font.family: Theme.fontFamilyUiNf
                         font.pointSize: root.buttonFontSize
-                        color: "#000000"
+                        color: root.textColor
                         opacity: 0.95
-                    }
-
-                    Rectangle {
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: 1
-                        color: "#000000"
-                        opacity: 1.0
                     }
 
                     MouseArea {
@@ -288,7 +267,7 @@ Item {
                         text: "\uf051"
                         font.family: Theme.fontFamilyUiNf
                         font.pointSize: root.buttonFontSize
-                        color: "#000000"
+                        color: root.textColor
                         opacity: 0.95
                     }
 
@@ -301,15 +280,6 @@ Item {
                 }
             }
         }
-    }
-
-    // Bottom border separator
-    Rectangle {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 1
-        color: Theme.app200
     }
 
     Timer {

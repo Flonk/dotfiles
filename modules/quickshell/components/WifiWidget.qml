@@ -19,7 +19,7 @@ Singleton {
     property real downloadRate: 0
     property real lastRxBytes: 0
     property real lastTxBytes: 0
-    property int networkSampleInterval: 1000
+    property int networkSampleInterval: 5000
     property int networkInfoInterval: 10000
     property int publicIpInterval: 300000
     property real downloadWarningThresholdBytesPerSec: (30 * 1000 * 1000) / 8

@@ -42,22 +42,62 @@ let
       }) attrs
     );
 
-  mainC = 0.19;
-  # mainH = math.toRad 162.0; # mint
-  # mainH = math.toRad 110.0; # lime
-  # mainH = math.toRad 256.0; # blue
-  # mainH = math.toRad 0.0; # pink
-  # mainH = math.toRad 87.0; # ocre
-  mainH = math.toRad 50.0; # trump
+  # --- Derive palette hues from wallpaper's dominant color (IFD) ---
+  wallpaperSrc = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
 
+  extractedColorsFile =
+    pkgs.runCommand "wallpaper-colors.json"
+      {
+        nativeBuildInputs = [ pkgs.imagemagick ];
+      }
+      ''
+        magick ${wallpaperSrc} -resize 200x200! -colors 8 +dither -depth 8 -alpha off \
+          -unique-colors txt:- \
+          | tail -n +2 \
+          | grep -oE '#[0-9A-Fa-f]{6}' \
+          | head -8 \
+          | awk 'BEGIN{printf "["} NR>1{printf ","} {printf "\"%s\"", $0} END{print "]"}' > $out
+      '';
+
+  dominantHexColors = builtins.fromJSON (builtins.readFile extractedColorsFile);
+
+  oklchColors = map (hex: {
+    inherit hex;
+    oklch = nix-colorizer.hex.to.oklch hex;
+  }) dominantHexColors;
+
+  # Pick the most chromatic color as the wallpaper's "primary" → WM
+  primaryColor = builtins.foldl' (
+    best: c: if c.oklch.C > best.oklch.C then c else best
+  ) (builtins.head oklchColors) (builtins.tail oklchColors);
+
+  # Pick the extracted color with the most distant hue from primary → App
+  hueDist =
+    a: b:
+    let
+      d = math.floatMod ((if a > b then a - b else b - a)) (2.0 * math.pi);
+    in
+    if d > math.pi then 2.0 * math.pi - d else d;
+
+  secondaryColor = builtins.foldl' (
+    best: c:
+    let
+      bestDist = hueDist primaryColor.oklch.h best.oklch.h;
+      cDist = hueDist primaryColor.oklch.h c.oklch.h;
+    in
+    if cDist > bestDist then c else best
+  ) (builtins.head oklchColors) (builtins.tail oklchColors);
+
+  # WM palette: primary wallpaper hue (vivid accent)
   colorWm = colorUtils.mkPalette {
-    cMax = mainC;
-    h = mainH;
+    cMax = 0.19;
+    h = primaryColor.oklch.h;
   };
 
+  # App palette: most opposite extracted hue (subdued)
   colorApp = colorUtils.mkPalette {
     cMax = 0.07;
-    h = math.floatMod (mainH + math.pi) (2.0 * math.pi);
+    h = secondaryColor.oklch.h;
   };
 
   colorError600 = nix-colorizer.oklch.to.hex {
@@ -130,7 +170,7 @@ let
   #     ;
   # };
   wallpaper = pkgs.runCommand "wallpaper.jpg" { } ''
-    cp ${../../../assets/wallpapers/wallhaven-o5qwl7.jpg} $out
+    cp ${wallpaperSrc} $out
   '';
 
 in

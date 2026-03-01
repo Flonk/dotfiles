@@ -9,10 +9,10 @@ Column {
     width: Theme.barSize
     
     property int sectionMargin: 0  // Can be overridden from parent
-    property int sectionRadius: 5  // Can be overridden from parent
+    property int sectionRadius: 7  // Can be overridden from parent
     property int sectionVerticalPadding: 6
-    property int sectionVerticalGap: 0
-    property int sectionHorizontalPadding: 0
+    property int sectionVerticalGap: 1
+    property int sectionHorizontalPadding: 1
     property bool sectionClip: true
     property color sectionBackgroundColor: "#000000"
     property color sectionTopBorderColor: Theme.app200
@@ -27,7 +27,7 @@ Column {
     property color chargingColor: Theme.success600
     property bool wifiWarningActive: WifiWidget.isHighTraffic
     
-    // MEM / DSK / CPU
+    // MEDIA CONTROL
     Section {
         width: parent.width
         topMargin: root.sectionMargin
@@ -35,15 +35,41 @@ Column {
         leftMargin: root.sectionMargin
         rightMargin: root.sectionMargin
         radius: root.sectionRadius
-        topPadding: root.sectionVerticalPadding
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: root.sectionHorizontalPadding
+        rightPadding: root.sectionHorizontalPadding
+        clip: false
+        backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
+        topBorderColor: root.sectionTopBorderColor
+        topBorderHeight: root.sectionTopBorderHeight
+        showTopBorder: false
+        glassEffect: true
+
+        MediaControlDisplay {
+            width: Theme.barSize - (root.sectionMargin * 2) - (root.sectionHorizontalPadding * 2)
+            textColor: root.textColor
+        }
+    }
+
+    // MEM / DSK / CPU
+    Section {
+        width: parent.width
+        topMargin: root.sectionVerticalGap
+        bottomMargin: root.sectionVerticalGap
+        leftMargin: root.sectionMargin
+        rightMargin: root.sectionMargin
+        radius: root.sectionRadius
+        topPadding: root.sectionVerticalPadding + 2
         bottomPadding: Math.max(0, root.sectionVerticalPadding - 3)
         leftPadding: root.sectionHorizontalPadding
         rightPadding: root.sectionHorizontalPadding
         clip: root.sectionClip
-        backgroundColor: root.sectionBackgroundColor
+        backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
         topBorderColor: root.sectionTopBorderColor
         topBorderHeight: root.sectionTopBorderHeight
         showTopBorder: false
+        glassEffect: true
         Column {
             id: metricsColumn
             anchors.left: parent.left
@@ -85,59 +111,36 @@ Column {
         }
     }
 
-    // MEDIA CONTROL
-    Section {
-        width: parent.width
-        topMargin: root.sectionVerticalGap
-        bottomMargin: root.sectionVerticalGap
-        leftMargin: root.sectionMargin
-        rightMargin: root.sectionMargin
-        radius: root.sectionRadius
-        topPadding: 0
-        bottomPadding: 0
-        leftPadding: root.sectionHorizontalPadding
-        rightPadding: root.sectionHorizontalPadding
-        clip: false
-        backgroundColor: Theme.app700
-        topBorderColor: root.sectionTopBorderColor
-        topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
-
-        MediaControlDisplay {
-            width: Theme.barSize - (root.sectionMargin * 2) - (root.sectionHorizontalPadding * 2)
-        }
-    }
-
     // WIFI
     Section {
         width: parent.width
         topMargin: root.sectionVerticalGap
         bottomMargin: root.sectionVerticalGap
-        leftMargin: Math.max(0, root.sectionMargin - 2)
-        rightMargin: Math.max(0, root.sectionMargin - 2)
+        leftMargin: root.sectionMargin
+        rightMargin: root.sectionMargin
         radius: root.sectionRadius
         topPadding: 0
         bottomPadding: 0
         leftPadding: root.sectionHorizontalPadding
         rightPadding: root.sectionHorizontalPadding
         clip: root.sectionClip
-        backgroundColor: root.wifiWarningActive ? root.warningColor : root.sectionBackgroundColor
+        backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
         topBorderColor: root.sectionTopBorderColor
         topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
-        bottomBorderColor: root.wifiWarningActive ? root.warningColor : root.sectionTopBorderColor
-        bottomBorderHeight: 1
-        showBottomBorder: true
+        showTopBorder: false
+        showBottomBorder: false
+        glassEffect: true
         WifiDisplay {
             width: parent.width
-            wifiTextColor: root.wifiWarningActive ? "#000000" : root.textColor
-            wifiBarColor: root.wifiWarningActive ? "#000000" : root.barColor
-            backgroundColor: root.wifiWarningActive ? root.warningColor : Theme.app700
-            wifiHoverColor: root.wifiWarningActive ? root.warningColor : Theme.app600
-            wifiHoverBackground: root.wifiWarningActive ? "#000000" : "#000000"
+            wifiIconColor: root.wifiWarningActive ? root.warningColor : Theme.app900
+            wifiTextColor: root.textColor
+            wifiBarColor: root.barColor
+            backgroundColor: "transparent"
+            wifiHoverColor: Theme.app600
+            wifiHoverBackground: "#000000"
         }
     }
-    // BLUETOOTH
+    // CLOCK
     Section {
         width: parent.width
         topMargin: root.sectionVerticalGap
@@ -145,72 +148,22 @@ Column {
         leftMargin: root.sectionMargin
         rightMargin: root.sectionMargin
         radius: root.sectionRadius
-        topPadding: 1
-        bottomPadding: 0
+        topPadding: 6
+        bottomPadding: 4
         leftPadding: root.sectionHorizontalPadding
         rightPadding: root.sectionHorizontalPadding
         clip: root.sectionClip
-        backgroundColor: root.sectionBackgroundColor
-        topBorderColor: root.sectionTopBorderColor
-        topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
-        BluetoothDisplay {
+        backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
+        showTopBorder: false
+        glassEffect: true
+
+        ClockDisplay {
+            id: clockContent
             width: parent.width
-            btTextColor: root.textColor
-            btBarColor: root.barColor
+            textColor: root.textColor
         }
     }
 
-    // VOLUME
-    Section {
-        width: parent.width
-        topMargin: root.sectionVerticalGap
-        bottomMargin: root.sectionVerticalGap
-        leftMargin: root.sectionMargin
-        rightMargin: root.sectionMargin
-        radius: root.sectionRadius
-        topPadding: 2
-        bottomPadding: 0
-        leftPadding: root.sectionHorizontalPadding
-        rightPadding: root.sectionHorizontalPadding
-        clip: root.sectionClip
-        backgroundColor: VolumeWidget.muted ? root.warningColor : root.barColor
-        topBorderColor: root.sectionTopBorderColor
-        topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
-
-        SystemBar {
-            id: volumeBar
-            width: Theme.barSize - (root.sectionMargin * 2) - (root.sectionHorizontalPadding * 2)
-            icon: {
-                if (VolumeWidget.muted) return "\ueee8";
-                const v = VolumeWidget.volume;
-                if (v <= 0) return "\uf026";
-                if (v < 0.35) return "\uf027";
-                return "\uf028";
-            }
-            iconLeftPadding: 0
-            verticalPadding: 1
-            label: "VOL"
-            value: VolumeWidget.volume
-            textColor: "#000000"
-            errorColor: root.errorColor
-            enableErrorThreshold: false
-            enableMouseInteraction: true
-            valueChangedCallback: function(newValue) {
-                VolumeWidget.setVolume(newValue);
-            }
-            mouseStep: 0.01
-        }
-
-        MouseArea {
-            anchors.fill: volumeBar
-            acceptedButtons: Qt.RightButton
-            onClicked: function(mouse) {
-                VolumeWidget.toggleMute();
-            }
-        }
-    }
     // BRIGHTNESS
     Section {
         width: parent.width
@@ -219,18 +172,19 @@ Column {
         leftMargin: root.sectionMargin
         rightMargin: root.sectionMargin
         radius: root.sectionRadius
-        topPadding: 2
-        bottomPadding: 0
+        topPadding: root.sectionVerticalPadding
+        bottomPadding: root.sectionVerticalPadding
         leftPadding: root.sectionHorizontalPadding
         rightPadding: root.sectionHorizontalPadding
         clip: root.sectionClip
-        backgroundColor: root.barColor
-        topBorderColor: root.sectionTopBorderColor
-        topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
+        backgroundColor: "#bda551"
+        showTopBorder: false
+        glassEffect: true
+
         SystemBar {
             id: brightnessBar
-            width: Theme.barSize - (root.sectionMargin * 2) - (root.sectionHorizontalPadding * 2)
+            width: parent.width
+            anchors.verticalCenter: parent.verticalCenter
             icon: "\uf522"
             iconLeftPadding: 0
             verticalPadding: 1
@@ -246,7 +200,8 @@ Column {
             mouseStep: 0.01
         }
     }
-    // CLOCK
+
+    // VOLUME
     Section {
         width: parent.width
         topMargin: root.sectionVerticalGap
@@ -254,30 +209,64 @@ Column {
         leftMargin: root.sectionMargin
         rightMargin: root.sectionMargin
         radius: root.sectionRadius
-        topPadding: root.sectionVerticalPadding + 2
+        topPadding: root.sectionVerticalPadding
         bottomPadding: root.sectionVerticalPadding
         leftPadding: root.sectionHorizontalPadding
         rightPadding: root.sectionHorizontalPadding
         clip: root.sectionClip
-        backgroundColor: Theme.app800
-        topBorderColor: root.sectionTopBorderColor
-        topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
-        
-        ClockDisplay {
+        backgroundColor: "#7493a3"
+        showTopBorder: false
+        glassEffect: true
+
+        Item {
             width: parent.width
+            height: volumeBar.height
+            anchors.verticalCenter: parent.verticalCenter
+
+            SystemBar {
+                id: volumeBar
+                width: parent.width
+                icon: {
+                    if (VolumeWidget.muted) return "\ueee8";
+                    const v = VolumeWidget.volume;
+                    if (v <= 0) return "\uf026";
+                    if (v < 0.35) return "\uf027";
+                    return "\uf028";
+                }
+                iconLeftPadding: 0
+                verticalPadding: 1
+                label: "VOL"
+                value: VolumeWidget.volume
+                textColor: VolumeWidget.muted ? root.warningColor : "#000000"
+                errorColor: root.errorColor
+                enableErrorThreshold: false
+                enableMouseInteraction: true
+                valueChangedCallback: function(newValue) {
+                    VolumeWidget.setVolume(newValue);
+                }
+                mouseStep: 0.01
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton
+                onClicked: function(mouse) {
+                    VolumeWidget.toggleMute();
+                }
+            }
         }
     }
+
     // BATTERY
     Section {
         width: parent.width
         topMargin: root.sectionVerticalGap
-        bottomMargin: root.sectionMargin
+        bottomMargin: root.sectionVerticalGap
         leftMargin: root.sectionMargin
         rightMargin: root.sectionMargin
         radius: root.sectionRadius
-        topPadding: 2
-        bottomPadding: 0
+        topPadding: root.sectionVerticalPadding
+        bottomPadding: root.sectionVerticalPadding
         leftPadding: root.sectionHorizontalPadding
         rightPadding: root.sectionHorizontalPadding
         clip: root.sectionClip
@@ -288,12 +277,12 @@ Column {
             if (colorState === "critical") return root.errorColor;
             return root.warningColor;
         }
-        topBorderColor: root.sectionTopBorderColor
-        topBorderHeight: root.sectionTopBorderHeight
-        showTopBorder: root.sectionShowTopBorder
+        showTopBorder: false
+        glassEffect: true
         SystemBar {
             id: batteryBar
-            width: Theme.barSize - (root.sectionMargin * 2) - (root.sectionHorizontalPadding * 2)
+            width: parent.width
+            anchors.verticalCenter: parent.verticalCenter
             icon: "\udb85\udc0b"
             iconLeftPadding: 2
             verticalPadding: 1

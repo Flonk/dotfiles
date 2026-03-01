@@ -17,7 +17,7 @@ Item {
     property string fontFamily: Theme.fontFamilyUiNf
     property string valueFontFamily: Theme.fontFamilyUiNf
     property int labelLeftPadding: 0
-    property int horizontalPadding: 4
+    property int horizontalPadding: 7
     clip: true
     width: parent ? parent.width : implicitWidth
     implicitWidth: horizontalPadding + singleLineLabelText.implicitWidth + singleLineSpacing + singleLineValueText.implicitWidth + horizontalPadding
