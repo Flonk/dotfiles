@@ -17,7 +17,7 @@
         greeter = "none";
       };
       grub.enable = true;
-      ollama.enable = true;
+      ollama.enable = false;
       powersaver.enable = true;
       qemu.enable = true;
 

@@ -47,6 +47,7 @@
   networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -129,6 +130,7 @@
 
   # Docker
   virtualisation.docker.enable = true;
+  virtualisation.docker.enableOnBoot = false;
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;

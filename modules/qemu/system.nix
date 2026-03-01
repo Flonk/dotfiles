@@ -15,6 +15,9 @@
       };
     };
 
+    systemd.services.libvirtd.wantedBy = lib.mkForce [ ];
+    systemd.services.libvirt-guests.wantedBy = lib.mkForce [ ];
+
     # GUI manager
     programs.virt-manager.enable = true;
 

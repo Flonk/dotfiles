@@ -21,15 +21,16 @@
   boot.loader.grub.devices = [ "nodev" ];
 
   boot.initrd.kernelModules = [ "i915" ];
+  boot.initrd.systemd.enable = true;
   boot.kernelModules = [
-    "i915"
-    "nvidia"
-    "nvidia_modeset"
-    "nvidia_uvm"
-    "nvidia_drm"
-    "usb"
-    "btusb"
-    "bluetooth"
+    # "i915"
+    # "nvidia"
+    # "nvidia_modeset"
+    # "nvidia_uvm"
+    # "nvidia_drm"
+    # "usb"
+    # "btusb"
+    # "bluetooth"
   ];
 
   boot.extraModprobeConfig = "options nvidia-drm modeset=1";

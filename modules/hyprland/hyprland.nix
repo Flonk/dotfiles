@@ -119,6 +119,7 @@ in
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"
+          "systemctl start docker"
         ]
         ++ lib.optional (
           config.skynet.module.greetd.enable && config.skynet.module.greetd.greeter == "none"
@@ -386,14 +387,14 @@ in
         decoration = {
           rounding = 0;
           blur = {
-            enabled = true;
+            enabled = false;
             size = 5;
             passes = 3;
             ignore_opacity = false;
             new_optimizations = true;
           };
           shadow = {
-            enabled = true;
+            enabled = false;
             range = 3;
             render_power = 1;
             offset = "1, 1";

@@ -18,7 +18,7 @@
     minecraft.enable = true;
     nchat.enable = true;
     obsidian.enable = true;
-    openclaw.enable = true;
+    openclaw.enable = false;
     quickshell.enable = true;
     antigravity.enable = true;
     sops.enable = true;
