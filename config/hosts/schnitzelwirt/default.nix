@@ -87,7 +87,7 @@
     SUBSYSTEM=="usb", ENV{DEVNAME}=="/dev/bus/usb/*", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4ee7", MODE="0664", GROUP="plugdev"
   '';
 
-  services.greetd.settings.default_session.user = "flo";
+  services.greetd.settings.default_session.user = lib.mkDefault "flo";
   programs.steam.enable = true;
 
   programs.nix-ld.enable = true;

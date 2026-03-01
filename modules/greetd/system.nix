@@ -9,6 +9,7 @@ let
   c = config.theme.color;
   mon = config.skynet.primaryMonitor;
   isCustom = cfg.greeter == "custom";
+  isNone = cfg.greeter == "none";
 
   pythonEnv = pkgs.python3.withPackages (ps: [ ps.pygame ]);
 
@@ -23,8 +24,12 @@ let
   skynetGreeter = pkgs.writeShellScriptBin "skynet-greeter" ''
     set -euo pipefail
 
-    # SDL backend for rendering without a compositor
-    export SDL_VIDEODRIVER="''${SDL_VIDEODRIVER:-kmsdrm}"
+    # cage provides a Wayland compositor, so SDL uses the wayland backend
+    # instead of kmsdrm — avoids all evdev/touchscreen/GPU-selection issues.
+    export SDL_VIDEODRIVER=wayland
+
+    # Suppress harmless AVX2 build warning from pygame
+    export PYGAME_HIDE_SUPPORT_PROMPT=1
 
     # Theme colors
     export GREETER_BG_COLOR="${c.app100}"
@@ -53,7 +58,7 @@ let
 
   greeterCommand =
     if isCustom then
-      "${skynetGreeter}/bin/skynet-greeter"
+      "${pkgs.cage}/bin/cage -s -- ${skynetGreeter}/bin/skynet-greeter"
     else
       "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
 in
@@ -64,6 +69,16 @@ in
       settings = {
         default_session = {
           command = greeterCommand;
+          user = if isCustom then "greeter" else "flo";
+        };
+      }
+      // lib.optionalAttrs isNone {
+        # Auto-login: greetd handles PAM session setup and execs Hyprland
+        # directly without a greeter. hyprlock is responsible for security.
+        # initial_session fires on first startup; default_session is the
+        # tuigreet fallback used if Hyprland exits and greetd loops.
+        initial_session = {
+          command = "${pkgs.hyprland}/bin/start-hyprland";
           user = "flo";
         };
       };

@@ -19,8 +19,6 @@ import struct
 import sys
 import time
 
-os.environ.setdefault("SDL_VIDEODRIVER", "kmsdrm")
-
 import pygame  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -124,6 +122,7 @@ class GreeterUI:
 
     def __init__(self):
         pygame.init()
+        pygame.key.set_repeat(500, 50)
 
         if SCREEN_W > 0 and SCREEN_H > 0:
             self.width, self.height = SCREEN_W, SCREEN_H
@@ -406,9 +405,11 @@ class GreeterUI:
 
                 # Success! The greeter process should now exit so greetd
                 # can start the user session.
+                # Use os._exit(0) to bypass pygame/SDL Wayland teardown — a
+                # graceful pygame.quit() stalls waiting for cage to ack the
+                # Wayland disconnect, causing ~90s delay before Hyprland starts.
                 ipc.close()
-                pygame.quit()
-                sys.exit(0)
+                os._exit(0)
 
         except Exception as e:
             self._show_error(str(e))

@@ -119,7 +119,10 @@ in
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"
-        ];
+        ]
+        ++ lib.optional (
+          config.skynet.module.greetd.enable && config.skynet.module.greetd.greeter == "none"
+        ) "hyprlock";
 
         bind = [
           # HYPRLAND

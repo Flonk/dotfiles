@@ -12,7 +12,10 @@
       chrome-remote-desktop.enable = false;
       dnsmasq.enable = true;
       fingerprint.enable = true;
-      greetd.enable = true;
+      greetd = {
+        enable = true;
+        greeter = "none";
+      };
       grub.enable = true;
       ollama.enable = true;
       powersaver.enable = true;
