@@ -148,7 +148,7 @@ let
       relPath = "logos/andamp-amp-blue.png";
     }
     {
-      name = "tileGrey";
+      name = "logoTileGrey";
       relPath = "logos/tile-grey.png";
       src = tileGreyPng; # generated, not from assets/
     }
