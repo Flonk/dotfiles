@@ -129,7 +129,6 @@ in
           # HYPRLAND
           "$mainMod, RETURN, exec, $terminal"
           "$mainMod CTRL, RETURN, exec, $browser"
-          "$mainMod, SPACE, exec, walker -t mytheme"
 
           "$mainMod, ESCAPE, exec, hyprlock"
           "$mainMod, M, exit"
@@ -196,6 +195,7 @@ in
           action = "resizeactive";
           d = 80;
         })
+        ++ lib.optional config.skynet.module.vicinae.enable "$mainMod, SPACE, exec, vicinae open"
         ++ (mkKeypadBindings {
           mod = "CTRL";
           action = "resizeactive";

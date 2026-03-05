@@ -17,6 +17,7 @@
           command = "runCommands";
           args = {
             commands = [
+              "git.openFile"
               "workbench.files.action.collapseExplorerFolders"
               "workbench.files.action.showActiveFileInExplorer"
             ];
@@ -27,6 +28,7 @@
           command = "runCommands";
           args = {
             commands = [
+              "git.openFile"
               "workbench.action.editorLayoutSingle"
               "workbench.action.closeOtherEditors"
               "workbench.files.action.collapseExplorerFolders"

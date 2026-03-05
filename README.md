@@ -4,7 +4,7 @@ There are many dotfiles but these ones are mine.
 
 ## Overview
 
-I use NixOS with Hyprland (hy3) and waybar. App launcher is walker.
+I use NixOS with Hyprland (hy3) and waybar. App launcher is vicinae.
 
 This is my workhorse setup; no transparent terminals, no gaps, few animations.
 

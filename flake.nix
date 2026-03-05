@@ -14,8 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    walker.url = "github:abenz1267/walker";
-
     nix-colorizer.url = "github:nutsalhan87/nix-colorizer";
 
     nix-openclaw = {
@@ -35,6 +33,11 @@
 
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -86,6 +89,7 @@
           modules = [
             inputs.sops-nix.homeManagerModules.sops
             inputs.nix-openclaw.homeManagerModules.openclaw
+            inputs.vicinae.homeManagerModules.default
             ./config/flo-schnitzelwirt.nix
           ];
         };

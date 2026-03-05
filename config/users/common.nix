@@ -26,8 +26,8 @@
     ../../modules/skynet-scripts/home.nix
     ../../modules/sops/home.nix
     ../../modules/spotify/home.nix
+    ../../modules/vicinae/home.nix
     ../../modules/vscode/home.nix
-    ../../modules/walker/home.nix
     ../../modules/waybar/home.nix
     ../../modules/work/home.nix
     ../../modules/zsh/home.nix

@@ -215,11 +215,11 @@ in
         type = types.bool;
         default = false;
       };
-      vscode.enable = mkOption {
+      vicinae.enable = mkOption {
         type = types.bool;
         default = false;
       };
-      walker.enable = mkOption {
+      vscode.enable = mkOption {
         type = types.bool;
         default = false;
       };

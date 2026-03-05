@@ -1,4 +1,4 @@
-// AppLauncherDisplay.qml - Single square button with grimace emoji that launches walker
+// AppLauncherDisplay.qml - Single square button with grimace emoji that launches vicinae
 import QtQuick
 import Quickshell
 
@@ -67,7 +67,7 @@ Rectangle {
         }
     }
     
-    // Click handler to launch walker
+    // Click handler to launch vicinae
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor  // Show pointer cursor on hover
@@ -78,7 +78,7 @@ Rectangle {
                 return;
             }
             if (mouse.button === Qt.LeftButton) {
-                Quickshell.execDetached(["walker", "-t", "mytheme"]);
+                Quickshell.execDetached(["vicinae", "open"]);
             }
         }
         

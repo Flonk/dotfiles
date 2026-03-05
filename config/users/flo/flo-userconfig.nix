@@ -23,8 +23,8 @@
     antigravity.enable = true;
     sops.enable = true;
     spotify.enable = true;
+    vicinae.enable = true;
     vscode.enable = true;
-    walker.enable = true;
     waybar.enable = true;
     zsh.enable = true;
 
