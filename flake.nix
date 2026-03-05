@@ -16,11 +16,6 @@
 
     nix-colorizer.url = "github:nutsalhan87/nix-colorizer";
 
-    nix-openclaw = {
-      url = "github:openclaw/nix-openclaw";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     openconnect-pulse-launcher = {
       url = "github:erahhal/openconnect-pulse-launcher";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,7 +53,6 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          inputs.nix-openclaw.overlays.default
           inputs.antigravity-nix.overlays.default
         ];
       };
@@ -88,7 +82,6 @@
           };
           modules = [
             inputs.sops-nix.homeManagerModules.sops
-            inputs.nix-openclaw.homeManagerModules.openclaw
             inputs.vicinae.homeManagerModules.default
             ./config/flo-schnitzelwirt.nix
           ];

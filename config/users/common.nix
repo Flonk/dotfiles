@@ -19,7 +19,6 @@
     ../../modules/minecraft/home.nix
     ../../modules/nchat/home.nix
     ../../modules/obsidian/home.nix
-    ../../modules/openclaw/home.nix
     ../../modules/peripherals/home.nix
     ../../modules/powersaver/home.nix
     ../../modules/quickshell/home.nix

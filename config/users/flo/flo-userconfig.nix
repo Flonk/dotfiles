@@ -2,8 +2,6 @@
 {
   config.skynet.mimeapps = true;
 
-  config.skynet.discordId = "140292365435797504";
-
   config.skynet.module = {
     alacritty.enable = true;
     csvlens.enable = true;
@@ -18,7 +16,6 @@
     minecraft.enable = true;
     nchat.enable = true;
     obsidian.enable = true;
-    openclaw.enable = false;
     quickshell.enable = true;
     antigravity.enable = true;
     sops.enable = true;
