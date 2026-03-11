@@ -240,6 +240,10 @@ in
         type = types.bool;
         default = false;
       };
+      zeroclaw.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
       zsh.enable = mkOption {
         type = types.bool;
         default = false;

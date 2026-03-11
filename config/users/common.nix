@@ -29,6 +29,7 @@
     ../../modules/vscode/home.nix
     ../../modules/waybar/home.nix
     ../../modules/work/home.nix
+    ../../modules/zeroclaw/home.nix
     ../../modules/zsh/home.nix
   ];
 }
