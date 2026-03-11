@@ -1,4 +1,6 @@
 { ... }:
 {
-  config.skynet.module = { };
+  config.skynet.module = {
+    direnv.enable = true;
+  };
 }
