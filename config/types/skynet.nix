@@ -60,6 +60,20 @@ in
       };
     };
 
+    host = {
+      adminUser = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
+
+      ssh = {
+        authorizedKeys = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+        };
+      };
+    };
+
     module = {
       alacritty.enable = mkOption {
         type = types.bool;

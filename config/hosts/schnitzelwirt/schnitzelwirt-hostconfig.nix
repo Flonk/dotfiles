@@ -1,6 +1,10 @@
 { ... }:
 {
   config.skynet = {
+    host = {
+      adminUser = "flo";
+    };
+
     primaryMonitor = {
       width = 1920;
       height = 1080;

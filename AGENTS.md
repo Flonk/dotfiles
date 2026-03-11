@@ -13,6 +13,8 @@ When adding a new module:
 
 ## Skynet Scripts
 
+`modules/skynet-scripts/home.nix` is intentionally always imported (not gated behind `skynet.module.*.enable`).
+
 To register a new skynet CLI script, add to the module's `home.nix`:
 
 ```nix

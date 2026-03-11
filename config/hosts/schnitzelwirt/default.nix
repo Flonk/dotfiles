@@ -7,10 +7,11 @@
 {
   imports = [
     ../../types
+    ../common.nix
     ../../themes/trump/trump.nix
+    ./schnitzelwirt-system.nix
     ./schnitzelwirt-hardware.nix
     ./schnitzelwirt-hostconfig.nix
-    ../common.nix
   ];
 
   networking.hostName = "schnitzelwirt";

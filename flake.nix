@@ -76,6 +76,15 @@
             ./config/hosts/schnitzelwirt
           ];
         };
+        hetzy = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs nix-colorizer;
+          };
+          modules = [
+            inputs.sops-nix.nixosModules.sops
+            ./config/hosts/hetzy
+          ];
+        };
       };
 
       homeConfigurations = {
@@ -89,6 +98,18 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             ./config/flo-schnitzelwirt.nix
+          ];
+        };
+        zeroclaw-hetzy = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit inputs;
+            inherit nix-colorizer;
+          };
+          modules = [
+            inputs.sops-nix.homeManagerModules.sops
+            inputs.vicinae.homeManagerModules.default
+            ./config/zeroclaw-hetzy.nix
           ];
         };
       };
