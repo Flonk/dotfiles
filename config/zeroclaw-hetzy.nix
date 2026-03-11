@@ -9,6 +9,7 @@
 {
   imports = [
     ./types
+    ./hosts/hetzy/hetzy-hostconfig.nix
     ./themes/trump/trump.nix
     ./users/zeroclaw
   ];
