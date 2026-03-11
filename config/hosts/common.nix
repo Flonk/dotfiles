@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -20,27 +21,30 @@ in
     ../../modules/work/andamp/CEFKM/system.nix
   ];
 
-  config = lib.mkIf (adminUser != null && authorizedKeys != [ ]) {
-    users.users.${adminUser}.openssh.authorizedKeys.keys = authorizedKeys;
-  };
+  config = lib.mkMerge [
+    {
+      environment.systemPackages = with pkgs; [
+        home-manager
 
-  environment.systemPackages = with pkgs; [
-    home-manager
+        git
+        micro
 
-    git
-    micro
+        curl
+        wget
 
-    curl
-    wget
+        foot
 
-    foot
-
-    iproute2
-    nettools
-    bind
-    iputils
-    nmap
-    whois
+        iproute2
+        nettools
+        bind
+        iputils
+        nmap
+        whois
+      ];
+    }
+    (lib.mkIf (adminUser != null && authorizedKeys != [ ]) {
+      users.users.${adminUser}.openssh.authorizedKeys.keys = authorizedKeys;
+    })
   ];
 
 }

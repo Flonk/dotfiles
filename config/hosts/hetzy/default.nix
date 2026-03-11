@@ -19,6 +19,7 @@
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.devices = [ "nodev" ];
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   services.openssh.enable = true;
   services.openssh.openFirewall = true;
