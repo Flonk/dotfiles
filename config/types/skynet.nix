@@ -45,6 +45,11 @@ in
       default = false;
     };
 
+    wallpaper = mkOption {
+      type = types.nullOr (types.either types.path types.package);
+      default = null;
+    };
+
     primaryMonitor = {
       width = mkOption {
         type = types.int;

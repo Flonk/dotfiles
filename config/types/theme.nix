@@ -40,7 +40,6 @@ in
       humongous = mkOption { type = types.int; };
     };
 
-    wallpaper = mkOption { type = types.package; };
     lockscreenImage = mkOption { type = types.path; };
 
     font = mkOption {

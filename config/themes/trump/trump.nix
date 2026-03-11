@@ -42,24 +42,36 @@ let
       }) attrs
     );
 
-  # --- Derive palette hues from wallpaper's dominant color (IFD) ---
-  wallpaperSrc = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
+  # --- Derive palette hues from user wallpaper (when provided) ---
+  wallpaperSrc = config.skynet.wallpaper;
 
-  extractedColorsFile =
-    pkgs.runCommand "wallpaper-colors.json"
-      {
-        nativeBuildInputs = [ pkgs.imagemagick ];
-      }
-      ''
-        magick ${wallpaperSrc} -resize 200x200! -colors 8 +dither -depth 8 -alpha off \
-          -unique-colors txt:- \
-          | tail -n +2 \
-          | grep -oE '#[0-9A-Fa-f]{6}' \
-          | head -8 \
-          | awk 'BEGIN{printf "["} NR>1{printf ","} {printf "\"%s\"", $0} END{print "]"}' > $out
-      '';
-
-  dominantHexColors = builtins.fromJSON (builtins.readFile extractedColorsFile);
+  dominantHexColors =
+    if wallpaperSrc != null then
+      let
+        extractedColorsFile =
+          pkgs.runCommand "wallpaper-colors.json"
+            {
+              nativeBuildInputs = [ pkgs.imagemagick ];
+            }
+            ''
+              magick ${wallpaperSrc} -resize 200x200! -colors 8 +dither -depth 8 -alpha off \
+                -unique-colors txt:- \
+                | tail -n +2 \
+                | grep -oE '#[0-9A-Fa-f]{6}' \
+                | head -8 \
+                | awk 'BEGIN{printf "["} NR>1{printf ","} {printf "\"%s\"", $0} END{print "]"}' > $out
+            '';
+      in
+      builtins.fromJSON (builtins.readFile extractedColorsFile)
+    else
+      [
+        "#3b82f6"
+        "#111827"
+        "#1f2937"
+        "#334155"
+        "#64748b"
+        "#0f172a"
+      ];
 
   oklchColors = map (hex: {
     inherit hex;
@@ -151,28 +163,6 @@ let
   };
 
   lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
-  # wallpaper = (import ./wallpaper.nix) {
-  #   inherit
-  #     lib
-  #     pkgs
-  #     config
-  #     colorWm
-  #     colorApp
-  #     colorUtils
-  #     lockscreenImage
-  #     colorError600
-  #     colorError400
-  #     colorError300
-  #     colorError800
-  #     colorSuccess400
-  #     colorSuccess600
-  #     colorSuccess800
-  #     ;
-  # };
-  wallpaper = pkgs.runCommand "wallpaper.jpg" { } ''
-    cp ${wallpaperSrc} $out
-  '';
-
 in
 {
   config.theme = rec {
@@ -193,7 +183,6 @@ in
     inherit
       fontFamily
       fontSize
-      wallpaper
       lockscreenImage
       ;
 

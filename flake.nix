@@ -54,9 +54,14 @@
     }:
     let
       lib = nixpkgs.lib;
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
+      pkgsX86 = import nixpkgs {
+        system = "x86_64-linux";
+        overlays = [
+          inputs.antigravity-nix.overlays.default
+        ];
+      };
+      pkgsAarch64 = import nixpkgs {
+        system = "aarch64-linux";
         overlays = [
           inputs.antigravity-nix.overlays.default
         ];
@@ -89,7 +94,7 @@
 
       homeConfigurations = {
         flo-schnitzelwirt = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          pkgs = pkgsX86;
           extraSpecialArgs = {
             inherit inputs;
             inherit nix-colorizer;
@@ -101,7 +106,7 @@
           ];
         };
         zeroclaw-hetzy = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          pkgs = pkgsAarch64;
           extraSpecialArgs = {
             inherit inputs;
             inherit nix-colorizer;
