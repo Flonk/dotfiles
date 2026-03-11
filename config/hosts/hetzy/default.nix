@@ -24,7 +24,7 @@
   services.openssh.enable = true;
   services.openssh.openFirewall = true;
   services.openssh.settings = {
-    PermitRootLogin = "no";
+    PermitRootLogin = "yes";
     PasswordAuthentication = false;
     KbdInteractiveAuthentication = false;
   };
@@ -39,6 +39,8 @@
       "wheel"
     ];
   };
+
+  users.users.root.openssh.authorizedKeys.keys = config.skynet.host.ssh.authorizedKeys;
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
