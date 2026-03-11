@@ -6,6 +6,16 @@
 }:
 {
   config = lib.mkIf config.skynet.module.zsh.enable {
+    home.packages = with pkgs; [
+      fortune
+      cowsay
+    ];
+
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     programs.zsh = {
       enable = true;
 
