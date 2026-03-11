@@ -16,6 +16,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-CcldFjukQfC2CGbeNOkYnxnW5iGHECcI35/OOL2TgF4=";
+  cargoAuditable = false;
+
+  CARGO_BUILD_JOBS = "1";
+  CARGO_PROFILE_RELEASE_LTO = "off";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "16";
+  CARGO_PROFILE_RELEASE_OPT_LEVEL = "2";
 
   nativeBuildInputs = [
     pkg-config
