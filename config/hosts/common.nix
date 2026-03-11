@@ -23,4 +23,24 @@ in
   config = lib.mkIf (adminUser != null && authorizedKeys != [ ]) {
     users.users.${adminUser}.openssh.authorizedKeys.keys = authorizedKeys;
   };
+
+  environment.systemPackages = with pkgs; [
+    home-manager
+
+    git
+    micro
+
+    curl
+    wget
+
+    foot
+
+    iproute2
+    nettools
+    bind
+    iputils
+    nmap
+    whois
+  ];
+
 }
