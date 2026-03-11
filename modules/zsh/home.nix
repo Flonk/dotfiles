@@ -9,12 +9,16 @@
     home.packages = with pkgs; [
       fortune
       cowsay
+      tree
     ];
 
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
     };
+
+    programs.bat.enable = true;
+    programs.eza.enable = true;
 
     programs.zsh = {
       enable = true;
@@ -87,7 +91,7 @@
         # For a full list of active aliases, run `alias`.
 
         ##### Navigation
-        cat = "bat -P -p --color always --theme 'Visual Studio Dark+'";
+        bat = "command bat -P -p --color always --theme 'Visual Studio Dark+'";
         t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
         l = "eza -l --group --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --color=always";
         c = "cd_fzf";
