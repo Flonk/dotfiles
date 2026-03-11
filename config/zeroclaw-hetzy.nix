@@ -9,6 +9,7 @@
 {
   imports = [
     ./types
+    ./themes/trump/trump.nix
     ./users/zeroclaw
   ];
 
