@@ -71,6 +71,14 @@ in
         default = null;
       };
 
+      motd = {
+        command = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Shell command to run as MOTD in interactive zsh sessions";
+        };
+      };
+
       ssh = {
         authorizedKeys = mkOption {
           type = types.listOf types.str;

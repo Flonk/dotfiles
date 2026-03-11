@@ -40,15 +40,15 @@
 
       initContent =
         let
+          motdCommand = config.skynet.host.motd.command;
+
           init = lib.mkBefore ''
             source ${./zshrc.sh}
           '';
 
           end = lib.mkAfter ''
-            if [[ -n "$IS_INITIAL_SHELL" ]]; then
-              
-            else
-              fortune | cowsay
+            if [[ -n ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)} ]]; then
+              eval ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)}
             fi
           '';
 

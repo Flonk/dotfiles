@@ -3,6 +3,7 @@
   config.skynet = {
     host = {
       adminUser = "flo";
+      motd.command = "fortune | cowsay";
     };
 
     primaryMonitor = {
