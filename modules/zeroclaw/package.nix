@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     rev = "744620bc3464732395b0b0e4f0f0bde0d2848ff6";
-    hash = lib.fakeHash;
+    hash = "sha256-FwWFbolE+2BsGYSW12VipRdGg3HfQRL0yBpXrOinMAs=";
   };
 
   cargoHash = lib.fakeHash;
