@@ -4,5 +4,6 @@
     ./hyprlock.nix
     ./hyprcursor.nix
     ./hyprpaper.nix
+    ./hyprpicker.nix
   ];
 }

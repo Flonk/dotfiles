@@ -195,7 +195,6 @@ in
           action = "resizeactive";
           d = 80;
         })
-        ++ lib.optional config.skynet.module.vicinae.enable "$mainMod, SPACE, exec, vicinae open"
         ++ (mkKeypadBindings {
           mod = "CTRL";
           action = "resizeactive";
@@ -260,10 +259,7 @@ in
 
         input = {
           kb_layout = "de";
-          kb_options = [
-            "grp:alt_caps_toggle"
-            "caps:super"
-          ];
+          kb_options = "caps:hyper,hyper:mod3";
           numlock_by_default = true;
           repeat_delay = 300;
           follow_mouse = 1;
