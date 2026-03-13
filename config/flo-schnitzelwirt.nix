@@ -18,9 +18,6 @@
   sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   sops.age.generateKey = true;
 
-  programs.zsh.shellAliases.nr = "home-manager switch --flake ~/repos/personal/dotfiles#flo-schnitzelwirt";
-  programs.zsh.shellAliases.nrsys = "sudo nixos-rebuild switch --flake ~/repos/personal/dotfiles#schnitzelwirt";
-
   skynet.cli.scripts = [
     {
       command = [

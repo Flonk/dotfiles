@@ -11,7 +11,7 @@
     ];
 
     wayland.windowManager.hyprland.settings.bind = [
-      "$mainMod, C, exec, hyprpicker -a"
+      ''$mainMod, C, exec, bash -lc 'color="$(hyprpicker -a)"; [ -n "$color" ] && notify-send "🎨 Color copied" "$color"' ''
     ];
   };
 }

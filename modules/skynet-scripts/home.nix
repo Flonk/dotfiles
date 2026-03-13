@@ -7,7 +7,6 @@
 
 let
   scripts = config.skynet.cli.scripts;
-  hasScripts = scripts != [ ];
   hasTs = builtins.any (s: lib.hasSuffix ".ts" (toString s.script)) scripts;
 
   # Theme colors
@@ -370,7 +369,7 @@ let
   '';
 in
 {
-  config = lib.mkIf hasScripts {
+  config = {
     # Expose the fzf theme args for other modules to use
     skynet.cli.fzfThemeArgs = fzfThemeArgs;
 

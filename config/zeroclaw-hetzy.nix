@@ -14,9 +14,6 @@
     ./users/zeroclaw
   ];
 
-  programs.zsh.shellAliases.nr = "home-manager switch --flake ~/repos/personal/dotfiles#zeroclaw-hetzy";
-  programs.zsh.shellAliases.nrsys = "sudo nixos-rebuild switch --flake ~/repos/personal/dotfiles#hetzy";
-
   skynet.cli.scripts = [
     {
       command = [

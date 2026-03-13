@@ -102,6 +102,8 @@
         nb = "nix-build";
         ns = "nix-shell";
         s = "skynet";
+        nr = "skynet rebuild";
+        nrsys = "skynet system rebuild";
         p = "nix-shell -p";
         run = "_nix-shell-run";
         appimage = "nix run nixpkgs#appimage-run --";
