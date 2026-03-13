@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.alacritty.enable {
+  config = lib.mkIf config.skynet.module.desktop.alacritty.enable {
     programs.alacritty = {
       enable = true;
       settings = {

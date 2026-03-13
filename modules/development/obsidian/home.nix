@@ -224,7 +224,7 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.obsidian.enable {
+  config = lib.mkIf config.skynet.module.development.obsidian.enable {
     home.packages = with pkgs; [ obsidian ];
 
     home.file."Documents/Vault/.obsidian/snippets/style.css".text = lib.mkForce themeCss;

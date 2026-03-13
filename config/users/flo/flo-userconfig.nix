@@ -4,40 +4,52 @@
   config.skynet.mimeapps = true;
 
   config.skynet.module = {
-    alacritty.enable = true;
-    csvlens.enable = true;
-    direnv.enable = true;
-    fastfetch.enable = true;
-    foot.enable = true;
-    git.enable = true;
-    google-chrome.enable = true;
-    hyprland.enable = true;
-    jiratui.enable = true;
-    mako.enable = true;
-    minecraft.enable = true;
-    nchat.enable = true;
-    obsidian.enable = true;
-    quickshell.enable = true;
-    sops.enable = true;
-    spotify.enable = true;
-    vicinae.enable = true;
-    vscode.enable = true;
-    waybar.enable = true;
-    zsh.enable = true;
-
-    peripherals = {
-      enable = true;
-      trustedDevices = [
-        {
-          mac = "80:C3:BA:53:78:8B";
-          description = "Sennheiser MOMENTUM TW 4";
-        }
-      ];
+    assorted = {
+      jiratui.enable = true;
+      nchat.enable = true;
     };
-
-    andamp = {
-      enable = true;
-      CEFKM = true;
+    core = {
+      direnv.enable = true;
+      git.enable = true;
+      sops.enable = true;
+      zsh.enable = true;
+    };
+    desktop = {
+      alacritty.enable = true;
+      csvlens.enable = true;
+      fastfetch.enable = true;
+      foot.enable = true;
+      "google-chrome".enable = true;
+      hyprland.enable = true;
+      mako.enable = true;
+      quickshell.enable = true;
+      vicinae.enable = true;
+      waybar.enable = true;
+    };
+    development = {
+      obsidian.enable = true;
+      vscode.enable = true;
+    };
+    leisure = {
+      minecraft.enable = true;
+      spotify.enable = true;
+    };
+    os = {
+      peripherals = {
+        enable = true;
+        trustedDevices = [
+          {
+            mac = "80:C3:BA:53:78:8B";
+            description = "Sennheiser MOMENTUM TW 4";
+          }
+        ];
+      };
+    };
+    work = {
+      andamp = {
+        enable = true;
+        CEFKM = true;
+      };
     };
   };
 }

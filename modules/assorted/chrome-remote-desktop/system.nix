@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.skynet.module.chrome-remote-desktop.enable;
+  cfg = config.skynet.module.assorted."chrome-remote-desktop".enable;
 
   chrome-remote-desktop = pkgs.stdenv.mkDerivation rec {
     pname = "chrome-remote-desktop";

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.peripherals;
+  cfg = config.skynet.module.os.peripherals;
 
   trustScript = pkgs.writeShellScript "bluetooth-trust-peripherals" (
     lib.concatMapStrings (p: ''

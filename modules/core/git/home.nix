@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.git.enable {
+  config = lib.mkIf config.skynet.module.core.git.enable {
     programs.git = {
       enable = true;
 

@@ -262,7 +262,7 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.quickshell.enable {
+  config = lib.mkIf config.skynet.module.desktop.quickshell.enable {
     # Use the generated components directory (componentsOut) as the xdg source.
     xdg.configFile."quickshell".source = componentsOut;
 

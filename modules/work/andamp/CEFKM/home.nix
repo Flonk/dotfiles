@@ -52,7 +52,7 @@ in
     ./insomnia.nix
   ];
 
-  config = lib.mkIf config.skynet.module.andamp.CEFKM {
+  config = lib.mkIf config.skynet.module.work.andamp.CEFKM {
     home.packages = [
       vpnLauncher
     ];

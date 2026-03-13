@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.fastfetch.enable {
+  config = lib.mkIf config.skynet.module.desktop.fastfetch.enable {
     programs.fastfetch = {
       enable = true;
       settings = {

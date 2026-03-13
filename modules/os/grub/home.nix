@@ -32,7 +32,7 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.grub.enable {
+  config = lib.mkIf config.skynet.module.os.grub.enable {
     skynet.cli.scripts = [
       {
         command = [

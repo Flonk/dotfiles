@@ -13,21 +13,28 @@
     };
 
     module = {
-      avahi.enable = false;
-      chrome-remote-desktop.enable = false;
-      dnsmasq.enable = true;
-      fingerprint.enable = true;
-      greetd = {
-        enable = true;
-        greeter = "none";
+      assorted = {
+        avahi.enable = false;
+        "chrome-remote-desktop".enable = false;
       };
-      grub.enable = true;
-      powersaver.enable = true;
-      qemu.enable = true;
-
-      andamp = {
-        enable = true;
-        CEFKM = true;
+      development = {
+        dnsmasq.enable = true;
+        qemu.enable = true;
+      };
+      os = {
+        fingerprint.enable = true;
+        greetd = {
+          enable = true;
+          greeter = "none";
+        };
+        grub.enable = true;
+        powersaver.enable = true;
+      };
+      work = {
+        andamp = {
+          enable = true;
+          CEFKM = true;
+        };
       };
     };
   };

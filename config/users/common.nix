@@ -1,34 +1,34 @@
 { ... }:
 {
   imports = [
-    ../../modules/desktop/alacritty/home.nix
-    ../../modules/desktop/csvlens/home.nix
-    ../../modules/core/direnv/home.nix
-    ../../modules/desktop/fastfetch/home.nix
-    ../../modules/os/fingerprint/home.nix
-    ../../modules/desktop/foot/home.nix
-    ../../modules/core/git/home.nix
-    ../../modules/desktop/google-chrome/home.nix
-    ../../modules/os/greetd/home.nix
-    ../../modules/os/grub/home.nix
-    ../../modules/desktop/hyprland/home.nix
     ../../modules/assorted/jiratui/home.nix
-    ../../modules/desktop/mako/home.nix
-    ../../modules/desktop/mimeapps/home.nix
-    ../../modules/leisure/minecraft/home.nix
     ../../modules/assorted/nchat/home.nix
-    ../../modules/development/obsidian/home.nix
-    ../../modules/os/peripherals/home.nix
-    ../../modules/os/powersaver/home.nix
-    ../../modules/desktop/quickshell/home.nix
+    ../../modules/core/direnv/home.nix
+    ../../modules/core/git/home.nix
     ../../modules/core/skynet-scripts/home.nix
     ../../modules/core/sops/home.nix
-    ../../modules/leisure/spotify/home.nix
-    ../../modules/desktop/vicinae/home.nix
-    ../../modules/development/vscode/home.nix
-    ../../modules/desktop/waybar/home.nix
-    ../../modules/work/home.nix
-    ../../modules/development/zeroclaw/home.nix
     ../../modules/core/zsh/home.nix
+    ../../modules/development/obsidian/home.nix
+    ../../modules/development/vscode/home.nix
+    ../../modules/development/zeroclaw/home.nix
+    ../../modules/desktop/alacritty/home.nix
+    ../../modules/desktop/csvlens/home.nix
+    ../../modules/desktop/fastfetch/home.nix
+    ../../modules/desktop/foot/home.nix
+    ../../modules/desktop/google-chrome/home.nix
+    ../../modules/desktop/hyprland/home.nix
+    ../../modules/desktop/mako/home.nix
+    ../../modules/desktop/mimeapps/home.nix
+    ../../modules/desktop/quickshell/home.nix
+    ../../modules/desktop/vicinae/home.nix
+    ../../modules/desktop/waybar/home.nix
+    ../../modules/leisure/minecraft/home.nix
+    ../../modules/leisure/spotify/home.nix
+    ../../modules/os/fingerprint/home.nix
+    ../../modules/os/greetd/home.nix
+    ../../modules/os/grub/home.nix
+    ../../modules/os/peripherals/home.nix
+    ../../modules/os/powersaver/home.nix
+    ../../modules/work/home.nix
   ];
 }

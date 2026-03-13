@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.zsh.enable {
+  config = lib.mkIf config.skynet.module.core.zsh.enable {
     home.packages = with pkgs; [
       fortune
       cowsay

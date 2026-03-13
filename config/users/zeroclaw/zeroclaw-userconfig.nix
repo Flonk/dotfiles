@@ -1,8 +1,12 @@
 { ... }:
 {
   config.skynet.module = {
-    direnv.enable = true;
-    zeroclaw.enable = true;
-    zsh.enable = true;
+    core = {
+      direnv.enable = true;
+      zsh.enable = true;
+    };
+    development = {
+      zeroclaw.enable = true;
+    };
   };
 }

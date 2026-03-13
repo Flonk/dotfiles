@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.hyprland.enable {
+  config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
     home.packages = with pkgs; [
       hyprpicker
     ];

@@ -13,11 +13,11 @@ in
     ../../modules/assorted/avahi/system.nix
     ../../modules/assorted/chrome-remote-desktop/system.nix
     ../../modules/development/dnsmasq/system.nix
+    ../../modules/development/qemu/system.nix
     ../../modules/os/fingerprint/system.nix
     ../../modules/os/greetd/system.nix
     ../../modules/os/grub/system.nix
     ../../modules/os/powersaver/system.nix
-    ../../modules/development/qemu/system.nix
     ../../modules/work/andamp/CEFKM/system.nix
   ];
 

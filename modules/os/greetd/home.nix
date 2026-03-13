@@ -56,7 +56,7 @@ let
 in
 {
   config =
-    lib.mkIf (config.skynet.module.greetd.enable && config.skynet.module.greetd.greeter == "custom")
+    lib.mkIf (config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "custom")
       {
         skynet.cli.scripts = [
           {

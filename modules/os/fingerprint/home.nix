@@ -5,7 +5,7 @@
 }:
 
 {
-  config = lib.mkIf config.skynet.module.fingerprint.enable {
+  config = lib.mkIf config.skynet.module.os.fingerprint.enable {
     # Register skynet CLI scripts
     skynet.cli.scripts = [
       {

@@ -112,7 +112,7 @@ let
 
 in
 {
-  config = lib.mkIf config.skynet.module.powersaver.enable {
+  config = lib.mkIf config.skynet.module.os.powersaver.enable {
     systemd.user.services.quickshell-power-toggle = {
       Unit = {
         Description = "Toggle QuickShell on AC/battery (sysfs+UPower, with env capture)";

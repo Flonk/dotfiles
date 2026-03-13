@@ -90,7 +90,7 @@ let
     map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
 in
 {
-  config = lib.mkIf config.skynet.module.hyprland.enable {
+  config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
@@ -122,7 +122,7 @@ in
           "systemctl start docker"
         ]
         ++ lib.optional (
-          config.skynet.module.greetd.enable && config.skynet.module.greetd.greeter == "none"
+          config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "none"
         ) "hyprlock";
 
         bind = [

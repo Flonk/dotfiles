@@ -88,170 +88,188 @@ in
     };
 
     module = {
-      alacritty.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      avahi.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      chrome-remote-desktop.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      csvlens.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      direnv.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      dnsmasq.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      fastfetch.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      fingerprint.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      foot.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      git.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      google-chrome.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      greetd = {
-        enable = mkOption {
+      assorted = {
+        avahi.enable = mkOption {
           type = types.bool;
           default = false;
         };
-        greeter = mkOption {
-          type = types.enum [
-            "custom"
-            "tuigreet"
-            "none"
-          ];
-          default = "custom";
-          description = "Which greeter to use: 'custom' (pygame-based matching GRUB theme), 'tuigreet' (TUI-based), or 'none' (auto-login, relies on hyprlock for security)";
-        };
-      };
-      grub.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      hyprland.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      jiratui.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      mako.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      minecraft.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      nchat.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      obs-studio.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      obsidian.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      peripherals = {
-        enable = mkOption {
+        "chrome-remote-desktop".enable = mkOption {
           type = types.bool;
           default = false;
         };
-        trustedDevices = mkOption {
-          type = types.listOf (
-            types.submodule {
-              options = {
-                mac = mkOption {
-                  type = types.str;
-                  description = "Bluetooth MAC address, e.g. AA:BB:CC:DD:EE:FF";
+        jiratui.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        nchat.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+      };
+      core = {
+        direnv.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        git.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        sops.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        "skynet-scripts".enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        zsh.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+      };
+      desktop = {
+        alacritty.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        csvlens.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        fastfetch.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        foot.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        "google-chrome".enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        hyprland.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        mako.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        quickshell.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        vicinae.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        waybar.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+      };
+      development = {
+        dnsmasq.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        obsidian.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        qemu.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        vscode.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        zeroclaw.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+      };
+      leisure = {
+        minecraft.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        "obs-studio".enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        spotify.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+      };
+      os = {
+        fingerprint.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        greetd = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+          };
+          greeter = mkOption {
+            type = types.enum [
+              "custom"
+              "tuigreet"
+              "none"
+            ];
+            default = "custom";
+            description = "Which greeter to use: 'custom' (pygame-based matching GRUB theme), 'tuigreet' (TUI-based), or 'none' (auto-login, relies on hyprlock for security)";
+          };
+        };
+        grub.enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        peripherals = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+          };
+          trustedDevices = mkOption {
+            type = types.listOf (
+              types.submodule {
+                options = {
+                  mac = mkOption {
+                    type = types.str;
+                    description = "Bluetooth MAC address, e.g. AA:BB:CC:DD:EE:FF";
+                  };
+                  description = mkOption {
+                    type = types.str;
+                    default = "";
+                    description = "Human-readable label for this device";
+                  };
                 };
-                description = mkOption {
-                  type = types.str;
-                  default = "";
-                  description = "Human-readable label for this device";
-                };
-              };
-            }
-          );
-          default = [ ];
-          description = "Bluetooth devices to auto-trust so they never trigger authorization prompts";
+              }
+            );
+            default = [ ];
+            description = "Bluetooth devices to auto-trust so they never trigger authorization prompts";
+          };
         };
-      };
-      powersaver.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      qemu.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      quickshell.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      sops.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      spotify.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      vicinae.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      vscode.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      waybar.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      zeroclaw.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      zsh.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      andamp = {
-        enable = mkOption {
+        powersaver.enable = mkOption {
           type = types.bool;
           default = false;
         };
-        CEFKM = mkOption {
-          type = types.bool;
-          default = false;
+      };
+      work = {
+        andamp = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+          };
+          CEFKM = mkOption {
+            type = types.bool;
+            default = false;
+          };
         };
       };
     };

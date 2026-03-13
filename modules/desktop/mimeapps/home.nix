@@ -14,10 +14,10 @@ in
     xdg.mimeApps = {
       enable = true;
       defaultApplications = lib.mkMerge [
-        (lib.optionalAttrs config.skynet.module.google-chrome.enable googleChromeMime)
-        (lib.optionalAttrs config.skynet.module.google-chrome.enable googleChromeFileViewerMime)
-        (lib.optionalAttrs config.skynet.module.csvlens.enable csvlensMime)
-        (lib.optionalAttrs config.skynet.module.spotify.enable spotifyMime)
+        (lib.optionalAttrs config.skynet.module.desktop."google-chrome".enable googleChromeMime)
+        (lib.optionalAttrs config.skynet.module.desktop."google-chrome".enable googleChromeFileViewerMime)
+        (lib.optionalAttrs config.skynet.module.desktop.csvlens.enable csvlensMime)
+        (lib.optionalAttrs config.skynet.module.leisure.spotify.enable spotifyMime)
       ];
     };
   };

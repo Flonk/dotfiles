@@ -40,7 +40,7 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.sops.enable {
+  config = lib.mkIf config.skynet.module.core.sops.enable {
     skynet.cli.scripts = [
       {
         command = [ "secrets" ];

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.jiratui.enable {
+  config = lib.mkIf config.skynet.module.assorted.jiratui.enable {
     home.packages = with pkgs; [
       jiratui
     ];

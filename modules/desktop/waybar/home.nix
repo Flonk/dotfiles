@@ -6,7 +6,7 @@
 }:
 with lib;
 {
-  config = lib.mkIf config.skynet.module.waybar.enable {
+  config = lib.mkIf config.skynet.module.desktop.waybar.enable {
     # Configure & Theme Waybar
     programs.waybar = {
       enable = true;

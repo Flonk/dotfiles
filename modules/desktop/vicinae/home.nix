@@ -6,7 +6,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.vicinae.enable (
+  config = lib.mkIf config.skynet.module.desktop.vicinae.enable (
     lib.mkMerge [
       {
         services.vicinae = {
@@ -22,7 +22,7 @@
         };
       }
 
-      (lib.mkIf config.skynet.module.hyprland.enable {
+      (lib.mkIf config.skynet.module.desktop.hyprland.enable {
         wayland.windowManager.hyprland.settings = {
           bind = [
             "$mainMod, SPACE, exec, vicinae open"
