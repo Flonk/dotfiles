@@ -27,6 +27,7 @@
       waybar.enable = true;
     };
     development = {
+      "claude-cowork".enable = true;
       obsidian.enable = true;
       vscode.enable = true;
     };

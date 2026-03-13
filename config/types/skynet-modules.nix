@@ -87,6 +87,10 @@ in
       };
     };
     development = {
+      "claude-cowork".enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
       dnsmasq.enable = mkOption {
         type = types.bool;
         default = false;
