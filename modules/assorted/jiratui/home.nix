@@ -12,17 +12,17 @@
 
     sops.secrets.jira_api_username = {
       key = "jira_api_username";
-      sopsFile = ../../assets/secrets/secrets.json;
+      sopsFile = ../../../assets/secrets/secrets.json;
     };
 
     sops.secrets.jira_api_token = {
       key = "jira_api_token";
-      sopsFile = ../../assets/secrets/secrets.json;
+      sopsFile = ../../../assets/secrets/secrets.json;
     };
 
     sops.secrets.jira_api_base_url = {
       key = "jira_api_base_url";
-      sopsFile = ../../assets/secrets/secrets.json;
+      sopsFile = ../../../assets/secrets/secrets.json;
     };
 
     home.activation.writeJiratuiConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

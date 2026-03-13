@@ -7,7 +7,7 @@ let
   googleChromeMime = import ../google-chrome/mimeApps.nix;
   googleChromeFileViewerMime = import ../google-chrome/file-viewer-mimeApps.nix;
   csvlensMime = import ../csvlens/mimeApps.nix;
-  spotifyMime = import ../spotify/mimeApps.nix;
+  spotifyMime = import ../../leisure/spotify/mimeApps.nix;
 in
 {
   config = lib.mkIf config.skynet.mimeapps {

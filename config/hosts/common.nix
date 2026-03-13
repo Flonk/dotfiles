@@ -10,14 +10,14 @@ let
 in
 {
   imports = [
-    ../../modules/avahi/system.nix
-    ../../modules/chrome-remote-desktop/system.nix
-    ../../modules/dnsmasq/system.nix
-    ../../modules/fingerprint/system.nix
-    ../../modules/greetd/system.nix
-    ../../modules/grub/system.nix
-    ../../modules/powersaver/system.nix
-    ../../modules/qemu/system.nix
+    ../../modules/assorted/avahi/system.nix
+    ../../modules/assorted/chrome-remote-desktop/system.nix
+    ../../modules/development/dnsmasq/system.nix
+    ../../modules/os/fingerprint/system.nix
+    ../../modules/os/greetd/system.nix
+    ../../modules/os/grub/system.nix
+    ../../modules/os/powersaver/system.nix
+    ../../modules/development/qemu/system.nix
     ../../modules/work/andamp/CEFKM/system.nix
   ];
 

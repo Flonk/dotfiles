@@ -1,34 +1,34 @@
 { ... }:
 {
   imports = [
-    ../../modules/alacritty/home.nix
-    ../../modules/csvlens/home.nix
-    ../../modules/direnv/home.nix
-    ../../modules/fastfetch/home.nix
-    ../../modules/fingerprint/home.nix
-    ../../modules/foot/home.nix
-    ../../modules/git/home.nix
-    ../../modules/google-chrome/home.nix
-    ../../modules/greetd/home.nix
-    ../../modules/grub/home.nix
-    ../../modules/hyprland/home.nix
-    ../../modules/jiratui/home.nix
-    ../../modules/mako/home.nix
-    ../../modules/mimeapps/home.nix
-    ../../modules/minecraft/home.nix
-    ../../modules/nchat/home.nix
-    ../../modules/obsidian/home.nix
-    ../../modules/peripherals/home.nix
-    ../../modules/powersaver/home.nix
-    ../../modules/quickshell/home.nix
-    ../../modules/skynet-scripts/home.nix
-    ../../modules/sops/home.nix
-    ../../modules/spotify/home.nix
-    ../../modules/vicinae/home.nix
-    ../../modules/vscode/home.nix
-    ../../modules/waybar/home.nix
+    ../../modules/desktop/alacritty/home.nix
+    ../../modules/desktop/csvlens/home.nix
+    ../../modules/core/direnv/home.nix
+    ../../modules/desktop/fastfetch/home.nix
+    ../../modules/os/fingerprint/home.nix
+    ../../modules/desktop/foot/home.nix
+    ../../modules/core/git/home.nix
+    ../../modules/desktop/google-chrome/home.nix
+    ../../modules/os/greetd/home.nix
+    ../../modules/os/grub/home.nix
+    ../../modules/desktop/hyprland/home.nix
+    ../../modules/assorted/jiratui/home.nix
+    ../../modules/desktop/mako/home.nix
+    ../../modules/desktop/mimeapps/home.nix
+    ../../modules/leisure/minecraft/home.nix
+    ../../modules/assorted/nchat/home.nix
+    ../../modules/development/obsidian/home.nix
+    ../../modules/os/peripherals/home.nix
+    ../../modules/os/powersaver/home.nix
+    ../../modules/desktop/quickshell/home.nix
+    ../../modules/core/skynet-scripts/home.nix
+    ../../modules/core/sops/home.nix
+    ../../modules/leisure/spotify/home.nix
+    ../../modules/desktop/vicinae/home.nix
+    ../../modules/development/vscode/home.nix
+    ../../modules/desktop/waybar/home.nix
     ../../modules/work/home.nix
-    ../../modules/zeroclaw/home.nix
-    ../../modules/zsh/home.nix
+    ../../modules/development/zeroclaw/home.nix
+    ../../modules/core/zsh/home.nix
   ];
 }
