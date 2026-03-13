@@ -165,7 +165,7 @@ let
   lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
 in
 {
-  config.theme = rec {
+  config.skynet.theme = rec {
     color = {
       text = textColor;
 

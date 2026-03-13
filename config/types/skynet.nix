@@ -1,6 +1,10 @@
-{ lib, ... }:
+{ lib, nix-colorizer, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption types genAttrs;
+  colorUtils = import ../utils/color.nix { inherit lib nix-colorizer; };
+  mkShadeOptions =
+    prefix:
+    genAttrs (map (k: "${prefix}${k}") colorUtils.paletteShades) (_: mkOption { type = types.str; });
 in
 {
   options.skynet = {
@@ -49,6 +53,43 @@ in
       wallpaper = mkOption {
         type = types.nullOr (types.either types.path types.package);
         default = null;
+      };
+
+      color = {
+        text = mkOption { type = types.str; };
+
+        error600 = mkOption { type = types.str; };
+        error400 = mkOption { type = types.str; };
+        error300 = mkOption { type = types.str; };
+        error800 = mkOption { type = types.str; };
+        success400 = mkOption { type = types.str; };
+        success600 = mkOption { type = types.str; };
+        success800 = mkOption { type = types.str; };
+      }
+      // (mkShadeOptions "app")
+      // (mkShadeOptions "wm");
+
+      fontFamily = {
+        ui = mkOption { type = types.str; };
+        uiNf = mkOption { type = types.str; };
+        mono = mkOption { type = types.str; };
+        monoNf = mkOption { type = types.str; };
+      };
+
+      fontSize = {
+        tiny = mkOption { type = types.int; };
+        small = mkOption { type = types.int; };
+        normal = mkOption { type = types.int; };
+        big = mkOption { type = types.int; };
+        bigger = mkOption { type = types.int; };
+        huge = mkOption { type = types.int; };
+        humongous = mkOption { type = types.int; };
+      };
+
+      lockscreenImage = mkOption { type = types.path; };
+
+      font = mkOption {
+        type = types.attrsOf (types.attrsOf types.str);
       };
     };
 

@@ -10,7 +10,7 @@
       enable = true;
       settings = {
         logo = {
-          source = builtins.toString config.theme.lockscreenImage;
+          source = builtins.toString config.skynet.theme.lockscreenImage;
           padding = {
             top = 10;
             right = 3;

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  c = config.theme.color;
+  c = config.skynet.theme.color;
   mon = config.skynet.host.primaryMonitor;
 
   pythonEnv = pkgs.python3.withPackages (ps: [ ps.pygame ]);
@@ -14,8 +14,8 @@ let
     mkdir -p $out
     cp ${./greeter.py} $out/greeter.py
     cp ${./mock-greetd.py} $out/mock-greetd.py
-    ${lib.optionalString (builtins.pathExists config.theme.lockscreenImage) ''
-      cp ${config.theme.lockscreenImage} $out/logo.png
+    ${lib.optionalString (builtins.pathExists config.skynet.theme.lockscreenImage) ''
+      cp ${config.skynet.theme.lockscreenImage} $out/logo.png
     ''}
   '';
 

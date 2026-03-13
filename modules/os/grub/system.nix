@@ -5,9 +5,9 @@
   ...
 }:
 let
-  c = config.theme.color;
+  c = config.skynet.theme.color;
   mon = config.skynet.host.primaryMonitor;
-  fontFamily = config.theme.fontFamily.mono;
+  fontFamily = config.skynet.theme.fontFamily.mono;
 
   skynetGrubTheme =
     pkgs.runCommand "skynet-grub-theme"
@@ -30,7 +30,7 @@ let
         GRUB_HEIGHT = toString mon.height;
 
         # Paths
-        GRUB_LOGO = config.theme.lockscreenImage;
+        GRUB_LOGO = config.skynet.theme.lockscreenImage;
         GRUB_FONT_FAMILY = fontFamily;
         GRUB_FONT_REGULAR = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf";
         GRUB_FONT_BOLD = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono-Bold.ttf";

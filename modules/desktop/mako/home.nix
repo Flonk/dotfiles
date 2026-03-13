@@ -14,29 +14,29 @@
         anchor = "top-right";
         border-radius = 0;
         border-size = 2;
-        font = config.theme.font.ui.normal;
+        font = config.skynet.theme.font.ui.normal;
         default-timeout = 10000;
         layer = "overlay";
         max-visible = 3;
         padding = "10";
         width = 340;
         height = 300;
-        border-color = config.theme.color.wm800;
-        background-color = config.theme.color.app150;
+        border-color = config.skynet.theme.color.wm800;
+        background-color = config.skynet.theme.color.app150;
 
         "urgency=low" = {
-          border-color = config.theme.color.app600;
-          text-color = config.theme.color.app600;
+          border-color = config.skynet.theme.color.app600;
+          text-color = config.skynet.theme.color.app600;
         };
 
         "urgency=normal" = {
-          border-color = config.theme.color.wm800;
-          text-color = config.theme.color.text;
+          border-color = config.skynet.theme.color.wm800;
+          text-color = config.skynet.theme.color.text;
         };
 
         "urgency=high" = {
-          border-color = config.theme.color.error600;
-          text-color = config.theme.color.text;
+          border-color = config.skynet.theme.color.error600;
+          text-color = config.skynet.theme.color.text;
           default-timeout = 30000;
         };
       };

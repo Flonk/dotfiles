@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.skynet.module.os.greetd;
-  c = config.theme.color;
+  c = config.skynet.theme.color;
   mon = config.skynet.host.primaryMonitor;
   isCustom = cfg.greeter == "custom";
   isNone = cfg.greeter == "none";
@@ -16,8 +16,8 @@ let
   greeterAssets = pkgs.runCommand "skynet-greeter-assets" { } ''
     mkdir -p $out
     cp ${./greeter.py} $out/greeter.py
-    ${lib.optionalString (builtins.pathExists config.theme.lockscreenImage) ''
-      cp ${config.theme.lockscreenImage} $out/logo.png
+    ${lib.optionalString (builtins.pathExists config.skynet.theme.lockscreenImage) ''
+      cp ${config.skynet.theme.lockscreenImage} $out/logo.png
     ''}
   '';
 

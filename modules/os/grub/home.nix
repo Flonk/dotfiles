@@ -5,7 +5,7 @@
   ...
 }:
 let
-  c = config.theme.color;
+  c = config.skynet.theme.color;
   mon = config.skynet.host.primaryMonitor;
 
   grubPreview = pkgs.writeShellScriptBin "skynet-grub-preview" ''
@@ -19,7 +19,7 @@ let
     export GRUB_TEXT_DIM="${c.app400}"
     export GRUB_WIDTH="${toString mon.width}"
     export GRUB_HEIGHT="${toString mon.height}"
-    export GRUB_LOGO="${config.theme.lockscreenImage}"
+    export GRUB_LOGO="${config.skynet.theme.lockscreenImage}"
 
     WORKDIR=$(mktemp -d)
     trap 'rm -rf "$WORKDIR"' EXIT

@@ -7,17 +7,17 @@
 let
   hexTo0x = s: "0x${builtins.replaceStrings [ "#" ] [ "" ] s}";
 
-  bg2 = hexTo0x config.theme.color.app200;
-  fg = hexTo0x config.theme.color.text;
-  accent = hexTo0x config.theme.color.wm800;
-  muted = hexTo0x config.theme.color.app400;
-  recvBold = hexTo0x config.theme.color.wm800;
-  revcAccent = hexTo0x config.theme.color.wm900;
-  recv = hexTo0x config.theme.color.text;
-  recvBg = hexTo0x config.theme.color.wm200;
-  meBold = hexTo0x config.theme.color.app800;
-  me = hexTo0x config.theme.color.text;
-  meBg = hexTo0x config.theme.color.app200;
+  bg2 = hexTo0x config.skynet.theme.color.app200;
+  fg = hexTo0x config.skynet.theme.color.text;
+  accent = hexTo0x config.skynet.theme.color.wm800;
+  muted = hexTo0x config.skynet.theme.color.app400;
+  recvBold = hexTo0x config.skynet.theme.color.wm800;
+  revcAccent = hexTo0x config.skynet.theme.color.wm900;
+  recv = hexTo0x config.skynet.theme.color.text;
+  recvBg = hexTo0x config.skynet.theme.color.wm200;
+  meBold = hexTo0x config.skynet.theme.color.app800;
+  me = hexTo0x config.skynet.theme.color.text;
+  meBg = hexTo0x config.skynet.theme.color.app200;
 in
 {
   config = lib.mkIf config.skynet.module.assorted.nchat.enable {
@@ -96,7 +96,7 @@ in
       entry_color_fg=${fg}
       help_attr=
       help_color_bg=${bg2}
-      help_color_fg=${hexTo0x config.theme.color.app600}
+      help_color_fg=${hexTo0x config.skynet.theme.color.app600}
       history_name_attr=bold
       history_name_attr_selected=reverse
       history_name_recv_color_bg=
@@ -122,7 +122,7 @@ in
       list_attr=
       list_attr_selected=reverse
       list_color_bg=
-      list_color_fg=${hexTo0x config.theme.color.app500}
+      list_color_fg=${hexTo0x config.skynet.theme.color.app500}
       list_color_unread_bg=
       list_color_unread_fg=${accent}
       listborder_attr=
@@ -130,10 +130,10 @@ in
       listborder_color_fg=${bg2}
       status_attr=
       status_color_bg=${bg2}
-      status_color_fg=${hexTo0x config.theme.color.app600}
+      status_color_fg=${hexTo0x config.skynet.theme.color.app600}
       top_attr=
       top_color_bg=${bg2}
-      top_color_fg=${hexTo0x config.theme.color.app600}
+      top_color_fg=${hexTo0x config.skynet.theme.color.app600}
     '';
 
     xdg.configFile."nchat/key.conf".text = ''

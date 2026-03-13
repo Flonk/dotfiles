@@ -5,9 +5,9 @@
   ...
 }:
 let
-  c = config.theme.color;
-  fs = config.theme.fontSize;
-  ff = config.theme.fontFamily;
+  c = config.skynet.theme.color;
+  fs = config.skynet.theme.fontSize;
+  ff = config.skynet.theme.fontFamily;
 
   themeCss = ''
     /* ===== Obsidian — Flo base (scoped to theme root) ===== */

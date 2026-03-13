@@ -10,7 +10,7 @@ let
   hasTs = builtins.any (s: lib.hasSuffix ".ts" (toString s.script)) scripts;
 
   # Theme colors
-  c = config.theme.color;
+  c = config.skynet.theme.color;
 
   # Common fzf theme args shared across all skynet fzf UIs
   fzfThemeArgs = lib.concatStringsSep " " [

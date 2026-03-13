@@ -9,9 +9,9 @@
     programs.alacritty = {
       enable = true;
       settings = {
-        font.size = config.theme.fontSize.small;
-        font.normal.family = config.theme.fontFamily.monoNf;
-        colors.primary.background = config.theme.color.app150;
+        font.size = config.skynet.theme.fontSize.small;
+        font.normal.family = config.skynet.theme.fontFamily.monoNf;
+        colors.primary.background = config.skynet.theme.color.app150;
 
         keyboard = {
           bindings = [

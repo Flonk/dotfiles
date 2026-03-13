@@ -99,7 +99,7 @@ in
         colors = {
           # alpha=1.0
           # alpha-mode=default
-          background = hexToRgb config.theme.color.app150;
+          background = hexToRgb config.skynet.theme.color.app150;
           # foreground=ffffff
           # flash=7f7f00
           # flash-alpha=0.5

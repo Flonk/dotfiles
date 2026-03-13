@@ -108,11 +108,11 @@ let
   # plus a generated Theme.qml. This directory is placed in the Nix store and
   # then used as the xdg.configFile source.
   # Extract wm and app colors from theme
-  wmColors = lib.filterAttrs (n: v: lib.hasPrefix "wm" n) config.theme.color;
-  appColors = lib.filterAttrs (n: v: lib.hasPrefix "app" n) config.theme.color;
+  wmColors = lib.filterAttrs (n: v: lib.hasPrefix "wm" n) config.skynet.theme.color;
+  appColors = lib.filterAttrs (n: v: lib.hasPrefix "app" n) config.skynet.theme.color;
   otherColors = lib.filterAttrs (
     n: v: !(lib.hasPrefix "wm" n || lib.hasPrefix "app" n)
-  ) config.theme.color;
+  ) config.skynet.theme.color;
 
   # Generated tile pattern from the andamp logo
   tileGreyPng = pkgs.runCommand "tile-grey.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
@@ -165,7 +165,7 @@ let
       "readonly property int fontSize${
         lib.toUpper (lib.substring 0 1 name)
       }${lib.substring 1 (-1) name}: ${toString size}"
-    ) config.theme.fontSize
+    ) config.skynet.theme.fontSize
   );
 
   # Helper to convert font families to QML properties
@@ -175,14 +175,14 @@ let
       "readonly property string fontFamily${
         lib.toUpper (lib.substring 0 1 name)
       }${lib.substring 1 (-1) name}: \"${family}\""
-    ) config.theme.fontFamily
+    ) config.skynet.theme.fontFamily
   );
 
   # Convert colors to QML properties
   colorsToQml = lib.concatStringsSep "\n    " (
     lib.mapAttrsToList (
       name: color: "readonly property string ${name}: \"${color}\""
-    ) config.theme.color
+    ) config.skynet.theme.color
   );
 
   themeQml = ''
