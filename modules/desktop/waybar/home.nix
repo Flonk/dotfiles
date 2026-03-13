@@ -106,7 +106,7 @@ with lib;
 
           #workspaces button:hover {
             background: ${config.skynet.theme.color.wm800};
-            color: ${config.skynet.theme.color.wm150};
+            color: ${config.skynet.theme.color.wm100};
             border: 0px solid transparent;
           }
 

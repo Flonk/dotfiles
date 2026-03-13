@@ -14,7 +14,7 @@ let
   recvBold = hexTo0x config.skynet.theme.color.wm800;
   revcAccent = hexTo0x config.skynet.theme.color.wm900;
   recv = hexTo0x config.skynet.theme.color.text;
-  recvBg = hexTo0x config.skynet.theme.color.wm200;
+  recvBg = hexTo0x config.skynet.theme.color.wm100;
   meBold = hexTo0x config.skynet.theme.color.app800;
   me = hexTo0x config.skynet.theme.color.text;
   meBg = hexTo0x config.skynet.theme.color.app200;
@@ -122,7 +122,7 @@ in
       list_attr=
       list_attr_selected=reverse
       list_color_bg=
-      list_color_fg=${hexTo0x config.skynet.theme.color.app500}
+      list_color_fg=${hexTo0x config.skynet.theme.color.app600}
       list_color_unread_bg=
       list_color_unread_fg=${accent}
       listborder_attr=

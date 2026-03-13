@@ -53,7 +53,7 @@ Item {
             text: Qt.formatDateTime(new Date(), "ss")
             font.pointSize: Theme.fontSizeHuge
             font.family: Theme.fontFamilyUiNf
-            color: Theme.app500
+            color: Theme.app600
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: 0.7
             font.bold: true

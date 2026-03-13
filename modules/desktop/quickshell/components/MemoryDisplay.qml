@@ -10,13 +10,13 @@ Row {
         text: SystemMonitor.getMemoryIcon()
         font.pointSize: Theme.fontSizeNormal
         font.family: Theme.fontFamilyUiNf
-        color: Theme.app400
+        color: Theme.app600
     }
     
     Text {
         text: SystemMonitor.getMemoryText()
         font.pointSize: Theme.fontSizeNormal
         font.family: Theme.fontFamilyUiNf
-        color: SystemMonitor.memoryUsage > 0.9 ? Theme.error400 : Theme.app400  // text color
+        color: SystemMonitor.memoryUsage > 0.9 ? Theme.error400 : Theme.app600  // text color
     }
 }

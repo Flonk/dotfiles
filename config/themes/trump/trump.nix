@@ -112,54 +112,14 @@ let
     h = secondaryColor.oklch.h;
   };
 
-  colorError600 = nix-colorizer.oklch.to.hex {
-    L = 0.56;
-    C = 0.22;
+  colorError = colorUtils.mkPalette {
+    cMax = 0.22;
     h = math.toRad 30;
-    a = 1.0;
   };
 
-  colorError400 = nix-colorizer.oklch.to.hex {
-    L = 0.4;
-    C = 0.16;
-    h = math.toRad 30;
-    a = 1.0;
-  };
-
-  colorError300 = nix-colorizer.oklch.to.hex {
-    L = 0.3;
-    C = 0.11;
-    h = math.toRad 30;
-    a = 1.0;
-  };
-
-  colorError800 = nix-colorizer.oklch.to.hex {
-    L = 0.8;
-    C = 0.16;
-    h = math.toRad 30;
-    a = 1.0;
-  };
-
-  # Success color palette
-  colorSuccess400 = nix-colorizer.oklch.to.hex {
-    L = 0.4;
-    C = 0.15; # 0.135 * 0.39 * 2.8 (approximate scaling)
+  colorSuccess = colorUtils.mkPalette {
+    cMax = 0.16;
     h = math.toRad 140;
-    a = 1.0;
-  };
-
-  colorSuccess600 = nix-colorizer.oklch.to.hex {
-    L = 0.60;
-    C = 0.135;
-    h = math.toRad 140;
-    a = 1.0;
-  };
-
-  colorSuccess800 = nix-colorizer.oklch.to.hex {
-    L = 0.8;
-    C = 0.16; # bit more chroma than 600
-    h = math.toRad 140;
-    a = 1.0;
   };
 
   lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
@@ -168,17 +128,11 @@ in
   config.skynet.theme = rec {
     color = {
       text = textColor;
-
-      error600 = colorError600;
-      error400 = colorError400;
-      error300 = colorError300;
-      error800 = colorError800;
-      success400 = colorSuccess400;
-      success600 = colorSuccess600;
-      success800 = colorSuccess800;
     }
     // (prefixKeys "wm" colorWm)
-    // (prefixKeys "app" colorApp);
+    // (prefixKeys "app" colorApp)
+    // (prefixKeys "error" colorError)
+    // (prefixKeys "success" colorSuccess);
 
     inherit
       fontFamily

@@ -324,7 +324,7 @@ in
             "col.locked_inactive" = "rgba(ffffff33)";
             font_size = config.skynet.theme.fontSize.small;
             font_family = config.skynet.theme.fontFamily.ui;
-            text_color = toRgba config.skynet.theme.color.wm950;
+            text_color = toRgba config.skynet.theme.color.wm800;
             indicator_height = 3;
           };
         };
@@ -337,7 +337,7 @@ in
               text_font = config.skynet.theme.fontFamily.ui;
               "col.active" = borderColor;
               "col.active.border" = borderColor;
-              "col.active.text" = toRgba config.skynet.theme.color.wm150;
+              "col.active.text" = toRgba config.skynet.theme.color.wm100;
 
               "col.focused" = toRgba config.skynet.theme.color.app150;
               "col.focused.border" = inactiveBorderColor;

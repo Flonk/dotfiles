@@ -102,7 +102,7 @@
           "sideBarSectionHeader.border" = config.skynet.theme.color.app200;
 
           # optional: tree views inside side bar (file explorer, outline, timeline rows)
-          "tree.indentGuidesStroke" = "${config.skynet.theme.color.app300}44";
+          "tree.indentGuidesStroke" = "${config.skynet.theme.color.app400}44";
           "list.dropBackground" = config.skynet.theme.color.app200;
           "list.activeSelectionBackground" = config.skynet.theme.color.app200;
           "list.inactiveSelectionBackground" = config.skynet.theme.color.app200;

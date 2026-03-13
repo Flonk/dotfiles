@@ -57,17 +57,11 @@ in
 
       color = {
         text = mkOption { type = types.str; };
-
-        error600 = mkOption { type = types.str; };
-        error400 = mkOption { type = types.str; };
-        error300 = mkOption { type = types.str; };
-        error800 = mkOption { type = types.str; };
-        success400 = mkOption { type = types.str; };
-        success600 = mkOption { type = types.str; };
-        success800 = mkOption { type = types.str; };
       }
       // (mkShadeOptions "app")
-      // (mkShadeOptions "wm");
+      // (mkShadeOptions "wm")
+      // (mkShadeOptions "error")
+      // (mkShadeOptions "success");
 
       fontFamily = {
         ui = mkOption { type = types.str; };

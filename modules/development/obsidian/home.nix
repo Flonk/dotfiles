@@ -26,7 +26,7 @@ let
 
       /* Text */
       --text-normal:  ${c.text};
-      --text-muted:   ${c.app950}88;
+      --text-muted:   ${c.app800}88;
       --text-accent:  ${c.wm800};
 
       /* Sizes */

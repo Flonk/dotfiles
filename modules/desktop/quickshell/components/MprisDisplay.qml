@@ -46,7 +46,7 @@ MouseArea {
             font.family: Theme.fontFamilyUiNf
             font.pointSize: Theme.fontSizeSmall
             font.weight: Font.Bold
-            textColor: MprisWidget.isPlaying ? Theme.app800 : Theme.app500
+            textColor: MprisWidget.isPlaying ? Theme.app800 : Theme.app600
             textOpacity: 0.95
             alignment: Qt.AlignRight
             marqueeDelay: 800
