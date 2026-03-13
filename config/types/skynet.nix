@@ -2,9 +2,28 @@
 let
   inherit (lib) mkOption types genAttrs;
   colorUtils = import ../utils/color.nix { inherit lib nix-colorizer; };
+
+  colorType = types.submodule {
+    options = {
+      hex = mkOption { type = types.str; };
+      hexNoHash = mkOption { type = types.str; };
+      hexAlpha = mkOption { type = types.str; };
+      rgba = mkOption { type = types.str; };
+      hexRgb = mkOption { type = types.str; };
+      hexRgba = mkOption { type = types.str; };
+      hex0x = mkOption { type = types.str; };
+      r = mkOption { type = types.int; };
+      g = mkOption { type = types.int; };
+      b = mkOption { type = types.int; };
+      a = mkOption { type = types.number; };
+      ansi = mkOption { type = types.str; };
+      ansiBackground = mkOption { type = types.str; };
+    };
+  };
+
   mkShadeOptions =
     prefix:
-    genAttrs (map (k: "${prefix}${k}") colorUtils.paletteShades) (_: mkOption { type = types.str; });
+    genAttrs (map (k: "${prefix}${k}") colorUtils.paletteShades) (_: mkOption { type = colorType; });
 in
 {
   options.skynet = {
@@ -56,7 +75,7 @@ in
       };
 
       color = {
-        text = mkOption { type = types.str; };
+        text = mkOption { type = colorType; };
       }
       // (mkShadeOptions "app")
       // (mkShadeOptions "wm")

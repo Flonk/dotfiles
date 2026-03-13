@@ -4,11 +4,6 @@
   lib,
   ...
 }:
-let
-  # Foot expects colors in RGB format (RRGGBB) without the # prefix
-  # Convert from hex format (#RRGGBB) to RGB format (RRGGBB)
-  hexToRgb = hexColor: lib.removePrefix "#" hexColor;
-in
 {
   config = lib.mkIf config.skynet.module.desktop.foot.enable {
     programs.foot = {
@@ -99,7 +94,7 @@ in
         colors = {
           # alpha=1.0
           # alpha-mode=default
-          background = hexToRgb config.skynet.theme.color.app150;
+          background = config.skynet.theme.color.app150.hexNoHash;
           # foreground=ffffff
           # flash=7f7f00
           # flash-alpha=0.5

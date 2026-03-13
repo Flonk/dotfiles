@@ -19,15 +19,15 @@ let
       --font-monospace: "${ff.mono}", ui-monospace, monospace;
 
       /* Surfaces */
-      --background-primary:         ${c.app150};
-      --background-secondary:       ${c.app200};
-      --background-modifier-hover:  ${c.app200};
-      --background-modifier-border: ${c.app200};
+      --background-primary:         ${c.app150.hex};
+      --background-secondary:       ${c.app200.hex};
+      --background-modifier-hover:  ${c.app200.hex};
+      --background-modifier-border: ${c.app200.hex};
 
       /* Text */
-      --text-normal:  ${c.text};
-      --text-muted:   ${c.app800}88;
-      --text-accent:  ${c.wm800};
+      --text-normal:  ${c.text.hex};
+      --text-muted:   ${c.app800.hex}88;
+      --text-accent:  ${c.wm800.hex};
 
       /* Sizes */
       --h1-size: ${toString fs.huge}px;
@@ -37,13 +37,13 @@ let
       --line-height-normal: 1.6;
 
       /* Interactive */
-      --interactive-normal:        ${c.app200};
-      --interactive-hover:         ${c.app200};
-      --interactive-accent:        ${c.wm800};
-      --interactive-accent-hover:  ${c.wm800};
+      --interactive-normal:        ${c.app200.hex};
+      --interactive-hover:         ${c.app200.hex};
+      --interactive-accent:        ${c.wm800.hex};
+      --interactive-accent-hover:  ${c.wm800.hex};
 
       /* Selection (match VS Code) */
-      --text-selection: ${c.app800}33;
+      --text-selection: ${c.app800.hex}33;
 
       /* Tabs (neutral hover like idle) */
       --tab-background: var(--background-primary);

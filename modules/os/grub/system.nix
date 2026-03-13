@@ -18,12 +18,12 @@ let
         ];
 
         # Colors
-        GRUB_BG_COLOR = c.app100;
-        GRUB_BORDER_COLOR = c.wm800;
-        GRUB_BAR_BG = c.app200;
-        GRUB_BAR_FG = c.app600;
-        GRUB_TEXT_COLOR = c.text;
-        GRUB_TEXT_DIM = c.app400;
+        GRUB_BG_COLOR = c.app100.hex;
+        GRUB_BORDER_COLOR = c.wm800.hex;
+        GRUB_BAR_BG = c.app200.hex;
+        GRUB_BAR_FG = c.app600.hex;
+        GRUB_TEXT_COLOR = c.text.hex;
+        GRUB_TEXT_DIM = c.app400.hex;
 
         # Dimensions
         GRUB_WIDTH = toString mon.width;

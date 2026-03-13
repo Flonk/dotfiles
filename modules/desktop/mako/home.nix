@@ -21,22 +21,22 @@
         padding = "10";
         width = 340;
         height = 300;
-        border-color = config.skynet.theme.color.wm800;
-        background-color = config.skynet.theme.color.app150;
+        border-color = config.skynet.theme.color.wm800.hex;
+        background-color = config.skynet.theme.color.app150.hex;
 
         "urgency=low" = {
-          border-color = config.skynet.theme.color.app600;
-          text-color = config.skynet.theme.color.app600;
+          border-color = config.skynet.theme.color.app600.hex;
+          text-color = config.skynet.theme.color.app600.hex;
         };
 
         "urgency=normal" = {
-          border-color = config.skynet.theme.color.wm800;
-          text-color = config.skynet.theme.color.text;
+          border-color = config.skynet.theme.color.wm800.hex;
+          text-color = config.skynet.theme.color.text.hex;
         };
 
         "urgency=high" = {
-          border-color = config.skynet.theme.color.error600;
-          text-color = config.skynet.theme.color.text;
+          border-color = config.skynet.theme.color.error600.hex;
+          text-color = config.skynet.theme.color.text.hex;
           default-timeout = 30000;
         };
       };

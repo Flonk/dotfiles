@@ -127,7 +127,7 @@ in
 {
   config.skynet.theme = rec {
     color = {
-      text = textColor;
+      text = colorUtils.mkColorAttrs textColor;
     }
     // (prefixKeys "wm" colorWm)
     // (prefixKeys "app" colorApp)

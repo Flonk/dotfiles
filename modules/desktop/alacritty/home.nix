@@ -11,7 +11,7 @@
       settings = {
         font.size = config.skynet.theme.fontSize.small;
         font.normal.family = config.skynet.theme.fontFamily.monoNf;
-        colors.primary.background = config.skynet.theme.color.app150;
+        colors.primary.background = config.skynet.theme.color.app150.hex;
 
         keyboard = {
           bindings = [

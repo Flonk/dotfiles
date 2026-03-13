@@ -5,12 +5,8 @@
   ...
 }:
 let
-  stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
-  toRgba = hex: "rgba(${stripHash hex}ff)";
-  toRgb = hex: "rgb(${stripHash hex})";
-
-  borderColor = toRgba config.skynet.theme.color.wm800;
-  inactiveBorderColor = toRgba config.skynet.theme.color.app150;
+  borderColor = config.skynet.theme.color.wm800.hexRgba;
+  inactiveBorderColor = config.skynet.theme.color.app150.hexRgba;
 
   mkKeypadBindings =
     {
@@ -324,7 +320,7 @@ in
             "col.locked_inactive" = "rgba(ffffff33)";
             font_size = config.skynet.theme.fontSize.small;
             font_family = config.skynet.theme.fontFamily.ui;
-            text_color = toRgba config.skynet.theme.color.wm800;
+            text_color = config.skynet.theme.color.wm800.hexRgba;
             indicator_height = 3;
           };
         };
@@ -337,19 +333,19 @@ in
               text_font = config.skynet.theme.fontFamily.ui;
               "col.active" = borderColor;
               "col.active.border" = borderColor;
-              "col.active.text" = toRgba config.skynet.theme.color.wm100;
+              "col.active.text" = config.skynet.theme.color.wm100.hexRgba;
 
-              "col.focused" = toRgba config.skynet.theme.color.app150;
+              "col.focused" = config.skynet.theme.color.app150.hexRgba;
               "col.focused.border" = inactiveBorderColor;
-              "col.focused.text" = toRgba config.skynet.theme.color.wm500;
+              "col.focused.text" = config.skynet.theme.color.wm500.hexRgba;
 
-              "col.inactive" = toRgba config.skynet.theme.color.app150;
+              "col.inactive" = config.skynet.theme.color.app150.hexRgba;
               "col.inactive.border" = inactiveBorderColor;
-              "col.inactive.text" = toRgba config.skynet.theme.color.wm500;
+              "col.inactive.text" = config.skynet.theme.color.wm500.hexRgba;
 
-              "col.urgent" = toRgba config.skynet.theme.color.error600;
-              "col.urgent.border" = toRgba config.skynet.theme.color.error600;
-              "col.urgent.text" = toRgba config.skynet.theme.color.text;
+              "col.urgent" = config.skynet.theme.color.error600.hexRgba;
+              "col.urgent.border" = config.skynet.theme.color.error600.hexRgba;
+              "col.urgent.text" = config.skynet.theme.color.text.hexRgba;
             };
           };
         };

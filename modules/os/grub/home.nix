@@ -11,12 +11,12 @@ let
   grubPreview = pkgs.writeShellScriptBin "skynet-grub-preview" ''
     set -euo pipefail
 
-    export GRUB_BG_COLOR="${c.app100}"
-    export GRUB_BORDER_COLOR="${c.wm800}"
-    export GRUB_BAR_BG="${c.app200}"
-    export GRUB_BAR_FG="${c.app600}"
-    export GRUB_TEXT_COLOR="${c.text}"
-    export GRUB_TEXT_DIM="${c.app400}"
+    export GRUB_BG_COLOR="${c.app100.hex}"
+    export GRUB_BORDER_COLOR="${c.wm800.hex}"
+    export GRUB_BAR_BG="${c.app200.hex}"
+    export GRUB_BAR_FG="${c.app600.hex}"
+    export GRUB_TEXT_COLOR="${c.text.hex}"
+    export GRUB_TEXT_DIM="${c.app400.hex}"
     export GRUB_WIDTH="${toString mon.width}"
     export GRUB_HEIGHT="${toString mon.height}"
     export GRUB_LOGO="${config.skynet.theme.lockscreenImage}"

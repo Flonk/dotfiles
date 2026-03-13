@@ -181,7 +181,7 @@ let
   # Convert colors to QML properties
   colorsToQml = lib.concatStringsSep "\n    " (
     lib.mapAttrsToList (
-      name: color: "readonly property string ${name}: \"${color}\""
+      name: color: "readonly property string ${name}: \"${color.hex}\""
     ) config.skynet.theme.color
   );
 

@@ -5,11 +5,8 @@
   ...
 }:
 let
-  stripHash = hex: lib.replaceStrings [ "#" ] [ "" ] hex;
-  toRgba = hex: "rgba(${stripHash hex}ff)";
-
-  borderColor = toRgba config.skynet.theme.color.wm800;
-  textColor = toRgba config.skynet.theme.color.text;
+  borderColor = config.skynet.theme.color.wm800.hexRgba;
+  textColor = config.skynet.theme.color.text.hexRgba;
 in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {

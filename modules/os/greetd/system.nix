@@ -32,12 +32,12 @@ let
     export PYGAME_HIDE_SUPPORT_PROMPT=1
 
     # Theme colors
-    export GREETER_BG_COLOR="${c.app100}"
-    export GREETER_BORDER_COLOR="${c.wm800}"
-    export GREETER_TEXT_COLOR="${c.text}"
-    export GREETER_TEXT_DIM="${c.app400}"
-    export GREETER_BAR_BG="${c.app200}"
-    export GREETER_BAR_FG="${c.app600}"
+    export GREETER_BG_COLOR="${c.app100.hex}"
+    export GREETER_BORDER_COLOR="${c.wm800.hex}"
+    export GREETER_TEXT_COLOR="${c.text.hex}"
+    export GREETER_TEXT_DIM="${c.app400.hex}"
+    export GREETER_BAR_BG="${c.app200.hex}"
+    export GREETER_BAR_FG="${c.app600.hex}"
     export GREETER_BORDER_WIDTH="4"
 
     # Paths

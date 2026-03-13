@@ -18,11 +18,11 @@ let
     "--border --padding 1,2"
     "--input-label ' Search '"
     "--preview-window=right:50%:wrap"
-    "--color 'border:${c.wm800},label:${c.wm800}'"
-    "--color 'preview-border:${c.app600},preview-label:${c.app800}'"
-    "--color 'list-border:${c.app600},list-label:${c.app600}'"
-    "--color 'input-border:${c.wm800},input-label:${c.wm800}'"
-    "--color 'header-border:${c.app600},header-label:${c.app800}'"
+    "--color 'border:${c.wm800.hex},label:${c.wm800.hex}'"
+    "--color 'preview-border:${c.app600.hex},preview-label:${c.app800.hex}'"
+    "--color 'list-border:${c.app600.hex},list-label:${c.app600.hex}'"
+    "--color 'input-border:${c.wm800.hex},input-label:${c.wm800.hex}'"
+    "--color 'header-border:${c.app600.hex},header-label:${c.app800.hex}'"
     "--bind 'result:transform-list-label:if [[ -z \$FZF_QUERY ]]; then echo \" \$FZF_MATCH_COUNT items \"; else echo \" \$FZF_MATCH_COUNT matches for [\$FZF_QUERY] \"; fi'"
     "--bind 'focus:transform-preview-label:[[ -n {1} ]] && printf \" %s \" {1}'"
   ];
@@ -197,7 +197,7 @@ let
 
     # --- Colorize toilet output with app800 ---
     _skynet_colorize() {
-      local hex="${c.app800}"
+      local hex="${c.app800.hex}"
       hex="''${hex#\#}"
       local r=$((16#''${hex:0:2}))
       local g=$((16#''${hex:2:2}))
