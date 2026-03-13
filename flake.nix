@@ -21,11 +21,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    quickmilk = {
-      url = "path:/home/flo/repos/personal/quickmilk";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
