@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import ShaderPlugin 1.0
 
 PanelWindow {
   id: window
@@ -29,14 +28,11 @@ PanelWindow {
     border.color: Qt.rgba(1, 1, 1, 0.08)
     border.width: 1
 
-    QuickMilkWidget {
-      anchors.fill: parent
-      anchors.margins: 12
-      colorScheme: ({
-        backgroundColor: Theme.app150,
-        accentColorA: Theme.wm400,
-        accentColorB: Theme.wm700,
-      })
+    Text {
+      anchors.centerIn: parent
+      text: "Visualizer disabled"
+      font.pixelSize: 20
+      color: Theme.app50
     }
   }
 }

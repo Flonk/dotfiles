@@ -3,8 +3,6 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
 import QtQuick
-import Quickmilk 1.0
-import ShaderPlugin 1.0
 
 PanelWindow {
   id: barWindow
