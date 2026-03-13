@@ -21,18 +21,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     vicinae = {
       url = "github:vicinaehq/vicinae";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    vicinae-extensions = {
-      url = "github:vicinaehq/extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -51,15 +41,9 @@
       lib = nixpkgs.lib;
       pkgsX86 = import nixpkgs {
         system = "x86_64-linux";
-        overlays = [
-          inputs.antigravity-nix.overlays.default
-        ];
       };
       pkgsAarch64 = import nixpkgs {
         system = "aarch64-linux";
-        overlays = [
-          inputs.antigravity-nix.overlays.default
-        ];
       };
     in
     {

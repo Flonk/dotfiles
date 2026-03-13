@@ -2,7 +2,6 @@
 {
   imports = [
     ../../modules/alacritty/home.nix
-    ../../modules/antigravity/home.nix
     ../../modules/csvlens/home.nix
     ../../modules/direnv/home.nix
     ../../modules/fastfetch/home.nix

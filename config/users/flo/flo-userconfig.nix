@@ -18,7 +18,6 @@
     nchat.enable = true;
     obsidian.enable = true;
     quickshell.enable = true;
-    antigravity.enable = true;
     sops.enable = true;
     spotify.enable = true;
     vicinae.enable = true;

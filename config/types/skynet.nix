@@ -92,10 +92,6 @@ in
         type = types.bool;
         default = false;
       };
-      antigravity.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
       avahi.enable = mkOption {
         type = types.bool;
         default = false;
