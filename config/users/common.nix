@@ -28,7 +28,6 @@
     ../../modules/os/greetd/home.nix
     ../../modules/os/grub/home.nix
     ../../modules/os/peripherals/home.nix
-    ../../modules/os/powersaver/home.nix
     ../../modules/work/home.nix
   ];
 }

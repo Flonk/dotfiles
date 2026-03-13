@@ -253,6 +253,10 @@ in
           # "stay_focused on, match:class Rofi"
         ];
 
+        layerrule = lib.optionals config.skynet.module.desktop.mako.enable [
+          "animation slide right, match:namespace notifications"
+        ];
+
         input = {
           kb_layout = "de";
           kb_options = "caps:hyper,hyper:mod3";

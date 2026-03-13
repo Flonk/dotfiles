@@ -27,11 +27,13 @@
         "urgency=low" = {
           border-color = config.skynet.theme.color.app600.hex;
           text-color = config.skynet.theme.color.app600.hex;
+          default-timeout = 4000;
         };
 
         "urgency=normal" = {
           border-color = config.skynet.theme.color.wm800.hex;
           text-color = config.skynet.theme.color.text.hex;
+          default-timeout = 8000;
         };
 
         "urgency=high" = {
