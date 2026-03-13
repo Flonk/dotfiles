@@ -4,12 +4,12 @@
     host = {
       adminUser = "flo";
       motd.command = "fortune | cowsay";
-    };
 
-    primaryMonitor = {
-      width = 1920;
-      height = 1080;
-      hz = 60;
+      primaryMonitor = {
+        width = 1920;
+        height = 1080;
+        hz = 60;
+      };
     };
 
     module = {

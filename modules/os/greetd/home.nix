@@ -6,7 +6,7 @@
 }:
 let
   c = config.theme.color;
-  mon = config.skynet.primaryMonitor;
+  mon = config.skynet.host.primaryMonitor;
 
   pythonEnv = pkgs.python3.withPackages (ps: [ ps.pygame ]);
 
@@ -56,7 +56,8 @@ let
 in
 {
   config =
-    lib.mkIf (config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "custom")
+    lib.mkIf
+      (config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "custom")
       {
         skynet.cli.scripts = [
           {

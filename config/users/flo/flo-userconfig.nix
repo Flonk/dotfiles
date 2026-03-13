@@ -1,6 +1,6 @@
 { ... }:
 {
-  config.skynet.wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
+  config.skynet.theme.wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
   config.skynet.mimeapps = true;
 
   config.skynet.module = {

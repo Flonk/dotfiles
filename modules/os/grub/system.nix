@@ -6,7 +6,7 @@
 }:
 let
   c = config.theme.color;
-  mon = config.skynet.primaryMonitor;
+  mon = config.skynet.host.primaryMonitor;
   fontFamily = config.theme.fontFamily.mono;
 
   skynetGrubTheme =

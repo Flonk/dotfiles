@@ -43,7 +43,7 @@ let
     );
 
   # --- Derive palette hues from user wallpaper (when provided) ---
-  wallpaperSrc = config.skynet.wallpaper;
+  wallpaperSrc = config.skynet.theme.wallpaper;
 
   dominantHexColors =
     if wallpaperSrc != null then

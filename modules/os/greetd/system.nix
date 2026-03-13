@@ -7,7 +7,7 @@
 let
   cfg = config.skynet.module.os.greetd;
   c = config.theme.color;
-  mon = config.skynet.primaryMonitor;
+  mon = config.skynet.host.primaryMonitor;
   isCustom = cfg.greeter == "custom";
   isNone = cfg.greeter == "none";
 

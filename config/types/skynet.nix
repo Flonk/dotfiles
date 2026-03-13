@@ -45,23 +45,10 @@ in
       default = false;
     };
 
-    wallpaper = mkOption {
-      type = types.nullOr (types.either types.path types.package);
-      default = null;
-    };
-
-    primaryMonitor = {
-      width = mkOption {
-        type = types.int;
-        default = 1920;
-      };
-      height = mkOption {
-        type = types.int;
-        default = 1080;
-      };
-      hz = mkOption {
-        type = types.int;
-        default = 60;
+    theme = {
+      wallpaper = mkOption {
+        type = types.nullOr (types.either types.path types.package);
+        default = null;
       };
     };
 
@@ -83,6 +70,21 @@ in
         authorizedKeys = mkOption {
           type = types.listOf types.str;
           default = [ ];
+        };
+      };
+
+      primaryMonitor = {
+        width = mkOption {
+          type = types.int;
+          default = 1920;
+        };
+        height = mkOption {
+          type = types.int;
+          default = 1080;
+        };
+        hz = mkOption {
+          type = types.int;
+          default = 60;
         };
       };
     };
@@ -109,23 +111,23 @@ in
       core = {
         direnv.enable = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
         };
         git.enable = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
         };
         sops.enable = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
         };
         "skynet-scripts".enable = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
         };
         zsh.enable = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
         };
       };
       desktop = {
