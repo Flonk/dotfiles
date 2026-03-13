@@ -78,9 +78,7 @@ rec {
     .${c};
 
   hexPairToInt =
-    s:
-    (hexDigitToInt (builtins.substring 0 1 s)) * 16
-    + (hexDigitToInt (builtins.substring 1 1 s));
+    s: (hexDigitToInt (builtins.substring 0 1 s)) * 16 + (hexDigitToInt (builtins.substring 1 1 s));
 
   mkColorAttrs =
     hex:

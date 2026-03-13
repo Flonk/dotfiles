@@ -1,6 +1,9 @@
 { lib, ... }:
 {
   imports = [
-    ./skynet.nix
+    ./skynet-cli.nix
+    ./skynet-theme.nix
+    ./skynet-host.nix
+    ./skynet-modules.nix
   ];
 }
