@@ -91,7 +91,7 @@
           # alternate-scroll-mode=yes
         };
 
-        colors = {
+        "colors-dark" = {
           # alpha=1.0
           # alpha-mode=default
           background = config.skynet.theme.color.app150.hexNoHash;

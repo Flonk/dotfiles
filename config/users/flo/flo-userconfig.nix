@@ -5,7 +5,7 @@
 
   config.skynet.module = {
     assorted = {
-      jiratui.enable = true;
+      jiratui.enable = false;
       nchat.enable = true;
     };
     core = {
@@ -27,6 +27,7 @@
       waybar.enable = true;
     };
     development = {
+      "claude-code".enable = true;
       "claude-cowork".enable = true;
       obsidian.enable = true;
       vscode.enable = true;

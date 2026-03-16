@@ -87,6 +87,10 @@ in
       };
     };
     development = {
+      "claude-code".enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
       "claude-cowork".enable = mkOption {
         type = types.bool;
         default = false;

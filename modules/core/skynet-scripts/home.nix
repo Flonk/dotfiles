@@ -373,6 +373,22 @@ in
     # Expose the fzf theme args for other modules to use
     skynet.cli.fzfThemeArgs = fzfThemeArgs;
 
+    # Built-in skynet scripts
+    skynet.cli.scripts = [
+      {
+        command = [ "update" ];
+        title = "Update flake inputs";
+        script = pkgs.writeShellScript "update.sh" ''
+          set -euo pipefail
+          ${pkgs.toilet}/bin/toilet -f future "update" | cat
+          echo ""
+          echo "Updating flake inputs..."
+          nix flake update ~/repos/personal/dotfiles
+        '';
+        usage = "Runs nix flake update to fetch the latest versions of all flake inputs.";
+      }
+    ];
+
     # Symlink the scripts directory to ~/.skynet/scripts
     home.file.".skynet/scripts".source = scriptsDir;
 
