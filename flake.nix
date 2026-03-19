@@ -26,6 +26,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -69,6 +74,16 @@
             ./config/hosts/hetzy
           ];
         };
+        bricky = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs nix-colorizer;
+          };
+          modules = [
+            inputs.sops-nix.nixosModules.sops
+            inputs.nixos-wsl.nixosModules.default
+            ./config/hosts/bricky
+          ];
+        };
       };
 
       homeConfigurations = {
@@ -94,6 +109,18 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             ./config/zeroclaw-hetzy.nix
+          ];
+        };
+        bricky-bricky = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgsX86;
+          extraSpecialArgs = {
+            inherit inputs;
+            inherit nix-colorizer;
+          };
+          modules = [
+            inputs.sops-nix.homeManagerModules.sops
+            inputs.vicinae.homeManagerModules.default
+            ./config/bricky-bricky.nix
           ];
         };
       };
