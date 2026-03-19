@@ -51,6 +51,7 @@
       andamp = {
         enable = true;
         CEFKM = true;
+        CEIFRS = true;
       };
     };
   };

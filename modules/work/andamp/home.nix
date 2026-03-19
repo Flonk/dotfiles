@@ -7,6 +7,7 @@
 {
   imports = [
     ./CEFKM/home.nix
+    ./CEIFRS/home.nix
   ];
 
   config = lib.mkIf config.skynet.module.work.andamp.enable {

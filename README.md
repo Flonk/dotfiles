@@ -4,18 +4,7 @@ There are many dotfiles but these ones are mine.
 
 ## Overview
 
-I use NixOS with Hyprland (hy3) and waybar. App launcher is vicinae.
-
-This is my workhorse setup; no transparent terminals, no gaps, few animations.
-
-Kinda cool: The entire theme is parametrized on a single primary
-color (orange in the screenshots); all other colors are generated
-from that.
-
-## TODO
-
-- Make a GTK Theme, or get rid of nautilus
-- Theme chrome?
+I use NixOS with Hyprland (hy3) and quickshell. App launcher is vicinae.
 
 ![screen1](./assets/screenshots/screen1.png)
 ![screen2](./assets/screenshots/screen2.png)

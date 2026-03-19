@@ -194,6 +194,10 @@ in
           type = types.bool;
           default = false;
         };
+        CEIFRS = mkOption {
+          type = types.bool;
+          default = false;
+        };
       };
     };
   };
