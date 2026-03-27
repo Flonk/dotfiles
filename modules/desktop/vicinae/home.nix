@@ -28,6 +28,7 @@
             "$mainMod, SPACE, exec, vicinae open"
             "MOD3, C, exec, xdg-open vicinae://extensions/florisdobber/claude/ask"
             "MOD3, period, exec, xdg-open vicinae://extensions/vicinae/core/search-emojis"
+            "MOD3, B, exec, xdg-open vicinae://extensions/Gelei/bluetooth/devices"
           ];
         };
       })
