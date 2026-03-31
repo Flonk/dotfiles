@@ -184,7 +184,7 @@ in
         default = false;
       };
     };
-    work = {
+    projects = {
       andamp = {
         enable = mkOption {
           type = types.bool;
@@ -197,6 +197,14 @@ in
         CEIFRS = mkOption {
           type = types.bool;
           default = false;
+        };
+      };
+      personal = {
+        dwain = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+          };
         };
       };
     };

@@ -30,6 +30,6 @@
     ../../modules/os/greetd/home.nix
     ../../modules/os/grub/home.nix
     ../../modules/os/peripherals/home.nix
-    ../../modules/work/home.nix
+    ../../modules/projects/home.nix
   ];
 }

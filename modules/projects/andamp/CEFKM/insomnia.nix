@@ -16,7 +16,7 @@ let
   };
 in
 {
-  config = lib.mkIf config.skynet.module.work.andamp.CEFKM {
+  config = lib.mkIf config.skynet.module.projects.andamp.CEFKM {
     home.packages = [
       insomniaAppImage
     ];

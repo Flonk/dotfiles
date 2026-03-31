@@ -30,7 +30,7 @@
         grub.enable = true;
         powersaver.enable = true;
       };
-      work = {
+      projects = {
         andamp = {
           enable = true;
           CEFKM = true;

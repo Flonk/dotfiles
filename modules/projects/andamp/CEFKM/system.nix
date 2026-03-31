@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.work.andamp.CEFKM {
+  config = lib.mkIf config.skynet.module.projects.andamp.CEFKM {
     sops = {
       secrets."vpn3itdnsmasq" = {
         path = "/etc/dnsmasq.d/vpn3it.conf";

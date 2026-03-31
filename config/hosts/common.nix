@@ -18,7 +18,7 @@ in
     ../../modules/os/greetd/system.nix
     ../../modules/os/grub/system.nix
     ../../modules/os/powersaver/system.nix
-    ../../modules/work/andamp/CEFKM/system.nix
+    ../../modules/projects/andamp/CEFKM/system.nix
   ];
 
   config = lib.mkMerge [

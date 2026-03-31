@@ -47,11 +47,14 @@
         ];
       };
     };
-    work = {
+    projects = {
       andamp = {
         enable = true;
         CEFKM = true;
         CEIFRS = true;
+      };
+      personal = {
+        dwain.enable = false;
       };
     };
   };
