@@ -10,6 +10,7 @@
     core = {
       direnv.enable = true;
       git.enable = true;
+      keyring.enable = true;
       sops.enable = true;
       zsh.enable = true;
     };
@@ -32,7 +33,6 @@
     };
     development = {
       "claude-code".enable = true;
-      "claude-cowork".enable = true;
       obsidian.enable = true;
       vscode.enable = true;
       "zed-editor".enable = true;

@@ -52,7 +52,7 @@
 
       profiles.default.userSettings = {
         "editor.fontFamily" = lib.mkDefault config.stylix.fonts.monospace.name;
-        "editor.fontSize" = lib.mkDefault config.stylix.fonts.sizes.applications;
+        "editor.fontSize" = lib.mkDefault config.skynet.module.desktop.stylix.fontSizePx;
         "window.zoomLevel" = -1;
 
         "workbench.editor.showTabs" = "none";

@@ -43,6 +43,10 @@ in
         type = types.bool;
         default = true;
       };
+      keyring.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
     };
     desktop = {
       alacritty.enable = mkOption {
@@ -103,8 +107,14 @@ in
           description = "Wallpaper image path";
         };
         lockscreenImage = mkOption {
-          type = types.path;
+          type = types.nullOr types.path;
+          default = null;
           description = "Lockscreen / logo image path";
+        };
+        fontSizePx = mkOption {
+          type = types.int;
+          default = 14;
+          description = "Base font size in pixels for apps that use pixel-based sizing (e.g. Zed, VSCode)";
         };
       };
       vicinae.enable = mkOption {
@@ -121,10 +131,7 @@ in
         type = types.bool;
         default = false;
       };
-      "claude-cowork".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
+
       dnsmasq.enable = mkOption {
         type = types.bool;
         default = false;

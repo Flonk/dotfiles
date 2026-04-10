@@ -5,11 +5,12 @@
     ../../modules/assorted/nchat/home.nix
     ../../modules/core/direnv/home.nix
     ../../modules/core/git/home.nix
+    ../../modules/core/keyring/home.nix
     ../../modules/core/skynet-scripts/home.nix
     ../../modules/core/sops/home.nix
     ../../modules/core/zsh/home.nix
     ../../modules/development/claude-code/home.nix
-    ../../modules/development/claude-cowork/home.nix
+
     ../../modules/development/obsidian/home.nix
     ../../modules/development/vscode/home.nix
     ../../modules/development/zed-editor/home.nix
