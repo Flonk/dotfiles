@@ -20,9 +20,9 @@
         auto_update = false;
         load_direnv = "shell_hook";
 
-        buffer_font_family = config.skynet.theme.fontFamily.mono;
-        buffer_font_size = config.skynet.theme.fontSize.bigger;
-        ui_font_size = 16;
+        buffer_font_family = lib.mkDefault config.stylix.fonts.monospace.name;
+        buffer_font_size = lib.mkDefault config.stylix.fonts.sizes.applications;
+        ui_font_size = lib.mkDefault 16;
 
         tab_size = 2;
         soft_wrap = "editor_width";
@@ -38,7 +38,7 @@
           show = false;
         };
 
-        theme = {
+        theme = lib.mkDefault {
           mode = "system";
           light = "One Light";
           dark = "One Dark";

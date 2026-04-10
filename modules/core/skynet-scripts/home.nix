@@ -9,8 +9,9 @@ let
   scripts = config.skynet.cli.scripts;
   hasTs = builtins.any (s: lib.hasSuffix ".ts" (toString s.script)) scripts;
 
-  # Theme colors
-  c = config.skynet.theme.color;
+  # Theme colors from Stylix
+  s = config.lib.stylix.colors.withHashtag;
+  accent = config.skynet.module.desktop.stylix.accent;
 
   # Common fzf theme args shared across all skynet fzf UIs
   fzfThemeArgs = lib.concatStringsSep " " [
@@ -18,11 +19,11 @@ let
     "--border --padding 1,2"
     "--input-label ' Search '"
     "--preview-window=right:50%:wrap"
-    "--color 'border:${c.wm800.hex},label:${c.wm800.hex}'"
-    "--color 'preview-border:${c.app600.hex},preview-label:${c.app800.hex}'"
-    "--color 'list-border:${c.app600.hex},list-label:${c.app600.hex}'"
-    "--color 'input-border:${c.wm800.hex},input-label:${c.wm800.hex}'"
-    "--color 'header-border:${c.app600.hex},header-label:${c.app800.hex}'"
+    "--color 'border:${accent},label:${accent}'"
+    "--color 'preview-border:${s.base05},preview-label:${s.base06}'"
+    "--color 'list-border:${s.base05},list-label:${s.base05}'"
+    "--color 'input-border:${accent},input-label:${accent}'"
+    "--color 'header-border:${s.base05},header-label:${s.base06}'"
     "--bind 'result:transform-list-label:if [[ -z \$FZF_QUERY ]]; then echo \" \$FZF_MATCH_COUNT items \"; else echo \" \$FZF_MATCH_COUNT matches for [\$FZF_QUERY] \"; fi'"
     "--bind 'focus:transform-preview-label:[[ -n {1} ]] && printf \" %s \" {1}'"
   ];
@@ -195,9 +196,9 @@ let
 
     SCRIPTS_DIR="$HOME/.skynet/scripts"
 
-    # --- Colorize toilet output with app800 ---
+    # --- Colorize toilet output with accent ---
     _skynet_colorize() {
-      local hex="${c.app800.hex}"
+      local hex="${accent}"
       hex="''${hex#\#}"
       local r=$((16#''${hex:0:2}))
       local g=$((16#''${hex:2:2}))

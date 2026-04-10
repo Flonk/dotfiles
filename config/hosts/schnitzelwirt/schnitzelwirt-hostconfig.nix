@@ -17,6 +17,9 @@
         avahi.enable = false;
         "chrome-remote-desktop".enable = false;
       };
+      desktop = {
+        stylix.enable = true;
+      };
       development = {
         dnsmasq.enable = true;
         qemu.enable = true;

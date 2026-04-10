@@ -4,19 +4,6 @@
   lib,
   ...
 }:
-let
-  bg2 = config.skynet.theme.color.app200.hex0x;
-  fg = config.skynet.theme.color.text.hex0x;
-  accent = config.skynet.theme.color.wm800.hex0x;
-  muted = config.skynet.theme.color.app400.hex0x;
-  recvBold = config.skynet.theme.color.wm800.hex0x;
-  revcAccent = config.skynet.theme.color.wm900.hex0x;
-  recv = config.skynet.theme.color.text.hex0x;
-  recvBg = config.skynet.theme.color.wm100.hex0x;
-  meBold = config.skynet.theme.color.app800.hex0x;
-  me = config.skynet.theme.color.text.hex0x;
-  meBg = config.skynet.theme.color.app200.hex0x;
-in
 {
   config = lib.mkIf config.skynet.module.assorted.nchat.enable {
     home.packages = with pkgs; [
@@ -80,58 +67,6 @@ in
       0xbd93f9
       0xff5555
       0xf1fa8c
-    '';
-
-    xdg.configFile."nchat/color.conf".text = ''
-      default_color_bg=
-      default_color_fg=${fg}
-      dialog_attr=
-      dialog_attr_selected=reverse
-      dialog_color_bg=
-      dialog_color_fg=${fg}
-      entry_attr=
-      entry_color_bg=
-      entry_color_fg=${fg}
-      help_attr=
-      help_color_bg=${bg2}
-      help_color_fg=${config.skynet.theme.color.app600.hex0x}
-      history_name_attr=bold
-      history_name_attr_selected=reverse
-      history_name_recv_color_bg=
-      history_name_recv_color_fg=${recvBold}
-      history_name_recv_group_color_bg=
-      history_name_recv_group_color_fg=usercolor
-      history_name_sent_color_bg=
-      history_name_sent_color_fg=${meBold}
-      history_text_attachment_color_bg=
-      history_text_attachment_color_fg=${revcAccent}
-      history_text_attr=
-      history_text_attr_selected=reverse
-      history_text_quoted_color_bg=
-      history_text_quoted_color_fg=${revcAccent}
-      history_text_reaction_color_bg=
-      history_text_reaction_color_fg=${revcAccent}
-      history_text_recv_color_bg=
-      history_text_recv_color_fg=${recv}
-      history_text_recv_group_color_bg=
-      history_text_recv_group_color_fg=${fg}
-      history_text_sent_color_bg=
-      history_text_sent_color_fg=${me}
-      list_attr=
-      list_attr_selected=reverse
-      list_color_bg=
-      list_color_fg=${config.skynet.theme.color.app600.hex0x}
-      list_color_unread_bg=
-      list_color_unread_fg=${accent}
-      listborder_attr=
-      listborder_color_bg=
-      listborder_color_fg=${bg2}
-      status_attr=
-      status_color_bg=${bg2}
-      status_color_fg=${config.skynet.theme.color.app600.hex0x}
-      top_attr=
-      top_color_bg=${bg2}
-      top_color_fg=${config.skynet.theme.color.app600.hex0x}
     '';
 
     xdg.configFile."nchat/key.conf".text = ''

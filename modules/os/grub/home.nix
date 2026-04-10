@@ -5,18 +5,19 @@
   ...
 }:
 let
-  c = config.skynet.theme.color;
+  s = config.lib.stylix.colors.withHashtag;
+  border = config.skynet.module.desktop.stylix.accent;
   mon = config.skynet.host.primaryMonitor;
 
   grubPreview = pkgs.writeShellScriptBin "skynet-grub-preview" ''
     set -euo pipefail
 
-    export GRUB_BG_COLOR="${c.app100.hex}"
-    export GRUB_BORDER_COLOR="${c.wm800.hex}"
-    export GRUB_BAR_BG="${c.app200.hex}"
-    export GRUB_BAR_FG="${c.app600.hex}"
-    export GRUB_TEXT_COLOR="${c.text.hex}"
-    export GRUB_TEXT_DIM="${c.app400.hex}"
+    export GRUB_BG_COLOR="${s.base00}"
+    export GRUB_BORDER_COLOR="${border}"
+    export GRUB_BAR_BG="${s.base01}"
+    export GRUB_BAR_FG="${s.base04}"
+    export GRUB_TEXT_COLOR="${s.base05}"
+    export GRUB_TEXT_DIM="${s.base03}"
     export GRUB_WIDTH="${toString mon.width}"
     export GRUB_HEIGHT="${toString mon.height}"
     export GRUB_LOGO="${config.skynet.theme.lockscreenImage}"

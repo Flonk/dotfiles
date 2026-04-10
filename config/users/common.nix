@@ -23,6 +23,7 @@
     ../../modules/desktop/mako/home.nix
     ../../modules/desktop/mimeapps/home.nix
     ../../modules/desktop/quickshell/home.nix
+    ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix
     ../../modules/desktop/waybar/home.nix
     ../../modules/leisure/minecraft/home.nix

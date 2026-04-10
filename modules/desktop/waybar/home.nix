@@ -87,10 +87,7 @@ with lib;
           }
 
           window#waybar {
-            background-color: ${config.skynet.theme.color.app150.hex};
             border-radius: 0px;
-            color: ${config.skynet.theme.color.wm800.hex};
-            border-top: 2px solid ${config.skynet.theme.color.app200.hex};
           }
 
           #workspaces {
@@ -100,18 +97,11 @@ with lib;
           }
 
           #workspaces button {
-            color: ${config.skynet.theme.color.wm800.hex};
             border-radius: 0;
           }
 
           #workspaces button:hover {
-            background: ${config.skynet.theme.color.wm800.hex};
-            color: ${config.skynet.theme.color.wm100.hex};
             border: 0px solid transparent;
-          }
-
-          #workspaces button.active {
-            border: 1px solid ${config.skynet.theme.color.wm800.hex};
           }
 
           tooltip {
@@ -121,21 +111,12 @@ with lib;
           tooltip label {
           }
 
-          #cava {
-            color: ${config.skynet.theme.color.wm800.hex};
-          }
-
-          #mpris, #window, #clock {
-            color: ${config.skynet.theme.color.app600.hex};
-          }
-
           #cpu, #memory, #battery {
             margin: 0;
             padding: 0;
           }
 
           #custom-label-cpu, #custom-label-mem, #custom-label-bat {
-            color: ${config.skynet.theme.color.app600.hex};
             margin-right: 12px;
           }
         ''

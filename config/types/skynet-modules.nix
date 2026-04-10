@@ -77,6 +77,27 @@ in
         type = types.bool;
         default = false;
       };
+      stylix = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        scheme = mkOption {
+          type = types.str;
+          default = "ayu-dark";
+          description = "Base16 scheme name (filename without .yaml) from base16-schemes";
+        };
+        accent = mkOption {
+          type = types.str;
+          default = "#ff9624";
+          description = "Window manager accent color (borders, active tabs)";
+        };
+        accentDark = mkOption {
+          type = types.str;
+          default = "#8e4e1c";
+          description = "Darker accent variant (focused/inactive tab text)";
+        };
+      };
       vicinae.enable = mkOption {
         type = types.bool;
         default = false;

@@ -5,9 +5,6 @@
   ...
 }:
 let
-  borderColor = config.skynet.theme.color.wm800.hexRgba;
-  inactiveBorderColor = config.skynet.theme.color.app150.hexRgba;
-
   mkKeypadBindings =
     {
       mod,
@@ -287,8 +284,6 @@ in
           gaps_in = 0;
           gaps_out = 0;
           border_size = 4;
-          "col.active_border" = borderColor;
-          "col.inactive_border" = inactiveBorderColor;
           resize_on_border = true;
         };
 
@@ -312,19 +307,9 @@ in
         };
 
         group = {
-          "col.border_active" = borderColor;
-          "col.border_inactive" = inactiveBorderColor;
-          "col.border_locked_active" = inactiveBorderColor;
-          "col.border_locked_inactive" = inactiveBorderColor;
-
           groupbar = {
-            "col.active" = borderColor;
-            "col.locked_active" = inactiveBorderColor;
-            "col.inactive" = "rgba(ffffff33)";
-            "col.locked_inactive" = "rgba(ffffff33)";
-            font_size = config.skynet.theme.fontSize.small;
-            font_family = config.skynet.theme.fontFamily.ui;
-            text_color = config.skynet.theme.color.wm800.hexRgba;
+            font_size = config.stylix.fonts.sizes.desktop;
+            font_family = config.stylix.fonts.sansSerif.name;
             indicator_height = 3;
           };
         };
@@ -334,22 +319,7 @@ in
             tabs = {
               radius = 0;
               padding = 0;
-              text_font = config.skynet.theme.fontFamily.ui;
-              "col.active" = borderColor;
-              "col.active.border" = borderColor;
-              "col.active.text" = config.skynet.theme.color.wm100.hexRgba;
-
-              "col.focused" = config.skynet.theme.color.app150.hexRgba;
-              "col.focused.border" = inactiveBorderColor;
-              "col.focused.text" = config.skynet.theme.color.wm500.hexRgba;
-
-              "col.inactive" = config.skynet.theme.color.app150.hexRgba;
-              "col.inactive.border" = inactiveBorderColor;
-              "col.inactive.text" = config.skynet.theme.color.wm500.hexRgba;
-
-              "col.urgent" = config.skynet.theme.color.error600.hexRgba;
-              "col.urgent.border" = config.skynet.theme.color.error600.hexRgba;
-              "col.urgent.text" = config.skynet.theme.color.text.hexRgba;
+              text_font = config.stylix.fonts.sansSerif.name;
             };
           };
         };
@@ -394,14 +364,11 @@ in
             range = 3;
             render_power = 1;
             offset = "1, 1";
-            color = "rgba(00000022)";
           };
         };
 
         cursor = {
-          sync_gsettings_theme = true;
           no_hardware_cursors = 2; # change to 1 if want to disable
-          enable_hyprcursor = false;
           warp_on_change_workspace = 2;
           no_warps = true;
         };
@@ -417,7 +384,6 @@ in
         };
 
         env = [
-          "GTK_THEME,\"Adwaita-dark\""
           "NIXOS_OZONE_WL, 1"
           "NIXPKGS_ALLOW_UNFREE, 1"
           "XDG_CURRENT_DESKTOP, Hyprland"

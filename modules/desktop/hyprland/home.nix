@@ -5,5 +5,6 @@
     ./hyprcursor.nix
     ./hyprpaper.nix
     ./hyprpicker.nix
+    ./style.nix
   ];
 }

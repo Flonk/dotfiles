@@ -94,40 +94,10 @@
         "colors-dark" = {
           # alpha=1.0
           # alpha-mode=default
-          background = config.skynet.theme.color.app150.hexNoHash;
           # foreground=ffffff
           # flash=7f7f00
           # flash-alpha=0.5
           # cursor=<inverse foreground/background>
-
-          # Nord color theme - Normal/regular colors (color palette 0-7)
-          regular0 = "3b4252"; # black (Nord1)
-          regular1 = "bf616a"; # red (Nord11)
-          regular2 = "a3be8c"; # green (Nord14)
-          regular3 = "ebcb8b"; # yellow (Nord13)
-          regular4 = "81a1c1"; # blue (Nord9)
-          regular5 = "b48ead"; # magenta (Nord15)
-          regular6 = "88c0d0"; # cyan (Nord8)
-          regular7 = "e5e9f0"; # white (Nord5)
-
-          # Nord color theme - Bright colors (color palette 8-15)
-          bright0 = "4c566a"; # bright black (Nord3)
-          bright1 = "bf616a"; # bright red (Nord11)
-          bright2 = "a3be8c"; # bright green (Nord14)
-          bright3 = "ebcb8b"; # bright yellow (Nord13)
-          bright4 = "81a1c1"; # bright blue (Nord9)
-          bright5 = "b48ead"; # bright magenta (Nord15)
-          bright6 = "8fbcbb"; # bright cyan (Nord7)
-          bright7 = "eceff4"; # bright white (Nord6)
-
-          # dim-blend-towards=black
-          # selection-foreground=<inverse foreground/background>
-          # selection-background=<inverse foreground/background>
-          # jump-labels=<regular0> <regular3>
-          # scrollback-indicator=<regular0> <bright4>
-          # search-box-no-match=<regular0> <regular1>
-          # search-box-match=<regular0> <regular3>
-          # urls=<regular3>
         };
 
         csd = {

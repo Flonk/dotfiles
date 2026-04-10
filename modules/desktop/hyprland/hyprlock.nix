@@ -5,8 +5,8 @@
   ...
 }:
 let
-  borderColor = config.skynet.theme.color.wm800.hexRgba;
-  textColor = config.skynet.theme.color.text.hexRgba;
+  s = config.lib.stylix.colors.withHashtag;
+  textColor = "rgba(${builtins.substring 1 6 s.base07}ff)";
 in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
@@ -25,7 +25,7 @@ in
         ];
 
         background = {
-          path = "screenshot";
+          path = lib.mkForce "screenshot";
 
           blur_passes = 2;
           blur_size = 7;
@@ -47,9 +47,8 @@ in
 
         label = {
           text = "";
-          color = textColor;
           font_size = 80;
-          font_family = config.skynet.theme.fontFamily.ui;
+          font_family = lib.mkDefault config.stylix.fonts.sansSerif.name;
           position = "0, 0";
           halign = "center";
           valign = "center";
@@ -57,11 +56,11 @@ in
 
         input-field = {
           hide_input = true;
-          outer_color = "rgba(ffffff00)";
-          inner_color = "rgba(ffffff00)";
+          outer_color = lib.mkForce "rgba(ffffff00)";
+          inner_color = lib.mkForce "rgba(ffffff00)";
           outline_thickness = 30;
           font_size = 20;
-          font_family = config.skynet.theme.fontFamily.ui;
+          font_family = lib.mkDefault config.stylix.fonts.sansSerif.name;
           fade_on_empty = false;
           placeholder_text = "";
           fail_text = "❌";

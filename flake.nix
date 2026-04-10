@@ -31,6 +31,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -62,6 +67,7 @@
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
+            inputs.stylix.nixosModules.stylix
             ./config/hosts/schnitzelwirt
           ];
         };
@@ -96,6 +102,7 @@
           modules = [
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
+            inputs.stylix.homeModules.stylix
             ./config/flo-schnitzelwirt.nix
           ];
         };
@@ -108,6 +115,7 @@
           modules = [
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
+            inputs.stylix.homeModules.stylix
             ./config/zeroclaw-hetzy.nix
           ];
         };
@@ -120,6 +128,7 @@
           modules = [
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
+            inputs.stylix.homeModules.stylix
             ./config/bricky-bricky.nix
           ];
         };

@@ -6,7 +6,12 @@
 }:
 {
   config =
-    lib.mkIf (config.skynet.module.desktop.hyprland.enable && config.skynet.theme.wallpaper != null)
+    lib.mkIf
+      (
+        config.skynet.module.desktop.hyprland.enable
+        && config.skynet.theme.wallpaper != null
+        && !config.skynet.module.desktop.stylix.enable
+      )
       (
         let
           path = builtins.toString config.skynet.theme.wallpaper;

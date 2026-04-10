@@ -12,6 +12,7 @@ in
   imports = [
     ../../modules/assorted/avahi/system.nix
     ../../modules/assorted/chrome-remote-desktop/system.nix
+    ../../modules/desktop/stylix/system.nix
     ../../modules/development/dnsmasq/system.nix
     ../../modules/development/qemu/system.nix
     ../../modules/os/fingerprint/system.nix

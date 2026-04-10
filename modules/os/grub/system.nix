@@ -5,9 +5,10 @@
   ...
 }:
 let
-  c = config.skynet.theme.color;
+  s = config.lib.stylix.colors.withHashtag;
+  border = config.skynet.module.desktop.stylix.accent;
   mon = config.skynet.host.primaryMonitor;
-  fontFamily = config.skynet.theme.fontFamily.mono;
+  fontFamily = config.stylix.fonts.monospace.name;
 
   skynetGrubTheme =
     pkgs.runCommand "skynet-grub-theme"
@@ -18,13 +19,12 @@ let
         ];
 
         # Colors
-        GRUB_BG_COLOR = c.app100.hex;
-        GRUB_BORDER_COLOR = c.wm800.hex;
-        GRUB_BAR_BG = c.app200.hex;
-        GRUB_BAR_FG = c.app600.hex;
-        GRUB_TEXT_COLOR = c.text.hex;
-        GRUB_TEXT_DIM = c.app400.hex;
-
+        GRUB_BG_COLOR = s.base00;
+        GRUB_BORDER_COLOR = border;
+        GRUB_BAR_BG = s.base01;
+        GRUB_BAR_FG = s.base04;
+        GRUB_TEXT_COLOR = s.base05;
+        GRUB_TEXT_DIM = s.base03;
         # Dimensions
         GRUB_WIDTH = toString mon.width;
         GRUB_HEIGHT = toString mon.height;

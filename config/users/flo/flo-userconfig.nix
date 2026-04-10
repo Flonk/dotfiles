@@ -23,6 +23,7 @@
       hyprland.enable = true;
       mako.enable = true;
       quickshell.enable = true;
+      stylix.enable = true;
       vicinae.enable = true;
       waybar.enable = true;
     };

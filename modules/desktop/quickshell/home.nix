@@ -107,12 +107,6 @@ let
   # Build a transient components directory that contains the repository components
   # plus a generated Theme.qml. This directory is placed in the Nix store and
   # then used as the xdg.configFile source.
-  # Extract wm and app colors from theme
-  wmColors = lib.filterAttrs (n: v: lib.hasPrefix "wm" n) config.skynet.theme.color;
-  appColors = lib.filterAttrs (n: v: lib.hasPrefix "app" n) config.skynet.theme.color;
-  otherColors = lib.filterAttrs (
-    n: v: !(lib.hasPrefix "wm" n || lib.hasPrefix "app" n)
-  ) config.skynet.theme.color;
 
   # Generated tile pattern from the andamp logo
   tileGreyPng = pkgs.runCommand "tile-grey.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
@@ -159,31 +153,69 @@ let
       '';
 
   # Helper to convert font sizes to QML properties
-  fontSizesToQml = lib.concatStringsSep "\n    " (
-    lib.mapAttrsToList (
-      name: size:
-      "readonly property int fontSize${
-        lib.toUpper (lib.substring 0 1 name)
-      }${lib.substring 1 (-1) name}: ${toString size}"
-    ) config.skynet.theme.fontSize
-  );
+  fontSizesToQml =
+    let
+      sizes = config.stylix.fonts.sizes;
+      fontSizes = {
+        tiny = sizes.terminal - 2;
+        small = sizes.terminal - 1;
+        normal = sizes.terminal;
+        big = sizes.terminal + 1;
+        bigger = sizes.terminal + 3;
+        huge = sizes.terminal + 5;
+        humongous = sizes.terminal + 11;
+      };
+    in
+    lib.concatStringsSep "\n    " (
+      lib.mapAttrsToList (
+        name: size:
+        "readonly property int fontSize${
+          lib.toUpper (lib.substring 0 1 name)
+        }${lib.substring 1 (-1) name}: ${toString size}"
+      ) fontSizes
+    );
 
   # Helper to convert font families to QML properties
-  fontFamiliesToQml = lib.concatStringsSep "\n    " (
-    lib.mapAttrsToList (
-      name: family:
-      "readonly property string fontFamily${
-        lib.toUpper (lib.substring 0 1 name)
-      }${lib.substring 1 (-1) name}: \"${family}\""
-    ) config.skynet.theme.fontFamily
-  );
+  fontFamiliesToQml =
+    let
+      fonts = config.stylix.fonts;
+      fontFamilies = {
+        ui = fonts.sansSerif.name;
+        uiNf = fonts.monospace.name;
+        mono = fonts.monospace.name;
+        monoNf = fonts.monospace.name;
+      };
+    in
+    lib.concatStringsSep "\n    " (
+      lib.mapAttrsToList (
+        name: family:
+        "readonly property string fontFamily${
+          lib.toUpper (lib.substring 0 1 name)
+        }${lib.substring 1 (-1) name}: \"${family}\""
+      ) fontFamilies
+    );
 
   # Convert colors to QML properties
-  colorsToQml = lib.concatStringsSep "\n    " (
-    lib.mapAttrsToList (
-      name: color: "readonly property string ${name}: \"${color.hex}\""
-    ) config.skynet.theme.color
-  );
+  colorsToQml =
+    let
+      c = config.lib.stylix.colors.withHashtag;
+      colorMapping = {
+        app100 = c.base00;
+        app150 = c.base01;
+        app200 = c.base02;
+        app600 = c.base05;
+        app700 = c.base03;
+        app800 = c.base06;
+        app900 = c.base07;
+        wm800 = config.skynet.module.desktop.stylix.accent;
+        error400 = c.base08;
+        error600 = c.base09;
+        success600 = c.base0B;
+      };
+    in
+    lib.concatStringsSep "\n    " (
+      lib.mapAttrsToList (name: hex: "readonly property color ${name}: \"${hex}\"") colorMapping
+    );
 
   themeQml = ''
         pragma Singleton

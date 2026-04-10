@@ -6,7 +6,8 @@
 }:
 let
   cfg = config.skynet.module.os.greetd;
-  c = config.skynet.theme.color;
+  s = config.lib.stylix.colors.withHashtag;
+  border = config.skynet.module.desktop.stylix.accent;
   mon = config.skynet.host.primaryMonitor;
   isCustom = cfg.greeter == "custom";
   isNone = cfg.greeter == "none";
@@ -32,12 +33,12 @@ let
     export PYGAME_HIDE_SUPPORT_PROMPT=1
 
     # Theme colors
-    export GREETER_BG_COLOR="${c.app100.hex}"
-    export GREETER_BORDER_COLOR="${c.wm800.hex}"
-    export GREETER_TEXT_COLOR="${c.text.hex}"
-    export GREETER_TEXT_DIM="${c.app400.hex}"
-    export GREETER_BAR_BG="${c.app200.hex}"
-    export GREETER_BAR_FG="${c.app600.hex}"
+    export GREETER_BG_COLOR="${s.base00}"
+    export GREETER_BORDER_COLOR="${border}"
+    export GREETER_TEXT_COLOR="${s.base05}"
+    export GREETER_TEXT_DIM="${s.base03}"
+    export GREETER_BAR_BG="${s.base01}"
+    export GREETER_BAR_FG="${s.base04}"
     export GREETER_BORDER_WIDTH="4"
 
     # Paths
