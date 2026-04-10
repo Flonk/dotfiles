@@ -111,6 +111,10 @@ in
         type = types.bool;
         default = false;
       };
+      "zed-editor".enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
       zeroclaw.enable = mkOption {
         type = types.bool;
         default = false;

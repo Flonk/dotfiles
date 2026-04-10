@@ -31,6 +31,7 @@
       "claude-cowork".enable = true;
       obsidian.enable = true;
       vscode.enable = true;
+      "zed-editor".enable = true;
     };
     leisure = {
       minecraft.enable = true;
@@ -54,7 +55,7 @@
         CEIFRS = true;
       };
       personal = {
-        dwain.enable = false;
+        dwain.enable = true;
       };
     };
   };

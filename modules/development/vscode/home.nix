@@ -149,6 +149,9 @@
         "[nix]" = {
           "editor.defaultFormatter" = "jnoortheen.nix-ide";
         };
+        "[csharp]" = {
+          "editor.defaultFormatter" = "csharpier.csharpier-vscode";
+        };
 
         "editor.codeActionsOnSave" = {
           "source.organizeImports" = "always";

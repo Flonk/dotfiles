@@ -16,7 +16,7 @@ PanelWindow {
     bottom: true
   }
 
-  WlrLayershell.layer: WlrLayer.Bottom
+  WlrLayershell.layer: WlrLayer.Top
 
   implicitWidth: Theme.barSize
   color: Theme.app200

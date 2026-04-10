@@ -12,6 +12,7 @@
     ../../modules/development/claude-cowork/home.nix
     ../../modules/development/obsidian/home.nix
     ../../modules/development/vscode/home.nix
+    ../../modules/development/zed-editor/home.nix
     ../../modules/development/zeroclaw/home.nix
     ../../modules/desktop/alacritty/home.nix
     ../../modules/desktop/csvlens/home.nix
