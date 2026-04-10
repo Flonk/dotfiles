@@ -26,12 +26,12 @@ in
           name = "DejaVuSansM Nerd Font";
         };
         sansSerif = {
-          package = pkgs.dejavu_fonts;
-          name = "DejaVu Sans";
+          package = pkgs.nerd-fonts.dejavu-sans-mono;
+          name = "DejaVuSansM Nerd Font";
         };
         serif = {
-          package = pkgs.dejavu_fonts;
-          name = "DejaVu Serif";
+          package = pkgs.nerd-fonts.dejavu-sans-mono;
+          name = "DejaVuSansM Nerd Font";
         };
         sizes = {
           applications = 9;
