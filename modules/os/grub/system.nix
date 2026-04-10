@@ -30,7 +30,7 @@ let
         GRUB_HEIGHT = toString mon.height;
 
         # Paths
-        GRUB_LOGO = config.skynet.theme.lockscreenImage;
+        GRUB_LOGO = config.skynet.module.desktop.stylix.lockscreenImage;
         GRUB_FONT_FAMILY = fontFamily;
         GRUB_FONT_REGULAR = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf";
         GRUB_FONT_BOLD = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono-Bold.ttf";

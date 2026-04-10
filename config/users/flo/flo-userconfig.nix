@@ -1,6 +1,5 @@
 { ... }:
 {
-  config.skynet.theme.wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
   config.skynet.mimeapps = true;
 
   config.skynet.module = {
@@ -23,7 +22,11 @@
       hyprland.enable = true;
       mako.enable = true;
       quickshell.enable = true;
-      stylix.enable = true;
+      stylix = {
+        enable = true;
+        wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
+        lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
+      };
       vicinae.enable = true;
       waybar.enable = true;
     };

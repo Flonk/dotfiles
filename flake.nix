@@ -14,8 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-colorizer.url = "github:nutsalhan87/nix-colorizer";
-
     openconnect-pulse-launcher = {
       url = "github:erahhal/openconnect-pulse-launcher";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,7 +41,6 @@
       self,
       nixpkgs,
       home-manager,
-      nix-colorizer,
       sops-nix,
       ...
     }:
@@ -63,7 +60,7 @@
       nixosConfigurations = {
         schnitzelwirt = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs nix-colorizer;
+            inherit inputs;
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
@@ -73,7 +70,7 @@
         };
         hetzy = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs nix-colorizer;
+            inherit inputs;
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
@@ -82,7 +79,7 @@
         };
         bricky = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs nix-colorizer;
+            inherit inputs;
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
@@ -97,7 +94,6 @@
           pkgs = pkgsX86;
           extraSpecialArgs = {
             inherit inputs;
-            inherit nix-colorizer;
           };
           modules = [
             inputs.sops-nix.homeManagerModules.sops
@@ -110,7 +106,6 @@
           pkgs = pkgsAarch64;
           extraSpecialArgs = {
             inherit inputs;
-            inherit nix-colorizer;
           };
           modules = [
             inputs.sops-nix.homeManagerModules.sops
@@ -123,7 +118,6 @@
           pkgs = pkgsX86;
           extraSpecialArgs = {
             inherit inputs;
-            inherit nix-colorizer;
           };
           modules = [
             inputs.sops-nix.homeManagerModules.sops

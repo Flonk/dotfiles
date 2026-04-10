@@ -10,7 +10,6 @@
   imports = [
     ./types
     ./hosts/bricky/bricky-hostconfig.nix
-    ./themes/trump/trump.nix
     ./users/bricky
   ];
 

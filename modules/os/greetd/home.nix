@@ -15,8 +15,8 @@ let
     mkdir -p $out
     cp ${./greeter.py} $out/greeter.py
     cp ${./mock-greetd.py} $out/mock-greetd.py
-    ${lib.optionalString (builtins.pathExists config.skynet.theme.lockscreenImage) ''
-      cp ${config.skynet.theme.lockscreenImage} $out/logo.png
+    ${lib.optionalString (builtins.pathExists config.skynet.module.desktop.stylix.lockscreenImage) ''
+      cp ${config.skynet.module.desktop.stylix.lockscreenImage} $out/logo.png
     ''}
   '';
 

@@ -97,6 +97,15 @@ in
           default = "#8e4e1c";
           description = "Darker accent variant (focused/inactive tab text)";
         };
+        wallpaper = mkOption {
+          type = types.nullOr (types.either types.path types.package);
+          default = null;
+          description = "Wallpaper image path";
+        };
+        lockscreenImage = mkOption {
+          type = types.path;
+          description = "Lockscreen / logo image path";
+        };
       };
       vicinae.enable = mkOption {
         type = types.bool;

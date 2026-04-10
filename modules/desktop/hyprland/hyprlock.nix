@@ -35,7 +35,7 @@ in
         };
 
         image = {
-          path = builtins.toString config.skynet.theme.lockscreenImage;
+          path = builtins.toString config.skynet.module.desktop.stylix.lockscreenImage;
 
           position = "0, 0";
           halign = "center";

@@ -17,8 +17,8 @@ let
   greeterAssets = pkgs.runCommand "skynet-greeter-assets" { } ''
     mkdir -p $out
     cp ${./greeter.py} $out/greeter.py
-    ${lib.optionalString (builtins.pathExists config.skynet.theme.lockscreenImage) ''
-      cp ${config.skynet.theme.lockscreenImage} $out/logo.png
+    ${lib.optionalString (builtins.pathExists config.skynet.module.desktop.stylix.lockscreenImage) ''
+      cp ${config.skynet.module.desktop.stylix.lockscreenImage} $out/logo.png
     ''}
   '';
 

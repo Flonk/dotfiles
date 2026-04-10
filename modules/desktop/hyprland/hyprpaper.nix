@@ -9,12 +9,12 @@
     lib.mkIf
       (
         config.skynet.module.desktop.hyprland.enable
-        && config.skynet.theme.wallpaper != null
+        && config.skynet.module.desktop.stylix.wallpaper != null
         && !config.skynet.module.desktop.stylix.enable
       )
       (
         let
-          path = builtins.toString config.skynet.theme.wallpaper;
+          path = builtins.toString config.skynet.module.desktop.stylix.wallpaper;
         in
         {
           services.hyprpaper = {

@@ -10,7 +10,6 @@
   imports = [
     ./types
     ./hosts/schnitzelwirt/schnitzelwirt-hostconfig.nix
-    ./themes/trump/trump.nix
     ./users/flo
   ];
 

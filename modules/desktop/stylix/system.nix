@@ -12,7 +12,7 @@ in
     stylix = {
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/${scheme}.yaml";
-      image = config.skynet.theme.lockscreenImage;
+      image = config.skynet.module.desktop.stylix.lockscreenImage;
       fonts = {
         monospace = {
           package = pkgs.nerd-fonts.dejavu-sans-mono;

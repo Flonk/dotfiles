@@ -20,7 +20,7 @@ let
     export GRUB_TEXT_DIM="${s.base03}"
     export GRUB_WIDTH="${toString mon.width}"
     export GRUB_HEIGHT="${toString mon.height}"
-    export GRUB_LOGO="${config.skynet.theme.lockscreenImage}"
+    export GRUB_LOGO="${config.skynet.module.desktop.stylix.lockscreenImage}"
 
     WORKDIR=$(mktemp -d)
     trap 'rm -rf "$WORKDIR"' EXIT
