@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   lib,
   ...
@@ -14,7 +13,7 @@
       )
       (
         let
-          path = builtins.toString config.skynet.module.desktop.stylix.wallpaper;
+          path = toString config.skynet.module.desktop.stylix.wallpaper;
         in
         {
           services.hyprpaper = {

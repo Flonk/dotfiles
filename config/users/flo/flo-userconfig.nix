@@ -27,6 +27,7 @@
         enable = true;
         wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
         lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
+        scheme = "ayu-dark";
       };
       vicinae.enable = true;
       waybar.enable = true;

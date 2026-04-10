@@ -61,7 +61,7 @@
 
         buffer_font_family = lib.mkDefault config.stylix.fonts.monospace.name;
         buffer_font_size = lib.mkDefault config.skynet.module.desktop.stylix.fontSizePx;
-        ui_font_size = lib.mkDefault (config.skynet.module.desktop.stylix.fontSizePx);
+        ui_font_size = lib.mkDefault (config.skynet.module.desktop.stylix.fontSizePx + 2);
 
         tab_size = 2;
         soft_wrap = "editor_width";
