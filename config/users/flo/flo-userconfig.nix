@@ -10,6 +10,7 @@
     core = {
       direnv.enable = true;
       git.enable = true;
+      bitwarden.enable = true;
       keyring.enable = true;
       sops.enable = true;
       zsh.enable = true;

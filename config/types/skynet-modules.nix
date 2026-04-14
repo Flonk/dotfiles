@@ -23,6 +23,10 @@ in
       };
     };
     core = {
+      bitwarden.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
       direnv.enable = mkOption {
         type = types.bool;
         default = true;
