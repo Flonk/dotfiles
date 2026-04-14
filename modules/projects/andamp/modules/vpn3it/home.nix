@@ -31,21 +31,16 @@ let
   vpn3itConnect = pkgs.stdenv.mkDerivation {
     name = "vpn3it-connect";
     dontUnpack = true;
-    nativeBuildInputs = [ pkgs.makeWrapper ];
     installPhase = ''
-      install -Dm755 ${./vpn3it-connect.py} $out/bin/vpn3it-connect
-      wrapProgram $out/bin/vpn3it-connect \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            pkgs.chromedriver
-            pkgs.chromium
-            pkgs.openconnect
-          ]
-        } \
-        --set PYTHONPATH "${pythonEnv}/${pythonEnv.sitePackages}" \
-        --set PYTHON "${pythonEnv}/bin/python3"
+      install -Dm644 ${./vpn3it-connect.py} $out/lib/vpn3it-connect.py
     '';
   };
+
+  runtimePath = lib.makeBinPath [
+    pkgs.chromedriver
+    pkgs.chromium
+    pkgs.openconnect
+  ];
 
   vpn3it = pkgs.writeShellScriptBin "vpn3it" ''
     set -euo pipefail
@@ -59,24 +54,26 @@ let
     VPN_USER_FILE="${config.sops.secrets.vpn3ituser.path}"
     VPN_PASS_FILE="${config.sops.secrets.vpn3itpass.path}"
 
-    ${pythonEnv}/bin/python3 ${vpn3itConnect}/bin/vpn3it-connect \
+    PATH="${runtimePath}:$PATH" \
+    ${pythonEnv}/bin/python3 ${vpn3itConnect}/lib/vpn3it-connect.py \
       "$(${pkgs.bat}/bin/bat -pp "''${VPN_HOST_FILE}")" \
       "''${VPN_USER_FILE}" \
       "''${VPN_PASS_FILE}"
 
-    # --- Wait for VPN device to appear ---
-    echo "Waiting for VPN device..."
-    NEW_DEV=""
-    for i in $(seq 1 60); do
-      NEW_DEV="$(${pkgs.iproute2}/bin/ip route show default | ${pkgs.gawk}/bin/awk -v W="''${PRE_DEV}" '/^default/ && $5 != W {print $5; exit}')"
-      [ -n "''${NEW_DEV}" ] && break
-      sleep 0.5
-    done
+    # --- Check for VPN device ---
+    # openconnect runs in the foreground in the Python script before returning,
+    # so tun0 is already up by the time we get here.
+    NEW_DEV="tun0"
+    if ! ${pkgs.iproute2}/bin/ip link show "''${NEW_DEV}" > /dev/null 2>&1; then
+      echo "Warning: ''${NEW_DEV} not found. Waiting up to 30s..."
+      for i in $(seq 1 60); do
+        ${pkgs.iproute2}/bin/ip link show "''${NEW_DEV}" > /dev/null 2>&1 && break
+        sleep 0.5
+      done
+    fi
 
-    if [ -z "''${NEW_DEV}" ]; then
-      echo "Warning: no new VPN device detected after 30s. Routes unchanged."
-      echo "VPN may still be connecting. Waiting for openconnect..."
-      wait
+    if ! ${pkgs.iproute2}/bin/ip link show "''${NEW_DEV}" > /dev/null 2>&1; then
+      echo "Error: ''${NEW_DEV} never appeared. openconnect may have failed."
       exit 1
     fi
 
@@ -142,10 +139,6 @@ in
   config =
     lib.mkIf (config.skynet.module.projects.andamp.CEFKM || config.skynet.module.projects.andamp.CEIFRS)
       {
-        home.packages = [
-          vpn3itConnect
-        ];
-
         skynet.cli.scripts = [
           {
             command = [
