@@ -29,18 +29,45 @@ let
     done
 
     if [ -n "''${NEW_DEV}" ]; then
-      # The VPN device appears before the VPN client finishes configuring routes.
-      # Enforcing routing immediately causes a race: openconnect's setup script
-      # may add/re-add the default route *after* we've already removed it.
-      # Wait for the client to settle, then enforce twice to catch late additions.
-      echo "VPN device ''${NEW_DEV} up, waiting for client to finish route setup..."
-      sleep 4
+      echo "VPN device ''${NEW_DEV} up, waiting for routing table to stabilize..."
+
+      # Poll until the routing table stops changing, meaning openconnect's
+      # vpnc-script is done adding/modifying routes. We snapshot the full
+      # routing table and compare it after a short interval. Once two
+      # consecutive snapshots match, the table is stable.
+      STABLE_ROUNDS=0
+      PREV_ROUTES=""
+      for i in $(seq 1 120); do
+        CUR_ROUTES="$(${pkgs.iproute2}/bin/ip route show)"
+        if [ "''${CUR_ROUTES}" = "''${PREV_ROUTES}" ]; then
+          STABLE_ROUNDS=$((STABLE_ROUNDS + 1))
+          # Require 3 consecutive stable checks (~1.5s of no changes)
+          if [ "''${STABLE_ROUNDS}" -ge 3 ]; then
+            echo "Routing table stable after ''${i} checks."
+            break
+          fi
+        else
+          STABLE_ROUNDS=0
+        fi
+        PREV_ROUTES="''${CUR_ROUTES}"
+        sleep 0.5
+      done
+
+      # Now enforce: remove VPN default route, restore original default
       sudo ${pkgs.iproute2}/bin/ip route del default dev "''${NEW_DEV}" 2>/dev/null || true
       sudo ${pkgs.iproute2}/bin/ip route replace default via "''${PRE_GW}" dev "''${PRE_DEV}" metric 100
-      # Second pass: catch anything the client added during or after the first pass
-      sleep 3
-      sudo ${pkgs.iproute2}/bin/ip route del default dev "''${NEW_DEV}" 2>/dev/null || true
-      sudo ${pkgs.iproute2}/bin/ip route replace default via "''${PRE_GW}" dev "''${PRE_DEV}" metric 100 2>/dev/null || true
+
+      # Guard: keep watching for a few more seconds in case openconnect
+      # sneaks in a late route change (e.g. DNS reconfiguration trigger)
+      for i in $(seq 1 10); do
+        sleep 0.5
+        ROGUE="$(${pkgs.iproute2}/bin/ip route show default dev "''${NEW_DEV}" 2>/dev/null || true)"
+        if [ -n "''${ROGUE}" ]; then
+          echo "Late VPN default route detected, removing..."
+          sudo ${pkgs.iproute2}/bin/ip route del default dev "''${NEW_DEV}" 2>/dev/null || true
+          sudo ${pkgs.iproute2}/bin/ip route replace default via "''${PRE_GW}" dev "''${PRE_DEV}" metric 100 2>/dev/null || true
+        fi
+      done
     fi
 
     echo "VPN up; internet via ''${PRE_DEV}. Ctrl+C to stop."
