@@ -25,7 +25,7 @@
         qemu.enable = true;
       };
       os = {
-        fingerprint.enable = true;
+        fingerprint.enable = false;
         greetd = {
           enable = true;
           greeter = "none";

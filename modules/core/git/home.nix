@@ -16,6 +16,7 @@
         fetch.prune = true;
         pull.rebase = true;
         diff.algorithm = "histogram";
+        init.defaultBranch = "main";
         http.sslVerify = "false";
       };
     };

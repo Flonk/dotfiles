@@ -8,6 +8,7 @@
   imports = [
     ./CEFKM/home.nix
     ./CEIFRS/home.nix
+    ./modules/vpn3it/home.nix
   ];
 
   config = lib.mkIf config.skynet.module.projects.andamp.enable {

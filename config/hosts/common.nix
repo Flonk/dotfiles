@@ -21,6 +21,7 @@ in
     ../../modules/os/grub/system.nix
     ../../modules/os/powersaver/system.nix
     ../../modules/projects/andamp/CEFKM/system.nix
+    ../../modules/projects/andamp/modules/vpn3it/system.nix
   ];
 
   config = lib.mkMerge [
