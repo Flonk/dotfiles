@@ -2,27 +2,33 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
   sopsFile = ../modules/vpn3it/secrets/secrets.json;
   renderedPath = config.sops.templates."user-mapping.xml".path;
 
+  pkgs-2405 = import inputs.nixpkgs-2405 {
+    system = pkgs.stdenv.hostPlatform.system;
+  };
+
   rdp3it = pkgs.writeShellScriptBin "rdp3it" ''
     set -euo pipefail
-    HOST="$(${pkgs.bat}/bin/bat -pp "${config.sops.secrets.rdp3ithost.path}")"
-    PORT="$(${pkgs.bat}/bin/bat -pp "${config.sops.secrets.rdp3itport.path}")"
-    USER="$(${pkgs.bat}/bin/bat -pp "${config.sops.secrets.rdp3ituser.path}")"
-    PASS="$(${pkgs.bat}/bin/bat -pp "${config.sops.secrets.rdp3itpass.path}")"
-    ${pkgs.freerdp}/bin/xfreerdp /v:"''${HOST}":"''${PORT}" /u:"''${USER}" /p:"''${PASS}" \
-      /cert:ignore /bpp:32 /dynamic-resolution \
+    HOST="$(cat ${config.sops.secrets.rdp3ithost.path})"
+    PORT="$(cat ${config.sops.secrets.rdp3itport.path})"
+    USER="$(cat ${config.sops.secrets.rdp3ituser.path})"
+    PASS="$(cat ${config.sops.secrets.rdp3itpass.path})"
+    RES="$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[0] | "\(.width)x\(.height)"')"
+    ${pkgs-2405.freerdp}/bin/xfreerdp /v:"''${HOST}":"''${PORT}" /u:"''${USER}" /p:"''${PASS}" \
+      /cert-ignore /bpp:32 /size:"''${RES}" /f \
       -gfx +rfx
   '';
 in
 {
   config = lib.mkIf config.skynet.module.projects.andamp.CEIFRS {
-    home.packages = with pkgs; [
-      freerdp
+    home.packages = [
+      pkgs-2405.freerdp
     ];
 
     skynet.cli.scripts = [
