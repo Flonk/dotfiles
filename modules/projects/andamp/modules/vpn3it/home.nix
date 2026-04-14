@@ -142,8 +142,8 @@ in
         skynet.cli.scripts = [
           {
             command = [
-              "vpn3it"
-              "connect"
+              "3it"
+              "vpn"
             ];
             title = "Connect to vpn3it VPN";
             script = "${vpn3it}/bin/vpn3it";
