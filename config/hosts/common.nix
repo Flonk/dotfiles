@@ -41,8 +41,6 @@ in
         curl
         wget
 
-        foot
-
         iproute2
         nettools
         bind

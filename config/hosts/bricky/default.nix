@@ -37,7 +37,7 @@
     ];
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
   virtualisation.docker.enableOnBoot = false;
 
   environment.variables.EDITOR = "micro";

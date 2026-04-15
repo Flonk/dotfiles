@@ -109,7 +109,7 @@ in
         "$code" = "vscode";
         "$browser" = "google-chrome-stable";
         "$editor" = "micro";
-        "$lockscreen" = "skynetlock";
+        "$lockscreen" = "skynetlock lock";
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"

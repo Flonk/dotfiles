@@ -7,8 +7,6 @@
       sops.enable = true;
       zsh.enable = true;
     };
-    development = {
-      vscode.enable = true;
-    };
+    development = { };
   };
 }

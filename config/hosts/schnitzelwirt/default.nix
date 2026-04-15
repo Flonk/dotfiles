@@ -5,6 +5,8 @@
   ...
 }:
 {
+  environment.systemPackages = [ pkgs.foot ];
+
   imports = [
     ../../types
     ../common.nix
