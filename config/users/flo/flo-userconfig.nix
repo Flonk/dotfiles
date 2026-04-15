@@ -24,6 +24,7 @@
       hyprland.enable = true;
       mako.enable = true;
       quickshell.enable = true;
+      skynetlock.enable = true;
       stylix = {
         enable = true;
         wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;

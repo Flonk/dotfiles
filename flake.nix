@@ -35,6 +35,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    skynetlock = {
+      url = "github:Flonk/skynetlock";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -100,6 +105,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
+            inputs.skynetlock.homeManagerModules.default
             ./config/flo-schnitzelwirt.nix
           ];
         };
@@ -112,6 +118,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
+            inputs.skynetlock.homeManagerModules.default
             ./config/zeroclaw-hetzy.nix
           ];
         };
@@ -124,6 +131,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
+            inputs.skynetlock.homeManagerModules.default
             ./config/bricky-bricky.nix
           ];
         };

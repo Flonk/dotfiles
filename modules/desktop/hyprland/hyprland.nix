@@ -109,6 +109,7 @@ in
         "$code" = "vscode";
         "$browser" = "google-chrome-stable";
         "$editor" = "micro";
+        "$lockscreen" = "skynetlock";
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"
@@ -116,14 +117,14 @@ in
         ]
         ++ lib.optional (
           config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "none"
-        ) "hyprlock";
+        ) "$lockscreen";
 
         bind = [
           # HYPRLAND
           "$mainMod, RETURN, exec, $terminal"
           "$mainMod CTRL, RETURN, exec, $browser"
 
-          "$mainMod, ESCAPE, exec, hyprlock"
+          "$mainMod, ESCAPE, exec, $lockscreen"
           "$mainMod, M, exit"
           "$mainMod, Q, killactive"
 
