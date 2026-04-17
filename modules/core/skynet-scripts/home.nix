@@ -96,7 +96,7 @@ let
       isTs = lib.hasSuffix ".ts" relPath;
     in
     ''
-      "${cmd}")
+      "${cmd}"|"${cmd} "*)
         shift ${toString nArgs}
         ${
           if isTs then
