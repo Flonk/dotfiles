@@ -106,15 +106,9 @@ let
         }
         ;;'';
 
-  # Generate fzf entries: "command\ttitle"
-  mkFzfEntry = s: "${cmdStr s}\t${s.title}";
-
   # --- Zsh completions ---
   # Group scripts by their first command word
   firstWords = lib.unique (map (s: builtins.head s.command) scripts);
-
-  # Scripts that are a single word (leaf commands at top level)
-  topLeafs = builtins.filter (s: builtins.length s.command == 1) scripts;
 
   # For a given first word, get all scripts that start with it and have more words
   subCommandsFor =

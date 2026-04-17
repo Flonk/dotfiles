@@ -1,10 +1,5 @@
 {
-  config,
-  lib,
   pkgs,
-  self,
-  theme,
-  inputs,
   ...
 }:
 {

@@ -1,3 +1,4 @@
+# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportMissingParameterType=false, reportUnknownParameterType=false, reportUnusedVariable=false, reportUnknownVariableType=false, reportUnusedCallResult=false, reportUnknownArgumentType=false, reportUnknownLambdaType=false, reportReturnType=false, reportUninitializedInstanceVariable=false, reportUnusedImport=false, reportUnannotatedClassAttribute=false
 import os
 import signal
 import subprocess
@@ -5,7 +6,6 @@ import sys
 import time
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -26,7 +26,7 @@ class VPN3ITConnect:
         self.password = password
         self.driver = None
 
-    def signal_handler(self, signum, frame):
+    def signal_handler(self, _signum, _frame):
         print("\nCaught SIGINT, shutting down openconnect...", file=sys.stderr)
         subprocess.run(["sudo", "pkill", "-SIGINT", "openconnect"])
         if self.driver:

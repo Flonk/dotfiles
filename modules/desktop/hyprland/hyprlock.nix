@@ -1,13 +1,8 @@
 {
-  pkgs,
   config,
   lib,
   ...
 }:
-let
-  s = config.lib.stylix.colors.withHashtag;
-  textColor = "rgba(${builtins.substring 1 6 s.base07}ff)";
-in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
     programs.hyprlock = {
@@ -35,7 +30,7 @@ in
         };
 
         image = {
-          path = builtins.toString config.skynet.module.desktop.stylix.lockscreenImage;
+          path = toString config.skynet.module.desktop.stylix.lockscreenImage;
 
           position = "0, 0";
           halign = "center";

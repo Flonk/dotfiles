@@ -5,7 +5,7 @@
   ...
 }:
 let
-  selenium-stealth = pkgs.python3.pkgs.buildPythonPackage rec {
+  selenium-stealth = pkgs.python3.pkgs.buildPythonPackage {
     pname = "selenium-stealth";
     version = "1.0.6";
     format = "wheel";
