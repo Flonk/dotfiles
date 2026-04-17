@@ -13,12 +13,17 @@ from selenium_stealth import stealth
 from xdg_base_dirs import xdg_config_home
 
 
+def _log(msg, style="dim"):
+    styles = {"dim": "\033[2m", "bold": "\033[1m", "green": "\033[1;32m"}
+    reset = "\033[0m"
+    print(f"{styles.get(style, '')}{msg}{reset}", file=sys.stderr, flush=True)
+
+
 class VPN3ITConnect:
-    def __init__(self, vpn_url, username, password, token):
+    def __init__(self, vpn_url, username, password):
         self.vpn_url = vpn_url
         self.username = username
         self.password = password
-        self.token = token
         self.driver = None
 
     def signal_handler(self, signum, frame):
@@ -45,7 +50,8 @@ class VPN3ITConnect:
         options.add_argument(f"--user-data-dir={user_data_dir}")
 
         try:
-            print("Starting headless Chromium...", file=sys.stderr)
+            _log("Launching...", "bold")
+            _log("Starting headless Chromium...")
             self.driver = webdriver.Chrome(options=options)
 
             stealth(
@@ -58,10 +64,10 @@ class VPN3ITConnect:
                 fix_hairline=True,
             )
 
-            print(f"Navigating to {self.vpn_url}...", file=sys.stderr)
+            _log(f"Navigating to {self.vpn_url}...")
             self.driver.get(self.vpn_url)
 
-            print("Waiting for login form...", file=sys.stderr)
+            _log("Waiting for login form...")
             wait = WebDriverWait(self.driver, 30)
 
             try:
@@ -80,9 +86,11 @@ class VPN3ITConnect:
                 print("Error: Timed out waiting for login form fields", file=sys.stderr)
                 sys.exit(1)
 
-            print("Filling in credentials...", file=sys.stderr)
+            print("Enter Authy token: ", end="", flush=True)
+            token = input()
+
             username_field.send_keys(self.username)
-            password_field.send_keys(self.token)
+            password_field.send_keys(token)
             password_secondary_field.send_keys(self.password)
 
             try:
@@ -95,10 +103,10 @@ class VPN3ITConnect:
                 print("Error: Timed out waiting for submit button", file=sys.stderr)
                 sys.exit(1)
 
-            print("Submitting login form...", file=sys.stderr)
+            _log("Authenticating...", "bold")
             submit_button.click()
 
-            print("Waiting for DSID cookie...", file=sys.stderr)
+            _log("Obtaining DSID Token...", "bold")
             try:
                 dsid = WebDriverWait(self.driver, timeout=300, poll_frequency=1).until(
                     lambda d: d.get_cookie("DSID")
@@ -110,9 +118,8 @@ class VPN3ITConnect:
             self.driver.quit()
             self.driver = None
 
-            print(f"DSID cookie acquired: {dsid['value'][:8]}...", file=sys.stderr)
+            _log(f"DSID cookie acquired: {dsid['value'][:8]}...")
 
-            print("Launching openconnect...", file=sys.stderr)
             subprocess.run(
                 [
                     "sudo",
@@ -126,7 +133,8 @@ class VPN3ITConnect:
             )
 
             time.sleep(3)
-            print("openconnect launched in background", file=sys.stderr)
+            _log("openconnect launched in background")
+            _log("VPN Connection Established!", "green")
 
         except SystemExit:
             raise
@@ -159,8 +167,5 @@ if __name__ == "__main__":
     with open(password_file, "r") as f:
         password = f.read().strip()
 
-    print("Enter Authy token: ", end="", flush=True)
-    token = input()
-
-    vpn = VPN3ITConnect(vpn_url, username, password, token)
+    vpn = VPN3ITConnect(vpn_url, username, password)
     vpn.connect()
