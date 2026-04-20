@@ -82,6 +82,9 @@ let
     in
     map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
 in
+let
+  mon = config.skynet.host.primaryMonitor;
+in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
     wayland.windowManager.hyprland = {
@@ -405,8 +408,8 @@ in
       };
 
       extraConfig = "
-      monitor=eDP-1,1920x1080@60,0x0,1.00
-      monitor=DP-2,5120x1440@120,1920x0,1.00
+      monitor=eDP-1,${toString mon.width}x${toString mon.height}@${toString mon.hz},0x0,1.00
+      monitor=DP-2,5120x1440@120,${toString mon.width}x0,1.00
       monitor=,preferred,auto,1
     ";
     };
