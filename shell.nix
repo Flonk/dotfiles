@@ -1,15 +1,37 @@
 with import <nixpkgs> { };
 
+let
+  bootstrap = writeShellScriptBin "bootstrap" (builtins.readFile ./bootstrap/bootstrap.sh);
+
+  bootstrapPart2 = writeShellScriptBin "bootstrap-part-2" (
+    builtins.readFile ./bootstrap/bootstrap-part-2.sh
+  );
+
+  updateAllSecrets = writeShellScriptBin "update-all-secrets" (
+    builtins.readFile ./bootstrap/update-all-secrets.sh
+  );
+in
 mkShell {
   nativeBuildInputs = [
     age
+    curl
+    fzf
+    git
+    micro
+    openssh
+    qrencode
+    ssh-to-age
     sops
+    bootstrap
+    bootstrapPart2
+    updateAllSecrets
   ];
 
   NIX_ENFORCE_PURITY = true;
 
   shellHook = ''
     echo "Welcome to SKYNET Development Shell."
+    echo "Are you on a new machine? Run 'bootstrap' to set up SKYNET."
   '';
 }
 
