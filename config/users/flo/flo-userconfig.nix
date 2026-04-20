@@ -45,6 +45,7 @@
       spotify.enable = true;
     };
     os = {
+      "network-scripts".enable = true;
       peripherals = {
         enable = true;
         trustedDevices = [

@@ -167,10 +167,6 @@ in
         type = types.bool;
         default = false;
       };
-      zeroclaw.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
     };
     leisure = {
       minecraft.enable = mkOption {
@@ -207,6 +203,10 @@ in
         };
       };
       grub.enable = mkOption {
+        type = types.bool;
+        default = false;
+      };
+      "network-scripts".enable = mkOption {
         type = types.bool;
         default = false;
       };

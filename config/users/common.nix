@@ -15,7 +15,6 @@
     ../../modules/development/obsidian/home.nix
     ../../modules/development/vscode/home.nix
     ../../modules/development/zed-editor/home.nix
-    ../../modules/development/zeroclaw/home.nix
     ../../modules/desktop/alacritty/home.nix
     ../../modules/desktop/csvlens/home.nix
     ../../modules/desktop/fastfetch/home.nix
@@ -34,6 +33,7 @@
     ../../modules/os/fingerprint/home.nix
     ../../modules/os/greetd/home.nix
     ../../modules/os/grub/home.nix
+    ../../modules/os/network-scripts/home.nix
     ../../modules/os/peripherals/home.nix
     ../../modules/projects/home.nix
   ];

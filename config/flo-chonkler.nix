@@ -9,9 +9,13 @@
 {
   imports = [
     ./types
-    ./hosts/hetzy/hetzy-hostconfig.nix
-    ./users/zeroclaw
+    ./hosts/chonkler/chonkler-hostconfig.nix
+    ./users/flo
   ];
+
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+  sops.age.generateKey = true;
 
   skynet.cli.scripts = [
     {
@@ -22,9 +26,9 @@
       script = pkgs.writeShellScript "rebuild.sh" ''
         set -euo pipefail
         echo "Rebuilding home-manager configuration..."
-        home-manager switch --flake ~/repos/personal/dotfiles#zeroclaw-hetzy
+        home-manager switch --flake ~/repos/personal/dotfiles#flo-chonkler
       '';
-      usage = "Runs home-manager switch for zeroclaw-hetzy.";
+      usage = "Runs home-manager switch for flo-chonkler.";
     }
     {
       command = [
@@ -35,9 +39,9 @@
       script = pkgs.writeShellScript "system-rebuild.sh" ''
         set -euo pipefail
         echo "Rebuilding NixOS system configuration..."
-        sudo nixos-rebuild switch --flake ~/repos/personal/dotfiles#hetzy
+        sudo nixos-rebuild switch --flake ~/repos/personal/dotfiles#chonkler
       '';
-      usage = "Runs nixos-rebuild switch for hetzy (requires sudo).";
+      usage = "Runs nixos-rebuild switch for chonkler (requires sudo).";
     }
   ];
 }

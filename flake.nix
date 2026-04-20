@@ -74,13 +74,14 @@
             ./config/hosts/schnitzelwirt
           ];
         };
-        hetzy = nixpkgs.lib.nixosSystem {
+        chonkler = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs;
           };
           modules = [
             inputs.sops-nix.nixosModules.sops
-            ./config/hosts/hetzy
+            inputs.stylix.nixosModules.stylix
+            ./config/hosts/chonkler
           ];
         };
         bricky = nixpkgs.lib.nixosSystem {
@@ -109,8 +110,8 @@
             ./config/flo-schnitzelwirt.nix
           ];
         };
-        zeroclaw-hetzy = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgsAarch64;
+        flo-chonkler = home-manager.lib.homeManagerConfiguration {
+          pkgs = pkgsX86;
           extraSpecialArgs = {
             inherit inputs;
           };
@@ -119,7 +120,7 @@
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
             inputs.skynetlock.homeManagerModules.default
-            ./config/zeroclaw-hetzy.nix
+            ./config/flo-chonkler.nix
           ];
         };
         bricky-bricky = home-manager.lib.homeManagerConfiguration {
