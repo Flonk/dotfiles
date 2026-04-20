@@ -1,7 +1,11 @@
 set -euo pipefail
 shopt -s nullglob
 
-mapfile -t secret_files < <(find . -type f \( -path "*/secrets/*.json" -o -path "./assets/secrets/*.json" \) | sort)
+mapfile -t secret_files < <(
+  find . -type f -path "*/secrets/*" \
+    | grep -E '\.(yaml|json|env|ini|ovpn|crt)$' \
+    | sort
+)
 
 if [[ "${#secret_files[@]}" -eq 0 ]]; then
   echo "No matching secret files found."
