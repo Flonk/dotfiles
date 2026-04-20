@@ -22,6 +22,17 @@ if [[ -z "$selected_file" ]]; then
 fi
 
 selected_config="${selected_file%.nix}"
+printf "About to use config '%s'. Continue? [y/N]: " "$selected_config"
+read -r confirm_roll
+case "$confirm_roll" in
+  y|Y|yes|YES)
+    ;;
+  *)
+    echo "Aborted."
+    exit 0
+    ;;
+esac
+
 host="${selected_config#*-}"
 
 if [[ "$host" == "$selected_config" || -z "$host" ]]; then
