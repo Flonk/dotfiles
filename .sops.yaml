@@ -1,9 +1,11 @@
 keys:
   - &user_flowork age17ctlfnf2dtpmhk9chk59d0aj9ranmtaz9esckqqhhslylaawvemq69qdpn
-  - &server_schnitzelwirt age1jdngvt8rjryavachuvvgxr8pe99l6h9wpmk94aa6n0m0cea4vpys6mt2w2
+  - &host_schnitzelwirt age1jdngvt8rjryavachuvvgxr8pe99l6h9wpmk94aa6n0m0cea4vpys6mt2w2
+  - &host_chonkler age14nex3eh34uhvdc6ltf8de8rypx0efadx75qp0w3l4qv97xp8r48svtjkph
 creation_rules:
   - path_regex: (.*/)?secrets/[^/]+\.(yaml|json|env|ini|ovpn|crt)$
     key_groups:
       - age:
           - *user_flowork
-          - *server_schnitzelwirt
+          - *host_schnitzelwirt
+          - *host_chonkler
