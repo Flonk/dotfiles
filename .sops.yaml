@@ -1,8 +1,8 @@
 keys:
   - &user_flowork age17ctlfnf2dtpmhk9chk59d0aj9ranmtaz9esckqqhhslylaawvemq69qdpn
-  - &user_flochonkler age128v43mwnwdqqslm3v0qs6mn0malj4uh2303kegwjdj9ge9rsmgusqyf6d0
+  - &user_flochonkler age1h6dfc9mwetfjnec2ttp0kmg7fxvj5vycj3uafmt7u898wjll8s0qnmr5wm
   - &host_schnitzelwirt age1jdngvt8rjryavachuvvgxr8pe99l6h9wpmk94aa6n0m0cea4vpys6mt2w2
-  - &host_chonkler age1dy27kd7cfjl26lagrux6vt0ucxrh47gtfk5ud44llc5kue6tlc2s424a9d
+  - &host_chonkler age175nwam69zjmasynmkdk664zd4rnvhgz2qghvk272revlne9hq4eqwa7phf
 creation_rules:
   - path_regex: (.*/)?secrets/[^/]+\.(yaml|json|env|ini|ovpn|crt)$
     key_groups:

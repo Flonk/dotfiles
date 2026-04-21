@@ -22,11 +22,6 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
-  networking.wireless.iwd.enable = true;
-  networking.wireless.iwd.settings = {
-    General.DisableANQP = true;
-  };
-  networking.networkmanager.wifi.backend = "iwd";
   systemd.services.NetworkManager-wait-online.enable = false;
 
   # Configure network proxy if necessary
