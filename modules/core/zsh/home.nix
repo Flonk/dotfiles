@@ -115,6 +115,7 @@
           "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
         b = "gcob";
         squash = "squash_wip";
+        gc = "git commit --all --message";
 
         ##### Docker
         dka = "docker ps -q | xargs docker stop | xargs docker rm";

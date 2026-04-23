@@ -17,7 +17,7 @@ let
     NMCLI_BIN="${pkgs.networkmanager}/bin/nmcli"
     GREP_BIN="${pkgs.gnugrep}/bin/grep"
     AWK_BIN="${pkgs.gawk}/bin/awk"
-    SUDO_BIN="${pkgs.sudo}/bin/sudo"
+    SUDO_BIN="/run/wrappers/bin/sudo"
     BASENAME_BIN="${pkgs.coreutils}/bin/basename"
     HEAD_BIN="${pkgs.coreutils}/bin/head"
 
