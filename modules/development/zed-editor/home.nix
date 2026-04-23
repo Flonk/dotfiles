@@ -5,35 +5,6 @@
   lib,
   ...
 }:
-let
-  zedPackage =
-    if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
-      pkgs.stdenvNoCC.mkDerivation {
-        pname = "zed-editor";
-        version = "0.233.8";
-        src = pkgs.fetchurl {
-          url = "https://zed.dev/api/releases/stable/0.233.8/zed-linux-x86_64.tar.gz";
-          sha256 = "1pfl86h40jkliqmrdp8x7sa2nf4r97bg79087267swrxr5rx38ky";
-        };
-        dontBuild = true;
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out
-          cp -r . $out/
-          ln -s $out/bin/zed $out/bin/zeditor
-          runHook postInstall
-        '';
-        meta = with lib; {
-          description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
-          homepage = "https://zed.dev";
-          mainProgram = "zeditor";
-          platforms = [ "x86_64-linux" ];
-          sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        };
-      }
-    else
-      pkgs.zed-editor;
-in
 {
   config = lib.mkIf config.skynet.module.development."zed-editor".enable {
     home.packages = with pkgs; [
@@ -69,7 +40,6 @@ in
 
     programs.zed-editor = {
       enable = true;
-      package = zedPackage;
 
       userKeymaps = [
         {
