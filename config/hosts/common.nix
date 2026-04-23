@@ -18,6 +18,7 @@ in
     ../../modules/development/qemu/system.nix
     ../../modules/os/fingerprint/system.nix
     ../../modules/os/greetd/system.nix
+    ../../modules/os/ipu6/system.nix
     ../../modules/os/grub/system.nix
     ../../modules/os/powersaver/system.nix
     ../../modules/projects/andamp/CEFKM/system.nix
