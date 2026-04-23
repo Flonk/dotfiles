@@ -24,6 +24,9 @@
         dnsmasq.enable = true;
         qemu.enable = true;
       };
+      leisure = {
+        "gopro-webcam".enable = true;
+      };
       os = {
         fingerprint.enable = false;
         # IPU6 webcam — currently broken due to SVP7500 USB-IO bridge bulk

@@ -28,6 +28,7 @@
     ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix
     ../../modules/desktop/waybar/home.nix
+    ../../modules/leisure/gopro-webcam/home.nix
     ../../modules/leisure/minecraft/home.nix
     ../../modules/leisure/spotify/home.nix
     ../../modules/os/fingerprint/home.nix

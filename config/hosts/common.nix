@@ -16,6 +16,7 @@ in
     ../../modules/desktop/stylix/system.nix
     ../../modules/development/dnsmasq/system.nix
     ../../modules/development/qemu/system.nix
+    ../../modules/leisure/gopro-webcam/system.nix
     ../../modules/os/fingerprint/system.nix
     ../../modules/os/greetd/system.nix
     ../../modules/os/ipu6/system.nix
