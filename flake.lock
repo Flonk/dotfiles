@@ -281,6 +281,7 @@
         "nixpkgs-2405": "nixpkgs-2405",
         "openconnect-pulse-launcher": "openconnect-pulse-launcher",
         "skynetlock": "skynetlock",
+        "skynetshell-src": "skynetshell-src",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "vicinae": "vicinae"
@@ -304,6 +305,19 @@
         "owner": "Flonk",
         "repo": "skynetlock",
         "type": "github"
+      }
+    },
+    "skynetshell-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776958043,
+        "narHash": "sha256-WoirjCBKX7RTvRbVnLMuDSJLghnacJx355hxTGIY3pM=",
+        "path": "/home/flo/repos/personal/skynetshell",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/flo/repos/personal/skynetshell",
+        "type": "path"
       }
     },
     "sops-nix": {

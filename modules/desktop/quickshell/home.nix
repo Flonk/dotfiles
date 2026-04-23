@@ -7,6 +7,8 @@
 }:
 let
   barSize = 50;
+  quickshellRepo = inputs."skynetshell-src".outPath;
+  quickshellConfigDir = "${quickshellRepo}/shell";
 
   wrappedQuickshell = pkgs.quickshell;
 
@@ -15,7 +17,7 @@ let
 
     CONFIG_DIR="''${HOME}/quickshell-impure"             # your editable copy
     SOURCE_CONFIG="''${HOME}/.config/quickshell"         # managed by nix
-    DOTFILES_DIR="''${HOME}/dotfiles/modules/desktop/quickshell/components"
+    REPO_DIR="''${HOME}/repos/personal/skynetshell/shell"
     QS_BIN='${pkgs.quickshell}/bin/quickshell'           # Quickshell binary
 
     # Force copy from ~/.config/quickshell to ~/quickshell-impure and initialize git
@@ -75,23 +77,23 @@ let
     # initial start
     start_qs "''$@"
 
-    # watch and restart on edits, syncing back to dotfiles
-    export CONFIG_DIR QS_BIN PIDFILE DOTFILES_DIR
+    # watch and restart on edits, syncing back to the source repo
+    export CONFIG_DIR QS_BIN PIDFILE REPO_DIR
     nix run nixpkgs#watchexec -- \
       -r \
       -w "''${CONFIG_DIR}" \
       --ignore '**/.git/*' --ignore '**/*.swp' --ignore '**/*~' \
       -e qml,js,ts,css,json,yaml,yml \
       -- bash -c '
-        echo "[quickshell-dev] Change detected, syncing to $DOTFILES_DIR"
+        echo "[quickshell-dev] Change detected, syncing to $REPO_DIR"
         
-        # Sync changes back to dotfiles (excluding .git directory)
-        mkdir -p "$DOTFILES_DIR"
+        # Sync changes back to the skynetshell repo (excluding .git directory)
+        mkdir -p "$REPO_DIR"
         ${pkgs.rsync}/bin/rsync -av --delete \
           --exclude=".git" \
           --exclude="*.swp" \
           --exclude="*~" \
-          "$CONFIG_DIR/" "$DOTFILES_DIR/"
+          "$CONFIG_DIR/" "$REPO_DIR/"
         
         # Restart quickshell
         if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
@@ -108,23 +110,6 @@ let
   # plus a generated Theme.qml. This directory is placed in the Nix store and
   # then used as the xdg.configFile source.
 
-  # Generated tile pattern from the andamp logo
-  tileGreyPng = pkgs.runCommand "tile-grey.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
-    magick ${../../../assets/logos/andamp-amp-blue.png} \
-      -resize 10x10 -background transparent -gravity center -extent 15x15 \
-      -channel RGB -evaluate set 0 +channel \
-      -channel A -evaluate multiply 0.65 +channel \
-      -type TrueColorAlpha PNG32:$TMPDIR/logo-unit.png
-
-    magick -size 30x30 xc:transparent \
-      $TMPDIR/logo-unit.png -geometry +0+0 -composite \
-      $TMPDIR/logo-unit.png -geometry +15+0 -composite \
-      $TMPDIR/logo-unit.png -geometry +7+15 -composite \
-      $TMPDIR/logo-unit.png -geometry +22+15 -composite \
-      $TMPDIR/logo-unit.png -geometry -8+15 -composite \
-      -type TrueColorAlpha PNG32:$out
-  '';
-
   quickshellAssets = [
     {
       name = "logoAndampAmpBlue";
@@ -133,7 +118,6 @@ let
     {
       name = "logoTileGrey";
       relPath = "logos/tile-grey.png";
-      src = tileGreyPng; # generated, not from assets/
     }
   ];
 
@@ -238,20 +222,10 @@ let
         }
   '';
 
-  assetCopyCommands = lib.concatStringsSep "\n        " (
-    map (
-      asset:
-      let
-        src = asset.src or "${../../../assets}/${asset.relPath}";
-      in
-      ''install -Dm644 "${src}" "$out/assets/${asset.relPath}"''
-    ) quickshellAssets
-  );
-
   componentsOut = pkgs.runCommand "quickshell-components" { inherit (pkgs) stdenv; } ''
         mkdir -p "$out"
-        cp -r "${./components}/"* "$out/" || true
-        ${assetCopyCommands}
+        cp -r "${quickshellConfigDir}/." "$out/"
+      rm -f "$out/Theme.qml"
         cat > "$out/Theme.qml" <<'EOF'
     ${themeQml}
     EOF

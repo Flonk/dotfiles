@@ -40,6 +40,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    skynetshell-src = {
+      url = "path:/home/flo/repos/personal/skynetshell";
+      flake = false;
+    };
+
   };
 
   outputs =
