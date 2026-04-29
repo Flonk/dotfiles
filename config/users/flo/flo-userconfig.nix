@@ -38,7 +38,7 @@
       skynetlock.enable = true;
       stylix = {
         enable = true;
-        wallpaper = ../../../assets/wallpapers/wallhaven-o5qwl7.jpg;
+        wallpaper = ../../../assets/wallpapers/winxp.jpg;
         lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
         scheme = "ayu-dark";
       };
