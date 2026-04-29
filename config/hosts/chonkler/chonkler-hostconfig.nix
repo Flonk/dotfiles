@@ -18,7 +18,12 @@
         "chrome-remote-desktop".enable = false;
       };
       desktop = {
+        easyeffects = {
+          db = ./cache/easyeffects/db;
+          speakerSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
+        };
         stylix.enable = true;
+        wireplumber.enable = true;
       };
       development = {
         dnsmasq.enable = true;

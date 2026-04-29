@@ -123,6 +123,9 @@
         "dkav!" = "docker volume ls | xargs docker volume rm";
         "dk!" = "dka! && dkav!";
 
+        ##### Claude
+        cc = "z claude && claude --dangerously-skip-permissions";
+
         ##### Assorted
         future = "toilet -f future";
         x = "sudo env \"PATH=$PATH\"";

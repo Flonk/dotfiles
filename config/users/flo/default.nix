@@ -57,6 +57,15 @@
           cp *.ttf $out/share/fonts/truetype/
         '';
       })
+      (pkgs.stdenvNoCC.mkDerivation {
+        pname = "hypik";
+        version = "1.0";
+        src = ../../../assets/fonts/hypik;
+        installPhase = ''
+          mkdir -p $out/share/fonts/opentype
+          cp *.otf $out/share/fonts/opentype/
+        '';
+      })
     ];
 
     username = "flo";

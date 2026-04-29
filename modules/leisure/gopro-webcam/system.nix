@@ -7,63 +7,96 @@
 let
   cfg = config.skynet.module.leisure."gopro-webcam";
   adminUser = config.skynet.host.adminUser;
-  videoDeviceNumber = 48;
 
-  gopro-script = pkgs.stdenvNoCC.mkDerivation {
+  gopro-webcam = pkgs.buildNpmPackage {
     pname = "gopro-webcam";
-    version = "0.0.3";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "jschmid1";
-      repo = "gopro_as_webcam_on_linux";
-      rev = "45adee75bad90d4d1c55f29178ca6984e1e48a36";
-      # Run `nix build` and replace with the hash reported in the error.
-      hash = "sha256-HH3sd92e/Ct6o/frawt/XvcuveieDmMtd7EbGcmj3fE=";
-    };
+    version = "1.0.0";
+    src = ./.;
+    npmDepsHash = "sha256-+4S6Yhord1M+bGbGlaTR/KCta7kxkwueksbPLADzf5o=";
+    dontNpmBuild = true;
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
-    postPatch = ''
-      substituteInPlace gopro \
-        --replace-fail "modprobe v4l2loopback exclusive_caps=1 card_label='GoPro' video_nr=42" "modprobe v4l2loopback devices=1 exclusive_caps=1 max_buffers=2 card_label='GoPro' video_nr=42" \
-        --replace-fail "modprobe v4l2loopback exclusive_caps=1 card_label='GoPro'\$GOPRO_VIDEO_NUMBER video_nr=\$GOPRO_VIDEO_NUMBER" "modprobe v4l2loopback devices=1 exclusive_caps=1 max_buffers=2 card_label='GoPro'\$GOPRO_VIDEO_NUMBER video_nr=\$GOPRO_VIDEO_NUMBER"
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm755 gopro $out/bin/gopro
-      wrapProgram $out/bin/gopro \
+    # buildNpmPackage places output in lib/node_modules/gopro-webcam/.
+    # Create a wrapper that calls tsx with the right PATH for runtime tools.
+    postInstall = ''
+      mkdir -p $out/bin
+      local pkg="$out/lib/node_modules/gopro-webcam"
+      makeWrapper "$pkg/node_modules/.bin/tsx" "$out/bin/gopro-webcam" \
+        --add-flags "$pkg/src/gopro.tsx" \
         --prefix PATH : ${
           lib.makeBinPath [
-            pkgs.kmod
-            pkgs.iproute2
-            pkgs.curl
             pkgs.ffmpeg
+            pkgs.curl
+            pkgs.iproute2
+            pkgs.kmod
+            pkgs.procps
+            pkgs.libnotify
+            config.boot.kernelPackages.v4l2loopback.bin
           ]
         }
-      runHook postInstall
     '';
   };
 in
 {
   config = lib.mkIf cfg.enable {
-    # Make v4l2loopback available for the manual skynet gopro commands.
+    # Make v4l2loopback available (loaded on demand, not at boot).
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-    boot.extraModprobeConfig = ''
-      options v4l2loopback devices=1 exclusive_caps=1 max_buffers=2 card_label="GoPro" video_nr=${toString videoDeviceNumber}
-    '';
 
-    environment.systemPackages = [ gopro-script ];
+    # The gopro-webcam script and tools it calls via sudo must be on the system PATH.
+    environment.systemPackages = [
+      gopro-webcam
+      pkgs.ffmpeg
+      config.boot.kernelPackages.v4l2loopback.bin
+    ];
 
-    # Give the admin user access to the virtual video device
-    users.users.${adminUser}.extraGroups = [ "video" ];
+    # Give the admin user access to the virtual video device.
+    users.users.${adminUser}.extraGroups = lib.mkIf (adminUser != null) [ "video" ];
 
-    # Open UDP port for the GoPro stream
+    # Open UDP port for the GoPro stream.
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 8554 ];
 
-    # Set video group ownership and rw permissions on the loopback device.
+    # Set video group ownership and rw permissions on any v4l2loopback device.
+    # Auto-start/stop when GoPro is plugged/unplugged (Hero 11 Black: 2672:0059).
     services.udev.extraRules = ''
-      KERNEL=="video${toString videoDeviceNumber}", SUBSYSTEM=="video4linux", GROUP="video", MODE="0660"
+      SUBSYSTEM=="video4linux", ATTR{name}=="*GoPro*", GROUP="video", MODE="0660"
+    '' + lib.optionalString cfg.autoStart ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="2672", ATTR{idProduct}=="0059", RUN+="${pkgs.systemd}/bin/systemctl start --no-block gopro-webcam-start.service"
+      ACTION=="remove", SUBSYSTEM=="usb", ENV{ID_VENDOR_ID}=="2672", ENV{ID_MODEL_ID}=="0059", RUN+="${pkgs.systemd}/bin/systemctl start --no-block gopro-webcam-stop.service"
     '';
+
+    # Systemd services for udev-triggered auto start/stop.
+    systemd.services.gopro-webcam-start = lib.mkIf cfg.autoStart {
+      description = "Start GoPro webcam";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${gopro-webcam}/bin/gopro-webcam start";
+        Environment = [
+          "GOPRO_USER=${adminUser}"
+        ];
+      };
+      path = [
+        gopro-webcam
+        pkgs.bashInteractive
+        pkgs.ffmpeg
+        pkgs.util-linux # runuser
+        config.boot.kernelPackages.v4l2loopback.bin
+      ];
+    };
+
+    systemd.services.gopro-webcam-stop = lib.mkIf cfg.autoStart {
+      description = "Stop GoPro webcam";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${gopro-webcam}/bin/gopro-webcam stop";
+        Environment = [
+          "GOPRO_USER=${adminUser}"
+        ];
+      };
+      path = [
+        gopro-webcam
+        pkgs.util-linux
+      ];
+    };
   };
 }

@@ -30,7 +30,7 @@ mkShell {
   NIX_ENFORCE_PURITY = true;
 
   shellHook = ''
-    echo "Welcome to SKYNET Development Shell."
+    echo "Welcome to SKYNET Development Shell." >&2
     if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ ! -f "$HOME/.ssh/id_rsa" ] && [ ! -f "$HOME/.config/sops/age/keys.txt" ]; then
       echo "Are you on a new machine? Run 'bootstrap' to set up SKYNET."
     fi

@@ -145,7 +145,6 @@
     alacritty
     upower
 
-
     iproute2
     nettools
     bind

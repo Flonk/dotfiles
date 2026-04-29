@@ -61,6 +61,27 @@ in
         type = types.bool;
         default = false;
       };
+      easyeffects = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        db = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = "Path to the EasyEffects db directory to deploy into ~/.config/easyeffects/db/ on rebuild.";
+        };
+        speakerSink = mkOption {
+          type = types.str;
+          default = "";
+          description = "PulseAudio sink name for the internal speakers. When this is the default sink, EasyEffects processes audio; otherwise it bypasses.";
+        };
+        speakerPreset = mkOption {
+          type = types.str;
+          default = "defaultSink";
+          description = "EasyEffects output preset name to load when the speaker sink is active.";
+        };
+      };
       fastfetch.enable = mkOption {
         type = types.bool;
         default = false;
@@ -140,6 +161,17 @@ in
         type = types.bool;
         default = false;
       };
+      wireplumber = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        laptopSink = mkOption {
+          type = types.str;
+          default = "";
+          description = "PulseAudio sink name for the laptop speakers (fallback when no BT device is connected).";
+        };
+      };
     };
     development = {
       "claude-code".enable = mkOption {
@@ -183,6 +215,11 @@ in
           type = types.bool;
           default = false;
           description = "Automatically start the gopro-webcam service at boot (requires GoPro to be connected and powered on)";
+        };
+        autoStart = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Automatically start/stop webcam when GoPro is plugged/unplugged via USB";
         };
       };
       minecraft.enable = mkOption {
