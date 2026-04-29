@@ -17,8 +17,18 @@
     };
     desktop = {
       alacritty.enable = true;
+      audio = {
+        enable = true;
+        defaultAudioSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
+        easyeffects.enable = true;
+        trustedBluetoothHeadsets = [
+          {
+            mac = "80:C3:BA:53:78:8B";
+            description = "Sennheiser MOMENTUM TW 4";
+          }
+        ];
+      };
       csvlens.enable = true;
-      easyeffects.enable = true;
       fastfetch.enable = true;
       foot.enable = true;
       "google-chrome".enable = true;
@@ -34,10 +44,6 @@
       };
       vicinae.enable = true;
       waybar.enable = true;
-      wireplumber = {
-        enable = true;
-        laptopSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
-      };
     };
     development = {
       "claude-code".enable = true;
@@ -51,15 +57,6 @@
     };
     os = {
       "network-scripts".enable = true;
-      peripherals = {
-        enable = true;
-        trustedDevices = [
-          {
-            mac = "80:C3:BA:53:78:8B";
-            description = "Sennheiser MOMENTUM TW 4";
-          }
-        ];
-      };
     };
     projects = {
       andamp = {

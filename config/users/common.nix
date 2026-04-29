@@ -17,7 +17,7 @@
     ../../modules/development/zed-editor/home.nix
     ../../modules/desktop/alacritty/home.nix
     ../../modules/desktop/csvlens/home.nix
-    ../../modules/desktop/easyeffects/home.nix
+    ../../modules/desktop/audio/home.nix
     ../../modules/desktop/fastfetch/home.nix
     ../../modules/desktop/foot/home.nix
     ../../modules/desktop/google-chrome/home.nix
@@ -27,7 +27,6 @@
     ../../modules/desktop/skynetlock/home.nix
     ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix
-    ../../modules/desktop/wireplumber/home.nix
     ../../modules/desktop/waybar/home.nix
     ../../modules/leisure/gopro-webcam/home.nix
     ../../modules/leisure/minecraft/home.nix
@@ -35,7 +34,6 @@
     ../../modules/os/greetd/home.nix
     ../../modules/os/grub/home.nix
     ../../modules/os/network-scripts/home.nix
-    ../../modules/os/peripherals/home.nix
     ../../modules/projects/home.nix
   ];
 }

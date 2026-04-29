@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.wireplumber;
+  cfg = config.skynet.module.desktop.audio;
 in
 {
   config = lib.mkIf cfg.enable {

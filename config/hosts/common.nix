@@ -14,7 +14,7 @@ in
     ../../modules/assorted/chrome-remote-desktop/system.nix
     ../../modules/desktop/hyprland/system.nix
     ../../modules/desktop/stylix/system.nix
-    ../../modules/desktop/wireplumber/system.nix
+    ../../modules/desktop/audio/system.nix
     ../../modules/development/dnsmasq/system.nix
     ../../modules/development/qemu/system.nix
     ../../modules/leisure/gopro-webcam/system.nix

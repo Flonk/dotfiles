@@ -17,8 +17,8 @@
 
     # desktop
     ../../modules/desktop/alacritty/options.nix
+    ../../modules/desktop/audio/options.nix
     ../../modules/desktop/csvlens/options.nix
-    ../../modules/desktop/easyeffects/options.nix
     ../../modules/desktop/fastfetch/options.nix
     ../../modules/desktop/foot/options.nix
     ../../modules/desktop/google-chrome/options.nix
@@ -29,7 +29,6 @@
     ../../modules/desktop/stylix/options.nix
     ../../modules/desktop/vicinae/options.nix
     ../../modules/desktop/waybar/options.nix
-    ../../modules/desktop/wireplumber/options.nix
 
     # development
     ../../modules/development/claude-code/options.nix
@@ -50,7 +49,6 @@
     ../../modules/os/grub/options.nix
     ../../modules/os/ipu6/options.nix
     ../../modules/os/network-scripts/options.nix
-    ../../modules/os/peripherals/options.nix
     ../../modules/os/powersaver/options.nix
 
     # projects
