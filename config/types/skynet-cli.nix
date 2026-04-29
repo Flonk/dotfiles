@@ -25,7 +25,7 @@ in
               };
               script = mkOption {
                 type = types.path;
-                description = "Path to the script file (.ts or .sh)";
+                description = "Path to the script file (.sh)";
               };
               usage = mkOption {
                 type = types.str;
@@ -38,11 +38,6 @@ in
         default = [ ];
         description = "Scripts registered by modules, collected into the skynet CLI";
       };
-    };
-
-    mimeapps = mkOption {
-      type = types.bool;
-      default = false;
     };
   };
 }

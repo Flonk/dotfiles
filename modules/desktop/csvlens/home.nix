@@ -11,6 +11,11 @@
       xlsx2csv
     ];
 
+    xdg.mimeApps.defaultApplications = {
+      "text/csv" = "csvlens.desktop";
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "xlsx2csv.desktop";
+    };
+
     xdg.desktopEntries.csvlens = {
       name = "csvlens";
       genericName = "CSV Viewer";

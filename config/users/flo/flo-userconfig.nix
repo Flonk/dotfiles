@@ -1,6 +1,6 @@
 { ... }:
 {
-  config.skynet.mimeapps = true;
+  config.xdg.mimeApps.enable = true;
 
   config.skynet.module = {
     assorted = {
