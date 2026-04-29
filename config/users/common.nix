@@ -33,7 +33,6 @@
     ../../modules/leisure/gopro-webcam/home.nix
     ../../modules/leisure/minecraft/home.nix
     ../../modules/leisure/spotify/home.nix
-    ../../modules/os/fingerprint/home.nix
     ../../modules/os/greetd/home.nix
     ../../modules/os/grub/home.nix
     ../../modules/os/network-scripts/home.nix

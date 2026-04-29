@@ -1,336 +1,60 @@
-{ lib, ... }:
-let
-  inherit (lib) mkOption types;
-in
 {
-  options.skynet.module = {
-    assorted = {
-      avahi.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      "chrome-remote-desktop".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      jiratui.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      nchat.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-    core = {
-      bitwarden.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      direnv.enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-      git.enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-      sops.enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-      "skynet-scripts".enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-      zsh.enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-      keyring.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-    desktop = {
-      alacritty.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      csvlens.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      easyeffects = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        db = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = "Path to the EasyEffects db directory to deploy into ~/.config/easyeffects/db/ on rebuild.";
-        };
-        speakerSink = mkOption {
-          type = types.str;
-          default = "";
-          description = "PulseAudio sink name for the internal speakers. When this is the default sink, EasyEffects processes audio; otherwise it bypasses.";
-        };
-        speakerPreset = mkOption {
-          type = types.str;
-          default = "defaultSink";
-          description = "EasyEffects output preset name to load when the speaker sink is active.";
-        };
-      };
-      fastfetch.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      foot.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      "google-chrome".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      hyprland.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      mako.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      quickshell.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      skynetlock = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        theme = mkOption {
-          type = types.str;
-          default = "";
-          description = "Shader theme for the lock screen (e.g. 'mobius_spiral'. Keep empty for random)";
-        };
-      };
-      stylix = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        scheme = mkOption {
-          type = types.str;
-          default = "ayu-dark";
-          description = "Base16 scheme name (filename without .yaml) from base16-schemes";
-        };
-        accent = mkOption {
-          type = types.str;
-          default = "#ff9624";
-          description = "Window manager accent color (borders, active tabs)";
-        };
-        accentDark = mkOption {
-          type = types.str;
-          default = "#8e4e1c";
-          description = "Darker accent variant (focused/inactive tab text)";
-        };
-        wallpaper = mkOption {
-          type = types.nullOr (types.either types.path types.package);
-          default = null;
-          description = "Wallpaper image path";
-        };
-        lockscreenImage = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = "Lockscreen / logo image path";
-        };
-        fontSizePx = mkOption {
-          type = types.int;
-          default = 14;
-          description = "Base font size in pixels for apps that use pixel-based sizing (e.g. Zed, VSCode)";
-        };
-      };
-      vicinae.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      waybar.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      wireplumber = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        laptopSink = mkOption {
-          type = types.str;
-          default = "";
-          description = "PulseAudio sink name for the laptop speakers (fallback when no BT device is connected).";
-        };
-      };
-    };
-    development = {
-      "claude-code".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
+  imports = [
+    # assorted
+    ../../modules/assorted/avahi/options.nix
+    ../../modules/assorted/chrome-remote-desktop/options.nix
+    ../../modules/assorted/jiratui/options.nix
+    ../../modules/assorted/nchat/options.nix
 
-      dnsmasq.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      obsidian.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      qemu.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      vscode.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      "zed-editor".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-    leisure = {
-      "gopro-webcam" = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        openFirewall = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Open UDP port 8554 for the GoPro stream";
-        };
-        startOnBoot = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Automatically start the gopro-webcam service at boot (requires GoPro to be connected and powered on)";
-        };
-        autoStart = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Automatically start/stop webcam when GoPro is plugged/unplugged via USB";
-        };
-      };
-      minecraft.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      "obs-studio".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      spotify.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-    os = {
-      fingerprint.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      ipu6 = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        platform = mkOption {
-          type = types.enum [
-            "ipu6"
-            "ipu6ep"
-            "ipu6epmtl"
-          ];
-          default = "ipu6epmtl";
-          description = "IPU6 platform variant: ipu6 (Tiger Lake), ipu6ep (Alder/Raptor Lake), ipu6epmtl (Meteor Lake)";
-        };
-      };
-      greetd = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        greeter = mkOption {
-          type = types.enum [
-            "custom"
-            "tuigreet"
-            "none"
-          ];
-          default = "custom";
-          description = "Which greeter to use: 'custom' (pygame-based matching GRUB theme), 'tuigreet' (TUI-based), or 'none' (auto-login, relies on hyprlock for security)";
-        };
-      };
-      grub.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      "network-scripts".enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-      peripherals = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        trustedDevices = mkOption {
-          type = types.listOf (
-            types.submodule {
-              options = {
-                mac = mkOption {
-                  type = types.str;
-                  description = "Bluetooth MAC address, e.g. AA:BB:CC:DD:EE:FF";
-                };
-                description = mkOption {
-                  type = types.str;
-                  default = "";
-                  description = "Human-readable label for this device";
-                };
-              };
-            }
-          );
-          default = [ ];
-          description = "Bluetooth devices to auto-trust so they never trigger authorization prompts";
-        };
-      };
-      powersaver.enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-    };
-    projects = {
-      andamp = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        CEFKM = mkOption {
-          type = types.bool;
-          default = false;
-        };
-        CEIFRS = mkOption {
-          type = types.bool;
-          default = false;
-        };
-      };
-      personal = {
-        dwain = {
-          enable = mkOption {
-            type = types.bool;
-            default = false;
-          };
-        };
-      };
-    };
-  };
+    # core
+    ../../modules/core/bitwarden/options.nix
+    ../../modules/core/direnv/options.nix
+    ../../modules/core/git/options.nix
+    ../../modules/core/keyring/options.nix
+    ../../modules/core/skynet-scripts/options.nix
+    ../../modules/core/sops/options.nix
+    ../../modules/core/zsh/options.nix
+
+    # desktop
+    ../../modules/desktop/alacritty/options.nix
+    ../../modules/desktop/csvlens/options.nix
+    ../../modules/desktop/easyeffects/options.nix
+    ../../modules/desktop/fastfetch/options.nix
+    ../../modules/desktop/foot/options.nix
+    ../../modules/desktop/google-chrome/options.nix
+    ../../modules/desktop/hyprland/options.nix
+    ../../modules/desktop/mako/options.nix
+    ../../modules/desktop/quickshell/options.nix
+    ../../modules/desktop/skynetlock/options.nix
+    ../../modules/desktop/stylix/options.nix
+    ../../modules/desktop/vicinae/options.nix
+    ../../modules/desktop/waybar/options.nix
+    ../../modules/desktop/wireplumber/options.nix
+
+    # development
+    ../../modules/development/claude-code/options.nix
+    ../../modules/development/dnsmasq/options.nix
+    ../../modules/development/obsidian/options.nix
+    ../../modules/development/qemu/options.nix
+    ../../modules/development/vscode/options.nix
+    ../../modules/development/zed-editor/options.nix
+
+    # leisure
+    ../../modules/leisure/gopro-webcam/options.nix
+    ../../modules/leisure/minecraft/options.nix
+    ../../modules/leisure/obs-studio/options.nix
+    ../../modules/leisure/spotify/options.nix
+
+    # os
+    ../../modules/os/greetd/options.nix
+    ../../modules/os/grub/options.nix
+    ../../modules/os/ipu6/options.nix
+    ../../modules/os/network-scripts/options.nix
+    ../../modules/os/peripherals/options.nix
+    ../../modules/os/powersaver/options.nix
+
+    # projects
+    ../../modules/projects/andamp/options.nix
+    ../../modules/projects/personal/options.nix
+  ];
 }

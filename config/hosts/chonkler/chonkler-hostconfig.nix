@@ -33,7 +33,6 @@
         "gopro-webcam".enable = true;
       };
       os = {
-        fingerprint.enable = false;
         # IPU6 webcam — currently broken due to SVP7500 USB-IO bridge bulk
         # transfer bugs (intel/ipu6-drivers#426), but keep enabled so it
         # starts working automatically when upstream fixes land.

@@ -7,7 +7,6 @@
 
 let
   scripts = config.skynet.cli.scripts;
-  hasTs = builtins.any (s: lib.hasSuffix ".ts" (toString s.script)) scripts;
 
   # Theme colors from Stylix
   s = config.lib.stylix.colors.withHashtag;
@@ -28,61 +27,33 @@ let
     "--bind 'focus:transform-preview-label:[[ -n {1} ]] && printf \" %s \" {1}'"
   ];
 
-  # Build node_modules from package.json (only needed if TS scripts exist)
-  nodeModules = pkgs.buildNpmPackage {
-    pname = "skynet-scripts-deps";
-    version = "1.0.0";
-    src = ./.;
-    npmDepsHash = "sha256-aINlEcFIuu0QW+hgsZF2gyj3EuK1+j5Am5IqZm7zjZg=";
-    dontNpmBuild = true;
-    installPhase = ''
-      mkdir -p $out
-      cp -r node_modules $out/
-    '';
-  };
-
   # Build the scripts directory with all registered scripts
   scriptsDir = pkgs.runCommand "skynet-scripts" { } ''
     mkdir -p $out
-
-    ${lib.optionalString hasTs ''
-      cp ${./package.json} $out/package.json
-      cp -r ${nodeModules}/node_modules $out/
-    ''}
 
     ${lib.concatMapStringsSep "\n" (
       s:
       let
         dir = lib.concatStringsSep "/" (lib.init s.command);
-        filename =
-          lib.last s.command
-          + (lib.optionalString (lib.hasSuffix ".ts" (toString s.script)) ".ts")
-          + (lib.optionalString (lib.hasSuffix ".sh" (toString s.script)) ".sh");
+        filename = lib.last s.command + ".sh";
       in
       ''
         mkdir -p $out/${dir}
         cp ${s.script} $out/${dir}/${filename}
-        ${lib.optionalString (lib.hasSuffix ".sh" (toString s.script)) "chmod +x $out/${dir}/${filename}"}
+        chmod +x $out/${dir}/${filename}
       ''
     ) scripts}
   '';
 
-  # Command string for each script, e.g. "fingerprint enroll"
+  # Command string for each script, e.g. "wifi connect"
   cmdStr = s: lib.concatStringsSep " " s.command;
 
-  # Relative path in scripts dir, e.g. "fingerprint/enroll.ts"
+  # Relative path in scripts dir, e.g. "wifi/connect.sh"
   scriptRelPath =
     s:
     let
       dir = lib.concatStringsSep "/" (lib.init s.command);
-      ext =
-        if lib.hasSuffix ".ts" (toString s.script) then
-          ".ts"
-        else if lib.hasSuffix ".sh" (toString s.script) then
-          ".sh"
-        else
-          "";
-      filename = lib.last s.command + ext;
+      filename = lib.last s.command + ".sh";
     in
     "${dir}/${filename}";
 
@@ -93,17 +64,11 @@ let
       cmd = cmdStr s;
       nArgs = builtins.length s.command;
       relPath = scriptRelPath s;
-      isTs = lib.hasSuffix ".ts" relPath;
     in
     ''
       "${cmd}"|"${cmd} "*)
         shift ${toString nArgs}
-        ${
-          if isTs then
-            ''exec "$SCRIPTS_DIR/node_modules/.bin/tsx" "$SCRIPTS_DIR/${relPath}" "$@"''
-          else
-            ''exec "$SCRIPTS_DIR/${relPath}" "$@"''
-        }
+        exec "$SCRIPTS_DIR/${relPath}" "$@"
         ;;'';
 
   # --- Zsh completions ---
@@ -230,7 +195,7 @@ let
     )
 
     # --- Resolve prefix-abbreviated args to full command words ---
-    # e.g. "f e" -> "fingerprint enroll"
+    # e.g. "w c" -> "wifi connect"
     _skynet_resolve() {
       local -a resolved=()
       local -a candidates=("''${_SKYNET_CMDS[@]}")
@@ -333,7 +298,7 @@ let
       shift
       _skynet_preview "$*"
     else
-      # Resolve prefix-abbreviated args (e.g. "f e" -> "fingerprint enroll")
+      # Resolve prefix-abbreviated args (e.g. "w c" -> "wifi connect")
       resolved=$(_skynet_resolve "$@")
 
       # shellcheck disable=SC2086
