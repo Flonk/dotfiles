@@ -2,17 +2,15 @@
   pkgs,
   config,
   lib,
-  inputs,
   ...
 }:
 let
-  quickshellConfigDir = "${inputs."skynetshell-src".outPath}/shell";
+  cfg = config.skynet.module.desktop.skynetshell;
 
   themeJson =
     let
       c = config.lib.stylix.colors.withHashtag;
       sz = config.stylix.fonts.sizes.terminal;
-      ui = config.stylix.fonts.sansSerif.name;
       mono = config.stylix.fonts.monospace.name;
       accent = config.skynet.module.desktop.stylix.accent;
     in
@@ -35,7 +33,6 @@ let
   qsLaunch = pkgs.writeShellScript "quickshell-launch" ''
     set -euo pipefail
 
-    # Decide env file path without nested ${"..:-.."} expansions (Nix-safe).
     if [ -n "''${QS_ENV_FILE:-}" ]; then
       ENV_FILE="''${QS_ENV_FILE}"
     else
@@ -48,9 +45,6 @@ let
     if [ -r "''${ENV_FILE}" ]; then
       # shellcheck disable=SC2046
       export $(grep -E '^(WAYLAND_DISPLAY|XDG_RUNTIME_DIR|DBUS_SESSION_BUS_ADDRESS|HYPRLAND_INSTANCE_SIGNATURE|DISPLAY)=' "''${ENV_FILE}")
-      echo "[qs-launch] sourced env from ''${ENV_FILE}"
-    else
-      echo "[qs-launch] env file not found: ''${ENV_FILE}" >&2
     fi
 
     : "''${XDG_RUNTIME_DIR:?XDG_RUNTIME_DIR missing}"
@@ -62,38 +56,18 @@ let
       exit 200
     fi
 
-    echo "[qs-launch] launching quickshell (WAYLAND_DISPLAY=''${WAYLAND_DISPLAY})"
     exec ${pkgs.quickshell}/bin/quickshell
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.desktop.quickshell.enable {
-    xdg.configFile."quickshell".source = quickshellConfigDir;
+  config = lib.mkIf cfg.enable {
+    programs.skynetshell.quickshell.enable = true;
+
     xdg.configFile."quickshell-theme.json".text = themeJson;
 
-    home.packages = with pkgs; [
-      brightnessctl
-      lm_sensors
-      pipewire
-      quickshell
-      inotify-tools
-    ];
-
-    systemd.user.services.quickshell = {
-      Unit = {
-        Description = "QuickShell Wayland compositor shell";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        Environment = [ "QS_ENV_FILE=/run/user/%U/quickshell.env" ];
-        ExecStart = qsLaunch;
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
+    systemd.user.services.quickshell.Service = {
+      Environment = [ "QS_ENV_FILE=/run/user/%U/quickshell.env" ];
+      ExecStart = lib.mkForce qsLaunch;
     };
   };
 }

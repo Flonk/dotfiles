@@ -35,7 +35,7 @@
       script = pkgs.writeShellScript "system-rebuild.sh" ''
         set -euo pipefail
         echo "Rebuilding NixOS system configuration..."
-        sudo nixos-rebuild switch --flake ~/repos/personal/dotfiles#bricky
+        sudo nixos-rebuild switch --fast --flake ~/repos/personal/dotfiles#bricky
       '';
       usage = "Runs nixos-rebuild switch for bricky (requires sudo).";
     }

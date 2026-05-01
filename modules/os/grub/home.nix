@@ -1,36 +1,36 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
 }:
 let
-  s = config.lib.stylix.colors.withHashtag;
-  border = config.skynet.module.desktop.stylix.accent;
+  t = config.programs.skynetshell.theme;
   mon = config.skynet.host.primaryMonitor;
 
-  grubPreview = pkgs.writeShellScriptBin "skynet-grub-preview" ''
+  grubPreview = pkgs.writeShellScriptBin "skynet-grub-preview" (''
     set -euo pipefail
 
-    export GRUB_BG_COLOR="${s.base00}"
-    export GRUB_BORDER_COLOR="${border}"
-    export GRUB_BAR_BG="${s.base01}"
-    export GRUB_BAR_FG="${s.base04}"
-    export GRUB_TEXT_COLOR="${s.base05}"
-    export GRUB_TEXT_DIM="${s.base03}"
     export GRUB_WIDTH="${toString mon.width}"
     export GRUB_HEIGHT="${toString mon.height}"
-    export GRUB_LOGO="${config.skynet.module.desktop.stylix.lockscreenImage}"
-
+  '' + lib.optionalString (t != null) ''
+    export GRUB_BG_COLOR="${t.bg_base}"
+    export GRUB_BORDER_COLOR="${t.accent}"
+    export GRUB_BAR_BG="${t.bg_active}"
+    export GRUB_BAR_FG="${t.fg_secondary}"
+    export GRUB_TEXT_COLOR="${t.fg_primary}"
+    export GRUB_TEXT_DIM="${t.fg_muted}"
+  '' + ''
     WORKDIR=$(mktemp -d)
     trap 'rm -rf "$WORKDIR"' EXIT
-    cp -r ${./src}/. "$WORKDIR/"
+    cp -r ${inputs.skynetshell}/grub/. "$WORKDIR/"
     chmod -R u+w "$WORKDIR"
 
     exec ${pkgs.nix}/bin/nix-shell \
       -p imagemagick xorriso mtools grub2 qemu python3 OVMF.fd \
       --run "cd $WORKDIR && bash preview.sh"
-  '';
+  '');
 in
 {
   config = lib.mkIf config.skynet.module.os.grub.enable {

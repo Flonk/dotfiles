@@ -5,6 +5,8 @@
   ...
 }:
 let
+  qsLock = config.programs.skynetshell.quickshell.lockCommand;
+
   mkKeypadBindings =
     {
       mod,
@@ -91,7 +93,6 @@ in
       enable = true;
       package = pkgs.hyprland;
 
-      plugins = [ pkgs.hyprlandPlugins.hy3 ];
 
       systemd = {
         enable = true;
@@ -112,15 +113,12 @@ in
         "$code" = "vscode";
         "$browser" = "google-chrome-stable";
         "$editor" = "micro";
-        "$lockscreen" = "skynetlock lock";
+        "$lockscreen" = "${qsLock}";
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"
           "systemctl start docker"
-        ]
-        ++ lib.optional (
-          config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "none"
-        ) "$lockscreen";
+        ];
 
         bind = [
           # HYPRLAND
@@ -303,6 +301,7 @@ in
             "windowsOut,1,2,md3_decel,slide"
             "windowsMove,1,2,md3_decel,slide"
             "fade,1,10,md3_decel"
+            "fadeLayers,1,5,md3_decel"
             "workspaces,1,2,md3_decel,slide"
             "workspaces, 1, 2, default"
             "specialWorkspace,1,2,md3_decel,slide"
@@ -318,15 +317,8 @@ in
           };
         };
 
-        plugin = {
-          hy3 = {
-            tabs = {
-              radius = 0;
-              padding = 0;
-              text_font = config.stylix.fonts.sansSerif.name;
-            };
-          };
-        };
+        # hy3 plugin settings moved to extraConfig (after plugin load line)
+        # to avoid "unknown option" errors during config parsing.
 
         misc = {
           layers_hog_keyboard_focus = true;
@@ -404,14 +396,29 @@ in
           "GDK_SCALE,1"
           "QT_SCALE_FACTOR,1"
           "EDITOR,micro"
+          "HYPRSHOT_DIR,$HOME/Pictures/Screenshots"
         ];
       };
 
-      extraConfig = "
-      monitor=eDP-1,${toString mon.width}x${toString mon.height}@${toString mon.hz},0x0,1.00
-      monitor=DP-2,5120x1440@120,${toString mon.width}x0,1.00
-      monitor=,preferred,auto,1
-    ";
+      # Load hy3 at config-parse time (not via exec-once) so plugin
+      # Load hy3 plugin at config-parse time, then apply its settings.
+      # Both must be in extraConfig (after settings) so the plugin is
+      # loaded before its options are parsed.
+      extraConfig = ''
+        plugin = ${pkgs.hyprlandPlugins.hy3}/lib/libhy3.so
+        plugin {
+          hy3 {
+            tabs {
+              radius = 0
+              padding = 0
+              text_font = ${config.stylix.fonts.sansSerif.name}
+            }
+          }
+        }
+        monitor=eDP-1,${toString mon.width}x${toString mon.height}@${toString mon.hz},0x0,1.00
+        monitor=DP-2,5120x1440@120,${toString mon.width}x0,1.00
+        monitor=,preferred,auto,1
+      '';
     };
   };
 }

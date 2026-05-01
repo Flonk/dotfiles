@@ -34,11 +34,10 @@
       "google-chrome".enable = true;
       hyprland.enable = true;
       mako.enable = true;
-      quickshell.enable = true;
-      skynetlock.enable = true;
+      skynetshell.enable = true;
       stylix = {
         enable = true;
-        wallpaper = ../../../assets/wallpapers/winxp.jpg;
+        wallpaper = ../../../assets/wallpapers/abstract1.jpg;
         lockscreenImage = ../../../assets/logos/andamp-amp-blue.png;
         scheme = "ayu-dark";
       };
@@ -53,6 +52,7 @@
     };
     leisure = {
       minecraft.enable = true;
+      "obs-studio".enable = true;
       spotify.enable = true;
     };
     os = {

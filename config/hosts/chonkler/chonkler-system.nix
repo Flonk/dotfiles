@@ -46,8 +46,9 @@
     LC_TIME = "de_AT.UTF-8";
   };
 
-  # Enable the X11 windowing system.
+  # Enable the X11 windowing system (XWayland support; lightdm disabled — using greetd via skynetshell).
   services.xserver.enable = true;
+  services.xserver.displayManager.lightdm.enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -107,11 +108,7 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = false;
 
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "flo";
-
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+  # greetd (via skynetshell) handles login — no autologin needed.
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
   systemd.services.bluetooth = {
@@ -130,7 +127,10 @@
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
 
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    withUWSM = false;
+  };
 
   environment.systemPackages = with pkgs; [
     home-manager

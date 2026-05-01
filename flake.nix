@@ -35,14 +35,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    skynetlock = {
-      url = "github:Flonk/skynetlock";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    skynetshell-src = {
+    skynetshell = {
       url = "path:/home/flo/repos/personal/skynetshell";
-      flake = false;
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
@@ -86,6 +81,7 @@
           modules = [
             inputs.sops-nix.nixosModules.sops
             inputs.stylix.nixosModules.stylix
+            inputs.skynetshell.nixosModules.default
             ./config/hosts/chonkler
           ];
         };
@@ -111,7 +107,6 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            inputs.skynetlock.homeManagerModules.default
             ./config/flo-schnitzelwirt.nix
           ];
         };
@@ -124,7 +119,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            inputs.skynetlock.homeManagerModules.default
+            inputs.skynetshell.homeManagerModules.default
             ./config/flo-chonkler.nix
           ];
         };
@@ -137,7 +132,6 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            inputs.skynetlock.homeManagerModules.default
             ./config/bricky-bricky.nix
           ];
         };

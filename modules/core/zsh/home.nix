@@ -51,6 +51,10 @@
           '';
 
           end = lib.mkAfter ''
+            cc_fn() {
+              z "''${1:-claude}" && claude --dangerously-skip-permissions
+            }
+
             if [[ -n ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)} ]]; then
               eval ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)}
             fi
@@ -124,7 +128,7 @@
         "dk!" = "dka! && dkav!";
 
         ##### Claude
-        cc = "z claude && claude --dangerously-skip-permissions";
+        cc = "cc_fn";
 
         ##### Assorted
         future = "toilet -f future";

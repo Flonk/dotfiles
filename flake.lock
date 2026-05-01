@@ -280,38 +280,21 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-2405": "nixpkgs-2405",
         "openconnect-pulse-launcher": "openconnect-pulse-launcher",
-        "skynetlock": "skynetlock",
-        "skynetshell-src": "skynetshell-src",
+        "skynetshell": "skynetshell",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "vicinae": "vicinae"
       }
     },
-    "skynetlock": {
+    "skynetshell": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1776237891,
-        "narHash": "sha256-1KXmgQeOkxwPBrcUDJg6QJ3CeWYsprCFEOOEtrA4QAQ=",
-        "owner": "Flonk",
-        "repo": "skynetlock",
-        "rev": "8293ac8b27d7214cfb6c36bec33724995ecd4ddf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Flonk",
-        "repo": "skynetlock",
-        "type": "github"
-      }
-    },
-    "skynetshell-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1777325826,
-        "narHash": "sha256-ragO1CNSYgxHLT9teVQVdVcJxbk35PWFkVG+gRKig0o=",
+        "lastModified": 1777670683,
+        "narHash": "sha256-1owc86syqEbTp71qnHmMdFyEwdF6gT5/b0kyEixKIEU=",
         "path": "/home/flo/repos/personal/skynetshell",
         "type": "path"
       },

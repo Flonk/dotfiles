@@ -23,15 +23,14 @@
     ../../modules/desktop/google-chrome/home.nix
     ../../modules/desktop/hyprland/home.nix
     ../../modules/desktop/mako/home.nix
-    ../../modules/desktop/quickshell/home.nix
-    ../../modules/desktop/skynetlock/home.nix
+    ../../modules/desktop/skynetshell/home.nix
     ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix
     ../../modules/desktop/waybar/home.nix
     ../../modules/leisure/gopro-webcam/home.nix
     ../../modules/leisure/minecraft/home.nix
+    ../../modules/leisure/obs-studio/home.nix
     ../../modules/leisure/spotify/home.nix
-    ../../modules/os/greetd/home.nix
     ../../modules/os/grub/home.nix
     ../../modules/os/network-scripts/home.nix
     ../../modules/projects/home.nix

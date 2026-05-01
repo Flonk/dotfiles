@@ -24,8 +24,7 @@
     ../../modules/desktop/google-chrome/options.nix
     ../../modules/desktop/hyprland/options.nix
     ../../modules/desktop/mako/options.nix
-    ../../modules/desktop/quickshell/options.nix
-    ../../modules/desktop/skynetlock/options.nix
+    ../../modules/desktop/skynetshell/options.nix
     ../../modules/desktop/stylix/options.nix
     ../../modules/desktop/vicinae/options.nix
     ../../modules/desktop/waybar/options.nix
@@ -45,7 +44,6 @@
     ../../modules/leisure/spotify/options.nix
 
     # os
-    ../../modules/os/greetd/options.nix
     ../../modules/os/grub/options.nix
     ../../modules/os/ipu6/options.nix
     ../../modules/os/network-scripts/options.nix

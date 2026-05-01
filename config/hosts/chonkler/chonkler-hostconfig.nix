@@ -26,6 +26,7 @@
             db = ./cache/easyeffects/db;
           };
         };
+        skynetshell.enable = true;
         stylix.enable = true;
       };
       development = {
@@ -42,10 +43,6 @@
         ipu6 = {
           enable = true;
           platform = "ipu6epmtl";
-        };
-        greetd = {
-          enable = true;
-          greeter = "none";
         };
         grub.enable = true;
         powersaver.enable = true;

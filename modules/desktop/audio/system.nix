@@ -13,6 +13,16 @@ in
       (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-output-priority.conf" ''
         monitor.alsa.rules = [
           {
+            matches = [{ device.name = "~alsa_card.pci-*" }]
+            actions = {
+              update-props = {
+                # Keep the duplex profile when headphones are plugged in
+                # so the internal mic stays available
+                "api.acp.auto-profile" = false
+              }
+            }
+          }
+          {
             matches = [{ node.name = "~alsa_output.*Headphones.*" }]
             actions = {
               update-props = {

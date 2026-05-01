@@ -18,7 +18,7 @@ in
     ../../modules/development/dnsmasq/system.nix
     ../../modules/development/qemu/system.nix
     ../../modules/leisure/gopro-webcam/system.nix
-    ../../modules/os/greetd/system.nix
+    ../../modules/desktop/skynetshell/system.nix
     ../../modules/os/ipu6/system.nix
     ../../modules/os/grub/system.nix
     ../../modules/os/powersaver/system.nix
@@ -29,10 +29,20 @@ in
 
   config = lib.mkMerge [
     {
-      nix.settings.experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      nix.settings = {
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        max-jobs = "auto";
+        cores = 0;
+        substituters = [
+          "https://nix-community.cachix.org"
+        ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        ];
+      };
 
       environment.systemPackages = with pkgs; [
         home-manager
