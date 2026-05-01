@@ -44,7 +44,6 @@
           enable = true;
           platform = "ipu6epmtl";
         };
-        grub.enable = true;
         powersaver.enable = true;
       };
       projects = {

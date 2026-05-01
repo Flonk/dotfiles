@@ -9,22 +9,24 @@ let
   s = config.lib.stylix.colors.withHashtag;
   border = config.skynet.module.desktop.stylix.accent;
   asciiArt = builtins.readFile ./skynetgreet-ascii.txt;
+  mon = config.skynet.host.primaryMonitor;
+  fontFamily = config.stylix.fonts.monospace.name;
 in
 {
   config = lib.mkIf cfg.enable {
     programs.skynetshell.theme = {
       inherit asciiArt;
-      name        = "skynet-stylix";
-      bg_base     = s.base00;
-      bg_active   = s.base01;
-      primary     = s.base0D;
-      secondary   = s.base0E;
-      accent      = border;
-      warning     = s.base0A;
-      danger      = s.base08;
-      fg_primary   = s.base05;
+      name = "skynet-stylix";
+      bg_base = s.base00;
+      bg_active = s.base01;
+      primary = s.base0D;
+      secondary = s.base0E;
+      accent = border;
+      warning = s.base0A;
+      danger = s.base08;
+      fg_primary = s.base05;
       fg_secondary = s.base04;
-      fg_muted     = s.base03;
+      fg_muted = s.base03;
       border_focus = border;
     };
 
@@ -36,8 +38,23 @@ in
       };
       font = {
         name = config.stylix.fonts.monospace.name;
-        size = 22;
+        size = 20;
         package = config.stylix.fonts.monospace.package;
+      };
+    };
+
+    programs.skynetshell.grub = {
+      enable = true;
+
+      resolution = {
+        width = mon.width;
+        height = mon.height;
+      };
+
+      font = {
+        family = fontFamily;
+        regular = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf";
+        bold = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono-Bold.ttf";
       };
     };
   };

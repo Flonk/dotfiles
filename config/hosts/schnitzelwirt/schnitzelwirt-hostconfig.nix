@@ -29,7 +29,6 @@
           enable = true;
           greeter = "none";
         };
-        grub.enable = true;
         powersaver.enable = true;
       };
       projects = {

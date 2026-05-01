@@ -27,6 +27,7 @@
     ../../modules/desktop/skynetshell/options.nix
     ../../modules/desktop/stylix/options.nix
     ../../modules/desktop/vicinae/options.nix
+    ../../modules/desktop/vicinae-bitwarden/options.nix
     ../../modules/desktop/waybar/options.nix
 
     # development
@@ -44,7 +45,6 @@
     ../../modules/leisure/spotify/options.nix
 
     # os
-    ../../modules/os/grub/options.nix
     ../../modules/os/ipu6/options.nix
     ../../modules/os/network-scripts/options.nix
     ../../modules/os/powersaver/options.nix

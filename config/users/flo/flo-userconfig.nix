@@ -42,6 +42,7 @@
         scheme = "ayu-dark";
       };
       vicinae.enable = true;
+      "vicinae-bitwarden".enable = true;
       waybar.enable = true;
     };
     development = {
