@@ -23,6 +23,7 @@
     ../../modules/desktop/google-chrome/home.nix
     ../../modules/desktop/hyprland/home.nix
     ../../modules/desktop/mako/home.nix
+    ../../modules/desktop/qutebrowser/home.nix
     ../../modules/desktop/skynetshell/home.nix
     ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix

@@ -76,6 +76,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # Only restart services whose unit files actually changed,
+  # rather than restarting all managed services on every build.
+  systemd.user.startServices = "sd-switch";
+
   fonts.fontconfig.enable = true;
 
   programs.bash.bashrcExtra = ''

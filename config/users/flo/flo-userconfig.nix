@@ -34,6 +34,7 @@
       "google-chrome".enable = true;
       hyprland.enable = true;
       mako.enable = true;
+      qutebrowser.enable = true;
       skynetshell.enable = true;
       stylix = {
         enable = true;

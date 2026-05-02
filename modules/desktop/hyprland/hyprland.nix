@@ -5,86 +5,6 @@
   ...
 }:
 let
-  qsLock = config.programs.skynetshell.quickshell.lockCommand;
-
-  mkKeypadBindings =
-    {
-      mod,
-      action,
-      d,
-    }:
-    let
-      keys = [
-        {
-          key = "KP_Left";
-          x = -1;
-          y = 0;
-        }
-        {
-          key = "KP_Right";
-          x = 1;
-          y = 0;
-        }
-        {
-          key = "KP_Up";
-          x = 0;
-          y = -1;
-        }
-        {
-          key = "KP_Down";
-          x = 0;
-          y = 1;
-        }
-        {
-          key = "KP_Begin";
-          x = 0;
-          y = 1;
-        }
-        {
-          key = "KP_Home";
-          x = -1;
-          y = -1;
-        }
-        {
-          key = "KP_Prior";
-          x = 1;
-          y = -1;
-        }
-        {
-          key = "KP_End";
-          x = -1;
-          y = 1;
-        }
-        {
-          key = "KP_Next";
-          x = 1;
-          y = 1;
-        }
-        {
-          key = "i";
-          x = 0;
-          y = -1;
-        }
-        {
-          key = "j";
-          x = -1;
-          y = 0;
-        }
-        {
-          key = "k";
-          x = 0;
-          y = 1;
-        }
-        {
-          key = "l";
-          x = 1;
-          y = 0;
-        }
-      ];
-    in
-    map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
-in
-let
   mon = config.skynet.host.primaryMonitor;
 in
 {
@@ -111,9 +31,9 @@ in
         "$fileManager" = "nautilus";
         "$mainMod" = "SUPER";
         "$code" = "vscode";
-        "$browser" = "google-chrome-stable";
+        "$browser" = "env LIBVA_DRIVER_NAME=iHD qutebrowser";
         "$editor" = "micro";
-        "$lockscreen" = "${qsLock}";
+        "$lockscreen" = "${config.programs.skynetshell.quickshell.lockCommand}";
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"
@@ -144,9 +64,7 @@ in
           "$mainMod SHIFT, W, hy3:makegroup, tab, toggle"
           "$mainMod, V, hy3:makegroup, v"
 
-          "$mainMod, Tab, focusurgentorlast"
-
-          # MOVE WINDOWS
+          # FOCUS / MOVE WINDOWS
           "$mainMod, left, hy3:movefocus, l"
           "$mainMod, right, hy3:movefocus, r"
           "$mainMod, up, hy3:movefocus, u"
@@ -157,7 +75,17 @@ in
           "$mainMod SHIFT, up, hy3:movewindow, u"
           "$mainMod SHIFT, down, hy3:movewindow, d"
 
-          # MOVE BETWEEN WORKSPACES
+          # RESIZE (ijkl: i=up j=left k=down l=right)
+          "$mainMod, i, resizeactive, 0 15"
+          "$mainMod, j, resizeactive, -15 0"
+          "$mainMod, k, resizeactive, 0 -15"
+          "$mainMod, l, resizeactive, 15 0"
+          "$mainMod SHIFT, i, resizeactive, 0 100"
+          "$mainMod SHIFT, j, resizeactive, -100 0"
+          "$mainMod SHIFT, k, resizeactive, 0 -100"
+          "$mainMod SHIFT, l, resizeactive, 100 0"
+
+          # WORKSPACES
           "$mainMod, 1, workspace, 1"
           "$mainMod, 2, workspace, 2"
           "$mainMod, 3, workspace, 3"
@@ -182,39 +110,7 @@ in
           "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
           "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
           "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
-
-          # RESIZE MODE / MOVE FLOATING
-        ]
-        ++ (mkKeypadBindings {
-          mod = "";
-          action = "resizeactive";
-          d = 80;
-        })
-        ++ (mkKeypadBindings {
-          mod = "CTRL";
-          action = "resizeactive";
-          d = 20;
-        })
-        ++ (mkKeypadBindings {
-          mod = "CTRL SHIFT";
-          action = "resizeactive";
-          d = 5;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT";
-          action = "moveactive";
-          d = 160;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT CTRL";
-          action = "moveactive";
-          d = 40;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT CTRL SHIFT";
-          action = "moveactive";
-          d = 10;
-        });
+        ];
 
         # Move/resize windows with mainMod + LMB/RMB and dragging
         bindm = [
@@ -247,9 +143,6 @@ in
           "size 500 100, match:class Alacritty, match:title ^(initial-shell)$"
           "float on, match:class ^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
           "float on, match:class org.pulseaudio.pavucontrol"
-
-          # "float on, match:class Rofi"
-          # "stay_focused on, match:class Rofi"
         ];
 
         layerrule = lib.optionals config.skynet.module.desktop.mako.enable [
@@ -317,9 +210,6 @@ in
           };
         };
 
-        # hy3 plugin settings moved to extraConfig (after plugin load line)
-        # to avoid "unknown option" errors during config parsing.
-
         misc = {
           layers_hog_keyboard_focus = true;
           initial_workspace_tracking = 0;
@@ -329,15 +219,10 @@ in
           disable_hyprland_logo = true;
           enable_swallow = false;
           focus_on_activate = true;
-          vfr = true; # Variable Frame Rate
-          vrr = 2; # Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
-          # Screen flashing to black momentarily or going black when app is fullscreen
-          # Try setting vrr to 0
-
-          #  Application not responding (ANR) settings
+          vfr = true;
+          vrr = 2;
           enable_anr_dialog = true;
           anr_missed_pings = 20;
-
         };
 
         dwindle = {
@@ -364,7 +249,7 @@ in
         };
 
         cursor = {
-          no_hardware_cursors = 2; # change to 1 if want to disable
+          no_hardware_cursors = 2;
           warp_on_change_workspace = 2;
           no_warps = true;
         };
@@ -390,7 +275,6 @@ in
           "QT_QPA_PLATFORM=wayland;xcb"
           "QT_WAYLAND_DISABLE_WINDOWDECORATION, 1"
           "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
-          #     "SDL_VIDEODRIVER, x11"
           "MOZ_ENABLE_WAYLAND, 1"
           "AQ_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
           "GDK_SCALE,1"
@@ -400,10 +284,6 @@ in
         ];
       };
 
-      # Load hy3 at config-parse time (not via exec-once) so plugin
-      # Load hy3 plugin at config-parse time, then apply its settings.
-      # Both must be in extraConfig (after settings) so the plugin is
-      # loaded before its options are parsed.
       extraConfig = ''
         plugin = ${pkgs.hyprlandPlugins.hy3}/lib/libhy3.so
         plugin {

@@ -152,11 +152,24 @@ in
     (lib.mkIf cfg.easyeffects.enable {
       services.easyeffects.enable = true;
 
+      # Override ExecStart/ExecStop to use stable paths (easyeffects is on PATH
+      # via home.packages). Without this, sd-switch restarts the service on
+      # every rebuild because the nix store path of easyeffects changes.
+      systemd.user.services.easyeffects.Service = {
+        ExecStart = lib.mkForce "easyeffects --hide-window --service-mode";
+        ExecStop = lib.mkForce "easyeffects --quit";
+      };
+
       home.activation.easyeffectsDb = lib.mkIf (cfg.easyeffects.db != null) (
         lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          $DRY_RUN_CMD mkdir -p "$HOME/.config/easyeffects/db"
-          $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -r --chmod=u+rw \
-            ${cfg.easyeffects.db}/ "$HOME/.config/easyeffects/db/"
+          _ee_src="${cfg.easyeffects.db}"
+          _ee_stamp="$HOME/.config/easyeffects/.last-nix-source"
+          if [[ "$(cat "$_ee_stamp" 2>/dev/null)" != "$_ee_src" ]]; then
+            $DRY_RUN_CMD mkdir -p "$HOME/.config/easyeffects/db"
+            $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -r --chmod=u+rw \
+              "$_ee_src/" "$HOME/.config/easyeffects/db/"
+            $DRY_RUN_CMD ${pkgs.coreutils}/bin/echo "$_ee_src" > "$_ee_stamp"
+          fi
         ''
       );
 
