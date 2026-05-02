@@ -40,6 +40,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    balaclava = {
+      url = "path:/home/flo/repos/personal/balaclava";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =

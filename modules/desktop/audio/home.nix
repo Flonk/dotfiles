@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -108,6 +109,10 @@ let
 in
 {
   config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      home.packages = [ inputs.balaclava.packages.${pkgs.system}.default ];
+    }
+
     # --- Sink auto-switching ---
     (lib.mkIf (cfg.defaultAudioSink != "") {
       systemd.user.services.audio-auto-switch = {

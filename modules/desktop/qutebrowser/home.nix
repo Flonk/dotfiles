@@ -216,6 +216,19 @@ in
           "<Alt+Shift+Right>" = "debug-pyeval -q exec(open('${tabMoveRight}').read())";
           "<Alt+Shift+Up>"    = "debug-pyeval -q exec(open('${tabMoveUp}').read())";
           "<Alt+Shift+Down>"  = "debug-pyeval -q exec(open('${tabMoveDown}').read())";
+          # Tab by number (Alt+1..9 → tab 1..9, Alt+0 → tab 10)
+          "<Alt+1>" = "tab-focus 1";
+          "<Alt+2>" = "tab-focus 2";
+          "<Alt+3>" = "tab-focus 3";
+          "<Alt+4>" = "tab-focus 4";
+          "<Alt+5>" = "tab-focus 5";
+          "<Alt+6>" = "tab-focus 6";
+          "<Alt+7>" = "tab-focus 7";
+          "<Alt+8>" = "tab-focus 8";
+          "<Alt+9>" = "tab-focus 9";
+          "<Alt+0>" = "tab-focus 10";
+          # Reload
+          "<Ctrl+r>" = "reload";
           # Merge
           "<Alt+m>"         = "debug-pyeval -q exec(open('${mergeWorkspace}').read())";
           "<Alt+Shift+m>"   = "debug-pyeval -q exec(open('${mergeAll}').read())";

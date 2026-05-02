@@ -6,13 +6,13 @@
 }:
 let
   mon = config.skynet.host.primaryMonitor;
+  borderSize = 5;
 in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
-
 
       systemd = {
         enable = true;
@@ -176,10 +176,11 @@ in
         general = {
           "$modifier" = "SUPER";
           layout = "hy3";
-          gaps_in = 0;
+          # Border collapse: negative top+left gaps make adjacent borders
+          # overlap into a single line (CSS border-collapse style).
+          gaps_in = "-${toString borderSize},0,0,-${toString borderSize}";
           gaps_out = 0;
-          border_size = 4;
-          resize_on_border = true;
+          border_size = borderSize;
         };
 
         animations = {
@@ -289,9 +290,11 @@ in
         plugin {
           hy3 {
             tabs {
+              height = 20
               radius = 0
               padding = 0
               text_font = ${config.stylix.fonts.sansSerif.name}
+              text_height = 7
             }
           }
         }

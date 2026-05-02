@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "balaclava": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777740186,
+        "narHash": "sha256-GNIR2C/NZIyI0YTh4grSTn5ZsT6T11S9oSoVISm9ZtY=",
+        "path": "/home/flo/repos/personal/balaclava",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/flo/repos/personal/balaclava",
+        "type": "path"
+      }
+    },
     "base16": {
       "inputs": {
         "fromYaml": "fromYaml"
@@ -275,6 +292,7 @@
     },
     "root": {
       "inputs": {
+        "balaclava": "balaclava",
         "home-manager": "home-manager",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
@@ -458,11 +476,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1777243295,
-        "narHash": "sha256-93BwU2DfV4UJVRHTOzG30UmRvS10yUVJXi6uPc0WxLY=",
+        "lastModified": 1777753133,
+        "narHash": "sha256-aUM+rSGb6liWdSBVABBwUKZXhsr5iUPq2QfnjkIsEVE=",
         "owner": "vicinaehq",
         "repo": "vicinae",
-        "rev": "b3e11a9654656d63f09cfabeb7f7330f32fc851b",
+        "rev": "a0b875caf4accf7e43bca88da0c509f8d9176908",
         "type": "github"
       },
       "original": {

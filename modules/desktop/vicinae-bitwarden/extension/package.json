@@ -12,7 +12,14 @@
       "title": "Search Vault",
       "subtitle": "Bitwarden",
       "description": "Search items in your Bitwarden vault",
-      "mode": "view"
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "query",
+          "placeholder": "Search query",
+          "type": "text"
+        }
+      ]
     }
   ],
   "scripts": {
