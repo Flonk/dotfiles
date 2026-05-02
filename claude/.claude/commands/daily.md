@@ -1,6 +1,6 @@
 This skill handles food logging, Garmin syncing, and end-of-day summaries. Behavior depends on context:
 
-**Important:** Food tracking lives in Obsidian, NOT Garmin. Calorie logs are stored at `claude/crystallized/calorie-log/YYYY-MM-DD.md` and the food database is at `claude/crystallized/food-db.md`. Never use Garmin's food log tools.
+**Important:** Food tracking lives in Obsidian, NOT Garmin. Calorie logs are stored at `claude/fitness/calorie-log/YYYY-MM-DD.md` and the food database is at `claude/fitness/food-db.md`. Never use Garmin's food log tools.
 
 ---
 
@@ -8,8 +8,8 @@ This skill handles food logging, Garmin syncing, and end-of-day summaries. Behav
 
 Triggered when the user mentions specific food they ate (e.g. "track 1 butter croissant", "log a protein shake").
 
-1. Look up each item in `claude/crystallized/food-db.md`. If not found, **you MUST WebSearch for real nutrition facts** — never estimate or invent numbers. Add the item to the DB, then continue.
-2. Get today's date with `date '+%Y-%m-%d'`, then read `claude/crystallized/calorie-log/YYYY-MM-DD.md` (substituting the actual date).
+1. Look up each item in `claude/fitness/food-db.md`. If not found, **you MUST WebSearch for real nutrition facts** — never estimate or invent numbers. Add the item to the DB, then continue.
+2. Get today's date with `date '+%Y-%m-%d'`, then read `claude/fitness/calorie-log/YYYY-MM-DD.md` (substituting the actual date).
    - If the file doesn't exist yet: create it with proper frontmatter and an empty `## Calories & Macros` section, then add the item(s).
    - If the file exists and has a `## Calories & Macros` table: use Edit to insert the new row(s) before the `**Total**` row, and update the totals.
    - If the file exists but has no table yet: append a new `## Calories & Macros` section with the item(s) and a totals row.
@@ -38,7 +38,7 @@ tags: [claude/calorie-log]
 
 Triggered when the user asks to pull/sync Garmin data (e.g. "pull garmin data", "sync garmin").
 
-1. Get today's date with `date '+%Y-%m-%d'` and read `claude/crystallized/calorie-log/YYYY-MM-DD.md`. If the file doesn't exist, create it with proper frontmatter first.
+1. Get today's date with `date '+%Y-%m-%d'` and read `claude/fitness/calorie-log/YYYY-MM-DD.md`. If the file doesn't exist, create it with proper frontmatter first.
 2. Pull today's Garmin data in parallel:
    - Activities via `mcp__garmin__get_activities_fordate`
    - Daily stats via `mcp__garmin__get_stats` (for `total_calories`, `bmr_calories`, `active_calories`)
@@ -65,9 +65,9 @@ Triggered when the user asks to pull/sync Garmin data (e.g. "pull garmin data", 
 
 Triggered when the user asks for a daily summary or end-of-day wrap-up.
 
-1. Read `claude/crystallized/food-db.md`. Get today's date with `date '+%Y-%m-%d'` and read `claude/crystallized/calorie-log/YYYY-MM-DD.md`. If the file doesn't exist, create it with proper frontmatter and empty sections first.
+1. Read `claude/fitness/food-db.md`. Get today's date with `date '+%Y-%m-%d'` and read `claude/fitness/calorie-log/YYYY-MM-DD.md`. If the file doesn't exist, create it with proper frontmatter and empty sections first.
 2. Ask the user what they ate today (any meals/snacks not yet logged). Then look up each item in the food DB (adding any unknowns), and update the `## Calories & Macros` table exactly as in the Quick Food Log flow.
 3. Run the full Garmin Sync flow (steps 2–4 above).
 4. Report the full summary to the user: food in, total burn, deficit/surplus, macros vs targets.
-5. Check `claude/gold/projects.md` for any events that have now passed. Ask the user how they went, then remove them from the list.
-6. Ask the user about any new events, plans, or things coming up that should be added to `claude/gold/projects.md`.
+5. Check `claude/projects.md` for any events that have now passed. Ask the user how they went, then remove them from the list.
+6. Ask the user about any new events, plans, or things coming up that should be added to `claude/projects.md`.

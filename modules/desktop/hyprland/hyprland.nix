@@ -46,7 +46,7 @@ in
           "$mainMod CTRL, RETURN, exec, $browser"
 
           "$mainMod, ESCAPE, exec, $lockscreen"
-          "$mainMod, M, exit"
+          "$mainMod, M, exec, obsidian daily"
           "$mainMod, Q, killactive"
 
           "$mainMod, PRINT, exec, hyprshot -m window -m active"
@@ -290,7 +290,7 @@ in
         plugin {
           hy3 {
             tabs {
-              height = 20
+              height = 24
               radius = 0
               padding = 0
               text_font = ${config.stylix.fonts.sansSerif.name}

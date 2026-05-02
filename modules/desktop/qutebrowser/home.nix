@@ -227,6 +227,8 @@ in
           "<Alt+8>" = "tab-focus 8";
           "<Alt+9>" = "tab-focus 9";
           "<Alt+0>" = "tab-focus 10";
+          # Zoom
+          "<Ctrl+0>" = "zoom";
           # Reload
           "<Ctrl+r>" = "reload";
           # Merge

@@ -311,8 +311,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1777671393,
-        "narHash": "sha256-QmpqZ6sPHzVGRzky1m6lUhdyK3ulYzw8rotu5ZJVVqQ=",
+        "lastModified": 1777765431,
+        "narHash": "sha256-NJBf22nFnKapKhzO0vt96yzpcO2+x7ijM9GGrD+m1JQ=",
         "path": "/home/flo/repos/personal/skynetshell",
         "type": "path"
       },
