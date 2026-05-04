@@ -290,11 +290,9 @@ in
         plugin {
           hy3 {
             tabs {
-              height = 24
               radius = 0
               padding = 0
               text_font = ${config.stylix.fonts.sansSerif.name}
-              text_height = 7
             }
           }
         }

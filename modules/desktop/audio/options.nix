@@ -47,6 +47,11 @@ in
         default = "defaultSink";
         description = "EasyEffects output preset name to load when the speaker sink is active.";
       };
+      passthroughPreset = mkOption {
+        type = types.str;
+        default = "passthrough";
+        description = "EasyEffects output preset name to load when a non-speaker sink is active (empty plugin chain).";
+      };
     };
   };
 }

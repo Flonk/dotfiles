@@ -8,44 +8,6 @@
 let
   cfg = config.skynet.module.desktop.audio;
 
-  # --- Auto-switch default sink to BT headphones when connected ---
-  autoSwitchScript = pkgs.writeShellScript "audio-auto-switch.sh" ''
-    set -euo pipefail
-
-    DEFAULT_SINK="${cfg.defaultAudioSink}"
-    DEBOUNCE_PID=""
-
-    update_default() {
-      local bt_sink
-      bt_sink=$(${pkgs.pulseaudio}/bin/pactl list short sinks 2>/dev/null \
-        | ${pkgs.gnugrep}/bin/grep "^[0-9]*${"\t"}bluez_output" \
-        | ${pkgs.coreutils}/bin/head -1 \
-        | ${pkgs.coreutils}/bin/cut -f2)
-
-      if [[ -n "$bt_sink" ]]; then
-        ${pkgs.pulseaudio}/bin/pactl set-default-sink "$bt_sink"
-      else
-        ${pkgs.pulseaudio}/bin/pactl set-default-sink "$DEFAULT_SINK"
-      fi
-    }
-
-    schedule_update() {
-      if [[ -n "$DEBOUNCE_PID" ]] && kill -0 "$DEBOUNCE_PID" 2>/dev/null; then
-        kill "$DEBOUNCE_PID" 2>/dev/null || true
-      fi
-      (sleep 1 && update_default) &
-      DEBOUNCE_PID=$!
-    }
-
-    update_default
-
-    ${pkgs.pulseaudio}/bin/pactl subscribe 2>/dev/null \
-      | ${pkgs.gnugrep}/bin/grep --line-buffered -E "Event '(change|new|remove)' on (server|sink)" \
-      | while read -r _; do
-          schedule_update
-        done
-  '';
-
   # --- Auto-trust configured Bluetooth headsets ---
   trustScript = pkgs.writeShellScript "bluetooth-trust-headsets" (
     lib.concatMapStrings (p: ''
@@ -54,25 +16,34 @@ let
     '') cfg.trustedBluetoothHeadsets
   );
 
-  # --- EasyEffects: auto-bypass when not on default sink ---
-  autoBypassScript = pkgs.writeShellScript "easyeffects-auto-bypass.sh" ''
+  # --- EasyEffects: switch preset based on active sink ---
+  autoPresetScript = pkgs.writeShellScript "easyeffects-auto-preset.sh" ''
     set -euo pipefail
 
     SPEAKER_SINK="${cfg.defaultAudioSink}"
     SPEAKER_PRESET="${cfg.easyeffects.speakerPreset}"
+    PASSTHROUGH_PRESET="${cfg.easyeffects.passthroughPreset}"
     DEBOUNCE_PID=""
+    CURRENT_PRESET=""
 
-    apply_bypass() {
-      local default_sink
+    ee() {
+      ${pkgs.coreutils}/bin/timeout 5 ${pkgs.easyeffects}/bin/easyeffects "$@" 2>/dev/null || true
+    }
+
+    apply_preset() {
+      local default_sink target
       default_sink=$(${pkgs.pulseaudio}/bin/pactl info 2>/dev/null \
         | ${pkgs.gnugrep}/bin/grep "Default Sink" \
         | ${pkgs.coreutils}/bin/cut -d: -f2 \
         | ${pkgs.coreutils}/bin/tr -d ' ')
       if [[ "${"\${default_sink,,}"}" == "${"\${SPEAKER_SINK,,}"}" ]]; then
-        [[ -n "$SPEAKER_PRESET" ]] && ${pkgs.easyeffects}/bin/easyeffects --load-preset "$SPEAKER_PRESET" 2>/dev/null || true
-        ${pkgs.easyeffects}/bin/easyeffects --bypass 2 2>/dev/null || true
+        target="$SPEAKER_PRESET"
       else
-        ${pkgs.easyeffects}/bin/easyeffects --bypass 1 2>/dev/null || true
+        target="$PASSTHROUGH_PRESET"
+      fi
+      if [[ "$target" != "$CURRENT_PRESET" ]]; then
+        ee --load-preset "$target"
+        CURRENT_PRESET="$target"
       fi
     }
 
@@ -80,11 +51,17 @@ let
       if [[ -n "$DEBOUNCE_PID" ]] && kill -0 "$DEBOUNCE_PID" 2>/dev/null; then
         kill "$DEBOUNCE_PID" 2>/dev/null || true
       fi
-      (sleep 1.5 && apply_bypass) &
+      (sleep 1.5 && apply_preset) &
       DEBOUNCE_PID=$!
     }
 
-    apply_bypass
+    # Wait for easyeffects to become reachable
+    for _ in $(seq 1 10); do
+      ${pkgs.coreutils}/bin/timeout 3 ${pkgs.easyeffects}/bin/easyeffects -p 2>/dev/null && break
+      sleep 2
+    done
+
+    apply_preset
 
     ${pkgs.pulseaudio}/bin/pactl subscribe 2>/dev/null \
       | ${pkgs.gnugrep}/bin/grep --line-buffered -E "Event '(change|new|remove)' on (server|sink)" \
@@ -113,28 +90,6 @@ in
       home.packages = [ inputs.balaclava.packages.${pkgs.system}.default ];
     }
 
-    # --- Sink auto-switching ---
-    (lib.mkIf (cfg.defaultAudioSink != "") {
-      systemd.user.services.audio-auto-switch = {
-        Unit = {
-          Description = "Auto-switch default sink to BT headphones when connected";
-          After = [
-            "graphical-session.target"
-            "pipewire-pulse.service"
-          ];
-          PartOf = [ "graphical-session.target" ];
-        };
-        Service = {
-          ExecStart = autoSwitchScript;
-          Restart = "on-failure";
-          RestartSec = "3s";
-        };
-        Install = {
-          WantedBy = [ "graphical-session.target" ];
-        };
-      };
-    })
-
     # --- Bluetooth headset auto-trust ---
     (lib.mkIf (cfg.trustedBluetoothHeadsets != [ ]) {
       systemd.user.services.bluetooth-trust-headsets = {
@@ -157,13 +112,22 @@ in
     (lib.mkIf cfg.easyeffects.enable {
       services.easyeffects.enable = true;
 
-      # Override ExecStart/ExecStop to use stable paths (easyeffects is on PATH
-      # via home.packages). Without this, sd-switch restarts the service on
-      # every rebuild because the nix store path of easyeffects changes.
+      # Override ExecStart/ExecStop to use a profile-stable path so sd-switch
+      # doesn't restart the service on every rebuild due to store-path churn.
       systemd.user.services.easyeffects.Service = {
-        ExecStart = lib.mkForce "easyeffects --hide-window --service-mode";
-        ExecStop = lib.mkForce "easyeffects --quit";
+        ExecStart = lib.mkForce "${config.home.profileDirectory}/bin/easyeffects --hide-window --service-mode";
+        ExecStop = lib.mkForce "${config.home.profileDirectory}/bin/easyeffects --quit";
       };
+
+      # Passthrough preset: empty plugin chain so EasyEffects stays linked but
+      # applies no processing.
+      home.file.".local/share/easyeffects/output/${cfg.easyeffects.passthroughPreset}.json".text =
+        builtins.toJSON {
+          output = {
+            blocklist = [ ];
+            plugins_order = [ ];
+          };
+        };
 
       home.activation.easyeffectsDb = lib.mkIf (cfg.easyeffects.db != null) (
         lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -190,9 +154,9 @@ in
         }
       ];
 
-      systemd.user.services.easyeffects-auto-bypass = lib.mkIf (cfg.defaultAudioSink != "") {
+      systemd.user.services.easyeffects-auto-preset = lib.mkIf (cfg.defaultAudioSink != "") {
         Unit = {
-          Description = "Auto-bypass EasyEffects when non-speaker sink is active";
+          Description = "Auto-switch EasyEffects preset based on active sink";
           After = [
             "graphical-session.target"
             "easyeffects.service"
@@ -201,7 +165,7 @@ in
           Wants = [ "easyeffects.service" ];
         };
         Service = {
-          ExecStart = autoBypassScript;
+          ExecStart = autoPresetScript;
           Restart = "on-failure";
           RestartSec = "3s";
         };

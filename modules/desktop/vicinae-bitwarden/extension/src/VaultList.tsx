@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { execFileSync } from "child_process";
 import { Action, ActionPanel, Clipboard, List } from "@vicinae/api";
 import { VaultItem, getPassword } from "./rbw";
@@ -91,16 +91,34 @@ export function VaultList({
   initialQuery?: string;
 }) {
   const [searchText, setSearchText] = useState(initialQuery ?? "");
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [filterText, setFilterText] = useState(searchText);
+
+  const handleSearchChange = useCallback((text: string) => {
+    setSearchText(text);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setFilterText(text), 20);
+  }, []);
+
+  const filtered = filterText
+    ? items.filter((item) => {
+        const q = filterText.toLowerCase();
+        return (
+          item.name.toLowerCase().includes(q) ||
+          (item.user?.toLowerCase().includes(q) ?? false) ||
+          (item.uris?.some((u) => u.toLowerCase().includes(q)) ?? false)
+        );
+      })
+    : items;
 
   return (
     <List
       isShowingDetail
       searchBarPlaceholder="Search vault…"
       searchText={searchText}
-      onSearchTextChange={setSearchText}
-      filtering
+      onSearchTextChange={handleSearchChange}
     >
-      {items.map((item) => (
+      {filtered.map((item) => (
         <List.Item
           key={item.id}
           id={item.id}

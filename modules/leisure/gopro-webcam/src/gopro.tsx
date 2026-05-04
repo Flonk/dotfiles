@@ -164,22 +164,30 @@ async function loadModule(ctx: Ctx): Promise<string> {
 
   await root`modprobe v4l2loopback devices=1 exclusive_caps=1 max_buffers=2 card_label=GoPro video_nr=${VIDEO_NR}`;
 
-  if (needWpRestart) await systemctlUser("start", "wireplumber");
-
   // Find the device in sysfs
   const base = "/sys/devices/virtual/video4linux";
+  let found = false;
   for (const dir of await readdir(base)) {
     try {
       const name = await readFile(join(base, dir, "name"), "utf-8");
       if (name.includes("GoPro")) {
         ctx.videoDev = `/dev/${dir}`;
         await root`bash -c ${`echo ${ctx.videoDev} > ${DEVICE_FILE}`}`.nothrow();
-        return ctx.videoDev;
+        found = true;
+        break;
       }
     } catch {}
   }
+  if (!found) throw new Error("v4l2loopback loaded but no GoPro device appeared");
 
-  throw new Error("v4l2loopback loaded but no GoPro device appeared");
+  // Set caps immediately so wireplumber sees a capture device (not just output)
+  // when it processes the add event. Must happen before wireplumber restarts.
+  const caps = `YU12:${ctx.videoSize}`;
+  await root`v4l2loopback-ctl set-caps ${ctx.videoDev!} ${caps}`;
+
+  if (needWpRestart) await systemctlUser("start", "wireplumber");
+
+  return ctx.videoDev!;
 }
 
 async function discoverGoPro(ctx: Ctx): Promise<string> {
@@ -220,10 +228,6 @@ async function activateWebcam(ctx: Ctx): Promise<string | undefined> {
 async function startFfmpeg(ctx: Ctx): Promise<string> {
   // Raise kernel UDP buffer limit
   await root`sysctl -w net.core.rmem_max=16777216`.nothrow();
-
-  // Configure v4l2loopback device caps
-  const caps = `YU12:${ctx.videoSize}`;
-  await root`v4l2loopback-ctl set-caps ${ctx.videoDev!} ${caps}`;
 
   // Pass the ffmpeg launch script to sudo bash via stdin
   const script = [

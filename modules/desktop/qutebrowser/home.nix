@@ -189,10 +189,26 @@ in
         tabs.last_close = "close";
       };
 
+      extraConfig = ''
+        # Nuke normal-mode defaults only — our config.bind() calls live in
+        # c.bindings.commands which is a separate layer and unaffected.
+        c.bindings.default['normal'] = {}
+      '';
+
       keyBindings = {
         normal = {
+          # Essentials
+          "<Escape>" = "clear-keychain ;; search ;; fullscreen --leave";
+          ":" = "cmd-set-text :";
+          "i" = "mode-enter passthrough";
+          # Open URL
+          "o" = "cmd-set-text -s :open";
+          "<F6>" = "cmd-set-text -s :open";
+          # Passthrough / undo
+          "<Ctrl+Shift+t>" = "undo";
           # New tab / close
           "<Ctrl+t>" = "cmd-set-text -s :open -t";
+          "O" = "cmd-set-text -s :open -t";
           "<Ctrl+w>" = "tab-close";
           # Tab navigation
           "<Ctrl+Tab>" = "tab-next";
@@ -227,6 +243,8 @@ in
           "<Alt+8>" = "tab-focus 8";
           "<Alt+9>" = "tab-focus 9";
           "<Alt+0>" = "tab-focus 10";
+          # Yank URL
+          "yy" = "yank";
           # Zoom
           "<Ctrl+0>" = "zoom";
           # Reload
@@ -234,6 +252,14 @@ in
           # Merge
           "<Alt+m>"         = "debug-pyeval -q exec(open('${mergeWorkspace}').read())";
           "<Alt+Shift+m>"   = "debug-pyeval -q exec(open('${mergeAll}').read())";
+        };
+        passthrough = {
+          "<Escape>" = "mode-leave";
+          "<Shift+Escape>" = "fake-key <Escape>";
+          "<Ctrl+t>" = "cmd-set-text -s :open -t";
+          "<Ctrl+f>" = "cmd-set-text /";
+          "<Ctrl+Tab>" = "tab-next";
+          "<Ctrl+Shift+Tab>" = "tab-prev";
         };
       };
     };

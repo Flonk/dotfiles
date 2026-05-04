@@ -62,7 +62,7 @@ in
       SUBSYSTEM=="video4linux", ATTR{name}=="*GoPro*", GROUP="video", MODE="0660"
     '' + lib.optionalString cfg.autoStart ''
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="2672", ATTR{idProduct}=="0059", RUN+="${pkgs.systemd}/bin/systemctl start --no-block gopro-webcam-start.service"
-      ACTION=="remove", SUBSYSTEM=="usb", ENV{ID_VENDOR_ID}=="2672", ENV{ID_MODEL_ID}=="0059", RUN+="${pkgs.systemd}/bin/systemctl start --no-block gopro-webcam-stop.service"
+      ACTION=="remove", SUBSYSTEM=="usb", ENV{PRODUCT}=="2672/59/*", RUN+="${pkgs.systemd}/bin/systemctl start --no-block gopro-webcam-stop.service"
     '';
 
     # Systemd services for udev-triggered auto start/stop.
@@ -71,6 +71,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${gopro-webcam}/bin/gopro-webcam start";
+        # ffmpeg is backgrounded by the script and must outlive the oneshot.
+        KillMode = "process";
         Environment = [
           "GOPRO_USER=${adminUser}"
         ];
