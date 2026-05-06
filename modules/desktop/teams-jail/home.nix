@@ -5,10 +5,24 @@
   ...
 }:
 let
+  s = config.lib.stylix.colors.withHashtag;
+  teamsImg = ./teams-hello-there.png;
+  jailPage = pkgs.writeText "jail-redirect.html" ''
+    <!DOCTYPE html>
+    <html>
+    <head><title>Teams Jail</title></head>
+    <body style="background:${s.base00};color:${s.base05};font-family:monospace;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">
+    <div style="font-size:2rem;text-align:left">
+    <p style="margin-bottom:1.5em">Skynet: Has 20GB+ of free memory</p>
+    <p style="margin-bottom:1em">Microsoft Teams:</p>
+    <img src="data:image/png;base64,${builtins.readFile (pkgs.runCommand "teams-img-b64" {} "${pkgs.coreutils}/bin/base64 -w0 < ${teamsImg} > $out")}" style="max-width:400px;border-radius:8px" />
+    </div>
+    </body>
+    </html>
+  '';
   logFile = "/tmp/teams-jail.log";
   debugPort = "9222";
   fifo = "/tmp/teams-jail.fifo";
-  themeDir = ./theme;
 
   urlencode = pkgs.writeShellScript "urlencode" ''
     ${pkgs.jq}/bin/jq -rn --arg u "$1" '$u|@uri'
@@ -149,7 +163,6 @@ in
     programs.qutebrowser.extraConfig = lib.mkAfter ''
       import subprocess as _sp
       from qutebrowser.api import interceptor as _intc
-
       if not hasattr(_intc, '_teams_registered'):
           @_intc.register
           def _teams_intercept(info: _intc.Request):
@@ -160,6 +173,7 @@ in
                   return
               info.block()
               _sp.Popen(['${teamsJail}', url])
+              _sp.Popen(['qutebrowser', ':open file://${jailPage}'])
 
           _intc._teams_registered = True
     '';
