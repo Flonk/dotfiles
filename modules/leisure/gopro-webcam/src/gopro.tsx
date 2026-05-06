@@ -116,7 +116,15 @@ async function sendNotify(...args: string[]): Promise<void> {
 async function stopFfmpeg(): Promise<string | undefined> {
   let killed = false;
 
-  // Kill by PID file
+  // Stop the transient systemd service (preferred)
+  const status = await root`systemctl is-active gopro-ffmpeg.service`.nothrow();
+  if (status.stdout.trim() === "active") {
+    await root`systemctl stop gopro-ffmpeg.service`.nothrow();
+    killed = true;
+  }
+  await root`systemctl reset-failed gopro-ffmpeg.service`.nothrow();
+
+  // Kill by PID file (fallback for old-style launches)
   if (await exists(PID_FILE)) {
     const pid = (await root`cat ${PID_FILE}`.nothrow()).stdout.trim();
     if (pid) {
@@ -229,38 +237,51 @@ async function startFfmpeg(ctx: Ctx): Promise<string> {
   // Raise kernel UDP buffer limit
   await root`sysctl -w net.core.rmem_max=16777216`.nothrow();
 
-  // Pass the ffmpeg launch script to sudo bash via stdin
-  const script = [
-    `nohup ffmpeg`,
+  // Stop any leftover transient unit from a previous run
+  await root`systemctl stop gopro-ffmpeg.service`.nothrow();
+  await root`systemctl reset-failed gopro-ffmpeg.service`.nothrow();
+
+  // Launch ffmpeg as a transient systemd service with memory limits.
+  // This keeps it in a tracked cgroup so it can't OOM the whole system.
+  const cmd = [
+    `systemd-run`,
+    `--unit=gopro-ffmpeg`,
+    `--property=MemoryMax=2G`,
+    `--property=MemoryHigh=1G`,
+    `--property=StandardOutput=file:${LOG_FILE}`,
+    `--property=StandardError=file:${LOG_FILE}`,
+    `--`,
+    `ffmpeg`,
     `-nostdin -use_wallclock_as_timestamps 1`,
     `-f mpegts -fflags nobuffer+discardcorrupt -flags low_delay`,
     `-max_delay 0`,
     `-analyzeduration 256k -probesize 256k`,
     `-skip_frame noref -flags2 fast`,
-    `-i 'udp://@0.0.0.0:${PORT}?overrun_nonfatal=1&fifo_size=100000000&buffer_size=16777216'`,
+    `-i 'udp://@0.0.0.0:${PORT}?overrun_nonfatal=1&fifo_size=50000&buffer_size=16777216'`,
     `-map 0:v -vf 'format=yuv420p'`,
     `-fps_mode passthrough -codec:v rawvideo -pix_fmt yuv420p`,
     `-flush_packets 1`,
     `-f v4l2 ${ctx.videoDev}`,
-    `>${LOG_FILE} 2>&1 < /dev/null &`,
-    `echo $! > ${PID_FILE}`,
-  ].join(" \\\n  ");
+  ].join(" ");
 
   if (isRoot) {
-    await $({ input: script })`bash`;
+    await $({ input: cmd })`bash`;
   } else {
-    await $({ input: script })`sudo bash`;
+    await $({ input: cmd })`sudo bash`;
   }
 
   // Give ffmpeg a moment to start (or crash)
   await sleep(2000);
 
-  // Verify it's alive
-  if (await exists(PID_FILE)) {
-    const pid = (await root`cat ${PID_FILE}`).stdout.trim();
-    if (pid && (await root`kill -0 ${pid}`.nothrow()).exitCode === 0) {
-      return "streaming";
+  // Verify it's alive via systemd
+  const status = await root`systemctl is-active gopro-ffmpeg.service`.nothrow();
+  if (status.stdout.trim() === "active") {
+    // Write PID file for the stop function
+    const mainPid = (await root`systemctl show -p MainPID --value gopro-ffmpeg.service`.nothrow()).stdout.trim();
+    if (mainPid && mainPid !== "0") {
+      await root`bash -c ${`echo ${mainPid} > ${PID_FILE}`}`.nothrow();
     }
+    return "streaming";
   }
 
   const log = (await $`tail -20 ${LOG_FILE}`.nothrow()).stdout;

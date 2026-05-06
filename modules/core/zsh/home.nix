@@ -52,7 +52,11 @@
 
           end = lib.mkAfter ''
             cc_fn() {
-              z "''${1:-claude}" && claude --dangerously-skip-permissions
+              if [[ -n "$1" ]]; then
+                cd "$1" && claude --dangerously-skip-permissions
+              else
+                cd ~/repos/personal/dotfiles/claude && claude --dangerously-skip-permissions
+              fi
             }
 
             if [[ -n ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)} ]]; then

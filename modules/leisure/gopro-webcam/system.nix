@@ -81,6 +81,7 @@ in
         gopro-webcam
         pkgs.bashInteractive
         pkgs.ffmpeg
+        pkgs.systemd
         pkgs.util-linux # runuser
         config.boot.kernelPackages.v4l2loopback.bin
       ];

@@ -52,7 +52,7 @@ let
     export VPN_HOST_FILE="${config.sops.secrets.vpn3ithost.path}"
     export VPN_USER_FILE="${config.sops.secrets.vpn3ituser.path}"
     export VPN_PASS_FILE="${config.sops.secrets.vpn3itpass.path}"
-    exec ${./vpn3it.sh}
+    exec ${./vpn3it.sh} "$@"
   '';
 in
 {

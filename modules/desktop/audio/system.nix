@@ -40,6 +40,15 @@ in
               }
             }
           }
+          {
+            matches = [{ node.name = "~alsa_input.*" }]
+            actions = {
+              update-props = {
+                "priority.driver" = 2000
+                "priority.session" = 2000
+              }
+            }
+          }
         ]
 
         monitor.bluez5.rules = [
@@ -49,6 +58,15 @@ in
               update-props = {
                 "priority.driver" = 2100
                 "priority.session" = 2100
+              }
+            }
+          }
+          {
+            matches = [{ node.name = "~bluez_input.*" }]
+            actions = {
+              update-props = {
+                "priority.driver" = 100
+                "priority.session" = 100
               }
             }
           }
