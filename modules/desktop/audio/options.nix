@@ -13,6 +13,11 @@ in
       default = "";
       description = "PulseAudio sink name for the laptop speakers (fallback when no BT device is connected).";
     };
+    headphoneSink = mkOption {
+      type = types.str;
+      default = "";
+      description = "PulseAudio sink name for wired headphones. When non-empty, the auto-preset script will switch the default sink on headphone jack events.";
+    };
     trustedBluetoothHeadsets = mkOption {
       type = types.listOf (
         types.submodule {

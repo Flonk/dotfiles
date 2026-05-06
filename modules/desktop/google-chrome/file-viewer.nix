@@ -7,15 +7,13 @@
 let
   wrapper = pkgs.writeShellScriptBin "xdg-open-tabbed" ''
     set -euo pipefail
-    ${pkgs.hyprland}/bin/hyprctl dispatch 'hy3:makegroup tab' || true
     open_one() {
       local arg="$1" uri
       if [ -n "$arg" ] && ! printf '%s' "$arg" | grep -q '://'; then
         uri="file://$(${pkgs.coreutils}/bin/realpath "$arg")"
       else
-        uri="$arg"ch
+        uri="$arg"
       fi
-      ${pkgs.hyprland}/bin/hyprctl dispatch 'hy3:setephemeral true' || true
       exec google-chrome-stable --app="$uri"
     }
     if [ "$#" -ge 1 ]; then

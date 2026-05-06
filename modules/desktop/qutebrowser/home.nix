@@ -176,6 +176,12 @@ in
       mimeType = [ "text/html" "x-scheme-handler/http" "x-scheme-handler/https" ];
     };
 
+    xdg.mimeApps.defaultApplications = {
+      "x-scheme-handler/http" = "qutebrowser.desktop";
+      "x-scheme-handler/https" = "qutebrowser.desktop";
+      "text/html" = "qutebrowser.desktop";
+    };
+
     programs.qutebrowser = {
       enable = true;
 
@@ -210,6 +216,7 @@ in
           "<Ctrl+t>" = "cmd-set-text -s :open -t";
           "O" = "cmd-set-text -s :open -t";
           "<Ctrl+w>" = "tab-close";
+          "<Ctrl+Shift+n>" = "open -p";
           # Tab navigation
           "<Ctrl+Tab>" = "tab-next";
           "<Ctrl+Shift+Tab>" = "tab-prev";

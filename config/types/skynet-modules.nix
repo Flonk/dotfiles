@@ -25,6 +25,7 @@
     ../../modules/desktop/hyprland/options.nix
     ../../modules/desktop/mako/options.nix
     ../../modules/desktop/qutebrowser/options.nix
+    ../../modules/desktop/teams-jail/options.nix
     ../../modules/desktop/skynetshell/options.nix
     ../../modules/desktop/stylix/options.nix
     ../../modules/desktop/vicinae/options.nix

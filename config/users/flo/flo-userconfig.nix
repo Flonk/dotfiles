@@ -20,6 +20,7 @@
       audio = {
         enable = true;
         defaultAudioSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
+        headphoneSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Headphones__sink";
         easyeffects.enable = true;
         trustedBluetoothHeadsets = [
           {
@@ -35,6 +36,7 @@
       hyprland.enable = true;
       mako.enable = true;
       qutebrowser.enable = true;
+      "teams-jail".enable = true;
       skynetshell.enable = true;
       stylix = {
         enable = true;

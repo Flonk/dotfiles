@@ -51,7 +51,7 @@ in
           }
         ]
 
-        monitor.bluez5.rules = [
+        monitor.bluez.rules = [
           {
             matches = [{ node.name = "~bluez_output.*" }]
             actions = {

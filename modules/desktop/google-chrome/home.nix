@@ -15,9 +15,6 @@
     ];
 
     xdg.mimeApps.defaultApplications = {
-      "x-scheme-handler/http" = "google-chrome.desktop";
-      "x-scheme-handler/https" = "google-chrome.desktop";
-      "text/html" = "google-chrome.desktop";
 
       # File viewer (chrome-app-tabbed)
       "image/jpeg" = [ "chrome-app-tabbed.desktop" ];
