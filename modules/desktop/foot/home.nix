@@ -36,7 +36,7 @@
           initial-window-size-pixels = "700x500";
           # initial-window-size-chars=<COLSxROWS>
           initial-window-mode = "windowed";
-          # pad=0x0 center-when-maximized-and-fullscreen
+          pad = "6x6";
           resize-by-cells = "yes";
           # resize-keep-grid=yes
           # resize-delay-ms=100
