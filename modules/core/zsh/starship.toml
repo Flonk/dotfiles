@@ -1,0 +1,62 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+${custom.user_local}${custom.user_ssh}\
+${custom.arrow_local}${custom.arrow_ssh}\
+$directory\
+[](fg:#769ff0 bg:#394260)\
+$git_branch\
+$git_commit\
+$git_status\
+[](fg:#394260)\
+\n$character"""
+
+
+
+
+[custom.user_local]
+when = 'test -z "$SSH_CONNECTION"'
+command = 'printf "%s" "$USER"'
+shell = ["sh", "--noprofile", "--norc"]
+style = "bg:#9A348E"
+format = '[ $output ]($style)'
+
+[custom.user_ssh]
+when = 'test -n "$SSH_CONNECTION"'
+command = 'printf "%s@%s" "$USER" "${HOSTNAME:-$HOST}"'
+shell = ["sh", "--noprofile", "--norc"]
+style = "bg:#cc241d"
+format = '[ $output ]($style)'
+
+[custom.arrow_local]
+when = 'test -z "$SSH_CONNECTION"'
+command = 'true'
+shell = ["sh", "--noprofile", "--norc"]
+format = '[](bg:#769ff0 fg:#9A348E)'
+
+[custom.arrow_ssh]
+when = 'test -n "$SSH_CONNECTION"'
+command = 'true'
+shell = ["sh", "--noprofile", "--norc"]
+format = '[](bg:#769ff0 fg:#cc241d)'
+
+[directory]
+style = "fg:#e3e5e5 bg:#769ff0"
+format = "[ $path ]($style)"
+
+[git_branch]
+symbol = "git"
+style = "bg:#394260"
+format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
+
+[git_commit]
+tag_symbol = " tag "
+
+[git_status]
+style = "bg:#394260"
+format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+ahead = "+"
+behind = "-"
+diverged = "+-"
+renamed = "r"
+deleted = "x"
