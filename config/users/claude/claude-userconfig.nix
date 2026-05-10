@@ -17,6 +17,7 @@
         enable = true;
         service.enable = true;
       };
+      obsidian.enable = true;
     };
   };
 }

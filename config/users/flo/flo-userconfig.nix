@@ -55,7 +55,10 @@
         enable = true;
         service.enable = true;
       };
-      obsidian.enable = true;
+      obsidian = {
+        enable = true;
+        ui.enable = true;
+      };
       vscode.enable = true;
       "zed-editor".enable = true;
     };

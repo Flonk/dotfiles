@@ -4,12 +4,21 @@
   lib,
   ...
 }:
+let
+  obScript = pkgs.writeShellScriptBin "ob" ''
+    export PATH="${pkgs.nodejs_22}/bin:$PATH"
+    exec ${pkgs.nodejs_22}/bin/npx --yes obsidian-headless "$@"
+  '';
+  cfg = config.skynet.module.development.obsidian;
+in
 {
-  config = lib.mkIf config.skynet.module.development.obsidian.enable {
-    home.packages = with pkgs; [ obsidian ];
+  config = lib.mkIf cfg.enable {
+    home.packages =
+      [ obScript ]
+      ++ lib.optionals cfg.ui.enable [ pkgs.obsidian ];
 
-    stylix.targets.obsidian.enable = true;
-    stylix.targets.obsidian.vaultNames = lib.mkIf config.skynet.module.desktop.stylix.enable [
+    stylix.targets.obsidian.enable = lib.mkIf cfg.ui.enable true;
+    stylix.targets.obsidian.vaultNames = lib.mkIf (cfg.ui.enable && config.skynet.module.desktop.stylix.enable) [
       "Vault"
     ];
   };
