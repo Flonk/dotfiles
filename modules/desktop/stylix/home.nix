@@ -7,6 +7,7 @@
 let
   scheme = config.skynet.module.desktop.stylix.scheme;
   enabled = config.skynet.module.desktop.stylix.enable;
+  wallpaper = config.skynet.module.desktop.stylix.wallpaper;
 in
 {
   config = lib.mkMerge [
@@ -18,7 +19,6 @@ in
       gtk.gtk4.theme = null;
 
       stylix = {
-        image = config.skynet.module.desktop.stylix.wallpaper;
         cursor = {
           package = pkgs.apple-cursor;
           name = "Apple Cursor";
@@ -45,6 +45,9 @@ in
           };
         };
       };
+    })
+    (lib.mkIf (enabled && wallpaper != null) {
+      stylix.image = wallpaper;
     })
   ];
 }
