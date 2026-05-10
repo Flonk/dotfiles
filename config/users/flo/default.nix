@@ -10,8 +10,6 @@
 
   home = {
     packages = with pkgs; [
-      nixfmt
-
       nautilus
       hyprpaper
       hyprshot
@@ -27,17 +25,9 @@
       wl-clipboard
       bluetui
 
-      tree
-      figlet
-      toilet
-      cowsay
-      fortune
-      btop
-      chafa
       cool-retro-term
 
       postman
-      jq
 
       musescore
       discord
@@ -85,13 +75,6 @@
   programs.bash.bashrcExtra = ''
     [[ $- == *i* ]] && shopt -s xpg_echo
   '';
-
-  programs.eza.enable = true;
-  programs.bat.enable = true;
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 
   programs.distrobox.enable = true;
 

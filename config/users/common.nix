@@ -1,5 +1,9 @@
-{ ... }:
+{ pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    nixfmt
+  ];
+
   imports = [
     ../../modules/assorted/jiratui/home.nix
     ../../modules/assorted/nchat/home.nix

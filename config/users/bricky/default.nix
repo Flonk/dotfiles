@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ ... }:
 {
   imports = [
     ./bricky-userconfig.nix
@@ -9,13 +6,6 @@
   ];
 
   home = {
-    packages = with pkgs; [
-      nixfmt
-      jq
-      btop
-      tree
-    ];
-
     username = "bricky";
     homeDirectory = "/home/bricky";
 
@@ -27,11 +17,4 @@
   programs.bash.bashrcExtra = ''
     [[ $- == *i* ]] && shopt -s xpg_echo
   '';
-
-  programs.eza.enable = true;
-  programs.bat.enable = true;
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 }

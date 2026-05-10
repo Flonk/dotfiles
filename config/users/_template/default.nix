@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ ... }:
 {
   imports = [
     ./__USER__-userconfig.nix
@@ -9,13 +6,6 @@
   ];
 
   home = {
-    packages = with pkgs; [
-      nixfmt
-      jq
-      btop
-      tree
-    ];
-
     username = "__USER__";
     homeDirectory = "/home/__USER__";
 
@@ -23,11 +13,4 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-
-  programs.eza.enable = true;
-  programs.bat.enable = true;
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 }

@@ -10,6 +10,11 @@
       fortune
       cowsay
       tree
+      figlet
+      toilet
+      btop
+      chafa
+      jq
     ];
 
     programs.fzf = {
