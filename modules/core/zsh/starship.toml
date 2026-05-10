@@ -11,9 +11,6 @@ $git_status\
 [](fg:#394260)\
 \n$character"""
 
-
-
-
 [custom.user_local]
 when = 'test -z "$SSH_CONNECTION"'
 command = 'printf "%s" "$USER"'
