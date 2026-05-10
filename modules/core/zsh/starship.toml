@@ -4,56 +4,56 @@ format = """
 ${custom.user_local}${custom.user_ssh}\
 ${custom.arrow_local}${custom.arrow_ssh}\
 $directory\
-[](fg:#769ff0 bg:#394260)\
+[](fg:base03 bg:base04)\
 $git_branch\
 $git_commit\
 $git_status\
-[](fg:#394260)\
+[](fg:base04)\
 \n$character"""
 
 [custom.user_local]
 when = 'test -z "$SSH_CONNECTION"'
 command = 'printf "%s" "$USER"'
 shell = ["sh", "--noprofile", "--norc"]
-style = "bg:#9A348E"
+style = "fg:base07 bg:base0D"
 format = '[ $output ]($style)'
 
 [custom.user_ssh]
 when = 'test -n "$SSH_CONNECTION"'
 command = 'printf "ssh %s@%s" "$USER" "${HOSTNAME:-$HOST}"'
 shell = ["sh", "--noprofile", "--norc"]
-style = "bg:#cc241d"
+style = "fg:base07 bg:base08"
 format = '[ $output ]($style)'
 
 [custom.arrow_local]
 when = 'test -z "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:#769ff0 fg:#9A348E)'
+format = '[](bg:base03 fg:base0D)'
 
 [custom.arrow_ssh]
 when = 'test -n "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:#769ff0 fg:#cc241d)'
+format = '[](bg:base03 fg:base08)'
 
 [directory]
-style = "fg:#e3e5e5 bg:#769ff0"
+style = "fg:base07 bg:base03"
 format = "[ $path ]($style)"
 
 [git_branch]
 symbol = "git"
-style = "bg:#394260"
-format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
+style = "bg:base04"
+format = '[[ $symbol $branch ](fg:base00 bg:base04)]($style)'
 
 [git_commit]
 tag_symbol = " tag "
-style = "bg:#394260"
-format = '[[$hash$tag ](fg:#769ff0 bg:#394260)]($style)'
+style = "bg:base04"
+format = '[[$hash$tag ](fg:base00 bg:base04)]($style)'
 
 [git_status]
-style = "bg:#394260"
-format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+style = "bg:base04"
+format = '[[($all_status$ahead_behind )](fg:base00 bg:base04)]($style)'
 ahead = "+"
 behind = "-"
 diverged = "+-"
