@@ -2,6 +2,13 @@
 {
   programs.nix-ld.enable = true;
 
+  security.sudo.extraRules = [
+    {
+      users = [ "claude" ];
+      commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+    }
+  ];
+
   config.skynet = {
     whoami.host = "hetzner";
     host = {
