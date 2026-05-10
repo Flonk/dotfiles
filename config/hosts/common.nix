@@ -83,6 +83,7 @@ in
         isNormalUser = lib.mkDefault true;
         group = lib.mkForce adminUser;
         extraGroups = [ "wheel" ];
+        linger = true;
         openssh.authorizedKeys.keys = authorizedKeys;
       };
       users.groups.${adminUser} = { };

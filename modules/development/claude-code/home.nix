@@ -26,17 +26,17 @@ in
       systemd.user.services.claude-remote-control = {
         Unit = {
           Description = "Claude Code Remote Control";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
+          After = [ "network-online.target" ];
+          Wants = [ "network-online.target" ];
         };
         Service = {
-          Type = "simple";
+          Type = "idle";
           ExecStart = "${claudeRemoteControlScript}/bin/claude-remote-control-start";
           Restart = "on-failure";
           RestartSec = "5s";
         };
         Install = {
-          WantedBy = [ "graphical-session.target" ];
+          WantedBy = [ "default.target" ];
         };
       };
     })
