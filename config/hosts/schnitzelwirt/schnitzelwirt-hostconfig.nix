@@ -1,6 +1,7 @@
 { ... }:
 {
   config.skynet = {
+    whoami.host = "schnitzelwirt";
     host = {
       adminUser = "flo";
       motd.command = "fortune | cowsay";
@@ -25,12 +26,10 @@
         qemu.enable = true;
       };
       os = {
-        fingerprint.enable = false;
         greetd = {
           enable = true;
           greeter = "none";
         };
-        grub.enable = true;
         powersaver.enable = true;
       };
       projects = {

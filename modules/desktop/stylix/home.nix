@@ -6,40 +6,45 @@
 }:
 let
   scheme = config.skynet.module.desktop.stylix.scheme;
+  enabled = config.skynet.module.desktop.stylix.enable;
 in
 {
-  config = lib.mkIf config.skynet.module.desktop.stylix.enable {
-    gtk.gtk4.theme = null;
+  config = lib.mkMerge [
+    {
+      stylix.enable = enabled;
+      stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/${scheme}.yaml";
+    }
+    (lib.mkIf enabled {
+      gtk.gtk4.theme = null;
 
-    stylix = {
-      enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/${scheme}.yaml";
-      image = config.skynet.module.desktop.stylix.wallpaper;
-      cursor = {
-        package = pkgs.apple-cursor;
-        name = "Apple Cursor";
-        size = 24;
+      stylix = {
+        image = config.skynet.module.desktop.stylix.wallpaper;
+        cursor = {
+          package = pkgs.apple-cursor;
+          name = "Apple Cursor";
+          size = 24;
+        };
+        fonts = {
+          monospace = {
+            package = pkgs.nerd-fonts.dejavu-sans-mono;
+            name = "DejaVuSansM Nerd Font";
+          };
+          sansSerif = {
+            package = pkgs.nerd-fonts.dejavu-sans-mono;
+            name = "DejaVuSansM Nerd Font";
+          };
+          serif = {
+            package = pkgs.nerd-fonts.dejavu-sans-mono;
+            name = "DejaVuSansM Nerd Font";
+          };
+          sizes = {
+            applications = 10;
+            desktop = 10;
+            popups = 10;
+            terminal = 9;
+          };
+        };
       };
-      fonts = {
-        monospace = {
-          package = pkgs.nerd-fonts.dejavu-sans-mono;
-          name = "DejaVuSansM Nerd Font";
-        };
-        sansSerif = {
-          package = pkgs.nerd-fonts.dejavu-sans-mono;
-          name = "DejaVuSansM Nerd Font";
-        };
-        serif = {
-          package = pkgs.nerd-fonts.dejavu-sans-mono;
-          name = "DejaVuSansM Nerd Font";
-        };
-        sizes = {
-          applications = 10;
-          desktop = 10;
-          popups = 10;
-          terminal = 9;
-        };
-      };
-    };
-  };
+    })
+  ];
 }

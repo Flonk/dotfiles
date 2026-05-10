@@ -1,0 +1,6 @@
+[soe][BassEnhancer#0]
+amount=5
+bypass=true
+floor=25
+floorActive=true
+harmonics=10

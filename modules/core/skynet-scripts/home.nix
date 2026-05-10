@@ -7,7 +7,6 @@
 
 let
   scripts = config.skynet.cli.scripts;
-  hasTs = builtins.any (s: lib.hasSuffix ".ts" (toString s.script)) scripts;
 
   # Theme colors from Stylix
   s = config.lib.stylix.colors.withHashtag;
@@ -28,61 +27,33 @@ let
     "--bind 'focus:transform-preview-label:[[ -n {1} ]] && printf \" %s \" {1}'"
   ];
 
-  # Build node_modules from package.json (only needed if TS scripts exist)
-  nodeModules = pkgs.buildNpmPackage {
-    pname = "skynet-scripts-deps";
-    version = "1.0.0";
-    src = ./.;
-    npmDepsHash = "sha256-aINlEcFIuu0QW+hgsZF2gyj3EuK1+j5Am5IqZm7zjZg=";
-    dontNpmBuild = true;
-    installPhase = ''
-      mkdir -p $out
-      cp -r node_modules $out/
-    '';
-  };
-
   # Build the scripts directory with all registered scripts
   scriptsDir = pkgs.runCommand "skynet-scripts" { } ''
     mkdir -p $out
-
-    ${lib.optionalString hasTs ''
-      cp ${./package.json} $out/package.json
-      cp -r ${nodeModules}/node_modules $out/
-    ''}
 
     ${lib.concatMapStringsSep "\n" (
       s:
       let
         dir = lib.concatStringsSep "/" (lib.init s.command);
-        filename =
-          lib.last s.command
-          + (lib.optionalString (lib.hasSuffix ".ts" (toString s.script)) ".ts")
-          + (lib.optionalString (lib.hasSuffix ".sh" (toString s.script)) ".sh");
+        filename = lib.last s.command + ".sh";
       in
       ''
         mkdir -p $out/${dir}
         cp ${s.script} $out/${dir}/${filename}
-        ${lib.optionalString (lib.hasSuffix ".sh" (toString s.script)) "chmod +x $out/${dir}/${filename}"}
+        chmod +x $out/${dir}/${filename}
       ''
     ) scripts}
   '';
 
-  # Command string for each script, e.g. "fingerprint enroll"
+  # Command string for each script, e.g. "wifi connect"
   cmdStr = s: lib.concatStringsSep " " s.command;
 
-  # Relative path in scripts dir, e.g. "fingerprint/enroll.ts"
+  # Relative path in scripts dir, e.g. "wifi/connect.sh"
   scriptRelPath =
     s:
     let
       dir = lib.concatStringsSep "/" (lib.init s.command);
-      ext =
-        if lib.hasSuffix ".ts" (toString s.script) then
-          ".ts"
-        else if lib.hasSuffix ".sh" (toString s.script) then
-          ".sh"
-        else
-          "";
-      filename = lib.last s.command + ext;
+      filename = lib.last s.command + ".sh";
     in
     "${dir}/${filename}";
 
@@ -93,18 +64,17 @@ let
       cmd = cmdStr s;
       nArgs = builtins.length s.command;
       relPath = scriptRelPath s;
-      isTs = lib.hasSuffix ".ts" relPath;
     in
     ''
       "${cmd}"|"${cmd} "*)
         shift ${toString nArgs}
-        ${
-          if isTs then
-            ''exec "$SCRIPTS_DIR/node_modules/.bin/tsx" "$SCRIPTS_DIR/${relPath}" "$@"''
-          else
-            ''exec "$SCRIPTS_DIR/${relPath}" "$@"''
-        }
+        exec "$SCRIPTS_DIR/${relPath}" "$@"
         ;;'';
+
+  # Sort scripts by command length descending so more-specific commands match
+  # before their shorter prefixes — bash `case` is first-match-wins and the
+  # pattern `"foo"|"foo "*` would otherwise shadow `"foo bar"`.
+  dispatchScripts = lib.sort (a: b: builtins.length a.command > builtins.length b.command) scripts;
 
   # --- Zsh completions ---
   # Group scripts by their first command word
@@ -230,7 +200,7 @@ let
     )
 
     # --- Resolve prefix-abbreviated args to full command words ---
-    # e.g. "f e" -> "fingerprint enroll"
+    # e.g. "w c" -> "wifi connect"
     _skynet_resolve() {
       local -a resolved=()
       local -a candidates=("''${_SKYNET_CMDS[@]}")
@@ -274,7 +244,7 @@ let
       done
 
       case "$args" in
-        ${lib.concatMapStringsSep "\n        " mkDispatchCase scripts}
+        ${lib.concatMapStringsSep "\n        " mkDispatchCase dispatchScripts}
         *)
           return 1
           ;;
@@ -333,7 +303,7 @@ let
       shift
       _skynet_preview "$*"
     else
-      # Resolve prefix-abbreviated args (e.g. "f e" -> "fingerprint enroll")
+      # Resolve prefix-abbreviated args (e.g. "w c" -> "wifi connect")
       resolved=$(_skynet_resolve "$@")
 
       # shellcheck disable=SC2086
@@ -381,6 +351,57 @@ in
           nix flake update ~/repos/personal/dotfiles
         '';
         usage = "Runs nix flake update to fetch the latest versions of all flake inputs.";
+      }
+      {
+        command = [ "rebuild" ];
+        title = "Rebuild home-manager config";
+        script = pkgs.writeShellScript "rebuild.sh" ''
+          set -euo pipefail
+          echo "Rebuilding home-manager configuration..."
+          home-manager switch --flake ~/repos/personal/dotfiles#${config.skynet.whoami.installation}
+        '';
+        usage = "Runs home-manager switch for ${config.skynet.whoami.installation}.";
+      }
+      {
+        command = [ "keys" ];
+        title = "Show SSH public keys";
+        script = pkgs.writeShellScript "keys.sh" ''
+          set -euo pipefail
+          BLUE=$'\033[34m'
+          RESET=$'\033[0m'
+          show_key() {
+            local file="$1"
+            [ -f "$file" ] || return 0
+            local key
+            key="$(cat "$file")"
+            echo "$key"
+            local size=6
+            [[ ''${#key} -gt 200 ]] && size=3
+            echo "$key" | ${pkgs.qrencode}/bin/qrencode -t PNG --foreground=FFFFFF --background=00000000 -l L -m 2 -s "$size" -o - | ${pkgs.chafa}/bin/chafa
+            echo ""
+          }
+          echo "''${BLUE}## Host Keys''${RESET}"
+          show_key /etc/ssh/ssh_host_ed25519_key.pub
+          if [[ "''${1:-}" == "--all" ]]; then
+            show_key /etc/ssh/ssh_host_rsa_key.pub
+          fi
+          echo "''${BLUE}## User Keys''${RESET}"
+          show_key ~/.ssh/id_ed25519.pub
+          if [[ "''${1:-}" == "--all" ]]; then
+            show_key ~/.ssh/id_rsa.pub
+          fi
+        '';
+        usage = "Shows public SSH keys (ed25519 by default, --all includes RSA).";
+      }
+      {
+        command = [ "system" "rebuild" ];
+        title = "Rebuild NixOS system config";
+        script = pkgs.writeShellScript "system-rebuild.sh" ''
+          set -euo pipefail
+          echo "Rebuilding NixOS system configuration..."
+          sudo nixos-rebuild switch --fast --flake ~/repos/personal/dotfiles#${config.skynet.whoami.host}
+        '';
+        usage = "Runs nixos-rebuild switch for ${config.skynet.whoami.host} (requires sudo).";
       }
     ];
 

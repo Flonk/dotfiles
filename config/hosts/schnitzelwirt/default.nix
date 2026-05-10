@@ -8,16 +8,15 @@
   environment.systemPackages = [ pkgs.foot ];
 
   imports = [
-    ../../types
+    ../../../types
     ../common.nix
     ./schnitzelwirt-system.nix
     ./schnitzelwirt-hardware.nix
     ./schnitzelwirt-hostconfig.nix
   ];
 
-  networking.hostName = "schnitzelwirt";
-
   # Bootloader config
+  boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.devices = [ "nodev" ];

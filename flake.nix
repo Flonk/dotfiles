@@ -35,8 +35,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    skynetlock = {
-      url = "github:Flonk/skynetlock";
+    skynetshell = {
+      url = "github:Flonk/skynetshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    balaclava = {
+      url = "github:Flonk/balaclava";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -58,85 +63,67 @@
       pkgsAarch64 = import nixpkgs {
         system = "aarch64-linux";
       };
+
+      mkSystem =
+        name:
+        {
+          extraModules ? [ ],
+        }:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            inputs.sops-nix.nixosModules.sops
+            inputs.stylix.nixosModules.stylix
+            inputs.skynetshell.nixosModules.default
+            ./config/hosts/${name}
+          ]
+          ++ extraModules;
+        };
+
+      mkHome =
+        name:
+        {
+          pkgs ? pkgsX86,
+          extraModules ? [ ],
+        }:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            inputs.sops-nix.homeManagerModules.sops
+            inputs.vicinae.homeManagerModules.default
+            inputs.stylix.homeModules.stylix
+            inputs.skynetshell.homeManagerModules.default
+            ./config/installations/${name}.nix
+          ]
+          ++ extraModules;
+        };
     in
     {
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
       nixosConfigurations = {
-        schnitzelwirt = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            inputs.sops-nix.nixosModules.sops
-            inputs.stylix.nixosModules.stylix
-            ./config/hosts/schnitzelwirt
-          ];
+        schnitzelwirt = mkSystem "schnitzelwirt" { };
+        chonkler = mkSystem "chonkler" { };
+        bricky = mkSystem "bricky" {
+          extraModules = [ inputs.nixos-wsl.nixosModules.default ];
         };
-        chonkler = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            inputs.sops-nix.nixosModules.sops
-            inputs.stylix.nixosModules.stylix
-            ./config/hosts/chonkler
-          ];
-        };
-        bricky = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            inputs.sops-nix.nixosModules.sops
-            inputs.nixos-wsl.nixosModules.default
-            ./config/hosts/bricky
-          ];
-        };
+        hetzner = mkSystem "hetzner" { };
       };
 
-      homeConfigurations = {
-        flo-schnitzelwirt = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgsX86;
-          extraSpecialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            inputs.sops-nix.homeManagerModules.sops
-            inputs.vicinae.homeManagerModules.default
-            inputs.stylix.homeModules.stylix
-            inputs.skynetlock.homeManagerModules.default
-            ./config/flo-schnitzelwirt.nix
-          ];
-        };
-        flo-chonkler = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgsX86;
-          extraSpecialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            inputs.sops-nix.homeManagerModules.sops
-            inputs.vicinae.homeManagerModules.default
-            inputs.stylix.homeModules.stylix
-            inputs.skynetlock.homeManagerModules.default
-            ./config/flo-chonkler.nix
-          ];
-        };
-        bricky-bricky = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgsX86;
-          extraSpecialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            inputs.sops-nix.homeManagerModules.sops
-            inputs.vicinae.homeManagerModules.default
-            inputs.stylix.homeModules.stylix
-            inputs.skynetlock.homeManagerModules.default
-            ./config/bricky-bricky.nix
-          ];
-        };
-      };
+      homeConfigurations =
+        let
+          installationFiles = builtins.attrNames (builtins.readDir ./config/installations);
+          names = map (f: lib.removeSuffix ".nix" f) (
+            builtins.filter (f: lib.hasSuffix ".nix" f) installationFiles
+          );
+        in
+        lib.genAttrs names (name: mkHome name { });
     };
 
 }

@@ -3,6 +3,8 @@ keys:
   - &user_flochonkler age1h6dfc9mwetfjnec2ttp0kmg7fxvj5vycj3uafmt7u898wjll8s0qnmr5wm
   - &host_schnitzelwirt age1jdngvt8rjryavachuvvgxr8pe99l6h9wpmk94aa6n0m0cea4vpys6mt2w2
   - &host_chonkler age175nwam69zjmasynmkdk664zd4rnvhgz2qghvk272revlne9hq4eqwa7phf
+  - &host_claude-hetzner age12j9mpkm0g52vznxxcudknygq8hm02czryn6590gss3s8nlwyc3ssz94vml
+  - &user_claude-hetzner age1left5nshymcz8ade2v0fhzqphs4c22rxvuhvrr3r545pvwl8jpys83t0cc
 creation_rules:
   - path_regex: (.*/)?secrets/[^/]+\.(yaml|json|env|ini|ovpn|crt)$
     key_groups:
@@ -11,3 +13,5 @@ creation_rules:
           - *user_flochonkler
           - *host_schnitzelwirt
           - *host_chonkler
+          - *host_claude-hetzner
+          - *user_claude-hetzner

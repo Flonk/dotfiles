@@ -10,6 +10,8 @@
       enable = true;
 
       settings = {
+        user.name = "Florian Schindler";
+        user.email = "florian.schindler@andamp.io";
         core.askPass = "";
         rerere.enabled = true;
         push.autosetupRemote = true;

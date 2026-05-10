@@ -1,6 +1,7 @@
 { ... }:
 {
   config.skynet = {
+    whoami.host = "chonkler";
     host = {
       adminUser = "flo";
       motd.command = "fortune | cowsay";
@@ -18,14 +19,26 @@
         "chrome-remote-desktop".enable = false;
       };
       desktop = {
+        audio = {
+          enable = true;
+          defaultAudioSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
+          headphoneSink = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Headphones__sink";
+          easyeffects = {
+            enable = true;
+            db = ./cache/easyeffects/db;
+          };
+        };
+        skynetshell.enable = true;
         stylix.enable = true;
       };
       development = {
         dnsmasq.enable = true;
         qemu.enable = true;
       };
+      leisure = {
+        "gopro-webcam".enable = true;
+      };
       os = {
-        fingerprint.enable = false;
         # IPU6 webcam — currently broken due to SVP7500 USB-IO bridge bulk
         # transfer bugs (intel/ipu6-drivers#426), but keep enabled so it
         # starts working automatically when upstream fixes land.
@@ -33,11 +46,6 @@
           enable = true;
           platform = "ipu6epmtl";
         };
-        greetd = {
-          enable = true;
-          greeter = "none";
-        };
-        grub.enable = true;
         powersaver.enable = true;
       };
       projects = {

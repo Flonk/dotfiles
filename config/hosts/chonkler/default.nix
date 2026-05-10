@@ -6,33 +6,36 @@
 }:
 {
   environment.systemPackages = [ pkgs.foot ];
+  services.fwupd.enable = true;
 
   imports = [
-    ../../types
+    ../../../types
     ../common.nix
     ./chonkler-system.nix
     ./chonkler-hardware.nix
     ./chonkler-hostconfig.nix
   ];
 
-  networking.hostName = "chonkler";
-
   # Bootloader config
   boot.loader.grub.efiSupport = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.devices = [ "nodev" ];
 
-  boot.initrd.kernelModules = [ "i915" ];
+  boot.initrd.kernelModules = [ "xe" ];
   boot.initrd.systemd.enable = true;
+  boot.blacklistedKernelModules = [ "i915" ];
+  boot.kernelParams = [ "xe.force_probe=7d51" "i915.force_probe=!7d51" ];
+  boot.kernelPatches = [
+    {
+      name = "ucsi-fix-duplicate-altmodes";
+      patch = ./ucsi-fix-duplicate-altmodes.patch;
+    }
+  ];
   boot.kernelModules = [
-    # "i915"
     # "nvidia"
     # "nvidia_modeset"
     # "nvidia_uvm"
     # "nvidia_drm"
-    # "usb"
-    # "btusb"
-    # "bluetooth"
   ];
 
   boot.extraModprobeConfig = "options nvidia-drm modeset=1";

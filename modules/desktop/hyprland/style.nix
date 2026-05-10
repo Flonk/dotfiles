@@ -8,7 +8,7 @@ let
   accent = config.skynet.module.desktop.stylix.accent;
   accentDark = config.skynet.module.desktop.stylix.accentDark;
   borderColor = "rgba(${builtins.substring 1 6 accent}ff)";
-  inactiveBorderColor = "rgba(${builtins.substring 1 6 s.base00}ff)";
+  inactiveBorderColor = "rgba(000000ff)";
 in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {

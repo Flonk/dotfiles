@@ -57,6 +57,15 @@
           cp *.ttf $out/share/fonts/truetype/
         '';
       })
+      (pkgs.stdenvNoCC.mkDerivation {
+        pname = "hypik";
+        version = "1.0";
+        src = ../../../assets/fonts/hypik;
+        installPhase = ''
+          mkdir -p $out/share/fonts/opentype
+          cp *.otf $out/share/fonts/opentype/
+        '';
+      })
     ];
 
     username = "flo";
@@ -66,6 +75,10 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  # Only restart services whose unit files actually changed,
+  # rather than restarting all managed services on every build.
+  systemd.user.startServices = "sd-switch";
 
   fonts.fontconfig.enable = true;
 

@@ -5,93 +5,38 @@
   ...
 }:
 let
-  mkKeypadBindings =
-    {
-      mod,
-      action,
-      d,
-    }:
-    let
-      keys = [
-        {
-          key = "KP_Left";
-          x = -1;
-          y = 0;
-        }
-        {
-          key = "KP_Right";
-          x = 1;
-          y = 0;
-        }
-        {
-          key = "KP_Up";
-          x = 0;
-          y = -1;
-        }
-        {
-          key = "KP_Down";
-          x = 0;
-          y = 1;
-        }
-        {
-          key = "KP_Begin";
-          x = 0;
-          y = 1;
-        }
-        {
-          key = "KP_Home";
-          x = -1;
-          y = -1;
-        }
-        {
-          key = "KP_Prior";
-          x = 1;
-          y = -1;
-        }
-        {
-          key = "KP_End";
-          x = -1;
-          y = 1;
-        }
-        {
-          key = "KP_Next";
-          x = 1;
-          y = 1;
-        }
-        {
-          key = "i";
-          x = 0;
-          y = -1;
-        }
-        {
-          key = "j";
-          x = -1;
-          y = 0;
-        }
-        {
-          key = "k";
-          x = 0;
-          y = 1;
-        }
-        {
-          key = "l";
-          x = 1;
-          y = 0;
-        }
-      ];
-    in
-    map (k: "$mainMod ${mod}, ${k.key}, ${action}, ${toString (k.x * d)} ${toString (k.y * d)}") keys;
-in
-let
   mon = config.skynet.host.primaryMonitor;
+  borderSize = 5;
+
+  # Generate numpad resize/move bindings across modifier tiers
+  kpKeys = [
+    { key = "KP_Left";  x = -1; y =  0; }
+    { key = "KP_Right"; x =  1; y =  0; }
+    { key = "KP_Up";    x =  0; y = -1; }
+    { key = "KP_Down";  x =  0; y =  1; }
+    { key = "KP_Begin"; x =  0; y =  1; }
+    { key = "KP_Home";  x = -1; y = -1; }
+    { key = "KP_Prior"; x =  1; y = -1; }
+    { key = "KP_End";   x = -1; y =  1; }
+    { key = "KP_Next";  x =  1; y =  1; }
+  ];
+  kpTiers = [
+    { mods = "$mainMod";                action = "resizeactive"; step =  80; }
+    { mods = "$mainMod CTRL";           action = "resizeactive"; step =  20; }
+    { mods = "$mainMod CTRL SHIFT";     action = "resizeactive"; step =   5; }
+    { mods = "$mainMod ALT";            action = "moveactive";   step = 160; }
+    { mods = "$mainMod ALT CTRL";       action = "moveactive";   step =  40; }
+    { mods = "$mainMod ALT CTRL SHIFT"; action = "moveactive";   step =  10; }
+  ];
+  mkKpBindings = lib.concatMap (tier:
+    map (k: "${tier.mods}, ${k.key}, ${tier.action}, ${toString (k.x * tier.step)} ${toString (k.y * tier.step)}") kpKeys
+  ) kpTiers;
 in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
-
-      plugins = [ pkgs.hyprlandPlugins.hy3 ];
 
       systemd = {
         enable = true;
@@ -110,17 +55,14 @@ in
         "$fileManager" = "nautilus";
         "$mainMod" = "SUPER";
         "$code" = "vscode";
-        "$browser" = "google-chrome-stable";
+        "$browser" = "env LIBVA_DRIVER_NAME=iHD qutebrowser";
         "$editor" = "micro";
-        "$lockscreen" = "skynetlock lock";
+        "$lockscreen" = "${config.programs.skynetshell.quickshell.lockCommand}";
 
         exec-once = [
           "hyprctl setcursor macOS-White 28"
           "systemctl start docker"
-        ]
-        ++ lib.optional (
-          config.skynet.module.os.greetd.enable && config.skynet.module.os.greetd.greeter == "none"
-        ) "$lockscreen";
+        ];
 
         bind = [
           # HYPRLAND
@@ -128,7 +70,7 @@ in
           "$mainMod CTRL, RETURN, exec, $browser"
 
           "$mainMod, ESCAPE, exec, $lockscreen"
-          "$mainMod, M, exit"
+          "$mainMod, M, exec, obsidian daily"
           "$mainMod, Q, killactive"
 
           "$mainMod, PRINT, exec, hyprshot -m window -m active"
@@ -146,9 +88,7 @@ in
           "$mainMod SHIFT, W, hy3:makegroup, tab, toggle"
           "$mainMod, V, hy3:makegroup, v"
 
-          "$mainMod, Tab, focusurgentorlast"
-
-          # MOVE WINDOWS
+          # FOCUS / MOVE WINDOWS
           "$mainMod, left, hy3:movefocus, l"
           "$mainMod, right, hy3:movefocus, r"
           "$mainMod, up, hy3:movefocus, u"
@@ -159,7 +99,18 @@ in
           "$mainMod SHIFT, up, hy3:movewindow, u"
           "$mainMod SHIFT, down, hy3:movewindow, d"
 
-          # MOVE BETWEEN WORKSPACES
+          # RESIZE (ijkl: i=up j=left k=down l=right)
+          "$mainMod, i, resizeactive, 0 15"
+          "$mainMod, j, resizeactive, -15 0"
+          "$mainMod, k, resizeactive, 0 -15"
+          "$mainMod, l, resizeactive, 15 0"
+          "$mainMod SHIFT, i, resizeactive, 0 100"
+          "$mainMod SHIFT, j, resizeactive, -100 0"
+          "$mainMod SHIFT, k, resizeactive, 0 -100"
+          "$mainMod SHIFT, l, resizeactive, 100 0"
+
+        ] ++ mkKpBindings ++ [
+          # WORKSPACES
           "$mainMod, 1, workspace, 1"
           "$mainMod, 2, workspace, 2"
           "$mainMod, 3, workspace, 3"
@@ -184,39 +135,7 @@ in
           "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
           "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
           "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
-
-          # RESIZE MODE / MOVE FLOATING
-        ]
-        ++ (mkKeypadBindings {
-          mod = "";
-          action = "resizeactive";
-          d = 80;
-        })
-        ++ (mkKeypadBindings {
-          mod = "CTRL";
-          action = "resizeactive";
-          d = 20;
-        })
-        ++ (mkKeypadBindings {
-          mod = "CTRL SHIFT";
-          action = "resizeactive";
-          d = 5;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT";
-          action = "moveactive";
-          d = 160;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT CTRL";
-          action = "moveactive";
-          d = 40;
-        })
-        ++ (mkKeypadBindings {
-          mod = "ALT CTRL SHIFT";
-          action = "moveactive";
-          d = 10;
-        });
+        ];
 
         # Move/resize windows with mainMod + LMB/RMB and dragging
         bindm = [
@@ -249,9 +168,6 @@ in
           "size 500 100, match:class Alacritty, match:title ^(initial-shell)$"
           "float on, match:class ^chrome-nngceckbapebfimnlniiiahkandclblb.*$"
           "float on, match:class org.pulseaudio.pavucontrol"
-
-          # "float on, match:class Rofi"
-          # "stay_focused on, match:class Rofi"
         ];
 
         layerrule = lib.optionals config.skynet.module.desktop.mako.enable [
@@ -285,10 +201,11 @@ in
         general = {
           "$modifier" = "SUPER";
           layout = "hy3";
-          gaps_in = 0;
+          # Border collapse: negative top+left gaps make adjacent borders
+          # overlap into a single line (CSS border-collapse style).
+          gaps_in = "-${toString borderSize},0,0,-${toString borderSize}";
           gaps_out = 0;
-          border_size = 4;
-          resize_on_border = true;
+          border_size = borderSize;
         };
 
         animations = {
@@ -303,6 +220,7 @@ in
             "windowsOut,1,2,md3_decel,slide"
             "windowsMove,1,2,md3_decel,slide"
             "fade,1,10,md3_decel"
+            "fadeLayers,1,5,md3_decel"
             "workspaces,1,2,md3_decel,slide"
             "workspaces, 1, 2, default"
             "specialWorkspace,1,2,md3_decel,slide"
@@ -318,16 +236,6 @@ in
           };
         };
 
-        plugin = {
-          hy3 = {
-            tabs = {
-              radius = 0;
-              padding = 0;
-              text_font = config.stylix.fonts.sansSerif.name;
-            };
-          };
-        };
-
         misc = {
           layers_hog_keyboard_focus = true;
           initial_workspace_tracking = 0;
@@ -337,15 +245,10 @@ in
           disable_hyprland_logo = true;
           enable_swallow = false;
           focus_on_activate = true;
-          vfr = true; # Variable Frame Rate
-          vrr = 2; # Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
-          # Screen flashing to black momentarily or going black when app is fullscreen
-          # Try setting vrr to 0
-
-          #  Application not responding (ANR) settings
+          vfr = true;
+          vrr = 2;
           enable_anr_dialog = true;
           anr_missed_pings = 20;
-
         };
 
         dwindle = {
@@ -372,7 +275,7 @@ in
         };
 
         cursor = {
-          no_hardware_cursors = 2; # change to 1 if want to disable
+          no_hardware_cursors = 2;
           warp_on_change_workspace = 2;
           no_warps = true;
         };
@@ -398,20 +301,30 @@ in
           "QT_QPA_PLATFORM=wayland;xcb"
           "QT_WAYLAND_DISABLE_WINDOWDECORATION, 1"
           "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
-          #     "SDL_VIDEODRIVER, x11"
           "MOZ_ENABLE_WAYLAND, 1"
           "AQ_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
           "GDK_SCALE,1"
           "QT_SCALE_FACTOR,1"
           "EDITOR,micro"
+          "HYPRSHOT_DIR,$HOME/Pictures/Screenshots"
         ];
       };
 
-      extraConfig = "
-      monitor=eDP-1,${toString mon.width}x${toString mon.height}@${toString mon.hz},0x0,1.00
-      monitor=DP-2,5120x1440@120,${toString mon.width}x0,1.00
-      monitor=,preferred,auto,1
-    ";
+      extraConfig = ''
+        plugin = ${pkgs.hyprlandPlugins.hy3}/lib/libhy3.so
+        plugin {
+          hy3 {
+            tabs {
+              radius = 0
+              padding = 0
+              text_font = ${config.stylix.fonts.sansSerif.name}
+            }
+          }
+        }
+        monitor=eDP-1,${toString mon.width}x${toString mon.height}@${toString mon.hz},0x0,1.00
+        monitor=DP-2,5120x1440@120,${toString mon.width}x0,1.00
+        monitor=,preferred,auto,1
+      '';
     };
   };
 }

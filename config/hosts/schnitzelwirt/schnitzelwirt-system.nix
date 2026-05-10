@@ -7,14 +7,6 @@
   ...
 }:
 {
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
 
@@ -132,8 +124,6 @@
   };
 
   programs.firefox.enable = true;
-  programs.zsh.enable = true;
-  users.defaultUserShell = pkgs.zsh;
 
   programs.hyprland.enable = true;
 

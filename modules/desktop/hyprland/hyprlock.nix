@@ -8,16 +8,9 @@
     programs.hyprlock = {
       enable = true;
       settings = {
-        auth = lib.mkMerge [
-          {
-            "pam:enabled" = true;
-          }
-          (lib.mkIf config.skynet.module.os.fingerprint.enable {
-            "fingerprint:enabled" = true;
-            "fingerprint:ready_message" = "(Scan fingerprint to unlock)";
-            "fingerprint:present_message" = "Scanning fingerprint";
-          })
-        ];
+        auth = {
+          "pam:enabled" = true;
+        };
 
         background = {
           path = lib.mkForce "screenshot";

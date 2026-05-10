@@ -10,9 +10,10 @@ green() { printf '\033[1;32m%s\033[0m\n' "$*" >&2; }
 PRE_DEV="$($IP route show default | $AWK '/^default/ {print $5; exit}')"
 PRE_GW="$($IP route show default | $AWK '/^default/ {print $3; exit}')"
 
-# --- Authenticate & launch openconnect (headless, one Authy prompt) ---
+# --- Authenticate & launch openconnect ---
 PATH="${EXTRA_PATH}:$PATH" \
 $PYTHON "$VPN3IT_CONNECT_PY" \
+  "$@" \
   "$($BAT -pp "$VPN_HOST_FILE")" \
   "$VPN_USER_FILE" \
   "$VPN_PASS_FILE"

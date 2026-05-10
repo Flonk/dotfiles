@@ -17,24 +17,24 @@
     ../../modules/development/zed-editor/home.nix
     ../../modules/desktop/alacritty/home.nix
     ../../modules/desktop/csvlens/home.nix
+    ../../modules/desktop/audio/home.nix
     ../../modules/desktop/fastfetch/home.nix
     ../../modules/desktop/foot/home.nix
     ../../modules/desktop/google-chrome/home.nix
     ../../modules/desktop/hyprland/home.nix
     ../../modules/desktop/mako/home.nix
-    ../../modules/desktop/mimeapps/home.nix
-    ../../modules/desktop/quickshell/home.nix
-    ../../modules/desktop/skynetlock/home.nix
+    ../../modules/desktop/qutebrowser/home.nix
+    ../../modules/desktop/teams-jail/home.nix
+    ../../modules/desktop/skynetshell/home.nix
     ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix
+    ../../modules/desktop/vicinae-bitwarden/home.nix
     ../../modules/desktop/waybar/home.nix
+    ../../modules/leisure/gopro-webcam/home.nix
     ../../modules/leisure/minecraft/home.nix
+    ../../modules/leisure/obs-studio/home.nix
     ../../modules/leisure/spotify/home.nix
-    ../../modules/os/fingerprint/home.nix
-    ../../modules/os/greetd/home.nix
-    ../../modules/os/grub/home.nix
     ../../modules/os/network-scripts/home.nix
-    ../../modules/os/peripherals/home.nix
     ../../modules/projects/home.nix
   ];
 }

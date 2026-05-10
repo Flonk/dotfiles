@@ -51,6 +51,14 @@
           '';
 
           end = lib.mkAfter ''
+            cc_fn() {
+              if [[ -n "$1" ]]; then
+                cd "$1" && claude --dangerously-skip-permissions
+              else
+                cd ~/repos/personal/dotfiles/claude && claude --dangerously-skip-permissions
+              fi
+            }
+
             if [[ -n ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)} ]]; then
               eval ${lib.escapeShellArg (if motdCommand == null then "" else motdCommand)}
             fi
@@ -122,6 +130,9 @@
         "dka!" = "docker ps -aq | xargs docker stop | xargs docker rm";
         "dkav!" = "docker volume ls | xargs docker volume rm";
         "dk!" = "dka! && dkav!";
+
+        ##### Claude
+        cc = "cc_fn";
 
         ##### Assorted
         future = "toilet -f future";

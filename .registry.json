@@ -1,0 +1,12 @@
+{
+  "flo-chonkler": {
+    "hostname": "",
+    "ip": "",
+    "sshPublicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINsRymxOTIq0xyfxwdxfdKqNbYz69XnYGU4aEdnAYvkE root@nixos"
+  },
+  "claude-hetzner": {
+    "hostname": "claw",
+    "ip": "188.245.217.118",
+    "sshPublicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGgUI7jQvMZykHaz8OdaxHRuW9Tgx7XCPodIwBL8XbRz root@claw"
+  }
+}

@@ -1,0 +1,8 @@
+[soe][Compressor#0]
+bypass=true
+knee=-4
+outputGain=-8
+release=500
+sidechainType=1
+threshold=-18
+wet=12

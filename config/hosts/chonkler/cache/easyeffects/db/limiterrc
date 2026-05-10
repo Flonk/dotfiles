@@ -1,0 +1,11 @@
+[soe][Limiter#0]
+attack=1
+outputGain=-1
+release=20
+threshold=-1
+
+[soe][Limiter#1]
+attack=1
+outputGain=-2
+release=20
+threshold=-1

@@ -14,12 +14,12 @@ in
     ../../modules/assorted/chrome-remote-desktop/system.nix
     ../../modules/desktop/hyprland/system.nix
     ../../modules/desktop/stylix/system.nix
+    ../../modules/desktop/audio/system.nix
     ../../modules/development/dnsmasq/system.nix
     ../../modules/development/qemu/system.nix
-    ../../modules/os/fingerprint/system.nix
-    ../../modules/os/greetd/system.nix
+    ../../modules/leisure/gopro-webcam/system.nix
+    ../../modules/desktop/skynetshell/system.nix
     ../../modules/os/ipu6/system.nix
-    ../../modules/os/grub/system.nix
     ../../modules/os/powersaver/system.nix
     ../../modules/projects/andamp/CEFKM/system.nix
     ../../modules/projects/andamp/CEIFRS/system.nix
@@ -28,10 +28,30 @@ in
 
   config = lib.mkMerge [
     {
-      nix.settings.experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      networking.hostName = config.skynet.whoami.host;
+
+      nixpkgs.config.allowUnfree = true;
+
+      nix.gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 30d";
+      };
+
+      nix.settings = {
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        max-jobs = "auto";
+        cores = 0;
+        substituters = [
+          "https://nix-community.cachix.org"
+        ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        ];
+      };
 
       environment.systemPackages = with pkgs; [
         home-manager
@@ -49,9 +69,23 @@ in
         nmap
         whois
       ];
+
+      services.openssh.enable = true;
+
+      programs.zsh.enable = true;
+      users.defaultUserShell = pkgs.zsh;
     }
-    (lib.mkIf (adminUser != null && authorizedKeys != [ ]) {
-      users.users.${adminUser}.openssh.authorizedKeys.keys = authorizedKeys;
+    (lib.mkIf (authorizedKeys != [ ]) {
+      users.users.root.openssh.authorizedKeys.keys = authorizedKeys;
+    })
+    (lib.mkIf (adminUser != null) {
+      users.users.${adminUser} = {
+        isNormalUser = lib.mkDefault true;
+        group = lib.mkForce adminUser;
+        extraGroups = [ "wheel" ];
+        openssh.authorizedKeys.keys = authorizedKeys;
+      };
+      users.groups.${adminUser} = { };
     })
   ];
 
