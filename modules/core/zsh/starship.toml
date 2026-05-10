@@ -4,11 +4,11 @@ format = """
 ${custom.user_local}${custom.user_ssh}\
 ${custom.arrow_local}${custom.arrow_ssh}\
 $directory\
-[](fg:base03 bg:base04)\
+[](fg:base03 bg:base04)\
 $git_branch\
 $git_commit\
 $git_status\
-[](fg:base04)\
+[](fg:base04)\
 \n$character"""
 
 [custom.user_local]
@@ -21,19 +21,19 @@ format = '[ $output ](fg:base00 bg:blue)'
 when = 'test -n "$SSH_CONNECTION"'
 command = 'printf "ssh %s@%s" "$USER" "${HOSTNAME:-$HOST}"'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[ $output ](fg:base07 bg:red)'
+format = '[ $output ](fg:base00 bg:red)'
 
 [custom.arrow_local]
 when = 'test -z "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:base03 fg:blue)'
+format = '[](bg:base03 fg:blue)'
 
 [custom.arrow_ssh]
 when = 'test -n "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:base03 fg:red)'
+format = '[](bg:base03 fg:red)'
 
 [directory]
 style = "fg:base07 bg:base03"
