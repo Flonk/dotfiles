@@ -15,27 +15,30 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.development.claude-code.enable {
-    home.packages = [
-      pkgs.gh
-      claudeScript
-    ];
-
-    systemd.user.services.claude-remote-control = {
-      Unit = {
-        Description = "Claude Code Remote Control";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
+  config = lib.mkMerge [
+    (lib.mkIf config.skynet.module.development.claude-code.enable {
+      home.packages = [
+        pkgs.gh
+        claudeScript
+      ];
+    })
+    (lib.mkIf config.skynet.module.development.claude-code.service.enable {
+      systemd.user.services.claude-remote-control = {
+        Unit = {
+          Description = "Claude Code Remote Control";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+        Service = {
+          Type = "simple";
+          ExecStart = "${claudeRemoteControlScript}/bin/claude-remote-control-start";
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
-      Service = {
-        Type = "simple";
-        ExecStart = "${claudeRemoteControlScript}/bin/claude-remote-control-start";
-        Restart = "on-failure";
-        RestartSec = "5s";
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
-    };
-  };
+    })
+  ];
 }

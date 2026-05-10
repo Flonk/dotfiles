@@ -51,7 +51,10 @@
       waybar.enable = true;
     };
     development = {
-      "claude-code".enable = true;
+      "claude-code" = {
+        enable = true;
+        service.enable = true;
+      };
       obsidian.enable = true;
       vscode.enable = true;
       "zed-editor".enable = true;

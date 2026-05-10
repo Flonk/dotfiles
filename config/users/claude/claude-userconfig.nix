@@ -13,7 +13,10 @@
       stylix.enable = true;
     };
     development = {
-      claude-code.enable = true;
+      claude-code = {
+        enable = true;
+        service.enable = true;
+      };
     };
   };
 }
