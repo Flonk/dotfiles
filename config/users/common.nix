@@ -13,6 +13,7 @@
     ../../modules/core/keyring/home.nix
     ../../modules/core/skynet-scripts/home.nix
     ../../modules/core/sops/home.nix
+    ../../modules/core/ssh/home.nix
     ../../modules/core/zsh/home.nix
     ../../modules/development/claude-code/home.nix
 

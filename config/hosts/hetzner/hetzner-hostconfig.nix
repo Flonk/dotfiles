@@ -1,5 +1,7 @@
 { ... }:
 {
+  programs.nix-ld.enable = true;
+
   config.skynet = {
     whoami.host = "hetzner";
     host = {

@@ -13,6 +13,7 @@
     ../modules/core/keyring/options.nix
     ../modules/core/skynet-scripts/options.nix
     ../modules/core/sops/options.nix
+    ../modules/core/ssh/options.nix
     ../modules/core/zsh/options.nix
 
     # desktop
