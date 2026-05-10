@@ -15,27 +15,25 @@ $git_status\
 when = 'test -z "$SSH_CONNECTION"'
 command = 'printf "%s" "$USER"'
 shell = ["sh", "--noprofile", "--norc"]
-style = "fg:base07 bg:base0D"
-format = '[ $output ]($style)'
+format = '[ $output ](fg:base00 bg:blue)'
 
 [custom.user_ssh]
 when = 'test -n "$SSH_CONNECTION"'
 command = 'printf "ssh %s@%s" "$USER" "${HOSTNAME:-$HOST}"'
 shell = ["sh", "--noprofile", "--norc"]
-style = "fg:base07 bg:base08"
-format = '[ $output ]($style)'
+format = '[ $output ](fg:base07 bg:red)'
 
 [custom.arrow_local]
 when = 'test -z "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:base03 fg:base0D)'
+format = '[](bg:base03 fg:blue)'
 
 [custom.arrow_ssh]
 when = 'test -n "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:base03 fg:base08)'
+format = '[](bg:base03 fg:red)'
 
 [directory]
 style = "fg:base07 bg:base03"
