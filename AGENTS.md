@@ -13,6 +13,13 @@ When adding a new module:
 5. Enable the module in `$USER-userconfig.nix` or `$HOST-hostconfig.nix`
 6. If the module handles specific file types/URI schemes, set `xdg.mimeApps.defaultApplications` in its `home.nix`
 
+## Host Config Files
+
+Each host has two files with distinct roles — never mix them:
+
+- `config/hosts/$HOST/default.nix` — NixOS system options (`programs.*`, `services.*`, `security.*`, etc.)
+- `config/hosts/$HOST/$HOST-hostconfig.nix` — **only** `config.skynet.*` values (whoami, host metadata, module enable flags)
+
 ## Skynet Scripts
 
 `modules/skynet-scripts/home.nix` is intentionally always imported (not gated behind `skynet.module.*.enable`).
