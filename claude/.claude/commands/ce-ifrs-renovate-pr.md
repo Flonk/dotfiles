@@ -14,6 +14,7 @@ lib-name              1.2.3  1.2.4  java-archive  GHSA-1234-1234-1234  Medium   
 
 3. In that repository, check out the renovate/non-major-dependencies branch, and build and test.
 4. If a grype check was provided, pin the package versions as mentioned in it. Add a comment detailing which CVE was resolved.
+   Always pin to the fixed version from the grype output — there are no false positives to skip; not fixing a CVE will fail the pipeline.
 <lib.version>1.2.3.4</lib.version> <!-- pinned to resolve 1.2.3 GHSA-1234-1234-1234 (lib-name, Medium) -->
 
 5. Check all other existing pin comments -- if the version in pom is higher than what the comment pinned, the comment is obsolete and should be removed.
