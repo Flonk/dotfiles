@@ -131,6 +131,9 @@
         ##### Claude
         cc = "cc_fn";
 
+        ##### Kubernetes
+        k = "kubectl";
+
         ##### Assorted
         future = "toilet -f future";
         x = "sudo env \"PATH=$PATH\"";
