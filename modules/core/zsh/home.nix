@@ -119,6 +119,7 @@
         "gprune!" =
           "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
         b = "gcob";
+        br = "gcobr";
         squash = "squash_wip";
         gc = "git commit --all --message";
 

@@ -70,6 +70,21 @@ gcob () {
   fi
 }
 
+gcobr () {
+  git fetch --prune >/dev/null 2>&1
+  # Strip just the first path segment (the remote name) so multi-segment
+  # branch names like feature/foo survive intact.
+  local branches
+  branches=$(git branch -r | grep -v ' -> ' | awk '{sub(/^[ \t]*[^/]+\//,""); print}' | sort -u)
+  local branch
+  if [ -n "$1" ]; then
+    branch=$(echo "$branches" | fzf --query="$1" --select-1 --exit-0)
+  else
+    branch=$(echo "$branches" | fzf --height 8 --layout=reverse)
+  fi
+  [ -n "$branch" ] && git checkout "$branch"
+}
+
 figlet-all() {
   for font in /usr/share/figlet/*.tlf; do
       font_name=$(basename "$font" .tlf)
