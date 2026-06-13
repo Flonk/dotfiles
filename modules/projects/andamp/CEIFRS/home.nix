@@ -31,8 +31,8 @@ let
 in
 {
   config = lib.mkIf config.skynet.module.projects.andamp.CEIFRS {
-    wayland.windowManager.hyprland.settings.windowrule = [
-      "float off, match:class xfreerdp"
+    wayland.windowManager.hyprland.settings.window_rule = [
+      { match.class = "xfreerdp"; float = false; }
     ];
 
     home.packages = [

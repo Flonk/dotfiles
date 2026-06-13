@@ -51,17 +51,15 @@ in
 
       (lib.mkIf config.skynet.module.desktop.hyprland.enable {
         home.packages = [ open-bitwarden ];
-        wayland.windowManager.hyprland.settings = {
-          bind = [
-            "$mainMod, SPACE, exec, vicinae open"
-            "MOD3, period, exec, xdg-open vicinae://extensions/vicinae/core/search-emojis"
-            "MOD3, B, exec, xdg-open vicinae://extensions/Gelei/bluetooth/devices"
-            "MOD3, P, exec, open-bitwarden"
-          ];
-          layerrule = [
-            "dim_around on, match:namespace vicinae"
-          ];
-        };
+        wayland.windowManager.hyprland.settings.layer_rule = [
+          { match.namespace = "vicinae"; dim_around = true; }
+        ];
+        wayland.windowManager.hyprland.extraConfig = ''
+          hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("vicinae open"))
+          hl.bind("MOD3 + period", hl.dsp.exec_cmd("xdg-open vicinae://extensions/vicinae/core/search-emojis"))
+          hl.bind("MOD3 + B", hl.dsp.exec_cmd("xdg-open vicinae://extensions/Gelei/bluetooth/devices"))
+          hl.bind("MOD3 + P", hl.dsp.exec_cmd("open-bitwarden"))
+        '';
       })
     ]
   );

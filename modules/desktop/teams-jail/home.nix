@@ -194,8 +194,8 @@ in
       usage = "Launch MS Teams in a resource-limited jailed Chromium (3GB RAM, 2 CPU cores)";
     }];
 
-    wayland.windowManager.hyprland.settings.windowrule = [
-      "border_color rgb(FF0000) rgb(880808), match:class teams-jail"
+    wayland.windowManager.hyprland.settings.window_rule = [
+      { match.class = "teams-jail"; border_color = "rgb(FF0000) rgb(880808)"; }
     ];
   };
 }

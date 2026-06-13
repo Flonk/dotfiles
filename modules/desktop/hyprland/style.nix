@@ -12,7 +12,7 @@ let
 in
 {
   config = lib.mkIf config.skynet.module.desktop.hyprland.enable {
-    wayland.windowManager.hyprland.settings = {
+    wayland.windowManager.hyprland.settings.config = {
       general = {
         "col.active_border" = lib.mkForce borderColor;
         "col.inactive_border" = lib.mkForce inactiveBorderColor;
