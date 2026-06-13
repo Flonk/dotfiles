@@ -37,11 +37,7 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
-
-      # TODO: revisit after the 2026-06 flake bump. home-manager's default
-      # `configType` is moving "hyprlang" -> "lua" (kicks in at stateVersion 26.05).
-      # We're still on the legacy "hyprlang" default. Decide: silence the warning by
-      # pinning `configType = "hyprlang"`, or migrate the config to lua.
+      configType = "hyprlang";
 
       systemd = {
         enable = true;

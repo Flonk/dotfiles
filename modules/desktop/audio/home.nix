@@ -217,7 +217,7 @@ in
 {
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      home.packages = [ inputs.balaclava.packages.${pkgs.system}.default ];
+      home.packages = [ inputs.balaclava.packages.${pkgs.stdenv.hostPlatform.system}.default ];
     }
 
     # --- Bluetooth headset auto-trust ---
