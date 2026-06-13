@@ -35,22 +35,22 @@ in
 
       decoration.shadow.color = lib.mkForce "rgba(00000022)";
 
-      plugin.hy3.tabs = {
-        "col.active" = borderColor;
-        "col.active.border" = borderColor;
-        "col.active.text" = inactiveBorderColor;
+      plugin.hy3.tabs.colors = {
+        active = borderColor;
+        active_border = borderColor;
+        active_text = inactiveBorderColor;
 
-        "col.focused" = inactiveBorderColor;
-        "col.focused.border" = inactiveBorderColor;
-        "col.focused.text" = "rgba(${builtins.substring 1 6 accentDark}ff)";
+        focused = inactiveBorderColor;
+        focused_border = inactiveBorderColor;
+        focused_text = "rgba(${builtins.substring 1 6 accentDark}ff)";
 
-        "col.inactive" = inactiveBorderColor;
-        "col.inactive.border" = inactiveBorderColor;
-        "col.inactive.text" = "rgba(${builtins.substring 1 6 accentDark}ff)";
+        inactive = inactiveBorderColor;
+        inactive_border = inactiveBorderColor;
+        inactive_text = "rgba(${builtins.substring 1 6 accentDark}ff)";
 
-        "col.urgent" = "rgba(${builtins.substring 1 6 s.base08}ff)";
-        "col.urgent.border" = "rgba(${builtins.substring 1 6 s.base08}ff)";
-        "col.urgent.text" = "rgba(${builtins.substring 1 6 s.base07}ff)";
+        urgent = "rgba(${builtins.substring 1 6 s.base08}ff)";
+        urgent_border = "rgba(${builtins.substring 1 6 s.base08}ff)";
+        urgent_text = "rgba(${builtins.substring 1 6 s.base07}ff)";
       };
     };
   };

@@ -246,13 +246,24 @@ async function startFfmpeg(ctx: Ctx): Promise<string> {
   const cmd = [
     `systemd-run`,
     `--unit=gopro-ffmpeg`,
-    `--property=MemoryMax=2G`,
-    `--property=MemoryHigh=1G`,
-    `--property=StandardOutput=file:${LOG_FILE}`,
-    `--property=StandardError=file:${LOG_FILE}`,
+    // Raw YUV420 1080p30 + max_buffers=2 → working set is ~50–100 MB.
+    // Hard cap at 512 MB so a runaway ffmpeg can't contribute to a swap
+    // death spiral; see obsidian://claude/video-setup.
+    `--property=MemoryMax=512M`,
+    `--property=MemoryHigh=256M`,
+    // When the system thrashes (post-call swap-in storm), ffmpeg can stop
+    // responding to SIGTERM. Cap stop time so it can't block shutdown.
+    `--property=TimeoutStopSec=5s`,
+    `--property=KillMode=mixed`,
+    // truncate: prefix wipes the log on each start so it can't grow forever
+    `--property=StandardOutput=truncate:${LOG_FILE}`,
+    `--property=StandardError=truncate:${LOG_FILE}`,
     `--`,
     `ffmpeg`,
-    `-nostdin -use_wallclock_as_timestamps 1`,
+    // -nostats: drop per-frame progress lines (they were filling the log
+    //   with megabytes of "elapsed=... frame=..." with no \n).
+    // -loglevel error: only log actual problems (jam, crash, EAGAIN floods).
+    `-nostdin -nostats -loglevel error -use_wallclock_as_timestamps 1`,
     `-f mpegts -fflags nobuffer+discardcorrupt -flags low_delay`,
     `-max_delay 0`,
     `-analyzeduration 256k -probesize 256k`,

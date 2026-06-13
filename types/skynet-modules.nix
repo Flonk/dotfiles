@@ -49,6 +49,7 @@
 
     # os
     ../modules/os/ipu6/options.nix
+    ../modules/os/memory-pressure/options.nix
     ../modules/os/network-scripts/options.nix
     ../modules/os/powersaver/options.nix
 

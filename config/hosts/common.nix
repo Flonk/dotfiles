@@ -20,6 +20,7 @@ in
     ../../modules/leisure/gopro-webcam/system.nix
     ../../modules/desktop/skynetshell/system.nix
     ../../modules/os/ipu6/system.nix
+    ../../modules/os/memory-pressure/system.nix
     ../../modules/os/powersaver/system.nix
     ../../modules/projects/andamp/CEFKM/system.nix
     ../../modules/projects/andamp/CEIFRS/system.nix

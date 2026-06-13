@@ -38,6 +38,11 @@ in
       enable = true;
       package = pkgs.hyprland;
 
+      # TODO: revisit after the 2026-06 flake bump. home-manager's default
+      # `configType` is moving "hyprlang" -> "lua" (kicks in at stateVersion 26.05).
+      # We're still on the legacy "hyprlang" default. Decide: silence the warning by
+      # pinning `configType = "hyprlang"`, or migrate the config to lua.
+
       systemd = {
         enable = true;
         enableXdgAutostart = true;
@@ -245,14 +250,12 @@ in
           disable_hyprland_logo = true;
           enable_swallow = false;
           focus_on_activate = true;
-          vfr = true;
           vrr = 2;
           enable_anr_dialog = true;
           anr_missed_pings = 20;
         };
 
         dwindle = {
-          pseudotile = true;
           preserve_split = true;
           force_split = 2;
         };

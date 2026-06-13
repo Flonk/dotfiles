@@ -20,17 +20,26 @@
   boot.loader.grub.efiSupport = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.devices = [ "nodev" ];
+  # /boot is a 1 GB ESP; without a limit GRUB keeps a kernel+initrd per generation
+  # and fills it. Cap how many entries (and thus /boot kernels) are retained.
+  boot.loader.grub.configurationLimit = 20;
+
+  boot.kernelPackages = pkgs.linuxPackages_latest; # currently 7.0.12
 
   boot.initrd.kernelModules = [ "xe" ];
   boot.initrd.systemd.enable = true;
   boot.blacklistedKernelModules = [ "i915" ];
   boot.kernelParams = [ "xe.force_probe=7d51" "i915.force_probe=!7d51" ];
-  boot.kernelPatches = [
-    {
-      name = "ucsi-fix-duplicate-altmodes";
-      patch = ./ucsi-fix-duplicate-altmodes.patch;
-    }
-  ];
+  # Disabled: forced a from-source kernel rebuild on every switch. The patch only
+  # silences buggy-firmware UCSI duplicate-altmode errors (USB-C dock/Thunderbolt
+  # altmode setup) — cosmetic enough to not be worth daily kernel compiles.
+  # Re-enable if a USB-C dock / external display misbehaves. Upstream-bound (Cc: stable).
+  # boot.kernelPatches = [
+  #   {
+  #     name = "ucsi-fix-duplicate-altmodes";
+  #     patch = ./ucsi-fix-duplicate-altmodes.patch;
+  #   }
+  # ];
   boot.kernelModules = [
     # "nvidia"
     # "nvidia_modeset"
@@ -42,7 +51,7 @@
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    open = false; # switch off the open module
+    open = true; # Blackwell (GB207 / RTX PRO 1000) REQUIRES the open kernel module
     modesetting.enable = true;
     powerManagement.enable = true; # NVreg_DynamicPowerManagement=0x02 + nvidia-powerd
     prime = {

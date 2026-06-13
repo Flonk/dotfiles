@@ -16,7 +16,9 @@ in
       stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/${scheme}.yaml";
     }
     (lib.mkIf enabled {
-      gtk.gtk4.theme = null;
+      # New stylix sets gtk.gtk4.theme itself; mkForce keeps our "no GTK4 theming" intent
+      # and resolves the null-vs-not-null conflict.
+      gtk.gtk4.theme = lib.mkForce null;
 
       stylix = {
         cursor = {

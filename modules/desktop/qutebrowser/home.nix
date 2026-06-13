@@ -5,6 +5,36 @@
   ...
 }:
 let
+  cfg = config.skynet.module.desktop.qutebrowser;
+
+  # qutebrowser package, shadowed so every launch path (desktop entry,
+  # hyprland $browser keybind, terminal, xdg-open link handler) runs inside
+  # a memory-capped transient systemd scope. A qutebrowser/QtWebEngine leak
+  # then kills qutebrowser via the cgroup OOM-killer instead of freezing the
+  # laptop. See obsidian://claude/video-setup.
+  basePkg = pkgs.qutebrowser;
+
+  cappedLauncher = pkgs.writeShellScript "qutebrowser-capped" ''
+    exec ${pkgs.systemd}/bin/systemd-run --user --scope --quiet --collect \
+      --unit="qutebrowser-$$" \
+      --property=MemoryHigh=${cfg.memoryHigh} \
+      --property=MemoryMax=${cfg.memoryMax} \
+      -- ${basePkg}/bin/qutebrowser "$@"
+  '';
+
+  cappedQutebrowser = pkgs.runCommand "qutebrowser-${basePkg.version}-capped"
+    {
+      inherit (basePkg) meta;
+      passthru = { inherit (basePkg) version; };
+    }
+    ''
+      mkdir -p $out
+      cp -as ${basePkg}/. $out/
+      chmod -R +w $out
+      rm $out/bin/qutebrowser
+      ln -s ${cappedLauncher} $out/bin/qutebrowser
+    '';
+
   # direction: "left" | "right" | "up" | "down"
   # left/right: move within tab bar first, give to neighbor qutebrowser at edge
   # up/down: always give to nearest qutebrowser in that direction (or new window)
@@ -184,6 +214,7 @@ in
 
     programs.qutebrowser = {
       enable = true;
+      package = cappedQutebrowser;
 
       searchEngines = {
         DEFAULT = "https://www.google.com/search?q={}";

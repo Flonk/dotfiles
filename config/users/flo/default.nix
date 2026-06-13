@@ -65,6 +65,9 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  # Transitively pulled in by an Electron app; newer nixpkgs marks this build insecure.
+  # TODO: drop once the app upgrades off Electron 39.
+  nixpkgs.config.permittedInsecurePackages = [ "electron-39.8.10" ];
 
   # Only restart services whose unit files actually changed,
   # rather than restarting all managed services on every build.

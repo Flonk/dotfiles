@@ -45,6 +45,7 @@
         # shutdown (see obsidian://claude/video-setup). Re-enable when
         # upstream lands a fix.
         ipu6.enable = false;
+        memory-pressure.enable = true;
         powersaver.enable = true;
       };
       projects = {

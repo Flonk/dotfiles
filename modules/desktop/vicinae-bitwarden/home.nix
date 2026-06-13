@@ -29,7 +29,8 @@ let
     '';
   };
 
-  extension = inputs.vicinae.packages.${pkgs.stdenv.system}.mkVicinaeExtension {
+  # vicinae 2026-06 moved the extension builder from packages.<system> to lib.<system>
+  extension = inputs.vicinae.lib.${pkgs.stdenv.system}.mkVicinaeExtension {
     name = "vicinae-bitwarden";
     version = "0.1.0";
     src = ./extension;
