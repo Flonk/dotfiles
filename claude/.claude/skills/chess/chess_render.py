@@ -146,7 +146,8 @@ def evaluate(board, depth, multipv=5):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("input", nargs="?")
-    ap.add_argument("--eval", action="store_true")
+    ap.add_argument("--eval", action=argparse.BooleanOptionalAction, default=True,
+                    help="Stockfish eval + lines + bar (default on; --no-eval = fast board only)")
     ap.add_argument("--depth", type=int, default=18)
     ap.add_argument("--flip", action="store_true")
     ap.add_argument("--out", default=str(pathlib.Path(tempfile.gettempdir()) / "chess.png"))

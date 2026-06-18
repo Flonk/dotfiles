@@ -13,11 +13,12 @@ Everything runs in one nix-shell. Pass the FEN/PGN as a single argument (quote i
 
 ```
 nix-shell -p stockfish python3Packages.chess librsvg --run \
-  'python3 .claude/skills/chess/chess_render.py [--eval] [--depth N] [--flip] [--out PATH] "<FEN or PGN>"'
+  'python3 .claude/skills/chess/chess_render.py [--no-eval] [--depth N] [--flip] [--out PATH] "<FEN or PGN>"'
 ```
 
-- `--eval` — add Stockfish eval + top 5 lines, and draw a lichess-style eval bar on the left of the board. Costs think-time (depth-bound); omit for an instant board.
-- `--depth N` — search depth for `--eval` (default 18).
+- Stockfish analysis (eval + top 5 lines + eval bar) runs **by default**.
+- `--no-eval` — skip the engine for a fast board-only render (no STOCKFISH section, no bar).
+- `--depth N` — search depth (default 18); lower = faster.
 - `--flip` — orient from Black's side.
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
 
