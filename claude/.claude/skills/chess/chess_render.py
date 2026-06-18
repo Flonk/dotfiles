@@ -56,10 +56,10 @@ def game_status(board):
             chess.Termination.SEVENTYFIVE_MOVES: "75-move rule",
             chess.Termination.FIVEFOLD_REPETITION: "fivefold repetition",
         }.get(o.termination, o.termination.name.lower())
-        return f"Draw — {reason}"
+        return f"Draw, {reason}"
     winner = "White" if o.winner else "Black"
     if o.termination == chess.Termination.CHECKMATE:
-        return f"Checkmate — {winner} wins"
+        return f"Checkmate, {winner} wins"
     return f"{winner} wins"
 
 
@@ -177,9 +177,15 @@ def main():
 
     status = game_status(board)
     eval_frac = eval_text = best = lines = None
-    if args.eval and status is None:  # no engine on a finished game
-        best, lines, eval_frac = evaluate(board, args.depth)
-        eval_text = best
+    if args.eval:
+        if status is not None:  # finished: show the result, skip the engine
+            o = board.outcome()
+            eval_frac, eval_text = (
+                (1.0, "1-0") if o.winner is True else
+                (0.0, "0-1") if o.winner is False else (0.5, "½-½"))
+        else:
+            best, lines, eval_frac = evaluate(board, args.depth)
+            eval_text = best
 
     lastmove = board.peek() if board.move_stack else None
     render_png(board, args.out, args.flip, lastmove,
