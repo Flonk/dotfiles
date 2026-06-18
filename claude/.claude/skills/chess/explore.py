@@ -11,8 +11,8 @@ from collections import Counter, defaultdict
 import chess, chess.svg
 from chess_render import render_png, ECO, HERE, parse_input
 
-MAIN_COLOR = "#ffcc00e6"   # yellow @ ~0.9 — the mainline
-OTHER_COLOR = "#0040c01a"  # blue @ 0.10 — all other continuations
+MAIN_COLOR = "#7cfc00"     # lime @ 100% — the mainline
+OTHER_COLOR = "#0040c026"  # blue @ 0.15 — all other continuations
 
 FEN_RE = re.compile(r"^([rnbqkpRNBQKP1-8]+/){7}[rnbqkpRNBQKP1-8]+\s")
 
