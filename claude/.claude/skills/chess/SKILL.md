@@ -34,7 +34,7 @@ Keep it terse, in **this exact order**:
 
 1. **Stockfish lines** — only if `lines` is present. A bold `**STOCKFISH**` header, then the 5 `lines` **reversed** (worst first, best line last — closest to the board), one per line, plain text (not a table): `<score> <SAN PV>`. `score` is White's perspective; `#n` = mate. Omit this whole section if `lines` is absent (game over, or `--no-eval`).
 2. **Game** — `**GAME**: <pgn>` inline (plain movetext). Skip the whole line if no moves.
-3. **Board PNG** — `SendUserFile` the `image` path.
+3. **Board** — display the `image` with the **Read tool** (renders large inline in the web client). Only use `SendUserFile` if the user wants the file to download — its preview is a small thumbnail.
 4. **Summary line** — `**{opening}** — {last_ply} — {last}`, all on one line, where `{last}` is `status` if non-null else `{turn} to Play`. Drop any segment that's `null` (no opening / no `last_ply`) along with its surrounding ` — `.
 
 No FEN line, no headline eval text — the eval number and bar are already in the image.
@@ -53,7 +53,7 @@ It resolves a name to a position (shortest matching ECO line), then renders the 
 **Present** in this order:
 1. A bold `**CONTINUATIONS**` header.
 2. The continuations, most-popular first, one per line: `<san> — <display> (<pct>%)`. Mark the first (the green mainline) with a leading `→ `; indent the rest to align.
-3. **Board PNG** via `SendUserFile`.
+3. **Board** — display the `image` with the **Read tool** for a large inline preview (not `SendUserFile`, whose preview is a small thumbnail).
 4. **Summary line** — `**{name}** — {last_ply} — {turn} to play`. Drop any `null` segment with its surrounding ` — `.
 
 ## Maintenance
