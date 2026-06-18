@@ -13,6 +13,7 @@ import chess, chess.pgn, chess.svg, chess.engine
 
 HERE = pathlib.Path(__file__).parent
 ECO = json.loads((HERE / "eco.json").read_text())
+PV_PLIES = 8  # plies shown per line in --eval output
 
 
 def parse_input(text):
@@ -55,20 +56,40 @@ def opening_name(board, root_moves):
     return name
 
 
-def render_png(board, out, flip, lastmove, size=300, pad=0):
+def eval_bar_svg(frac, text, flip, size, bar_w):
+    """Lichess-style bar: white fills `frac` of the height from the leading
+    side's foot. `frac` is White's win expectation in [0,1]."""
+    white_h = frac * size
+    # White at the bottom (top when board is flipped to Black's view).
+    if flip:
+        white_y, label_y, label_fill = 0, 14, "#000"
+    else:
+        white_y, label_y, label_fill = size - white_h, size - 6, (
+            "#000" if frac > 0.15 else "#fff")
+    return (
+        f'<rect width="{bar_w}" height="{size}" fill="#403d39"/>'
+        f'<rect y="{white_y:.1f}" width="{bar_w}" height="{white_h:.1f}" fill="#f7f6f5"/>'
+        f'<text x="{bar_w/2}" y="{label_y}" font-family="DejaVu Sans" '
+        f'font-size="10" text-anchor="middle" fill="{label_fill}">{text}</text>'
+    )
+
+
+def render_png(board, out, flip, lastmove, size=300, eval_frac=None, eval_text=None):
     svg = chess.svg.board(
         board, size=size, coordinates=True,
         orientation=chess.BLACK if flip else chess.WHITE,
         lastmove=lastmove,
     )
-    # Wrap with `pad` px of white margin. Canvas is sized from the render
-    # `size` (px), not the board's internal viewBox units.
-    side = size + 2 * pad
+    bar_w = 26 if eval_frac is not None else 0
+    bar = (eval_bar_svg(eval_frac, eval_text, flip, size, bar_w)
+           if bar_w else "")
     wrapped = (
         f'<svg xmlns="http://www.w3.org/2000/svg" '
-        f'width="{side}" height="{side}" viewBox="0 0 {side} {side}">'
+        f'width="{size + bar_w}" height="{size}" '
+        f'viewBox="0 0 {size + bar_w} {size}">'
         f'<rect width="100%" height="100%" fill="#fff"/>'
-        f'<g transform="translate({pad},{pad})">{svg}</g></svg>'
+        f'{bar}'
+        f'<g transform="translate({bar_w},0)">{svg}</g></svg>'
     )
     with tempfile.NamedTemporaryFile("w", suffix=".svg", delete=False) as tf:
         tf.write(wrapped)
@@ -94,12 +115,16 @@ def evaluate(board, depth, multipv=5):
     for info in infos:
         b = board.copy()
         pv = []
-        for mv in info.get("pv", []):
+        for mv in info.get("pv", [])[:PV_PLIES]:
             pv.append(b.san(mv))
             b.push(mv)
         lines.append({"score": fmt_score(info["score"]), "pv": pv})
     best = lines[0]["score"] if lines else None
-    return best, lines
+    # White win expectation [0,1] for the eval bar, via python-chess WDL model.
+    frac = 0.5
+    if infos:
+        frac = infos[0]["score"].white().wdl(ply=board.ply()).expectation()
+    return best, lines, frac
 
 
 def main():
@@ -114,8 +139,14 @@ def main():
     text = args.input if args.input else sys.stdin.read()
     board, moves = parse_input(text)
 
+    eval_frac = eval_text = best = lines = None
+    if args.eval:
+        best, lines, eval_frac = evaluate(board, args.depth)
+        eval_text = best
+
     lastmove = board.peek() if board.move_stack else None
-    render_png(board, args.out, args.flip, lastmove)
+    render_png(board, args.out, args.flip, lastmove,
+               eval_frac=eval_frac, eval_text=eval_text)
 
     result = {
         "fen": board.fen(),
@@ -125,7 +156,6 @@ def main():
         "image": str(pathlib.Path(args.out).resolve()),
     }
     if args.eval:
-        best, lines = evaluate(board, args.depth)
         result["eval"] = best
         result["lines"] = lines
     print(json.dumps(result, indent=2))

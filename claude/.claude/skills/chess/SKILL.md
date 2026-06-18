@@ -16,7 +16,7 @@ nix-shell -p stockfish python3Packages.chess librsvg --run \
   'python3 .claude/skills/chess/chess_render.py [--eval] [--depth N] [--flip] [--out PATH] "<FEN or PGN>"'
 ```
 
-- `--eval` — add Stockfish eval + top 5 lines. Costs think-time (depth-bound); omit for an instant board.
+- `--eval` — add Stockfish eval + top 5 lines, and draw a lichess-style eval bar on the left of the board. Costs think-time (depth-bound); omit for an instant board.
 - `--depth N` — search depth for `--eval` (default 18).
 - `--flip` — orient from Black's side.
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
@@ -32,7 +32,7 @@ The script prints JSON: `{fen, opening, moves[], pgn, image, eval?, lines?[]}`.
    <fen>
    ```
 2. Then **send the board PNG** to the user with `SendUserFile` (the `image` path) — after the code block.
-3. If `--eval` was used, follow with an **Evaluation** line (`eval`, from White's perspective) and the **top 5 lines** as a table: score + PV (already in SAN).
+3. If `--eval` was used, follow with the **top 5 lines** as a table — `score` (White's perspective; `#n` = mate) and the PV joined as SAN. The eval number and bar are already in the image, so don't restate the headline eval separately.
 
 Default to no `--eval` unless the user asks to evaluate/analyze. Scores are White-relative; `#n` means mate in n.
 
