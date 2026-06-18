@@ -29,7 +29,23 @@
   boot.initrd.kernelModules = [ "xe" ];
   boot.initrd.systemd.enable = true;
   boot.blacklistedKernelModules = [ "i915" ];
-  boot.kernelParams = [ "xe.force_probe=7d51" "i915.force_probe=!7d51" ];
+  boot.kernelParams = [
+    "xe.force_probe=7d51"
+    "i915.force_probe=!7d51"
+    "printk.always_kmsg_dump"
+    "nmi_watchdog=1" # hardlockup detector is off at runtime; force it on so hardlockup_panic can fire
+  ];
+
+  # Crash forensics: the 2026-06-14 and 2026-06-18 freezes left nothing in the
+  # journal or EFI pstore. Turn lockups/oopses into panics so the kernel log is
+  # dumped to pstore before reboot. hardlockup_panic is the one that can catch a
+  # true silent freeze (NMI-detected CPU stuck with IRQs off).
+  boot.kernel.sysctl = {
+    "kernel.panic" = 20;
+    "kernel.panic_on_oops" = 1;
+    "kernel.softlockup_panic" = 1;
+    "kernel.hardlockup_panic" = 1;
+  };
   # Disabled: forced a from-source kernel rebuild on every switch. The patch only
   # silences buggy-firmware UCSI duplicate-altmode errors (USB-C dock/Thunderbolt
   # altmode setup) — cosmetic enough to not be worth daily kernel compiles.

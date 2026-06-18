@@ -38,7 +38,6 @@
       hyprland.enable = true;
       mako.enable = true;
       qutebrowser.enable = true;
-      "teams-jail".enable = true;
       skynetshell.enable = true;
       stylix = {
         enable = true;
