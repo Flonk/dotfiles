@@ -9,7 +9,10 @@ Run inside: nix-shell -p python3Packages.chess librsvg
 import argparse, csv, json, pathlib, re
 from collections import Counter, defaultdict
 import chess, chess.svg
-from chess_render import render_png, ECO, HERE, BEST_COLOR, parse_input
+from chess_render import render_png, ECO, HERE, parse_input
+
+MAIN_COLOR = "#ffcc00e6"   # yellow @ ~0.9 — the mainline
+OTHER_COLOR = "#0040c01a"  # blue @ 0.10 — all other continuations
 
 FEN_RE = re.compile(r"^([rnbqkpRNBQKP1-8]+/){7}[rnbqkpRNBQKP1-8]+\s")
 
@@ -80,15 +83,6 @@ def resolve(query):
     return board, row["name"]
 
 
-def blue(rank, n):
-    """Fading blue: brighter/opaque first, darker/see-through for lower moves."""
-    t = rank / (n - 1) if n > 1 else 0
-    L = 1 - 0.7 * t
-    r, g, b = round(30 * L), round(90 * L), round(200 * L)
-    a = round((0.5 - 0.32 * t) * 255)
-    return f"#{r:02x}{g:02x}{b:02x}{a:02x}"
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("query", help="opening name, FEN, or PGN")
@@ -100,13 +94,10 @@ def main():
     conts = continuations(build_tree(), board.epd())
 
     arrows = []
-    if conts:
-        m = chess.Move.from_uci(conts[0]["uci"])
-        arrows.append(chess.svg.Arrow(m.from_square, m.to_square, color=BEST_COLOR))
-        blues = conts[1:]
-        for i, c in enumerate(blues):
-            m = chess.Move.from_uci(c["uci"])
-            arrows.append(chess.svg.Arrow(m.from_square, m.to_square, color=blue(i, len(blues))))
+    for i, c in enumerate(conts):
+        m = chess.Move.from_uci(c["uci"])
+        color = MAIN_COLOR if i == 0 else OTHER_COLOR
+        arrows.append(chess.svg.Arrow(m.from_square, m.to_square, color=color))
 
     lastmove = board.peek() if board.move_stack else None
     render_png(board, args.out, args.flip, lastmove, arrows=arrows)

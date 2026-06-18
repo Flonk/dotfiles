@@ -48,7 +48,7 @@ nix-shell -p python3Packages.chess librsvg --run \
   'python3 .claude/skills/chess/explore.py [--flip] [--out PATH] "<opening name | FEN | PGN>"'
 ```
 
-It resolves a name to a position (shortest matching ECO line), then renders the board with a **green mainline arrow** + up to six fading **blue arrows** for the next book moves. "Popularity" = how many named ECO lines run through each move (offline proxy; no engine, no network). Output JSON: `{name, fen, turn, continuations[], image}` where each continuation is `{san, uci, name, count, pct}`, most popular first.
+It resolves a name to a position (shortest matching ECO line), then renders the board with a **yellow mainline arrow** + up to six faint **blue arrows** (flat 10% opacity) for the next book moves. "Popularity" = how many named ECO lines run through each move (offline proxy; no engine, no network). Output JSON: `{name, fen, turn, continuations[], image}` where each continuation is `{san, uci, name, count, pct}`, most popular first.
 
 **Present** terse:
 1. `**{name}**` header (the resolved opening; skip if `null`).
