@@ -22,16 +22,17 @@ nix-shell -p stockfish python3Packages.chess librsvg --run \
 - `--flip` — orient from Black's side.
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
 
-The script prints JSON: `{fen, turn, opening, moves[], pgn, last_ply, image, eval?, lines?[]}`.
+The script prints JSON: `{fen, turn, status, opening, moves[], pgn, last_ply, image, eval?, lines?[]}`.
+`status` is the result string if the game is over (e.g. `Checkmate — Black wins`, `Draw — stalemate`), else `null`. When the game is over the engine is skipped, so `lines` is absent.
 
 ## Present the result
 
 Keep it terse, in **this exact order**:
 
-1. **Stockfish lines** — only if `--eval`. A bold `**STOCKFISH**` header, then the 5 `lines` **reversed** (worst first, best line last — closest to the board), one per line, plain text (not a table): `<score> <SAN PV>`. `score` is White's perspective; `#n` = mate.
+1. **Stockfish lines** — only if `lines` is present. A bold `**STOCKFISH**` header, then the 5 `lines` **reversed** (worst first, best line last — closest to the board), one per line, plain text (not a table): `<score> <SAN PV>`. `score` is White's perspective; `#n` = mate. Omit this whole section if `lines` is absent (game over, or `--no-eval`).
 2. **Game** — `**GAME**: <pgn>` inline (plain movetext). Skip the whole line if no moves.
 3. **Board PNG** — `SendUserFile` the `image` path.
-4. **Summary line** — `**{opening}** — {last_ply} — {turn} to Play`, all on one line. Drop any segment that's `null` (no opening / no `last_ply`) along with its surrounding ` — `.
+4. **Summary line** — `**{opening}** — {last_ply} — {last}`, all on one line, where `{last}` is `status` if non-null else `{turn} to Play`. Drop any segment that's `null` (no opening / no `last_ply`) along with its surrounding ` — `.
 
 No FEN line, no headline eval text — the eval number and bar are already in the image.
 

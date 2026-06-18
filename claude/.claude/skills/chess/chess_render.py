@@ -44,6 +44,25 @@ def to_pgn(moves):
     return " ".join(out)
 
 
+def game_status(board):
+    """Human result if the position is terminal, else None."""
+    o = board.outcome()
+    if o is None:
+        return None
+    if o.winner is None:
+        reason = {
+            chess.Termination.STALEMATE: "stalemate",
+            chess.Termination.INSUFFICIENT_MATERIAL: "insufficient material",
+            chess.Termination.SEVENTYFIVE_MOVES: "75-move rule",
+            chess.Termination.FIVEFOLD_REPETITION: "fivefold repetition",
+        }.get(o.termination, o.termination.name.lower())
+        return f"Draw — {reason}"
+    winner = "White" if o.winner else "Black"
+    if o.termination == chess.Termination.CHECKMATE:
+        return f"Checkmate — {winner} wins"
+    return f"{winner} wins"
+
+
 def last_ply(moves):
     """The final half-move, numbered: '8. c3' (White) or '8...O-O' (Black)."""
     if not moves:
@@ -156,8 +175,9 @@ def main():
     text = args.input if args.input else sys.stdin.read()
     board, moves = parse_input(text)
 
+    status = game_status(board)
     eval_frac = eval_text = best = lines = None
-    if args.eval:
+    if args.eval and status is None:  # no engine on a finished game
         best, lines, eval_frac = evaluate(board, args.depth)
         eval_text = best
 
@@ -168,13 +188,14 @@ def main():
     result = {
         "fen": board.fen(),
         "turn": "White" if board.turn else "Black",
+        "status": status,
         "opening": opening_name(board, moves),
         "moves": moves,
         "pgn": to_pgn(moves),
         "last_ply": last_ply(moves),
         "image": str(pathlib.Path(args.out).resolve()),
     }
-    if args.eval:
+    if lines is not None:
         result["eval"] = best
         result["lines"] = lines
     print(json.dumps(result, indent=2))
