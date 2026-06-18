@@ -21,18 +21,21 @@ nix-shell -p stockfish python3Packages.chess librsvg --run \
 - `--flip` — orient from Black's side.
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
 
-The script prints JSON: `{fen, opening, moves[], pgn, image, eval?, lines?[]}`.
+The script prints JSON: `{fen, turn, opening, moves[], pgn, image, eval?, lines?[]}`.
 
 ## Present the result
 
-1. First print **one code block**, each on its own line (omit a line if `null`/empty):
-   ```
-   <opening>
-   <pgn>
-   <fen>
-   ```
-2. Then **send the board PNG** to the user with `SendUserFile` (the `image` path) — after the code block.
-3. If `--eval` was used, follow with the **top 5 lines** as a table — `score` (White's perspective; `#n` = mate) and the PV joined as SAN. The eval number and bar are already in the image, so don't restate the headline eval separately.
+Render in **this exact order** (this reads best in a chat client):
+
+1. **FEN** — as inline code on its own line.
+2. **Best-move table** — only if `--eval`: the top 5 `lines` as a table, `score` (White's perspective; `#n` = mate) + the PV joined as SAN.
+3. **PGN** — the full `pgn` movetext inline (no code block), with the turn numbers **bolded**, e.g. `**1.** e4 e5 **2.** Nf3 Nc6 …`. Skip if no moves.
+4. **Board PNG** — `SendUserFile` the `image` path.
+5. **Last moves** — the last 5 plies of the game on one line (for quick context under the board), e.g. `… 6. Re1 b5 7. Bb3 d6`. Skip if the game is ≤5 plies (the full PGN above already covers it).
+6. **Side to move** — `**{turn} to Play**`.
+7. **Opening** — the `opening` string in **bold**. Skip if `null`.
+
+The eval number and bar are baked into the image, so don't restate the headline eval as text.
 
 Default to no `--eval` unless the user asks to evaluate/analyze. Scores are White-relative; `#n` means mate in n.
 

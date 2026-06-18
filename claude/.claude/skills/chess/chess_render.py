@@ -56,21 +56,28 @@ def opening_name(board, root_moves):
     return name
 
 
-def eval_bar_svg(frac, text, flip, size, bar_w):
-    """Lichess-style bar: white fills `frac` of the height from the leading
-    side's foot. `frac` is White's win expectation in [0,1]."""
+def eval_bar_svg(frac, text, flip, size, bar_w, pad=8):
+    """Lichess-style bar; `frac` = White's win expectation [0,1]. White fills
+    from its base (bottom, or top when flipped). The rotated label is placed at
+    the *winning* side's outer edge — that side's bar is always >=50%, so the
+    text is guaranteed to sit on its colour: dark on White's bar, light on
+    Black's."""
     white_h = frac * size
-    # White at the bottom (top when board is flipped to Black's view).
-    if flip:
-        white_y, label_y, label_fill = 0, 14, "#000"
-    else:
-        white_y, label_y, label_fill = size - white_h, size - 6, (
-            "#000" if frac > 0.15 else "#fff")
+    white_y = 0 if flip else size - white_h
+    dark, light = "#312e2b", "#f7f6f5"
+    white_wins = frac >= 0.5
+    fill = dark if white_wins else light
+    cx = bar_w / 2
+    if white_wins != flip:                  # winner's edge is the bottom
+        cy, angle = size - pad, -90         # read upward from bottom
+    else:                                   # winner's edge is the top
+        cy, angle = pad, 90                 # read downward from top
     return (
-        f'<rect width="{bar_w}" height="{size}" fill="#403d39"/>'
-        f'<rect y="{white_y:.1f}" width="{bar_w}" height="{white_h:.1f}" fill="#f7f6f5"/>'
-        f'<text x="{bar_w/2}" y="{label_y}" font-family="DejaVu Sans" '
-        f'font-size="10" text-anchor="middle" fill="{label_fill}">{text}</text>'
+        f'<rect width="{bar_w}" height="{size}" fill="{dark}"/>'
+        f'<rect y="{white_y:.1f}" width="{bar_w}" height="{white_h:.1f}" fill="{light}"/>'
+        f'<text x="{cx}" y="{cy}" transform="rotate({angle} {cx} {cy})" '
+        f'font-family="DejaVu Sans" font-size="13" font-weight="bold" '
+        f'text-anchor="start" dominant-baseline="central" fill="{fill}">{text}</text>'
     )
 
 
@@ -150,6 +157,7 @@ def main():
 
     result = {
         "fen": board.fen(),
+        "turn": "White" if board.turn else "Black",
         "opening": opening_name(board, moves),
         "moves": moves,
         "pgn": to_pgn(moves),
