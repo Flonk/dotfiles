@@ -48,12 +48,13 @@ nix-shell -p python3Packages.chess librsvg --run \
   'python3 .claude/skills/chess/explore.py [--flip] [--out PATH] "<opening name | FEN | PGN>"'
 ```
 
-It resolves a name to a position (shortest matching ECO line), then renders the board with a green **mainline arrow** (drawn last, on top) + up to six faint **blue arrows** (flat 15% opacity) for the next book moves. "Popularity" = how many named ECO lines run through each move (offline proxy; no engine, no network). Output JSON: `{name, fen, turn, continuations[], image}` where each continuation is `{san, uci, name, count, pct}`, most popular first.
+It resolves a name to a position (shortest matching ECO line), then renders the board with a green **mainline arrow** (drawn last, on top) + up to six faint **blue arrows** (flat 15% opacity) for the next book moves. "Popularity" = how many named ECO lines run through each move (offline proxy; no engine, no network). Output JSON: `{name, fen, turn, last_ply, continuations[], image}` where each continuation is `{san, uci, name, display, count, pct}`, most popular first. `display` is the de-duplicated short name (ECO + distinctive part).
 
-**Present** terse:
-1. `**{name}**` header (the resolved opening; skip if `null`).
-2. The continuations, most-popular first, one per line: `<san> — <name> (<pct>%)`. Mark the first (the green mainline) with a leading `→ `.
+**Present** in this order:
+1. A bold `**CONTINUATIONS**` header.
+2. The continuations, most-popular first, one per line: `<san> — <display> (<pct>%)`. Mark the first (the green mainline) with a leading `→ `; indent the rest to align.
 3. **Board PNG** via `SendUserFile`.
+4. **Summary line** — `**{name}** — {last_ply} — {turn} to play`. Drop any `null` segment with its surrounding ` — `.
 
 ## Maintenance
 

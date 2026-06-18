@@ -9,7 +9,7 @@ Run inside: nix-shell -p python3Packages.chess librsvg
 import argparse, csv, json, pathlib, re
 from collections import Counter, defaultdict
 import chess, chess.svg
-from chess_render import render_png, ECO, HERE, BEST_COLOR, parse_input
+from chess_render import render_png, ECO, HERE, BEST_COLOR, parse_input, last_ply
 
 MAIN_COLOR = BEST_COLOR     # default green — the mainline
 OTHER_COLOR = "#0040c026"   # blue @ 0.15 — all other continuations
@@ -43,13 +43,27 @@ def build_tree():
     return edges
 
 
-def continuations(edges, epd, top=7):
+def display_name(full, parent):
+    """Drop the ECO code's family prefix shared with `parent` -> 'B90 English
+    Attack' instead of 'B90 Sicilian Defense: Najdorf Variation, English Attack'."""
+    m = re.match(r"^([A-E]\d\d)\s+(.*)$", full)
+    eco, name = (m.group(1), m.group(2)) if m else ("", full)
+    if parent and name.startswith(parent):
+        name = name[len(parent):].lstrip(",: ").strip() or \
+            parent.split(":")[-1].split(",")[-1].strip()
+    elif ":" in name:
+        name = name.split(":", 1)[1].strip()
+    return f"{eco} {name}".strip()
+
+
+def continuations(edges, epd, parent, top=7):
     moves = edges.get(epd, {})
     total = sum(e["count"] for e in moves.values()) or 1
     out = []
     for e in sorted(moves.values(), key=lambda e: -e["count"])[:top]:
         name = ECO.get(e["child"]) or e["names"].most_common(1)[0][0]
         out.append({"san": e["san"], "uci": e["uci"], "name": name,
+                    "display": display_name(name, parent),
                     "count": e["count"], "pct": round(100 * e["count"] / total)})
     return out
 
@@ -69,18 +83,19 @@ def find_named(query):
 
 
 def resolve(query):
-    """-> (board, name) from a FEN, PGN, or opening name."""
+    """-> (board, name, san_moves) from a FEN, PGN, or opening name."""
     first = query.strip().splitlines()[0] if query.strip() else ""
     if FEN_RE.match(first) or re.match(r"^\s*1\.", query):
-        board, _ = parse_input(query)
-        return board, None
+        board, moves = parse_input(query)
+        return board, None, moves
     row = find_named(query)
     if row is None:
         raise SystemExit(f"no opening, FEN or PGN matched: {query!r}")
     board = chess.Board()
-    for tok in sans_of(row["pgn"]):
+    moves = sans_of(row["pgn"])
+    for tok in moves:
         board.push_san(tok)
-    return board, row["name"]
+    return board, row["name"], moves
 
 
 def main():
@@ -90,8 +105,8 @@ def main():
     ap.add_argument("--out", default="/tmp/opening.png")
     args = ap.parse_args()
 
-    board, named = resolve(args.query)
-    conts = continuations(build_tree(), board.epd())
+    board, named, moves = resolve(args.query)
+    conts = continuations(build_tree(), board.epd(), named or "")
 
     # Others first, mainline last so the green arrow renders on top.
     arrows = []
@@ -109,6 +124,7 @@ def main():
         "name": named or ECO.get(board.epd()),
         "fen": board.fen(),
         "turn": "White" if board.turn else "Black",
+        "last_ply": last_ply(moves),
         "continuations": conts,
         "image": str(pathlib.Path(args.out).resolve()),
     }, indent=2))
