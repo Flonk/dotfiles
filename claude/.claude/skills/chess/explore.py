@@ -7,40 +7,18 @@ moves. "Popularity" = how many named ECO lines run through each move.
 Run inside: nix-shell -p python3Packages.chess librsvg
 """
 import argparse, csv, json, pathlib, re
-from collections import Counter, defaultdict
 import chess, chess.svg
 from chess_render import render_png, ECO, HERE, BEST_COLOR, parse_input, last_ply
 
 MAIN_COLOR = BEST_COLOR     # default green — the mainline
 OTHER_COLOR = "#0040c026"   # blue @ 0.15 — all other continuations
+TREE = json.loads((HERE / "tree.json").read_text())  # parent EPD -> [[san,uci,count,name]]
 
 FEN_RE = re.compile(r"^([rnbqkpRNBQKP1-8]+/){7}[rnbqkpRNBQKP1-8]+\s")
 
 
 def sans_of(pgn_field):
     return [t for t in pgn_field.split() if not (t[0].isdigit() and "." in t)]
-
-
-def build_tree():
-    """parent_epd -> {uci: {san, uci, child, count, names}} over all ECO lines."""
-    edges = defaultdict(dict)
-    for f in sorted((HERE / "eco").glob("*.tsv")):
-        with open(f, newline="") as fh:
-            for row in csv.DictReader(fh, delimiter="\t"):
-                b = chess.Board()
-                for tok in sans_of(row["pgn"]):
-                    parent = b.epd()
-                    mv = b.parse_san(tok)
-                    uci, san = mv.uci(), b.san(mv)
-                    b.push(mv)
-                    e = edges[parent].get(uci)
-                    if e is None:
-                        e = {"san": san, "uci": uci, "child": b.epd(),
-                             "count": 0, "names": Counter()}
-                        edges[parent][uci] = e
-                    e["count"] += 1
-                    e["names"][row["name"]] += 1
-    return edges
 
 
 def display_name(full, parent):
@@ -56,15 +34,14 @@ def display_name(full, parent):
     return f"{eco} {name}".strip()
 
 
-def continuations(edges, epd, parent, top=7):
-    moves = edges.get(epd, {})
-    total = sum(e["count"] for e in moves.values()) or 1
+def continuations(epd, parent, top=7):
+    rows = TREE.get(epd, [])
+    total = sum(r[2] for r in rows) or 1
     out = []
-    for e in sorted(moves.values(), key=lambda e: -e["count"])[:top]:
-        name = ECO.get(e["child"]) or e["names"].most_common(1)[0][0]
-        out.append({"san": e["san"], "uci": e["uci"], "name": name,
+    for san, uci, count, name in sorted(rows, key=lambda r: -r[2])[:top]:
+        out.append({"san": san, "uci": uci, "name": name,
                     "display": display_name(name, parent),
-                    "count": e["count"], "pct": round(100 * e["count"] / total)})
+                    "count": count, "pct": round(100 * count / total)})
     return out
 
 
@@ -106,7 +83,7 @@ def main():
     args = ap.parse_args()
 
     board, named, moves = resolve(args.query)
-    conts = continuations(build_tree(), board.epd(), named or "")
+    conts = continuations(board.epd(), named or "")
 
     # Others first, mainline last so the green arrow renders on top.
     arrows = []

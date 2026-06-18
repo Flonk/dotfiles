@@ -58,7 +58,7 @@ It resolves a name to a position (shortest matching ECO line), then renders the 
 
 ## Maintenance
 
-`eco/` holds the lichess CC0 opening TSVs; `eco.json` is the precomputed EPD→name map used at runtime. Regenerate only if the TSVs change:
+`eco/` holds the lichess CC0 opening TSVs. `eco.json` (EPD→name) and `tree.json` (the explorer's precomputed opening tree) are both generated from them so runtime needs no replay — without `tree.json` the explorer would rebuild the tree every call (~1.6 s). Regenerate both only if the TSVs change:
 
 ```
 nix-shell -p python3Packages.chess --run 'python3 .claude/skills/chess/gen_eco.py'
