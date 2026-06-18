@@ -1,11 +1,13 @@
 ---
 name: chess
-description: Render a chess position from a FEN string or PGN to a PNG board image, with the resulting FEN, the move list, the opening name (ECO), and an optional Stockfish evaluation with the top 5 lines. Use whenever the user gives a FEN/PGN or asks to visualize, analyze, or evaluate a chess position.
+description: Render a chess position from a FEN, PGN, or opening name to a PNG board image. Two modes — (1) analyze a position: resulting FEN, move list, opening name, and Stockfish eval with the top 5 lines and a best-move arrow; (2) explore an opening by name (e.g. "render the Najdorf", "show the Rio de Janeiro"): named continuations with a popularity-ranked arrow fan. Use whenever the user gives a FEN/PGN or names an opening to visualize, analyze, or explore.
 ---
 
 # chess
 
-Render and analyze a chess position. Input is a **FEN** or a **PGN** (movetext, with or without headers); the script auto-detects which.
+Two modes:
+- **Analyze** a position — `chess_render.py`, input a **FEN** or **PGN** (auto-detected). Board + FEN + eval + lines.
+- **Explore** an opening — `explore.py`, input an opening **name**, FEN, or PGN. Board + named continuations.
 
 ## Run
 
@@ -24,7 +26,7 @@ nix-shell -p stockfish python3Packages.chess librsvg --run \
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
 
 The script prints JSON: `{fen, turn, status, opening, moves[], pgn, last_ply, image, eval?, lines?[]}`.
-`status` is the result string if the game is over (e.g. `Checkmate — Black wins`, `Draw — stalemate`), else `null`. When the game is over the engine is skipped, so `lines` is absent.
+`status` is the result string if the game is over (e.g. `Checkmate, Black wins`, `Draw, stalemate`), else `null`. When the game is over the engine is skipped, so `lines` is absent.
 
 ## Present the result
 
@@ -37,7 +39,21 @@ Keep it terse, in **this exact order**:
 
 No FEN line, no headline eval text — the eval number and bar are already in the image.
 
-Default to no `--eval` unless the user asks to evaluate/analyze. Scores are White-relative; `#n` means mate in n.
+## Explore mode
+
+For exploring an opening (the user names one, or asks for continuations), use `explore.py` instead:
+
+```
+nix-shell -p python3Packages.chess librsvg --run \
+  'python3 .claude/skills/chess/explore.py [--flip] [--out PATH] "<opening name | FEN | PGN>"'
+```
+
+It resolves a name to a position (shortest matching ECO line), then renders the board with a **green mainline arrow** + up to six fading **blue arrows** for the next book moves. "Popularity" = how many named ECO lines run through each move (offline proxy; no engine, no network). Output JSON: `{name, fen, turn, continuations[], image}` where each continuation is `{san, uci, name, count, pct}`, most popular first.
+
+**Present** terse:
+1. `**{name}**` header (the resolved opening; skip if `null`).
+2. The continuations, most-popular first, one per line: `<san> — <name> (<pct>%)`. Mark the first (the green mainline) with a leading `→ `.
+3. **Board PNG** via `SendUserFile`.
 
 ## Maintenance
 
