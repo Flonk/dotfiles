@@ -44,6 +44,15 @@ def to_pgn(moves):
     return " ".join(out)
 
 
+def last_ply(moves):
+    """The final half-move, numbered: '8. c3' (White) or '8...O-O' (Black)."""
+    if not moves:
+        return None
+    i = len(moves) - 1
+    n = i // 2 + 1
+    return f"{n}. {moves[i]}" if i % 2 == 0 else f"{n}...{moves[i]}"
+
+
 def opening_name(board, root_moves):
     """Longest-prefix opening match over the played positions."""
     if not root_moves:
@@ -161,6 +170,7 @@ def main():
         "opening": opening_name(board, moves),
         "moves": moves,
         "pgn": to_pgn(moves),
+        "last_ply": last_ply(moves),
         "image": str(pathlib.Path(args.out).resolve()),
     }
     if args.eval:

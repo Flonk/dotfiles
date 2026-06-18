@@ -21,21 +21,18 @@ nix-shell -p stockfish python3Packages.chess librsvg --run \
 - `--flip` — orient from Black's side.
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
 
-The script prints JSON: `{fen, turn, opening, moves[], pgn, image, eval?, lines?[]}`.
+The script prints JSON: `{fen, turn, opening, moves[], pgn, last_ply, image, eval?, lines?[]}`.
 
 ## Present the result
 
-Render in **this exact order** (this reads best in a chat client):
+Keep it terse, in **this exact order**:
 
-1. **FEN** — as inline code on its own line.
-2. **Best-move table** — only if `--eval`: the top 5 `lines` as a table, `score` (White's perspective; `#n` = mate) + the PV joined as SAN.
-3. **PGN** — the full `pgn` movetext inline (no code block), with the turn numbers **bolded**, e.g. `**1.** e4 e5 **2.** Nf3 Nc6 …`. Skip if no moves.
-4. **Board PNG** — `SendUserFile` the `image` path.
-5. **Last moves** — the last 5 plies of the game on one line (for quick context under the board), e.g. `… 6. Re1 b5 7. Bb3 d6`. Skip if the game is ≤5 plies (the full PGN above already covers it).
-6. **Side to move** — `**{turn} to Play**`.
-7. **Opening** — the `opening` string in **bold**. Skip if `null`.
+1. **Stockfish lines** — only if `--eval`. A bold `**STOCKFISH**` header, then the 5 `lines` **reversed** (worst first, best line last — closest to the board), one per line, plain text (not a table): `<score> <SAN PV>`. `score` is White's perspective; `#n` = mate.
+2. **Game** — `**GAME**: <pgn>` inline (plain movetext). Skip the whole line if no moves.
+3. **Board PNG** — `SendUserFile` the `image` path.
+4. **Summary line** — `**{opening}** — {last_ply} — {turn} to Play`, all on one line. Drop any segment that's `null` (no opening / no `last_ply`) along with its surrounding ` — `.
 
-The eval number and bar are baked into the image, so don't restate the headline eval as text.
+No FEN line, no headline eval text — the eval number and bar are already in the image.
 
 Default to no `--eval` unless the user asks to evaluate/analyze. Scores are White-relative; `#n` means mate in n.
 
