@@ -14,8 +14,8 @@ import chess, chess.pgn, chess.svg, chess.engine
 HERE = pathlib.Path(__file__).parent
 ECO = json.loads((HERE / "eco.json").read_text())
 PV_PLIES = 8  # plies shown per line in --eval output
-BEST_COLOR = "#15781B"  # green, lichess best-move arrow
-ARROW_COLORS = {"green": "#15781B", "red": "#882020",
+BEST_COLOR = "#15781be6"  # green @ ~0.9 alpha so the board shimmers through
+ARROW_COLORS = {"green": "#15781be6", "red": "#882020",
                 "blue": "#003088", "yellow": "#e68f00"}
 
 
@@ -103,12 +103,14 @@ def opening_name(board, root_moves):
     return name
 
 
-def eval_bar_svg(frac, text, flip, size, bar_w, pad=8):
+def eval_bar_svg(frac, text, flip, size, bar_w, font_size, pad=None):
     """Lichess-style bar; `frac` = White's win expectation [0,1]. White fills
     from its base (bottom, or top when flipped). The rotated label is placed at
     the *winning* side's outer edge — that side's bar is always >=50%, so the
     text is guaranteed to sit on its colour: dark on White's bar, light on
     Black's."""
+    if pad is None:
+        pad = round(font_size * 0.6)
     white_h = frac * size
     white_y = 0 if flip else size - white_h
     dark, light = "#312e2b", "#f7f6f5"
@@ -123,20 +125,21 @@ def eval_bar_svg(frac, text, flip, size, bar_w, pad=8):
         f'<rect width="{bar_w}" height="{size}" fill="{dark}"/>'
         f'<rect y="{white_y:.1f}" width="{bar_w}" height="{white_h:.1f}" fill="{light}"/>'
         f'<text x="{cx}" y="{cy}" transform="rotate({angle} {cx} {cy})" '
-        f'font-family="DejaVu Sans" font-size="13" font-weight="bold" '
+        f'font-family="DejaVu Sans" font-size="{font_size}" font-weight="bold" '
         f'text-anchor="start" dominant-baseline="central" fill="{fill}">{text}</text>'
     )
 
 
-def render_png(board, out, flip, lastmove, size=300, eval_frac=None,
+def render_png(board, out, flip, lastmove, size=500, eval_frac=None,
                eval_text=None, arrows=None):
     svg = chess.svg.board(
         board, size=size, coordinates=True,
         orientation=chess.BLACK if flip else chess.WHITE,
         lastmove=lastmove, arrows=arrows or [],
     )
-    bar_w = 26 if eval_frac is not None else 0
-    bar = (eval_bar_svg(eval_frac, eval_text, flip, size, bar_w)
+    bar_w = round(size * 0.085) if eval_frac is not None else 0
+    bar = (eval_bar_svg(eval_frac, eval_text, flip, size, bar_w,
+                        font_size=max(11, round(size / 23)))
            if bar_w else "")
     wrapped = (
         f'<svg xmlns="http://www.w3.org/2000/svg" '
