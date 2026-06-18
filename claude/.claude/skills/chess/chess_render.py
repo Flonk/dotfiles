@@ -14,6 +14,25 @@ import chess, chess.pgn, chess.svg, chess.engine
 HERE = pathlib.Path(__file__).parent
 ECO = json.loads((HERE / "eco.json").read_text())
 PV_PLIES = 8  # plies shown per line in --eval output
+BEST_COLOR = "#15781B"  # green, lichess best-move arrow
+ARROW_COLORS = {"green": "#15781B", "red": "#882020",
+                "blue": "#003088", "yellow": "#e68f00"}
+
+
+def parse_arrows(spec):
+    """'e2e4,g1f3:red,e4e4:#abc' -> [Arrow]. Color optional (name or hex,
+    default green); a same-square move (e4e4) draws a circle highlight."""
+    out = []
+    for part in spec.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        move, _, color = part.partition(":")
+        color = ARROW_COLORS.get(color, color) or BEST_COLOR
+        out.append(chess.svg.Arrow(
+            chess.parse_square(move[0:2]), chess.parse_square(move[2:4]),
+            color=color))
+    return out
 
 
 def parse_input(text):
@@ -109,11 +128,12 @@ def eval_bar_svg(frac, text, flip, size, bar_w, pad=8):
     )
 
 
-def render_png(board, out, flip, lastmove, size=300, eval_frac=None, eval_text=None):
+def render_png(board, out, flip, lastmove, size=300, eval_frac=None,
+               eval_text=None, arrows=None):
     svg = chess.svg.board(
         board, size=size, coordinates=True,
         orientation=chess.BLACK if flip else chess.WHITE,
-        lastmove=lastmove,
+        lastmove=lastmove, arrows=arrows or [],
     )
     bar_w = 26 if eval_frac is not None else 0
     bar = (eval_bar_svg(eval_frac, eval_text, flip, size, bar_w)
@@ -156,10 +176,12 @@ def evaluate(board, depth, multipv=5):
         lines.append({"score": fmt_score(info["score"]), "pv": pv})
     best = lines[0]["score"] if lines else None
     # White win expectation [0,1] for the eval bar, via python-chess WDL model.
-    frac = 0.5
+    frac, best_move = 0.5, None
     if infos:
         frac = infos[0]["score"].white().wdl(ply=board.ply()).expectation()
-    return best, lines, frac
+        pv = infos[0].get("pv")
+        best_move = pv[0] if pv else None
+    return best, lines, frac, best_move
 
 
 def main():
@@ -168,6 +190,8 @@ def main():
     ap.add_argument("--eval", action=argparse.BooleanOptionalAction, default=True,
                     help="Stockfish eval + lines + bar (default on; --no-eval = fast board only)")
     ap.add_argument("--depth", type=int, default=18)
+    ap.add_argument("--arrows", help="manual arrows, e.g. 'e2e4,g1f3:red' "
+                    "(color name or hex, default green; e4e4 = circle)")
     ap.add_argument("--flip", action="store_true")
     ap.add_argument("--out", default=str(pathlib.Path(tempfile.gettempdir()) / "chess.png"))
     args = ap.parse_args()
@@ -176,7 +200,7 @@ def main():
     board, moves = parse_input(text)
 
     status = game_status(board)
-    eval_frac = eval_text = best = lines = None
+    eval_frac = eval_text = best = lines = best_move = None
     if args.eval:
         if status is not None:  # finished: show the result, skip the engine
             o = board.outcome()
@@ -184,12 +208,19 @@ def main():
                 (1.0, "1-0") if o.winner is True else
                 (0.0, "0-1") if o.winner is False else (0.5, "½-½"))
         else:
-            best, lines, eval_frac = evaluate(board, args.depth)
+            best, lines, eval_frac, best_move = evaluate(board, args.depth)
             eval_text = best
+
+    arrows = []
+    if best_move is not None:  # auto best-move arrow
+        arrows.append(chess.svg.Arrow(
+            best_move.from_square, best_move.to_square, color=BEST_COLOR))
+    if args.arrows:
+        arrows += parse_arrows(args.arrows)
 
     lastmove = board.peek() if board.move_stack else None
     render_png(board, args.out, args.flip, lastmove,
-               eval_frac=eval_frac, eval_text=eval_text)
+               eval_frac=eval_frac, eval_text=eval_text, arrows=arrows)
 
     result = {
         "fen": board.fen(),

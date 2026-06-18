@@ -16,9 +16,10 @@ nix-shell -p stockfish python3Packages.chess librsvg --run \
   'python3 .claude/skills/chess/chess_render.py [--no-eval] [--depth N] [--flip] [--out PATH] "<FEN or PGN>"'
 ```
 
-- Stockfish analysis (eval + top 5 lines + eval bar) runs **by default**.
-- `--no-eval` — skip the engine for a fast board-only render (no STOCKFISH section, no bar).
+- Stockfish analysis (eval + top 5 lines + eval bar) runs **by default**, and draws a green arrow for the engine's best move.
+- `--no-eval` — skip the engine for a fast board-only render (no STOCKFISH section, no bar, no best-move arrow).
 - `--depth N` — search depth (default 18); lower = faster.
+- `--arrows 'e2e4,g1f3:red,e4e4:#abc'` — manual arrows, drawn on top of the best-move arrow. Each is `<from><to>[:<color>]`; color is a name (green/red/blue/yellow) or hex, default green; a same-square move like `e4e4` draws a circle highlight. Pair with `--no-eval` to annotate a position with only your own arrows.
 - `--flip` — orient from Black's side.
 - `--out PATH` — PNG output path (default `$TMPDIR/chess.png`).
 
