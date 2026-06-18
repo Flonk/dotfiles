@@ -9,6 +9,8 @@ Two modes:
 - **Analyze** a position — `chess_render.py`, input a **FEN** or **PGN** (auto-detected). Board + FEN + eval + lines.
 - **Explore** an opening — `explore.py`, input an opening **name**, FEN, or PGN. Board + named continuations.
 
+**Perspective:** if the user asks to see it from Black's side — "as black", "for black", "from black's perspective" — pass `--flip` (works in both scripts) so the board renders with Black at the bottom.
+
 ## Run
 
 Everything runs in one nix-shell. Pass the FEN/PGN as a single argument (quote it):
