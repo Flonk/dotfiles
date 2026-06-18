@@ -9,10 +9,10 @@ Run inside: nix-shell -p python3Packages.chess librsvg
 import argparse, csv, json, pathlib, re
 from collections import Counter, defaultdict
 import chess, chess.svg
-from chess_render import render_png, ECO, HERE, parse_input
+from chess_render import render_png, ECO, HERE, BEST_COLOR, parse_input
 
-MAIN_COLOR = "#7cfc00"     # lime @ 100% — the mainline
-OTHER_COLOR = "#0040c026"  # blue @ 0.15 — all other continuations
+MAIN_COLOR = BEST_COLOR     # default green — the mainline
+OTHER_COLOR = "#0040c026"   # blue @ 0.15 — all other continuations
 
 FEN_RE = re.compile(r"^([rnbqkpRNBQKP1-8]+/){7}[rnbqkpRNBQKP1-8]+\s")
 
@@ -93,11 +93,14 @@ def main():
     board, named = resolve(args.query)
     conts = continuations(build_tree(), board.epd())
 
+    # Others first, mainline last so the green arrow renders on top.
     arrows = []
-    for i, c in enumerate(conts):
+    for c in conts[1:]:
         m = chess.Move.from_uci(c["uci"])
-        color = MAIN_COLOR if i == 0 else OTHER_COLOR
-        arrows.append(chess.svg.Arrow(m.from_square, m.to_square, color=color))
+        arrows.append(chess.svg.Arrow(m.from_square, m.to_square, color=OTHER_COLOR))
+    if conts:
+        m = chess.Move.from_uci(conts[0]["uci"])
+        arrows.append(chess.svg.Arrow(m.from_square, m.to_square, color=MAIN_COLOR))
 
     lastmove = board.peek() if board.move_stack else None
     render_png(board, args.out, args.flip, lastmove, arrows=arrows)
