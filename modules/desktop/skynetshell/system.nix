@@ -32,6 +32,7 @@ in
 
     programs.skynetshell.greeter = {
       enable = true;
+      output = "eDP-1";
       settings = {
         exec = "start-hyprland >/dev/null 2>&1";
         effect = "beams";
