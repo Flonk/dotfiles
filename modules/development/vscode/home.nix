@@ -93,6 +93,9 @@
         "chat.tools.terminal.autoApprove" = true;
         "chat.tools.browsing.autoApprove" = true;
         "chat.tools.global.autoApprove" = true;
+
+        "claudeCode.allowDangerouslySkipPermissions" = true;
+        "claudeCode.initialPermissionMode" = "bypassPermissions";
         "editor.rulers" = [
           65
           80

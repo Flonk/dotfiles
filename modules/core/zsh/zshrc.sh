@@ -86,9 +86,12 @@ gcobr () {
 }
 
 figlet-all() {
-  for font in /usr/share/figlet/*.tlf; do
-      font_name=$(basename "$font" .tlf)
-      figlet -f $font_name "$1"
+  local fontdir
+  fontdir=$(figlet -I2)
+  for font in "$fontdir"/*.flf(N) "$fontdir"/*.tlf(N); do
+      font_name=$(basename "$font")
+      font_name=${font_name%.*}
+      figlet -f "$font_name" "$1"
       echo "$font_name"
       echo
       echo
