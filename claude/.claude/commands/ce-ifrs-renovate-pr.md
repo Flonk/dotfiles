@@ -56,7 +56,22 @@ In `~/repos/ce-ifrs/<repo>`:
 1. `git fetch origin && git checkout renovate/non-major-dependencies && git pull --ff-only`
 2. Build & test. Use `./mvnw -B clean install` if a wrapper exists, else
    `nix-shell -p maven --run "mvn -B clean install"` (NixOS: no global `mvn`).
-3. **Pin** each flagged package to its `FIXED IN` version (usually a
+3. **Trace each flagged package in the dependency tree first.** Run
+   `mvn dependency:tree` (via the wrapper or `nix-shell`) and locate where the
+   vulnerable artifact comes from. It is almost always transitive — note the
+   *outermost* (direct or parent-managed) package that drags it in. Before
+   force-pinning the transitive version, check whether a bump to that outer
+   package — or simply *removing* a stale local pin so the Spring Boot parent's
+   newer managed version takes over — already pulls a fixed transitive. Prefer
+   that: it's the cleaner fix, avoids version-property overrides that drift, and
+   sometimes the parent default is already past the `FIXED IN` (a local pin may
+   even be holding it *back* on a vulnerable version). Verify with
+   `dependency:tree` that the resolved version is now `>= FIXED IN`. Only fall
+   back to an explicit version-property pin (step 4) when no upstream bump
+   resolves it, or when the fixed version was never published (e.g. the advisory
+   names a patch that isn't on Maven Central — jump to the next published release
+   that sits outside the affected range).
+4. **Pin** each still-flagged package to its `FIXED IN` version (usually a
    `<x.version>` property fed by the Spring Boot parent). Always pin to the fixed
    version — there are no false positives; an unfixed CVE fails the pipeline. Add
    a comment documenting the resolved CVEs, e.g.:
@@ -69,11 +84,11 @@ In `~/repos/ce-ifrs/<repo>`:
    ```
 
    (single-line form: `<lib.version>1.2.3.4</lib.version> <!-- pinned to resolve 1.2.3 GHSA-… (lib-name, Medium) -->`)
-4. **Prune obsolete pin comments**: a pin-comment line reads `from -> to: CVE`;
+5. **Prune obsolete pin comments**: a pin-comment line reads `from -> to: CVE`;
    if the property value is now higher than that line's `to` target, the line is
    superseded — remove it (replace with the current set when re-pinning).
-5. Build & test again to verify green.
-6. Commit & push the `renovate/non-major-dependencies` branch.
+6. Build & test again to verify green.
+7. Commit & push the `renovate/non-major-dependencies` branch.
 
 ## 4. Confirm
 
