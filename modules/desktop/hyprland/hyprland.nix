@@ -172,7 +172,7 @@ in
           [ "GDK_SCALE" "1" ]
           [ "QT_SCALE_FACTOR" "1" ]
           [ "EDITOR" "micro" ]
-          [ "HYPRSHOT_DIR" "$HOME/Pictures/Screenshots" ]
+          [ "HYPRSHOT_DIR" "${config.home.homeDirectory}/Pictures/Screenshots" ]
         ];
 
         window_rule = [
@@ -182,6 +182,7 @@ in
           { match.class = "^(Alacritty|code)$";                                  opacity = "1 1"; }
           { match = { class = "Alacritty"; title = "^(initial-shell)$"; };       size = "500 100"; }
           { match.class = "^chrome-nngceckbapebfimnlniiiahkandclblb.*$";         float = true; }
+          { match.class = "^claude-chrome$";                                     workspace = "10 silent"; }
           { match.class = "org.pulseaudio.pavucontrol";                          float = true; }
         ];
 

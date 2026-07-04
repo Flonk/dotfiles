@@ -39,12 +39,9 @@
         "gopro-webcam".enable = true;
       };
       os = {
-        # IPU6 webcam — disabled. Built-in camera is unusable due to
-        # intel/ipu6-drivers#426 (SVP7500 USB-IO bridge bulk transfer bugs)
-        # and the v4l2-relayd service it spawns wedges in D-state on every
-        # shutdown (see obsidian://claude/video-setup). Re-enable when
-        # upstream lands a fix.
-        ipu6.enable = false;
+        # IPU6 webcam — re-enabled 2026-07-04 with out-of-tree intel_cvs +
+        # DWC PHY fix (see obsidian://claude/video-setup).
+        ipu6.enable = true;
         memory-pressure.enable = true;
         powersaver.enable = true;
       };

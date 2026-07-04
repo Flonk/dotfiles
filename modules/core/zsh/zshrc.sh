@@ -300,3 +300,118 @@ EOF
       post
   }' | less -R
 }
+
+# rlol — recursive lol: my commits across every git repo under the cwd (or given dir)
+rlol() {
+  local root="${1:-.}" me mail
+
+  me="$(git config user.name)"
+  mail="$(git config user.email)"
+  : "${me:=$(git -C "$root" config user.name 2>/dev/null)}"
+  : "${mail:=$(git -C "$root" config user.email 2>/dev/null)}"
+
+  if [ -z "$me" ] && [ -z "$mail" ]; then
+    echo "could not determine author (set git user.name / user.email)" >&2
+    return 1
+  fi
+
+  {
+    # find every git repo under root; emit all commits tagged with the repo name,
+    # plus author name + email so awk can decide who's "me"
+    find "$root" -type d -name .git -prune 2>/dev/null | while read -r gitdir; do
+      local repo="${gitdir%/.git}"
+      local name="${repo##*/}"
+      git -C "$repo" log --no-merges --date=iso-local \
+        --pretty=format:"%ad|$name|%h|%an|%ae|%s" 2>/dev/null
+      echo
+    done
+  } | awk -F'|' -v me="$me" -v mail="$mail" '
+    function lower(s){ return tolower(s) }
+    function trim(s){ sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); return s }
+
+    BEGIN {
+      me_l = lower(trim(me))
+      mail_l = lower(trim(mail))
+      n = split(me_l, p, /[[:space:]]+/)
+      two = (n == 2)
+      if (two) {
+        fn = p[1]; ln = p[2]
+        r1 = fn ".*[[:space:]]*" ln
+        r2 = ln ".*[[:space:]]*" fn
+      }
+    }
+
+    {
+      if (NF < 6) next
+      date_raw=$1; repo=$2; hash=$3; author=$4; email=$5
+      # subject may contain "|" — rejoin fields 6..NF
+      subj=$6
+      for (i=7; i<=NF; i++) subj = subj "|" $i
+
+      # decide if this commit is mine
+      a_l = lower(trim(author))
+      e_l = lower(trim(email))
+      is_me = 0
+      if (mail_l != "" && e_l == mail_l) is_me = 1
+      else if (me_l != "") {
+        if (two) is_me = (a_l ~ r1 || a_l ~ r2)
+        else     is_me = (a_l == me_l)
+      }
+      if (!is_me) next
+
+      # trim seconds + timezone: "2024-01-13 14:30:45 +0100" -> "2024-01-13 14:30"
+      sub(/:[0-9][0-9] [+-][0-9]+$/, "", date_raw)
+
+      print date_raw "\t" repo "\t" hash "\t" subj
+    }
+  ' | sort -r | awk -F'\t' '
+    {
+      date_raw=$1; repo=$2; hash=$3; subj=$4
+      repo_fmt = sprintf("%-20s", substr(repo, 1, 20))
+      subj_fmt = sprintf("%-60s", substr(subj, 1, 60))
+      border = "\033[1;90m│\033[0m"
+
+      printf "\033[35m%s\033[0m %s \033[33m%s\033[0m %s \033[32m%s\033[0m %s %s\n",
+        repo_fmt, border, hash, border, date_raw, border, subj_fmt
+    }' | less -R
+}
+
+# rglr — for every subfolder: stash WIP, fetch, pull, restore WIP
+rglr() {
+  local dir
+  find . -maxdepth 1 -mindepth 1 -type d | while read -r dir; do
+    [[ -d "$dir/.git" ]] || continue
+    echo "▶ ${dir#./}"
+    (
+      cd "$dir" && git add -A
+      git rm $(git ls-files --deleted) 2>/dev/null
+      git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
+      git fetch --all --tags --prune &&
+      git pull &&
+      git rev-list --max-count=1 --format="%s" HEAD | grep -q -- "--wip--" && git reset HEAD~1
+    )
+  done
+}
+
+# rglr! — for every subfolder: stash WIP, checkout develop (or main), fetch, pull
+rglr!() {
+  local dir branch
+  find . -maxdepth 1 -mindepth 1 -type d | while read -r dir; do
+    [[ -d "$dir/.git" ]] || continue
+    (
+      cd "$dir" || exit
+      if git show-ref --verify --quiet refs/heads/develop; then
+        branch=develop
+      else
+        branch=main
+      fi
+      echo "▶ ${dir#./} ($branch)"
+      git add -A
+      git rm $(git ls-files --deleted) 2>/dev/null
+      git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
+      git checkout "$branch" &&
+      git fetch --all --tags --prune &&
+      git pull
+    )
+  done
+}

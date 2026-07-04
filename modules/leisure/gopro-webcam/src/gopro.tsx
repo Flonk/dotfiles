@@ -94,14 +94,6 @@ async function getUserUid(): Promise<string> {
   return _userUid;
 }
 
-async function systemctlUser(...args: string[]) {
-  if (isRoot && GOPRO_USER) {
-    const uid = await getUserUid();
-    return $`runuser -u ${GOPRO_USER} -- env XDG_RUNTIME_DIR=${`/run/user/${uid}`} systemctl --user ${args}`.nothrow();
-  }
-  return $`systemctl --user ${args}`.nothrow();
-}
-
 async function sendNotify(...args: string[]): Promise<void> {
   if (isRoot && GOPRO_USER) {
     const uid = await getUserUid();
@@ -151,26 +143,14 @@ async function stopFfmpeg(): Promise<string | undefined> {
 // --- Steps: start ------------------------------------------------------------
 
 async function loadModule(ctx: Ctx): Promise<string> {
-  let needWpRestart = false;
-
-  if ((await $`lsmod`).stdout.includes("v4l2loopback")) {
-    let unloaded = (await root`rmmod v4l2loopback`.nothrow()).exitCode === 0;
-
-    if (!unloaded) {
-      needWpRestart =
-        (await systemctlUser("is-active", "wireplumber")).exitCode === 0;
-      if (needWpRestart) await systemctlUser("stop", "wireplumber");
-      await sleep(300);
-
-      unloaded = (await root`rmmod v4l2loopback`.nothrow()).exitCode === 0;
-      if (!unloaded) {
-        await root`rmmod -f v4l2loopback`.nothrow();
-      }
-      await sleep(200);
-    }
+  // Never rmmod: the IPU6 relay holds /dev/video50 on the same module.
+  // Add/remove only our own device (see obsidian://claude/video-setup).
+  if (!(await $`lsmod`).stdout.includes("v4l2loopback")) {
+    await root`modprobe v4l2loopback devices=0`;
   }
 
-  await root`modprobe v4l2loopback devices=1 exclusive_caps=1 max_buffers=2 card_label=GoPro video_nr=${VIDEO_NR}`;
+  await root`v4l2loopback-ctl delete ${VIDEO_NR}`.nothrow();
+  await root`v4l2loopback-ctl add -b 2 -x 1 -n GoPro ${VIDEO_NR}`.nothrow();
 
   // Find the device in sysfs
   const base = "/sys/devices/virtual/video4linux";
@@ -188,12 +168,10 @@ async function loadModule(ctx: Ctx): Promise<string> {
   }
   if (!found) throw new Error("v4l2loopback loaded but no GoPro device appeared");
 
-  // Set caps immediately so wireplumber sees a capture device (not just output)
-  // when it processes the add event. Must happen before wireplumber restarts.
+  // Set caps immediately so wireplumber sees a capture device (not just
+  // output) when it processes the add event.
   const caps = `YU12:${ctx.videoSize}`;
   await root`v4l2loopback-ctl set-caps ${ctx.videoDev!} ${caps}`;
-
-  if (needWpRestart) await systemctlUser("start", "wireplumber");
 
   return ctx.videoDev!;
 }
@@ -302,10 +280,15 @@ async function startFfmpeg(ctx: Ctx): Promise<string> {
 // --- Steps: stop -------------------------------------------------------------
 
 async function unloadModule(): Promise<string | undefined> {
-  if (!(await $`lsmod`).stdout.includes("v4l2loopback")) return "not loaded";
+  if ((await $`test -e /dev/video${VIDEO_NR}`.nothrow()).exitCode !== 0) {
+    await root`rm -f ${DEVICE_FILE}`.nothrow();
+    return "no device";
+  }
 
   for (let i = 0; i < 6; i++) {
-    if ((await root`rmmod v4l2loopback`.nothrow()).exitCode === 0) {
+    if (
+      (await root`v4l2loopback-ctl delete ${VIDEO_NR}`.nothrow()).exitCode === 0
+    ) {
       await root`rm -f ${DEVICE_FILE}`.nothrow();
       return undefined;
     }
@@ -313,7 +296,7 @@ async function unloadModule(): Promise<string | undefined> {
   }
 
   await root`rm -f ${DEVICE_FILE}`.nothrow();
-  return "still loaded (harmless)";
+  return "device still present (harmless)";
 }
 
 // --- Headless runner ---------------------------------------------------------
@@ -513,7 +496,7 @@ async function main() {
 
   const startSteps: StepDef[] = [
     { label: "Stop previous session", run: () => stopFfmpeg() },
-    { label: "Load v4l2loopback", run: (c) => loadModule(c) },
+    { label: "Add GoPro loopback device", run: (c) => loadModule(c) },
     { label: "Discover GoPro", run: (c) => discoverGoPro(c) },
     {
       label: "Activate webcam mode",
@@ -525,7 +508,7 @@ async function main() {
 
   const stopSteps: StepDef[] = [
     { label: "Stop ffmpeg", run: () => stopFfmpeg() },
-    { label: "Unload v4l2loopback", run: () => unloadModule() },
+    { label: "Remove GoPro loopback device", run: () => unloadModule() },
   ];
 
   const stepDefs = action === "start" ? startSteps : stopSteps;

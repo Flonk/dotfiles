@@ -9,6 +9,9 @@ let
     export PATH="${pkgs.nodejs}/bin:$PATH"
     exec ${pkgs.nodejs}/bin/npx --yes @anthropic-ai/claude-code "$@"
   '';
+  claudeChromeScript = pkgs.writeShellScriptBin "claude-chrome" ''
+    exec ${pkgs.google-chrome}/bin/google-chrome-stable --class=claude-chrome "$@"
+  '';
   claudeRemoteControlScript = pkgs.writeShellScriptBin "claude-remote-control-start" ''
     cd ${config.home.homeDirectory}/repos/personal/dotfiles/claude
     exec ${pkgs.util-linux}/bin/script -q -c '${claudeScript}/bin/claude --dangerously-skip-permissions --remote-control ${config.skynet.whoami.installation}' /dev/null
@@ -20,6 +23,7 @@ in
       home.packages = [
         pkgs.gh
         claudeScript
+        claudeChromeScript
       ];
     })
     (lib.mkIf config.skynet.module.development.claude-code.service.enable {

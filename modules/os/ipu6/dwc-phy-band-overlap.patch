@@ -1,0 +1,34 @@
+media: ipu6: prefer overlapping DPHY band with higher DDL osc target
+
+get_hsfreq_by_mbps() searches freqranges[] backwards and returns the
+higher band when adjacent bands overlap. At 1498 Mbps this selects the
+1461-1640 band (osc_freq_target=208) instead of 1414-1588 (335); the
+lower DDL target fails to lock and every frame arrives with payload
+checksum (CRC) errors. Shift to the previous band when it also covers
+the data rate and has a higher oscillation target.
+
+Upstream: https://lore.kernel.org/linux-media/20260401162547.1597975-1-mnencia@kcore.it/T/
+(accepted for 7.2; drop this patch once the running kernel contains it)
+
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-dwc-phy.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-dwc-phy.c
+@@ -317,6 +317,19 @@
+ 		return -EINVAL;
+ 	}
+ 
++	/*
++	 * Adjacent frequency bands overlap. When the data rate also fits the
++	 * previous band and that band has a higher DDL target oscillation
++	 * frequency, prefer it: the lower target can fail to lock (e.g. at
++	 * 1498 Mbps), corrupting every frame with payload checksum errors.
++	 */
++	if (index > 0 &&
++	    mbps >= freqranges[index - 1].min &&
++	    mbps <= freqranges[index - 1].max &&
++	    freqranges[index - 1].osc_freq_target >
++	    freqranges[index].osc_freq_target)
++		index--;
++
+ 	dwc_dphy_write_mask(isys, phy_id, IPU6_DWC_DPHY_HSFREQRANGE,
+ 			    freqranges[index].hsfreq, 0, 7);
+ 
