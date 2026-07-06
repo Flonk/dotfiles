@@ -12,7 +12,8 @@ $.quiet = true;
 $.shell = "/bin/sh";
 $.quote = quote;
 
-const VIDEO_NR = 48;
+// Above the IPU6 raw range (video0-47) and dock-webcam numbers; relay is 60.
+const VIDEO_NR = 61;
 const PORT = 8554;
 const PID_FILE = "/run/gopro-webcam-ffmpeg.pid";
 const LOG_FILE = "/tmp/gopro-webcam-ffmpeg.log";
@@ -143,7 +144,7 @@ async function stopFfmpeg(): Promise<string | undefined> {
 // --- Steps: start ------------------------------------------------------------
 
 async function loadModule(ctx: Ctx): Promise<string> {
-  // Never rmmod: the IPU6 relay holds /dev/video50 on the same module.
+  // Never rmmod: the IPU6 relay holds /dev/video60 on the same module.
   // Add/remove only our own device (see obsidian://claude/video-setup).
   if (!(await $`lsmod`).stdout.includes("v4l2loopback")) {
     await root`modprobe v4l2loopback devices=0`;

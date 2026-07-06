@@ -67,9 +67,9 @@ let
       fi
       echo ""
 
-      echo "## /dev/video48 holders (GoPro loopback)"
-      if [ -e /dev/video48 ]; then
-        holders=$(fuser /dev/video48 2>/dev/null || true)
+      echo "## /dev/video61 holders (GoPro loopback)"
+      if [ -e /dev/video61 ]; then
+        holders=$(fuser /dev/video61 2>/dev/null || true)
         if [ -n "''${holders// /}" ]; then
           for pid in $holders; do
             if [ -r "/proc/$pid/comm" ]; then
@@ -298,7 +298,7 @@ in
         ];
         title = "Capture a labeled mem/swap/v4l2/pipewire/oomd snapshot to /tmp";
         script = snapshotScript;
-        usage = "Usage: skynet mem snapshot <label>. Writes /tmp/skynet-mem-<label>.txt with a diff-friendly dump of memory state, v4l2/pipewire holders of /dev/video48, gopro-ffmpeg internals, and recent oomd/kernel OOM events. Run pre-call and post-call to isolate leaks at call boundaries.";
+        usage = "Usage: skynet mem snapshot <label>. Writes /tmp/skynet-mem-<label>.txt with a diff-friendly dump of memory state, v4l2/pipewire holders of /dev/video61, gopro-ffmpeg internals, and recent oomd/kernel OOM events. Run pre-call and post-call to isolate leaks at call boundaries.";
       }
       {
         command = [
