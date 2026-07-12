@@ -15,9 +15,11 @@ let
   basePkg = pkgs.qutebrowser;
 
   cappedLauncher = pkgs.writeShellScript "qutebrowser-capped" ''
+    ${lib.optionalString cfg.softwareVideoDecode ''
+      export QTWEBENGINE_CHROMIUM_FLAGS="--disable-accelerated-video-decode ''${QTWEBENGINE_CHROMIUM_FLAGS:-}"
+    ''}
     exec ${pkgs.systemd}/bin/systemd-run --user --scope --quiet --collect \
       --unit="qutebrowser-$$" \
-      --property=MemoryHigh=${cfg.memoryHigh} \
       --property=MemoryMax=${cfg.memoryMax} \
       -- ${basePkg}/bin/qutebrowser "$@"
   '';
@@ -216,6 +218,11 @@ in
       enable = true;
       package = cappedQutebrowser;
 
+      # Load autoconfig.yml, where qutebrowser persists "always allow"
+      # permission answers (mic, webcam, …). Without this the answers are
+      # saved but never read back, so every site re-prompts each visit.
+      loadAutoconfig = true;
+
       searchEngines = {
         DEFAULT = "https://www.google.com/search?q={}";
       };
@@ -224,6 +231,9 @@ in
         url.start_pages = [ "https://news.ycombinator.com" ];
         url.default_page = "https://news.ycombinator.com";
         tabs.last_close = "close";
+        # The memory cap can OOM-kill the browser (QtWebEngine WebRTC leak);
+        # keep the session on disk so a kill or crash restores all windows.
+        auto_save.session = true;
       };
 
       extraConfig = ''
