@@ -21,6 +21,16 @@ def sans_of(pgn_field):
     return [t for t in pgn_field.split() if not (t[0].isdigit() and "." in t)]
 
 
+def movetext(moves):
+    """SAN list -> '1. e4 e5 2. Nf3 ...' movetext."""
+    out = []
+    for i, san in enumerate(moves):
+        if i % 2 == 0:
+            out.append(f"{i // 2 + 1}.")
+        out.append(san)
+    return " ".join(out)
+
+
 def display_name(full, parent):
     """Drop the ECO code's family prefix shared with `parent` -> 'B90 English
     Attack' instead of 'B90 Sicilian Defense: Najdorf Variation, English Attack'."""
@@ -102,6 +112,7 @@ def main():
         "fen": board.fen(),
         "turn": "White" if board.turn else "Black",
         "last_ply": last_ply(moves),
+        "pgn": movetext(moves),
         "continuations": conts,
         "image": str(pathlib.Path(args.out).resolve()),
     }, indent=2))
