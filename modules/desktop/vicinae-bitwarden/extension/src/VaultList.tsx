@@ -70,19 +70,8 @@ const AUTOFILL_JS = `
 })()
 `.trim();
 
-function qutebrowserIsActive(): boolean {
-  try {
-    const out = execFileSync("hyprctl", ["activewindow", "-j"], { encoding: "utf8" });
-    return JSON.parse(out).class === "org.qutebrowser.qutebrowser";
-  } catch {
-    return false;
-  }
-}
-
 async function autofillCredentials(item: VaultItem, masterPassword: string) {
-  const password = qutebrowserIsActive()
-    ? await getPassword(item, masterPassword)
-    : "";
+  const password = await getPassword(item, masterPassword);
   const username = item.user ?? "";
   const js = AUTOFILL_JS
     .replace("__USERNAME__", JSON.stringify(username))

@@ -38,6 +38,7 @@ let
     pkgs.chromedriver
     pkgs.chromium
     pkgs.openconnect
+    pkgs.chafa
   ];
 
   vpn3it = pkgs.writeShellScriptBin "vpn3it" ''

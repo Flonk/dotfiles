@@ -10,24 +10,29 @@ let
     name = "open-bitwarden";
     runtimeInputs = with pkgs; [ wl-clipboard ];
     text = ''
-      # Yank current URL from qutebrowser and extract hostname for prefill
-      old_clip=$(wl-paste 2>/dev/null || true)
-      qutebrowser ':yank'
-      url=$(wl-paste 2>/dev/null || true)
-      if [ -n "$old_clip" ]; then
-        printf '%s' "$old_clip" | wl-copy
-      fi
-
       link="vicinae://launch/@flo/vicinae-bitwarden/search"
-      if [ -n "$url" ]; then
-        host="''${url#*://}"
-        host="''${host%%/*}"
-        host="''${host%%\?*}"
-        host="''${host%%#*}"
-        if [ -n "$host" ]; then
-          link="$link?arguments={\"query\":\"$host\"}"
+
+      # Only prefill from the active tab if qutebrowser is the focused window
+      if hyprctl activewindow -j | grep -qE '"class"[[:space:]]*:[[:space:]]*"org\.qutebrowser\.qutebrowser"'; then
+        # Yank current URL from qutebrowser and extract hostname for prefill
+        old_clip=$(wl-paste 2>/dev/null || true)
+        qutebrowser ':yank'
+        url=$(wl-paste 2>/dev/null || true)
+        if [ -n "$old_clip" ]; then
+          printf '%s' "$old_clip" | wl-copy
+        fi
+
+        if [ -n "$url" ]; then
+          host="''${url#*://}"
+          host="''${host%%/*}"
+          host="''${host%%\?*}"
+          host="''${host%%#*}"
+          if [ -n "$host" ]; then
+            link="$link?arguments={\"query\":\"$host\"}"
+          fi
         fi
       fi
+
       vicinae deeplink "$link"
     '';
   };

@@ -52,7 +52,19 @@ let
 
     log() { echo "[auto-preset] $(${pkgs.coreutils}/bin/date +%H:%M:%S) $*"; }
 
+    # Any easyeffects CLI call becomes the primary instance itself when the
+    # daemon is down, stealing the single-instance socket and crash-looping
+    # easyeffects.service. Never invoke without a live daemon.
+    ee_ready() {
+      [[ -S "$XDG_RUNTIME_DIR/EasyEffectsServer" ]] || return 1
+      [[ "$(systemctl --user show -p SubState --value easyeffects.service 2>/dev/null)" == "running" ]]
+    }
+
     ee() {
+      if ! ee_ready; then
+        log "ee $* skipped: daemon not ready"
+        return 0
+      fi
       log "ee $*"
       local rc=0
       ${pkgs.coreutils}/bin/timeout 5 ${pkgs.easyeffects}/bin/easyeffects "$@" 2>&1 || rc=$?
@@ -154,10 +166,9 @@ let
 
     log "starting, waiting for easyeffects…"
 
-    # Wait for easyeffects to become reachable
-    for i in $(seq 1 10); do
-      log "probe attempt $i"
-      ${pkgs.coreutils}/bin/timeout 3 ${pkgs.easyeffects}/bin/easyeffects -p 2>/dev/null && break
+    for i in $(seq 1 30); do
+      ee_ready && break
+      log "waiting for easyeffects daemon (attempt $i)"
       sleep 2
     done
 
@@ -186,8 +197,12 @@ let
     echo "Restarting easyeffects-auto-preset…"
     systemctl --user restart easyeffects-auto-preset.service
     echo "Waiting for EasyEffects to come up…"
-    for _ in $(seq 1 10); do
-      ${pkgs.coreutils}/bin/timeout 3 ${pkgs.easyeffects}/bin/easyeffects -p 2>/dev/null && break
+    # Probing with the easyeffects CLI while the daemon is down would spawn a
+    # primary instance and crash-loop the service — wait on the socket instead.
+    for _ in $(seq 1 15); do
+      [[ -S "$XDG_RUNTIME_DIR/EasyEffectsServer" ]] \
+        && [[ "$(systemctl --user show -p SubState --value easyeffects.service 2>/dev/null)" == "running" ]] \
+        && break
       sleep 2
     done
     echo "Disabling EasyEffects bypass…"

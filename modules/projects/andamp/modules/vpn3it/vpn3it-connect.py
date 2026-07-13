@@ -1,8 +1,10 @@
 # pyright: reportMissingImports=false, reportUnknownMemberType=false, reportMissingParameterType=false, reportUnknownParameterType=false, reportUnusedVariable=false, reportUnknownVariableType=false, reportUnusedCallResult=false, reportUnknownArgumentType=false, reportUnknownLambdaType=false, reportReturnType=false, reportUninitializedInstanceVariable=false, reportUnusedImport=false, reportUnannotatedClassAttribute=false
 import os
+import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 
 from selenium import webdriver
@@ -26,6 +28,66 @@ class VPN3ITConnect:
         self.password = password
         self.headless = headless
         self.driver = None
+
+    def _handle_open_sessions_page(self):
+        # Ivanti intermittently shows a "maximum number of open user sessions"
+        # confirmation page (welcome.cgi?p=user-confirm) after auth. Tick every
+        # listed session and click continue so the login can complete.
+        try:
+            buttons = self.driver.find_elements(By.CSS_SELECTOR, "#btnContinue")
+            if not buttons:
+                return
+            checkboxes = self.driver.find_elements(
+                By.CSS_SELECTOR, 'input[name="postfixSID"]'
+            )
+            if not checkboxes:
+                return
+            for cb in checkboxes:
+                if not cb.is_selected():
+                    cb.click()
+            _log("Open sessions page detected; closing existing sessions...")
+            buttons[0].click()
+        except Exception:
+            # Page may transition mid-inspection; the next poll retries.
+            pass
+
+    def _login_form_present(self):
+        try:
+            fields = self.driver.find_elements(By.CSS_SELECTOR, "#username")
+            return any(f.is_displayed() for f in fields)
+        except Exception:
+            return False
+
+    def _visible_text(self):
+        try:
+            txt = self.driver.find_element(By.TAG_NAME, "body").text.strip()
+            return txt or None
+        except Exception:
+            return None
+
+    def _capture_and_render(self, reason):
+        if not self.driver:
+            return
+        try:
+            try:
+                self.driver.execute_script(
+                    "document.documentElement.style.zoom='200%'"
+                )
+                time.sleep(0.3)
+            except Exception:
+                pass
+            fd, path = tempfile.mkstemp(prefix="vpn3it-fail-", suffix=".png")
+            os.close(fd)
+            if not self.driver.save_screenshot(path):
+                _log("(could not save screenshot)")
+                return
+            _log(f"--- Browser at failure ({reason}) ---", "bold")
+            if shutil.which("chafa"):
+                subprocess.run(["chafa", path])
+            else:
+                _log(f"(chafa not found; screenshot saved to {path})")
+        except Exception as e:
+            _log(f"(could not capture screenshot: {e})")
 
     def signal_handler(self, _signum, _frame):
         print("\nCaught SIGINT, shutting down openconnect...", file=sys.stderr)
@@ -87,6 +149,7 @@ class VPN3ITConnect:
                     )
                 except Exception:
                     print("Error: Timed out waiting for login form fields", file=sys.stderr)
+                    self._capture_and_render("login form never appeared")
                     sys.exit(1)
 
                 print("Enter Authy token: ", end="", flush=True)
@@ -104,6 +167,7 @@ class VPN3ITConnect:
                     )
                 except Exception:
                     print("Error: Timed out waiting for submit button", file=sys.stderr)
+                    self._capture_and_render("submit button never appeared")
                     sys.exit(1)
 
                 _log("Authenticating...", "bold")
@@ -112,12 +176,39 @@ class VPN3ITConnect:
                 _log("Log in manually in the browser window...", "bold")
 
             _log("Obtaining DSID Token...", "bold")
-            try:
-                dsid = WebDriverWait(self.driver, timeout=300, poll_frequency=1).until(
-                    lambda d: d.get_cookie("DSID")
-                )
-            except Exception:
-                print("Error: Timed out waiting for DSID cookie", file=sys.stderr)
+            dsid = None
+            rejected = False
+            start = time.time()
+            deadline = start + (90 if self.headless else 300)
+            while time.time() < deadline:
+                dsid = self.driver.get_cookie("DSID")
+                if dsid:
+                    break
+                self._handle_open_sessions_page()
+                if self.headless and time.time() - start > 15 and self._login_form_present():
+                    rejected = True
+                    break
+                time.sleep(1)
+            if not dsid:
+                if rejected:
+                    print(
+                        "Error: login rejected — still on the login form after "
+                        "submit (bad token, or locked/expired access?)",
+                        file=sys.stderr,
+                    )
+                    reason = "login rejected"
+                else:
+                    print(
+                        "Error: timed out waiting for DSID cookie "
+                        "(login did not complete)",
+                        file=sys.stderr,
+                    )
+                    reason = "DSID cookie never appeared"
+                msg = self._visible_text()
+                if msg:
+                    print("--- What the portal is showing ---", file=sys.stderr)
+                    print(msg, file=sys.stderr)
+                self._capture_and_render(reason)
                 sys.exit(1)
 
             self.driver.quit()
@@ -145,6 +236,7 @@ class VPN3ITConnect:
             raise
         except Exception as e:
             print(f"Error: {e}", file=sys.stderr)
+            self._capture_and_render(f"unexpected error: {type(e).__name__}")
             sys.exit(1)
         finally:
             if self.driver:

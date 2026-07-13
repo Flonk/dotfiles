@@ -28,11 +28,11 @@
       FAN_SPEED_ON_BAT = "auto";
 
       # PCIe link power management
-      PCIE_ASPM_ON_AC = "powersupersave";
+      PCIE_ASPM_ON_AC = "default";
       PCIE_ASPM_ON_BAT = "powersupersave";
 
-      # USB autosuspend
-      USB_AUTOSUSPEND = 1;
+      # USB autosuspend — off: dock's Realtek hubs re-enumerate the whole tree on resume
+      USB_AUTOSUSPEND = 0;
 
       # Wi-Fi power save
       WIFI_PWR_ON_BAT = "on";

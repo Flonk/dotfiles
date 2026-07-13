@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+@../CLAUDE.global.md
+
 - User: Flo, Vienna, Austria
 - Units: metric, Celsius. Numbers: space as thousands separator, period as decimal (e.g. 1 234.5). Week starts on Monday.
 - OS: **NixOS** — use `nix-shell -p <package>` for tools not on PATH. **Never run `python3` or `node` directly.**
