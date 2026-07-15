@@ -314,11 +314,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784026479,
-        "narHash": "sha256-VhXG+Ahyyc6TSFYNGOy5vxTWwFeuEVBCrnTJi5gb8CU=",
+        "lastModified": 1784131694,
+        "narHash": "sha256-kkKQxfsL4LbnZf0DlCp0VQU4iYVYq/BqmhkJEm5cHTM=",
         "owner": "Flonk",
         "repo": "skynetshell",
-        "rev": "6067bdecbb011b35a7c91b93000f094f01a58825",
+        "rev": "120de1f5c6c92c0d22da28b1f68aa24f744bbd7c",
         "type": "github"
       },
       "original": {
