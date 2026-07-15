@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
+  "name": "vicinae-i18n",
+  "title": "Switch Keyboard",
+  "description": "Switch the active fcitx5 input method",
+  "author": "flo",
+  "license": "MIT",
+  "icon": "extension_icon.svg",
+  "commands": [
+    {
+      "name": "switch",
+      "title": "Switch Keyboard...",
+      "subtitle": "i18n",
+      "description": "List input methods and switch to the selected one",
+      "mode": "view"
+    }
+  ],
+  "scripts": {
+    "build": "vici build",
+    "dev": "vici develop",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vicinae/api": "0.16.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.9.3"
+  }
+}

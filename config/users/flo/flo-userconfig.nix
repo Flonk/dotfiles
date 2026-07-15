@@ -36,6 +36,7 @@
       foot.enable = true;
       "google-chrome".enable = true;
       hyprland.enable = true;
+      i18n.enable = true;
       mako.enable = true;
       qutebrowser.enable = true;
       skynetshell.enable = true;
