@@ -40,7 +40,7 @@ shaders-clean:
 
 # Run greeter in test mode
 greet-test:
-    cd greeter && go run ./cmd/gloxwaldgreet --test --data-dir .
+    cd greeter && go run ./cmd/gloxwaldgreet --test --ascii ../ascii.txt
 
 # Preview GRUB theme in QEMU
 grub-preview resolution="1920x1080":

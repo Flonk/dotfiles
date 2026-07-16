@@ -6,13 +6,12 @@ set -euo pipefail
 OUT="${GRUB_OUTPUT_DIR:-.}"
 mkdir -p "$OUT"
 
-# --- Colors ---
-BG_COLOR="${GRUB_BG_COLOR:-#141519}"
-ACCENT="${GRUB_BORDER_COLOR:-#D4A645}"
+# --- Colors (mirrors the greeter: bg/accent themed, white/muted hardcoded there too) ---
+BG_COLOR="${GRUB_BG_COLOR:-#1a1a1a}"
+ACCENT="${GRUB_BORDER_COLOR:-#ff9529}"
 BAR_BG="${GRUB_BAR_BG:-#1C1D24}"
-BAR_FG="${GRUB_BAR_FG:-#8B92A8}"
-TEXT_COLOR="${GRUB_TEXT_COLOR:-#ffffff}"
-TEXT_DIM="${GRUB_TEXT_DIM:-#555560}"
+WHITE="#ffffff"
+MUTED="#677383"
 
 # --- Dimensions ---
 W="${GRUB_WIDTH:-1920}"
@@ -31,12 +30,6 @@ fi
 
 echo "=== Generating GLOXWALD GRUB theme ==="
 
-# Helper: hex → rgba with alpha
-hex_to_rgba() {
-    local hex="${1#\#}" alpha="$2"
-    printf "rgba(%d,%d,%d,%s)" "0x${hex:0:2}" "0x${hex:2:2}" "0x${hex:4:2}" "$alpha"
-}
-
 # --- Background (solid color, no border) ---
 echo "[1/5] Background..."
 $IM -size "${W}x${H}" xc:"$BG_COLOR" -depth 8 "PNG32:${OUT}/background.png"
@@ -50,8 +43,8 @@ if [[ -n "$ASCII_ART_FILE" && -f "$ASCII_ART_FILE" ]]; then
         RENDER_FONT="DejaVu-Sans-Mono"
     fi
 
-    $IM -background none -fill "$ACCENT" \
-        -font "$RENDER_FONT" -pointsize 14 \
+    $IM -background none -fill "$WHITE" \
+        -font "$RENDER_FONT" -pointsize 20 \
         -interline-spacing 0 \
         label:"@${ASCII_ART_FILE}" \
         "PNG32:${OUT}/ascii.png"
@@ -60,39 +53,17 @@ else
     echo "  [!] No ASCII art file provided, skipping"
 fi
 
-# --- Selection highlight (9-slice) ---
-echo "[3/5] Selection highlight..."
-SELECT_BORDER=2
-SELECT_PADDING=12
-SLICE_V=$(( SELECT_BORDER + 2 ))
-SLICE_H=$(( SELECT_BORDER + SELECT_PADDING ))
-TINT="$(hex_to_rgba "$ACCENT" "0.10")"
-
-mkslice() { $IM -size "${2}x${3}" "xc:${4}" "PNG32:${OUT}/${1}"; }
-
-# Selected items
-$IM -size 8x8 "xc:$TINT" "PNG32:${OUT}/select_c.png"
-$IM -size 8x${SLICE_V} "xc:$TINT" -fill "$ACCENT" -draw "rectangle 0,0 7,$(( SELECT_BORDER - 1 ))" "PNG32:${OUT}/select_n.png"
-$IM -size 8x${SLICE_V} "xc:$TINT" -fill "$ACCENT" -draw "rectangle 0,$(( SLICE_V - SELECT_BORDER )) 7,$(( SLICE_V - 1 ))" "PNG32:${OUT}/select_s.png"
-$IM -size ${SLICE_H}x8 "xc:$TINT" -fill "$ACCENT" -draw "rectangle 0,0 $(( SELECT_BORDER - 1 )),7" "PNG32:${OUT}/select_w.png"
-$IM -size ${SLICE_H}x8 "xc:$TINT" -fill "$ACCENT" -draw "rectangle $(( SLICE_H - SELECT_BORDER )),0 $(( SLICE_H - 1 )),7" "PNG32:${OUT}/select_e.png"
-$IM -size ${SLICE_H}x${SLICE_V} "xc:$TINT" -fill "$ACCENT" -draw "rectangle 0,0 $(( SELECT_BORDER - 1 )),$(( SLICE_V - 1 ))" -fill "$ACCENT" -draw "rectangle 0,0 $(( SLICE_H - 1 )),$(( SELECT_BORDER - 1 ))" "PNG32:${OUT}/select_nw.png"
-$IM -size ${SLICE_H}x${SLICE_V} "xc:$TINT" -fill "$ACCENT" -draw "rectangle $(( SLICE_H - SELECT_BORDER )),0 $(( SLICE_H - 1 )),$(( SLICE_V - 1 ))" -fill "$ACCENT" -draw "rectangle 0,0 $(( SLICE_H - 1 )),$(( SELECT_BORDER - 1 ))" "PNG32:${OUT}/select_ne.png"
-$IM -size ${SLICE_H}x${SLICE_V} "xc:$TINT" -fill "$ACCENT" -draw "rectangle 0,0 $(( SELECT_BORDER - 1 )),$(( SLICE_V - 1 ))" -fill "$ACCENT" -draw "rectangle 0,$(( SLICE_V - SELECT_BORDER )) $(( SLICE_H - 1 )),$(( SLICE_V - 1 ))" "PNG32:${OUT}/select_sw.png"
-$IM -size ${SLICE_H}x${SLICE_V} "xc:$TINT" -fill "$ACCENT" -draw "rectangle $(( SLICE_H - SELECT_BORDER )),0 $(( SLICE_H - 1 )),$(( SLICE_V - 1 ))" -fill "$ACCENT" -draw "rectangle 0,$(( SLICE_V - SELECT_BORDER )) $(( SLICE_H - 1 )),$(( SLICE_V - 1 ))" "PNG32:${OUT}/select_se.png"
-
-# Inactive items (transparent, same dimensions for consistent padding)
-$IM -size 8x8 xc:none "PNG32:${OUT}/item_c.png"
-$IM -size 8x${SLICE_V} xc:none "PNG32:${OUT}/item_n.png"
-$IM -size 8x${SLICE_V} xc:none "PNG32:${OUT}/item_s.png"
-$IM -size ${SLICE_H}x8 xc:none "PNG32:${OUT}/item_w.png"
-$IM -size ${SLICE_H}x8 xc:none "PNG32:${OUT}/item_e.png"
-$IM -size ${SLICE_H}x${SLICE_V} xc:none "PNG32:${OUT}/item_nw.png"
-$IM -size ${SLICE_H}x${SLICE_V} xc:none "PNG32:${OUT}/item_ne.png"
-$IM -size ${SLICE_H}x${SLICE_V} xc:none "PNG32:${OUT}/item_sw.png"
-$IM -size ${SLICE_H}x${SLICE_V} xc:none "PNG32:${OUT}/item_se.png"
+# --- Menu box (9-slice rounded border, like the greeter's login box) ---
+echo "[3/5] Menu box..."
+$IM -size 24x24 xc:none -fill "$MUTED" -draw "roundrectangle 0,0 23,23 3,3" \
+    -fill "$BG_COLOR" -draw "roundrectangle 1,1 22,22 2,2" "PNG32:${OUT}/menubox.png"
+for slice in nw:+0+0 n:+8+0 ne:+16+0 w:+0+8 c:+8+8 e:+16+8 sw:+0+16 s:+8+16 se:+16+16; do
+    $IM "${OUT}/menubox.png" -crop "8x8${slice#*:}" +repage "PNG32:${OUT}/menu_${slice%%:*}.png"
+done
+rm "${OUT}/menubox.png"
 
 # Terminal box
+mkslice() { $IM -size "${2}x${3}" "xc:${4}" "PNG32:${OUT}/${1}"; }
 mkslice "terminal_c.png" 8 8 "$BG_COLOR"
 mkslice "terminal_n.png" 8 2 "$BAR_BG"
 mkslice "terminal_s.png" 8 2 "$BAR_BG"
@@ -136,7 +107,7 @@ if [[ -f "${OUT}/ascii.png" ]]; then
     ASCII_BLOCK="
 + image {
     left = 50%-$(( AW / 2 ))
-    top = 30%-$(( AH / 2 ))
+    top = 45%-$(( AH + 48 ))
     file = \"ascii.png\"
 }"
 fi
@@ -156,13 +127,12 @@ ${ASCII_BLOCK}
     width = 40%
     height = 20%
 
-    item_font = "${FONT_FAMILY} Regular 16"
-    item_color = "${BAR_FG}"
-    selected_item_font = "${FONT_FAMILY} Bold 16"
-    selected_item_color = "${TEXT_COLOR}"
+    menu_pixmap_style = "menu_*.png"
 
-    selected_item_pixmap_style = "select_*.png"
-    item_pixmap_style = "item_*.png"
+    item_font = "${FONT_FAMILY} Regular 16"
+    item_color = "${MUTED}"
+    selected_item_font = "${FONT_FAMILY} Bold 16"
+    selected_item_color = "${ACCENT}"
 
     icon_width = 0
     icon_height = 0
@@ -184,7 +154,7 @@ ${ASCII_BLOCK}
     id = "__timeout__"
 
     bg_color = "${BAR_BG}"
-    fg_color = "${BAR_FG}"
+    fg_color = "${ACCENT}"
     border_color = "${BAR_BG}"
 }
 
@@ -195,18 +165,18 @@ ${ASCII_BLOCK}
     height = 20
 
     id = "__timeout__"
-    color = "${TEXT_DIM}"
+    color = "${MUTED}"
     font = "${FONT_FAMILY} Regular 12"
     align = "center"
 }
 
 + label {
     left = 30%
-    top = 78%
+    top = 100%-30
     width = 40%
     height = 20
 
-    color = "${TEXT_DIM}"
+    color = "${MUTED}"
     font = "${FONT_FAMILY} Regular 12"
     align = "center"
     text = "enter: boot | e: edit | c: command line"

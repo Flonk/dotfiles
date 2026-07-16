@@ -14,39 +14,20 @@ let
 
   asciiDefault = builtins.readFile ../ascii.txt;
 
-  # Generate the ASCII config file from settings
-  asciiConfigFile = pkgs.writeText "gloxwaldgreet.conf" (
-    ''
-      name=${cfg.settings.name}
-      effect=${cfg.settings.effect}
-      exec=${cfg.settings.exec}
-    ''
-    + optionalString (cfg.settings.color != "") "color=${cfg.settings.color}\n"
-    + "\nascii_1=\n${if t != null then t.asciiArt else asciiDefault}\n"
+  greeterPkg = gloxwaldPkgs.greeter;
+
+  asciiFile = pkgs.writeText "gloxwald-greeter-ascii.txt"
+    (if t != null then t.asciiArt else asciiDefault);
+
+  greeterFlags = concatStringsSep " " (
+    [ "--ascii ${asciiFile}" "--exec ${escapeShellArg cfg.settings.exec}" ]
+    ++ optional (cfg.settings.user != null) "--user ${escapeShellArg cfg.settings.user}"
+    ++ optionals (t != null) [
+      "--bg '${t.bg_base}'"
+      "--fg '${t.fg_primary}'"
+      "--accent '${t.accent}'"
+    ]
   );
-
-  # Generate theme .toml from attrset
-  themeFile = pkgs.writeText "gloxwaldgreet-theme.toml" (
-    ''
-      name = "${t.name}"
-
-      [colors]
-    ''
-    + concatStringsSep "\n" (
-      mapAttrsToList (k: v: "${k} = \"${v}\"")
-        (removeAttrs t [ "name" "asciiArt" ])
-    )
-    + "\n"
-  );
-
-  greeterPkg = (gloxwaldPkgs.greeter.overrideAttrs (old: {
-    postInstall = old.postInstall + ''
-      cp ${asciiConfigFile} $out/share/gloxwaldgreet/ascii_configs/hyprland.conf
-    '' + optionalString (t != null) ''
-      mkdir -p $out/share/gloxwaldgreet/themes
-      cp ${themeFile} $out/share/gloxwaldgreet/themes/theme.toml
-    '';
-  }));
 
   # Kitty config for the greeter session — no decorations,
   # themed background, custom font rendering.
@@ -65,7 +46,7 @@ let
   '');
 
   # The terminal + greeter the kiosk compositor launches.
-  greeterClient = "${pkgs.kitty}/bin/kitty --config=${kittyConf} ${greeterPkg}/bin/gloxwaldgreet";
+  greeterClient = "${pkgs.kitty}/bin/kitty --config=${kittyConf} ${greeterPkg}/bin/gloxwaldgreet ${greeterFlags}";
 
   # Minimal sway kiosk config used when the greeter is pinned to a single
   # output: disable every output, then enable only the requested one, so the
@@ -91,12 +72,9 @@ let
     {
       nativeBuildInputs = with pkgs; [ imagemagick grub2 ];
 
-      GRUB_BG_COLOR     = if t != null then t.bg_base      else "#141519";
-      GRUB_BORDER_COLOR = if t != null then t.accent        else "#D4A645";
-      GRUB_BAR_BG       = if t != null then t.bg_active     else "#1C1D24";
-      GRUB_BAR_FG       = if t != null then t.fg_secondary  else "#8B92A8";
-      GRUB_TEXT_COLOR    = if t != null then t.fg_primary    else "#ffffff";
-      GRUB_TEXT_DIM      = if t != null then t.fg_muted      else "#555560";
+      GRUB_BG_COLOR     = if t != null then t.bg_base   else "#1a1a1a";
+      GRUB_BORDER_COLOR = if t != null then t.accent    else "#ff9529";
+      GRUB_BAR_BG       = if t != null then t.bg_active else "#1C1D24";
 
       GRUB_WIDTH = toString grubCfg.resolution.width;
       GRUB_HEIGHT = toString grubCfg.resolution.height;
@@ -122,7 +100,6 @@ in
     theme = mkOption {
       type = types.nullOr (types.submodule {
         options = {
-          name       = mkOption { type = types.str; default = "theme"; };
           asciiArt   = mkOption {
             type = types.lines;
             default = asciiDefault;
@@ -130,15 +107,8 @@ in
           };
           bg_base    = mkOption { type = types.str; };
           bg_active  = mkOption { type = types.str; };
-          primary    = mkOption { type = types.str; };
-          secondary  = mkOption { type = types.str; };
           accent     = mkOption { type = types.str; };
-          warning    = mkOption { type = types.str; };
-          danger     = mkOption { type = types.str; };
-          fg_primary   = mkOption { type = types.str; };
-          fg_secondary = mkOption { type = types.str; };
-          fg_muted     = mkOption { type = types.str; };
-          border_focus = mkOption { type = types.str; };
+          fg_primary = mkOption { type = types.str; };
         };
       });
       default = null;
@@ -200,22 +170,14 @@ in
       };
 
       settings = {
-        name = mkOption {
-          type = types.str;
-          default = "hyprland";
-        };
-        effect = mkOption {
-          type = types.enum [ "beams" "" ];
-          default = "beams";
-        };
         exec = mkOption {
           type = types.str;
           description = "Command to launch after successful login (e.g. \"start-hyprland\")";
         };
-        color = mkOption {
-          type = types.str;
-          default = "";
-          description = "Optional hex color override for ASCII art (e.g. \"#89b4fa\")";
+        user = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Username to prefill; initial focus moves to the password field";
         };
       };
 
