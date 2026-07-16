@@ -5,7 +5,6 @@
   ...
 }:
 let
-  mon = config.skynet.host.primaryMonitor;
   borderSize = 5;
   lockCommand = config.programs.gloxwald.quickshell.lockCommand;
 in
@@ -34,7 +33,6 @@ in
 
         config = {
           input = {
-            kb_layout = "de";
             kb_options = "caps:hyper,hyper:mod3";
             numlock_by_default = true;
             repeat_delay = 300;
@@ -157,37 +155,16 @@ in
         ];
 
         env = map (e: { _args = e; }) [
-          [ "NIXOS_OZONE_WL" "1" ]
-          [ "NIXPKGS_ALLOW_UNFREE" "1" ]
           [ "XDG_CURRENT_DESKTOP" "Hyprland" ]
           [ "XDG_SESSION_TYPE" "wayland" ]
           [ "XDG_SESSION_DESKTOP" "Hyprland" ]
-          [ "GDK_BACKEND" "wayland,x11" ]
-          [ "CLUTTER_BACKEND" "wayland" ]
-          [ "QT_QPA_PLATFORM" "wayland;xcb" ]
-          [ "QT_WAYLAND_DISABLE_WINDOWDECORATION" "1" ]
-          [ "QT_AUTO_SCREEN_SCALE_FACTOR" "1" ]
-          [ "MOZ_ENABLE_WAYLAND" "1" ]
-          [ "AQ_DRM_DEVICES" "/dev/dri/card0:/dev/dri/card1" ]
-          [ "GDK_SCALE" "1" ]
-          [ "QT_SCALE_FACTOR" "1" ]
-          [ "EDITOR" "micro" ]
-          [ "HYPRSHOT_DIR" "${config.home.homeDirectory}/Pictures/Screenshots" ]
         ];
 
         window_rule = [
-          { match.class = ".*";                                                  suppress_event = "maximize"; }
-          { match.class = "org.pulseaudio.pavucontrol";                          size = "900 600"; }
-          { match.float = false;                                                 no_shadow = true; }
-          { match.class = "^(Alacritty|code)$";                                  opacity = "1 1"; }
-          { match = { class = "Alacritty"; title = "^(initial-shell)$"; };       size = "500 100"; }
-          { match.class = "^chrome-nngceckbapebfimnlniiiahkandclblb.*$";         float = true; }
-          { match.class = "^claude-chrome$";                                     workspace = "10 silent"; }
-          { match.class = "org.pulseaudio.pavucontrol";                          float = true; }
-        ];
-
-        layer_rule = lib.optionals config.skynet.module.desktop.mako.enable [
-          { match.namespace = "notifications"; animation = "slide right"; }
+          { match.class = ".*";                         suppress_event = "maximize"; }
+          { match.float = false;                        no_shadow = true; }
+          { match.class = "org.pulseaudio.pavucontrol"; size = "900 600"; }
+          { match.class = "org.pulseaudio.pavucontrol"; float = true; }
         ];
       };
 
@@ -197,8 +174,6 @@ in
       extraConfig = ''
         hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("${lockCommand}"))
 
-        hl.monitor({ output = "eDP-1", mode = "${toString mon.width}x${toString mon.height}@${toString mon.hz}", position = "0x0", scale = 1.00 })
-        hl.monitor({ output = "DP-2", mode = "5120x1440@120", position = "${toString mon.width}x0", scale = 1.00 })
         hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
       '';
     };

@@ -23,6 +23,7 @@
     ../modules/desktop/fastfetch/options.nix
     ../modules/desktop/foot/options.nix
     ../modules/desktop/google-chrome/options.nix
+    ../modules/desktop/hyprland/options.nix
     ../modules/desktop/i18n/options.nix
     ../modules/desktop/mako/options.nix
     ../modules/desktop/qutebrowser/options.nix

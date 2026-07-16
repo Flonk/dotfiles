@@ -16,6 +16,8 @@ MUTED="#677383"
 # --- Dimensions ---
 W="${GRUB_WIDTH:-1920}"
 H="${GRUB_HEIGHT:-1080}"
+# The menu box cannot auto-fit its content, so it is sized for this many entries
+ITEMS="${GRUB_MENU_ITEMS:-4}"
 
 # --- Paths ---
 FONT_FAMILY="${GRUB_FONT_FAMILY:-DejaVu Sans Mono}"
@@ -107,10 +109,13 @@ if [[ -f "${OUT}/ascii.png" ]]; then
     ASCII_BLOCK="
 + image {
     left = 50%-$(( AW / 2 ))
-    top = 45%-$(( AH + 48 ))
+    top = 45%-$(( AH + 24 ))
     file = \"ascii.png\"
 }"
 fi
+
+# 8px slice inset + 10px item_padding top and bottom, 32px items, 6px spacing
+BOX_H=$(( 36 + ITEMS * 32 + (ITEMS - 1) * 6 ))
 
 cat > "${OUT}/theme.txt" <<THEME
 # GLOXWALD GRUB Theme
@@ -125,7 +130,7 @@ ${ASCII_BLOCK}
     left = 30%
     top = 45%
     width = 40%
-    height = 20%
+    height = ${BOX_H}
 
     menu_pixmap_style = "menu_*.png"
 
@@ -147,7 +152,7 @@ ${ASCII_BLOCK}
 
 + progress_bar {
     left = 30%
-    top = 70%
+    top = 45%+$(( BOX_H + 24 ))
     width = 40%
     height = 3
 
@@ -160,7 +165,7 @@ ${ASCII_BLOCK}
 
 + label {
     left = 30%
-    top = 74%
+    top = 45%+$(( BOX_H + 40 ))
     width = 40%
     height = 20
 

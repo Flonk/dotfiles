@@ -7,6 +7,7 @@
     ./hyprpaper.nix
     ./hyprpicker.nix
     ./style.nix
+    ./vicinae.nix
   ];
 
   options.programs.gloxwald.hyprland.enable =

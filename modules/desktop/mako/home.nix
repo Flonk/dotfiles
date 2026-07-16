@@ -6,6 +6,11 @@
 }:
 {
   config = lib.mkIf config.skynet.module.desktop.mako.enable {
+    wayland.windowManager.hyprland.settings.layer_rule =
+      lib.optionals config.programs.gloxwald.hyprland.enable [
+        { match.namespace = "notifications"; animation = "slide right"; }
+      ];
+
     # mako notification daemon
     services.mako = {
       enable = true;

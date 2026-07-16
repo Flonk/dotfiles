@@ -25,6 +25,11 @@ in
         claudeScript
         claudeChromeScript
       ];
+
+      wayland.windowManager.hyprland.settings.window_rule =
+        lib.optionals config.programs.gloxwald.hyprland.enable [
+          { match.class = "^claude-chrome$"; workspace = "10 silent"; }
+        ];
     })
     (lib.mkIf config.skynet.module.development.claude-code.service.enable {
       systemd.user.services.claude-remote-control = {

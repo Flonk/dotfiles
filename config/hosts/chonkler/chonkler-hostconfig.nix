@@ -29,6 +29,7 @@
           };
         };
         gloxwald.enable = true;
+        hyprland.enable = true;
         stylix.enable = true;
       };
       development = {

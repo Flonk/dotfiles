@@ -1,6 +1,5 @@
 {
   pkgs,
-  inputs,
   config,
   lib,
   ...
@@ -38,35 +37,15 @@ let
   };
 in
 {
-  config = lib.mkIf config.skynet.module.desktop.vicinae.enable (
-    lib.mkMerge [
+  config =
+    lib.mkIf (config.skynet.module.desktop.vicinae.enable && config.programs.gloxwald.hyprland.enable)
       {
-        services.vicinae = {
-          enable = true;
-
-          package = pkgs.vicinae;
-
-          systemd = {
-            enable = true;
-            autoStart = true;
-            target = "graphical-session.target";
-          };
-        };
-      }
-
-      (lib.mkIf config.programs.gloxwald.hyprland.enable {
         home.packages = [ open-bitwarden ];
-        wayland.windowManager.hyprland.settings.layer_rule = [
-          { match.namespace = "vicinae"; dim_around = true; }
-        ];
+
         wayland.windowManager.hyprland.extraConfig = ''
-          hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("vicinae open"))
-          hl.bind("MOD3 + period", hl.dsp.exec_cmd("xdg-open vicinae://launch/core/search-emojis"))
           hl.bind("MOD3 + B", hl.dsp.exec_cmd("xdg-open vicinae://launch/@Gelei/store.vicinae.bluetooth/devices"))
           hl.bind("MOD3 + P", hl.dsp.exec_cmd("open-bitwarden"))
           hl.bind("MOD3 + T", hl.dsp.exec_cmd("xdg-open vicinae://launch/@gebeto/store.raycast.translate/quick-translate"))
         '';
-      })
-    ]
-  );
+      };
 }
