@@ -7,6 +7,16 @@
 let
   borderSize = 5;
   lockCommand = config.programs.gloxwald.quickshell.lockCommand;
+
+  hypr-scale = pkgs.writeShellApplication {
+    name = "hypr-scale";
+    runtimeInputs = with pkgs; [
+      jq
+      gawk
+      libnotify
+    ];
+    text = builtins.readFile ./hypr-scale.sh;
+  };
 in
 {
   imports = [
@@ -17,6 +27,8 @@ in
   ];
 
   config = lib.mkIf config.programs.gloxwald.hyprland.enable {
+    home.packages = [ hypr-scale ];
+
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;

@@ -81,6 +81,16 @@ end
 bindGrid(ijklKeys)
 bindGrid(kpKeys)
 
+-- MONITOR SCALE (of the active window's monitor)
+for _, s in ipairs({
+  { keys = { "plus", "KP_Add" },       delta = "up" },
+  { keys = { "minus", "KP_Subtract" }, delta = "down" },
+}) do
+  for _, key in ipairs(s.keys) do
+    hl.bind(mainMod .. " + " .. key, hl.dsp.exec_cmd("hypr-scale " .. s.delta))
+  end
+end
+
 -- WORKSPACES (1-9 -> 1-9, 0 -> 10)
 for i = 0, 9 do
   local ws = (i == 0) and 10 or i
