@@ -138,7 +138,8 @@ in
               tabs = {
                 radius = 0;
                 padding = 0;
-                text_font = config.stylix.fonts.sansSerif.name;
+                text_font = "${config.stylix.fonts.monospace.name} Bold";
+                text_height = 8;
               };
             };
           };

@@ -254,19 +254,15 @@ const float ATMO_POW    = 2.;    // haze concentration toward the limb
 
 // warhol mode: tiles become flat pop-color squares, no pad, no borders.
 // each square hashes a palette color and a normal/inverted flip; the fill
-// wipe becomes a pulse with a gradient tail — transparent toward the seed,
-// solid at the wavefront. normal = black bg, amps printed in the color,
-// pulsing to black; inverted = color bg, black amps, pulsing to
-// color*WARHOL_FILL. colors are oklch-matched to the andamp blue (same
-// lightness/chroma, rotated hue)
+// wipe is suppressed — tiles spin, then sit still. normal = black bg, amps
+// printed in the color; inverted = color bg, black amps. colors are
+// oklch-matched to the andamp blue (same lightness/chroma, rotated hue)
 const vec3 WARHOL_COLS[4] = vec3[4](
     vec3(0.138, 0.633, 0.717),   // andamp blue
     vec3(0.768, 0.456, 0.581),   // pink
     vec3(0.482, 0.619, 0.336),   // lime
     vec3(0.764, 0.495, 0.304));  // orange
 const float WARHOL_INV  = 0.5;   // chance a square is inverted
-const float WARHOL_FILL = 1.2;   // pulse brightness x the base color (inverted)
-const float PULSE_W     = 0.35;  // pulse gradient tail width (glyph units)
 
 // key indicator: on keypress a black circle fills the screen while a blue
 // amp zooms in; each key bumps the amp, errors turn it red, inactivity
@@ -547,14 +543,6 @@ float fillAnim(float frame, float start){
     return 0.;
 }
 
-// wipe progress for the warhol pulse: parked negative before the wipe (the
-// annulus is imaginary), eased across, then parked past the glyph — so the
-// on/unfill phases read as settled black with no retiming
-float pulseWipe(float frame, float start){
-    if(frame < start) return -1.;
-    return cubicInOut(min((frame - start)/T_FILL, 1.));
-}
-
 // brand gradient across the glyph (glyph space spans y in [-0.5,0.5])
 vec3 ampGradient(vec2 p){
     return mix(GRAD_BOT, GRAD_TOP, clamp(p.y + 0.5, 0., 1.));
@@ -692,29 +680,12 @@ vec3 drawAmp(vec2 p, float n, vec3 sq, float depth, float tileDepth, vec2 tp, ve
     dw = max(sq.x, dw);
     // brand-gradient fill; in terra mode snow-covered high terrain with a
     // thin rock rim, detail mottling toned down on the snow. suppressed in
-    // warhol — the pulse below takes over
+    // warhol — tiles keep their printed color and just sit
     vec3 fillCol = mix(ampGradient(p),
                        mix(HIGH_BOT, HIGH_TOP, smoothstep(0., -SNOW_D, dw))
                        * mix(1., dmod, SNOW_DETAIL),
                        P.terra);
     col = mix(col, fillCol, S(dw) * rim * (1. - P.warhol));
-
-    // warhol: the fill wipe becomes a pulse with a gradient tail —
-    // transparent toward the seed, solid at the wavefront — sweeping across
-    // the glyph and out past its rim, so the on/unfill phases read as
-    // settled. inverted tiles pulse brightened color over black amps;
-    // normal tiles pulse black over the printed color
-    if(P.warhol > 0.001){
-        float rj = pulseWipe(frame, FILLJ_START) * (RJ + 1.5*PULSE_W);
-        float rp = pulseWipe(frame, FILLP_START) * (RP + 1.5*PULSE_W);
-        float lj = length(pJ - SEED_J), lp = length(pP - SEED_P);
-        float aj = S(max(sq.x, max(dj, lj - rj) * ampScale))
-                 * smoothstep(rj - PULSE_W, rj, lj);
-        float ap = S(max(sq.x, max(dp, lp - rp) * ampScale))
-                 * smoothstep(rp - PULSE_W, rp, lp);
-        col = mix(col, mix(vec3(0.), gPop * WARHOL_FILL * tshade, gInv),
-                  max(aj, ap) * rim * P.warhol);
-    }
 
     // emboss: terrain slopes facing the sun brighten, away-facing darken,
     // strongest right at coasts and ridges. the SDF gradients come from

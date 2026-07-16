@@ -66,14 +66,6 @@ float fillAnim(float frame, float start){
     return 0.;
 }
 
-// wipe progress for the warhol pulse: parked negative before the wipe (the
-// annulus is imaginary), eased across, then parked past the glyph — so the
-// on/unfill phases read as settled black with no retiming
-float pulseWipe(float frame, float start){
-    if(frame < start) return -1.;
-    return cubicInOut(min((frame - start)/T_FILL, 1.));
-}
-
 // brand gradient across the glyph (glyph space spans y in [-0.5,0.5])
 vec3 ampGradient(vec2 p){
     return mix(GRAD_BOT, GRAD_TOP, clamp(p.y + 0.5, 0., 1.));
@@ -211,29 +203,12 @@ vec3 drawAmp(vec2 p, float n, vec3 sq, float depth, float tileDepth, vec2 tp, ve
     dw = max(sq.x, dw);
     // brand-gradient fill; in terra mode snow-covered high terrain with a
     // thin rock rim, detail mottling toned down on the snow. suppressed in
-    // warhol — the pulse below takes over
+    // warhol — tiles keep their printed color and just sit
     vec3 fillCol = mix(ampGradient(p),
                        mix(HIGH_BOT, HIGH_TOP, smoothstep(0., -SNOW_D, dw))
                        * mix(1., dmod, SNOW_DETAIL),
                        P.terra);
     col = mix(col, fillCol, S(dw) * rim * (1. - P.warhol));
-
-    // warhol: the fill wipe becomes a pulse with a gradient tail —
-    // transparent toward the seed, solid at the wavefront — sweeping across
-    // the glyph and out past its rim, so the on/unfill phases read as
-    // settled. inverted tiles pulse brightened color over black amps;
-    // normal tiles pulse black over the printed color
-    if(P.warhol > 0.001){
-        float rj = pulseWipe(frame, FILLJ_START) * (RJ + 1.5*PULSE_W);
-        float rp = pulseWipe(frame, FILLP_START) * (RP + 1.5*PULSE_W);
-        float lj = length(pJ - SEED_J), lp = length(pP - SEED_P);
-        float aj = S(max(sq.x, max(dj, lj - rj) * ampScale))
-                 * smoothstep(rj - PULSE_W, rj, lj);
-        float ap = S(max(sq.x, max(dp, lp - rp) * ampScale))
-                 * smoothstep(rp - PULSE_W, rp, lp);
-        col = mix(col, mix(vec3(0.), gPop * WARHOL_FILL * tshade, gInv),
-                  max(aj, ap) * rim * P.warhol);
-    }
 
     // emboss: terrain slopes facing the sun brighten, away-facing darken,
     // strongest right at coasts and ridges. the SDF gradients come from

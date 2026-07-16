@@ -5,6 +5,10 @@ Item {
     id: root
     required property var context
 
+    // Only the largest screen renders the shader; the rest stay black
+    // (bar and input still work) — one GPU-heavy render per lock
+    property bool renderScene: true
+
     // Resolved scene name from the shared context (identical on every monitor)
     property string shader: context.activeShader
 
@@ -21,7 +25,9 @@ Item {
         target: root.Window.window
         function onFrameSwapped() {
             root._iFrame += 1;
-            root.context.frameTick(root);
+            // black surfaces barely repaint — they can't sustain the clock
+            // loop, so never own it
+            if (root.renderScene) root.context.frameTick(root);
         }
     }
     Component.onDestruction: root.context.releaseClock(root)
@@ -42,9 +48,14 @@ Item {
     }
 
     onShaderChanged: _reloadShader()
+    onRenderSceneChanged: _reloadShader()
     Component.onCompleted: _reloadShader()
 
     function _reloadShader() {
+        if (!renderScene) {
+            shaderLoader.setSource("");
+            return;
+        }
         _pickShader();
         shaderLoader.setSource("shaders/scenes/" + _activeShader + ".qml", {
             "context": Qt.binding(() => root.context),
@@ -53,7 +64,7 @@ Item {
         });
     }
 
-    // ---- Shader background (loaded per-shader) ----
+    // ---- Shader background (loaded per-shader, render surface only) ----
     Loader {
         id: shaderLoader
         anchors.fill: parent

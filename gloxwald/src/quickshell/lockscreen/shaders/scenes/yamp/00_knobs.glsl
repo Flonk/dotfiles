@@ -139,19 +139,15 @@ const float ATMO_POW    = 2.;    // haze concentration toward the limb
 
 // warhol mode: tiles become flat pop-color squares, no pad, no borders.
 // each square hashes a palette color and a normal/inverted flip; the fill
-// wipe becomes a pulse with a gradient tail — transparent toward the seed,
-// solid at the wavefront. normal = black bg, amps printed in the color,
-// pulsing to black; inverted = color bg, black amps, pulsing to
-// color*WARHOL_FILL. colors are oklch-matched to the andamp blue (same
-// lightness/chroma, rotated hue)
+// wipe is suppressed — tiles spin, then sit still. normal = black bg, amps
+// printed in the color; inverted = color bg, black amps. colors are
+// oklch-matched to the andamp blue (same lightness/chroma, rotated hue)
 const vec3 WARHOL_COLS[4] = vec3[4](
     vec3(0.138, 0.633, 0.717),   // andamp blue
     vec3(0.768, 0.456, 0.581),   // pink
     vec3(0.482, 0.619, 0.336),   // lime
     vec3(0.764, 0.495, 0.304));  // orange
 const float WARHOL_INV  = 0.5;   // chance a square is inverted
-const float WARHOL_FILL = 1.2;   // pulse brightness x the base color (inverted)
-const float PULSE_W     = 0.35;  // pulse gradient tail width (glyph units)
 
 // key indicator: on keypress a black circle fills the screen while a blue
 // amp zooms in; each key bumps the amp, errors turn it red, inactivity
