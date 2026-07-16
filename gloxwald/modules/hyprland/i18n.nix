@@ -72,36 +72,6 @@ let
   };
 in
 {
-  options.programs.gloxwald.i18n = {
-    enable = lib.mkEnableOption "fcitx5 input-method switching (gloxwald-i18n CLI, bar widget, MOD3+I cycle)";
-
-    defaultLayout = lib.mkOption {
-      type = lib.types.str;
-      default = "us";
-    };
-
-    inputMethods = lib.mkOption {
-      type = lib.types.listOf (
-        lib.types.submodule {
-          options = {
-            im = lib.mkOption { type = lib.types.str; };
-            label = lib.mkOption { type = lib.types.str; };
-            layout = lib.mkOption {
-              type = lib.types.str;
-              default = "";
-            };
-          };
-        }
-      );
-      default = [
-        {
-          im = "keyboard-us";
-          label = "ENGLISH";
-        }
-      ];
-    };
-  };
-
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {

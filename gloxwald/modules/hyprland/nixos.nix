@@ -5,9 +5,6 @@
   ...
 }:
 {
-  options.programs.gloxwald.hyprland.enable =
-    lib.mkEnableOption "gloxwald hyprland session";
-
   config = lib.mkIf config.programs.gloxwald.hyprland.enable {
     xdg.portal = {
       enable = true;

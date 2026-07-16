@@ -5,12 +5,6 @@
   ...
 }:
 {
-  options.programs.gloxwald.vicinae.enable = lib.mkOption {
-    type = lib.types.bool;
-    default = true;
-    description = "Ship the vicinae launcher (requires the vicinae home-manager module to be imported)";
-  };
-
   config =
     lib.mkIf (config.programs.gloxwald.hyprland.enable && config.programs.gloxwald.vicinae.enable)
       {

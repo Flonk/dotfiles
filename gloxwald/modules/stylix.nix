@@ -8,32 +8,6 @@ let
   cfg = config.programs.gloxwald.stylix;
 in
 {
-  options.programs.gloxwald.stylix = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Stylix theming for the gloxwald desktop (requires the stylix home-manager module to be imported)";
-    };
-
-    scheme = lib.mkOption {
-      type = lib.types.str;
-      default = "ayu-dark";
-      description = "Base16 scheme name (filename without .yaml) from base16-schemes";
-    };
-
-    accent = lib.mkOption {
-      type = lib.types.str;
-      default = "#ff9624";
-      description = "Accent color (borders, active tabs, bar highlights)";
-    };
-
-    accentDark = lib.mkOption {
-      type = lib.types.str;
-      default = "#8e4e1c";
-      description = "Darker accent variant (focused/inactive tab text)";
-    };
-  };
-
   config = lib.mkIf (config.programs.gloxwald.hyprland.enable && cfg.enable) (
     lib.mkMerge [
       {

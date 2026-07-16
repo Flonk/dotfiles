@@ -4,12 +4,6 @@
   ...
 }:
 {
-  options.programs.gloxwald.mako.enable = lib.mkOption {
-    type = lib.types.bool;
-    default = true;
-    description = "Ship the mako notification daemon";
-  };
-
   config = lib.mkIf (config.programs.gloxwald.hyprland.enable && config.programs.gloxwald.mako.enable) {
     services.mako = {
       enable = true;

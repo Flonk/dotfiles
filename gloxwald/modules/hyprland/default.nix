@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 {
   imports = [
     ./hyprland.nix
@@ -10,7 +10,4 @@
     ./style.nix
     ./vicinae.nix
   ];
-
-  options.programs.gloxwald.hyprland.enable =
-    lib.mkEnableOption "gloxwald hyprland session";
 }

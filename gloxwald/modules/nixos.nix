@@ -94,112 +94,11 @@ let
 
 in
 {
-  imports = [ ./hyprland/nixos.nix ];
+  imports = [
+    ./options.nix
+    ./hyprland/nixos.nix
+  ];
 
-  options.programs.gloxwald = {
-    theme = mkOption {
-      type = types.nullOr (types.submodule {
-        options = {
-          asciiArt   = mkOption {
-            type = types.lines;
-            default = asciiDefault;
-            description = "ASCII art displayed by greeter and rendered into the GRUB background";
-          };
-          bg_base    = mkOption { type = types.str; };
-          bg_active  = mkOption { type = types.str; };
-          accent     = mkOption { type = types.str; };
-          fg_primary = mkOption { type = types.str; };
-        };
-      });
-      default = null;
-      description = "Shared theme for greeter and GRUB. If null, hardcoded defaults are used.";
-    };
-
-    grub = {
-      enable = mkEnableOption "gloxwald GRUB theme";
-
-      resolution = {
-        width = mkOption {
-          type = types.int;
-          default = 1920;
-        };
-        height = mkOption {
-          type = types.int;
-          default = 1080;
-        };
-      };
-
-      font = {
-        family = mkOption {
-          type = types.str;
-          default = "DejaVu Sans Mono";
-          description = "Font family name used in theme.txt";
-        };
-        regular = mkOption {
-          type = types.path;
-          default = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf";
-          description = "Path to regular weight TTF";
-        };
-        bold = mkOption {
-          type = types.path;
-          default = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono-Bold.ttf";
-          description = "Path to bold weight TTF";
-        };
-      };
-
-      useOSProber = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether to enable os-prober for detecting other OSes";
-      };
-    };
-
-    greeter = {
-      enable = mkEnableOption "gloxwaldgreet greeter for greetd";
-
-      output = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "eDP-1";
-        description = ''
-          Wayland output to pin the greeter to (e.g. "eDP-1"). When null the
-          greeter runs under cage and spans all connected outputs, which on a
-          multi-monitor setup centres it across the seam between displays. When
-          set, the greeter runs under sway on that single output only.
-        '';
-      };
-
-      settings = {
-        exec = mkOption {
-          type = types.str;
-          description = "Command to launch after successful login (e.g. \"start-hyprland\")";
-        };
-        user = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = "Username to prefill; initial focus moves to the password field";
-        };
-      };
-
-      font = {
-        name = mkOption {
-          type = types.str;
-          default = "monospace";
-          description = "Font name for the greeter (rendered via kitty)";
-        };
-        size = mkOption {
-          type = types.int;
-          default = 18;
-          description = "Font size in points for the greeter";
-        };
-        package = mkOption {
-          type = types.nullOr types.package;
-          default = null;
-          description = "Font package to install (e.g. pkgs.nerd-fonts.dejavu-sans-mono)";
-        };
-      };
-    };
-  };
 
   config = mkMerge [
     (mkIf grubCfg.enable {

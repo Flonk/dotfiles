@@ -4,12 +4,6 @@
   ...
 }:
 {
-  options.programs.gloxwald.wallpaper = lib.mkOption {
-    type = lib.types.nullOr (lib.types.either lib.types.path lib.types.package);
-    default = null;
-    description = "Wallpaper image; served by stylix when enabled, otherwise via hyprpaper";
-  };
-
   config =
     lib.mkIf
       (

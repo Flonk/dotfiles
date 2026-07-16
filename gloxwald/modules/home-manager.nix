@@ -10,38 +10,52 @@ let
 
   quickshellConfigDir = "${quickshellSrc}/shell";
 
-  lockScript = pkgs.writeShellScript "gloxwald-lock" ''
-    uid=$(id -u)
-    for i in $(seq 20); do
-      id=$(ls -t /run/user/"$uid"/quickshell/by-id/ 2>/dev/null | head -1)
-      if [ -n "$id" ]; then
-        ${pkgs.quickshell}/bin/quickshell ipc -i "$id" call lock lock && exit 0
+  themeJson =
+    let
+      c = config.lib.stylix.colors.withHashtag;
+    in
+    builtins.toJSON {
+      fontSize = config.stylix.fonts.sizes.terminal;
+      fontFamily = config.stylix.fonts.monospace.name;
+      app100 = c.base00;
+      app150 = c.base01;
+      app200 = c.base02;
+      app600 = c.base05;
+      app700 = c.base03;
+      app800 = c.base06;
+      app900 = c.base07;
+      wm800 = config.programs.gloxwald.stylix.accent;
+      error400 = c.base08;
+      error600 = c.base09;
+      success600 = c.base0B;
+    };
+
+  launchScript = pkgs.writeShellScript "gloxwald-quickshell-launch" ''
+    if [ -z "''${XDG_RUNTIME_DIR:-}" ]; then
+      export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+    fi
+    : "''${WAYLAND_DISPLAY:?WAYLAND_DISPLAY missing}"
+    for _ in $(seq 50); do
+      if [ -S "''${XDG_RUNTIME_DIR}/''${WAYLAND_DISPLAY}" ]; then
+        exec ${pkgs.quickshell}/bin/quickshell
       fi
-      sleep 0.5
+      sleep 0.2
     done
+    echo "wayland socket never appeared: ''${XDG_RUNTIME_DIR}/''${WAYLAND_DISPLAY}" >&2
     exit 1
   '';
 
 in
 {
   imports = [
+    ./options.nix
     ./hyprland
     ./stylix.nix
   ];
 
-  options.programs.gloxwald.quickshell = {
-    enable = mkEnableOption "gloxwald quickshell bar and lockscreen";
-
-    lockCommand = mkOption {
-      type = types.str;
-      readOnly = true;
-      default = "${lockScript}";
-      description = "Command to lock the screen via quickshell IPC. Use this in hyprland binds etc.";
-    };
-  };
-
   config = mkIf cfg.enable {
     xdg.configFile."quickshell".source = quickshellConfigDir;
+    xdg.configFile."quickshell-theme.json".text = themeJson;
 
     home.packages = with pkgs; [
       brightnessctl
@@ -59,7 +73,7 @@ in
       };
       Service = {
         Type = "simple";
-        ExecStart = "${pkgs.quickshell}/bin/quickshell";
+        ExecStart = "${launchScript}";
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
