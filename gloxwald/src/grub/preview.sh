@@ -14,7 +14,7 @@ RESOLUTION="${1:-1920x1080}"
 
 # Set defaults for generate-assets.sh
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-export GRUB_ASCII_ART="${GRUB_ASCII_ART:-${SCRIPT_DIR}/../ascii.txt}"
+export GRUB_ASCII_ART="${GRUB_ASCII_ART:-${SCRIPT_DIR}/../../ascii.txt}"
 export GRUB_WIDTH="${GRUB_WIDTH:-${RESOLUTION%x*}}"
 export GRUB_HEIGHT="${GRUB_HEIGHT:-${RESOLUTION#*x}}"
 

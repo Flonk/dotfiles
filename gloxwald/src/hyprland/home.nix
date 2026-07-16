@@ -9,6 +9,13 @@ let
   lockCommand = config.programs.gloxwald.quickshell.lockCommand;
 in
 {
+  imports = [
+    ./style.nix
+    ./hyprcursor.nix
+    ./hyprpaper.nix
+    ./hyprpicker.nix
+  ];
+
   config = lib.mkIf config.programs.gloxwald.hyprland.enable {
     wayland.windowManager.hyprland = {
       enable = true;

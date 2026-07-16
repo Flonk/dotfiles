@@ -4,11 +4,11 @@
 }:
 let
   quickshellSrc = builtins.path {
-    path = ./quickshell;
+    path = ./src/quickshell;
     name = "gloxwald-quickshell";
   };
   greeterSrc = builtins.path {
-    path = ./greeter;
+    path = ./src/greeter;
     name = "gloxwaldgreet-src";
   };
   asciiDefault = builtins.path {
