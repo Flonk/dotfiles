@@ -1,36 +1,36 @@
-// AppLauncherDisplay.qml - GLOXWALD logo button that launches vicinae
+// AppLauncherDisplay.qml - flat launcher button, launches vicinae
 import QtQuick
 import Quickshell
 
-Item {
+Section {
     id: root
 
-    property bool hovered: gloxwaldMouse.containsMouse
+    property bool interactive: true
 
-    width: gloxwaldText.implicitWidth - 20
-    height: 20
-    clip: true
+    width: 180
+    topPadding: 0; bottomPadding: 0
+    backgroundColor: launchMouse.containsMouse ? Qt.lighter("#5277c3", 1.3) : "#5277c3"
+    showTopBorder: false
+    glassEffect: false
 
-    Text {
-        id: gloxwaldText
-        anchors.centerIn: parent
-        anchors.verticalCenterOffset: 2
-        text: "GLOXWALD"
-        font.family: "Hypik"
-        font.pointSize: 26
-        color: gloxwaldMouse.containsMouse
-            ? Qt.rgba(Theme.app800.r * 0.8 + Theme.wm800.r * 0.2, Theme.app800.g * 0.8 + Theme.wm800.g * 0.2, Theme.app800.b * 0.8 + Theme.wm800.b * 0.2, 1.0)
-            : Theme.app800
-        scale: gloxwaldMouse.containsMouse ? 1.15 : 1.0
-        Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
-        Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutCubic } }
-    }
+    Item {
+        width: parent.width; height: 20
 
-    MouseArea {
-        id: gloxwaldMouse
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
-        onClicked: Quickshell.execDetached(["vicinae", "open"])
+        Text {
+            id: launchText
+            anchors.centerIn: parent; anchors.verticalCenterOffset: 1
+            text: "NIXOS ROCKS"
+            font.family: Theme.fontFamily; font.pointSize: Theme.fontSizeSmall; font.weight: Font.Bold
+            color: "#000000"
+        }
+
+        MouseArea {
+            id: launchMouse
+            enabled: root.interactive
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Quickshell.execDetached(["vicinae", "open"])
+        }
     }
 }

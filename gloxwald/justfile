@@ -1,47 +1,49 @@
 default:
     @just --list
 
-run:
-    quickshell --path ./src/quickshell/shell
-
-dev:
-    watchexec -r -w ./src/quickshell/shell -e qml,js,ts,css,json,yaml,yml -- quickshell --path ./src/quickshell/shell
-
 fmt:
     nix fmt
 
-# Build all lockscreen shaders (.glsl → .frag.qsb)
-shaders:
-    ./src/quickshell/lockscreen/convert-shaders.sh
+# Run the quickshell bar from the repo
+qs-run:
+    quickshell --path ./src/quickshell/shell
 
-# Build a single lockscreen shader scene (much faster than all of them)
-shaders-one scene:
-    ONLY_SCENE={{scene}} ./src/quickshell/lockscreen/convert-shaders.sh
-
-# Preview one lockscreen shader in a floating window (no lock, no bar)
-preview scene="yamp":
-    just shaders-one {{scene}}
-    SHADER_SCENE={{scene}} quickshell --path ./src/quickshell/shell/preview.qml
-
-# Live-iterate a lockscreen shader: recompile on save; the preview window
-# hot-swaps the shader in place (LockShaderPass watches the .qsb when SHADER_DEV=1)
-dev-shader scene="yamp":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    just shaders-one {{scene}}
-    watchexec -w ./src/quickshell/lockscreen/shaders/scenes/{{scene}} -e glsl -- \
-        just shaders-one {{scene}} &
-    trap 'kill $! 2>/dev/null' EXIT
-    SHADER_DEV=1 SHADER_SCENE={{scene}} quickshell --path ./src/quickshell/shell/preview.qml
-
-# Clean compiled shaders
-shaders-clean:
-    rm -rf ./src/quickshell/shell/shaders/
+# Hot-reload the quickshell bar on QML changes
+qs-dev:
+    watchexec -r -w ./src/quickshell/shell -e qml,js,ts,css,json,yaml,yml -- quickshell --path ./src/quickshell/shell
 
 # Run greeter in test mode
-greet-test:
+greet-dev:
     cd src/greeter && go run ./cmd/gloxwaldgreet --test --ascii ../../ascii.txt
 
 # Preview GRUB theme in QEMU
-grub-preview resolution="1920x1080":
+grub-dev resolution="1920x1080":
     cd src/grub && bash preview.sh {{resolution}}
+
+# Live-iterate a lockscreen shader: recompile on save; the preview window
+# hot-swaps the shader in place (LockShaderPass watches the .qsb when SHADER_DEV=1)
+shader-dev scene="yamp":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just shader-build {{scene}}
+    watchexec -w ./src/quickshell/lockscreen/shaders/scenes/{{scene}} -e glsl -- \
+        just shader-build {{scene}} &
+    trap 'kill $! 2>/dev/null' EXIT
+    SHADER_DEV=1 SHADER_SCENE={{scene}} quickshell --path ./src/quickshell/shell/preview.qml
+
+# Preview one lockscreen shader in a floating window (no lock, no bar)
+shader-preview scene="yamp":
+    just shader-build {{scene}}
+    SHADER_SCENE={{scene}} quickshell --path ./src/quickshell/shell/preview.qml
+
+# Build a single lockscreen shader scene (.glsl → .frag.qsb)
+shader-build scene:
+    ONLY_SCENE={{scene}} ./src/quickshell/lockscreen/convert-shaders.sh
+
+# Build all lockscreen shaders
+shader-build-all:
+    ./src/quickshell/lockscreen/convert-shaders.sh
+
+# Clean compiled shaders
+shader-clean:
+    rm -rf ./src/quickshell/shell/shaders/

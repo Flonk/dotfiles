@@ -9,7 +9,7 @@
 //   qs -p ./quickshell/shell/preview.qml
 //   SHADER_SCENE=auroras qs -p ./quickshell/shell/preview.qml
 //
-// See the `dev-shader` just recipe for the watch-recompile-reload loop.
+// See the `shader-dev` just recipe for the watch-recompile-reload loop.
 import QtQuick
 import Quickshell
 

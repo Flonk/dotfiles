@@ -17,10 +17,6 @@ Scope {
         Component.onCompleted: console.log("BarWindow completed on screen:", screen ? screen.name : "<none>")
       }
 
-      How2GloxwaldOverlay {
-        screenInfo: modelData
-      }
-
       /*
       VisualizerWindow {
         screenInfo: modelData

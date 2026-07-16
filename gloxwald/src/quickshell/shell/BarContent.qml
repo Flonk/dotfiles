@@ -42,106 +42,12 @@ Item {
     color: "#000000"
   }
 
-  // GLOXWALD glow color (shifts toward wm800 on hover)
-  property color glowColor: appLauncher.hovered
-      ? Qt.rgba(Theme.wm800.r * 0.3 + Theme.app200.r * 0.7, Theme.wm800.g * 0.3 + Theme.app200.g * 0.7, Theme.wm800.b * 0.3 + Theme.app200.b * 0.7, 1.0)
-      : Theme.app200
-  property real glowAlpha: appLauncher.hovered ? 0.95 : 0.9
-
-  Behavior on glowColor { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
-
-  // GLOXWALD horizontal outer glow (left)
-  Item {
-    x: centerSection.x - 60
-    y: centerSection.y
-    width: 60
-    height: centerSection.height
-    clip: true
-    Rectangle {
-      anchors.fill: parent
-      gradient: Gradient {
-        orientation: Gradient.Horizontal
-        GradientStop { position: 0.0; color: Qt.rgba(bar.glowColor.r, bar.glowColor.g, bar.glowColor.b, 0.0) }
-        GradientStop { position: 1.0; color: Qt.rgba(bar.glowColor.r, bar.glowColor.g, bar.glowColor.b, bar.glowAlpha) }
-      }
-    }
-    Image {
-      anchors.fill: parent
-      source: "assets/noise-tile.png"
-      fillMode: Image.Tile
-      opacity: 0.12
-    }
-    Rectangle {
-      anchors.fill: parent
-      gradient: Gradient {
-        orientation: Gradient.Horizontal
-        GradientStop { position: 0.0; color: "#000000" }
-        GradientStop { position: 1.0; color: "transparent" }
-      }
-    }
-  }
-  // GLOXWALD horizontal outer glow (right)
-  Item {
-    x: centerSection.x + centerSection.width
-    y: centerSection.y
-    width: 60
-    height: centerSection.height
-    clip: true
-    Rectangle {
-      anchors.fill: parent
-      gradient: Gradient {
-        orientation: Gradient.Horizontal
-        GradientStop { position: 0.0; color: Qt.rgba(bar.glowColor.r, bar.glowColor.g, bar.glowColor.b, bar.glowAlpha) }
-        GradientStop { position: 1.0; color: Qt.rgba(bar.glowColor.r, bar.glowColor.g, bar.glowColor.b, 0.0) }
-      }
-    }
-    Item {
-      anchors.fill: parent
-      clip: true
-      Image {
-        x: -(centerSection.width % 64)
-        y: 0
-        width: parent.width + 64
-        height: parent.height
-        source: "assets/noise-tile.png"
-        fillMode: Image.Tile
-        opacity: 0.12
-      }
-    }
-    Rectangle {
-      anchors.fill: parent
-      gradient: Gradient {
-        orientation: Gradient.Horizontal
-        GradientStop { position: 0.0; color: "transparent" }
-        GradientStop { position: 1.0; color: "#000000" }
-      }
-    }
-  }
-
-  // CENTER - GLOXWALD logo
-  Section {
+  // CENTER - launcher button
+  AppLauncherDisplay {
     id: centerSection
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: parent.top
-    width: appLauncher.width
-    topPadding: 0; bottomPadding: 0; leftPadding: 0; rightPadding: 0
-    topMargin: 0; bottomMargin: 0; leftMargin: 0; rightMargin: 0
-    backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
-    showTopBorder: false
-    glassEffect: true
-    AppLauncherDisplay { id: appLauncher }
-  }
-
-  // GLOXWALD 1px black vertical borders
-  Rectangle { x: centerSection.x; y: centerSection.y; width: 1; height: centerSection.height; color: "#000000" }
-  Rectangle { x: centerSection.x + centerSection.width - 1; y: centerSection.y; width: 1; height: centerSection.height; color: "#000000" }
-
-  // Noise overlay on GLOXWALD section
-  Image {
-    anchors.fill: centerSection
-    source: "assets/noise-tile.png"
-    fillMode: Image.Tile
-    opacity: 0.15
+    interactive: bar.interactive
   }
 
   // LEFT OF CENTER - dsk, mem, cpu
@@ -503,37 +409,5 @@ Item {
       }
     }
 
-    // HOW2GLOXWALD
-    Section {
-      id: h2sSection
-      visible: !bar.lockscreen
-      width: h2sText.implicitWidth + 24
-      topPadding: 0; bottomPadding: 0
-      backgroundColor: h2sMouse.containsMouse || How2GloxwaldWidget.visible ? Theme.wm800 : Theme.app150
-      showTopBorder: false
-      glassEffect: false
-      clip: true
-
-      Item {
-        width: parent.width; height: 20
-
-        Text {
-          id: h2sText
-          anchors.centerIn: parent; anchors.verticalCenterOffset: bar.textVerticalOffset
-          text: "HELP"
-          font.family: Theme.fontFamily; font.pointSize: Theme.fontSizeSmall; font.weight: Font.Bold
-          color: h2sMouse.containsMouse || How2GloxwaldWidget.visible ? Theme.app100 : bar.textColor
-        }
-
-        MouseArea {
-          id: h2sMouse
-          enabled: bar.interactive
-          anchors.fill: parent
-          hoverEnabled: true
-          cursorShape: Qt.PointingHandCursor
-          onClicked: How2GloxwaldWidget.toggle()
-        }
-      }
-    }
   }
 }

@@ -1,10 +1,22 @@
 {
   description = "GLOXWALD desktop (hyprland + quickshell bar/lockscreen + greetd greeter)";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
   outputs =
-    { self, nixpkgs }:
+    { self, nixpkgs, stylix, vicinae }:
     let
       lib = nixpkgs.lib;
       systems = [
@@ -56,6 +68,22 @@
       );
 
       nixosModules.default = ./modules/nixos.nix;
-      homeManagerModules.default = ./modules/home-manager.nix;
+
+      homeManagerModules = {
+        # Batteries included: bundles the stylix and vicinae home-manager
+        # modules gloxwald depends on.
+        default = {
+          imports = [
+            stylix.homeModules.stylix
+            vicinae.homeManagerModules.default
+            ./modules/home-manager.nix
+          ];
+        };
+
+        # Bare module for consumers that pin stylix/vicinae themselves.
+        gloxwald = ./modules/home-manager.nix;
+      };
+
+      homeModules = self.homeManagerModules;
     };
 }

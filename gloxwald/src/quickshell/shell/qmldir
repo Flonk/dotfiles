@@ -20,9 +20,7 @@ DropDown 1.0 DropDown.qml
 WifiDisplay 1.0 WifiDisplay.qml
 Shortcuts 1.0 Shortcuts.qml
 MarqueeText 1.0 MarqueeText.qml
-singleton How2GloxwaldWidget 1.0 How2GloxwaldWidget.qml
 singleton LanguageWidget 1.0 LanguageWidget.qml
-How2GloxwaldOverlay 1.0 How2GloxwaldOverlay.qml
 singleton LockWidget 1.0 LockWidget.qml
 LockContext 1.0 LockContext.qml
 LockShaderPass 1.0 LockShaderPass.qml
