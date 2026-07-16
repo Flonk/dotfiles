@@ -1,0 +1,7 @@
+# Generated assets - regenerate with ./generate-assets.sh
+*.png
+*.pf2
+theme.txt
+
+# Python venv for grub2-theme-preview
+.venv/

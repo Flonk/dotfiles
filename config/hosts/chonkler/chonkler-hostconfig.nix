@@ -28,7 +28,7 @@
             db = ./cache/easyeffects/db;
           };
         };
-        skynetshell.enable = true;
+        gloxwald.enable = true;
         stylix.enable = true;
       };
       development = {

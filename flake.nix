@@ -35,11 +35,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    skynetshell = {
-      url = "github:Flonk/skynetshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     balaclava = {
       url = "github:Flonk/balaclava";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,7 +71,7 @@
           modules = [
             inputs.sops-nix.nixosModules.sops
             inputs.stylix.nixosModules.stylix
-            inputs.skynetshell.nixosModules.default
+            ./gloxwald/modules/nixos.nix
             ./config/hosts/${name}
           ]
           ++ extraModules;
@@ -97,7 +92,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            inputs.skynetshell.homeManagerModules.default
+            ./gloxwald/modules/home-manager.nix
             ./config/installations/${name}.nix
           ]
           ++ extraModules;
@@ -106,6 +101,19 @@
     {
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+
+      packages.x86_64-linux =
+        let
+          gloxwald = import ./gloxwald/packages.nix {
+            pkgs = pkgsX86;
+            rev = self.rev or self.dirtyRev or "dev";
+          };
+        in
+        {
+          inherit (gloxwald) default greeter;
+          gloxwald = gloxwald.default;
+          gloxwald-greeter = gloxwald.greeter;
+        };
 
       nixosConfigurations = {
         schnitzelwirt = mkSystem "schnitzelwirt" { };

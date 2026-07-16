@@ -12,13 +12,12 @@ in
   imports = [
     ../../modules/assorted/avahi/system.nix
     ../../modules/assorted/chrome-remote-desktop/system.nix
-    ../../modules/desktop/hyprland/system.nix
     ../../modules/desktop/stylix/system.nix
     ../../modules/desktop/audio/system.nix
     ../../modules/development/dnsmasq/system.nix
     ../../modules/development/qemu/system.nix
     ../../modules/leisure/gopro-webcam/system.nix
-    ../../modules/desktop/skynetshell/system.nix
+    ../../modules/desktop/gloxwald/system.nix
     ../../modules/os/ipu6/system.nix
     ../../modules/os/memory-pressure/system.nix
     ../../modules/os/powersaver/system.nix

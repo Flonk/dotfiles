@@ -23,11 +23,10 @@
     ../modules/desktop/fastfetch/options.nix
     ../modules/desktop/foot/options.nix
     ../modules/desktop/google-chrome/options.nix
-    ../modules/desktop/hyprland/options.nix
     ../modules/desktop/i18n/options.nix
     ../modules/desktop/mako/options.nix
     ../modules/desktop/qutebrowser/options.nix
-    ../modules/desktop/skynetshell/options.nix
+    ../modules/desktop/gloxwald/options.nix
     ../modules/desktop/stylix/options.nix
     ../modules/desktop/vicinae/options.nix
     ../modules/desktop/vicinae-bitwarden/options.nix

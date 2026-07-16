@@ -35,11 +35,10 @@
       fastfetch.enable = true;
       foot.enable = true;
       "google-chrome".enable = true;
-      hyprland.enable = true;
       i18n.enable = true;
       mako.enable = true;
       qutebrowser.enable = true;
-      skynetshell.enable = true;
+      gloxwald.enable = true;
       stylix = {
         enable = true;
         wallpaper = ../../../assets/wallpapers/abstract1.jpg;

@@ -301,30 +301,9 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-2405": "nixpkgs-2405",
         "openconnect-pulse-launcher": "openconnect-pulse-launcher",
-        "skynetshell": "skynetshell",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "vicinae": "vicinae"
-      }
-    },
-    "skynetshell": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1784188481,
-        "narHash": "sha256-pPMyZwbFlUB7B+I+ERIpnNnHNEJg8/5NH5UeeEjxNX8=",
-        "owner": "Flonk",
-        "repo": "skynetshell",
-        "rev": "a488f559821e67c99ea949b5bf36ec92015b50c0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Flonk",
-        "repo": "skynetshell",
-        "type": "github"
       }
     },
     "sops-nix": {

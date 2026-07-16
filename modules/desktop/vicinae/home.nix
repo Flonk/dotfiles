@@ -54,7 +54,7 @@ in
         };
       }
 
-      (lib.mkIf config.skynet.module.desktop.hyprland.enable {
+      (lib.mkIf config.programs.gloxwald.hyprland.enable {
         home.packages = [ open-bitwarden ];
         wayland.windowManager.hyprland.settings.layer_rule = [
           { match.namespace = "vicinae"; dim_around = true; }
@@ -64,6 +64,7 @@ in
           hl.bind("MOD3 + period", hl.dsp.exec_cmd("xdg-open vicinae://launch/core/search-emojis"))
           hl.bind("MOD3 + B", hl.dsp.exec_cmd("xdg-open vicinae://launch/@Gelei/store.vicinae.bluetooth/devices"))
           hl.bind("MOD3 + P", hl.dsp.exec_cmd("open-bitwarden"))
+          hl.bind("MOD3 + T", hl.dsp.exec_cmd("xdg-open vicinae://launch/@gebeto/store.raycast.translate/quick-translate"))
         '';
       })
     ]
