@@ -1,4 +1,4 @@
-// LanguageWidget.qml - Current input method (via skynet-i18n)
+// LanguageWidget.qml - Current input method (via gloxwald-i18n)
 pragma Singleton
 
 import Quickshell
@@ -20,7 +20,7 @@ Singleton {
 
     Process {
         id: statusProc
-        command: ["skynet-i18n", "status"]
+        command: ["gloxwald-i18n", "status"]
 
         stdout: StdioCollector {
             onStreamFinished: {
@@ -46,7 +46,7 @@ Singleton {
     }
 
     function cycle(): void {
-        Quickshell.execDetached(["skynet-i18n", "cycle"]);
+        Quickshell.execDetached(["gloxwald-i18n", "cycle"]);
         refreshDelay.restart();
     }
 

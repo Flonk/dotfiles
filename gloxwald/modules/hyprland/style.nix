@@ -5,8 +5,8 @@
 }:
 let
   s = config.lib.stylix.colors.withHashtag;
-  accent = config.skynet.module.desktop.stylix.accent;
-  accentDark = config.skynet.module.desktop.stylix.accentDark;
+  accent = config.programs.gloxwald.stylix.accent;
+  accentDark = config.programs.gloxwald.stylix.accentDark;
   borderColor = "rgba(${builtins.substring 1 6 accent}ff)";
   inactiveBorderColor = "rgba(000000ff)";
 in

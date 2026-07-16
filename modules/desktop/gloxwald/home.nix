@@ -12,7 +12,7 @@ let
       c = config.lib.stylix.colors.withHashtag;
       sz = config.stylix.fonts.sizes.terminal;
       mono = config.stylix.fonts.monospace.name;
-      accent = config.skynet.module.desktop.stylix.accent;
+      accent = config.programs.gloxwald.stylix.accent;
     in
     builtins.toJSON {
       fontSize = sz;

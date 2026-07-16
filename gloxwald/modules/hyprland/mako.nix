@@ -1,17 +1,16 @@
 {
-  pkgs,
   config,
   lib,
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.desktop.mako.enable {
-    wayland.windowManager.hyprland.settings.layer_rule =
-      lib.optionals config.programs.gloxwald.hyprland.enable [
-        { match.namespace = "notifications"; animation = "slide right"; }
-      ];
+  options.programs.gloxwald.mako.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Ship the mako notification daemon";
+  };
 
-    # mako notification daemon
+  config = lib.mkIf (config.programs.gloxwald.hyprland.enable && config.programs.gloxwald.mako.enable) {
     services.mako = {
       enable = true;
       settings = {
@@ -38,7 +37,13 @@
           default-timeout = 30000;
         };
       };
-
     };
+
+    wayland.windowManager.hyprland.settings.layer_rule = [
+      {
+        match.namespace = "notifications";
+        animation = "slide right";
+      }
+    ];
   };
 }

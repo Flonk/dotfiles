@@ -15,7 +15,7 @@ let
   };
 in
 {
-  config = lib.mkIf (cfg.enable && config.skynet.module.desktop.vicinae.enable) {
+  config = lib.mkIf (cfg.enable && config.programs.gloxwald.vicinae.enable) {
     services.vicinae.extensions = [ extension ];
   };
 }

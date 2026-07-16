@@ -1,55 +1,25 @@
 {
-  pkgs,
   config,
   lib,
   ...
 }:
 let
-  scheme = config.skynet.module.desktop.stylix.scheme;
-  enabled = config.skynet.module.desktop.stylix.enable;
-  wallpaper = config.skynet.module.desktop.stylix.wallpaper;
+  cfg = config.skynet.module.desktop.stylix;
 in
 {
   config = lib.mkMerge [
     {
-      stylix.enable = enabled;
-      stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/${scheme}.yaml";
+      programs.gloxwald.stylix.enable = cfg.enable;
     }
-    (lib.mkIf enabled {
-      # New stylix sets gtk.gtk4.theme itself; mkForce keeps our "no GTK4 theming" intent
-      # and resolves the null-vs-not-null conflict.
-      gtk.gtk4.theme = lib.mkForce null;
-
-      stylix = {
-        cursor = {
-          package = pkgs.apple-cursor;
-          name = "Apple Cursor";
-          size = 24;
-        };
-        fonts = {
-          monospace = {
-            package = pkgs.nerd-fonts.dejavu-sans-mono;
-            name = "DejaVuSansM Nerd Font";
-          };
-          sansSerif = {
-            package = pkgs.nerd-fonts.dejavu-sans-mono;
-            name = "DejaVuSansM Nerd Font";
-          };
-          serif = {
-            package = pkgs.nerd-fonts.dejavu-sans-mono;
-            name = "DejaVuSansM Nerd Font";
-          };
-          sizes = {
-            applications = 10;
-            desktop = 10;
-            popups = 10;
-            terminal = 9;
-          };
-        };
+    (lib.mkIf cfg.enable {
+      programs.gloxwald.stylix = {
+        scheme = cfg.scheme;
+        accent = cfg.accent;
+        accentDark = cfg.accentDark;
       };
     })
-    (lib.mkIf (enabled && wallpaper != null) {
-      stylix.image = wallpaper;
+    (lib.mkIf (cfg.wallpaper != null) {
+      programs.gloxwald.wallpaper = cfg.wallpaper;
     })
   ];
 }

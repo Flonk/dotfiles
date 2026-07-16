@@ -24,7 +24,10 @@ let
 
 in
 {
-  imports = [ ./hyprland ];
+  imports = [
+    ./hyprland
+    ./stylix.nix
+  ];
 
   options.programs.gloxwald.quickshell = {
     enable = mkEnableOption "gloxwald quickshell bar and lockscreen";

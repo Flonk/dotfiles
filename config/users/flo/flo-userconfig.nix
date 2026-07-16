@@ -36,7 +36,6 @@
       foot.enable = true;
       "google-chrome".enable = true;
       i18n.enable = true;
-      mako.enable = true;
       qutebrowser.enable = true;
       gloxwald.enable = true;
       stylix = {
@@ -47,7 +46,6 @@
       };
       vicinae.enable = true;
       "vicinae-bitwarden".enable = true;
-      waybar.enable = true;
     };
     development = {
       "claude-code" = {
