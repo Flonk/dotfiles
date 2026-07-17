@@ -49,6 +49,6 @@ in
       fi
     '';
 
-    services.vicinae.extensions = [ extension ];
+    programs.vicinae.extensions = [ extension ];
   };
 }

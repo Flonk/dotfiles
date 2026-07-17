@@ -8,7 +8,7 @@
   config =
     lib.mkIf (config.programs.gloxwald.hyprland.enable && config.programs.gloxwald.vicinae.enable)
       {
-        services.vicinae = {
+        programs.vicinae = {
           enable = true;
           package = pkgs.vicinae;
 

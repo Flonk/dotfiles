@@ -90,6 +90,7 @@ for _, s in ipairs({
     hl.bind(mainMod .. " + " .. key, hl.dsp.exec_cmd("hypr-scale " .. s.delta))
   end
 end
+hl.bind(mainMod .. " + CTRL + 0", hl.dsp.exec_cmd("hypr-scale reset"))
 
 -- WORKSPACES (1-9 -> 1-9, 0 -> 10)
 for i = 0, 9 do

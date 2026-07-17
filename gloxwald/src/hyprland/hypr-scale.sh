@@ -3,8 +3,9 @@ rungs="0.8 1.0 1.25 1.67 2.0 2.5"
 case "$1" in
 up) delta=1 ;;
 down) delta=-1 ;;
+reset) delta=reset ;;
 *)
-  echo "usage: hypr-scale up|down" >&2
+  echo "usage: hypr-scale up|down|reset" >&2
   exit 1
   ;;
 esac
@@ -27,7 +28,10 @@ if [ -z "$info" ]; then
 fi
 read -r name w h hz x y scale <<<"$info"
 
-new=$(awk -v s="$scale" -v d="$delta" -v rungs="$rungs" 'BEGIN {
+if [ "$delta" = reset ]; then
+  new=1.0
+else
+  new=$(awk -v s="$scale" -v d="$delta" -v rungs="$rungs" 'BEGIN {
   n = split(rungs, r, " ")
   best = 1
   for (i = 2; i <= n; i++) {
@@ -40,6 +44,7 @@ new=$(awk -v s="$scale" -v d="$delta" -v rungs="$rungs" 'BEGIN {
   if (t > n) t = n
   print r[t]
 }')
+fi
 
 apply() {
   hyprctl eval \

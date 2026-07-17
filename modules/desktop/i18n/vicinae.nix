@@ -16,6 +16,6 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && config.programs.gloxwald.vicinae.enable) {
-    services.vicinae.extensions = [ extension ];
+    programs.vicinae.extensions = [ extension ];
   };
 }
