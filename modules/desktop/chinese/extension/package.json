@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
+  "name": "vicinae-chinese",
+  "title": "Chinese Characters",
+  "description": "Look up hanzi from the clipboard: stroke order, pinyin, translations",
+  "author": "flo",
+  "license": "MIT",
+  "icon": "extension_icon.svg",
+  "commands": [
+    {
+      "name": "lookup",
+      "title": "Chinese Lookup",
+      "subtitle": "hanzi",
+      "description": "Split clipboard text into characters with stroke order and translations",
+      "mode": "view"
+    }
+  ],
+  "scripts": {
+    "build": "vici build",
+    "dev": "vici develop",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vicinae/api": "0.16.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.9.3"
+  }
+}

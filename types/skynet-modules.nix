@@ -19,6 +19,7 @@
     # desktop
     ../modules/desktop/alacritty/options.nix
     ../modules/desktop/audio/options.nix
+    ../modules/desktop/chinese/options.nix
     ../modules/desktop/csvlens/options.nix
     ../modules/desktop/fastfetch/options.nix
     ../modules/desktop/foot/options.nix

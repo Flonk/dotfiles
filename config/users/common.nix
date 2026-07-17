@@ -21,6 +21,7 @@
     ../../modules/development/vscode/home.nix
     ../../modules/development/zed-editor/home.nix
     ../../modules/desktop/alacritty/home.nix
+    ../../modules/desktop/chinese/home.nix
     ../../modules/desktop/csvlens/home.nix
     ../../modules/desktop/audio/home.nix
     ../../modules/desktop/fastfetch/home.nix

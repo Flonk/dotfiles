@@ -31,6 +31,7 @@
           }
         ];
       };
+      chinese.enable = true;
       csvlens.enable = true;
       fastfetch.enable = true;
       foot.enable = true;
