@@ -31,5 +31,9 @@ in
   config = lib.mkIf cfg.enable {
     xdg.dataFile."skynet-chinese".source = data;
     programs.vicinae.extensions = [ extension ];
+
+    wayland.windowManager.hyprland.extraConfig = lib.mkIf config.programs.gloxwald.hyprland.enable ''
+      hl.bind("MOD3 + C", hl.dsp.exec_cmd("xdg-open vicinae://launch/@flo/vicinae-chinese/lookup"))
+    '';
   };
 }
