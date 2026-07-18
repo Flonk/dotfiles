@@ -15,18 +15,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openconnect-pulse-launcher = {
-      url = "github:erahhal/openconnect-pulse-launcher";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     vicinae = {
       url = "github:vicinaehq/vicinae";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -110,11 +100,7 @@
       packages.x86_64-linux = inputs.gloxwald.packages.x86_64-linux;
 
       nixosConfigurations = {
-        schnitzelwirt = mkSystem "schnitzelwirt" { };
         chonkler = mkSystem "chonkler" { };
-        bricky = mkSystem "bricky" {
-          extraModules = [ inputs.nixos-wsl.nixosModules.default ];
-        };
         hetzner = mkSystem "hetzner" { };
       };
 
