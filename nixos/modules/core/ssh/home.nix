@@ -9,7 +9,7 @@ let
   pickHost = pkgs.writeShellScript "skynet-ssh-pick.sh" ''
     set -euo pipefail
 
-    REGISTRY="$HOME/repos/personal/dotfiles/.registry.json"
+    REGISTRY="$HOME/repos/personal/dotfiles/nixos/.registry.json"
 
     if [[ ! -f "$REGISTRY" ]]; then
       echo "Registry not found: $REGISTRY" >&2
@@ -68,7 +68,7 @@ let
 
     echo "→ Rebuilding $installation on $ip..."
     exec ${pkgs.openssh}/bin/ssh -t "$user@$ip" \
-      "cd ~/repos/personal/dotfiles && git pull && home-manager switch --flake .#$installation"
+      "cd ~/repos/personal/dotfiles && git pull && home-manager switch --flake ./nixos#$installation"
   '';
 in
 {

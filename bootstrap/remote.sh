@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null)"
-sops_yaml="$repo_root/.sops.yaml"
+sops_yaml="$repo_root/nixos/.sops.yaml"
 config_dir="$repo_root/config"
 installations_dir="$config_dir/installations"
 user_age_key_file="$HOME/.config/sops/age/keys.txt"
@@ -160,15 +160,15 @@ git pull
 ok "Pulled"
 
 info "Rebuilding NixOS system: #$host_name"
-sudo nixos-rebuild switch --flake "$repo_root#$host_name"
+sudo nixos-rebuild switch --flake "$repo_root/nixos#$host_name"
 ok "NixOS rebuild complete"
 
 info "Rebuilding Home Manager: #$installation"
 if command -v home-manager &>/dev/null; then
-  home-manager switch --flake "$repo_root#$installation"
+  home-manager switch --flake "$repo_root/nixos#$installation"
 else
   info "home-manager not on PATH, using nix run..."
-  nix run home-manager/master -- switch --flake "$repo_root#$installation"
+  nix run home-manager/master -- switch --flake "$repo_root/nixos#$installation"
 fi
 ok "Home Manager rebuild complete"
 

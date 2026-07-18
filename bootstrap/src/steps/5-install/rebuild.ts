@@ -29,7 +29,7 @@ async function attempt(
   // Run nixos-rebuild ON the remote, against the cloned repo. Pulling from the
   // binary cache over the remote's network is much faster than nix-copy-closure
   // from a local build.
-  const cmd = `cd ${remotePath} && sudo nixos-rebuild switch --flake .#${host}`;
+  const cmd = `cd ${remotePath}/nixos && sudo nixos-rebuild switch --flake .#${host}`;
   const proc = $`ssh ${SSH_OPTS} ${target} ${cmd}`.nothrow();
 
   let zombieDetected = false;

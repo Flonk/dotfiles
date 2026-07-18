@@ -358,7 +358,7 @@ in
         script = pkgs.writeShellScript "rebuild.sh" ''
           set -euo pipefail
           echo "Rebuilding home-manager configuration..."
-          home-manager switch --flake ~/repos/personal/dotfiles#${config.skynet.whoami.installation}
+          home-manager switch --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.installation}
         '';
         usage = "Runs home-manager switch for ${config.skynet.whoami.installation}.";
       }
@@ -399,7 +399,7 @@ in
         script = pkgs.writeShellScript "system-rebuild.sh" ''
           set -euo pipefail
           echo "Rebuilding NixOS system configuration..."
-          sudo nixos-rebuild switch --fast --flake ~/repos/personal/dotfiles#${config.skynet.whoami.host}
+          sudo nixos-rebuild switch --fast --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.host}
         '';
         usage = "Runs nixos-rebuild switch for ${config.skynet.whoami.host} (requires sudo).";
       }

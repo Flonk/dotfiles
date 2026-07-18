@@ -14,7 +14,7 @@ export async function updateRegistry(
   installationName: string,
   target: string,
 ): Promise<void> {
-  const registryPath = join(repoRoot, ".registry.json");
+  const registryPath = join(repoRoot, "nixos", ".registry.json");
 
   let registry: Record<string, RegistryEntry> = {};
   try {

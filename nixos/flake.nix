@@ -71,7 +71,7 @@
           modules = [
             inputs.sops-nix.nixosModules.sops
             inputs.stylix.nixosModules.stylix
-            ./gloxwald/modules/nixos.nix
+            ../gloxwald/modules/nixos.nix
             ./config/hosts/${name}
           ]
           ++ extraModules;
@@ -92,7 +92,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            ./gloxwald/modules/home-manager.nix
+            ../gloxwald/modules/home-manager.nix
             ./config/installations/${name}.nix
           ]
           ++ extraModules;
@@ -104,7 +104,7 @@
 
       packages.x86_64-linux =
         let
-          gloxwald = import ./gloxwald/packages.nix {
+          gloxwald = import ../gloxwald/packages.nix {
             pkgs = pkgsX86;
             rev = self.rev or self.dirtyRev or "dev";
           };
