@@ -5,10 +5,6 @@
   config.skynet.whoami.user = "flo";
 
   config.skynet.module = {
-    assorted = {
-      jiratui.enable = false;
-      nchat.enable = true;
-    };
     core = {
       direnv.enable = true;
       git.enable = true;

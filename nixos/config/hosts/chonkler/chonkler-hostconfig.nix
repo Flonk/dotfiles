@@ -16,7 +16,6 @@
     module = {
       assorted = {
         avahi.enable = false;
-        "chrome-remote-desktop".enable = false;
       };
       desktop = {
         audio = {

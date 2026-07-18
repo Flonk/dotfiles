@@ -2,9 +2,6 @@
   imports = [
     # assorted
     ../modules/assorted/avahi/options.nix
-    ../modules/assorted/chrome-remote-desktop/options.nix
-    ../modules/assorted/jiratui/options.nix
-    ../modules/assorted/nchat/options.nix
 
     # core
     ../modules/core/bitwarden/options.nix

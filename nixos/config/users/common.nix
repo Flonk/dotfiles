@@ -5,8 +5,6 @@
   ];
 
   imports = [
-    ../../modules/assorted/jiratui/home.nix
-    ../../modules/assorted/nchat/home.nix
     ../../modules/core/bitwarden/home.nix
     ../../modules/core/direnv/home.nix
     ../../modules/core/git/home.nix
