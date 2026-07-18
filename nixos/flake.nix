@@ -40,6 +40,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    gloxwald = {
+      url = "path:../gloxwald";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -71,7 +76,7 @@
           modules = [
             inputs.sops-nix.nixosModules.sops
             inputs.stylix.nixosModules.stylix
-            ../gloxwald/modules/nixos.nix
+            inputs.gloxwald.nixosModules.default
             ./config/hosts/${name}
           ]
           ++ extraModules;
@@ -92,7 +97,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            ../gloxwald/modules/home-manager.nix
+            inputs.gloxwald.homeManagerModules.gloxwald
             ./config/installations/${name}.nix
           ]
           ++ extraModules;
@@ -102,18 +107,7 @@
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
-      packages.x86_64-linux =
-        let
-          gloxwald = import ../gloxwald/packages.nix {
-            pkgs = pkgsX86;
-            rev = self.rev or self.dirtyRev or "dev";
-          };
-        in
-        {
-          inherit (gloxwald) default greeter;
-          gloxwald = gloxwald.default;
-          gloxwald-greeter = gloxwald.greeter;
-        };
+      packages.x86_64-linux = inputs.gloxwald.packages.x86_64-linux;
 
       nixosConfigurations = {
         schnitzelwirt = mkSystem "schnitzelwirt" { };
