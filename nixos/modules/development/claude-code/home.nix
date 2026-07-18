@@ -29,6 +29,7 @@ in
       wayland.windowManager.hyprland.settings.window_rule =
         lib.optionals config.programs.gloxwald.hyprland.enable [
           { match.class = "^claude-chrome$"; workspace = "10 silent"; }
+          { match.class = "^claude-chrome$"; suppress_event = "activatefocus"; }
         ];
     })
     (lib.mkIf config.skynet.module.development.claude-code.service.enable {
