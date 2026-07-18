@@ -295,6 +295,8 @@ in
           "yy" = "yank";
           # Zoom
           "<Ctrl+0>" = "zoom";
+          "<Ctrl++>" = "zoom-in";
+          "<Ctrl+->" = "zoom-out";
           # Reload
           "<Ctrl+r>" = "reload";
           # Merge
