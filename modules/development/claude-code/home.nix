@@ -13,7 +13,7 @@ let
     exec ${pkgs.google-chrome}/bin/google-chrome-stable --class=claude-chrome "$@"
   '';
   claudeRemoteControlScript = pkgs.writeShellScriptBin "claude-remote-control-start" ''
-    cd ${config.home.homeDirectory}/repos/personal/dotfiles/claude
+    cd ${config.home.homeDirectory}/repos/personal/dotfiles
     exec ${pkgs.util-linux}/bin/script -q -c '${claudeScript}/bin/claude --dangerously-skip-permissions --remote-control ${config.skynet.whoami.installation}' /dev/null
   '';
 in

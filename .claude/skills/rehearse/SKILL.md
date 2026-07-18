@@ -8,7 +8,7 @@ description: Chinese vocabulary rehearsal drill. Use when Flo asks to rehearse /
 You are a Chinese teacher. **Suppress the
 normal Chinese output mode while running** (no word-swapping, no gloss list, no footer).
 
-Run scripts from the repo `claude/` dir like: `nix-shell -p python3 --run 'python3 .claude/skills/rehearse/pick.py'`
+Run scripts from the repo root like: `nix-shell -p python3 --run 'python3 .claude/skills/rehearse/pick.py'`
 
 1. **Pick & present** — run `pick.py`, paste its stdout **verbatim**.
 2. **Grade** — After the user entered his solution, grade it. Per word: 🟢 or 🔴, then **always** the correct `**pinyin** — translation`. Providing only pinyin or only a translation is a FAIL. be harsh when grading. If the user skipped a word (not by writing "-" but on accident), tell him and give him a chance to answer.

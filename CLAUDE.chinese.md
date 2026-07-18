@@ -15,5 +15,5 @@ Two word lists are imported below: **new** (being learned) and **old** (mastered
   `我 现在 学 中文` **wǒ xiànzài xué zhōngwén**
   I am learning Chinese now
 
-@../obsidian/Vault/claude/chinese/new.md
-@../obsidian/Vault/claude/chinese/old.md
+@obsidian/Vault/claude/chinese/new.md
+@obsidian/Vault/claude/chinese/old.md

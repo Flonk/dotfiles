@@ -3,7 +3,7 @@ import json
 import re
 from pathlib import Path
 
-DOCS = Path(__file__).resolve().parents[4] / "obsidian/Vault/claude/chinese"
+DOCS = Path(__file__).resolve().parents[3] / "obsidian/Vault/claude/chinese"
 JSON_PATH = DOCS / "rehearsal.json"
 NEW_MD = DOCS / "new.md"
 OLD_MD = DOCS / "old.md"
