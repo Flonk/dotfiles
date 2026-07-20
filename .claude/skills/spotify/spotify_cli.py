@@ -293,6 +293,108 @@ def cmd_create(args):
     print(pl["external_urls"]["spotify"])
 
 
+def owned_named(token, name):
+    me = api_get("/me", token)["id"]
+    items, _ = paginate("/me/playlists", token, 50, None)
+    return [
+        p
+        for p in items
+        if p and p.get("name") == name and (p.get("owner") or {}).get("id") == me
+    ]
+
+
+def playlist_uris(token, pid):
+    items, _ = paginate(f"/playlists/{pid}/items", token, 100, None)
+    uris = []
+    for it in items:
+        t = playlist_item(it)
+        if isinstance(t, dict) and t.get("uri") and not t.get("is_local"):
+            uris.append(t["uri"])
+    return uris
+
+
+def ensure_separator(token, year, public):
+    name = f"{year}-{year}-{year}"
+    found = owned_named(token, name)
+    if len(found) > 1:
+        sys.exit(f"{len(found)} playlists named {name}; resolve by hand")
+    if found:
+        print(f"{name} exists -> {found[0]['id']}")
+        return None
+
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from separator_cover import find_font, hue_for_year, render
+
+    pl = api_send(
+        "/me/playlists",
+        token,
+        "POST",
+        {"name": name, "public": public, "description": ""},
+    )
+    pid = pl["id"]
+    print(f"created {name} -> {pid}")
+    upload_cover(token, pid, render(str(year), hue_for_year(year), 640, find_font()))
+    return pid
+
+
+def cmd_mixtape(args):
+    token = access_token()
+    if not re.fullmatch(r"\d{4}-\d{2}", args.month):
+        sys.exit("month must look like 2025-03")
+
+    src = owned_named(token, args.month)
+    if len(src) != 1:
+        sys.exit(f"expected exactly 1 playlist named {args.month}, found {len(src)}")
+
+    name = f"{args.month}-mixtape"
+    dst = owned_named(token, name)
+    if len(dst) > 1:
+        sys.exit(f"{len(dst)} playlists named {name}; resolve by hand")
+
+    uris = playlist_uris(token, src[0]["id"])
+    print(f"{args.month}: {len(uris)} tracks to copy")
+    if not uris:
+        sys.exit("source is empty, nothing to do")
+    if args.dry_run:
+        print("dry run, nothing written")
+        return
+
+    new_separator = ensure_separator(token, args.month[:4], args.public)
+
+    if dst:
+        pid = dst[0]["id"]
+        print(f"{name} already exists -> {pid}")
+    else:
+        pl = api_send(
+            "/me/playlists",
+            token,
+            "POST",
+            {"name": name, "public": args.public, "description": ""},
+        )
+        pid = pl["id"]
+        print(f"created {name} -> {pid}")
+
+    already = set(playlist_uris(token, pid))
+    todo = [u for u in uris if u not in already]
+    if already:
+        print(f"{len(uris) - len(todo)} already present, skipping those")
+    for batch in chunked(todo, 100):
+        api_send(f"/playlists/{pid}/items", token, "POST", {"uris": batch})
+    print(f"added {len(todo)}")
+
+    landed = set(playlist_uris(token, pid))
+    missing = [u for u in uris if u not in landed]
+    print(f"verified {len(uris) - len(missing)}/{len(uris)} present in destination")
+    if missing:
+        sys.exit(f"{len(missing)} failed to land; source playlist untouched")
+    print(f"https://open.spotify.com/playlist/{pid}")
+
+    needs_filing = [x for x in (new_separator, None if dst else pid) if x]
+    if needs_filing:
+        print(f"\nstill to do in the browser, for each of {', '.join(needs_filing)}:")
+        print(f"  file into Errthang/Mine/Mixtapes/{args.month[:4]}, then Add to profile")
+
+
 def cmd_move_likes(args):
     token = access_token()
     pid = playlist_id(args.playlist)
@@ -358,20 +460,8 @@ def cmd_move_likes(args):
     print(f"unliked {done}")
 
 
-def cmd_cover(args):
+def upload_cover(token, pid, im):
     import io
-
-    from PIL import Image
-
-    token = access_token()
-    pid = playlist_id(args.playlist)
-
-    if args.file:
-        im = Image.open(args.file).convert("RGB")
-    else:
-        c = args.color.lstrip("#")
-        rgb = tuple(int(c[i : i + 2], 16) for i in (0, 2, 4))
-        im = Image.new("RGB", (args.size, args.size), rgb)
 
     buf = io.BytesIO()
     im.save(buf, format="JPEG", quality=90)
@@ -393,6 +483,22 @@ def cmd_cover(args):
             print(f"uploaded ({r.status}) {im.width}x{im.height} to {pid}")
     except urllib.error.HTTPError as e:
         sys.exit(f"{e.code} {e.read().decode(errors='replace')[:200]}")
+
+
+def cmd_cover(args):
+    from PIL import Image
+
+    token = access_token()
+    pid = playlist_id(args.playlist)
+
+    if args.file:
+        im = Image.open(args.file).convert("RGB")
+    else:
+        c = args.color.lstrip("#")
+        rgb = tuple(int(c[i : i + 2], 16) for i in (0, 2, 4))
+        im = Image.new("RGB", (args.size, args.size), rgb)
+
+    upload_cover(token, pid, im)
 
 
 p = argparse.ArgumentParser(prog="spotify_cli.py")
@@ -426,6 +532,12 @@ cr.add_argument("name")
 cr.add_argument("--public", action="store_true")
 cr.add_argument("--description", default="")
 cr.set_defaults(func=cmd_create)
+
+mx = sub.add_parser("mixtape", help="copy a monthly playlist into yyyy-MM-mixtape")
+mx.add_argument("month", help="YYYY-MM of the monthly to copy")
+mx.add_argument("--public", action="store_true")
+mx.add_argument("--dry-run", action="store_true")
+mx.set_defaults(func=cmd_mixtape)
 
 ml = sub.add_parser("move-likes", help="move liked songs into a playlist, then unlike them")
 ml.add_argument("playlist", help="destination playlist id, uri, or url")

@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 import argparse
+import os
 import re
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from separator_cover import bg_color, find_font, hue_for_year
 
 BODY = (18, 18, 18)

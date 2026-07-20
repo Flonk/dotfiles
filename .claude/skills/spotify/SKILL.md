@@ -26,6 +26,7 @@ The nix-shell banner goes to **stderr**, so `2>/dev/null` gives clean JSON on st
 - `tracks <playlist> [--limit N] [--json]` — a playlist's contents. Accepts a bare id, `spotify:playlist:…`, or an open.spotify.com URL.
 - `create <name> [--public] [--description D]` — create a playlist.
 - `cover <playlist> [--color #121212] [--file F] [--size 640]` — set the cover image. Default is the solid `#121212` the monthlies use.
+- `mixtape <YYYY-MM> [--public] [--dry-run]` — copy the monthly `yyyy-MM` into `yyyy-MM-mixtape`, creating the year's `yyyy-yyyy-yyyy` separator and cover if missing. Verifies every URI landed. Needs Pillow. See [create mixtape](#create-mixtape).
 - `move-likes <playlist> [--month YYYY-MM] [--dry-run]` — add Liked Songs to a playlist, verify every URI landed, then unlike only the verified ones. Idempotent: skips tracks already in the destination, so a retry after a failure never duplicates.
 
 Two cover generators sit alongside it. Both need Pillow, both write a 640×640 PNG you then feed to `cover --file`:
@@ -168,6 +169,38 @@ Do not fall back to drag-and-drop: it needs the playlist and a three-level-deep 
 **Deleting a folder shows a confirmation reading "delete this folder and all playlists inside".** Only ever confirm one you just created and can see is empty — `2023` has 12 playlists in it and the dialog text is identical. Querying `[role="dialog"]` also matches the page's language picker, so confirm by clicking the visible button, not by DOM-matching the first dialog.
 
 **Ordering caveat:** a freshly touched folder floats to the top of `Monthly` when the sidebar is sorted by **Recents**, which is not where it belongs. Nothing can fix this programmatically — tell Flo to switch the sidebar to **Custom order**, which is also the only mode where manual arrangement sticks.
+
+## create mixtape
+
+"create mixtape" means: **copy every track from the monthly `yyyy-MM` into a new `yyyy-MM-mixtape`, filed under `Errthang/Mine/Mixtapes/yyyy/`.** The monthly is left untouched — this is a copy, not a move.
+
+**No cover at this stage.** The cover needs the three artist names, which do not exist until Flo has finished culling. Do not invent one.
+
+```
+nix-shell -p python3 python3Packages.pillow --run \
+  "python3 .claude/skills/spotify/spotify_cli.py mixtape 2025-03"
+```
+
+The command, in order: resolves the monthly by exact name (bails unless exactly one matches), creates the `yyyy-yyyy-yyyy` separator **and its cover** if that year has none yet, creates `yyyy-MM-mixtape`, copies every non-local URI, re-reads the destination and verifies all of them landed. Pillow is required because of the separator cover. `--dry-run` prints the track count and writes nothing at all.
+
+Re-running is safe: it skips URIs already in the destination, so it tops up rather than duplicating.
+
+It finishes by listing the playlists that still need the browser: file each into `Errthang/Mine/Mixtapes/yyyy`, then **Add to profile** (see step 8 above). A newly created separator needs this too.
+
+## finalize mixtape
+
+**Flo culls the playlist down to his top ~10 himself, then hands over three artist names.** Never pick the tracks or the artists — wait for him to name them.
+
+Given the names, generate the cover and upload it:
+
+```
+nix-shell -p python3 python3Packages.pillow --run \
+  "python3 .claude/skills/spotify/mixtape_cover.py 2025-03 --artists Thys Machinedrum Oppidan"
+nix-shell -p python3 python3Packages.pillow --run \
+  "python3 .claude/skills/spotify/spotify_cli.py cover <ID> --file 2025-03-mixtape.png"
+```
+
+The strip color comes from the year in `yyyy-MM`, so it always matches that year's separator. Show Flo the rendered PNG before uploading if there is any doubt about spelling or ordering — the names go on the cover verbatim, in the order given.
 
 ## Cover art
 
