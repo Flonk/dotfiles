@@ -318,21 +318,26 @@ def ensure_separator(token, year, public):
     found = owned_named(token, name)
     if len(found) > 1:
         sys.exit(f"{len(found)} playlists named {name}; resolve by hand")
+
     if found:
-        print(f"{name} exists -> {found[0]['id']}")
-        return None
+        pid, created = found[0]["id"], False
+        print(f"{name} exists -> {pid}")
+    else:
+        pl = api_send(
+            "/me/playlists",
+            token,
+            "POST",
+            {"name": name, "public": public, "description": ""},
+        )
+        pid, created = pl["id"], True
+        print(f"created {name} -> {pid}")
+
+    if api_get(f"/playlists/{pid}", token).get("images"):
+        return pid if created else None
 
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from separator_cover import find_font, hue_for_year, render
 
-    pl = api_send(
-        "/me/playlists",
-        token,
-        "POST",
-        {"name": name, "public": public, "description": ""},
-    )
-    pid = pl["id"]
-    print(f"created {name} -> {pid}")
     upload_cover(token, pid, render(str(year), hue_for_year(year), 640, find_font()))
     return pid
 
@@ -359,7 +364,7 @@ def cmd_mixtape(args):
         print("dry run, nothing written")
         return
 
-    new_separator = ensure_separator(token, args.month[:4], args.public)
+    new_separator = ensure_separator(token, int(args.month[:4]), args.public)
 
     if dst:
         pid = dst[0]["id"]
