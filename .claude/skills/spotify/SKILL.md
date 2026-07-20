@@ -222,7 +222,7 @@ Both generators derive it from the year — never pass `--hue` unless Flo asks f
 
 Mixtape names take a trailing period (`Thys.`). Any count works — 2022-05 has one name. If the longest line would breach the side margins the type shrinks until it fits, pitch scaling with it.
 
-**Font.** `CircularSpotifyText-Bold.otf` in the skill folder. Commercial Lineto face — **do not commit it**, it is untracked on purpose. Without it both scripts fall back to Work Sans Bold, which then needs `work-sans` in the nix-shell (`-p python3 python3Packages.pillow work-sans`) since the sandbox can't see store paths outside the shell's closure.
+**Font.** `CircularSpotifyText-Bold.otf` in the skill folder.
 
 ## Folders and library order are not in the API
 
