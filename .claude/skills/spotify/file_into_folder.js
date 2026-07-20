@@ -1,12 +1,15 @@
-// Files a playlist into Errthang/Mine/Monthly/<year> in the Spotify web player.
+// Files a playlist into a folder in the Spotify web player.
 // Folders are absent from the Web API; this drives the sidebar context menu instead.
-// Paste into the open.spotify.com page context, then:  await filePlaylist('2026-07', '2026')
+// Paste into the open.spotify.com page context, then either:
+//   await filePlaylist('2026-07', '2026')                              // Monthly year shorthand
+//   await filePlaylist('2025-2025-2025', ['Errthang','Mine','Mixtapes'])
+// The last path segment is the destination and is created if missing; the rest are drilled.
 //
 // Selectors key off role="menuitem" and visible text, never class names —
 // Spotify's classes are build-hashed and churn on every deploy.
 // Waits are polled, not fixed: submenus mount lazily and fixed sleeps race.
 
-const PATH = ['Errthang', 'Mine', 'Monthly'];
+const MONTHLY_PATH = ['Errthang', 'Mine', 'Monthly'];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function waitFor(fn, { timeout = 5000, interval = 100, what = 'condition' } = {}) {
@@ -128,7 +131,12 @@ async function openRowMenu(playlistName, attempts = 4) {
   throw lastErr;
 }
 
-async function filePlaylist(playlistName, folderName) {
+async function filePlaylist(playlistName, target) {
+  const path = Array.isArray(target) ? target : [...MONTHLY_PATH, target];
+  const drill = path.slice(0, -1);
+  const folderName = path.at(-1);
+  if (!drill.length) throw new Error('path needs at least one folder to drill into');
+
   await dismissMenus();
 
   await openRowMenu(playlistName);
@@ -141,12 +149,12 @@ async function filePlaylist(playlistName, folderName) {
   let menu = await waitFor(
     () => {
       const m = deepestMenu();
-      return itemNamed(m, PATH[0]) ? m : null;
+      return itemNamed(m, path[0]) ? m : null;
     },
     { what: 'folder submenu' },
   );
 
-  for (const step of PATH) {
+  for (const step of drill) {
     const item = await waitFor(() => itemNamed(deepestMenu(), step), { what: `folder "${step}"` });
     hover(item);
     menu = await waitFor(
@@ -166,7 +174,7 @@ async function filePlaylist(playlistName, folderName) {
   }
 
   const create = itemNamed(menu, 'Create folder');
-  if (!create) throw new Error(`no "Create folder" under ${PATH.at(-1)}`);
+  if (!create) throw new Error(`no "Create folder" under ${drill.at(-1)}`);
   click(create);
 
   const renamed = await renameFolder('New Folder', folderName);

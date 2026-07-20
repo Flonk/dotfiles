@@ -28,6 +28,13 @@ The nix-shell banner goes to **stderr**, so `2>/dev/null` gives clean JSON on st
 - `cover <playlist> [--color #121212] [--file F] [--size 640]` — set the cover image. Default is the solid `#121212` the monthlies use.
 - `move-likes <playlist> [--month YYYY-MM] [--dry-run]` — add Liked Songs to a playlist, verify every URI landed, then unlike only the verified ones. Idempotent: skips tracks already in the destination, so a retry after a failure never duplicates.
 
+Two cover generators sit alongside it. Both need Pillow, both write a 640×640 PNG you then feed to `cover --file`:
+
+- `separator_cover.py <year> [--hue H] [--font F] [--size N] [--out F]` — the `yyyy` divider art (solid year color, black year centered).
+- `mixtape_cover.py <yyyy-MM> --artists A [B …] [--hue H] [--font F] [--size N] [--out F]` — the mixtape art (year-color strip on top, artist names bottom-left).
+
+See [Cover art](#cover-art) for the design constants and the hue rule.
+
 ## promote liked
 
 Flo's recurring ritual. "promote liked" means: **move all Liked Songs into the `yyyy-MM` playlist filed under `Errthang/Mine/Monthly/yyyy/`, creating it if this is the month's first promotion.** Liked Songs ends up empty.
@@ -43,7 +50,11 @@ Errthang
     │   ├── 2021 … 2026          ← year folders, one playlist per month inside
     │   └── MONTHLY-MONTHLY-MONTHLY   ← marker playlist, not a real monthly
     └── Mixtapes
+        └── 2021 … 2025          ← year folders, one `yyyy-MM-mixtape` per month
+            └── yyyy-yyyy-yyyy   ← divider playlist, INSIDE its year folder
 ```
+
+The `yyyy-yyyy-yyyy` dividers live **inside** the matching year folder, not at the Mixtapes top level — verified in the sidebar. Getting this wrong is easy and costs a second move.
 
 ### Procedure
 
@@ -120,17 +131,22 @@ No API exists, so this drives the sidebar context menu. Exact sequence:
 3. `tabs_context_mcp` with `createIfEmpty: true`, then `navigate` that tab to `https://open.spotify.com`.
 4. Confirm Flo is logged in — the sidebar shows "Your Library" with his playlists. **If he is not logged in, ask him to log in himself and wait. Never type his credentials.** The desktop app's session does not carry over to the browser.
 5. Read `.claude/skills/spotify/file_into_folder.js` and run it via `javascript_tool`, **wrapped in `{ … }`** so its top-level `const`s don't collide if you run it twice. It ends by assigning `globalThis.filePlaylist`.
-6. Call it, substituting the real month and year:
+6. Call it. The second argument is either a `yyyy` string (shorthand for `Errthang/Mine/Monthly/yyyy`) or an explicit folder path array:
 
 ```js
 await filePlaylist('2026-07', '2026')
+await filePlaylist('2025-2025-2025', ['Errthang', 'Mine', 'Mixtapes', '2025'])
 // → {action:'moved', folder:'2026', created:false}
 // → {action:'moved', folder:'2026', created:true, renamed:true}  (folder didn't exist)
 ```
 
+The **last** path segment is the destination and gets created if missing; everything before it is drilled through.
+
 7. Screenshot the sidebar and confirm the playlist is nested under the year folder. Do not trust the return value alone.
 
-Both branches are verified working. It drills `Errthang ▸ Mine ▸ Monthly`, clicks the `yyyy` folder if present, otherwise clicks **Create folder** at the Monthly level — which creates the folder *and* moves the playlist in one action — then renames `New Folder` to `yyyy`.
+8. **Add it to Flo's profile — filing is not finished without this.** A filed playlist stays hidden until you do. Open the playlist in full view (`https://open.spotify.com/playlist/<ID>`), click the **`…`** button under the title, click **Add to profile**, and confirm the toast reads *"Playlist is now displayed on your profile."*
+
+Both branches are verified working. It drills every segment but the last, clicks that last folder if present, otherwise clicks **Create folder** in the parent — which creates the folder *and* moves the playlist in one action — then renames `New Folder` to match.
 
 Clicks in this window steal focus to Hyprland workspace 10 unless the `suppress_event = "activatefocus"` rule in `nixos/modules/development/claude-code/home.nix` is active. Warn Flo rather than clicking repeatedly without saying so.
 
@@ -152,6 +168,42 @@ Do not fall back to drag-and-drop: it needs the playlist and a three-level-deep 
 **Deleting a folder shows a confirmation reading "delete this folder and all playlists inside".** Only ever confirm one you just created and can see is empty — `2023` has 12 playlists in it and the dialog text is identical. Querying `[role="dialog"]` also matches the page's language picker, so confirm by clicking the visible button, not by DOM-matching the first dialog.
 
 **Ordering caveat:** a freshly touched folder floats to the top of `Monthly` when the sidebar is sorted by **Recents**, which is not where it belongs. Nothing can fix this programmatically — tell Flo to switch the sidebar to **Custom order**, which is also the only mode where manual arrangement sticks.
+
+## Cover art
+
+Two generators, both writing a 640×640 PNG for `cover --file`. Run them from the skill folder — `mixtape_cover.py` imports `separator_cover.py`:
+
+```
+nix-shell -p python3 python3Packages.pillow --run "python3 separator_cover.py 2025"
+nix-shell -p python3 python3Packages.pillow --run \
+  "python3 mixtape_cover.py 2025-03 --artists Thys Machinedrum Oppidan"
+```
+
+**The color of the year.** Every year has one hue at fixed `S=0.415, V=0.559` (HSV). Both generators derive it from the year, so never pass `--hue` unless Flo asks for a specific one.
+
+| year | hue | hex |
+|---|---|---|
+| 2021 | 94.00 | `#6d8f53` |
+| 2022 | 264.83 | `#6c548e` |
+| 2023 | 45.76 | `#8e8053` |
+| 2024 | 220.68 | `#54678f` |
+| 2025 | 358.19 | `#8f5355` |
+
+2021–2024 were picked by eye — their deltas are 170.8°, 140.9°, 174.9°, no formula. **From 2025 on the rule is the golden angle**: `hue(y) = (220.68 + 137.50776 × (y − 2024)) mod 360`, which is what `hue_for_year()` extrapolates. The measured years are hardcoded so they never drift.
+
+**Layout constants** (fractions of canvas, measured off the originals — don't re-derive):
+
+| | separator | mixtape |
+|---|---|---|
+| background | year color | `#121212`, year-color strip 6.25% tall on top |
+| text | `#121212`, centered | `#6c6c6c`, bottom-left |
+| cap height | 15.33% | 6.33% |
+| position | center x, 49.17% y | 30px left, baseline 608px @ 640 |
+| line pitch | — | 1.753 × cap height |
+
+Mixtape names take a trailing period (`Thys.`). Any count works — 2022-05 has one name. If the longest line would breach the side margins the type shrinks until it fits, pitch scaling with it.
+
+**Font.** `CircularSpotifyText-Bold.otf` in the skill folder, which is what Spotify itself uses. It is a commercial Lineto face — **do not commit it**; it is untracked on purpose. Both scripts fall back to Work Sans Bold from nixpkgs when it is absent, which needs `work-sans` added to the nix-shell (`-p python3 python3Packages.pillow work-sans`) because the sandbox cannot see store paths outside the shell's closure.
 
 ## Folders and library order are not in the API
 
