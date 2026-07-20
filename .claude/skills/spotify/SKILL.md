@@ -29,12 +29,7 @@ The nix-shell banner goes to **stderr**, so `2>/dev/null` gives clean JSON on st
 - `mixtape <YYYY-MM> [--public] [--dry-run]` — copy the monthly `yyyy-MM` into `yyyy-MM-mixtape`, creating the year's `yyyy-yyyy-yyyy` separator and cover if missing. Verifies every URI landed. Needs Pillow. See [create mixtape](#create-mixtape).
 - `move-likes <playlist> [--month YYYY-MM] [--dry-run]` — add Liked Songs to a playlist, verify every URI landed, then unlike only the verified ones. Idempotent: skips tracks already in the destination, so a retry after a failure never duplicates.
 
-Two cover generators sit alongside it. Both need Pillow, both write a 640×640 PNG you then feed to `cover --file`:
-
-- `separator_cover.py <year> [--hue H] [--font F] [--size N] [--out F]` — the `yyyy` divider art (solid year color, black year centered).
-- `mixtape_cover.py <yyyy-MM> --artists A [B …] [--hue H] [--font F] [--size N] [--out F]` — the mixtape art (year-color strip on top, artist names bottom-left).
-
-See [Cover art](#cover-art) for the design constants and the hue rule.
+Two cover generators sit alongside it — see [Cover art](#cover-art).
 
 ## promote liked
 
@@ -55,7 +50,7 @@ Errthang
             └── yyyy-yyyy-yyyy   ← divider playlist, INSIDE its year folder
 ```
 
-The `yyyy-yyyy-yyyy` dividers live **inside** the matching year folder, not at the Mixtapes top level — verified in the sidebar. Getting this wrong is easy and costs a second move.
+The `yyyy-yyyy-yyyy` dividers live **inside** the matching year folder, not at the Mixtapes top level.
 
 ### Procedure
 
@@ -147,11 +142,7 @@ The **last** path segment is the destination and gets created if missing; everyt
 
 8. **Add it to Flo's profile — filing is not finished without this.** A filed playlist stays hidden until you do. Open the playlist in full view (`https://open.spotify.com/playlist/<ID>`), click the **`…`** button under the title, click **Add to profile**, and confirm the toast reads *"Playlist is now displayed on your profile."*
 
-Both branches are verified working. It drills every segment but the last, clicks that last folder if present, otherwise clicks **Create folder** in the parent — which creates the folder *and* moves the playlist in one action — then renames `New Folder` to match.
-
-Clicks in this window steal focus to Hyprland workspace 10 unless the `suppress_event = "activatefocus"` rule in `nixos/modules/development/claude-code/home.nix` is active. Warn Flo rather than clicking repeatedly without saying so.
-
-If it throws, the page state is whatever the last step left; re-running is safe (it dismisses stray menus first). Verify the result in the sidebar rather than trusting the return value alone.
+It drills every segment but the last, clicks that last folder if present, otherwise clicks **Create folder** in the parent — which creates the folder *and* moves the playlist in one action — then renames `New Folder` to match. If it throws, re-running is safe: it dismisses stray menus first.
 
 **How it works, and what breaks it:**
 
@@ -164,11 +155,11 @@ If it throws, the page state is whatever the last step left; re-running is safe 
 
 When the DOM changes, re-probe with `spotifyDom` (exported: `sidebarRow`, `deepestMenu`, `itemNamed`, `itemsIn`, `waitFor`, `dismissMenus`) and fix the text constants.
 
-Do not fall back to drag-and-drop: it needs the playlist and a three-level-deep folder visible simultaneously, and only works when the sidebar sort is **Custom order**.
+Do not fall back to drag-and-drop: it needs both the playlist and a three-level-deep folder on screen at once.
 
-**Deleting a folder shows a confirmation reading "delete this folder and all playlists inside".** Only ever confirm one you just created and can see is empty — `2023` has 12 playlists in it and the dialog text is identical. Querying `[role="dialog"]` also matches the page's language picker, so confirm by clicking the visible button, not by DOM-matching the first dialog.
+**Deleting a folder shows a confirmation reading "delete this folder and all playlists inside".** Only ever confirm one you just created and can see is empty — the year folders hold a dozen playlists each and the dialog text is identical. Querying `[role="dialog"]` also matches the page's language picker, so confirm by clicking the visible button.
 
-**Ordering caveat:** a freshly touched folder floats to the top of `Monthly` when the sidebar is sorted by **Recents**, which is not where it belongs. Nothing can fix this programmatically — tell Flo to switch the sidebar to **Custom order**, which is also the only mode where manual arrangement sticks.
+**Ordering:** a freshly touched playlist floats to the top of its folder while the sidebar is sorted by **Recents**. Nothing can fix this programmatically — tell Flo to switch to **Custom order**, the only mode where manual arrangement sticks.
 
 ## create mixtape
 
@@ -204,25 +195,20 @@ The strip color comes from the year in `yyyy-MM`, so it always matches that year
 
 ## Cover art
 
-Two generators, both writing a 640×640 PNG for `cover --file`. Run them from the skill folder — `mixtape_cover.py` imports `separator_cover.py`:
+Two generators, both writing a 640×640 PNG for `cover --file`. Runnable from any directory:
 
 ```
-nix-shell -p python3 python3Packages.pillow --run "python3 separator_cover.py 2025"
-nix-shell -p python3 python3Packages.pillow --run \
-  "python3 mixtape_cover.py 2025-03 --artists Thys Machinedrum Oppidan"
+python3 separator_cover.py <year> [--hue H] [--font F] [--size N] [--out F]
+python3 mixtape_cover.py <yyyy-MM> --artists A [B …] [same options]
 ```
 
-**The color of the year.** Every year has one hue at fixed `S=0.415, V=0.559` (HSV). Both generators derive it from the year, so never pass `--hue` unless Flo asks for a specific one.
-
-The rule is the golden angle off 2025 red:
+**The color of the year.** One hue per year at fixed `S=0.415, V=0.559` (HSV), golden-angle spaced so consecutive years land maximally far apart on the wheel:
 
 ```
 hue(y) = (358.19 + 137.50776 × (y − 2025)) mod 360
 ```
 
-Golden-angle spacing is what keeps consecutive years maximally far apart on the wheel instead of drifting into each other.
-
-No lookup table — one formula, all years. It reproduces 2024's `220.68` exactly (2025 was derived from it) but **not** 2021–2023, which Flo picked by eye before the rule existed. That is fine and deliberate: those years are finished, their covers are already uploaded, and no new 2021–2023 mixtapes will ever be made. If one were ever regenerated, pass its measured hue explicitly with `--hue` (`2021: 94.00`, `2022: 264.83`, `2023: 45.76`).
+Both generators derive it from the year — never pass `--hue` unless Flo asks for a specific one.
 
 **Layout constants** (fractions of canvas, measured off the originals — don't re-derive):
 
@@ -236,15 +222,13 @@ No lookup table — one formula, all years. It reproduces 2024's `220.68` exactl
 
 Mixtape names take a trailing period (`Thys.`). Any count works — 2022-05 has one name. If the longest line would breach the side margins the type shrinks until it fits, pitch scaling with it.
 
-**Font.** `CircularSpotifyText-Bold.otf` in the skill folder, which is what Spotify itself uses. It is a commercial Lineto face — **do not commit it**; it is untracked on purpose. Both scripts fall back to Work Sans Bold from nixpkgs when it is absent, which needs `work-sans` added to the nix-shell (`-p python3 python3Packages.pillow work-sans`) because the sandbox cannot see store paths outside the shell's closure.
+**Font.** `CircularSpotifyText-Bold.otf` in the skill folder. Commercial Lineto face — **do not commit it**, it is untracked on purpose. Without it both scripts fall back to Work Sans Bold, which then needs `work-sans` in the nix-shell (`-p python3 python3Packages.pillow work-sans`) since the sandbox can't see store paths outside the shell's closure.
 
 ## Folders and library order are not in the API
 
-There is no endpoint to create a folder, list folders, read which folder a playlist is in, or reorder playlists in the library. Requested [since 2017](https://github.com/spotify/web-api/issues/1031), still absent after the February 2026 overhaul. To the Web API, Flo's library is a flat unordered bag.
+There is no endpoint to create a folder, list folders, read which folder a playlist is in, or reorder playlists. To the Web API, Flo's library is a flat unordered bag — hence the divider playlists and the browser automation. Don't go looking; it has been [open since 2017](https://github.com/spotify/web-api/issues/1031).
 
-`MONTHLY-MONTHLY-MONTHLY` and the `yyyy-yyyy-yyyy` playlists are dividers Flo made to work around exactly this.
-
-An internal endpoint (`POST spclient.wg.spotify.com/playlist/v2/user/{user}/rootlist/changes`) does expose folders. **Don't.** It needs a web-session credential rather than the OAuth token, it's undocumented and unstable, and using non-public endpoints cuts against the developer terms Flo's app registration runs under. The Chrome extension also blocks reading page session tokens outright — do not try to route around that block.
+The internal `POST spclient.wg.spotify.com/playlist/v2/user/{user}/rootlist/changes` does expose folders. **Don't.** It needs a web-session credential rather than the OAuth token, and non-public endpoints cut against the developer terms Flo's app registration runs under. The Chrome extension blocks reading page session tokens anyway — do not route around that.
 
 ## API quirks (verified live — the docs and every tutorial are wrong)
 
