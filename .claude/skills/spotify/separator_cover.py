@@ -9,7 +9,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 GOLDEN = 137.50776405003785
-KNOWN_HUES = {2021: 94.00, 2022: 264.83, 2023: 45.76, 2024: 220.68}
+ANCHOR_YEAR = 2025
+ANCHOR_HUE = 358.19
 SAT = 0.415
 VAL = 0.559
 INK = (18, 18, 18)
@@ -22,10 +23,7 @@ FONT_FILE = "WorkSans-Bold.*"
 
 
 def hue_for_year(year):
-    if year in KNOWN_HUES:
-        return KNOWN_HUES[year]
-    anchor = max(KNOWN_HUES)
-    return (KNOWN_HUES[anchor] + GOLDEN * (year - anchor)) % 360
+    return (ANCHOR_HUE + GOLDEN * (year - ANCHOR_YEAR)) % 360
 
 
 def bg_color(hue):

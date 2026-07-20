@@ -214,15 +214,15 @@ nix-shell -p python3 python3Packages.pillow --run \
 
 **The color of the year.** Every year has one hue at fixed `S=0.415, V=0.559` (HSV). Both generators derive it from the year, so never pass `--hue` unless Flo asks for a specific one.
 
-| year | hue | hex |
-|---|---|---|
-| 2021 | 94.00 | `#6d8f53` |
-| 2022 | 264.83 | `#6c548e` |
-| 2023 | 45.76 | `#8e8053` |
-| 2024 | 220.68 | `#54678f` |
-| 2025 | 358.19 | `#8f5355` |
+The rule is the golden angle off 2025 red:
 
-2021–2024 were picked by eye — their deltas are 170.8°, 140.9°, 174.9°, no formula. **From 2025 on the rule is the golden angle**: `hue(y) = (220.68 + 137.50776 × (y − 2024)) mod 360`, which is what `hue_for_year()` extrapolates. The measured years are hardcoded so they never drift.
+```
+hue(y) = (358.19 + 137.50776 × (y − 2025)) mod 360
+```
+
+Golden-angle spacing is what keeps consecutive years maximally far apart on the wheel instead of drifting into each other.
+
+No lookup table — one formula, all years. It reproduces 2024's `220.68` exactly (2025 was derived from it) but **not** 2021–2023, which Flo picked by eye before the rule existed. That is fine and deliberate: those years are finished, their covers are already uploaded, and no new 2021–2023 mixtapes will ever be made. If one were ever regenerated, pass its measured hue explicitly with `--hue` (`2021: 94.00`, `2022: 264.83`, `2023: 45.76`).
 
 **Layout constants** (fractions of canvas, measured off the originals — don't re-derive):
 
