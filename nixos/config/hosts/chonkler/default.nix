@@ -84,6 +84,7 @@
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
+      intel-media-driver
       libva-vdpau-driver
       libvdpau-va-gl
       nvidia-vaapi-driver
@@ -91,7 +92,6 @@
   };
 
   environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "nvidia";
     NIXOS_OZONE_WL = "1";
     GSK_RENDERER = "cairo";
   };
