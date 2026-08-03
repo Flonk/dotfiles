@@ -277,30 +277,32 @@ def chunked(seq, n):
         yield seq[i : i + n]
 
 
-def cmd_create(args):
-    token = access_token()
-    pl = api_send(
-        "/me/playlists",
-        token,
-        "POST",
-        {
-            "name": args.name,
-            "public": args.public,
-            "description": args.description or "",
-        },
-    )
-    print(f"created {pl['name']} -> {pl['id']}")
-    print(pl["external_urls"]["spotify"])
-
-
-def owned_named(token, name):
+def owned_playlists(token):
     me = api_get("/me", token)["id"]
     items, _ = paginate("/me/playlists", token, 50, None)
-    return [
-        p
-        for p in items
-        if p and p.get("name") == name and (p.get("owner") or {}).get("id") == me
-    ]
+    return [p for p in items if p and (p.get("owner") or {}).get("id") == me]
+
+
+def resolve_one(owned, name):
+    found = [p for p in owned if p.get("name") == name]
+    if len(found) > 1:
+        sys.exit(f"{len(found)} playlists named {name}; resolve by hand")
+    return found[0] if found else None
+
+
+def missing_report(missing):
+    print("create these in the spotify client first, then re-run:", file=sys.stderr)
+    for name, where in missing:
+        print(f"    {name}    in {where}", file=sys.stderr)
+    sys.exit(1)
+
+
+def cmd_find(args):
+    token = access_token()
+    p = resolve_one(owned_playlists(token), args.name)
+    if not p:
+        sys.exit(f"no playlist named {args.name}")
+    print(p["id"])
 
 
 def playlist_uris(token, pid):
@@ -313,71 +315,48 @@ def playlist_uris(token, pid):
     return uris
 
 
-def ensure_separator(token, year, public):
-    name = f"{year}-{year}-{year}"
-    found = owned_named(token, name)
-    if len(found) > 1:
-        sys.exit(f"{len(found)} playlists named {name}; resolve by hand")
-
-    if found:
-        pid, created = found[0]["id"], False
-        print(f"{name} exists -> {pid}")
-    else:
-        pl = api_send(
-            "/me/playlists",
-            token,
-            "POST",
-            {"name": name, "public": public, "description": ""},
-        )
-        pid, created = pl["id"], True
-        print(f"created {name} -> {pid}")
-
+def separator_cover(token, pid, year):
     if api_get(f"/playlists/{pid}", token).get("images"):
-        return pid if created else None
-
+        return
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from separator_cover import find_font, hue_for_year, render
 
     upload_cover(token, pid, render(str(year), hue_for_year(year), 640, find_font()))
-    return pid
 
 
 def cmd_mixtape(args):
     token = access_token()
     if not re.fullmatch(r"\d{4}-\d{2}", args.month):
         sys.exit("month must look like 2025-03")
-
-    src = owned_named(token, args.month)
-    if len(src) != 1:
-        sys.exit(f"expected exactly 1 playlist named {args.month}, found {len(src)}")
+    year = args.month[:4]
 
     name = f"{args.month}-mixtape"
-    dst = owned_named(token, name)
-    if len(dst) > 1:
-        sys.exit(f"{len(dst)} playlists named {name}; resolve by hand")
+    sep_name = f"{year}-{year}-{year}"
+    owned = owned_playlists(token)
+    src = resolve_one(owned, args.month)
+    dst = resolve_one(owned, name)
+    sep = resolve_one(owned, sep_name)
 
-    uris = playlist_uris(token, src[0]["id"])
-    print(f"{args.month}: {len(uris)} tracks to copy")
+    missing = []
+    if not src:
+        missing.append((args.month, f"Errthang/Mine/Monthly/{year}"))
+    if not dst:
+        missing.append((name, f"Errthang/Mine/Mixtapes/{year}"))
+    if not sep:
+        missing.append((sep_name, f"Errthang/Mine/Mixtapes/{year}"))
+    if missing:
+        missing_report(missing)
+
+    pid = dst["id"]
+    uris = playlist_uris(token, src["id"])
+    print(f"{args.month}: {len(uris)} tracks to copy -> {pid}")
     if not uris:
         sys.exit("source is empty, nothing to do")
     if args.dry_run:
         print("dry run, nothing written")
         return
 
-    new_separator = ensure_separator(token, int(args.month[:4]), args.public)
-
-    if dst:
-        pid = dst[0]["id"]
-        print(f"{name} already exists -> {pid}")
-    else:
-        pl = api_send(
-            "/me/playlists",
-            token,
-            "POST",
-            {"name": name, "public": args.public, "description": ""},
-        )
-        pid = pl["id"]
-        print(f"created {name} -> {pid}")
+    separator_cover(token, sep["id"], int(year))
 
     already = set(playlist_uris(token, pid))
     todo = [u for u in uris if u not in already]
@@ -393,11 +372,6 @@ def cmd_mixtape(args):
     if missing:
         sys.exit(f"{len(missing)} failed to land; source playlist untouched")
     print(f"https://open.spotify.com/playlist/{pid}")
-
-    needs_filing = [x for x in (new_separator, None if dst else pid) if x]
-    if needs_filing:
-        print(f"\nstill to do in the browser, for each of {', '.join(needs_filing)}:")
-        print(f"  file into Errthang/Mine/Mixtapes/{args.month[:4]}, then Add to profile")
 
 
 def cmd_move_likes(args):
@@ -532,15 +506,12 @@ cv.add_argument("--file", help="use an image file instead of a solid colour")
 cv.add_argument("--size", type=int, default=640)
 cv.set_defaults(func=cmd_cover)
 
-cr = sub.add_parser("create", help="create a playlist")
-cr.add_argument("name")
-cr.add_argument("--public", action="store_true")
-cr.add_argument("--description", default="")
-cr.set_defaults(func=cmd_create)
+fd = sub.add_parser("find", help="print the id of the owned playlist with this exact name")
+fd.add_argument("name")
+fd.set_defaults(func=cmd_find)
 
 mx = sub.add_parser("mixtape", help="copy a monthly playlist into yyyy-MM-mixtape")
 mx.add_argument("month", help="YYYY-MM of the monthly to copy")
-mx.add_argument("--public", action="store_true")
 mx.add_argument("--dry-run", action="store_true")
 mx.set_defaults(func=cmd_mixtape)
 

@@ -1,6 +1,6 @@
 ---
 name: spotify
-description: Read and curate Flo's Spotify library via the Web API — list playlists, dump contents, create playlists, set covers, and run "promote liked" (move all Liked Songs into a new monthly playlist under Errthang/Mine/Monthly/yyyy/yyyy-MM). Handles its own OAuth (browser click once, refresh token in gnome-keyring, auto-refreshed after that). Use when Flo asks about his Spotify playlists, what's in a playlist, says "promote liked", or wants to authenticate/re-authenticate the Spotify CLI.
+description: Read and curate Flo's Spotify library via the Web API — list playlists, dump contents, set covers, and run "promote liked" (move all Liked Songs into the monthly playlist under Errthang/Mine/Monthly/yyyy/yyyy-MM). Flo creates the playlists himself in his client; this never creates one. Handles its own OAuth (browser click once, refresh token in gnome-keyring, auto-refreshed after that). Use when Flo asks about his Spotify playlists, what's in a playlist, says "promote liked", or wants to authenticate/re-authenticate the Spotify CLI.
 ---
 
 # spotify
@@ -24,20 +24,26 @@ The nix-shell banner goes to **stderr**, so `2>/dev/null` gives clean JSON on st
 - `auth [--force] [--timeout N]` — OAuth flow. Prints an authorize URL, serves `127.0.0.1:8888/callback`, stores the refresh token in gnome-keyring. No-op if already authenticated unless `--force`.
 - `playlists [--limit N] [--json]` — every playlist Flo owns or follows, paginated. Shows track count, owner, visibility, id.
 - `tracks <playlist> [--limit N] [--json]` — a playlist's contents. Accepts a bare id, `spotify:playlist:…`, or an open.spotify.com URL.
-- `create <name> [--public] [--description D]` — create a playlist.
+- `find <name>` — print the id of the playlist Flo owns with that exact name. Exits 1 if there is none, and refuses if the name is ambiguous.
 - `cover <playlist> [--color #121212] [--file F] [--size 640]` — set the cover image. Default is the solid `#121212` the monthlies use.
-- `mixtape <YYYY-MM> [--public] [--dry-run]` — copy the monthly `yyyy-MM` into `yyyy-MM-mixtape`, creating the year's `yyyy-yyyy-yyyy` separator and cover if missing. Verifies every URI landed. Needs Pillow. See [create mixtape](#create-mixtape).
+- `mixtape <YYYY-MM> [--dry-run]` — copy the monthly `yyyy-MM` into `yyyy-MM-mixtape` and cover the year's `yyyy-yyyy-yyyy` separator. Both must already exist; it lists what's missing and stops. Verifies every URI landed. Needs Pillow. See [create mixtape](#create-mixtape).
 - `move-likes <playlist> [--month YYYY-MM] [--dry-run]` — add Liked Songs to a playlist, verify every URI landed, then unlike only the verified ones. Idempotent: skips tracks already in the destination, so a retry after a failure never duplicates.
 
 Two cover generators sit alongside it — see [Cover art](#cover-art).
 
+## Flo creates the playlists, you fill them
+
+**There is no create command and you must never POST `/me/playlists`.** A playlist created through the API is invisible in Flo's desktop client until he restarts it, and folders aren't in the API at all — so every new playlist is his job, made in the client, in the right folder, where it lands correctly and shows up immediately.
+
+When a playlist you need doesn't exist: tell Flo the **exact name** and the **exact folder**, then stop and wait for him to say it's done. Don't work around it, don't rename something else into place, don't drive the browser.
+
 ## promote liked
 
-Flo's recurring ritual. "promote liked" means: **move all Liked Songs into the `yyyy-MM` playlist filed under `Errthang/Mine/Monthly/yyyy/`, creating it if this is the month's first promotion.** Liked Songs ends up empty.
+Flo's recurring ritual. "promote liked" means: **move all Liked Songs into the `yyyy-MM` playlist filed under `Errthang/Mine/Monthly/yyyy/`.** Liked Songs ends up empty. If the month's playlist doesn't exist yet, Flo makes it — see step 1.
 
 Run as often as Flo likes — several times a month is normal. Repeat runs append to the same month's playlist rather than making a second one.
 
-The library tree (folders are **client-side only** — see below):
+The library tree (folders are **client-side only**, and Flo maintains them — see below):
 
 ```
 Errthang
@@ -58,26 +64,21 @@ The `yyyy-yyyy-yyyy` dividers live **inside** the matching year folder, not at t
 
 Run every command from the repo root. **Do not skip a numbered step, and stop at any step that fails** — later steps assume earlier ones succeeded.
 
-**0. Does the month's playlist already exist?** Promoting several times a month is normal — the monthly playlist accumulates. Look it up:
+**1. Find the month's playlist.** Promoting several times a month is normal — the monthly accumulates.
 
 ```
-nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py playlists --json" 2>/dev/null \
-  | nix-shell -p jq --run "jq -r '.[] | select(.name==\"2026-07\") | .id'"
+nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py find '2026-07'" 2>/dev/null
 ```
 
-- **Prints an id** → the playlist exists. Use it as `<ID>` and **skip to step 4**. It is already filed and already has its cover; redoing those would create a duplicate.
-- **Prints nothing** → first promotion this month. Continue with step 1.
-- **Prints more than one id** → **STOP** and ask Flo which to use. Duplicates mean something went wrong earlier.
+- **Prints an id** → that's `<ID>`, every later step needs it. Continue.
+- **`no playlist named …`, exit 1** → the month hasn't been started. **STOP and ask Flo to make it**, quoting both the name and the folder:
 
-**1. Create the playlist.** Substitute the real month:
+  > Make a playlist called `2026-07` in `Errthang/Mine/Monthly/2026`, and *Add to profile*. Say when it's there.
 
-```
-nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py create '2026-07'"
-```
+  Wait for him, then re-run this step. **Never create it yourself** — see [Flo creates the playlists](#flo-creates-the-playlists-you-fill-them).
+- **Refuses as ambiguous** → **STOP** and ask Flo which to use. Duplicates mean something went wrong earlier.
 
-Output ends with `created 2026-07 -> <ID>`. **Keep that `<ID>`** — every later step needs it.
-
-**2. Set the cover.** Note this shell has `pillow` in it; the others don't:
+**2. Set the cover.** Solid `#121212`, so it's safe to redo on every promotion — and a client-made playlist starts with no cover at all. Note this shell has `pillow` in it; the others don't:
 
 ```
 nix-shell -p python3 python3Packages.pillow --run "python3 .claude/skills/spotify/spotify_cli.py cover <ID>"
@@ -85,21 +86,17 @@ nix-shell -p python3 python3Packages.pillow --run "python3 .claude/skills/spotif
 
 Expect `uploaded (202) 640x640 to <ID>`.
 
-**3. File it into the folder.** This is browser work — see the section below for the full sequence. Net effect: `filePlaylist('2026-07', '2026')` returns `{action:'moved', ...}`.
-
-If this step fails → **STOP**. Do not run step 5. An unfiled empty playlist is trivial to clean up; 300 tracks stranded in an unfiled playlist is not.
-
-**4. Count what will move.**
+**3. Count what will move.**
 
 ```
 nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py move-likes <ID> --dry-run"
 ```
 
-Prints `N liked, N eligible`. Note the number and **continue straight to step 5 — do not stop to ask.** This whole procedure runs unattended; Flo asked for it that way.
+Prints `N liked, N eligible`. Note the number and **continue straight to step 4 — do not stop to ask.** Once the playlist exists, the rest runs unattended; Flo asked for it that way.
 
 The protection against a bad move is structural, not a confirmation prompt: `move-likes` adds everything first, re-reads the destination, and unlikes **only** the URIs it confirmed landed there. If `N` is 0, there is nothing to do — say so and stop.
 
-**5. Move the tracks.**
+**4. Move the tracks.**
 
 ```
 nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py move-likes <ID>"
@@ -107,63 +104,20 @@ nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py move-l
 
 Expect `added N`, `verified N/N present in destination`, `unliked N`. If `verified` is less than `N`, the CLI already refused to unlike the shortfall — report exactly which tracks it named.
 
-**6. Verify, then report.** On a repeat promotion the playlist total will be higher than `N` — it already held earlier tracks. What must match is that it grew by `N`.
+**5. Verify, then report.** On a repeat promotion the playlist total will be higher than `N` — it already held earlier tracks. What must match is that it grew by `N`.
 
 ```
 nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py tracks <ID> --limit 5"
 nix-shell -p python3 --run "python3 .claude/skills/spotify/spotify_cli.py move-likes <ID> --dry-run"
 ```
 
-The first must show the same `N` as step 4; the second must say `0 liked`. Tell Flo both numbers and the playlist URL.
+The first must show the same `N` as step 3; the second must say `0 liked`. Tell Flo both numbers and the playlist URL.
 
-**Why this order:** the folder step is UI-only and needs the playlist to exist, so it has to sit in the middle. Filing before moving means a failure costs an empty playlist rather than orphaned tracks.
-
-### Filing it into the folder (scripted — `file_into_folder.js`)
-
-No API exists, so this drives the sidebar context menu. Exact sequence:
-
-1. Invoke the **`claude-in-chrome`** skill first — it loads the browser tools.
-2. `pgrep chrome`. Only if nothing is running, launch it: `nohup claude-chrome >/dev/null 2>&1 &` then wait ~6s. (`claude-chrome` fails if Chrome is already up.)
-3. `tabs_context_mcp` with `createIfEmpty: true`, then `navigate` that tab to `https://open.spotify.com`.
-4. Confirm Flo is logged in — the sidebar shows "Your Library" with his playlists. **If he is not logged in, ask him to log in himself and wait. Never type his credentials.** The desktop app's session does not carry over to the browser.
-5. Read `.claude/skills/spotify/file_into_folder.js` and run it via `javascript_tool`, **wrapped in `{ … }`** so its top-level `const`s don't collide if you run it twice. It ends by assigning `globalThis.filePlaylist`.
-6. Call it. The second argument is either a `yyyy` string (shorthand for `Errthang/Mine/Monthly/yyyy`) or an explicit folder path array:
-
-```js
-await filePlaylist('2026-07', '2026')
-await filePlaylist('2025-2025-2025', ['Errthang', 'Mine', 'Mixtapes', '2025'])
-// → {action:'moved', folder:'2026', created:false}
-// → {action:'moved', folder:'2026', created:true, renamed:true}  (folder didn't exist)
-```
-
-The **last** path segment is the destination and gets created if missing; everything before it is drilled through.
-
-7. Screenshot the sidebar and confirm the playlist is nested under the year folder. Do not trust the return value alone.
-
-8. **Add it to Flo's profile — filing is not finished without this.** A filed playlist stays hidden until you do. Open the playlist in full view (`https://open.spotify.com/playlist/<ID>`), click the **`…`** button under the title, click **Add to profile**, and confirm the toast reads *"Playlist is now displayed on your profile."*
-
-It drills every segment but the last, clicks that last folder if present, otherwise clicks **Create folder** in the parent — which creates the folder *and* moves the playlist in one action — then renames `New Folder` to match. If it throws, re-running is safe: it dismisses stray menus first.
-
-**How it works, and what breaks it:**
-
-- Selectors key off `role="menuitem"` and **visible text only**. Spotify's class names are build-hashed (`PQMaFYfZyRAAMjIZ`) and change constantly — never select on them. Sidebar rows are bare `div`s with no role, testid, or href, so they're matched by first text line, narrowest element wins.
-- Each submenu mounts a **new** `[role="menu"]`; the deepest is always the last visible one. That's the drilling primitive.
-- Hover needs all four of `pointerover`, `mouseover`, `pointermove`, `mousemove`. Fewer and the submenu never opens.
-- Waits are **polled, not fixed** — submenus mount lazily and fixed sleeps race.
-- After a click-away closes a menu, the next `contextmenu` can be swallowed mid-settle. `openRowMenu` retries 4×, and the menu item is **re-queried after** the retry loop: a node from a superseded attempt is detached, and hovering it fails silently.
-- The sidebar is **virtualised** — a playlist that isn't scrolled into view has no DOM node. Freshly created playlists sit at the top, so this rarely bites, but the error message says so explicitly.
-
-When the DOM changes, re-probe with `spotifyDom` (exported: `sidebarRow`, `deepestMenu`, `itemNamed`, `itemsIn`, `waitFor`, `dismissMenus`) and fix the text constants.
-
-Do not fall back to drag-and-drop: it needs both the playlist and a three-level-deep folder on screen at once.
-
-**Deleting a folder shows a confirmation reading "delete this folder and all playlists inside".** Only ever confirm one you just created and can see is empty — the year folders hold a dozen playlists each and the dialog text is identical. Querying `[role="dialog"]` also matches the page's language picker, so confirm by clicking the visible button.
-
-**Ordering:** a freshly touched playlist floats to the top of its folder while the sidebar is sorted by **Recents**. Nothing can fix this programmatically — tell Flo to switch to **Custom order**, the only mode where manual arrangement sticks.
+**Why the cover goes first:** it overwrites the mosaic Spotify auto-generates once tracks land, so doing it before the move keeps that from ever flashing up.
 
 ## create mixtape
 
-"create mixtape" means: **copy every track from the monthly `yyyy-MM` into a new `yyyy-MM-mixtape`, filed under `Errthang/Mine/Mixtapes/yyyy/`.** The monthly is left untouched — this is a copy, not a move.
+"create mixtape" means: **copy every track from the monthly `yyyy-MM` into `yyyy-MM-mixtape`, which sits under `Errthang/Mine/Mixtapes/yyyy/`.** The monthly is left untouched — this is a copy, not a move.
 
 **No cover at this stage.** The cover needs the three artist names, which do not exist until Flo has finished culling. Do not invent one.
 
@@ -172,11 +126,11 @@ nix-shell -p python3 python3Packages.pillow --run \
   "python3 .claude/skills/spotify/spotify_cli.py mixtape 2025-03"
 ```
 
-The command, in order: resolves the monthly by exact name (bails unless exactly one matches), creates the `yyyy-yyyy-yyyy` separator **and its cover** if that year has none yet, creates `yyyy-MM-mixtape`, copies every non-local URI, re-reads the destination and verifies all of them landed. Pillow is required because of the separator cover. `--dry-run` prints the track count and writes nothing at all.
+The command, in order: resolves the monthly, the `yyyy-MM-mixtape` and the year's `yyyy-yyyy-yyyy` separator by exact name; **stops if any is missing**, listing each one and the folder it belongs in; renders the separator's cover if it has none; copies every non-local URI; re-reads the destination and verifies all of them landed. Pillow is required because of the separator cover. `--dry-run` prints the track count and writes nothing.
+
+Just relay the missing list to Flo verbatim and wait. In a fresh year that's two playlists — the mixtape and the separator — both in `Errthang/Mine/Mixtapes/yyyy`, plus *Add to profile* on each. In a year that already has a separator it's just the one. Re-run once he confirms.
 
 Re-running is safe: it skips URIs already in the destination, so it tops up rather than duplicating.
-
-It finishes by listing the playlists that still need the browser: file each into `Errthang/Mine/Mixtapes/yyyy`, then **Add to profile** (see step 8 above). A newly created separator needs this too.
 
 ## finalize mixtape
 
@@ -226,9 +180,11 @@ Mixtape names take a trailing period (`Thys.`). Any count works — 2022-05 has 
 
 ## Folders and library order are not in the API
 
-There is no endpoint to create a folder, list folders, read which folder a playlist is in, or reorder playlists. To the Web API, Flo's library is a flat unordered bag — hence the divider playlists and the browser automation. Don't go looking; it has been [open since 2017](https://github.com/spotify/web-api/issues/1031).
+There is no endpoint to create a folder, list folders, read which folder a playlist is in, or reorder playlists. To the Web API, Flo's library is a flat unordered bag — hence the divider playlists, and hence Flo doing the creating. Don't go looking; it has been [open since 2017](https://github.com/spotify/web-api/issues/1031).
 
 The internal `POST spclient.wg.spotify.com/playlist/v2/user/{user}/rootlist/changes` does expose folders. **Don't.** It needs a web-session credential rather than the OAuth token, and non-public endpoints cut against the developer terms Flo's app registration runs under. The Chrome extension blocks reading page session tokens anyway — do not route around that.
+
+Driving the web player's sidebar with a script used to be how this worked (`file_into_folder.js`, removed August 2026). Don't rebuild it: it broke on every Spotify deploy, and a playlist created over the API still didn't appear in the desktop client until a restart, so Flo ended up restarting anyway.
 
 ## API quirks (verified live — the docs and every tutorial are wrong)
 
@@ -237,7 +193,6 @@ The [February 2026 overhaul](https://developer.spotify.com/documentation/web-api
 | Old path (403s) | Current path |
 |---|---|
 | `GET/POST /playlists/{id}/tracks` | `/playlists/{id}/items` |
-| `POST /users/{id}/playlists` | `POST /me/playlists` |
 | `DELETE /me/tracks` | `DELETE /me/library?uris=…` (max **40** per call, `spotify:track:` URIs) |
 
 Shape changes in the same release:
@@ -267,5 +222,5 @@ Search needs no scope at all (`/v1/search` is public catalog data); `genre:`, `l
 - Keyring entry is service `spotify-cli`, key `refresh_token` (`secret-tool lookup service spotify-cli key refresh_token`).
 - Revoke at https://www.spotify.com/account/apps — deleting the keyring entry alone doesn't revoke, it just forces re-auth.
 - The app's redirect URI must include `http://127.0.0.1:8888/callback` exactly, or auth fails with `INVALID_CLIENT`.
-- Playlists created via the API land at the **top** of the library and cannot be repositioned programmatically.
+- `find` and `mixtape` only match playlists Flo **owns**, by exact name — a followed playlist of the same name won't collide.
 - `--json` emits the raw Spotify objects, for when the pretty output isn't enough.
