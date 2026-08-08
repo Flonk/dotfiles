@@ -273,6 +273,25 @@ and removing an entry brings them straight back with no re-scrape. Supports `sou
 Currently excluded: **`srs`** (Spanische Hofreitschule) — 1470 records, 13% of the entire
 DB, six guided tours repeating daily forever.
 
+## Improving a scraper re-keys its records
+
+Measured 2026-08-08, right after `volume_at` gained start times. The ingest reported **873
+records gone** — alarming until you look: 842 were `volume_at`, and **100% of them were
+still live under a different id**. Zero actually disappeared.
+
+The cause is the composite id, `source-source_id-start`. Give a record a start *time* where
+it previously had only a date and `start` changes, so the id changes: the old row is
+soft-deleted and a new one inserted. The gone rows had `timed=0`, the live rows `timed=842`
+— exact correspondence.
+
+Nothing to fix, but two consequences to know:
+
+- **`first_seen` resets** on the re-keyed rows, because they are genuinely new inserts. So
+  `rotate.py` reports them as newly *entered* rotation — 11 volume_at runs showed up as new
+  the first time. That is an artefact of the improvement, not a real repertoire change.
+  Expect one noisy rotation report after any scraper gains date precision, then silence.
+- **It is one-time per improvement.** Not worth engineering around; worth not misreading.
+
 ## Rotation change detection
 
 For fixed-repertoire sources — Planetarium, Urania Sternwarte, museum tour programmes,

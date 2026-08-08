@@ -5,7 +5,7 @@ description: Vienna event aggregator that syncs into Flo's Google Calendar so he
 
 # event-aggregator
 
-**Status: 110 scrapers built, 7 dead. ~11.3k events. Calendar sync not built.**
+**Status: 117 scrapers built, 11 dead. 11.8k events. Calendar sync not built.**
 
 A TypeScript pipeline over Python scrapers. Node 24 runs the `.ts` files directly —
 there is no build step, and `node:sqlite` means no runtime dependencies at all.
@@ -45,7 +45,9 @@ between the two languages is the JSON-per-line contract they already print on st
 Porting them happens one at a time, whenever one needs re-opening anyway.
 
 - one dir per source: `scrape.py`, `meta.json`, `NOTES.md`, `scraper_example_result.json`
-- `registry.json` — 117 buildable + 24 blocked
+- `registry.json` — buildable + blocked. **Check robots.txt on the host you actually
+  fetch, after redirects**: `vhs.at`, `vienna.at` disallow ClaudeBot, and `parkrun.co.at`
+  asks in words not to be scraped
 - `check.py <slug>` — validate a scraper and rewrite its example result
 - `cadence.py` — measure density → cadence + horizon
 - `lib/ea.py` — shared fetch/parse helpers
