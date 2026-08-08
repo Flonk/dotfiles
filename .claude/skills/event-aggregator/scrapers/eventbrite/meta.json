@@ -10,12 +10,13 @@
     "business",
     "music",
     "arts",
-    "sport"
+    "sport",
+    "gaming"
   ],
   "status": "built",
   "method": "html",
   "expect": {
-    "min_records": 380,
+    "min_records": 490,
     "required_fill": {
       "venue": 0.95,
       "category": 0.9
@@ -23,7 +24,7 @@
     "canary": "search_data"
   },
   "last_built": "2026-08-08",
-  "notes": "no price in listing (needs a per-event detail fetch we skip), so price_min/price_text are always null; site rate-limits aggressively (429) after ~45+ requests in a short window across runs, so avoid re-running check.py back-to-back",
+  "notes": "no price in listing (needs a per-event detail fetch we skip), so price_min/price_text are always null; site rate-limits aggressively (429) after ~45+ requests in a short window across runs, so avoid re-running check.py back-to-back; also fetches https://www.eventbrite.at/d/austria--wien/board-games/ (capped at 6 pages) to plug the gaming/board-games blind spot -- it's a full-text search (q=\"board games\"), not a real category filter, so most hits are noise, but it reliably surfaces a handful of genuine finds (chess meetups, board-game conventions) the all-events ranking never returns; merged with all-events and deduped on the shared source_id key; tried gaming/tabletop-gaming/video-games/hobbies too and they search the same ~1017-item fuzzy pool with no better gaming signal, so left out to conserve request budget",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 180,

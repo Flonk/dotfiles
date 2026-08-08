@@ -21,6 +21,17 @@
 - the site 429s after roughly 45-50 requests within a short window
   (observed while probing manually right after a check.py run) — don't
   chain multiple check.py runs back to back.
+- board games/gaming was a total blind spot (0/11604 records site-wide).
+  eventbrite has no strict category for it; `/d/austria--wien/board-games/`
+  is really a full-text search (`q=board games` per `search_data.event_search`)
+  over the same city-wide index, so most hits are unrelated (pub quizzes,
+  workshops, concerts). It's kept anyway, capped at 6 pages, because it
+  reliably surfaces real finds (e.g. "3W6 Con 2026", "Checkmates MeetUp")
+  the all-events ranking never returns. Probed gaming/tabletop-gaming/
+  video-games/hobbies too — same ~1017-result fuzzy pool, no better
+  precision, not worth the extra request budget. Merged with all-events
+  and deduped by source_id (eventbrite's own event id) before building
+  records, so an event appearing in both feeds emits once.
 - publishes ~13 months out (observed max start ~Sep 2027 from an Aug 2026
   run); horizon_days=180 is just a pagination guide, not a hard filter.
 - breaks if: `__SERVER_DATA__` moves/renames, `search_data.events` schema

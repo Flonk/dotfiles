@@ -4,17 +4,25 @@ import sys
 
 import ea
 
-LIST_URL = "https://www.eventbrite.at/d/austria--wien/all-events/"
 SERVER_DATA_RE = re.compile(r"window\.__SERVER_DATA__ = (\{.*?\});\s*\n", re.S)
-MAX_PAGES = 55
+
+FEEDS = [
+    ("https://www.eventbrite.at/d/austria--wien/all-events/", 55),
+    # "board-games" is a full-text search (q=board games), not a strict
+    # category filter -- noisy, but it's the only lever eventbrite exposes
+    # for the gaming blind spot and it surfaces real events (e.g. chess
+    # meetups, board game conventions) that the all-events ranking buries.
+    # Kept short (page cap) to stay well inside the site's rate limit.
+    ("https://www.eventbrite.at/d/austria--wien/board-games/", 6),
+]
 
 
-def fetch_page(n):
-    url = f"{LIST_URL}?page={n}"
+def fetch_page(list_url, n):
+    url = f"{list_url}?page={n}"
     try:
         page = ea.fetch(url)
     except Exception as e:
-        sys.stderr.write(f"fetch failed page={n}: {e}\n")
+        sys.stderr.write(f"fetch failed {list_url} page={n}: {e}\n")
         return None
     m = SERVER_DATA_RE.search(page)
     if not m:
@@ -22,7 +30,7 @@ def fetch_page(n):
     try:
         d = json.loads(m.group(1))
     except Exception as e:
-        sys.stderr.write(f"json parse failed page={n}: {e}\n")
+        sys.stderr.write(f"json parse failed {list_url} page={n}: {e}\n")
         return None
     return d.get("search_data", {}).get("events", {})
 
@@ -85,22 +93,27 @@ def build(r):
 
 def main():
     seen = {}
-    page = 1
-    while page <= MAX_PAGES:
-        events = fetch_page(page)
-        if events is None:
-            break
-        results = events.get("results") or []
-        if not results:
-            break
-        for r in results:
-            eid = str(r.get("id") or r.get("eid") or "")
-            if eid and eid not in seen:
-                seen[eid] = r
-        pagination = events.get("pagination") or {}
-        if not pagination.get("continuation"):
-            break
-        page += 1
+    new_from_extra = 0
+    for feed_i, (list_url, max_pages) in enumerate(FEEDS):
+        page = 1
+        while page <= max_pages:
+            events = fetch_page(list_url, page)
+            if events is None:
+                break
+            results = events.get("results") or []
+            if not results:
+                break
+            for r in results:
+                eid = str(r.get("id") or r.get("eid") or "")
+                if eid and eid not in seen:
+                    seen[eid] = r
+                    if feed_i > 0:
+                        new_from_extra += 1
+            pagination = events.get("pagination") or {}
+            if not pagination.get("continuation"):
+                break
+            page += 1
+    sys.stderr.write(f"new unique records from extra feeds: {new_from_extra}\n")
 
     records = []
     for r in seen.values():
