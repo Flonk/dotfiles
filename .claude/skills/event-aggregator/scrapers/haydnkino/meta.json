@@ -7,21 +7,25 @@
   "covers": [
     "cinema"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 155,
+    "required_fill": {
+      "title": 1.0,
+      "category": 1.0,
+      "venue": 1.0
+    },
+    "canary": "Cinema/CurrentList"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Cinema/CurrentList?dateSel=DD.MM.YYYY (XHR) requires Accept-Language header or it 500s; site's own flatpickr 'enable' array (same on every CurrentList response) lists every date with confirmed showtimes, ~2 months out; PreviewList gives date-only records (no time) for further-out titles not yet on the enable list, deduped by filmId; no pricing shown anywhere on site so price_min always null",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "basis": "measured",
+    "density_per_day": 2.5,
+    "p95_lead_days": 80,
+    "sample_records": 223
   }
 }

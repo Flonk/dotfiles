@@ -1,0 +1,161 @@
+[
+  {
+    "source": "messecongress",
+    "source_id": "https://www.battlekart.com/de/wien",
+    "url": "https://www.battlekart.com/de/wien",
+    "title": "BattleKart",
+    "start": "2026-02-20",
+    "end": "2026-12-24",
+    "venue": "Halle C",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Trabrennstrasse 5 / Tor 1",
+      "organizer": "Veranstalter: BattleKart GmbH Wien",
+      "ubahn": "U2: Krieau"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://isols2026.org/",
+    "url": "https://isols2026.org/",
+    "title": "ISOLS 2026",
+    "start": "2026-09-23",
+    "end": "2026-09-26",
+    "venue": "Congress Center",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Congress Center",
+      "organizer": "Veranstalter: International Society of Limb Salvage (ISOLS) Official Organizing Meeting Secretariat: Erasmus Conferences and Events S.A",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://networkxevent.com/",
+    "url": "https://networkxevent.com/",
+    "title": "Network X",
+    "start": "2026-10-13",
+    "end": "2026-10-15",
+    "venue": "Halle B & Congress Center",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Foyer A",
+      "organizer": "Veranstalter: Informa Connect Limited",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://datacenterworldeurope.com/",
+    "url": "https://datacenterworldeurope.com/",
+    "title": "Data Center World Europe",
+    "start": "2026-10-14",
+    "end": "2026-10-15",
+    "venue": "Halle A",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Foyer A",
+      "organizer": "Veranstalter: Informa Business Media Inc.",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://ecr-austria.at/ecrtag2026/",
+    "url": "https://ecr-austria.at/ecrtag2026/",
+    "title": "ECR Tag 2026",
+    "start": "2026-11-04",
+    "venue": "Congress Center",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Congress Center",
+      "organizer": "Veranstalter: ECR Austria/GS1 Austria GmbH",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://www.enlit-europe.com",
+    "url": "https://www.enlit-europe.com",
+    "title": "Enlit Europe",
+    "start": "2026-11-10",
+    "end": "2026-11-12",
+    "venue": "Halle A, Halle B, Halle C, Congress Center",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Foyer A",
+      "organizer": "Veranstalter: Enlit",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://meet-austria.at/de/",
+    "url": "https://meet-austria.at/de/",
+    "title": "Meet 2026",
+    "start": "2026-11-18",
+    "end": "2026-11-19",
+    "venue": "Halle D",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Foyer D",
+      "organizer": "Veranstalter: OETHG – Österreichische Theatertechnische Gesellschaft",
+      "ubahn": "U2: Krieau"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://www.hochzeitsmesse.at/",
+    "url": "https://www.hochzeitsmesse.at/",
+    "title": "TRAU DICH Hochzeitsmesse 2027",
+    "start": "2027-01-09",
+    "end": "2027-01-10",
+    "venue": "Congress Center",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Congress Center",
+      "organizer": "Veranstalter: DiVent -Dirnbacher Event GmbH",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://oegt.voebu.at/",
+    "url": "https://oegt.voebu.at/",
+    "title": "15. ÖGT & VÖBU FAIR 2027",
+    "start": "2027-01-28",
+    "end": "2027-01-29",
+    "venue": "Congress Center",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Congress Center",
+      "organizer": "Veranstalter: Vereinigung Österreichischer Bohr- Brunnenbau- und Spezialtiefbauunternehmungen (VÖBU)",
+      "ubahn": "U2: Messe-Prater"
+    }
+  },
+  {
+    "source": "messecongress",
+    "source_id": "https://events.asta.org/event/rce2027/home/",
+    "url": "https://events.asta.org/event/rce2027/home/",
+    "title": "ASTA River Cruise Expo 2027",
+    "start": "2027-03-11",
+    "end": "2027-03-13",
+    "venue": "Halle D",
+    "district": 1020,
+    "city": "Wien",
+    "extra": {
+      "entrance": "Eingang: Foyer D",
+      "organizer": "Veranstalter: American Society of Travel Advisors",
+      "ubahn": "U2: Krieau"
+    }
+  }
+]

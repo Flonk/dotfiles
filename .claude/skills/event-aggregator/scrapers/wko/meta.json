@@ -8,21 +8,24 @@
     "business",
     "trade"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 1200,
+    "required_fill": {
+      "url": 1.0,
+      "venue": 0.7
+    },
+    "canary": "card-event"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "The /veranstaltungen landing page is JS-rendered and carries no listing; the real data is /veranstaltungen/kalender's list-card markup, fed by POST https://www.wko.at/api/event/filter (JSON body: count, offsetCurrent, aktuelle:true, place:'Österreich', ...). Response elements are pre-rendered HTML card fragments (same markup as kalender.html), no auth needed. Sorted roughly ascending by start date, so pagination stops once total is exhausted (whole dataset is only ~1865 nationwide upcoming events spanning to ~May 2027, well past the 180d horizon knob, so it's always fetched in full rather than horizon-limited - cheap, ~10 requests at count=200 each). Nationwide (Austria), not Vienna-only, matching the aurena precedent: district/city only populate for the ~11%/63% of events with an Austrian postal code in the card (foreign trade fairs and many in-person events show only a city name or nothing). category and price_min are never on the list card (only on each detail page's ld+json, not fetched to keep request volume sane) so both are always null.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 1800
   }
 }

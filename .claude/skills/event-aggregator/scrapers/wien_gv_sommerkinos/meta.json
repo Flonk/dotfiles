@@ -7,21 +7,25 @@
   "covers": [
     "open air index"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 7,
+    "required_fill": {
+      "category": 0.9,
+      "description": 0.8,
+      "address": 0.6
+    },
+    "canary": "class=\"section-content\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Static server-rendered HTML, one h2 block per festival with a free-text 'Termin(e):'/'Ort:' li list; no ld+json/API. Each festival's run is emitted as one continuous record (start..end), except Sunset Cinema (two disjoint venue+date pairs -> 2 records) and Architektur.Film.Sommer (comma-listed single dates -> one record per date, past ones dropped). price_min=0 only when an explicit 'Eintritt frei' li is present.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 11
   }
 }

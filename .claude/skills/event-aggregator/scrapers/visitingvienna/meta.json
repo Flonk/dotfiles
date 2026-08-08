@@ -7,21 +7,24 @@
   "covers": [
     "festival index"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 9,
+    "required_fill": {
+      "start": 1.0,
+      "description": 1.0
+    },
+    "canary": "Festival directory"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "WordPress article, no ld+json/API; one h3 per festival with an id anchor, each followed by a 'Next dates: ...' sentence in English prose (e.g. 'October 22nd to November 3rd, 2026'). Entries with 'Next dates: TBA' (next edition not yet announced) are skipped entirely rather than guessing a date. Page is updated ~monthly and sometimes still lists a range that has already ended by the time we scrape it; those are filtered out by comparing end (or start) to today. No venue/district/price info is given per-festival on this page, so those fields are always null. Only ~14 upcoming festivals total; site publishes as far as it knows (some 2027 dates already listed), no pagination.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 14
   }
 }
