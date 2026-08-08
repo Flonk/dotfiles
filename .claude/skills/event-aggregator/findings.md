@@ -353,11 +353,24 @@ build. Ordered by damage done.
 Congresses/conferences are ★★★ and STEM is not fully covered. Audited 2026-08-08 against
 the 10 institutional calendars actually scraped. Ordered by value.
 
-1. **ÖAW is the biggest single loss.** `oeaw.ac.at` 403s sitewide, already in
-   `registry.json` as blocked. The Academy runs **IQOQI** (quantum optics), the **Space
-   Research Institute** and acoustics research — none of it visible. Worth retrying with a
-   different fetch approach before writing it off; a 403 on a browser UA is not the same
-   as a robots ban.
+1. **ÖAW — partly solved 2026-08-08. The 403 is per-host, not per-organisation.**
+   `oeaw.ac.at` and `oeaw.ac.at/en/events` still 403 on a browser UA, but the institutes
+   sit on their own hosts and answer fine:
+
+   | host | status | note |
+   |---|---|---|
+   | `imba.oeaw.ac.at/events` | **200** | while `imba.oeaw.ac.at/` itself 403s — the block is path-scoped |
+   | `cemm.at` | 200 | |
+   | `gmi.oeaw.ac.at/news-events` | 200 | |
+   | `astro.univie.ac.at` | 200 | the astronomy gap, directly |
+   | `physik.univie.ac.at` | 200 | |
+   | `vetmeduni.ac.at/…/veranstaltungen` | 200, JSON-LD | |
+   | `ait.ac.at/news-events` | 200, JSON-LD | |
+
+   None of these disallow ClaudeBot. So the Academy's central calendar stays out of reach,
+   but the research that was invisible — quantum biology, plant genomics, astrophysics — is
+   reachable one institute at a time. The remaining true loss is IQOQI: `iqoqi-vienna.at`
+   did not resolve at all and needs a fresh URL.
 2. **`univie` does not deliver what its note claims.** `findings.md` said "all fields incl.
    philosophy, linguistics", but live output is financial econometrics, media law,
    Byzantine studies and a campus tour — 6 of 14 sampled records were the same
@@ -389,20 +402,42 @@ Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is
    swimming programmes. Also still undone: `findings.md` says to encode Strasser Workout's
    Mon/Thu schedule as a fixed rule since it is Instagram-only — that has not been written.
    Filter out perennial course offerings per the availability axis above.
-2. **VHS Wien — the largest reachable source not scraped.** Austria's biggest adult-ed
-   provider. Already scraped *by accident*: `planetarium-wien.at` redirects to
-   `vhs.at/de/e/planetarium`, and that one slice alone yields **532 records**. The rest —
-   ~20 Volkshochschulen, lectures, workshops — is untouched, same site and same parser
-   shape, already proven. **Must filter perennial courses** (language, fitness) or it will
-   flood everything.
-3. **Board games / gaming — zero records out of 11,289.** Total blind spot. No Spielefest
-   (named in the priority table under trade fairs), no board-game cafés, no LAN/e-sport,
-   no pen-and-paper. Flo: *"would be great to know."*
+   Probed 2026-08-08: `laufkalender.at` and `laufen.at` **do not resolve**, so there is no
+   running-race calendar to scrape. What answers 200: `parkrun.co.at`,
+   `vienna-marathon.com`, `wienersportstaetten.at`, and `wien.gv.at/freizeit/baeder/` for
+   public swimming — the last being exactly the perennial case to filter, not surface.
+2. ~~**VHS Wien — the largest reachable source not scraped.**~~ **Dead: vhs.at disallows
+   ClaudeBot.** Probed 2026-08-08 — `vhs.at/robots.txt` carries an explicit
+   `User-agent: ClaudeBot / Disallow: /` (alongside GPTBot, Google-Extended and
+   meta-externalagent). Not a 403 to work around; a stated refusal. Do not build it.
+
+   **This implicates a scraper we already run.** `planetarium-wien.at` redirects to
+   `vhs.at/de/e/planetarium`, and `scrapers/planetarium/scrape.py` fetches
+   `www.vhs.at/de/e/planetarium/veranstaltungen` directly — 532 records, the 7th largest
+   source. It was built before anyone checked the *destination's* robots.txt rather than
+   the redirecting domain's. **Flo's call**, so it has been left running and its data left
+   in place; the options are to drop the source (−532 records, and the Planetarium goes
+   dark) or to keep it knowingly. Flagging, not deciding.
+
+   General lesson: **check robots.txt on the host you actually fetch, after redirects.**
+   `vienna.at` disallows ClaudeBot too, and was on the candidate list.
+3. **Board games / gaming — zero records out of 11,289.** Total blind spot. No board-game
+   cafés, no LAN/e-sport, no pen-and-paper. Flo: *"would be great to know."*
+   Probed 2026-08-08: `spielefest.at`, `spielbar.wien` and `tabletop.at` **do not resolve**
+   — the obvious dedicated sources are gone. What does work is aggregators:
+   `eventbrite.at/d/austria--wien/board-games/` returns **40 Event JSON-LD objects**, and
+   `meetup.com/find/?location=at--Vienna&keywords=board games` returns 19. Meetup is a new
+   source shape for us; Eventbrite is just another category URL on a scraper we already run.
+   `viecc.com` (Vienna Comic Con) answers 200 and covers the con half.
 4. **Food & drink — ★★☆ with 31 hits and two sources**, one of which is a brewery. Flo:
    *"I dont mind a lot of food"* — so err toward more sources, not fewer. Missing: Whisky
    Festival (named as a want, no scraper), Heurigen calendar, tastings, food markets.
+   Probed: no dedicated Heurigen or whisky calendar resolved. Eventbrite's food-and-drink
+   category is the cheap first move.
 5. **Büchereien Wien** — 39 branches, readings and events, not scraped. The Hauptbücherei
-   surfaces only because `meinbezirk` wrote about its rooftop cinema.
+   surfaces only because `meinbezirk` wrote about its rooftop cinema. Probed: the host is
+   `buechereien.wien.gv.at` **without** `www.` (the `www.` form does not resolve), and
+   `/veranstaltungen` answers 200 with no JSON-LD — a plain HTML parse.
 6. **Grätzlfeste / Straßenfeste — single point of failure.** 78 hits, **67 from
    `wien_gv_at` alone**. This is the project's original trigger. If that one listing thins
    out, the thing this was built for goes quiet — and the canary will not catch it,
