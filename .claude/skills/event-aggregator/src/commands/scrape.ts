@@ -53,8 +53,18 @@ export async function main(o: ScrapeOpts): Promise<number> {
   let ok = 0;
   let fail = 0;
 
-  const work = (slug: string): Promise<Harvest> =>
-    o.seed ? Promise.resolve(fromSample(slug)) : scrape(slug, horizons.get(slug) ?? 180);
+  const work = async (slug: string): Promise<Harvest> => {
+    const h = o.seed ? fromSample(slug) : await scrape(slug, horizons.get(slug) ?? 180);
+    // Zero records is not the only way a redesign hurts. A parser that still
+    // matches three items out of two hundred would ingest those three and mark
+    // the rest gone - a silent amputation. The floor from meta.expect makes
+    // that a recorded failure instead, leaving the existing records alone.
+    const floor = db.readMeta(slug)?.expect?.min_records ?? 0;
+    if (floor && h.valid.length < floor) {
+      throw new Error(`only ${h.valid.length} valid records, expected >= ${floor}`);
+    }
+    return h;
+  };
 
   await pool(todo, Math.max(1, o.jobs), work, (slug, res, err) => {
     const stamp = db.now();
