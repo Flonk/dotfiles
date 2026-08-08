@@ -75,6 +75,7 @@ def main():
             "title": ea.text(e.get("name")),
             "start": start,
             "end": None,
+            "image": e.get("image") or None,
             "venue": VENUE,
             "district": DISTRICT,
             "city": "Wien",

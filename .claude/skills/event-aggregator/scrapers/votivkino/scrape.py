@@ -29,6 +29,7 @@ PRODUCTION_RE = re.compile(
     r'<i class="card-hover-production pad-def">(.*?)</i>', re.S)
 DURATION_RE = re.compile(
     r'<i class="card-hover-duration pad-def">(.*?)</i>', re.S)
+IMAGE_RE = re.compile(r'class="card-img"[^>]*style="background-image:url\(\'([^\']+)\'\)')
 SHOWTIME_LI_RE = re.compile(r'<li id="stuid_[a-z0-9]+".*?</li>', re.S)
 SHOWTIME_DATA_RE = re.compile(r'data-showtime="(\d{4}-\d{2}-\d{2})T')
 SHOWTIME_VENUE_RE = re.compile(r'showtime_kino_(votiv|defrance|bellaria)')
@@ -68,6 +69,8 @@ def parse_cards(page_html):
         duration_text = ea.text(durm.group(1)) if durm else None
         cm = CATEGORY_RE.search(head)
         category = ea.text(cm.group(1)) if cm else None
+        im = IMAGE_RE.search(head)
+        image = im.group(1) if im else None
 
         for lim in SHOWTIME_LI_RE.finditer(block):
             li = lim.group(0)
@@ -91,6 +94,7 @@ def parse_cards(page_html):
                 "production": production,
                 "duration_text": duration_text,
                 "category": category,
+                "image": image,
                 "venue_key": vm.group(1),
                 "date_iso": dsm.group(1),
                 "time_txt": tim.group(1),
@@ -122,6 +126,7 @@ def build_record(card):
         "title": card["title"],
         "start": start,
         "end": None,
+        "image": card.get("image"),
         "venue": f"{venue['name']} ({card['room']})" if card["room"] else venue["name"],
         "district": venue["district"],
         "city": "Wien",
@@ -176,7 +181,9 @@ def parse_vorschau(page_html):
         title = ea.text(tm.group(1))
         if not title:
             continue
-        out.append({"url": um.group(1), "title": title, "date": dm.group(1)})
+        im = IMAGE_RE.search(block)
+        out.append({"url": um.group(1), "title": title, "date": dm.group(1),
+                    "image": im.group(1) if im else None})
     return out
 
 
@@ -233,6 +240,7 @@ def main():
                 "title": v["title"],
                 "start": v["date"],
                 "end": None,
+                "image": v.get("image"),
                 "venue": None,
                 "district": None,
                 "city": "Wien",

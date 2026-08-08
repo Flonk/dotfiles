@@ -14,12 +14,13 @@
     "required_fill": {
       "title": 1.0,
       "category": 1.0,
-      "venue": 1.0
+      "venue": 1.0,
+      "image": 0.9
     },
     "canary": "Cinema/CurrentList"
   },
   "last_built": "2026-08-08",
-  "notes": "Cinema/CurrentList?dateSel=DD.MM.YYYY (XHR) requires Accept-Language header or it 500s; site's own flatpickr 'enable' array (same on every CurrentList response) lists every date with confirmed showtimes, ~2 months out; PreviewList gives date-only records (no time) for further-out titles not yet on the enable list, deduped by filmId; no pricing shown anywhere on site so price_min always null",
+  "notes": "Cinema/CurrentList?dateSel=DD.MM.YYYY (XHR) requires Accept-Language header or it 500s; site's own flatpickr 'enable' array (same on every CurrentList response) lists every date with confirmed showtimes, ~2 months out; PreviewList gives date-only records (no time) for further-out titles not yet on the enable list, deduped by filmId; no pricing shown anywhere on site so price_min always null. Server is slow/flaky under load (individual requests routinely hang or hard-timeout, occasional transient 'no route to host'), so CurrentList day-fetches and per-film detail fetches now go through a small ThreadPoolExecutor (6 workers, 30s timeout, 1 retry each) instead of one giant sequential loop -- the old sequential version blew well past check.py's 300s kill. Image is /FilmImg/<slug>.jpg scraped from each film's own detail page (poster, not a logo, 100% fill observed); runtime is the free-text line right after the detail page's <h1> ('Genre<br/>NN min, Country Year<br/>...'), stored as extra.origin_year_runtime (100% fill) for the pipeline's automatic end derivation. No direct end time published so end stays null. If this scraper starts timing out again, check whether the site simply got slower and bump FETCH_TIMEOUT / lower max_workers rather than assume the markup broke.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 71,

@@ -9,7 +9,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/Bitteres-Fest_Still-01_©-El-Deseo_Photo-by-Iglesias-Mas-1-1204x457.jpeg",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "filmcasino",
@@ -22,7 +26,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "with English subtitles",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2017/08/image-w1280-1204x457.jpg",
+    "extra": {
+      "duration_min": 79
+    }
   },
   {
     "source": "filmcasino",
@@ -34,7 +42,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/04/OBSESSION-Still-1204x457.jpg",
+    "extra": {
+      "duration_min": 108
+    }
   },
   {
     "source": "filmcasino",
@@ -46,7 +58,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/03/RONDALLAS-1©Alamode-Film-scaled-e1774533699220-1204x457.jpg",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "filmcasino",
@@ -58,7 +74,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -70,7 +90,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -82,7 +106,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/odyseseses-e1782312969385-1200x457.jpg",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "filmcasino",
@@ -94,7 +122,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/THE_PIANOTUNER1DustinHoffmannundLeoWoodallcBlackBear-1204x457.jpeg",
+    "extra": {
+      "duration_min": 109
+    }
   },
   {
     "source": "filmcasino",
@@ -106,7 +138,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/Bitteres-Fest_Still-01_©-El-Deseo_Photo-by-Iglesias-Mas-1-1204x457.jpeg",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "filmcasino",
@@ -119,7 +155,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "We All Scream for Ice Cream - Our Jarmusch Favorites",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/MV5BNDM0MjkwNTQyM15BMl5BanBnXkFtZTgwMjg0MjgxMTI@._V1_-1204x457.jpg",
+    "extra": {
+      "duration_min": 116
+    }
   },
   {
     "source": "filmcasino",
@@ -131,7 +171,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -143,7 +187,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -155,7 +203,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/odyseseses-e1782312969385-1200x457.jpg",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "filmcasino",
@@ -167,7 +219,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/THE_PIANOTUNER1DustinHoffmannundLeoWoodallcBlackBear-1204x457.jpeg",
+    "extra": {
+      "duration_min": 109
+    }
   },
   {
     "source": "filmcasino",
@@ -180,7 +236,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "Queer Frames",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/rotting-sun-3-1204x457.jpg",
+    "extra": {
+      "duration_min": 109
+    }
   },
   {
     "source": "filmcasino",
@@ -192,7 +252,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -204,7 +268,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/odyseseses-e1782312969385-1200x457.jpg",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "filmcasino",
@@ -216,7 +284,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/THE_PIANOTUNER1DustinHoffmannundLeoWoodallcBlackBear-1204x457.jpeg",
+    "extra": {
+      "duration_min": 109
+    }
   },
   {
     "source": "filmcasino",
@@ -228,7 +300,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/Bitteres-Fest_Still-01_©-El-Deseo_Photo-by-Iglesias-Mas-1-1204x457.jpeg",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "filmcasino",
@@ -240,7 +316,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -253,7 +333,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "Special Screenings",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2025/03/greg-1204x457.jpg",
+    "extra": {
+      "duration_min": 99
+    }
   },
   {
     "source": "filmcasino",
@@ -266,7 +350,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "Special Screenings",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2025/03/greg-1204x457.jpg",
+    "extra": {
+      "duration_min": 99
+    }
   },
   {
     "source": "filmcasino",
@@ -279,7 +367,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "kino&kuchen",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/03/A-BICYCLETTE-Un-film-de-Mathias-Mlekuz-Photo-1-©-Emmanuel-Guimier-1-scaled-e1772792609924-1204x457.jpg",
+    "extra": {
+      "duration_min": 89
+    }
   },
   {
     "source": "filmcasino",
@@ -292,7 +384,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "We All Scream for Ice Cream - Our Jarmusch Favorites",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/0x386E847BE5DA2DDE9B022FB288B6462C-1200x457.jpeg",
+    "extra": {
+      "duration_min": 116
+    }
   },
   {
     "source": "filmcasino",
@@ -304,7 +400,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -316,7 +416,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/odyseseses-e1782312969385-1200x457.jpg",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "filmcasino",
@@ -328,7 +432,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/THE_PIANOTUNER1DustinHoffmannundLeoWoodallcBlackBear-1204x457.jpeg",
+    "extra": {
+      "duration_min": 109
+    }
   },
   {
     "source": "filmcasino",
@@ -340,7 +448,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/Bitteres-Fest_Still-01_©-El-Deseo_Photo-by-Iglesias-Mas-1-1204x457.jpeg",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "filmcasino",
@@ -352,7 +464,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/04/1-SUNNY-DANCER-First-Look-Image-Photo-by-Colin-J-Smith-©-SUNNY-DANCER-Distribution-Limited-scaled-e1780596661463-1204x457.jpg",
+    "extra": {
+      "duration_min": 106
+    }
   },
   {
     "source": "filmcasino",
@@ -364,7 +480,11 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/The_Invite_Still_2_c-Tobis-Film-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -376,7 +496,11 @@
     "district": 1070,
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/odyseseses-e1782312969385-1200x457.jpg",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "filmcasino",
@@ -389,7 +513,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "Park Chan-wook",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/07/Durst_Filmbild3-e1784130897504-1204x457.jpg",
+    "extra": {
+      "duration_min": 134
+    }
   },
   {
     "source": "filmcasino",
@@ -402,7 +530,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "We All Scream for Ice Cream - Our Jarmusch Favorites",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2018/02/OLLA_01532-1-1204x457.jpg",
+    "extra": {
+      "duration_min": 123
+    }
   },
   {
     "source": "filmcasino",
@@ -415,7 +547,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "We All Scream for Ice Cream - Our Jarmusch Favorites",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/2491_1628281475_brokenflowers-1204x457.jpg",
+    "extra": {
+      "duration_min": 105
+    }
   },
   {
     "source": "filmcasino",
@@ -428,7 +564,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "Poolinale Nights",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/07/once1-2000-70c82c8ae9b2424ab52e2ac60219acf0-e1785487925541-1204x457.jpg",
+    "extra": {
+      "duration_min": 83
+    }
   },
   {
     "source": "filmcasino",
@@ -441,7 +581,11 @@
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
     "category": "with English subtitles",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2022/12/6WMeEmwXWKwrWBd6uDXjtWPigzM-1204x457.jpg",
+    "extra": {
+      "duration_min": 121
+    }
   },
   {
     "source": "filmcasino",
@@ -454,7 +598,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "with English subtitles",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/07/NTL-2026-The-Audience-Queen-Elizabeth-II-Helen-Mirren-2.-Photo-by-Johan-Persson-1-1204x457.jpg",
+    "extra": {
+      "duration_min": 176
+    }
   },
   {
     "source": "filmcasino",
@@ -467,7 +615,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "Special Screenings",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/arena-upscalel-2-1152x457.jpg",
+    "extra": {
+      "duration_min": 77
+    }
   },
   {
     "source": "filmcasino",
@@ -480,7 +632,11 @@
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
     "category": "We All Scream for Ice Cream - Our Jarmusch Favorites",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/jim-jarmusch-permanent-vacation-13-e1782226530615-1204x457.jpg",
+    "extra": {
+      "duration_min": 75
+    }
   },
   {
     "source": "filmcasino",
@@ -493,7 +649,11 @@
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
     "category": "Late Night Thrills",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/05/Terminator_300dpi_01-scaled-e1779881001659-1204x457.jpg",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "filmcasino",
@@ -506,7 +666,11 @@
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
     "category": "Special Screenings",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/2-louis-polygluck-1204x457.jpg",
+    "extra": {
+      "duration_min": 106
+    }
   },
   {
     "source": "filmcasino",
@@ -519,7 +683,11 @@
     "city": "Wien",
     "address": "Spittelberggasse 3, 1070 Wien",
     "category": "Special Screenings",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/4-sarah-weint-im-auto-1204x457.jpg",
+    "extra": {
+      "duration_min": 81
+    }
   },
   {
     "source": "filmcasino",
@@ -531,6 +699,10 @@
     "district": 1050,
     "city": "Wien",
     "address": "Margaretenstraße 78, 1050 Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.filmcasino.at/wp-content/uploads/2026/06/Teenage-Sex-and-Death-at-Camp-Miasma_Still_3_©MUBI-1204x457.jpg",
+    "extra": {
+      "duration_min": 106
+    }
   }
 ]

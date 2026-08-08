@@ -1,6 +1,7 @@
 import datetime
 import re
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 import ea
 
@@ -24,6 +25,23 @@ SHOW_RE = re.compile(r'data-show_id="(\d+)"[^>]*aria-label="Tickets ([^"]+)"')
 
 LABEL_RE = re.compile(
     r'^(.+?) ([A-ZÄÖÜ][a-zäöüß]+) (\d{1,2})\.(\d{1,2})\. (\d{2}):(\d{2})$')
+
+DETAIL_IMAGE_RE = re.compile(
+    r'<img[^>]*src="([^"]+)"[^>]*class="[^"]*attachment-large_crop')
+DETAIL_RUNTIME_RE = re.compile(r'<h1>.*?</h1>.*?\|\s*(\d+)\s*min\b', re.S)
+
+
+def fetch_detail(url):
+    try:
+        html = ea.fetch(url, timeout=60)
+    except Exception as e:
+        sys.stderr.write(f"detail fetch failed {url}: {e}\n")
+        return None, None
+    im = DETAIL_IMAGE_RE.search(html)
+    image = im.group(1) if im else None
+    rm = DETAIL_RUNTIME_RE.search(html)
+    duration_min = int(rm.group(1)) if rm else None
+    return image, duration_min
 
 
 def resolve_year(month, day):
@@ -91,6 +109,18 @@ def main():
             continue
         parse_page(html, records, seen)
     records = [r for r in records if r["start"][:10] <= cutoff.isoformat()]
+
+    urls = sorted({r["url"] for r in records})
+    details = {}
+    with ThreadPoolExecutor(max_workers=10) as ex:
+        for url, result in zip(urls, ex.map(fetch_detail, urls)):
+            details[url] = result
+    for r in records:
+        image, duration_min = details.get(r["url"], (None, None))
+        r["image"] = image
+        if duration_min:
+            r["extra"] = {"duration_min": duration_min}
+
     ea.emit(records)
 
 

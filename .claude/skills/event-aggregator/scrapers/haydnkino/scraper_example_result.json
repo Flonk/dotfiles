@@ -10,7 +10,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -23,7 +27,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -36,7 +44,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -49,7 +61,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -62,7 +78,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -75,7 +95,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -88,7 +112,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -101,7 +129,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -114,7 +146,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -127,7 +163,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -140,7 +180,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -153,7 +197,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -166,7 +214,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -179,7 +231,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -192,7 +248,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -205,7 +265,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -218,7 +282,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -231,7 +299,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -244,7 +316,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -257,7 +333,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -270,7 +350,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -283,7 +367,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -296,7 +384,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -309,7 +401,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -322,7 +418,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -335,7 +435,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -348,7 +452,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -361,7 +469,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -374,7 +486,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -387,7 +503,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -400,7 +520,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -413,7 +537,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -426,7 +554,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -439,7 +571,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -452,7 +588,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -465,7 +605,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -478,7 +622,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -491,7 +639,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -504,7 +656,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -517,7 +673,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -530,7 +690,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -543,7 +707,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -556,7 +724,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -569,7 +741,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -582,7 +758,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -595,7 +775,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -608,7 +792,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -621,7 +809,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -634,7 +826,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -647,7 +843,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -660,7 +860,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -673,7 +877,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -686,7 +894,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -699,7 +911,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -712,7 +928,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -725,7 +945,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -738,7 +962,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -751,7 +979,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -764,7 +996,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -777,7 +1013,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -790,7 +1030,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -803,7 +1047,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -816,7 +1064,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -829,7 +1081,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -842,7 +1098,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -855,7 +1115,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -868,7 +1132,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -881,7 +1149,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -894,7 +1166,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -907,7 +1183,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -920,7 +1200,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -933,7 +1217,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -946,7 +1234,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -959,7 +1251,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -972,7 +1268,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -985,7 +1285,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -998,7 +1302,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1011,7 +1319,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1024,7 +1336,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1037,7 +1353,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1050,7 +1370,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1063,7 +1387,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1076,7 +1404,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1089,7 +1421,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1102,7 +1438,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1115,7 +1455,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1128,7 +1472,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1141,7 +1489,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1154,7 +1506,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1167,7 +1523,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1180,7 +1540,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1193,7 +1557,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1206,7 +1574,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1219,7 +1591,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1232,7 +1608,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1245,7 +1625,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1258,7 +1642,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1271,7 +1659,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1284,7 +1676,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1297,7 +1693,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1310,7 +1710,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1323,7 +1727,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1336,7 +1744,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1349,7 +1761,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1362,7 +1778,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1375,7 +1795,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1388,7 +1812,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1401,7 +1829,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1414,7 +1846,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1427,7 +1863,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1440,7 +1880,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1453,7 +1897,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1466,7 +1914,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1479,7 +1931,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1492,7 +1948,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1505,7 +1965,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1518,7 +1982,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1531,7 +1999,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1544,7 +2016,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1557,7 +2033,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1570,7 +2050,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1583,7 +2067,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1596,7 +2084,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1609,7 +2101,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1622,7 +2118,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1635,7 +2135,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1648,7 +2152,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1661,7 +2169,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1674,7 +2186,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1687,7 +2203,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1700,7 +2220,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1713,7 +2237,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1726,7 +2254,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1739,7 +2271,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1752,7 +2288,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1765,7 +2305,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1778,7 +2322,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1791,7 +2339,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1804,7 +2356,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1817,7 +2373,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1830,7 +2390,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1843,7 +2407,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1856,7 +2424,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1869,7 +2441,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -1882,7 +2458,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1895,7 +2475,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1908,7 +2492,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1921,7 +2509,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1934,7 +2526,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1947,7 +2543,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -1960,7 +2560,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1973,7 +2577,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1986,7 +2594,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -1999,7 +2611,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2012,7 +2628,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2025,7 +2645,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2038,7 +2662,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2051,7 +2679,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2064,7 +2696,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2077,7 +2713,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2090,7 +2730,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2103,7 +2747,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2116,7 +2764,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2129,7 +2781,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2142,7 +2798,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2155,7 +2815,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2168,7 +2832,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2181,7 +2849,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2194,7 +2866,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2207,7 +2883,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2220,7 +2900,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2233,7 +2917,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2246,7 +2934,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2259,7 +2951,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2272,7 +2968,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2285,7 +2985,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2298,7 +3002,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2311,7 +3019,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2324,7 +3036,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2337,7 +3053,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2350,7 +3070,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2363,7 +3087,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2376,7 +3104,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/odyssey.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 172 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2389,7 +3121,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2402,7 +3138,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/toystory5.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 102 min, USA/2026 ab 0 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2415,7 +3155,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/minions3.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 90 min, USA 2026 ab 8 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2428,7 +3172,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2441,7 +3189,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2454,7 +3206,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/brand.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 145 min, USA 2026 ab 12 Jahren Prädikat: sehenswert"
+    }
   },
   {
     "source": "haydnkino",
@@ -2467,7 +3223,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2480,7 +3240,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/invite.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 107 min, USA 2026 ab 14 Jahren Prädikat: wertvoll"
+    }
   },
   {
     "source": "haydnkino",
@@ -2493,7 +3257,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2506,7 +3274,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/obsession.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 108 min, USA/2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2519,7 +3291,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/backext.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 127 min, USA 2026 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2532,7 +3308,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oldboy.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 120 min, KOR 2003 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2545,7 +3325,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/oak.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 100 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2558,7 +3342,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/jennifersbody.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 102 min, USA 2009 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2571,7 +3359,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Theatre",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/audience.jpg",
+    "extra": {
+      "origin_year_runtime": "Theatre 180 min, GB 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2584,7 +3376,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/drivemycar.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 179 min, JP 2021 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2597,7 +3393,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/encantosing.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 110 min, USA 2021 ab 6 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2610,7 +3410,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Action",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/dogstars.jpg",
+    "extra": {
+      "origin_year_runtime": "Action 118 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2623,7 +3427,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/onenight.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy 102 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2636,7 +3444,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/seven.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 127 min, USA 1995 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2649,7 +3461,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Drama",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/christy.jpg",
+    "extra": {
+      "origin_year_runtime": "Drama 135 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2662,7 +3478,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/shoplifters.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 121 min, JP 2021"
+    }
   },
   {
     "source": "haydnkino",
@@ -2675,7 +3495,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/lotr1.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 228 min, USA 2001 ab 12 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2688,7 +3512,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/porco.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 94 min, JP 1992 ab 6 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2701,7 +3529,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Fantasy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/pm2.jpg",
+    "extra": {
+      "origin_year_runtime": "Fantasy, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2714,7 +3546,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/perfectdays.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 124 min, JP 2023 ab 16 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2740,7 +3576,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Horror",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/resident.jpg",
+    "extra": {
+      "origin_year_runtime": "Horror 90 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2753,7 +3593,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Drama",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/pressure.jpg",
+    "extra": {
+      "origin_year_runtime": "Drama 100 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2766,7 +3610,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/lotr3.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 263 min, USA 2003 ab 10 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2779,7 +3627,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/endgame.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 189 min, USA 2019 ab 12 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2792,7 +3644,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Comedy",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/digger.jpg",
+    "extra": {
+      "origin_year_runtime": "Comedy, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2818,7 +3674,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/shaunmossy.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 91 min, UK 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2831,7 +3691,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/howl.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 119 min, JP 2004 ab 10 Jahren"
+    }
   },
   {
     "source": "haydnkino",
@@ -2844,7 +3708,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/night.jpg",
+    "extra": {
+      "origin_year_runtime": "Event 96 min, USA 1968"
+    }
   },
   {
     "source": "haydnkino",
@@ -2857,7 +3725,11 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Animation",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/forgotten.jpg",
+    "extra": {
+      "origin_year_runtime": "Animation 98 min, USA 2026"
+    }
   },
   {
     "source": "haydnkino",
@@ -2870,32 +3742,10 @@
     "city": "Wien",
     "address": "Mariahilferstraße 57, 1060 Wien",
     "category": "Drama",
-    "status": "scheduled"
-  },
-  {
-    "source": "haydnkino",
-    "source_id": "3251-2026-10-22",
-    "url": "https://www.haydnkino.at/Cinema/Movie?filmId=3251",
-    "title": "FALLEN ANGELS BY NOËL COWARD",
-    "start": "2026-10-22",
-    "venue": "Haydn Kino",
-    "district": 1060,
-    "city": "Wien",
-    "address": "Mariahilferstraße 57, 1060 Wien",
-    "category": "Theatre",
-    "status": "scheduled"
-  },
-  {
-    "source": "haydnkino",
-    "source_id": "3181-2026-11-02",
-    "url": "https://www.haydnkino.at/Cinema/Movie?filmId=3181",
-    "title": "THE WIND RISES (2013) OmdU",
-    "start": "2026-11-02",
-    "venue": "Haydn Kino",
-    "district": 1060,
-    "city": "Wien",
-    "address": "Mariahilferstraße 57, 1060 Wien",
-    "category": "Event",
-    "status": "scheduled"
+    "status": "scheduled",
+    "image": "https://www.haydnkino.at/FilmImg/sense.jpg",
+    "extra": {
+      "origin_year_runtime": "Drama 131 min, UK 2026"
+    }
   }
 ]

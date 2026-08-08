@@ -15,12 +15,13 @@
       "title": 1.0,
       "venue": 1.0,
       "district": 1.0,
-      "description": 0.9
+      "description": 0.9,
+      "image": 0.9
     },
     "canary": "film-column"
   },
   "last_built": "2026-08-08",
-  "notes": "single-screen arthouse cinema; /programm/dat/YYYYMMDD/ returns a rolling 3-day window (columns for date, date+1, date+2, empty ones render as bare <div>), tiled by stepping 3 days; year not printed in markup so start dates are computed from the requested offset, not parsed text; price never published anywhere (incl. JS ticket booking app) so price_min/price_text always null; category not published either; 'Geschlossene Veranstaltung' (private closed screenings) skipped as non-public; site was in summer break (Sommerpause 23.7-19.8) at scrape time, program otherwise published out to ~90 days (into November)",
+  "notes": "single-screen arthouse cinema; /programm/dat/YYYYMMDD/ returns a rolling 3-day window (columns for date, date+1, date+2, empty ones render as bare <div>), tiled by stepping 3 days; year not printed in markup so start dates are computed from the requested offset, not parsed text; price never published anywhere (incl. JS ticket booking app) so price_min/price_text always null; category not published either; 'Geschlossene Veranstaltung' (private closed screenings) skipped as non-public; site was in summer break (Sommerpause 23.7-19.8) at scrape time, program otherwise published out to ~90 days (into November); image and runtime fetched from each film's own detail page: image is the first <img class=\"attachment-details...\"> on the page (gallery still, not always tagged wp-post-image, 100% fill observed via ThreadPoolExecutor over unique urls); runtime was already captured pre-existing as extra.origin_year_runtime (free text like 'Österreich, Deutschland, Israel 2026 / 96 min', ~97% fill) for the pipeline's automatic end derivation; no direct end time published so end stays null",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 180,

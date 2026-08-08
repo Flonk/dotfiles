@@ -1,6 +1,7 @@
 import datetime
 import re
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 import ea
 
@@ -19,6 +20,19 @@ PARA_RE = re.compile(r'<p>(.*?)</p>', re.S)
 REGIE_RE = re.compile(r'<span class="regie">(.*?)</span>', re.S)
 SMALL_RE = re.compile(r'<div class="film-info-box content small">([^<]*)</div>')
 SKIP_TITLES = {"geschlossene veranstaltung"}
+
+DETAIL_IMAGE_RE = re.compile(
+    r'<img[^>]*src="([^"]+)"[^>]*class="[^"]*attachment-details')
+
+
+def fetch_detail_image(url):
+    try:
+        html = ea.fetch(url, timeout=60)
+    except Exception as e:
+        sys.stderr.write(f"detail fetch failed {url}: {e}\n")
+        return None
+    im = DETAIL_IMAGE_RE.search(html)
+    return im.group(1) if im else None
 
 
 def parse_day_page(html, day):
@@ -102,6 +116,15 @@ def main():
             seen.add(rec["source_id"])
             records.append(rec)
         day += datetime.timedelta(days=3)
+
+    urls = sorted({r["url"] for r in records})
+    images = {}
+    with ThreadPoolExecutor(max_workers=10) as ex:
+        for url, image in zip(urls, ex.map(fetch_detail_image, urls)):
+            images[url] = image
+    for r in records:
+        r["image"] = images.get(r["url"])
+
     ea.emit(records)
 
 

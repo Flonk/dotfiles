@@ -19,3 +19,13 @@
 - Single venue/address, hardcoded; "Saal <letter>" appended to venue per slot.
 - Re-derive: view-source the Overview page network calls, or just re-run
   curl against CurrentList/PreviewList with an Accept-Language header.
+- image: each `/Cinema/Movie?filmId=N` detail page has `<img src="/FilmImg/<slug>.jpg">`
+  in the poster block; joined onto BASE. runtime/origin text lives right after
+  the detail page's `<h1>` as `Genre<br/>NN min, Country Year<br/>...` — kept
+  verbatim as `extra.origin_year_runtime`. Both fetched via a ThreadPoolExecutor
+  over the unique film urls found across CurrentList+PreviewList.
+- The server itself is slow and occasionally unreliable under concurrent load
+  (hangs, hard timeouts, transient DNS/routing errors) — day-list and detail
+  fetches use 6 workers / 30s timeout / 1 retry each. A naive sequential
+  60s-timeout loop over every enabled date routinely blew past check.py's
+  300s kill; don't revert to sequential fetching.

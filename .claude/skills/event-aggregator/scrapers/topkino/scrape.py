@@ -20,6 +20,9 @@ NAV_SLUGS = {
 TITLE_RE = re.compile(r'<h1 class="detail-titel">(.*?)</h1>', re.S)
 SUBINFO_RE = re.compile(r'<div class="subinfo">\s*(.*?)</div>', re.S)
 KURZ_RE = re.compile(r'<div class="kurzbeschreibung">(.*?)</div>\s*<div class="beschreibung">', re.S)
+IMAGE_RE = re.compile(
+    r'<div class="img-responsive"><img\s+alt="" src="([^"]+)"></div>\s*'
+    r'<div class="kurzbeschreibung">', re.S)
 TERMIN_RE = re.compile(
     r'<div class="termin">\s*<div class="datum">([^<]*)</div>\s*'
     r'<div class="raum">([^<]*)</div>.*?'
@@ -73,6 +76,10 @@ def parse_detail(href):
     elif subinfo:
         description = subinfo
 
+    im = IMAGE_RE.search(page)
+    image = BASE + im.group(1) if im else None
+    extra = {"origin_year_runtime": subinfo} if subinfo else None
+
     records = []
     now = datetime.datetime.now()
     for datum, raum, termin_id in TERMIN_RE.findall(page):
@@ -95,6 +102,7 @@ def parse_detail(href):
             "title": title,
             "start": start,
             "end": None,
+            "image": image,
             "venue": f"{VENUE} ({raum})" if raum else VENUE,
             "district": DISTRICT,
             "city": "Wien",
@@ -104,6 +112,7 @@ def parse_detail(href):
             "category": None,
             "description": description,
             "status": "scheduled",
+            "extra": extra,
         })
 
     if not records:
@@ -122,6 +131,7 @@ def parse_detail(href):
                     "title": title,
                     "start": cand.isoformat(),
                     "end": None,
+                    "image": image,
                     "venue": VENUE,
                     "district": DISTRICT,
                     "city": "Wien",
@@ -131,6 +141,7 @@ def parse_detail(href):
                     "category": None,
                     "description": description,
                     "status": "scheduled",
+                    "extra": extra,
                 })
     return records
 

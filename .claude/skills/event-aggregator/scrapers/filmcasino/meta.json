@@ -15,12 +15,13 @@
     "required_fill": {
       "title": 1.0,
       "venue": 1.0,
-      "district": 1.0
+      "district": 1.0,
+      "image": 0.9
     },
     "canary": "with English subtitles"
   },
   "last_built": "2026-08-08",
-  "notes": "server-rendered day tables at /programm/?show=this (next 7 days) and /programm/?show=next (following week, ~6 days currently); showtimes only, no year in markup (inferred from today's date); price never published so price_min always null; category is the site's own 'special' series label (e.g. Queer Frames, Park Chan-wook) when present, else null",
+  "notes": "server-rendered day tables at /programm/?show=this (next 7 days) and /programm/?show=next (following week, ~6 days currently); showtimes only, no year in markup (inferred from today's date); price never published so price_min always null; category is the site's own 'special' series label (e.g. Queer Frames, Park Chan-wook) when present, else null; image and runtime now fetched from each film's own detail page (one ThreadPoolExecutor pass over the ~25 unique urls, 10 workers): image is the first <img class=\"...attachment-large_crop...wp-post-image\"> (the article header still, 100% fill observed), runtime is the '| NN min |' token right after the <h1> title line, stored as extra.duration_min (100% fill) for the pipeline's automatic end derivation; no direct end time is published so end stays null",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 14,
