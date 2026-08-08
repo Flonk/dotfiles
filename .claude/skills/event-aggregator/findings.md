@@ -333,7 +333,30 @@ build. Ordered by damage done.
    rather than the scraper guessing. Two residues: `gartenbaukino` publishes no running
    time anywhere, and `haydnkino` is slow and flaky under load, so its day-list fetches had
    to become concurrent with per-fetch timeouts and one retry — noted in its meta so nobody
-   "fixes" it back to sequential. The other nine cinemas are in flight.
+   "fixes" it back to sequential.
+
+   **Batch 2 done too** — admiralkino, bellariakino, breitenseer, burgkino, cinecenter,
+   filmarchiv, filmmuseum, nonstopkino, schikaneder: **358/360 images**, another 314
+   derived end times. So all 17 cinemas now carry a poster or still: **872 image URLs**.
+
+   **Spot-checked rather than trusted**: 30 sampled URLs across all 17 cinemas, and 28
+   returned a real `image/*` response. The two exceptions were both instructive:
+
+   - `admiralkino` emits `http://` in its own `og:image`, and port 80 is `EHOSTUNREACH`
+     while the identical `https://` URL returns the image. Rewritten in the scraper. (The
+     site went fully down mid-check, so the fixed sample has not been regenerated yet —
+     check.py correctly refuses to overwrite a sample on failure, so nothing was lost.)
+   - 59 of the 872 URLs carry raw UTF-8 in the path (`..._©-El-Deseo.jpg`), 49 of them
+     `votivkino`. Browsers and node's `fetch` both handle that fine — measured, not
+     assumed — so it is hygiene, not a live breakage: Python's urllib raises on it and
+     `format: uri` wants it encoded. Normalised centrally in `src/url.ts` so future
+     sources get it for free. `encodeURI` is the wrong tool there; it escapes `%` too and
+     double-encodes anything already correct.
+
+   Two sources publish no runtime at all (`gartenbaukino`, `filmmuseum` — the latter's
+   records are series spanning many films), and one admiralkino photo exhibition publishes
+   a literal "1524 Minuten". All three are left alone: the pipeline's 1-600 minute bound
+   stops the last one becoming an end time.
 
    Original notes: schema field added (optional, absolute URL).
    Quality bar is deliberately low — poster, production still, anything representative;
