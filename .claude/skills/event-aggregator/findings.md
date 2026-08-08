@@ -325,7 +325,17 @@ build. Ordered by damage done.
    the main gig listing in town is date-only, so ~25 real gigs a day can't be placed in a
    calendar. Highest priority: a missing `end` is cosmetic, a missing `start` makes the
    record unusable.
-2. **Cinema scrapers should capture `image`.** Schema field added (optional, absolute URL).
+2. **Cinema scrapers should capture `image`.** **Batch 1 done 2026-08-08** — gartenbaukino,
+   votivkino, filmcasino, stadtkinowien, topkino, haydnkino all at **100% image fill**, by
+   four different routes: JSON-LD `image`, a card's `background-image:url(...)`, the film's
+   own detail page fetched concurrently, and a slug-derived path. Runtimes came with it, so
+   those six now yield **410 derived end times** — the pipeline builds `end` from `extra`
+   rather than the scraper guessing. Two residues: `gartenbaukino` publishes no running
+   time anywhere, and `haydnkino` is slow and flaky under load, so its day-list fetches had
+   to become concurrent with per-fetch timeouts and one retry — noted in its meta so nobody
+   "fixes" it back to sequential. The other nine cinemas are in flight.
+
+   Original notes: schema field added (optional, absolute URL).
    Quality bar is deliberately low — poster, production still, anything representative;
    only a site logo or placeholder is wrong. Availability varies per site: `gartenbaukino`
    has JSON-LD `image`, `votivkino` has `og:image`, `filmcasino`/`stadtkinowien` have plain
