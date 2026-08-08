@@ -414,11 +414,23 @@ build. Ordered by damage done.
    gaps: `srs` 1470 (fixed-duration tours, easy), `wko` 1451 (low priority, nationwide),
    `wien_ticket` 650, `haydnkino` 195, `porgy` 185, `wien_gv_at` 169 — top 6 covers 4120.
    275 are already derived at merge time from runtimes the scrapers captured in `extra`.
-4. **Geography on `volume_at` and `wko`.** Both are Austria-wide, not Vienna. `volume_at`
-   has 0 district and `city='Wien'` on 920 of 1304 (correct — null when out of town, so
-   usable as a filter). `wko` fills district on 11% of 1800. Without this a Vienna filter
-   can't tell "not Vienna" from "unknown", which already produced a false negative on
-   Diknu Schneeberger.
+4. ~~**Geography on `volume_at` and `wko`.**~~ **Done 2026-08-08.** `volume_at` covered
+   above. For `wko`: `city` 67%, `address` 0% → 11%, and the important part is that the
+   1800 records now decompose honestly into **199 identifiably Vienna, 1013 identifiably
+   elsewhere** (Graz, Zagreb, Barcelona — verbatim), **444 online** (the site says
+   "Webinar"/"MS Teams", which is not a place and is correctly left null), and **144
+   genuinely unknown** foreign trade fairs whose only location is unparseable prose like
+   "JIExpo Kemayoran, Jakarta".
+
+   So district staying at 11% was never a fill failure — it is the truth. Only 199 of
+   these events are in Vienna. That is the number the filter needed.
+
+   Two judgement calls worth keeping: the agent **declined** to infer `city` from the
+   detail page's free-text venue name, because that field mixes institution names, city
+   names and full addresses indistinguishably and would have stuffed an org name into
+   `city`. And it scoped detail fetches to only the ~450 ambiguous records after
+   discovering wko.at rate-limits above ~10-15 req/s — a naive fetch-all design ran
+   230-380s and was impolite; the scoped one runs in **32s**.
 5. ~~**Cadence sanity-check on thin samples.**~~ **Fixed 2026-08-08.** `admiralkino` (7
    records) and `nonstopkino` (8) had been measured onto `monthly` — wrong for a cinema,
    and it would go stale between runs. Two causes, both now addressed in `cadence.py`:
@@ -439,8 +451,16 @@ build. Ordered by damage done.
    daily where they belong (`wien_gv_at`, `eventbrite`, `wien_ticket`, `meinbezirk`,
    `ticketmaster`), music venues and academic calendars to weekly. `cadence.py --dry` now
    reports what would change without writing.
-6. **`kindermuseum` silently skips hub pages** when ZOOM's flaky server hangs, so yield
-   varies 5–6 per run and `min_records` can't distinguish "slow" from "broken".
+6. ~~**`kindermuseum` silently skips hub pages**~~ **Fixed 2026-08-08.** A hub page that
+   still fails after three tries now **raises** instead of returning nothing, so scrape.py
+   exits non-zero and the run is recorded as a failure. The point is the asymmetry: a run
+   that fails leaves the previous records alone, whereas a run that quietly returns
+   five-sixths of the data marks the missing sixth `gone`. Failing loudly is the safe
+   direction, and `min_records` never had to tell "slow" from "broken" in the first place.
+
+   The same reasoning is now enforced pipeline-wide — see the record floor in
+   `src/commands/scrape.ts`, which fails a scrape that comes back below
+   `meta.expect.min_records` rather than ingesting a partial harvest.
 
 ### Missing STEM coverage — new sources needed
 
@@ -471,13 +491,24 @@ the 10 institutional calendars actually scraped. Ordered by value.
    Byzantinistik congress. The central TYPO3 calendar does **not** aggregate faculty
    colloquia; physics/chemistry/astronomy talks live on per-faculty pages. Either scrape
    those separately or stop claiming the coverage.
-3. **No source at all, not even a blocked entry:**
-   - **Chemistry** — no dedicated calendar anywhere in the registry
-   - **Astronomy / astrophysics research** — the `planetarium` scraper's 532 records are
-     public shows, not colloquia; Univie's Institut für Astrophysik is unscraped
-   - **Vetmeduni Wien** — veterinary medicine, absent from the registry entirely
-   - **AIT** — Austria's largest non-university research institute
-   - **CeMM, IMBA, GMI** — the other Vienna BioCenter institutes; only IMP is scraped
+3. **No source at all** — mostly closed 2026-08-08:
+   - **Vetmeduni Wien** — **built**, 18 records, publishes ~4 months out
+   - **AIT** — **built**, 3 records. The listing page has no server-rendered items and no
+     Event JSON-LD despite what the tier note claimed; the data is behind the jQuery
+     "load more" AJAX endpoint
+   - **Univie Fakultät für Physik** — **built**, 2 records. Trap worth remembering: the
+     date chip on the news list is the *article's publish date*, not the event date — the
+     real start, end and venue live in the free-text teaser
+   - **Univie Institut für Astrophysik** — **dead for now.** Both the colloquium and
+     institute-seminar pages are accordions of *past* talks; newest is 17.07.2026. The
+     institute is between semesters and has not posted WS26/27. Recorded, not faked, with
+     re-derivation notes (institute-seminar dates are explicit `DD.MM.YYYY`; kolloquium
+     dates are "Weekday Month Day" with no year and need position-based inference)
+   - **CeMM, IMBA, GMI** — the other Vienna BioCenter institutes, in flight
+   - **Chemistry** — still nothing
+
+   Yields here are small by nature — an institute running one colloquium a week *should*
+   return a handful of records. The agents were told not to pad, and didn't.
 4. **MedUni Wien** events page lists nothing, so clinical medicine outside MAW's
    commercial congresses is uncovered. Already noted as blocked; recheck periodically.
 
@@ -497,9 +528,15 @@ Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is
    Mon/Thu schedule as a fixed rule since it is Instagram-only — that has not been written.
    Filter out perennial course offerings per the availability axis above.
    Probed 2026-08-08: `laufkalender.at` and `laufen.at` **do not resolve**, so there is no
-   running-race calendar to scrape. What answers 200: `parkrun.co.at`,
-   `vienna-marathon.com`, `wienersportstaetten.at`, and `wien.gv.at/freizeit/baeder/` for
+   running-race calendar to scrape. `parkrun.co.at` answers 200 but its **robots.txt says
+   in words: "We request that automated scraping does not take place"**, and disallows
+   `/results/` and `/*/futureroster` — precisely where the dates are. parkrun.com/scraping
+   repeats it. Not built, same treatment as vhs.at. What is left: `vienna-marathon.com`
+   (already scraped), `wienersportstaetten.at`, and `wien.gv.at/freizeit/baeder/` for
    public swimming — the last being exactly the perennial case to filter, not surface.
+
+   **So this category is still the biggest genuinely uncovered want**, and it is not for
+   lack of trying: the two obvious calendars are dead domains and the third refuses us.
 2. ~~**VHS Wien — the largest reachable source not scraped.**~~ **Dead: vhs.at disallows
    ClaudeBot.** Probed 2026-08-08 — `vhs.at/robots.txt` carries an explicit
    `User-agent: ClaudeBot / Disallow: /` (alongside GPTBot, Google-Extended and
@@ -528,10 +565,13 @@ Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is
    Festival (named as a want, no scraper), Heurigen calendar, tastings, food markets.
    Probed: no dedicated Heurigen or whisky calendar resolved. Eventbrite's food-and-drink
    category is the cheap first move.
-5. **Büchereien Wien** — 39 branches, readings and events, not scraped. The Hauptbücherei
-   surfaces only because `meinbezirk` wrote about its rooftop cinema. Probed: the host is
-   `buechereien.wien.gv.at` **without** `www.` (the `www.` form does not resolve), and
-   `/veranstaltungen` answers 200 with no JSON-LD — a plain HTML parse.
+5. ~~**Büchereien Wien**~~ **Built 2026-08-08 — 253 records, the biggest single win of the
+   night after volume_at.** The page itself is a DNN shell with no data; the real feed is
+   a JSON file at `Portals/0/Files/stb_va/stb_va.json` behind a DataTables widget.
+   Publishes ~6 months ahead. 100% start times, 92% address and district, enriched by
+   fetching the ~22 branch pages. `price_min` is only 3% — set solely where the free text
+   literally says *kostenlos*/*gratis*, null otherwise, rather than assuming a library
+   event is free.
 6. **Grätzlfeste / Straßenfeste — single point of failure.** 78 hits, **67 from
    `wien_gv_at` alone**. This is the project's original trigger. If that one listing thins
    out, the thing this was built for goes quiet — and the canary will not catch it,
