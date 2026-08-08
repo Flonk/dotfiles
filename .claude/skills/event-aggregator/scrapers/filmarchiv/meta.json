@@ -16,12 +16,13 @@
       "category": 0.9,
       "description": 0.9,
       "venue": 0.9,
-      "district": 0.9
+      "district": 0.9,
+      "image": 0.9
     },
     "canary": "ce-screening_widget"
   },
   "last_built": "2026-08-08",
-  "notes": "Phoenix LiveView site, but SSR HTML works fine over plain curl. Day-by-day widget at /?day=YYYY-MM-DD lists that day's screenings (each links to /de/kino/film/sc_<id>, a 'programme item' page that itself lists ALL of that item's future showtimes with per-showtime venue + ticket-checkout uuid used as source_id); scraper walks ~60 days to discover sc_ ids then parses each item page once. Site currently only publishes ~3 weeks ahead (Aug 8 build reached 2026-08-30) despite scanning further; price never shown anywhere server-side (ticket widget is JS/iframe) so price_min/price_text always null; category is the 'Im Rahmen von' series label (e.g. 'Kinostart: Kota', 'Kino wie noch nie: Timothée Chalamet').",
+  "notes": "Phoenix LiveView site, but SSR HTML works fine over plain curl. Day-by-day widget at /?day=YYYY-MM-DD lists that day's screenings (each links to /de/kino/film/sc_<id>, a 'programme item' page that itself lists ALL of that item's future showtimes with per-showtime venue + ticket-checkout uuid used as source_id); scraper walks ~60 days to discover sc_ ids then parses each item page once. Site currently only publishes ~3 weeks ahead (Aug 8 build reached 2026-08-30) despite scanning further; price never shown anywhere server-side (ticket widget is JS/iframe) so price_min/price_text always null; category is the 'Im Rahmen von' series label (e.g. 'Kinostart: Kota', 'Kino wie noch nie: Timothée Chalamet'). extra.Länge ('NNN min') was already being captured 100% of the time (the pipeline's runtime-derivation already recognises 'Länge' as a key) - no change needed there. image is now the detail page's og:image (img.filmarchiv.at CDN), ~99% fill, no extra requests since the page was already fetched for the metadata block.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 22,

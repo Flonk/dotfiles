@@ -13,12 +13,13 @@
     "min_records": 20,
     "required_fill": {
       "category": 0.9,
-      "description": 0.9
+      "description": 0.9,
+      "image": 0.9
     },
     "canary": "api.cineamo.com"
   },
   "last_built": "2026-08-08",
-  "notes": "cineamo.com platform (shared with votivkino/dokini chain, cinemaId=3000); GET https://api.cineamo.com/showings?cinemaIds[0]=3000&perPage=100 returns all showings (past+future, sorted ascending, ~272 total); filter to today..horizon locally; price never published (external ticket-cloud.de links only) so price_min/price_text always null; category is always the literal string 'movie_series' site-wide, not a real genre",
+  "notes": "cineamo.com platform (shared with votivkino/dokini chain, cinemaId=3000); GET https://api.cineamo.com/showings?cinemaIds[0]=3000&perPage=100 returns all showings (past+future, sorted ascending, ~272 total); filter to today..horizon locally; price never published (external ticket-cloud.de links only) so price_min/price_text always null; category is always the literal string 'movie_series' site-wide, not a real genre; image/runtime come from api.cineamo.com/movies/<movieId> (TMDB proxy: posterPath -> image.tmdb.org/t/p/w500, runtime in minutes), fetched concurrently once per unique movieId (ThreadPoolExecutor, 8 workers, 3 retries) - do not revert to sequential",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 74,

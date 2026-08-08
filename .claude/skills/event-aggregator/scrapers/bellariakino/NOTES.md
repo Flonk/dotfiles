@@ -22,3 +22,10 @@
   `cinemaIds[0]=` query param, or the `_embedded.content` nesting.
 - re-derive: view-source any page on bellariakino.at and grep for
   `api.cineamo.com`.
+- image/runtime: `_embedded.content.posterImageUrl`/`backdropImageUrl` on
+  the showing are null in practice; the real data lives at
+  `GET https://api.cineamo.com/movies/<movieId>` (a TMDB proxy) —
+  `posterPath` joined onto `https://image.tmdb.org/t/p/w500`, `runtime`
+  in minutes straight into `extra.duration_min`. Fetched once per unique
+  movieId (dedup'd, ~40-80 of them) via ThreadPoolExecutor, 8 workers, 3
+  retries — keep concurrent, this host is slow per-request.

@@ -22,3 +22,10 @@
   `font-bold text-s35` date/time span, or the `/de/kino/film/sc_` URL
   pattern changes. Re-derive by viewing `/?day=<near date>` and a
   `/de/kino/film/sc_...` detail page.
+- runtime was already free: the metadata block parses every `Regie:
+  .../Land: .../Länge: 100 min` field verbatim into `extra`, and `Länge`
+  is one of the pipeline's recognised runtime keys — 100% fill, no
+  change needed.
+- image: added the detail page's `<meta property="og:image">`
+  (img.filmarchiv.at CDN) — same page already fetched, no extra
+  requests, ~99% fill (one item had no still on site).

@@ -23,3 +23,9 @@
   JSON field names (title/start_date/start_time/datetime/url) change.
 - re-derive: view-source the homepage, find the `cinema-showtimes.js`
   script tag, read its `$.ajax` call for the current action name.
+- image: `og:image` meta tag on each `/produktion/<slug>/` detail page,
+  fetched concurrently (ThreadPoolExecutor, 8 workers, 3 retries each) —
+  this host was flaky under load, keep the retries.
+- runtime: the ajax feed already carries a `duration` field ("103
+  Minuten") per item — parsed straight into `extra.duration_min`, no
+  detail-page fetch needed for that part.

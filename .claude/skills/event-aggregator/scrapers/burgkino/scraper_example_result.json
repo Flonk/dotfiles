@@ -12,20 +12,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Horror, Thriller, Science Fiction",
-    "status": "scheduled"
-  },
-  {
-    "source": "burgkino",
-    "source_id": "digger-planned",
-    "url": "https://www.burgkino.at/movie/digger",
-    "title": "Digger",
-    "start": "2026-10-01",
-    "venue": "Burg Kino",
-    "district": 1010,
-    "city": "Wien",
-    "address": "Opernring 19, 1010 Vienna",
-    "category": "Comedy, Drama",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/back4.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 127
+    }
   },
   {
     "source": "burgkino",
@@ -40,7 +31,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Horror, Mystery, Thriller",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/exit-8-18986_0.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "burgkino",
@@ -53,7 +48,11 @@
     "city": "Wien",
     "address": "Opernring 19, 1010 Vienna",
     "category": "Drama, History",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/fatherland-18688.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 82
+    }
   },
   {
     "source": "burgkino",
@@ -66,7 +65,11 @@
     "city": "Wien",
     "address": "Opernring 19, 1010 Vienna",
     "category": "Drama",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/gentle-monster-18690.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 114
+    }
   },
   {
     "source": "burgkino",
@@ -81,7 +84,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Horror",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/obsession-18691_1.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 108
+    }
   },
   {
     "source": "burgkino",
@@ -96,7 +103,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Horror, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/teenage-sex-and-death-camp-miasma-18983_0.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 106
+    }
   },
   {
     "source": "burgkino",
@@ -111,7 +122,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -126,7 +141,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -141,7 +160,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -156,7 +179,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -171,7 +198,11 @@
     "price_min": 8.0,
     "price_text": "€ 8.00",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -186,7 +217,11 @@
     "price_min": 8.0,
     "price_text": "€ 8.00",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -201,7 +236,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -216,7 +255,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -231,7 +274,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -246,7 +293,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -261,7 +312,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -276,7 +331,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Drama, Comedy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/invite-18417.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "burgkino",
@@ -291,7 +350,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -306,7 +369,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -321,7 +388,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -336,7 +407,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -351,7 +426,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -366,7 +445,11 @@
     "price_min": 10.0,
     "price_text": "€ 10.00",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -381,7 +464,11 @@
     "price_min": 10.0,
     "price_text": "€ 10.00",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -396,7 +483,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -411,7 +502,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -426,7 +521,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -441,20 +540,11 @@
     "price_min": 12.5,
     "price_text": "€ 12.50",
     "category": "Adventure, Drama, Fantasy",
-    "status": "scheduled"
-  },
-  {
-    "source": "burgkino",
-    "source_id": "the-social-reckoning-planned",
-    "url": "https://www.burgkino.at/movie/the-social-reckoning",
-    "title": "The Social Reckoning",
-    "start": "2026-10-09",
-    "venue": "Burg Kino",
-    "district": 1010,
-    "city": "Wien",
-    "address": "Opernring 19, 1010 Vienna",
-    "category": "Drama",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2026/odyssey.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 172
+    }
   },
   {
     "source": "burgkino",
@@ -469,7 +559,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Thriller, Mystery",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2016/third-man-1_0.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 104
+    }
   },
   {
     "source": "burgkino",
@@ -484,7 +578,11 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Thriller, Mystery",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2016/third-man-1_0.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 104
+    }
   },
   {
     "source": "burgkino",
@@ -499,6 +597,10 @@
     "price_min": 10.5,
     "price_text": "€ 10.50",
     "category": "Thriller, Mystery",
-    "status": "scheduled"
+    "image": "https://www.burgkino.at/sites/default/files/images/2016/third-man-1_0.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 104
+    }
   }
 ]

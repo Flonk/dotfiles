@@ -26,3 +26,8 @@
   redesign).
 - re-derive: view-source the homepage and find the repeating `<a
   href="/event/...">` blocks under the `divide-y divide-gray-300` list.
+- image: each card already has its own `<img src=".../storage/events/
+  <id>.(jpg|webp)">` right in the listing (~99% fill, no detail-page
+  fetch needed). duration: parsed from the free-text description's
+  "Director, Country Year, NN Min." pattern (~86% fill — plain notes like
+  "deutsche Fassung" have no runtime, left out rather than guessed).

@@ -22,3 +22,13 @@
 - breaks if: the `programm-eintrag`/`programm-datum`/`schienen_id` HTML
   structure changes, or the URL slug for the next season's preview page
   changes (re-derive from the homepage "Programmvorschau" link).
+- image: the listing's own `programm-image` span has no `<img>` (JS/CSS
+  populated). Each schiene detail page (`/kinoprogramm/schiene?
+  schienen_id=...`, same URL already used as `url`) has a real still as
+  its first `/jart/prj3/filmmuseum/images/cache/...jpeg` `<img>` — its
+  own `og:image` meta tag is the site logo, deliberately not used.
+  Fetched concurrently (8 workers, 3 retries), 19 detail pages, ~1s total.
+- no per-record runtime exists anywhere (each record is a whole
+  series/retrospective covering many films), so no `extra.duration_min`
+  is emitted here — nothing to derive an end date from beyond the
+  series' own published date range, which is already `end`.

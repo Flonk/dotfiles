@@ -1,6 +1,7 @@
 import re
 import sys
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 
 import ea
 
@@ -10,6 +11,19 @@ ADDRESS = "Burggasse 119, 1070 Wien"
 DISTRICT = 1070
 
 SLUG_RE = re.compile(r"/produktion/([^/]+)/?$")
+OGIMG_RE = re.compile(r'<meta property="og:image" content="([^"]+)"')
+DURATION_RE = re.compile(r"(\d+)\s*Min")
+
+
+def fetch_image(url):
+    for attempt in range(3):
+        try:
+            page = ea.fetch(url, timeout=20)
+            m = OGIMG_RE.search(page)
+            return url, (m.group(1) if m else None)
+        except Exception:
+            continue
+    return url, None
 
 
 def fetch_posts():
@@ -39,6 +53,14 @@ def build(item):
     category = ea.text(item.get("categories"))
     lang = ea.text(item.get("language"))
     desc_parts = [p for p in (remarks, lang) if p]
+    extra = {}
+    dur = ea.text(item.get("duration"))
+    if dur:
+        m = DURATION_RE.search(dur)
+        if m:
+            extra["duration_min"] = int(m.group(1))
+        else:
+            extra["duration_text"] = dur
     return {
         "source": "admiralkino",
         "source_id": f"{slug}-{item.get('datetime')}",
@@ -54,7 +76,9 @@ def build(item):
         "price_text": None,
         "category": category,
         "description": " / ".join(desc_parts) if desc_parts else None,
+        "image": None,
         "status": "scheduled",
+        "extra": extra or None,
     }
 
 
@@ -76,6 +100,17 @@ def main():
         if datetime.date(y, mo, d) > cutoff:
             continue
         records.append(rec)
+
+    urls = sorted({r["url"] for r in records if r.get("url")})
+    images = {}
+    if urls:
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for url, img in ex.map(fetch_image, urls):
+                if img:
+                    images[url] = img
+    for r in records:
+        r["image"] = images.get(r.get("url"))
+
     ea.emit(records)
 
 

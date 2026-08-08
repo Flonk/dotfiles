@@ -27,3 +27,8 @@
   label wording changes.
 - re-derive: view-source any `/movie/<slug>` page, find the showtimes
   `<table>`.
+- image: the same `/movie/<slug>` page's `<meta property="og:image">`.
+  duration: same page's `field--name-field-runtime` block, `<div
+  content="127" class="field--item">`. Both free — already fetching that
+  page per movie, no extra requests, no concurrency needed (~30 movies,
+  runs in a couple seconds).

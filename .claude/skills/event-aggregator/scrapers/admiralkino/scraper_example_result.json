@@ -11,7 +11,11 @@
     "address": "Burggasse 119, 1070 Wien",
     "category": "Krimi",
     "description": "Needles and Crime / DF",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2026/07/Vie-Privee-Still-1-von-Georges-Lechaptois.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "admiralkino",
@@ -25,7 +29,11 @@
     "address": "Burggasse 119, 1070 Wien",
     "category": "Drama",
     "description": "Film & Gespräch / dt. OV",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2026/06/wholetrain-1.jpeg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 83
+    }
   },
   {
     "source": "admiralkino",
@@ -39,7 +47,11 @@
     "address": "Burggasse 119, 1070 Wien",
     "category": "Dokumentarfilm",
     "description": "dt. OV",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2026/03/ich-will-alles.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "admiralkino",
@@ -52,7 +64,11 @@
     "city": "Wien",
     "address": "Burggasse 119, 1070 Wien",
     "description": "STILL/MOVING / dt. OV",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2026/05/Gross-Rebellinnen_Presse_02_©Tina_Bara.jpeg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 1524
+    }
   },
   {
     "source": "admiralkino",
@@ -66,7 +82,11 @@
     "address": "Burggasse 119, 1070 Wien",
     "category": "Komödie",
     "description": "dt. OV",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2026/03/aufputzt-is_still-14_familie-christbaum-c-gebhardt-productions_petro-domenigg.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 99
+    }
   },
   {
     "source": "admiralkino",
@@ -79,7 +99,11 @@
     "city": "Wien",
     "address": "Burggasse 119, 1070 Wien",
     "description": "STILL//MOVING / OmenglU",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2026/05/chronicle.jpeg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 70
+    }
   },
   {
     "source": "admiralkino",
@@ -92,6 +116,10 @@
     "city": "Wien",
     "address": "Burggasse 119, 1070 Wien",
     "category": "Merch",
-    "status": "scheduled"
+    "image": "http://www.admiralkino.at/app/uploads/2021/12/Kino-Geschenke.jpeg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 120
+    }
   }
 ]

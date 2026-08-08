@@ -20,6 +20,7 @@ DETAIL_DATE_RE = re.compile(
 DETAIL_LOC_RE = re.compile(
     r'<p class="location">.*?<span class="value">(.*?)</span>', re.S)
 DETAIL_DESC_RE = re.compile(r'<div class="intro-text">\s*<p>(.*?)</p>', re.S)
+DETAIL_IMG_RE = re.compile(r'<meta property="og:image" content="([^"]+)"')
 
 TIME_RE = re.compile(r'(\d{1,2}):(\d{2})')
 DAY_LIST_RE = re.compile(
@@ -86,7 +87,7 @@ def main():
             dhtml = None
 
         fallback_iso = f"{ev['fallback'][:4]}-{ev['fallback'][4:6]}-{ev['fallback'][6:8]}"
-        date_text, loc_text, desc = None, None, None
+        date_text, loc_text, desc, image = None, None, None, None
         if dhtml:
             dm = DETAIL_DATE_RE.search(dhtml)
             date_text = dm.group(1) if dm else None
@@ -94,6 +95,8 @@ def main():
             loc_text = ea.text(lm.group(1)) if lm else None
             dm2 = DETAIL_DESC_RE.search(dhtml)
             desc = ea.text(dm2.group(1)) if dm2 else None
+            im = DETAIL_IMG_RE.search(dhtml)
+            image = im.group(1) if im else None
 
         time_hhmm = None
         if date_text:
@@ -135,6 +138,7 @@ def main():
                 "price_text": None,
                 "category": ev["category"],
                 "description": desc,
+                "image": image,
                 "status": "scheduled",
             })
 

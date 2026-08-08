@@ -105,6 +105,9 @@ def parse_film(film_id):
     cm = re.search(r'Im Rahmen von:.*?<a[^>]*>\s*(.*?)\s*</a>', page, re.S)
     category = ea.text(cm.group(1)) if cm else None
 
+    im = re.search(r'<meta property="og:image" content="([^"]+)"', page)
+    image = im.group(1) if im else None
+
     metab = re.search(
         r'<div class="space-y-1 text-\[0\.8rem\][^"]*">(.*?)</div>\s*</div>\s*</div>',
         page, re.S)
@@ -153,6 +156,7 @@ def parse_film(film_id):
             "price_text": None,
             "category": category,
             "description": description,
+            "image": image,
             "extra": extra or None,
         }
         records.append(rec)

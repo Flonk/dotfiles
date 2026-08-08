@@ -11,7 +11,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Sandra Hüller portrays Ingeborg Bachmann on an imaginary day in Rome. Regina Schilling’s hybrid film weaves together reenactments, archival footage, and Bachmann’s own writings into a portrait that offers a refreshing new perspective on the author and positions her writings as a reference point in current debates on gender relations and power. / OV: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/qKJV8zX23FcoNM3Vx3jtU8S58F8.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "bellariakino",
@@ -25,7 +29,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "A strange doorway appears in the basement of a furniture showroom. Now including an additional 16 minutes of new, theatrically exclusive post-credit bonus footage from Kane Parsons. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 127
+    }
   },
   {
     "source": "bellariakino",
@@ -39,7 +47,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Alex, an ex-con working as muscle in a Vienna brothel, dreams of escaping with his girlfriend Tamara, who also works there. Their attempt to break free sets off a chain of events that links their fate with a rural police officer and his troubled marriage. As their lives intersect, a quiet struggle unfolds between guilt, grief, and the desire for redemption. / OV: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/7EQ7EOXWwPirccqVfp6QoJV19UY.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 121
+    }
   },
   {
     "source": "bellariakino",
@@ -53,7 +65,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "A gifted piano tuner's meticulous skills for tuning pianos lead him to discover an unexpected aptitude for cracking safes, turning his life upside down. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/5OvA3i9wZs5jHu0DCrfmXlzAM67.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 108
+    }
   },
   {
     "source": "bellariakino",
@@ -67,7 +83,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Barbie, once an attractive, devoted mother and partner, faces newfound challenges as she turns 55, descending into darkness, violence, and absurdity while grappling with her identity, relationships, and life's complexities. / OV: fra, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/HvF1s0vvXw305kReDobAvYhaGQ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 99
+    }
   },
   {
     "source": "bellariakino",
@@ -81,7 +101,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In 2025 Spain, a celebrated film director struggles to write the screenplay for an autofictional film set in 2004 Spain about an unsuccessful movie director turned director of commercials who suffers a panic attack that forces her to take a break by visiting the Canary Islands, where she begins work on a new film. / OV: spa, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/mer2n9C4MoJgHb7pQ4PL6v46Lps.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "bellariakino",
@@ -95,7 +119,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Based on the true story of a married couple who invented a groundbreaking sex toy heralded as forever changing the way women experience pleasure. / OV: fra, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/12HNBcAUI8IdRlXfOuhWGqrTqpx.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "bellariakino",
@@ -109,7 +137,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "A gifted piano tuner's meticulous skills for tuning pianos lead him to discover an unexpected aptitude for cracking safes, turning his life upside down. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/5OvA3i9wZs5jHu0DCrfmXlzAM67.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 108
+    }
   },
   {
     "source": "bellariakino",
@@ -123,7 +155,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In 2025 Spain, a celebrated film director struggles to write the screenplay for an autofictional film set in 2004 Spain about an unsuccessful movie director turned director of commercials who suffers a panic attack that forces her to take a break by visiting the Canary Islands, where she begins work on a new film. / OV: spa, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/mer2n9C4MoJgHb7pQ4PL6v46Lps.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "bellariakino",
@@ -137,7 +173,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Sandra Hüller portrays Ingeborg Bachmann on an imaginary day in Rome. Regina Schilling’s hybrid film weaves together reenactments, archival footage, and Bachmann’s own writings into a portrait that offers a refreshing new perspective on the author and positions her writings as a reference point in current debates on gender relations and power. / OV: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/qKJV8zX23FcoNM3Vx3jtU8S58F8.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "bellariakino",
@@ -151,7 +191,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "From the Atlantic to the Black Sea, Mathias and Philippe, two old friends, embark on a bicycle journey that Mathias’s son made before his tragic death. The two men ride through the ordeals with tenderness, humor and emotion. / OV: fra, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/84j57nt48tBB2521lEBfQq9HARQ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 88
+    }
   },
   {
     "source": "bellariakino",
@@ -165,7 +209,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "A gifted piano tuner's meticulous skills for tuning pianos lead him to discover an unexpected aptitude for cracking safes, turning his life upside down. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/5OvA3i9wZs5jHu0DCrfmXlzAM67.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 108
+    }
   },
   {
     "source": "bellariakino",
@@ -179,7 +227,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In the future, the government maintains control of public opinion by outlawing literature and maintaining a group of enforcers, known as “firemen,” to perform the necessary book burnings. Fireman Montag begins to question the morality of his vocation… / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/k2CTpexoS9MO9lKVFfnzwVdJuM.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 113
+    }
   },
   {
     "source": "bellariakino",
@@ -193,7 +245,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Sisters Nora and Agnes reunite with their estranged father, the charismatic Gustav, a once-renowned director who offers stage actress Nora a role in what he hopes will be his comeback film. When Nora turns it down, she soon discovers he has given her part to an eager young Hollywood star. / OV: nor, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/pz9NCWxxOk3o0W3v1Zkhawrwb4i.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 133
+    }
   },
   {
     "source": "bellariakino",
@@ -207,7 +263,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Heroin addict Mark Renton stumbles through bad ideas and sobriety attempts with his unreliable friends --Sick Boy, Begbie, Spud and Tommy. He also has an underage girlfriend, Diane, along for the ride. After cleaning up and moving from Edinburgh to London, Mark finds he can't escape the life he left behind as Begbie and Sick Boy come knocking. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/1jUC02qsqS2NxBMFarbIhcQtazV.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 94
+    }
   },
   {
     "source": "bellariakino",
@@ -221,7 +281,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In the future, the government maintains control of public opinion by outlawing literature and maintaining a group of enforcers, known as “firemen,” to perform the necessary book burnings. Fireman Montag begins to question the morality of his vocation… / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/k2CTpexoS9MO9lKVFfnzwVdJuM.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 113
+    }
   },
   {
     "source": "bellariakino",
@@ -235,7 +299,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In the future, the government maintains control of public opinion by outlawing literature and maintaining a group of enforcers, known as “firemen,” to perform the necessary book burnings. Fireman Montag begins to question the morality of his vocation… / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/k2CTpexoS9MO9lKVFfnzwVdJuM.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 113
+    }
   },
   {
     "source": "bellariakino",
@@ -249,7 +317,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Heroin addict Mark Renton stumbles through bad ideas and sobriety attempts with his unreliable friends --Sick Boy, Begbie, Spud and Tommy. He also has an underage girlfriend, Diane, along for the ride. After cleaning up and moving from Edinburgh to London, Mark finds he can't escape the life he left behind as Begbie and Sick Boy come knocking. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/1jUC02qsqS2NxBMFarbIhcQtazV.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 94
+    }
   },
   {
     "source": "bellariakino",
@@ -263,7 +335,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Suffering from insomnia, disturbed loner Travis Bickle takes a job as a New York City cabbie, haunting the streets nightly, growing increasingly detached from reality as he dreams of cleaning up the filthy city. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/ekstpH614fwDX8DUln1a2Opz0N8.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 114
+    }
   },
   {
     "source": "bellariakino",
@@ -277,7 +353,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Two lost souls visiting Tokyo -- the young, neglected wife of a photographer and a washed-up movie star shooting a TV commercial -- find an odd solace and pensive freedom to be real in each other's company, away from their lives in America. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/3jCLmYDIIiSMPujbwygNpqdpM8N.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 102
+    }
   },
   {
     "source": "bellariakino",
@@ -291,7 +371,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "After the insane General Jack D. Ripper initiates a nuclear strike on the Soviet Union, a war room full of politicians, generals and a Russian diplomat all frantically try to stop it. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/gHm96BRW4GoI339rF1vYoYTB6Qe.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "bellariakino",
@@ -305,7 +389,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Two lost souls visiting Tokyo -- the young, neglected wife of a photographer and a washed-up movie star shooting a TV commercial -- find an odd solace and pensive freedom to be real in each other's company, away from their lives in America. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/3jCLmYDIIiSMPujbwygNpqdpM8N.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 102
+    }
   },
   {
     "source": "bellariakino",
@@ -319,7 +407,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "After the insane General Jack D. Ripper initiates a nuclear strike on the Soviet Union, a war room full of politicians, generals and a Russian diplomat all frantically try to stop it. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/gHm96BRW4GoI339rF1vYoYTB6Qe.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "bellariakino",
@@ -333,7 +425,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "After the insane General Jack D. Ripper initiates a nuclear strike on the Soviet Union, a war room full of politicians, generals and a Russian diplomat all frantically try to stop it. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/gHm96BRW4GoI339rF1vYoYTB6Qe.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 95
+    }
   },
   {
     "source": "bellariakino",
@@ -347,7 +443,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In the sleepy town of Centerville, the lives of a number of interconnected characters are disrupted by the undead. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/fgGzTEoNxptCRtEOpOPvIEdlxAq.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 104
+    }
   },
   {
     "source": "bellariakino",
@@ -361,7 +461,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "An anthology of eleven vignettes featuring star-studded casts of extremely unique individuals who all share the common activities of conversing while drinking coffee and smoking cigarettes. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/pfG02QCsutx3PIxFS8UY4iM9AsS.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 97
+    }
   },
   {
     "source": "bellariakino",
@@ -375,7 +479,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "In the sleepy town of Centerville, the lives of a number of interconnected characters are disrupted by the undead. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/fgGzTEoNxptCRtEOpOPvIEdlxAq.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 104
+    }
   },
   {
     "source": "bellariakino",
@@ -389,7 +497,11 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Renowned oceanographer Steve Zissou has sworn vengeance upon the rare shark that devoured a member of his crew. In addition to his regular team, he is joined on his boat by Ned, a man who believes Zissou to be his father, and Jane, a journalist pregnant by a married man. They travel the sea, all too often running into pirates and, perhaps more traumatically, various figures from Zissou's past, including his estranged wife, Eleanor. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/qZoFLNBC78jzboWeDH6Ha0qavF2.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 119
+    }
   },
   {
     "source": "bellariakino",
@@ -403,6 +515,10 @@
     "address": "Museumstraße 3, 1070 Wien",
     "category": "movie_series",
     "description": "Renowned oceanographer Steve Zissou has sworn vengeance upon the rare shark that devoured a member of his crew. In addition to his regular team, he is joined on his boat by Ned, a man who believes Zissou to be his father, and Jane, a journalist pregnant by a married man. They travel the sea, all too often running into pirates and, perhaps more traumatically, various figures from Zissou's past, including his estranged wife, Eleanor. / OV: eng, UT: deu",
-    "status": "scheduled"
+    "image": "https://image.tmdb.org/t/p/w500/qZoFLNBC78jzboWeDH6Ha0qavF2.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 119
+    }
   }
 ]

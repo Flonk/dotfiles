@@ -13,12 +13,13 @@
     "min_records": 24,
     "required_fill": {
       "category": 1.0,
-      "price_min": 0.85
+      "price_min": 0.85,
+      "image": 0.95
     },
     "canary": "views-field-field-startdatetime"
   },
   "last_built": "2026-08-08",
-  "notes": "Drupal 'movies' views on /movie/<slug> pages; showtimes only bookable/published ~1 week ahead (this-week+next-week), beyond that only a handful of premiere screenings and /coming-soon 'Starting' placeholder dates (no time, no price) reach further out; single-venue cinema, hardcoded address",
+  "notes": "Drupal 'movies' views on /movie/<slug> pages; showtimes only bookable/published ~1 week ahead (this-week+next-week), beyond that only a handful of premiere screenings and /coming-soon 'Starting' placeholder dates (no time, no price) reach further out; single-venue cinema, hardcoded address; image (og:image) and extra.duration_min (field--name-field-runtime's content=\"NNN\") both come off the same /movie/<slug> page already being fetched for genre/showtimes, no extra requests, 100% fill in practice",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 48,

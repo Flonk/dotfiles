@@ -16,6 +16,10 @@ TITLE_RE = re.compile(r'<h1 class="page-header">\s*<span>(.*?)</span>', re.S)
 GENRE_RE = re.compile(
     r'field--name-field-genre[^"]*"[^>]*>\s*<div class="field--label">Genre</div>\s*'
     r'<div class="field--item">(.*?)</div>', re.S)
+RUNTIME_RE = re.compile(
+    r'field--name-field-runtime[^"]*"[^>]*>\s*<div class="field--label">Runtime</div>\s*'
+    r'<div content="(\d+)"', re.S)
+OGIMG_RE = re.compile(r'<meta property="og:image" content="([^"]+)"')
 PLANNED_RE = re.compile(
     r'field--name-field-planned-start-date[^"]*"[^>]*>\s*<div class="field--label">Starting</div>\s*'
     r'<div class="field--item"><time datetime="([^"]+)"', re.S)
@@ -65,6 +69,10 @@ def parse_movie(slug, planned_start):
     title = ea.text(tm.group(1)) if tm else slug.replace("-", " ").title()
     gm = GENRE_RE.search(html)
     category = ea.text(gm.group(1)) if gm else None
+    im = OGIMG_RE.search(html)
+    image = im.group(1) if im else None
+    rm = RUNTIME_RE.search(html)
+    extra = {"duration_min": int(rm.group(1))} if rm else None
 
     now = datetime.datetime.now()
     records = []
@@ -102,7 +110,9 @@ def parse_movie(slug, planned_start):
             "price_text": price_text,
             "category": category,
             "description": None,
+            "image": image,
             "status": "scheduled",
+            "extra": extra,
         })
 
     if not records and planned_start:
@@ -125,7 +135,9 @@ def parse_movie(slug, planned_start):
                     "price_text": None,
                     "category": category,
                     "description": None,
+                    "image": image,
                     "status": "scheduled",
+                    "extra": extra,
                 })
         except ValueError:
             pass

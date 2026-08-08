@@ -3,6 +3,7 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 
 import ea
 
@@ -28,6 +29,7 @@ SHOWTIME = re.compile(
 SELECTED_DATE = re.compile(r'<option selected="selected" value="([\d.]+)"')
 OPTION_DATE = re.compile(r'<option[^>]*value="([\d.]+)">')
 GENRE_RE = re.compile(r"Genre</b></td><td class='sinemaFilmInfo col2'>([^<]*)</td>")
+IMG_RE = re.compile(r'class="image_container[^"]*">\s*<img[^>]+src="([^"]+)"')
 H1_RE = re.compile(r"<h1>(.*?)<span", re.S)
 DESC_RE = re.compile(r'class="sinemaFilmInfoArea ce_text">.*?<p>(.*?)</p>', re.S)
 
@@ -86,19 +88,16 @@ def parse_week(html):
     return out
 
 
-def film_meta(film_id, cache):
-    if film_id in cache:
-        return cache[film_id]
+def film_meta(film_id):
     html = None
-    for attempt in range(3):
+    for attempt in range(4):
         try:
             html = ea.fetch(f"{BASE}?op=info&ID={film_id}", timeout=30)
             break
         except Exception as e:
             sys.stderr.write(f"film_meta {film_id} attempt {attempt} failed: {e}\n")
     if html is None:
-        cache[film_id] = {"genre": None, "description": None}
-        return cache[film_id]
+        return film_id, {"genre": None, "description": None, "image": None}
     genre = None
     gm = GENRE_RE.search(html)
     if gm:
@@ -107,8 +106,11 @@ def film_meta(film_id, cache):
     dm = DESC_RE.search(html)
     if dm:
         desc = ea.text(dm.group(1).split("<br><bR>")[0].split("<br><br>")[0])
-    cache[film_id] = {"genre": genre, "description": desc}
-    return cache[film_id]
+    image = None
+    im = IMG_RE.search(html)
+    if im:
+        image = im.group(1)
+    return film_id, {"genre": genre, "description": desc, "image": image}
 
 
 def main():
@@ -141,15 +143,25 @@ def main():
         seen_anchors.add(opt)
 
     seen_prg = set()
-    cache = {}
-    records = []
+    dedup_shows = []
     for s in shows:
         if s["prg_id"] in seen_prg:
             continue
         seen_prg.add(s["prg_id"])
         if s["date"] > horizon:
             continue
-        meta = film_meta(s["film_id"], cache)
+        dedup_shows.append(s)
+
+    film_ids = sorted({s["film_id"] for s in dedup_shows})
+    cache = {}
+    if film_ids:
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for film_id, meta in ex.map(film_meta, film_ids):
+                cache[film_id] = meta
+
+    records = []
+    for s in dedup_shows:
+        meta = cache.get(s["film_id"], {"genre": None, "description": None, "image": None})
         start_dt = f"{s['date'].isoformat()}T{s['start']}"
         title = s["title"]
         cat = meta["genre"]
@@ -168,6 +180,7 @@ def main():
             "price_text": None,
             "category": cat,
             "description": meta["description"],
+            "image": meta["image"],
             "status": "scheduled",
             "extra": {
                 "version": s["version"],

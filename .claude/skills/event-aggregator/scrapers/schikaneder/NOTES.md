@@ -22,3 +22,11 @@
   names change.
 - re-derive: view-source `/kino/kinoprogramm?date=2026-08-08` and any
   `/kino/veranstaltung_detail?veranstaltung_id=...` page.
+- image: same detail page's `og:image` meta tag, but as printed on-site
+  it's broken - `http://schikaneder.at:443/jart/pub-prc/img.jart?...`
+  (plaintext HTTP against the TLS port 443, connection resets with an
+  empty reply). Rewritten to `https://schikaneder.at/jart/pub-prc/
+  img.jart?...` which 302-redirects to the real jpeg. 100% fill.
+- duration: the `subinfo` div ("Regie, Land, Jahr<br>NNN min., OmdU")
+  already parsed for description - added a regex for "NNN min" ->
+  extra.duration_min. 97% fill.

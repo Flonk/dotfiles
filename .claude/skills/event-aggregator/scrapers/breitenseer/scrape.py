@@ -16,6 +16,8 @@ ITEM_RE = re.compile(
 DATE_RE = re.compile(r'tracking-wider">\s*([^<]+?)\s*</span>')
 TITLE_RE = re.compile(r'font-bold pt-2">\s*(.*?)\s*</span>', re.S)
 DESC_RE = re.compile(r'<div class="prose prose-slate mt-4">(.*?)</div>', re.S)
+IMG_RE = re.compile(r'<img src="(https://breitenseer-lichtspiele\.at/storage/events/[^"]+)"')
+DURATION_RE = re.compile(r"(\d+)\s*Min\b")
 
 WEEKDAY_MONTH_RE = re.compile(
     r'[A-Za-zÄÖÜäöü]{2},\s*(\d{2})\.(\d{2})\.(\d{4})\s*\|\s*(\d{2}):(\d{2})'
@@ -50,6 +52,15 @@ def build(m):
 
     slug = url.rstrip("/").rsplit("/", 1)[-1]
 
+    img_m = IMG_RE.search(block)
+    image = img_m.group(1) if img_m else None
+
+    extra = {}
+    if description:
+        dm2 = DURATION_RE.search(description)
+        if dm2:
+            extra["duration_min"] = int(dm2.group(1))
+
     return {
         "source": "breitenseer",
         "source_id": slug,
@@ -65,7 +76,9 @@ def build(m):
         "price_text": None,
         "category": None,
         "description": description,
+        "image": image,
         "status": "scheduled",
+        "extra": extra or None,
     }
 
 

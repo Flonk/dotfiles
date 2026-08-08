@@ -22,3 +22,14 @@
 - Breaks if: FO sinema markup changes (`sinemaPrg times` table class, the
   `<td valign='top'>` literal used to split day columns, or the ASP.NET
   field names `prg1$ddDatePicker` / `__VIEWSTATE` etc).
+- image: same `res_main.aspx?op=info&ID=<id>` detail page already fetched
+  for genre/description has the poster at `<figure class="image_container
+  float_left"><img src="...">`; no extra request. duration_min was
+  already being parsed from the showtime's `title='HH:MM - HH:MM (NN
+  min)'` attribute - unchanged, 100% fill.
+- per-film detail fetches were sequential and, combined with this
+  backend's flakiness, occasionally starved description/category fill
+  well below the 90% floor (and once took 3m40s). Switched to
+  ThreadPoolExecutor (8 workers, 4 retries each) over the distinct film
+  ids - faster AND more reliable since a slow/failing request no longer
+  blocks the others. Don't revert to sequential.

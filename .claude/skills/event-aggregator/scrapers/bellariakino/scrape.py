@@ -1,14 +1,31 @@
 import datetime
 import zoneinfo
+from concurrent.futures import ThreadPoolExecutor
 
 import ea
 
 API = "https://api.cineamo.com/showings"
+MOVIE_API = "https://api.cineamo.com/movies/{}"
+TMDB_IMG = "https://image.tmdb.org/t/p/w500"
 CINEMA_ID = "3000"
 VENUE = "Bellaria Kino"
 ADDRESS = "Museumstraße 3, 1070 Wien"
 DISTRICT = 1070
 VIENNA = zoneinfo.ZoneInfo("Europe/Vienna")
+
+
+def fetch_movie(movie_id):
+    import json
+    for attempt in range(3):
+        try:
+            raw = ea.fetch(MOVIE_API.format(movie_id), timeout=20)
+            d = json.loads(raw)
+            image = f"{TMDB_IMG}{d['posterPath']}" if d.get("posterPath") else None
+            runtime = d.get("runtime")
+            return movie_id, image, (int(runtime) if runtime else None)
+        except Exception:
+            continue
+    return movie_id, None, None
 
 
 def local_dt(iso_utc):
@@ -74,7 +91,9 @@ def build(it):
         "price_text": None,
         "category": content.get("category"),
         "description": " / ".join(desc_parts) if desc_parts else None,
+        "image": content.get("posterImageUrl") or content.get("backdropImageUrl"),
         "status": "scheduled" if it.get("state") != "cancelled" else "cancelled",
+        "movie_id": it.get("movieId"),
     }
 
 
@@ -91,6 +110,21 @@ def main():
         if d < today or d > cutoff:
             continue
         records.append(rec)
+
+    movie_ids = sorted({r["movie_id"] for r in records if r.get("movie_id")})
+    movies = {}
+    if movie_ids:
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for mid, image, runtime in ex.map(fetch_movie, movie_ids):
+                movies[mid] = (image, runtime)
+    for r in records:
+        mid = r.pop("movie_id", None)
+        image, runtime = movies.get(mid, (None, None))
+        if not r.get("image") and image:
+            r["image"] = image
+        if runtime:
+            r["extra"] = {"duration_min": runtime}
+
     ea.emit(records)
 
 

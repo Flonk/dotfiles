@@ -18,3 +18,7 @@
 - breaks if: the `<article class="event" id="…" data-date="…">` markup changes, or the
   detail page's `<p class="date"><span class="value">` structure changes.
 - re-derive: view-source https://nonstopkino.at/events/ and any /events/<slug>/ page.
+- image: the detail page's `<meta property="og:image">` (same page already
+  fetched for date/location/description) — 100% fill, no extra requests.
+  No runtime/duration field exists anywhere on the site (these are club
+  screening events, not a regular cinema program) — no extra.duration_min.

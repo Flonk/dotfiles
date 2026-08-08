@@ -18,6 +18,16 @@ TERMIN_RE = re.compile(
     r'data-raum="([^"]*)"\s+data-datum="([^"]+)"', re.S)
 PRICE_RE = re.compile(
     r'<strong[^>]*><span[^>]*>([\d,]+)\s*EUR</span></strong><span[^>]*>\s*Normalpreis', re.S)
+IMG_RE = re.compile(r'<meta property="og:image" content="([^"]+)"')
+DURATION_RE = re.compile(r"(\d+)\s*min\b", re.I)
+
+
+def fix_image_url(url):
+    if not url:
+        return None
+    import html as html_mod
+    url = html_mod.unescape(url)
+    return url.replace("http://schikaneder.at:443/", "https://schikaneder.at/")
 
 MAX_EMPTY_STREAK = 14
 
@@ -71,6 +81,15 @@ def parse_detail(vid, price_min, price_text):
     desc = ea.text(km.group(1)) if km else None
     description = " ".join(x for x in (subinfo, desc) if x) or None
 
+    im = IMG_RE.search(html)
+    image = fix_image_url(im.group(1)) if im else None
+
+    extra = None
+    if subinfo:
+        dm = DURATION_RE.search(subinfo)
+        if dm:
+            extra = {"duration_min": int(dm.group(1))}
+
     records = []
     for termin_id, raum, datum in TERMIN_RE.findall(html):
         start = ea.de_date(datum.strip())
@@ -92,7 +111,9 @@ def parse_detail(vid, price_min, price_text):
             "price_text": price_text,
             "category": None,
             "description": description,
+            "image": image,
             "status": "scheduled",
+            "extra": extra,
         })
     return records
 

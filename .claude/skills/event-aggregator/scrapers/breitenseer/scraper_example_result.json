@@ -10,6 +10,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "deutsche Fassung",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7VGEHQ1RXA6YZJ2TVKGBV7.webp",
     "status": "scheduled"
   },
   {
@@ -23,7 +24,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Thomas Marschall, AT 2026, 75 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8T1SJX76D7FDSD7PHEP2ZG.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 75
+    }
   },
   {
     "source": "breitenseer",
@@ -36,6 +41,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "deutsche Fassung",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8RX7QG1BNVKQD33MX3049C.webp",
     "status": "scheduled"
   },
   {
@@ -49,7 +55,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Regina Schilling, DE/AT 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8TKVV66PF8SD3TGCYAQ719.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -62,7 +72,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Grégoire Vigneron, FR/BE 2025, 91 Min., deutsche Fassung",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8TQTSXT1JGP5TT0Z7AH81A.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 91
+    }
   },
   {
     "source": "breitenseer",
@@ -75,7 +89,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Giorgio Testi, IT 2024, 106 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7SV7RXP0M1JXM1EREC5PJQ.jfif",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 106
+    }
   },
   {
     "source": "breitenseer",
@@ -87,6 +105,7 @@
     "district": 1140,
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7V4CHGK92ATY5R2WYJDWRS.png",
     "status": "scheduled"
   },
   {
@@ -100,7 +119,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Regina Schilling, DE/AT 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGBHJSACPDW173BKAZ9XWWD.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -113,7 +136,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Thomas Stuber, DE/CH 2025, 113 Min., deutsche OF",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8SVB0APGDQZM0ARE7G768D.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 113
+    }
   },
   {
     "source": "breitenseer",
@@ -126,6 +153,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "OmdU",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7VHNMYJYGPNKJMTFJRKFE4.webp",
     "status": "scheduled"
   },
   {
@@ -138,6 +166,7 @@
     "district": 1140,
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7V6NSBHCJWPJXTA6CQP8FY.png",
     "status": "scheduled"
   },
   {
@@ -151,7 +180,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 1120 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7SKQW9GS6MZPS0RNHEW294.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 1120
+    }
   },
   {
     "source": "breitenseer",
@@ -164,6 +197,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "deutsche Fassung",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8S2TA3KRZT4FJSV5AQQXYS.webp",
     "status": "scheduled"
   },
   {
@@ -177,7 +211,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 1120 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8V00CK0F7VE8VTHHN230JZ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 1120
+    }
   },
   {
     "source": "breitenseer",
@@ -190,7 +228,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 111 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGBNT7NAGCRKYB7N1GWBASB.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "breitenseer",
@@ -203,7 +245,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Thomas Marschall, AT 2026, 75 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8T7401WDXFFFEWWTY70NT2.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 75
+    }
   },
   {
     "source": "breitenseer",
@@ -216,7 +262,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 111 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGBQRJKBRGM3ZRW4A5M0VQ2.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "breitenseer",
@@ -229,7 +279,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "György Pálfi, DE/GR/HR, 96 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGC20X5GDBHBE92ZHXT3CFS.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 96
+    }
   },
   {
     "source": "breitenseer",
@@ -242,7 +296,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "György Pálfi, DE/GR/HR, 96 Min., deutsche Fassung",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGC5KPCGR3R2JXZC0CW5HWK.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 96
+    }
   },
   {
     "source": "breitenseer",
@@ -255,7 +313,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 111 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGBTA9Q41H8N0SBABJ0HPMC.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "breitenseer",
@@ -268,7 +330,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "FR/CAN 2024, 83 Min., DF, Altersempfehlung ab 8 J.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX8TWABQ2MSN2M1R9NFYHJGC.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 83
+    }
   },
   {
     "source": "breitenseer",
@@ -281,7 +347,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "György Pálfi, DE/GR/HR, 96 Min., deutsche Fassung",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGC7G3XX3RYJRZZJCEKZ8YT.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 96
+    }
   },
   {
     "source": "breitenseer",
@@ -294,6 +364,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "deutsche Fassung",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KX7T6T8EGQMZ8934341GXNM8.jpg",
     "status": "scheduled"
   },
   {
@@ -307,7 +378,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 111 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KXGBXAP94CRQXHYG2J64V28M.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "breitenseer",
@@ -332,7 +407,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "György Pálfi, DE/GR/HR, 96 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ17G9EEX3GEKCRA1J5JQYFK.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 96
+    }
   },
   {
     "source": "breitenseer",
@@ -345,7 +424,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 111 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ16TK60XHQ5FM8B3GJZPTRW.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 111
+    }
   },
   {
     "source": "breitenseer",
@@ -358,6 +441,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "deutsche Fassung",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ17MMN5WQCKDQBWYDPZXYQE.jpg",
     "status": "scheduled"
   },
   {
@@ -371,7 +455,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 1120 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ17WANFS31T6B0Q7S98R5ZH.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 1120
+    }
   },
   {
     "source": "breitenseer",
@@ -384,7 +472,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Regina Schilling, DE/AT 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ17Z9YGAJ0X6WKC5T06R8RV.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -397,7 +489,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ18R8XQY5QQPB6QQ5M8WNHA.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -410,7 +506,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ18V8DD3MA5B68ZMRV2SQ6H.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -423,7 +523,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Ben Leonberg, US 2025, 72 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ18B4RZA8E21YFB6C08D042.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 72
+    }
   },
   {
     "source": "breitenseer",
@@ -436,7 +540,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "E.W.Emo, D 1940, 85 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ19G0T7PK4EAPTZ1M3M61P4.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 85
+    }
   },
   {
     "source": "breitenseer",
@@ -449,7 +557,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ18XAYPDDVP4G9XY4Q6T409.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -462,7 +574,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ194ZT1TXM7V9N4F8HJYGVG.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -475,7 +591,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Tizza Covi/Rainer Frimmel AT,2021, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1AMSNR3YTP5ZFA0FN5Z7HV.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -488,7 +608,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 112 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ187GPR44AC706VWTSBQY5G.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "breitenseer",
@@ -501,7 +625,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Regina Schilling, DE/AT 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1829GMVPQC7FYVKB4CYF9K.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -514,7 +642,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "François Truffaut, UK 1966, 109 Min., dt Fassung",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1BD0TSGZC26XD1PQH9DTTN.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 109
+    }
   },
   {
     "source": "breitenseer",
@@ -527,7 +659,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1ASA975CGMZ32Q96VKY8MD.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -540,7 +676,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 1120 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3ZKCSCBN6MQQ8J1DVKHNZM.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 1120
+    }
   },
   {
     "source": "breitenseer",
@@ -553,7 +693,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "François Truffaut, UK 1966, 112 Min., dt Fassung",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ40W5K4SS8CVPGNVWTY6X6C.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "breitenseer",
@@ -566,7 +710,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1Q06Q6GRGZWSSS2MPKGXF1.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -579,7 +727,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Thomas Marschall, AT 2026, 75 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1AG3YVA5R3WCQJ93TN7CP1.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 75
+    }
   },
   {
     "source": "breitenseer",
@@ -592,7 +744,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1AW3M90B3SYV1BTKQAWJQD.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -605,7 +761,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ40YXM3G3BMEWGVGE7M1WPE.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -618,7 +778,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Pedro Almodóvar, ES 2026, 112 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ41FWYFRT65QXYJ7KTS63D3.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "breitenseer",
@@ -631,7 +795,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Regina Schilling, DE/AT 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1J71WQ6EKTHJPGDMR9G4EP.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -644,7 +812,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Robert Altman, US 1973, 112 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1C98QKVNFRX65988D0YQJ5.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 112
+    }
   },
   {
     "source": "breitenseer",
@@ -657,7 +829,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HF3QXCKXCNH646KP714DY.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -670,7 +846,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Narges Kalhor, D 2024, 85 Min., deutsche OV",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1A7PFQ9N42JM9XMYMFC669.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 85
+    }
   },
   {
     "source": "breitenseer",
@@ -683,7 +863,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HJJQJA2XRET0374E35HVE.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -696,7 +880,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "E.W.Emo, D 1940, 85 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ19PQME917HSPS2W3B5KJTT.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 85
+    }
   },
   {
     "source": "breitenseer",
@@ -709,7 +897,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HYQ4F1VEXN2DGPKV855B7.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -722,7 +914,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3RJSDBDGMCZ7TV05P3DD22.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -735,7 +931,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Olivia Wilde, US 2026, 107 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ416730YQ9TFDZ9WSZYMWJX.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 107
+    }
   },
   {
     "source": "breitenseer",
@@ -748,7 +948,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HNA2F5V92AF0XB6K384TJ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -761,7 +965,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HQCF51BFMV3KAG2VPT1YY.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -774,7 +982,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HSYE4RGPTRT6A2W5F8ZAH.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -787,6 +999,7 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Livevertonung ELAINE BRENNAN | piano",
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZE16SM0S7DHCCG42TYZAJRZ.jpeg",
     "status": "scheduled"
   },
   {
@@ -800,7 +1013,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Mike Van Diem, NL/AT/BE 2025, 103 Min., OmdU",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1HW25B14FYTY2MVJ2ZD30T.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 103
+    }
   },
   {
     "source": "breitenseer",
@@ -813,7 +1030,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3R33637J6ZN74DB46EK9M8.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -826,7 +1047,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3RSX3SJN55D6WX062P5BBB.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -839,7 +1064,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Ed Herzog, D 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1N4JT3ZBPQ33QHJSQPMT37.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -852,7 +1081,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3R5GFXAYEY7B2GX9QSGXTZ.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -865,7 +1098,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Paweł Pawlikowski, PL/DE/IT/FR 2026, 82 Min., OV teilweise mit dt. Untertiteln",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1JZYPMRV6NWDYTJSC4NSRW.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 82
+    }
   },
   {
     "source": "breitenseer",
@@ -878,7 +1115,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Ed Herzog, D 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3S3E4EE9FZ5ZKT973AX80G.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -891,7 +1132,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3RCA0HG5F7AMW7JFTJVH5E.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -904,7 +1149,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Paweł Pawlikowski, PL/DE/IT/FR 2026, 82 Min., OV teilweise mit dt. Untertiteln",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1KHGKX2WGX4TC0VRKZKM3K.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 82
+    }
   },
   {
     "source": "breitenseer",
@@ -917,7 +1166,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Ed Herzog, D 2026, 98 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1N17682MRCDX09S1FF4PXQ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 98
+    }
   },
   {
     "source": "breitenseer",
@@ -930,7 +1183,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3RFVC1DYE02VPQ4SD4D04W.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   },
   {
     "source": "breitenseer",
@@ -943,7 +1200,11 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Paweł Pawlikowski, PL/DE/IT/FR 2026, 82 Min., OV teilweise mit dt. Untertiteln",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ1K2KDABN2KD1XV1DG9GXFZ.jpg",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 82
+    }
   },
   {
     "source": "breitenseer",
@@ -956,42 +1217,10 @@
     "city": "Wien",
     "address": "Breitenseer Straße 21, 1140 Wien",
     "description": "Marie Kreutzer, AT/DE/FR 2026, 115 Min.",
-    "status": "scheduled"
-  },
-  {
-    "source": "breitenseer",
-    "source_id": "gruberturnheim-vertonen-sherlock-und-der-letzte-hund-3",
-    "url": "https://breitenseer-lichtspiele.at/event/gruberturnheim-vertonen-sherlock-und-der-letzte-hund-3",
-    "title": "Gruber&Turnheim vertonen: Sherlock und der letzte Hund",
-    "start": "2026-10-30T20:00",
-    "venue": "Breitenseer Lichtspiele",
-    "district": 1140,
-    "city": "Wien",
-    "address": "Breitenseer Straße 21, 1140 Wien",
-    "status": "scheduled"
-  },
-  {
-    "source": "breitenseer",
-    "source_id": "gruberturnheim-vertonen-frankenstein-das-monster-spricht",
-    "url": "https://breitenseer-lichtspiele.at/event/gruberturnheim-vertonen-frankenstein-das-monster-spricht",
-    "title": "Gruber&Turnheim vertonen: Frankenstein - Das Monster spricht",
-    "start": "2026-10-31T20:00",
-    "venue": "Breitenseer Lichtspiele",
-    "district": 1140,
-    "city": "Wien",
-    "address": "Breitenseer Straße 21, 1140 Wien",
-    "status": "scheduled"
-  },
-  {
-    "source": "breitenseer",
-    "source_id": "gruberturnheim-vertonen-das-lied-des-weissen-zombie",
-    "url": "https://breitenseer-lichtspiele.at/event/gruberturnheim-vertonen-das-lied-des-weissen-zombie",
-    "title": "Gruber&Turnheim vertonen: Das Lied des weißen Zombie",
-    "start": "2026-11-01T20:00",
-    "venue": "Breitenseer Lichtspiele",
-    "district": 1140,
-    "city": "Wien",
-    "address": "Breitenseer Straße 21, 1140 Wien",
-    "status": "scheduled"
+    "image": "https://breitenseer-lichtspiele.at/storage/events/01KZ3RMVT7BQKXC12NV6EKVH35.webp",
+    "status": "scheduled",
+    "extra": {
+      "duration_min": 115
+    }
   }
 ]

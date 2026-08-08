@@ -1,6 +1,7 @@
 import datetime
 import html
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 import ea
 
@@ -9,6 +10,19 @@ PREVIEW_URL = f"{BASE}/kinoprogram/sept_okt_2026"
 VENUE = "Österreichisches Filmmuseum"
 ADDRESS = "Augustinerstraße 1, 1010 Wien"
 DISTRICT = 1010
+
+STILL_RE = re.compile(r'<img[^>]+src="(/jart/prj3/filmmuseum/images/cache/[^"]+)"')
+
+
+def fetch_image(url):
+    for attempt in range(3):
+        try:
+            page = ea.fetch(url, timeout=20)
+            m = STILL_RE.search(page)
+            return url, (BASE + m.group(1) if m else None)
+        except Exception:
+            continue
+    return url, None
 
 ENTRY_RE = re.compile(r'(?=<div class="programm-eintrag">)')
 FIELD_RE = re.compile(
@@ -85,6 +99,7 @@ def build(url_title, sid, datum, h3, desc_html):
         "price_text": None,
         "category": clean(h3),
         "description": desc,
+        "image": None,
         "status": "scheduled",
     }
 
@@ -106,6 +121,17 @@ def main():
         rec = build(title, sid, datum, h3, desc_html)
         if rec:
             records.append(rec)
+
+    urls = sorted({r["url"] for r in records})
+    images = {}
+    if urls:
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for url, img in ex.map(fetch_image, urls):
+                if img:
+                    images[url] = img
+    for r in records:
+        r["image"] = images.get(r["url"])
+
     ea.emit(records)
 
 

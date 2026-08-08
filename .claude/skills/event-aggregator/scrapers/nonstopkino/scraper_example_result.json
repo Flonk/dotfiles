@@ -9,6 +9,7 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Wir laden dich herzlich zu einer Preview des neuen Films von Jane Schoenbrun (I SAW THE TV GLOW) mit Gillian Anderson und Hacks-Star Hannah Einbinder.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/07/teenagesexanddeathatcampmiasma-1280x720-1.jpg",
     "status": "scheduled"
   },
   {
@@ -21,6 +22,7 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Der neue Film von Marie Kreutzer (,,Corsage“) – großartig besetzt mit u.a. Léa Seydoux und Jella Haase sowie der Grande Dame des französischen Kinos, Catherine Deneuve, wird bei uns in einer Preview inklusive Gespräch mit Marie Kreutzer gezeigt.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/06/697777823_1719905226250574_5997439378287663068_n.jpg",
     "status": "scheduled"
   },
   {
@@ -33,6 +35,7 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Wir zeigen die LORD OF THE RINGS Trilogie in der Extended Version an 3 Tagen im September exklusiv für nonstop Mitglieder.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/07/AAAABYkBOETqdoenZo3j8ibC1cZvlwlBi_ll_X8aBENew7JCPjMlP8pf3IfzyCWN8eQ2QwCoo6H9vcy5G3xtl0M0qml5aCg4nkvrbRmT.jpg",
     "status": "scheduled"
   },
   {
@@ -45,6 +48,7 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Wir zeigen die LORD OF THE RINGS Trilogie in der Extended Version an 3 Tagen im September exklusiv für nonstop Mitglieder.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/07/AAAABYkBOETqdoenZo3j8ibC1cZvlwlBi_ll_X8aBENew7JCPjMlP8pf3IfzyCWN8eQ2QwCoo6H9vcy5G3xtl0M0qml5aCg4nkvrbRmT.jpg",
     "status": "scheduled"
   },
   {
@@ -57,6 +61,7 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Wir zeigen die LORD OF THE RINGS Trilogie in der Extended Version an 3 Tagen im September exklusiv für nonstop Mitglieder.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/07/AAAABYkBOETqdoenZo3j8ibC1cZvlwlBi_ll_X8aBENew7JCPjMlP8pf3IfzyCWN8eQ2QwCoo6H9vcy5G3xtl0M0qml5aCg4nkvrbRmT.jpg",
     "status": "scheduled"
   },
   {
@@ -68,6 +73,7 @@
     "venue": "Filmcasino",
     "city": "Wien",
     "category": "Nur für Mitglieder",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/05/1_bruno-kreisky-c2a9dor-film-_petro-domenigg_alamode-film.jpg",
     "status": "scheduled"
   },
   {
@@ -80,6 +86,7 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Auch 2026 wird es wieder einen Film aus dem Programm der diesjährigen Viennale geben, den wir vorab zeigen werden.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/07/foto_viennale24.jpg",
     "status": "scheduled"
   },
   {
@@ -92,6 +99,20 @@
     "city": "Wien",
     "category": "Nur für Mitglieder",
     "description": "Zu Halloween laden wir euch herzlich zu einem Special im Bellaria Kino ein.",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/08/Berlinale_Blutgraefin_2_CP-Domenigg_u.jpg",
+    "status": "scheduled"
+  },
+  {
+    "source": "nonstopkino",
+    "source_id": "la-bola-negra",
+    "url": "https://nonstopkino.at/events/la-bola-negra/",
+    "title": "La Bola Negra",
+    "start": "2026-11-16",
+    "venue": "Votiv Kino",
+    "city": "Wien",
+    "category": "Nur für Mitglieder",
+    "description": "Wir zeigen eines der Highlights von Cannes 2026 LA BOLA NEGRA, dessen Regieduo Javier Calvo und Javier Ambrossi mit dem Preis für die beste Regie ausgezeichnet wurde (zusammen mit Pawel Pawlikowski für Vaterland).",
+    "image": "https://nonstopkino.at/wp-content/uploads/2026/08/la-bola-negra-1024x683-1.png",
     "status": "scheduled"
   }
 ]
