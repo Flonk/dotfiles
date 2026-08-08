@@ -1,6 +1,6 @@
 {
-  "buildable": 117,
-  "blocked": 24,
+  "buildable": 129,
+  "blocked": 30,
   "sources": [
     {
       "slug": "porgy",
@@ -1177,6 +1177,178 @@
       "status": "blocked",
       "blocked_by": "1 KB stub",
       "covered_via": "-"
+    },
+    {
+      "slug": "vhs_wien",
+      "name": "Wiener Volkshochschulen",
+      "url": "https://www.vhs.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot Disallow /",
+      "covered_via": "NOT covered: the planetarium scraper reaches vhs.at via a planetarium-wien.at redirect - same disallow applies to it"
+    },
+    {
+      "slug": "vienna_at",
+      "name": "vienna.at",
+      "url": "https://www.vienna.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot Disallow /"
+    },
+    {
+      "slug": "buechereien",
+      "name": "Buechereien Wien",
+      "url": "https://buechereien.wien.gv.at/veranstaltungen",
+      "tier": "B",
+      "group": "literature",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "39 branches, readings. Host has NO www. prefix - the www. form does not resolve. 200, no JSON-LD, plain HTML parse"
+    },
+    {
+      "slug": "parkrun",
+      "name": "parkrun Austria",
+      "url": "https://www.parkrun.co.at/",
+      "tier": "B",
+      "group": "sport",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "weekly free 5k runs. Perennial by nature - filter per the availability axis"
+    },
+    {
+      "slug": "viecc",
+      "name": "Vienna Comic Con",
+      "url": "https://www.viecc.com/",
+      "tier": "B",
+      "group": "fair",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "gaming/con coverage; gaming is 0 records in the whole DB"
+    },
+    {
+      "slug": "meetup_wien",
+      "name": "Meetup Vienna",
+      "url": "https://www.meetup.com/find/?location=at--Vienna",
+      "tier": "B",
+      "group": "aggregator",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "19 Event JSON-LD on a board-games query. New source shape; covers the meetup/community and gaming gaps"
+    },
+    {
+      "slug": "wienersportstaetten",
+      "name": "Wiener Sportstaetten",
+      "url": "https://www.wienersportstaetten.at/",
+      "tier": "C",
+      "group": "sport",
+      "status": "unbuilt",
+      "probed": "2026-08-08"
+    },
+    {
+      "slug": "vetmeduni",
+      "name": "Vetmeduni Wien",
+      "url": "https://www.vetmeduni.ac.at/de/universitaet/aktuelles/veranstaltungen",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "200 with JSON-LD. Veterinary medicine, previously absent from the registry entirely"
+    },
+    {
+      "slug": "ait",
+      "name": "AIT Austrian Institute of Technology",
+      "url": "https://www.ait.ac.at/news-events",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "200 with JSON-LD. Austria largest non-university research institute"
+    },
+    {
+      "slug": "cemm",
+      "name": "CeMM",
+      "url": "https://cemm.at/news-events/events",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08"
+    },
+    {
+      "slug": "imba",
+      "name": "IMBA",
+      "url": "https://www.imba.oeaw.ac.at/events",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "/events answers 200 while the site root 403s - the OeAW block is path-scoped, not org-wide"
+    },
+    {
+      "slug": "gmi",
+      "name": "GMI Gregor Mendel Institute",
+      "url": "https://www.gmi.oeaw.ac.at/news-events",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08"
+    },
+    {
+      "slug": "univie_astro",
+      "name": "Univie Institut fuer Astrophysik",
+      "url": "https://astro.univie.ac.at/",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "the astronomy gap: planetarium records are public shows, not colloquia"
+    },
+    {
+      "slug": "univie_physik",
+      "name": "Univie Fakultaet fuer Physik",
+      "url": "https://physik.univie.ac.at/",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt",
+      "probed": "2026-08-08",
+      "notes": "the central univie calendar does not aggregate faculty colloquia"
+    },
+    {
+      "slug": "spielefest",
+      "name": "Oesterreichisches Spielefest",
+      "url": "https://spielefest.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "dead",
+      "blocked_by": "domain does not resolve (probed 2026-08-08)"
+    },
+    {
+      "slug": "spielbar",
+      "name": "Spielbar Wien",
+      "url": "https://spielbar.wien/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "dead",
+      "blocked_by": "domain does not resolve (probed 2026-08-08)"
+    },
+    {
+      "slug": "laufkalender",
+      "name": "Laufkalender Austria",
+      "url": "https://www.laufkalender.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "dead",
+      "blocked_by": "domain does not resolve (probed 2026-08-08)"
+    },
+    {
+      "slug": "iqoqi",
+      "name": "IQOQI Vienna",
+      "url": "https://www.iqoqi-vienna.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "dead",
+      "blocked_by": "domain does not resolve (probed 2026-08-08)"
     }
   ]
 }
