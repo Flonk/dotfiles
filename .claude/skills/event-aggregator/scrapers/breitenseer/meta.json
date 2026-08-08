@@ -21,11 +21,12 @@
   "notes": "single-venue arthouse cinema; homepage server-renders the full program (no pagination); one <a href=/event/...> block per showtime; 9 'geschlossen' + 1 'SOMMERPAUSE' placeholder rows (all at 00:00 Uhr) filtered out as non-events; no per-event price published anywhere, price_min/price_text always null; category always null (site has no genre/category label); image is the per-showtime <img src=.../storage/events/...> already in the listing card (no detail fetch needed), ~99% fill; duration parsed from the description's '..., AT 2026, 75 Min.' pattern when present (~86% fill, not every card has a description)",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 62,
+    "horizon_days": 61,
     "basis": "measured",
-    "density_per_day": 0.951,
-    "p95_lead_days": 52,
-    "sample_records": 77,
-    "sample_truncated": false
+    "density_per_day": 1.51,
+    "p95_lead_days": 51,
+    "sample_records": 74,
+    "sample_truncated": false,
+    "reach_days": 53
   }
 }

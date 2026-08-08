@@ -24,12 +24,13 @@
   "last_built": "2026-08-08",
   "notes": "Server-rendered HTML, no JS needed. Upcoming events live in the first events-list container (data-view=list); a second container (data-view=archive) holds past events with deep AJAX pagination — ignored. Site currently only publishes ~2 months ahead (8 upcoming events, Sep-Oct 2026). No price info published anywhere on listing or detail pages, so price_min/price_text left null.",
   "schedule": {
-    "cadence": "monthly",
+    "cadence": "weekly",
     "horizon_days": 86,
     "basis": "measured",
     "density_per_day": 0.19,
     "p95_lead_days": 72,
     "sample_records": 8,
-    "sample_truncated": false
+    "sample_truncated": false,
+    "reach_days": 72
   }
 }

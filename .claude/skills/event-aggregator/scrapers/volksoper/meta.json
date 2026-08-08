@@ -24,11 +24,12 @@
   "notes": "Server-rendered month pages at /spielplan/<german-month>-<year>.de.html; iterates from current month to EA_HORIZON_DAYS out. Months with no shows (e.g. August, house dark) silently serve the next month's content instead of an empty page, so records are deduped by (source_id, start) across months. No real category field on the listing (only CSS state classes like event-premiere/weekend), so category is left null rather than guessed from the description blurb. Price is a tier label (\"Preise A\"..\"Preise Z\"), not a number, so price_min is always null and price_text carries the label. district hardcoded to 1090 (Volksoper's own address; all listed venues are in-house: Volksoper, Balkon-Foyer).",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 180,
+    "horizon_days": 132,
     "basis": "measured",
     "density_per_day": 1.034,
     "p95_lead_days": 110,
     "sample_records": 90,
-    "sample_truncated": true
+    "sample_truncated": false,
+    "reach_days": 114
   }
 }

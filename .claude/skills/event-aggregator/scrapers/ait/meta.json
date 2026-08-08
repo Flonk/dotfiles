@@ -15,5 +15,15 @@
     },
     "canary": "tx_aitnewsfeatures_newsapi"
   },
-  "notes": "No JSON-LD on the live page despite the tier note (only a BreadcrumbList); the events list is a jQuery 'load more' widget hitting /index.php?id=2580&tx_aitnewsfeatures_newsapi[...]. Only 3 upcoming events exist on the site at build time -- confirmed genuine (amount=100 still returns 3), not a scraper bug. Teaser gives a coarse day/month range plus a unix timestamp (= the END date); scrape.py combines those for start/end and then enriches from each detail page's free-text 'Datum:'/'Ort:'/'Veranstaltungsort' phrasing for a precise start time and venue where the site states one. No category or price is ever published."
+  "notes": "No JSON-LD on the live page despite the tier note (only a BreadcrumbList); the events list is a jQuery 'load more' widget hitting /index.php?id=2580&tx_aitnewsfeatures_newsapi[...]. Only 3 upcoming events exist on the site at build time -- confirmed genuine (amount=100 still returns 3), not a scraper bug. Teaser gives a coarse day/month range plus a unix timestamp (= the END date); scrape.py combines those for start/end and then enriches from each detail page's free-text 'Datum:'/'Ort:'/'Veranstaltungsort' phrasing for a precise start time and venue where the site states one. No category or price is ever published.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 62,
+    "basis": "measured",
+    "density_per_day": 0.103,
+    "p95_lead_days": 52,
+    "sample_records": 3,
+    "sample_truncated": false,
+    "reach_days": 53
+  }
 }

@@ -23,11 +23,12 @@
   "notes": "https://www.hgm.at/events lists all upcoming events on one server-rendered page (no pagination found); 30 events found, spanning ~2 months out (through mid-Oct 2026). No genuine category field on site (badge is a location tag, used as venue), so category is always null. price parsed from 'Kostenfrei'/'X Euro' badge text.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 65,
+    "horizon_days": 180,
     "basis": "measured",
     "density_per_day": 0.441,
     "p95_lead_days": 54,
     "sample_records": 30,
-    "sample_truncated": false
+    "sample_truncated": true,
+    "reach_days": 68
   }
 }

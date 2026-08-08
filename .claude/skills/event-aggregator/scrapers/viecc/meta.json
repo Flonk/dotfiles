@@ -17,5 +17,13 @@
     },
     "canary": "Messe Wien"
   },
-  "notes": "One annual 2-day convention, so this is genuinely a single-record scraper (homepage only, no per-year archive/listing). Homepage's own JSON-LD has no Event type (only WebPage/WebSite/Organization), so this parses the plain HTML: date range from the '21. - 22. November 2026' heading text, opening hours from the Samstag/Sonntag lines, address from the on-page 'Messeplatz 1, 1020 Wien' text, price_min from the lowest of the on-page ticket prices (Adult Samstag/Sonntag/Weekend/Cosplayer). Breaks if next year's page drops the day-range heading format or the Öffnungszeiten lines; re-derive by curling the homepage and grepping for 'Öffnungszeiten'."
+  "notes": "One annual 2-day convention, so this is genuinely a single-record scraper (homepage only, no per-year archive/listing). Homepage's own JSON-LD has no Event type (only WebPage/WebSite/Organization), so this parses the plain HTML: date range from the '21. - 22. November 2026' heading text, opening hours from the Samstag/Sonntag lines, address from the on-page 'Messeplatz 1, 1020 Wien' text, price_min from the lowest of the on-page ticket prices (Adult Samstag/Sonntag/Weekend/Cosplayer). Breaks if next year's page drops the day-range heading format or the Öffnungszeiten lines; re-derive by curling the homepage and grepping for 'Öffnungszeiten'.",
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
 }

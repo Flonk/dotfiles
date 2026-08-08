@@ -15,5 +15,15 @@
     },
     "canary": "__NEXT_DATA__"
   },
-  "notes": "meetup.com/robots.txt has no ClaudeBot rule and no blanket Disallow, but it does disallow the ?location= query pattern used by the /find/?location=at--Vienna URL from the brief, so this uses the path-based city page https://www.meetup.com/cities/at/vienna/ instead (not matched by any Disallow rule) and reads its embedded __NEXT_DATA__ JSON (Next.js SSR props) rather than calling the disallowed /gql*, /mu_api/, or /api* endpoints. pageProps holds several curated arrays (eventsInLocation, todayEvents, thisWeekendEvents, topicalEvents*) that overlap; deduped by event id, ~43 unique events, only ~4 weeks of forward coverage (site doesn't render further ahead server-side; deeper pagination lives behind the disallowed GraphQL API so was not pursued). price_min only set from an explicit feeSettings.amount (6/43 events); most Meetup RSVPs are free but the page never states that outright, so it stays null rather than being assumed 0. Some venue.city values are the organizer's own garbled input (e.g. 'Aruba', a stray plz prefix) - passed through verbatim except a plz accidentally landing in the city field, which is stripped into district instead."
+  "notes": "meetup.com/robots.txt has no ClaudeBot rule and no blanket Disallow, but it does disallow the ?location= query pattern used by the /find/?location=at--Vienna URL from the brief, so this uses the path-based city page https://www.meetup.com/cities/at/vienna/ instead (not matched by any Disallow rule) and reads its embedded __NEXT_DATA__ JSON (Next.js SSR props) rather than calling the disallowed /gql*, /mu_api/, or /api* endpoints. pageProps holds several curated arrays (eventsInLocation, todayEvents, thisWeekendEvents, topicalEvents*) that overlap; deduped by event id, ~43 unique events, only ~4 weeks of forward coverage (site doesn't render further ahead server-side; deeper pagination lives behind the disallowed GraphQL API so was not pursued). price_min only set from an explicit feeSettings.amount (6/43 events); most Meetup RSVPs are free but the page never states that outright, so it stays null rather than being assumed 0. Some venue.city values are the organizer's own garbled input (e.g. 'Aruba', a stray plz prefix) - passed through verbatim except a plz accidentally landing in the city field, which is stripped into district instead.",
+  "schedule": {
+    "cadence": "daily",
+    "horizon_days": 22,
+    "basis": "measured",
+    "density_per_day": 1.654,
+    "p95_lead_days": 18,
+    "sample_records": 43,
+    "sample_truncated": false,
+    "reach_days": 26
+  }
 }

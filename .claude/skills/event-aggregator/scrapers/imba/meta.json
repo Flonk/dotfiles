@@ -15,5 +15,15 @@
     },
     "canary": "events-mini-list"
   },
-  "notes": "/events redirects to a bare homepage; the real listing is /seminars-events (shared IMP/IMBA/GMI Vienna BioCenter seminar calendar, same events as the imp scraper under different ids). Site is fronted by Cloudflare and ~20-30% of requests 403 with a JS challenge even from a real browser UA over plain HTTP/1.1 - scrape.py retries every fetch up to 10x with backoff, which is why a full run takes 1-2 minutes. Discovers events by walking the mini-calendar month-by-month (each page's 'next' link carries its own TYPO3 cHash, arbitrary month/year query combos 404 without one), then fetches each event's detail page for the authoritative 'Date: ..., Time: ..., Speaker: ..., Location: ..., Type: ..., Institute: ..., Host: ...' line (the list-page teaser truncates this for busy days). No price or address/district info anywhere - left null."
+  "notes": "/events redirects to a bare homepage; the real listing is /seminars-events (shared IMP/IMBA/GMI Vienna BioCenter seminar calendar, same events as the imp scraper under different ids). Site is fronted by Cloudflare and ~20-30% of requests 403 with a JS challenge even from a real browser UA over plain HTTP/1.1 - scrape.py retries every fetch up to 10x with backoff, which is why a full run takes 1-2 minutes. Discovers events by walking the mini-calendar month-by-month (each page's 'next' link carries its own TYPO3 cHash, arbitrary month/year query combos 404 without one), then fetches each event's detail page for the authoritative 'Date: ..., Time: ..., Speaker: ..., Location: ..., Type: ..., Institute: ..., Host: ...' line (the list-page teaser truncates this for busy days). No price or address/district info anywhere - left null.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 0.234,
+    "p95_lead_days": 170,
+    "sample_records": 41,
+    "sample_truncated": false,
+    "reach_days": 177
+  }
 }

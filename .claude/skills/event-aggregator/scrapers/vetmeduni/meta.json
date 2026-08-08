@@ -15,5 +15,15 @@
     },
     "canary": "news-headline-link"
   },
-  "notes": "Original url in this file 404'd (no JSON-LD, no de/ prefix); real listing is /universitaet/infoservice/veranstaltungen, paginated ~6/page via /page-N, sorted by date ascending. Detail pages have labelled 'Ort:'/'Veranstaltungsbeginn:'/'Veranstaltungsende:'/'Veranstaltungskategorie:' text that scrape.py parses; some entries (online seminars, internal ceremonies) omit 'Ort:' so venue fill is ~60%, never guessed."
+  "notes": "Original url in this file 404'd (no JSON-LD, no de/ prefix); real listing is /universitaet/infoservice/veranstaltungen, paginated ~6/page via /page-N, sorted by date ascending. Detail pages have labelled 'Ort:'/'Veranstaltungsbeginn:'/'Veranstaltungsende:'/'Veranstaltungskategorie:' text that scrape.py parses; some entries (online seminars, internal ceremonies) omit 'Ort:' so venue fill is ~60%, never guessed.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 150,
+    "basis": "measured",
+    "density_per_day": 0.138,
+    "p95_lead_days": 125,
+    "sample_records": 18,
+    "sample_truncated": false,
+    "reach_days": 131
+  }
 }

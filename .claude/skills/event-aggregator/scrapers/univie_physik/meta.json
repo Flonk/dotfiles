@@ -16,5 +16,13 @@
     },
     "canary": "news-box article"
   },
-  "notes": "The dedicated Physics Colloquium page (/events/colloquium/) is semester-bound (Mondays, term-time only) and currently shows only the already-finished SS26 schedule (last talk 15 June 2026) with WS26/27 not yet posted, so it contributes 0 records right now and is not scraped. /events/ is a small TYPO3 news-list of faculty-wide events (forums, conferences); the date chip shown per item is the article's publish date, not the event date -- actual start/end/venue/category live in the teaser paragraphs ('DD.MM.YYYY, HH:MM' or a German date-range plus 'Ort:'/'Event from <category>' lines), which scrape.py parses. Only 2 events published at build time; genuinely small, not a scraper bug."
+  "notes": "The dedicated Physics Colloquium page (/events/colloquium/) is semester-bound (Mondays, term-time only) and currently shows only the already-finished SS26 schedule (last talk 15 June 2026) with WS26/27 not yet posted, so it contributes 0 records right now and is not scraped. /events/ is a small TYPO3 news-list of faculty-wide events (forums, conferences); the date chip shown per item is the article's publish date, not the event date -- actual start/end/venue/category live in the teaser paragraphs ('DD.MM.YYYY, HH:MM' or a German date-range plus 'Ort:'/'Event from <category>' lines), which scrape.py parses. Only 2 events published at build time; genuinely small, not a scraper bug.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
 }

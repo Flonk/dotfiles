@@ -27,12 +27,13 @@
   "last_built": "2026-08-08",
   "notes": "Actual data lives on talks-calendar.ista.ac.at (Rails TalksCalendar app), not on the ista.ac.at page itself; ista.ac.at only embeds a 6-item teaser slider. Combines the /events HTML table (for the 'Series' category) with /generate_all_ics (for start/end/location/description). price is never stated on the site so price_min/price_text are always null.",
   "schedule": {
-    "cadence": "monthly",
+    "cadence": "weekly",
     "horizon_days": 70,
     "basis": "measured",
     "density_per_day": 0.291,
     "p95_lead_days": 58,
     "sample_records": 16,
-    "sample_truncated": false
+    "sample_truncated": false,
+    "reach_days": 59
   }
 }

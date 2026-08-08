@@ -22,11 +22,12 @@
   "notes": "Drupal 'movies' views on /movie/<slug> pages; showtimes only bookable/published ~1 week ahead (this-week+next-week), beyond that only a handful of premiere screenings and /coming-soon 'Starting' placeholder dates (no time, no price) reach further out; single-venue cinema, hardcoded address; image (og:image) and extra.duration_min (field--name-field-runtime's content=\"NNN\") both come off the same /movie/<slug> page already being fetched for genre/showtimes, no extra requests, 100% fill in practice",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 48,
+    "horizon_days": 14,
     "basis": "measured",
-    "density_per_day": 0.548,
-    "p95_lead_days": 40,
-    "sample_records": 34,
-    "sample_truncated": false
+    "density_per_day": 0.8,
+    "p95_lead_days": 12,
+    "sample_records": 32,
+    "sample_truncated": false,
+    "reach_days": 40
   }
 }

@@ -8,5 +8,13 @@
   "method": "html",
   "last_built": "2026-08-08",
   "notes": "Not shipped: its 41 records are identical to imba's, event for event and time for time - IMP, IMBA and GMI all publish the one shared Vienna BioCenter seminar calendar, and gmi/imba differ only in the site id. Measured 2026-08-08: imba n=41, gmi n=41, intersection 41; imp n=24 and is a strict subset of both. Shipping all three would store 106 rows for 41 distinct events. imba is the one kept because it is the superset. The working parser is preserved in git history if imba ever breaks and this needs to become the live one.",
-  "blocked_by": "duplicate of imba (same Vienna BioCenter calendar)"
+  "blocked_by": "duplicate of imba (same Vienna BioCenter calendar)",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
 }

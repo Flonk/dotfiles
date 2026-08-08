@@ -24,11 +24,12 @@
   "notes": "Uses the DNN JSON endpoint /DesktopModules/WebAPI/API/Event/Search?...&pageSize=10000 that the programme page's own JS calls; one request returns all upcoming concerts (no real pagination needed). No CategoryName or price is ever populated by this API; fetching per-event detail pages for price was tried but the site's connections started timing out intermittently after a couple of requests even with retries/delay, so price_min/price_text are left null (unknown) rather than guessed. End dates are never given by the API (single-occurrence concerts), so end is always null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 180,
+    "horizon_days": 106,
     "basis": "measured",
     "density_per_day": 0.77,
     "p95_lead_days": 88,
     "sample_records": 67,
-    "sample_truncated": true
+    "sample_truncated": false,
+    "reach_days": 90
   }
 }

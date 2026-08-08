@@ -30,12 +30,13 @@
   "last_built": "2026-08-08",
   "notes": "Programm page is server-rendered, no pagination (data-posts-number=100 covers all upcoming). Title prefix DD/MM + project_category_20XX class give the date; door time fetched per-event from detail page 'DOORS' block. No price info published anywhere on site (only ticket-vendor links), so price_min/price_text always null. No address/district published either. One past event was found mixed into the list and is filtered out by date.",
   "schedule": {
-    "cadence": "monthly",
+    "cadence": "weekly",
     "horizon_days": 180,
     "basis": "measured",
     "density_per_day": 0.077,
     "p95_lead_days": 186,
     "sample_records": 17,
-    "sample_truncated": true
+    "sample_truncated": true,
+    "reach_days": 222
   }
 }

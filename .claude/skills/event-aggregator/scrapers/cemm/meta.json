@@ -6,5 +6,13 @@
   "group": "academic",
   "status": "dead",
   "expect": {},
-  "notes": "The configured url (https://cemm.at/news-events/events) 200s but is a bogus TYPO3 path that silently redirects to the homepage. The real events page is https://cemm.at/about-cemm/events/upcoming-events, which as of 2026-08-08 renders a literal 'There are no upcoming events at the moment' placeholder with zero event markup - only the Landsteiner/S.M.A.R.T. lecture series teaser cards (annual, no dated instance) remain. The site's own events sitemap only lists stale tx_news ids from ~2016. No JSON-LD or API endpoint found. Nothing to scrape right now; re-check /about-cemm/events/upcoming-events periodically for when they next post a dated event."
+  "notes": "The configured url (https://cemm.at/news-events/events) 200s but is a bogus TYPO3 path that silently redirects to the homepage. The real events page is https://cemm.at/about-cemm/events/upcoming-events, which as of 2026-08-08 renders a literal 'There are no upcoming events at the moment' placeholder with zero event markup - only the Landsteiner/S.M.A.R.T. lecture series teaser cards (annual, no dated instance) remain. The site's own events sitemap only lists stale tx_news ids from ~2016. No JSON-LD or API endpoint found. Nothing to scrape right now; re-check /about-cemm/events/upcoming-events periodically for when they next post a dated event.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
 }

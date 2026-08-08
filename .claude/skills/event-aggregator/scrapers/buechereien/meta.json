@@ -18,5 +18,15 @@
     },
     "canary": "vast_id"
   },
-  "notes": "Page itself has no data (DNN shell); the DataTables widget it embeds (Portals/0/js/vastat/vatable.js) pulls the real feed from Portals/0/Files/stb_va/stb_va.json, one JSON array covering all ~255 currently-listed occurrences (~250 after filtering past). No per-event page exists, so url is the pretix registration link when one is attached, else the branch's own page. district/address come from a second pass over the ~22 distinct branch pages (regex on their published 'Adresse: Street, PLZ Wien' line), fetched concurrently and best-effort (null on failure, never guessed). price_min only set (0) when the free-text programme description literally says kostenlos/gratis/frei; otherwise null, since most events have no visible price at all."
+  "notes": "Page itself has no data (DNN shell); the DataTables widget it embeds (Portals/0/js/vastat/vatable.js) pulls the real feed from Portals/0/Files/stb_va/stb_va.json, one JSON array covering all ~255 currently-listed occurrences (~250 after filtering past). No per-event page exists, so url is the pretix registration link when one is attached, else the branch's own page. district/address come from a second pass over the ~22 distinct branch pages (regex on their published 'Adresse: Street, PLZ Wien' line), fetched concurrently and best-effort (null on failure, never guessed). price_min only set (0) when the free-text programme description literally says kostenlos/gratis/frei; otherwise null, since most events have no visible price at all.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 157,
+    "basis": "measured",
+    "density_per_day": 1.643,
+    "p95_lead_days": 131,
+    "sample_records": 253,
+    "sample_truncated": false,
+    "reach_days": 156
+  }
 }

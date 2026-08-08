@@ -23,11 +23,12 @@
   "notes": "list page's window.__NUXT__ is a hand-deduped non-JSON blob, ignored it; real data comes from the public REST endpoint konzerthaus.at/api/events/?date=YYYY-MM-DD&page_size=100&page=N (date required, results sorted ascending, paginate to ea.horizon()); site publishes events over a year out",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 180,
+    "horizon_days": 106,
     "basis": "measured",
     "density_per_day": 1.852,
     "p95_lead_days": 88,
     "sample_records": 163,
-    "sample_truncated": true
+    "sample_truncated": false,
+    "reach_days": 90
   }
 }

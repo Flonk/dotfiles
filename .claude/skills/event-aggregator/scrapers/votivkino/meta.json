@@ -21,11 +21,12 @@
   "notes": "combines /programm/tag/?date=YYYYMMDD (per-day showtimes, iterated up to 21 days or horizon whichever is smaller since real daily listings thin out after ~2 weeks), /specials/ (further-out one-off special-series screenings with actual dates/times, through ~2 months), and /vorschau/ (announced-but-unscheduled premieres, added only as a single date-only placeholder record for films not otherwise seen); Bellaria Kino showtimes appear interleaved on the same pages (class showtime_kino_bellaria, CSS-hidden for logged-out users) and are deliberately skipped since bellariakino has its own scraper slug; no genre/category field exists on the site so category is the marketing strand label ('Primetime', 'Sleazy Sunday', 'Game: On!', etc.) or null; no per-showtime price is published so price_min/price_text always null; image is the card's background-image style url (still/poster, 1280x720, 100% fill observed) on both the daily/specials cards and vorschau cards; runtime already surfaced as extra.duration_text (e.g. '119min', ~82% fill) for the pipeline's automatic end derivation, no direct end time published so end stays null",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 180,
+    "horizon_days": 65,
     "basis": "measured",
-    "density_per_day": 1.2,
-    "p95_lead_days": 50,
-    "sample_records": 108,
-    "sample_truncated": true
+    "density_per_day": 0.924,
+    "p95_lead_days": 54,
+    "sample_records": 109,
+    "sample_truncated": false,
+    "reach_days": 118
   }
 }

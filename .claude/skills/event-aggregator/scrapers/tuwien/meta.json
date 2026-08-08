@@ -23,12 +23,13 @@
   "last_built": "2026-08-08",
   "notes": "Server-rendered paginated list at /en/tu-wien/news/events/page/N (10/page). Stops paginating once a page's earliest event exceeds EA_HORIZON_DAYS; site publishes events well into 2027 so many pages exist beyond the horizon. price never shown on list page so price_min/price_text are always null. district only fills ~75% (many venues are Online/Zoom/webinar with no postal code).",
   "schedule": {
-    "cadence": "monthly",
-    "horizon_days": 180,
+    "cadence": "weekly",
+    "horizon_days": 138,
     "basis": "measured",
     "density_per_day": 0.11,
     "p95_lead_days": 115,
     "sample_records": 30,
-    "sample_truncated": true
+    "sample_truncated": false,
+    "reach_days": 128
   }
 }

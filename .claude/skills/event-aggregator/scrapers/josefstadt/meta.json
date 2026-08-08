@@ -23,11 +23,12 @@
   "notes": "Actual programme lives in an ASP.NET WebForms iframe (spielplan_stuecke.aspx), not the wrapper page; parser postbacks the month dropdown. price_min/category almost never available (ticket sales open close to the date), left null on purpose.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 180,
+    "horizon_days": 104,
     "basis": "measured",
     "density_per_day": 1.864,
     "p95_lead_days": 87,
     "sample_records": 123,
-    "sample_truncated": true
+    "sample_truncated": false,
+    "reach_days": 90
   }
 }

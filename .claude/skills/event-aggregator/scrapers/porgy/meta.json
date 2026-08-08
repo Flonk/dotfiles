@@ -24,9 +24,10 @@
     "cadence": "weekly",
     "horizon_days": 180,
     "basis": "measured",
-    "density_per_day": 0.605,
-    "p95_lead_days": 247,
-    "sample_records": 185,
-    "sample_truncated": true
+    "density_per_day": 0.608,
+    "p95_lead_days": 248,
+    "sample_records": 186,
+    "sample_truncated": true,
+    "reach_days": 306
   }
 }

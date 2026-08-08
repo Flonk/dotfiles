@@ -26,12 +26,13 @@
   "last_built": "2026-08-08",
   "notes": "no price in listing (needs a per-event detail fetch we skip), so price_min/price_text are always null; site rate-limits aggressively (429) after ~45+ requests in a short window across runs, so avoid re-running check.py back-to-back; also fetches https://www.eventbrite.at/d/austria--wien/board-games/ (capped at 6 pages) to plug the gaming/board-games blind spot -- it's a full-text search (q=\"board games\"), not a real category filter, so most hits are noise, but it reliably surfaces a handful of genuine finds (chess meetups, board-game conventions) the all-events ranking never returns; merged with all-events and deduped on the shared source_id key; tried gaming/tabletop-gaming/video-games/hobbies too and they search the same ~1017-item fuzzy pool with no better gaming signal, so left out to conserve request budget",
   "schedule": {
-    "cadence": "weekly",
+    "cadence": "daily",
     "horizon_days": 180,
     "basis": "measured",
-    "density_per_day": 1.401,
-    "p95_lead_days": 137,
-    "sample_records": 549,
-    "sample_truncated": true
+    "density_per_day": 1.509,
+    "p95_lead_days": 145,
+    "sample_records": 706,
+    "sample_truncated": true,
+    "reach_days": 468
   }
 }

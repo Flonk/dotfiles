@@ -29,6 +29,7 @@
     "density_per_day": 0.018,
     "p95_lead_days": 67,
     "sample_records": 9,
-    "sample_truncated": false
+    "sample_truncated": false,
+    "reach_days": 352
   }
 }

@@ -6,5 +6,13 @@
   "group": "sport",
   "status": "dead",
   "expect": {},
-  "notes": "Not built: blocked_by explicit anti-scraping policy. robots.txt on www.parkrun.co.at states verbatim 'We request that automated scraping does not take place' (plus a Disallow on /results/ and /*/futureroster, which is exactly where per-date occurrence info would live), and parkrun.com/scraping states 'parkrun does not condone the scraping of our data' and points to an Anti-Scraping Policy. Homepage/events page are only reachable with a browser-like Referer/Accept-Language (plain UA gets a 403), consistent with active anti-bot posture. Respecting this per the same policy applied to vhs.at/vienna.at; no data fetched or written."
+  "notes": "Not built: blocked_by explicit anti-scraping policy. robots.txt on www.parkrun.co.at states verbatim 'We request that automated scraping does not take place' (plus a Disallow on /results/ and /*/futureroster, which is exactly where per-date occurrence info would live), and parkrun.com/scraping states 'parkrun does not condone the scraping of our data' and points to an Anti-Scraping Policy. Homepage/events page are only reachable with a browser-like Referer/Accept-Language (plain UA gets a 403), consistent with active anti-bot posture. Respecting this per the same policy applied to vhs.at/vienna.at; no data fetched or written.",
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
 }

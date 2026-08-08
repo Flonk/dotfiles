@@ -31,11 +31,12 @@
   "notes": "Only covers the main KHM building + Neue Hofburg (Kunstkammer, Gemäldegalerie, Ephesos, Hofjagd- und Rüstkammer, etc.) via /ausstellungen and /ausstellungen/vorschau. Weltmuseum, Theatermuseum, Schatzkammer and Wagenburg are separate KHM-Museumsverband sites not reachable from this page (Schatzkammer links out to kaiserliche-schatzkammer.at) and are NOT covered here; they'd need their own scrapers. Permanent collections and exhibitions with no published end get extra.permanent=true, end=null, start defaulted to today (unknown real start).",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 88,
+    "horizon_days": 180,
     "basis": "measured",
     "density_per_day": 0.036,
     "p95_lead_days": 73,
     "sample_records": 14,
-    "sample_truncated": false
+    "sample_truncated": true,
+    "reach_days": 239
   }
 }

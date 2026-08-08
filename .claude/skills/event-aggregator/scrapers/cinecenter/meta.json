@@ -21,12 +21,13 @@
   "last_built": "2026-08-08",
   "notes": "showtimes live on ticket.cinecenter.at (booking system embedded via iframe on /tagesprogramm and /wochenplan, not on the homepage itself); site only publishes ~1 week of regular showtimes plus occasional far-out single preview screenings (e.g. a 'Love Birds Filmreihe' date in October); price not per-show (only a general tiered price list on /preise), so price_min/price_text always null; category = film's Genre field from its detail page; extra.duration_min already came from the showtime title attribute (100% fill, no change needed); image is the film's poster <img> on the same res_main.aspx?op=info detail page already fetched for genre/description (~90% fill - a handful of titles have no poster on site); per-film detail fetches (~20-30 distinct film ids) are now concurrent (ThreadPoolExecutor, 8 workers, 4 retries) - this ASP.NET backend is slow/flaky and a sequential loop was pushing check.py close to its 300s kill; keep it concurrent",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 14,
+    "cadence": "daily",
+    "horizon_days": 6,
     "basis": "measured",
-    "density_per_day": 1.239,
+    "density_per_day": 13.667,
     "p95_lead_days": 5,
-    "sample_records": 83,
-    "sample_truncated": false
+    "sample_records": 82,
+    "sample_truncated": false,
+    "reach_days": 6
   }
 }

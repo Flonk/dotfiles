@@ -23,11 +23,12 @@
   "notes": "Server-rendered HTML, month-by-month via ?date=YYYY-MM, no exhibition-style end dates (each showing is its own occurrence). category/description are sparsely filled since the site rarely tags them; price not shown on listing so left null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 180,
+    "horizon_days": 119,
     "basis": "measured",
     "density_per_day": 0.745,
     "p95_lead_days": 99,
     "sample_records": 79,
-    "sample_truncated": true
+    "sample_truncated": false,
+    "reach_days": 133
   }
 }
