@@ -229,6 +229,41 @@ null-end explicitly.
 Inverse specificity is a good axe for wallpaper but does not produce a digest on its own —
 it cuts roughly 25%, not 95%.
 
+### Perennial availability — a third axis
+
+Distinct from run length. Flo on a swimming course: *"I dont really care about, I can do
+that any day of the year."* On VHS: *"language courses are on all year, those we should
+just filter."*
+
+The signal is not "this repeats" but **"nothing is lost by missing it today"**. A course
+block may only carry 8 dates and still be worthless, because an equivalent one starts next
+month. Demote (or filter outright) standing offers: language courses, swimming courses,
+fitness classes, recurring adult-ed intake.
+
+Contrast with **annual events of scale** — Vienna Marathon: *"genuinely huge."* Once a
+year, city-wide, unmissable. High run length is impossible for these, so they need no
+special handling, but they must never be caught by a "sport = routine" rule.
+
+### Incongruity — wanted, unsolved
+
+The single most-liked result in testing was a WKO listing, *"Junge Wirtschaft Waldviertel
+geht klettern!"* — a business-networking association going climbing. Flo: *"sounds
+cringely amazing, AI wouldn't understand. that's peak reverse specificity."*
+
+What makes it land is **category mismatch**: a business-chamber source emitting a sport
+activity. That is in principle detectable as source-group × activity-type disagreement,
+but treat it as a hypothesis, not a solution — the same rule would promote every mislabelled
+record in the DB, and most mismatches are just bad metadata rather than comedy.
+
+**Known tension, unresolved:** this event is in 3573 Rosenburg-Mold, Waldviertel. Any
+Vienna geography filter removes it. The most-wanted result in testing is out of scope by
+the rules already agreed. Related: the train-ride rule and the unsolved "magnitude"
+question below.
+
+Bieryoga at Ottakringer is the counter-case and needs no new machinery: fine once, spam
+weekly, and run-length demotion plus the rotation diff already handle it — the diff tells
+you when it *enters* the rotation, which is the only moment it is news.
+
 ## Blacklist
 
 `blacklist.json` — excluded at **read time only**, so records are still scraped and stored
@@ -341,6 +376,40 @@ the 10 institutional calendars actually scraped. Ordered by value.
 
 Sanity check on the ★★★ case: a **marine mammal** congress would be caught (NHM). A
 **chemistry** congress or a **quantum optics** talk would not.
+
+### Missing categories — new sources needed
+
+Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is.
+
+1. **Participatory sport — ★★★ and effectively uncovered.** Highest-enthusiasm category in
+   the priority table. 68 title matches and nearly all noise: Aperol Yoga, Bieryoga ×2, an
+   Aurena camping-gear auction, a WKO networking climb. Genuine hits: one `meinbezirk`
+   swimming course and `vienna_marathon`. **Missing entirely**: running-race calendar
+   (Vienna has dozens beyond the marathon), parkrun, climbing gyms, sport clubs, public
+   swimming programmes. Also still undone: `findings.md` says to encode Strasser Workout's
+   Mon/Thu schedule as a fixed rule since it is Instagram-only — that has not been written.
+   Filter out perennial course offerings per the availability axis above.
+2. **VHS Wien — the largest reachable source not scraped.** Austria's biggest adult-ed
+   provider. Already scraped *by accident*: `planetarium-wien.at` redirects to
+   `vhs.at/de/e/planetarium`, and that one slice alone yields **532 records**. The rest —
+   ~20 Volkshochschulen, lectures, workshops — is untouched, same site and same parser
+   shape, already proven. **Must filter perennial courses** (language, fitness) or it will
+   flood everything.
+3. **Board games / gaming — zero records out of 11,289.** Total blind spot. No Spielefest
+   (named in the priority table under trade fairs), no board-game cafés, no LAN/e-sport,
+   no pen-and-paper. Flo: *"would be great to know."*
+4. **Food & drink — ★★☆ with 31 hits and two sources**, one of which is a brewery. Flo:
+   *"I dont mind a lot of food"* — so err toward more sources, not fewer. Missing: Whisky
+   Festival (named as a want, no scraper), Heurigen calendar, tastings, food markets.
+5. **Büchereien Wien** — 39 branches, readings and events, not scraped. The Hauptbücherei
+   surfaces only because `meinbezirk` wrote about its rooftop cinema.
+6. **Grätzlfeste / Straßenfeste — single point of failure.** 78 hits, **67 from
+   `wien_gv_at` alone**. This is the project's original trigger. If that one listing thins
+   out, the thing this was built for goes quiet — and the canary will not catch it,
+   because the scraper still returns plenty of other events. Needs a second source.
+7. **Queer / activism** — 24 hits, no Regenbogenparade/Pride source.
+8. **Markets** — 62 hits, adequate for flea markets (ranked backlog anyway), but
+   Christkindlmärkte will matter in December.
 
 ## Still needed from Flo
 
