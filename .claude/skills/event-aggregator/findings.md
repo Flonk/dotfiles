@@ -411,6 +411,32 @@ Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is
 8. **Markets** — 62 hits, adequate for flea markets (ranked backlog anyway), but
    Christkindlmärkte will matter in December.
 
+### Migrate to a TypeScript project
+
+Flo, 2026-08-08: *"migrate to a typescript project (with npm nodejs package.json .envrc
+shell.nix)"*. Today everything is stdlib Python run through `nix-shell -p python3`, chosen
+because scrapers had to be disposable. That tradeoff is spent — the pipeline is now the
+part that grows (calendar sync, TMDB/Spotify enrichment, digest rendering), and all three
+have better libraries on node.
+
+Two halves, and they are independent:
+
+1. **Pipeline** (`db.py`, `run.py`, `digest.py`, `rotate.py`, `merge.py`) — ~700 lines,
+   no HTML parsing, all the logic worth type-checking. Port this first; the schema is
+   already JSON Schema, so record types can be generated rather than hand-written.
+2. **110 scrapers** — each is a bespoke regex/JSON parser. Porting them is 110 rewrites
+   with 110 chances to regress a working source, and buys nothing on its own. Do it
+   source-by-source, on the next occasion each one needs re-opening anyway (see the parser
+   pass above), not as a big bang.
+
+So the interim state is intentional: a TS pipeline that shells out to Python scrapers over
+the JSON contract they already emit on stdout. The contract is the seam — it is what makes
+the mixed state safe rather than sloppy.
+
+Skeleton wanted: `package.json`, `tsconfig.json`, `shell.nix` (node + python3, since both
+are needed during the interim), `.envrc` for direnv, and `EA_DB` still honoured so the
+existing `events.db` carries over untouched.
+
 ## Still needed from Flo
 
 - Home district, for proximity weighting
