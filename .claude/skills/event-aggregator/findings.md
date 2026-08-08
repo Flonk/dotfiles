@@ -411,31 +411,45 @@ Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is
 8. **Markets** — 62 hits, adequate for flea markets (ranked backlog anyway), but
    Christkindlmärkte will matter in December.
 
-### Migrate to a TypeScript project
+### Migrate to a TypeScript project — pipeline done 2026-08-08
 
 Flo, 2026-08-08: *"migrate to a typescript project (with npm nodejs package.json .envrc
-shell.nix)"*. Today everything is stdlib Python run through `nix-shell -p python3`, chosen
+shell.nix)"*. Everything was stdlib Python run through `nix-shell -p python3`, chosen
 because scrapers had to be disposable. That tradeoff is spent — the pipeline is now the
-part that grows (calendar sync, TMDB/Spotify enrichment, digest rendering), and all three
-have better libraries on node.
+part that grows (calendar sync, TMDB/Spotify enrichment, digest rendering).
 
 Two halves, and they are independent:
 
-1. **Pipeline** (`db.py`, `run.py`, `digest.py`, `rotate.py`, `merge.py`) — ~700 lines,
-   no HTML parsing, all the logic worth type-checking. Port this first; the schema is
-   already JSON Schema, so record types can be generated rather than hand-written.
-2. **110 scrapers** — each is a bespoke regex/JSON parser. Porting them is 110 rewrites
-   with 110 chances to regress a working source, and buys nothing on its own. Do it
-   source-by-source, on the next occasion each one needs re-opening anyway (see the parser
-   pass above), not as a big bang.
+1. **Pipeline** — **done.** `db.py`, `run.py`, `digest.py`, `rotate.py` and `merge.py` are
+   gone, replaced by `src/` (see SKILL.md). Node 24 runs `.ts` directly, so there is no
+   build step, and `node:sqlite` means **zero runtime dependencies** — typescript and
+   @types/node are dev-only. `EA_DB` still honoured; the existing `events.db` carried over
+   untouched via an `ALTER TABLE` for the new `image` column.
+2. **110 scrapers** — still Python, deliberately. Each is a bespoke regex/JSON parser;
+   porting them is 110 rewrites with 110 chances to regress a working source, and buys
+   nothing on its own. Do it source-by-source, whenever one needs re-opening anyway (see
+   the parser pass above), not as a big bang.
 
-So the interim state is intentional: a TS pipeline that shells out to Python scrapers over
-the JSON contract they already emit on stdout. The contract is the seam — it is what makes
-the mixed state safe rather than sloppy.
+The seam is the contract the scrapers already spoke: one JSON record per line on stdout.
+Nothing about a scraper had to change.
 
-Skeleton wanted: `package.json`, `tsconfig.json`, `shell.nix` (node + python3, since both
-are needed during the interim), `.envrc` for direnv, and `EA_DB` still honoured so the
-existing `events.db` carries over untouched.
+**Verified against the Python implementation before deleting it**, on a copy of the live
+DB: `digest` output byte-identical, `rotate` identical, `merge` identical (11,292 records,
+same timed/end/derived counts), and a seeded ingest of 607 records agreeing on every data
+column including `extra`.
+
+Two deliberate residues:
+
+- **13 hash mismatches out of 607.** The change hash is built from a `json.dumps` of the
+  field list, and Python prints a float `15.0` where JS prints `15`. `price_min` is the one
+  float column, so `pyFloat` renders it Python-style — which fixes the 5410 records whose
+  scraper emitted a float and breaks the 13 (all `depot`) that emitted an int literal.
+  Cost of a mismatch is one inflated `n_changed`, nothing more; `first_seen` is untouched,
+  so rotation detection is unaffected.
+- **Two validators.** `src/schema.ts` serves the pipeline, `scrapers/check.py` serves the
+  builder agents. Both read `event.schema.json`, so they cannot drift on the schema itself,
+  only on how strictly they read it. Collapsing them would mean making the agents depend on
+  node, which is not worth it.
 
 ## Still needed from Flo
 
