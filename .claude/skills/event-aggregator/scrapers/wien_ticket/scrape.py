@@ -2,8 +2,21 @@ import base64
 import datetime
 import json
 import re
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import ea
+
+
+def fetch_retry(url, tries=5, timeout=60):
+    for i in range(tries):
+        try:
+            return ea.fetch(url, timeout=timeout)
+        except Exception:
+            if i == tries - 1:
+                raise
+            time.sleep(min(2 * (i + 1), 8))
 
 BASE = "https://www.wien-ticket.at"
 CATEGORIES = ["konzerte", "klassik", "kultur", "musicals-shows", "sport", "freizeit"]
@@ -13,12 +26,11 @@ MAX_PAGES = 40
 LI_RE = re.compile(
     r'<li class="event-list-item[^"]*"\s+data-tracking="([^"]+)">(.*?)</li>', re.S)
 HREF_RE = re.compile(r'<a href="([^"]+)"')
-INFO_RE = re.compile(r'info-btn m0">\s*([^<]+?)\s*</p>', re.S)
 TITLE_RE = re.compile(r'<h2[^>]*>(.*?)</h2>', re.S)
 LOC_RE = re.compile(r'event-location[^"]*"[^>]*>([^<]+)</p>', re.S)
 PRICE_RE = re.compile(r'data-alternativetext="([^"]*)"')
 COUNT_RE = re.compile(r'(\d+)\s*Events')
-DATE2_RE = re.compile(r'(\d{2})\.(\d{2})\.(\d{4})')
+ISO_DT_RE = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}')
 
 
 def page_url(cat, page):
@@ -40,17 +52,53 @@ def parse_start(item):
     return date_s
 
 
-def parse_end(info_text, start_date):
-    if not info_text:
-        return None
-    dates = DATE2_RE.findall(info_text)
-    if len(dates) < 2:
-        return None
-    dd, mm, yy = dates[1]
-    end_date = f"{yy}-{mm}-{dd}"
-    if end_date == start_date[:10]:
-        return None
-    return end_date
+def fetch_end_map(url):
+    # detail page carries schema.org Event JSON-LD (one block per upcoming
+    # occurrence of that show); build start->end lookup keyed by both
+    # date+time and date-only so callers can match either precision.
+    out = {}
+    try:
+        page = fetch_retry(url, tries=4, timeout=20)
+    except Exception as e:
+        sys.stderr.write(f"detail fetch failed {url}: {e}\n")
+        return out
+    for d in ea.jsonld(page):
+        types = d.get("@type")
+        types = types if isinstance(types, list) else [types]
+        if not any(isinstance(t, str) and "Event" in t for t in types):
+            continue
+        sd, ed = d.get("startDate"), d.get("endDate")
+        if not sd or not ed or not ISO_DT_RE.match(sd) or not ISO_DT_RE.match(ed):
+            # site occasionally emits a garbage sentinel like
+            # "-001-11-30T00:00:00+01:05" for endDate - never pass that on
+            continue
+        if ed[:16] < sd[:16] or int(ed[:4]) - int(sd[:4]) > 2:
+            continue
+        # site's own offset is already Europe/Vienna local time (+01:00/+02:00)
+        out[sd[:16]] = ed[:16]
+        out.setdefault(sd[:10], ed[:16])
+    return out
+
+
+def enrich_ends(records):
+    urls = sorted({r["url"] for r in records
+                   if r.get("end") is None and not (r.get("extra") or {}).get("permanent")})
+    if not urls:
+        return
+    maps = {}
+    with ThreadPoolExecutor(max_workers=10) as ex:
+        futs = {ex.submit(fetch_end_map, u): u for u in urls}
+        for fut in as_completed(futs):
+            maps[futs[fut]] = fut.result()
+    for r in records:
+        if r.get("end") is not None or (r.get("extra") or {}).get("permanent"):
+            continue
+        m = maps.get(r["url"])
+        if not m:
+            continue
+        end = m.get(r["start"]) or m.get(r["start"][:10])
+        if end:
+            r["end"] = end
 
 
 def main():
@@ -64,7 +112,7 @@ def main():
         keep_going = True
         while page <= total_pages and page <= MAX_PAGES and keep_going:
             url = page_url(cat, page)
-            html_doc = ea.fetch(url)
+            html_doc = fetch_retry(url)
             if page == 1:
                 cm = COUNT_RE.search(html_doc)
                 if cm:
@@ -139,15 +187,18 @@ def main():
                     continue
 
                 seen.add(source_id)
-                info_m = INFO_RE.search(body)
-                end = parse_end(info_m.group(1) if info_m else None, start)
+                # The listing's second date is the production's LAST date, not
+                # this performance's end - a 14:00 show would have claimed to
+                # end 14 months later. Each record here is one dated
+                # performance, so the only honest end is the timed endDate that
+                # enrich_ends pulls from the detail page's JSON-LD.
                 records.append({
                     "source": "wien_ticket",
                     "source_id": source_id,
                     "url": detail_url,
                     "title": title,
                     "start": start,
-                    "end": end,
+                    "end": None,
                     "venue": venue,
                     "district": None,
                     "city": city,
@@ -158,6 +209,7 @@ def main():
             if page_exceeded:
                 keep_going = False
             page += 1
+    enrich_ends(records)
     ea.emit(records)
 
 

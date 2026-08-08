@@ -4273,21 +4273,6 @@
   },
   {
     "source": "wien_gv_at",
-    "source_id": "6131310",
-    "url": "https://www.wien.gv.at/veranstaltungen/klaenge-aus-der-kaiserzeit-belvederekonzert",
-    "title": "Klänge aus der Kaiserzeit - Belvederekonzert",
-    "start": "2026-08-08T10:30",
-    "end": "2026-08-08T11:30",
-    "venue": "Belvederegarten",
-    "city": "Wien",
-    "address": "Prinz-Eugen-Straße 27",
-    "price_min": 0.0,
-    "price_text": "Gratis",
-    "category": "Barrierefreier Zugang, Gratis, Förderung, Musik [Ebene1 HKV], Volksmusik, Konzert, Outdoor",
-    "description": "Beim Belvederekonzert geben die Wiener Hoch- und Deutschmeister jene Komponisten das Wort, die im zivilen Frack und in k.u.k Uniform erfolgreich waren."
-  },
-  {
-    "source": "wien_gv_at",
     "source_id": "6157994",
     "url": "https://www.wien.gv.at/veranstaltungen/kostenlose-bewegungsworkshops-in-leopoldstadt",
     "title": "Kostenlose Bewegungsworkshops in Leopoldstadt",
@@ -4394,22 +4379,6 @@
     "price_text": "Gratis",
     "category": "Barrierefreier Zugang, Gratis, Für Kinder, Förderung, Sommer, Outdoor, Literatur [HKV], ÖkoEvent, Musik [Ebene1 HKV], Konzert, Pop",
     "description": "Die Donaupiraten & Wolfgang Hartl: 10 Jahre ASAGAN. Ein Mitmach-Lesekonzert für Kinder ab vier Jahren."
-  },
-  {
-    "source": "wien_gv_at",
-    "source_id": "6130224",
-    "url": "https://www.wien.gv.at/veranstaltungen/duo-alone-und-nase-nus",
-    "title": "Kultursommer Duo Alone und Nase Nus",
-    "start": "2026-08-08T10:30",
-    "end": "2026-08-08T11:30",
-    "venue": "Fußballverein",
-    "district": 1210,
-    "city": "Wien",
-    "address": "Jedlersdorfer Platz 25",
-    "price_min": 0.0,
-    "price_text": "Gratis",
-    "category": "Barrierefreier Zugang, Gratis, Förderung, Sommer, Outdoor, ÖkoEvent, Bühne [Ebene1 HKV], Tanz",
-    "description": "Duo Alone & Nase Nus: Gib den Takt an, fall nicht runter. Ein zeitgenössisches Zirkusstück für Kinder ab sechs Jahren."
   },
   {
     "source": "wien_gv_at",
@@ -11316,21 +11285,6 @@
     "price_text": "Gratis",
     "category": "Ausstellung [HKV], Gratis, Förderung",
     "description": "Im Rahmen der Ateliertage öffnen Ottakringer Künstler*innen und Künstler* die Türen zu ihren Arbeitsorten. Nach einer Sommerpause findet der nächste Termin im Herbst 2026 statt."
-  },
-  {
-    "source": "wien_gv_at",
-    "source_id": "6131583",
-    "url": "https://www.wien.gv.at/veranstaltungen/pepe-speedy",
-    "title": "pepe-speedy",
-    "start": "2026-08-08T10:30",
-    "end": "2026-08-08T11:30",
-    "district": 1160,
-    "city": "Wien",
-    "address": "Kongreßpark",
-    "price_min": 0.0,
-    "price_text": "Gratis",
-    "category": "Sommer, Musik [Ebene1 HKV], Jazz, World, Konzert, Gratis, ÖkoEvent, Für Kinder, Förderung, Barrierefreier Zugang, Outdoor",
-    "description": "Interaktives Jazzkonzert mit Gitarre, Klarinette, Saxophon und selbstgebauten Pepephon."
   },
   {
     "source": "wien_gv_at",

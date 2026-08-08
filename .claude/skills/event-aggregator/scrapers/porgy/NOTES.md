@@ -23,3 +23,9 @@
   price out of `.tickets`, or splits /events/upcoming across pages.
 - re-derive: re-fetch /events/upcoming, diff row HTML structure, re-check
   one detail page's tickets div for the comment-stripping still needed.
+- end/duration: investigated 2026-08-08. No text duration anywhere on site.
+  `/events/export/calendar/<id>.ics` has DTEND, but checked 30+ ids across
+  all start-time slots (11:00 matinee through 22:00 late show) and every
+  single one is exactly DTSTART+2h00m, with no variation by genre/venue/
+  room. That's a CMS-wide default, not a real published end time -
+  deliberately NOT used. `end` stays null for all porgy records.

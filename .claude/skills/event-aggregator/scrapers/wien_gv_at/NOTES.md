@@ -17,3 +17,9 @@
   Re-derive by loading https://www.wien.gv.at/veranstaltungen in a browser devtools network
   tab and copying the XHR to search.wien.gv.at.
 - category = comma-joined `defined_terms[].title` verbatim (site has no single category field).
+- end: already handled, no change needed (2026-08-08 audit). `dates[].to` /
+  `ranges[].to` in daoh_edit are genuine when they differ from `from`
+  (~77% of single-occurrence dates); the remaining ~23% have `to == from`
+  in the source itself - the site publishes no duration for those (checked
+  free-text `content` for a couple, confirmed no end time anywhere), so
+  they correctly stay null rather than being guessed.

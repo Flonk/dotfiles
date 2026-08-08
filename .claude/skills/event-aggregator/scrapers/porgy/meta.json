@@ -19,7 +19,7 @@
     "canary": "class=\"row event_list"
   },
   "last_built": "2026-08-08",
-  "notes": "listing HTML gives date/time/title/category; price needs one detail-page fetch per event (185 requests, ~30s)",
+  "notes": "listing HTML gives date/time/title/category; price needs one detail-page fetch per event (185 requests, ~30s). end/duration: site publishes no text duration; the .ics export has DTEND but it is always exactly DTSTART+2h00m for every event checked (matinees, brunches, late shows alike) - a CMS default, not real data, so end is deliberately left null rather than passed through.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 180,

@@ -16,3 +16,13 @@
 - Breaks if: the `event-list-item` / `data-tracking` markup changes, or the GA4 tracking payload shape
   changes (`ecommerce.items[0]`). Re-derive by curling any `/de/{category}/catalog` page and inspecting
   one `<li>` block.
+- end: added 2026-08-08. Each detail page has schema.org `Event` JSON-LD with a real
+  per-event `endDate` (1.5h-3h after start, varies by show - not a fixed offset, confirmed
+  by sampling). `enrich_ends()` fetches every unique event URL once via a 10-worker
+  ThreadPoolExecutor after the listing pass and matches by `startDate` (a detail page can
+  list several JSON-LD blocks, one per upcoming date of that show). Adds ~2-2.5min to the
+  run (listing alone is ~90s; full run with enrichment is ~3-3.5min for ~650 events, still
+  well under check.py's 300s budget). The site occasionally emits a garbage endDate sentinel
+  (`-001-11-30T00:00:00+01:05`, seen on a handful of events) - rejected by requiring a valid
+  4-digit-year ISO timestamp and end >= start; those records correctly keep end=null rather
+  than trusting it. Result: 98% end fill on timed records (639/652 in the sample run).

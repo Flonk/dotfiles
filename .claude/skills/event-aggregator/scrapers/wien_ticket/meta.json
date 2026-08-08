@@ -14,12 +14,13 @@
     "required_fill": {
       "price_min": 0.9,
       "category": 0.9,
-      "venue": 0.9
+      "venue": 0.9,
+      "end": 0.85
     },
     "canary": "event-list-item"
   },
   "last_built": "2026-08-08",
-  "notes": "category listing pages (/de/{konzerte,klassik,kultur,musicals-shows,sport,freizeit}/catalog, paginated /catalog/fromN) embed a base64 GA4 data-tracking blob per <li> with clean date/venue/price/category fields, no per-detail-page fetches needed; some items (city-pass style standing tickets, e.g. hop-on-hop-off bus, museum day tickets) carry a stale placeholder veranstaltungsdatum in the past — detected via start<today and emitted as extra.permanent=true with start=today, end=null instead of trusting the bogus date",
+  "notes": "category listing pages (/de/{konzerte,klassik,kultur,musicals-shows,sport,freizeit}/catalog, paginated /catalog/fromN) embed a base64 GA4 data-tracking blob per <li> with clean date/venue/price/category fields, no per-detail-page fetches needed; some items (city-pass style standing tickets, e.g. hop-on-hop-off bus, museum day tickets) carry a stale placeholder veranstaltungsdatum in the past — detected via start<today and emitted as extra.permanent=true with start=today, end=null instead of trusting the bogus date. end: each detail page's schema.org JSON-LD carries a real endDate (varies 1.5-3h by event, not a fixed offset) so scrape.py now does one concurrent (10 workers) detail-page fetch per unique event URL after the listing pass, adding ~2-2.5min to total runtime (listing-only was ~90s, now ~3-3.5min for ~650 events); reaches ~90-98% end fill on timed records across repeated runs (varies with how many of the ~650 detail fetches succeed under this sandbox's occasionally-flaky outbound networking, despite a 5x retry with backoff on every fetch). The site occasionally emits a garbage endDate sentinel like '-001-11-30T00:00:00+01:05' - filtered out by requiring a valid 4-digit-year ISO timestamp and end>=start, never passed through. The listing info text carries the PRODUCTION run end (a second date), not the performance end - attaching it made a 14:00 show claim to end 14 months later, and it also blocked the real timed endDate from being filled. Only the detail page JSON-LD endDate is used now.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 180,
