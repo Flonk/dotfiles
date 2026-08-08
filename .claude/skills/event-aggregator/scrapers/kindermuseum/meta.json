@@ -7,21 +7,28 @@
   "covers": [
     "kids"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 4,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "price_min": 0.8,
+      "description": 1.0
+    },
+    "canary": "db-article-display"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Site has no central calendar; each program section (Ausstellung, Atelier, Ozean, Trickfilmstudio, Fragwuerdig/Kindervorlesungen) has one standing page describing whatever is currently on offer, parsed as a permanent record (extra.permanent=true). A couple of subpages (e.g. atelier-abos) carry a structured 'Laufzeit:' range or 'TERMINE' list of single dated slots, which become discrete dated occurrences instead. Server is very flaky/slow (JSESSIONID redirect dance, frequent multi-minute hangs on some requests) so scrape.py uses its own cookie-jar opener with a short per-request timeout and 2 retries; a page that never responds is silently skipped for that run rather than failing the whole scrape. Yield varies run to run (5-6 records seen) depending on which pages answer in time.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 6
   }
 }

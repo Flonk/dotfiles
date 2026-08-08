@@ -1,0 +1,55 @@
+[
+  {
+    "source": "schoenbrunn",
+    "source_id": "gerstner-k-u-k-hofzuckerbaecker-show",
+    "url": "https://www.schoenbrunn.at/veranstaltungen/alle-veranstaltungen/event/gerstner-k-u-k-hofzuckerbaecker-show",
+    "title": "Gerstner K. u. K. Hofzuckerbäcker Show – Apfelstrudel in Perfektion",
+    "start": "2026-04-01",
+    "end": "2027-01-06",
+    "venue": "Gerstner K. u. K. Hofzuckerbäcker im Schloss Schönbrunn",
+    "district": 1130,
+    "city": "Wien",
+    "category": "Kulinarik",
+    "description": "Ein Erlebnis für alle Sinne. Genusskultur für alle Generationen."
+  },
+  {
+    "source": "schoenbrunn",
+    "source_id": "red-bull-dance-your-style",
+    "url": "https://www.schoenbrunn.at/veranstaltungen/alle-veranstaltungen/event/red-bull-dance-your-style",
+    "title": "Red Bull Dance Your Style",
+    "start": "2026-08-28",
+    "venue": "Gloriette Schönbrunn",
+    "district": 1130,
+    "city": "Wien",
+    "category": "Streetdance Event",
+    "description": "Das international etablierte Streetdance-Event Red Bull Dance Your Style geht in die nächste Runde: Am 28. August 2026 wird die Gloriette Schönbrunn erstmals zur Bühne für das österreichische Red Bull Dance Your Style National Final."
+  },
+  {
+    "source": "schoenbrunn",
+    "source_id": "longines-global-champions-tour-vienna",
+    "url": "https://www.schoenbrunn.at/veranstaltungen/alle-veranstaltungen/event/longines-global-champions-tour-vienna",
+    "title": "Longines Global Champions Tour Vienna 2026",
+    "start": "2026-09-24",
+    "end": "2026-09-27",
+    "venue": "Schönbrunn Ehrenhof",
+    "district": 1130,
+    "city": "Wien",
+    "category": "Reitturnier",
+    "description": "Erleben Sie die Longines Global Champions Tour von 24. bis 27. September am Ehrenhof Schönbrunn."
+  },
+  {
+    "source": "schoenbrunn",
+    "source_id": "weihnachtsmarkt-schloss-schoenbrunn",
+    "url": "https://www.schoenbrunn.at/veranstaltungen/alle-veranstaltungen/event/weihnachtsmarkt-schloss-schoenbrunn",
+    "title": "Weihnachtsmarkt Schloss Schönbrunn 2026",
+    "start": "2026-11-06",
+    "end": "2027-01-06",
+    "venue": "Schönbrunn Ehrenhof",
+    "district": 1130,
+    "city": "Wien",
+    "price_min": 0.0,
+    "price_text": "Eintritt frei",
+    "category": "Weihnachten",
+    "description": "Der neue Weihnachtsmarkt Schloss Schönbrunn lädt zu einem festlichen Erlebnis in imperialer Atmosphäre ein."
+  }
+]

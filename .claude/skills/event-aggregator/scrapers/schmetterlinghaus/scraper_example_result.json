@@ -1,0 +1,20 @@
+[
+  {
+    "source": "schmetterlinghaus",
+    "source_id": "https://www.schmetterlinghaus.at/",
+    "url": "https://www.schmetterlinghaus.at/",
+    "title": "Schmetterlinghaus",
+    "start": "2026-08-08",
+    "venue": "Schmetterlinghaus",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Palmenhaus Burggarten, Hofburg, 1010 Wien",
+    "price_min": 10.0,
+    "price_text": "Erwachsene Einzelpreis 10,00 EUR, Gruppenpreis ab 10 Personen 9,00 EUR",
+    "description": "Tropisches Flugtheater mit rund 500 frei fliegenden Schmetterlingen im Jugendstil-Palmenhaus im Burggarten, ganzjährig geöffnet.",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  }
+]

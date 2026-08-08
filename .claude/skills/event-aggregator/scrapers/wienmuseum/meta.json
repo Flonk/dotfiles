@@ -12,21 +12,25 @@
     "pratermuseum",
     "beethoven"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 6,
+    "required_fill": {
+      "price_min": 1.0,
+      "price_text": 1.0,
+      "category": 1.0
+    },
+    "canary": "newsSliderElem"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered /ausstellungen listing has two sliders: section#26817 'Aktuell' (current exhibitions, incl. the permanent 'Wien. Meine Geschichte' with no date -> extra.permanent, start=today) and section#26819 'Vorschau' (announced future exhibitions, up to ~9 months out e.g. Franz West und Wien Nov2026-May2027). A third section#26820 'Rückblick' lists past exhibitions and is skipped. Only 2 venues appear (Wien Museum Karlsplatz 1040, musa 1010) so district/address are hardcoded by venue-name lookup; a new venue name would come through with district/address null. Each record does one extra fetch of its detail page to scrape the 'Eintrittspreise' collapsible section text via ea.price() (heading is <h3> or <h2> inconsistently, regex handles both). Site only ever lists ~9 exhibitions total (current+preview); horizon_days is irrelevant here, nothing to paginate.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 9
   }
 }

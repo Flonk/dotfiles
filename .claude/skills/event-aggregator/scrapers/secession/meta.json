@@ -1,27 +1,33 @@
 {
   "slug": "secession",
   "name": "Secession",
-  "url": "https://www.secession.at/ausstellungen/",
+  "url": "https://secession.at/category/exhibitions",
   "tier": "B",
   "group": "museum",
   "covers": [
     "art"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 7,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "end": 0.9,
+      "venue": 1.0,
+      "district": 1.0
+    },
+    "canary": "exhibSliderDate"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "www.secession.at/ausstellungen/ 404s (Keine Ergebnisse gefunden); real listing lives at secession.at/category/exhibitions with current + future exhibitions plus one hardcoded permanent Beethovenfries item. No per-exhibition price/category on the listing page, left null/none rather than guessed.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 11
   }
 }

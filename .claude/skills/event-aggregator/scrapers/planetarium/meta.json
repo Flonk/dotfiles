@@ -7,21 +7,30 @@
   "covers": [
     "astronomy"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 350,
+    "required_fill": {
+      "url": 1.0,
+      "title": 1.0,
+      "start": 1.0,
+      "end": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "price_min": 0.9,
+      "category": 1.0
+    },
+    "canary": "courseOverviewItem"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Site (www.planetarium-wien.at) redirects to www.vhs.at/de/e/planetarium; scrapes the paginated 'kurs' search listing (each dated show/session is its own bookable course entry) across Planetarium, Urania Sternwarte and Kuffner Sternwarte. Publishes ~10 months ahead; ~8% of records have no listed price (reservation-only, actual price paid at the door) so price_min is left null there.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 532
   }
 }

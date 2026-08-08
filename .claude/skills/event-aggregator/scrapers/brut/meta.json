@@ -8,7 +8,7 @@
     "performance",
     "dance"
   ],
-  "status": "unbuilt",
+  "status": "dead",
   "method": null,
   "expect": {
     "min_records": null,
@@ -16,7 +16,7 @@
     "canary": null
   },
   "last_built": null,
-  "notes": null,
+  "notes": "No usable event data as of 2026-08-08: /de/Programm/Kalender renders with an empty '.searchresult' (server-side, comment 'mymonth: 8'), and its ajax backend (/de/ezjscore/call/herbst::fetchEvents, POST parent=1010) returns events_count=0, past=0, upcoming=0 for every 'timestamp'/'direction' combination tried (the endpoint appears to ignore those params entirely and always resolves to the real current server month). The page's own 'next' pagination arrow is rendered disabled (class lightgrey, not schwarz), matching upcoming=0. Corroborated qualitatively: the homepage Magazin section is currently headlined by farewell posts from departing artistic directors Kira Kirsch & Flori Gugger about leaving 'brut nordwest' (their temporary venue since 2020) for a not-yet-open permanent home at Neu Marx — consistent with the institution being between venues/seasons with nothing programmed. robots.txt only disallows /de/dd/ical, /media, /a, /layout/set/, not the calendar itself, so this isn't a block, just genuinely no data right now. Re-check in autumn 2026 once a new season/venue is announced.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,

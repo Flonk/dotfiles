@@ -8,21 +8,28 @@
     "music",
     "history"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 32,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "category": 1.0,
+      "description": 1.0
+    },
+    "canary": "events-2"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered HTML listing at /events-2 (+ /events-2/p2, p3...), paginated by 'Weiter →' link presence; category comes from filtering the same listing by ?category=konzert|event|workshop|family-kids|f%C3%BChrung and joining matches. Price/description come from per-event detail page. Site only publishes concerts/workshops/tours through ~early Dec 2026 (~4 months out), well inside the 180d horizon.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 46
   }
 }

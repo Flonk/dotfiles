@@ -7,15 +7,19 @@
   "covers": [
     "jazz"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 9,
+    "required_fill": {
+      "category": 1.0,
+      "description": 1.0,
+      "price_text": 1.0
+    },
+    "canary": "class=\"uetab\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "13 records at build time, all in Aug 2026 (site's current published program only runs to end of current Jul/Aug bulletin; next bulletin not yet online). No per-event prices, only a general EUR 15-22 range, so price_min is always null.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,

@@ -8,21 +8,24 @@
     "world",
     "jazz"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 50,
+    "required_fill": {
+      "price_min": 0.6,
+      "description": 0.55
+    },
+    "canary": "/wp-json/tribe/events/v1/"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "The Events Calendar (tribe) REST API, /wp-json/tribe/events/v1/events?per_page=50&page=N, 2 pages for all 73 upcoming; site publishes through Nov 2027 so no horizon filtering needed. categories/tags always empty on this install -> category always null. cost sometimes empty string (unknown, not free) -> price_min null via ea.price.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 73
   }
 }

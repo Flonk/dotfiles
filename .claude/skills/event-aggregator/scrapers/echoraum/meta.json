@@ -7,21 +7,26 @@
   "covers": [
     "experimental"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 10,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "description": 1.0,
+      "category": 0.9
+    },
+    "canary": "class=\"datum\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "programm page lists ~14-16 upcoming events as one flat HTML page, no pagination, no ld+json; WP REST API only exposes past (published) posts so it's useless here; no price info anywhere on site so price_min/price_text always null",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "basis": "measured",
+    "density_per_day": 0.28,
+    "p95_lead_days": 80,
+    "sample_records": 14
   }
 }
