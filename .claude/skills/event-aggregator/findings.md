@@ -321,10 +321,21 @@ scheduling question, deliberately deferred — the mechanism does not care when 
 Work that means re-opening scrapers, batched into an overnight agent run like the original
 build. Ordered by damage done.
 
-1. **`volume_at` has no start times.** 0 of 1304 records carry one — the biggest source and
-   the main gig listing in town is date-only, so ~25 real gigs a day can't be placed in a
-   calendar. Highest priority: a missing `end` is cosmetic, a missing `start` makes the
-   record unusable.
+1. ~~**`volume_at` has no start times.**~~ **Fixed 2026-08-08: 0 → 842 of 1304 (65%).**
+   The listing markup really is date-only, but the detail pages carry a
+   `<div class="meta__time">` block with `Beginn: HH:MM Uhr` and/or `Einlass: HH:MM Uhr`.
+   A second threaded pass over every detail URL now fills `start` (Beginn preferred,
+   Einlass as fallback), `address` 881, and `district` 656 — all 656 inside 1010-1220, none
+   fabricated. `city` stays at 920, and the null-vs-Wien split is still deliberate: volume.at
+   is Austria-wide, so null means out of town.
+
+   The remaining 35% genuinely publish no time; ~65-70% is the ceiling, not a floor to push
+   on. `end` stays null everywhere — the site never publishes one on any page.
+
+   `required_fill` is set conservatively **below** the observed rate because the sandbox's
+   shared egress was dropping bursts of connections during the build (up to 80% of detail
+   fetches in the worst window). The scraper degrades gracefully under that rather than
+   crashing or fabricating, and the variance is documented in its NOTES.md.
 2. **Cinema scrapers should capture `image`.** **Batch 1 done 2026-08-08** — gartenbaukino,
    votivkino, filmcasino, stadtkinowien, topkino, haydnkino all at **100% image fill**, by
    four different routes: JSON-LD `image`, a card's `background-image:url(...)`, the film's
