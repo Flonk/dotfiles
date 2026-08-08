@@ -552,19 +552,40 @@ Probed across the whole DB 2026-08-08. Ordered by priority × how bad the gap is
 
    General lesson: **check robots.txt on the host you actually fetch, after redirects.**
    `vienna.at` disallows ClaudeBot too, and was on the candidate list.
-3. **Board games / gaming — zero records out of 11,289.** Total blind spot. No board-game
-   cafés, no LAN/e-sport, no pen-and-paper. Flo: *"would be great to know."*
-   Probed 2026-08-08: `spielefest.at`, `spielbar.wien` and `tabletop.at` **do not resolve**
-   — the obvious dedicated sources are gone. What does work is aggregators:
-   `eventbrite.at/d/austria--wien/board-games/` returns **40 Event JSON-LD objects**, and
-   `meetup.com/find/?location=at--Vienna&keywords=board games` returns 19. Meetup is a new
-   source shape for us; Eventbrite is just another category URL on a scraper we already run.
-   `viecc.com` (Vienna Comic Con) answers 200 and covers the con half.
-4. **Food & drink — ★★☆ with 31 hits and two sources**, one of which is a brewery. Flo:
-   *"I dont mind a lot of food"* — so err toward more sources, not fewer. Missing: Whisky
-   Festival (named as a want, no scraper), Heurigen calendar, tastings, food markets.
-   Probed: no dedicated Heurigen or whisky calendar resolved. Eventbrite's food-and-drink
-   category is the cheap first move.
+3. **Board games / gaming — was zero records out of 11,289. Partly closed 2026-08-08, and
+   worth being honest about how partly.**
+
+   The dedicated sources are simply gone: `spielefest.at`, `spielbar.wien` and
+   `tabletop.at` **do not resolve**. So the only route is aggregators, and there we got:
+
+   - **`viecc`** — Vienna Comic Con, **built**. One record, and one is correct: it is a
+     single annual two-day convention with no archive to paginate (21-22 Nov 2026).
+   - **`meetup_wien`** — **built, 43 records**, a new source shape for us (Next.js
+     `__NEXT_DATA__` SSR blob). Note the agent did *not* use the `?location=` query URL
+     from its brief — robots disallows it — and found a path-based city page instead.
+     Only publishes ~4 weeks out; going deeper needs the disallowed GraphQL API.
+   - **`eventbrite`** — a board-games feed added alongside all-events. **549 → 706
+     records**, all 706 with unique ids, dedupe verified.
+
+   **The eventbrite caveat matters.** `board-games/` is not a category filter at all — it
+   is a full-text search over the same city-wide index, and the agent proved it by probing
+   `gaming/`, `tabletop-gaming/`, `video-games/` and `hobbies/` and finding all five report
+   an identical `object_count: 1017`. So most of the +157 are ordinary Vienna events that
+   fuzzy-matched "game", not gaming content. It does surface genuine finds the all-events
+   ranking never returns — **3W6 Con 2026**, a trading-card festival, a chess meetup — but
+   `category` stays verbatim, so nothing downstream can classify these as gaming without
+   title matching. The events are now present to filter from; they are not pre-labelled.
+4. **Food & drink — better covered than the original probe suggested.** The 31-hit count
+   came from a German-only regex; `eventbrite` alone already carries **28 records tagged
+   "Food & Drink"** in its own category vocabulary (wine tastings, Heurigen evenings,
+   food-market quizzes). The gap is narrower than recorded — what is genuinely missing is
+   the Whisky Festival, a Heurigen calendar and food markets as *dedicated* sources, and
+   probing found no Heurigen or whisky calendar that resolves. Flo: *"I dont mind a lot of
+   food"*, so err toward more sources when one turns up.
+
+   Method note worth keeping: **probe regexes must cover both languages and the source's
+   own category labels.** Searching `weinverkostung|heuriger` while the source tags things
+   "Food & Drink" reports a blind spot that isn't there.
 5. ~~**Büchereien Wien**~~ **Built 2026-08-08 — 253 records, the biggest single win of the
    night after volume_at.** The page itself is a DNN shell with no data; the real feed is
    a JSON file at `Portals/0/Files/stb_va/stb_va.json` behind a DataTables widget.
