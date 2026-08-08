@@ -76,11 +76,53 @@ in
     ];
     boot.kernelModules = [ "intel_cvs" ];
 
+    systemd.services.camera-reset = {
+      description = "Recreate the IPU6 relay loopback and restart the relay";
+      path = [
+        config.boot.kernelPackages.v4l2loopback.bin
+        pkgs.systemd
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        TimeoutStartSec = "45s";
+      };
+      # A relay that dies mid-stream leaves the loopback latched capture-only
+      # (caps 0x5200001, no Video Output), so v4l2sink can never reopen it and
+      # every consumer gets one black frame. Per-device delete only — Rule 2 in
+      # obsidian://claude/video-setup forbids unloading v4l2loopback. The
+      # relay's own ExecStartPre re-adds the device with --exclusive-caps=1.
+      script = ''
+        rc=0
+        systemctl stop v4l2-relayd-ipu6
+        v4l2loopback-ctl delete ${toString config.hardware.ipu6.videoDeviceNumber} || rc=$?
+        systemctl start v4l2-relayd-ipu6
+        exit $rc
+      '';
+    };
+
+    security.polkit.enable = true;
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.systemd1.manage-units" &&
+            action.lookup("unit") == "camera-reset.service" &&
+            (action.lookup("verb") == "start" || action.lookup("verb") == "restart") &&
+            subject.isInGroup("video")) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
+
     systemd.services.v4l2-relayd-ipu6 = {
       # A failed icamerasrc load gets blacklisted in the gst registry cache
       # and nix store mtimes never invalidate it; keep the registry in /run
       # so every boot starts clean.
-      environment.GST_REGISTRY = "/run/v4l2-relayd-ipu6/gst-registry.bin";
+      environment = {
+        GST_REGISTRY = "/run/v4l2-relayd-ipu6/gst-registry.bin";
+        # v4l2-relayd tears the pipeline down before reporting, so a failed
+        # start only logs GLib assertions; keep the real cause in the journal.
+        GST_DEBUG = "2,icamerasrc:5";
+        GST_DEBUG_NO_COLOR = "1";
+      };
       # Don't stay dead for the whole session after early-boot failures.
       startLimitIntervalSec = 0;
       serviceConfig = {

@@ -1,20 +1,22 @@
-"""Pick a drill round: up to 5 mastered + a 30-word new/review slice.
+"""Pick a drill round: up to 5 mastered + a 15-word sample from a 30-word review pool.
 
 Usage:
-    python3 pick.py [--new N] [--review R] [--master M]
+    python3 pick.py [--new N] [--pool P] [--round R] [--master M]
 
---new N     force N brand-new words into the review slice (default 0)
---review R  size of the new/review slice (default 30)
+--new N     force N brand-new words into the review pool (default 0)
+--pool P    floor for the tracked review pool (default 30)
+--round R   how many review words to actually present this round (default 15)
 --master M  max mastered words on top (default 5)
 
-The review slice is always filled to R: tracked `new` words first (priority order),
-then brand-new words from new.md pad any shortfall (i.e. when fewer than R are
-tracked). Round size = mastered taken + R, so it grows from 30 toward 35 as you
-accumulate mastered words.
+The review pool is kept filled to P: tracked `new` words first (priority order),
+then brand-new words from new.md pad any shortfall (i.e. when fewer than P are
+tracked) — this is what keeps at least P words in rotation over time. Each round
+then samples R words from that pool at random, so untracked pad-in words still get
+a chance to be drilled (and graduate into the tracked pool) even once P is reached.
 
 Prints a paste-ready block: a counts line and the words as a 5-column markdown
 table (blue code spans, column-major numbering).
-Priority within a pool: most overdue first, then most-negative streak (leeches),
+Priority within the pool: most overdue first, then most-negative streak (leeches),
 then most-seen. Brand-new words are taken easiest-first from new.md (ease-sorted).
 """
 import argparse
@@ -31,7 +33,8 @@ def prio(w):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--new", type=int, default=0)
-    ap.add_argument("--review", type=int, default=30)
+    ap.add_argument("--pool", type=int, default=30)
+    ap.add_argument("--round", type=int, default=15)
     ap.add_argument("--master", type=int, default=5)
     args = ap.parse_args()
 
@@ -42,12 +45,12 @@ def main():
 
     take_master = sorted(mastered_pool, key=prio)[: args.master]
 
-    n_review = max(0, args.review - args.new)
+    n_review = max(0, args.pool - args.new)
     take_review = sorted(review_pool, key=prio)[:n_review]
 
-    # fill the review slice up to --review with brand-new words when the tracked
-    # `new` pool is short (fewer than --review), plus any forced via --new.
-    need_new = args.review - len(take_review)
+    # fill the review pool up to --pool with brand-new words when the tracked
+    # `new` pool is short (fewer than --pool), plus any forced via --new.
+    need_new = args.pool - len(take_review)
     brand = []
     if need_new > 0:
         for w in read_wordlist(NEW_MD):
@@ -56,17 +59,23 @@ def main():
                 if len(brand) == need_new:
                     break
 
-    selected = [w["word"] for w in take_master] + [w["word"] for w in take_review] + brand
+    review_words = [w["word"] for w in take_review] + brand
+    random.shuffle(review_words)
+    round_review = review_words[: args.round]
+    round_brand = [w for w in round_review if w in brand]
+    round_tracked = [w for w in round_review if w not in brand]
+
+    selected = [w["word"] for w in take_master] + round_review
 
     random.shuffle(selected)
 
     counts = []
     if take_master:
         counts.append(f"{len(take_master)} mastered")
-    if take_review:
-        counts.append(f"{len(take_review)} review")
-    if brand:
-        counts.append(f"{len(brand)} new")
+    if round_tracked:
+        counts.append(f"{len(round_tracked)} review")
+    if round_brand:
+        counts.append(f"{len(round_brand)} new")
 
     cols = 5
     n = len(selected)

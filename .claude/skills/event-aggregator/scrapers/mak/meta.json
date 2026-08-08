@@ -1,0 +1,33 @@
+{
+  "slug": "mak",
+  "name": "MAK",
+  "url": "https://www.mak.at/programm",
+  "tier": "A",
+  "group": "museum",
+  "covers": [
+    "design",
+    "architecture"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 80,
+    "required_fill": {
+      "venue": 0.9,
+      "city": 0.85,
+      "address": 0.85,
+      "district": 0.85
+    },
+    "canary": "class=\"kalender-list-entry"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Two sources combined: (1) POST to the jart calendar endpoint (events-limit=300) returns all ~106 dated occurrences (guided tours, talks, workshops) as ld+json Event blocks with clean ISO startDate; (2) the /programm/ausstellungen index + each exhibition detail page gives ~10 long-running exhibitions as single far-end records. No price info anywhere on site, price_min/price_text always null. Two exhibitions (Visual Investigations, Women of the Wiener Werkstätte) run at satellite venues outside Vienna (LA, NYC) so venue/district/city/address are null for those by design.",
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 116
+  }
+}

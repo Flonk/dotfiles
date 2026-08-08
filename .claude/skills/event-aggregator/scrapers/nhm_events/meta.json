@@ -1,0 +1,32 @@
+{
+  "slug": "nhm_events",
+  "name": "NHM Veranstaltungskalender",
+  "url": "https://www.nhm.at/veranstaltungskalender",
+  "tier": "B",
+  "group": "academic",
+  "covers": [
+    "natural history",
+    "zoology",
+    "marine"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 200,
+    "required_fill": {
+      "venue": 0.95,
+      "category": 0.95
+    },
+    "canary": "termin__date--liste"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered HTML calendar paginated via ?datum_von=YYYY-MM-01&dateMode=month&page=N (20/page). Site only publishes events roughly through end of current+3 months (Aug->Nov/Dec 2026 seen); no price data available anywhere so price_min is always null.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 293
+  }
+}

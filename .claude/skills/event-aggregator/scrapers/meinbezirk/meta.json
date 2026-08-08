@@ -1,0 +1,33 @@
+{
+  "slug": "meinbezirk",
+  "name": "meinbezirk.at Wien",
+  "url": "https://www.meinbezirk.at/event/wien/list/current-week",
+  "tier": "A",
+  "group": "aggregator",
+  "covers": [
+    "hyperlocal",
+    "district"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 60,
+    "required_fill": {
+      "district": 0.85,
+      "venue": 0.85,
+      "category": 0.95
+    },
+    "canary": "content-card-date-location"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered list at /event/wien/list/all/{page}?eventitem_filter_simple[date_start]=..&[date_end]=.. (bracket keys). No JSON-LD/API; parses <article class=\"content-list-item content-card ...\"> blocks. Category and district come from the URL slug (/event/<district>/c-<category>/<slug>_eID); price stays null except when the teaser text explicitly says \"Eintritt frei\"/kostenlos (regex, no loose keyword match to avoid false positives like 'frei von...'). Record count fluctuates a bit run to run because the site's own pagination reorders/duplicates items across pages; scrape.py dedupes by event id and retries flaky page fetches.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 32,
+    "basis": "measured",
+    "density_per_day": 3.103,
+    "p95_lead_days": 27,
+    "sample_records": 90,
+    "sample_truncated": false
+  }
+}

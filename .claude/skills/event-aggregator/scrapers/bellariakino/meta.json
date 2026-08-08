@@ -1,0 +1,30 @@
+{
+  "slug": "bellariakino",
+  "name": "Bellaria Kino",
+  "url": "https://www.bellariakino.at/de",
+  "tier": "B",
+  "group": "cinema",
+  "covers": [
+    "cinema"
+  ],
+  "status": "built",
+  "method": "api",
+  "expect": {
+    "min_records": 20,
+    "required_fill": {
+      "category": 0.9,
+      "description": 0.9
+    },
+    "canary": "api.cineamo.com"
+  },
+  "last_built": "2026-08-08",
+  "notes": "cineamo.com platform (shared with votivkino/dokini chain, cinemaId=3000); GET https://api.cineamo.com/showings?cinemaIds[0]=3000&perPage=100 returns all showings (past+future, sorted ascending, ~272 total); filter to today..horizon locally; price never published (external ticket-cloud.de links only) so price_min/price_text always null; category is always the literal string 'movie_series' site-wide, not a real genre",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "measured",
+    "density_per_day": 0.3,
+    "p95_lead_days": 60,
+    "sample_records": 29
+  }
+}

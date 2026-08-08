@@ -1,0 +1,575 @@
+[
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24984",
+    "url": "https://cineplexx.at/movie/auf-zwei-rädern",
+    "title": "Auf zwei Rädern",
+    "start": "2026-08-08T15:30",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama",
+    "description": "Dieser Film feiert die Liebe zum Leben, selbst in seinen schmerzhaftesten Momenten.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24988",
+    "url": "https://cineplexx.at/movie/auf-zwei-rädern",
+    "title": "Auf zwei Rädern",
+    "start": "2026-08-09T15:45",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama",
+    "description": "Dieser Film feiert die Liebe zum Leben, selbst in seinen schmerzhaftesten Momenten.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24987",
+    "url": "https://cineplexx.at/movie/backrooms-everything-must-go-edition",
+    "title": "Backrooms: Everything Must Go Edition (Extended Version)",
+    "start": "2026-08-08T20:00",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Science Fiction, Horror, Mystery",
+    "description": "Erleben Sie die um 16 Minuten längere Fassung exklusiv im Kino!",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25020",
+    "url": "https://cineplexx.at/movie/backrooms-everything-must-go-edition",
+    "title": "Backrooms: Everything Must Go Edition (Extended Version)",
+    "start": "2026-08-11T19:45",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Science Fiction, Horror, Mystery",
+    "description": "Erleben Sie die um 16 Minuten längere Fassung exklusiv im Kino!",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24979",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-08T20:15",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24997",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-09T15:30",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24995",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-09T19:45",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25005",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-10T20:15",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25015",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-11T17:45",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25026",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-12T20:15",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25029",
+    "url": "https://cineplexx.at/movie/bitteres-fest",
+    "title": "Bitteres Fest",
+    "start": "2026-08-13T17:45",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Bitteres Fest ist ein Film von Pedro Almodóvar mit Bárbara Lennie, Leonardo Sbaraglia.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24983",
+    "url": "https://cineplexx.at/movie/cheri-ich-komme-die-erfindung-der-lust",
+    "title": "Chéri, ich komme! - Die Erfindung der Lust",
+    "start": "2026-08-08T18:15",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie",
+    "description": "Jenseits von Vulgarität erzählt CHÉRI, ICH KOMME! – DIE ERFINDUNG DER LUST sehr empfindsam und dennoch voller Humor von der Erneuerungskraft der Liebe.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24993",
+    "url": "https://cineplexx.at/movie/cheri-ich-komme-die-erfindung-der-lust",
+    "title": "Chéri, ich komme! - Die Erfindung der Lust",
+    "start": "2026-08-09T18:00",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie",
+    "description": "Jenseits von Vulgarität erzählt CHÉRI, ICH KOMME! – DIE ERFINDUNG DER LUST sehr empfindsam und dennoch voller Humor von der Erneuerungskraft der Liebe.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25019",
+    "url": "https://cineplexx.at/movie/cheri-ich-komme-die-erfindung-der-lust",
+    "title": "Chéri, ich komme! - Die Erfindung der Lust",
+    "start": "2026-08-11T17:30",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie",
+    "description": "Jenseits von Vulgarität erzählt CHÉRI, ICH KOMME! – DIE ERFINDUNG DER LUST sehr empfindsam und dennoch voller Humor von der Erneuerungskraft der Liebe.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24980",
+    "url": "https://cineplexx.at/movie/das-drama",
+    "title": "Das Drama - Noch mal auf Anfang",
+    "start": "2026-08-08T20:30",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama, Romanze/Liebe",
+    "description": "Die perfekten Hochzeitspläne eines Paares geraten ins Wanken, als kurz vor der Zeremonie ein schockierendes Geheimnis ans Licht kommt...",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24996",
+    "url": "https://cineplexx.at/movie/das-drama",
+    "title": "Das Drama - Noch mal auf Anfang",
+    "start": "2026-08-09T20:15",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama, Romanze/Liebe",
+    "description": "Die perfekten Hochzeitspläne eines Paares geraten ins Wanken, als kurz vor der Zeremonie ein schockierendes Geheimnis ans Licht kommt...",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25016",
+    "url": "https://cineplexx.at/movie/das-drama",
+    "title": "Das Drama - Noch mal auf Anfang",
+    "start": "2026-08-11T20:15",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama, Romanze/Liebe",
+    "description": "Die perfekten Hochzeitspläne eines Paares geraten ins Wanken, als kurz vor der Zeremonie ein schockierendes Geheimnis ans Licht kommt...",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25031",
+    "url": "https://cineplexx.at/movie/das-drama",
+    "title": "Das Drama - Noch mal auf Anfang",
+    "start": "2026-08-13T20:15",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama, Romanze/Liebe",
+    "description": "Die perfekten Hochzeitspläne eines Paares geraten ins Wanken, als kurz vor der Zeremonie ein schockierendes Geheimnis ans Licht kommt...",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24985",
+    "url": "https://cineplexx.at/movie/die-camino-therapie-finde-deinen-weg",
+    "title": "Die Camino-Therapie – Finde deinen Weg",
+    "start": "2026-08-08T17:45",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama, Abenteuer",
+    "description": "DIE CAMINO-THERAPIE – FINDE DEINEN WEG erzählt von zwei Fremden, die auf dem Jakobsweg nicht nur zueinanderfinden, sondern auch zu sich selbst.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25007",
+    "url": "https://cineplexx.at/movie/die-camino-therapie-finde-deinen-weg",
+    "title": "Die Camino-Therapie – Finde deinen Weg",
+    "start": "2026-08-10T18:00",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama, Abenteuer",
+    "description": "DIE CAMINO-THERAPIE – FINDE DEINEN WEG erzählt von zwei Fremden, die auf dem Jakobsweg nicht nur zueinanderfinden, sondern auch zu sich selbst.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25023",
+    "url": "https://cineplexx.at/movie/die-camino-therapie-finde-deinen-weg",
+    "title": "Die Camino-Therapie – Finde deinen Weg",
+    "start": "2026-08-12T19:45",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama, Abenteuer",
+    "description": "DIE CAMINO-THERAPIE – FINDE DEINEN WEG erzählt von zwei Fremden, die auf dem Jakobsweg nicht nur zueinanderfinden, sondern auch zu sich selbst.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24977",
+    "url": "https://cineplexx.at/movie/ingeborg-bachmann-jemand-der-einmal-ich-war",
+    "title": "Ingeborg Bachmann: Jemand, der einmal ich war",
+    "start": "2026-08-08T16:00",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Dokumentation",
+    "description": "Regina Schillings sinnliche wie intellektuelle Annäherung an eine der bedeutendsten Schriftstellerinnen des 20. Jahrhunderts.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24990",
+    "url": "https://cineplexx.at/movie/ingeborg-bachmann-jemand-der-einmal-ich-war",
+    "title": "Ingeborg Bachmann: Jemand, der einmal ich war",
+    "start": "2026-08-09T17:45",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Dokumentation",
+    "description": "Regina Schillings sinnliche wie intellektuelle Annäherung an eine der bedeutendsten Schriftstellerinnen des 20. Jahrhunderts.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25027",
+    "url": "https://cineplexx.at/movie/ingeborg-bachmann-jemand-der-einmal-ich-war",
+    "title": "Ingeborg Bachmann: Jemand, der einmal ich war",
+    "start": "2026-08-12T18:00",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Dokumentation",
+    "description": "Regina Schillings sinnliche wie intellektuelle Annäherung an eine der bedeutendsten Schriftstellerinnen des 20. Jahrhunderts.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24982",
+    "url": "https://cineplexx.at/movie/so-klingt-das-leben",
+    "title": "So klingt das Leben",
+    "start": "2026-08-08T15:45",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama",
+    "description": "Warmherziges Kino aus Spanien, voller Humor und Lebensfreude.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25008",
+    "url": "https://cineplexx.at/movie/so-klingt-das-leben",
+    "title": "So klingt das Leben",
+    "start": "2026-08-10T17:45",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama",
+    "description": "Warmherziges Kino aus Spanien, voller Humor und Lebensfreude.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25022",
+    "url": "https://cineplexx.at/movie/so-klingt-das-leben",
+    "title": "So klingt das Leben",
+    "start": "2026-08-12T17:30",
+    "venue": "Actors Studio (Studio 3)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Komödie, Drama",
+    "description": "Warmherziges Kino aus Spanien, voller Humor und Lebensfreude.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-24981",
+    "url": "https://cineplexx.at/movie/verflucht-normal",
+    "title": "Verflucht Normal",
+    "start": "2026-08-08T18:00",
+    "venue": "Actors Studio (Studio 1)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Witzig, ehrlich und zutiefst menschlich erzählt Verflucht Normal die inspirierende wahre Geschichte von John Davidson, einem Pionier.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  },
+  {
+    "source": "cineplexx_actors",
+    "source_id": "1009-25028",
+    "url": "https://cineplexx.at/movie/verflucht-normal",
+    "title": "Verflucht Normal",
+    "start": "2026-08-12T20:00",
+    "venue": "Actors Studio (Studio 2)",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Tuchlauben 13, 1010 Wien",
+    "category": "Drama",
+    "description": "Witzig, ehrlich und zutiefst menschlich erzählt Verflucht Normal die inspirierende wahre Geschichte von John Davidson, einem Pionier.",
+    "status": "scheduled",
+    "extra": {
+      "technologies": [
+        "2D",
+        "OmU"
+      ]
+    }
+  }
+]

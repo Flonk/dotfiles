@@ -1,0 +1,32 @@
+{
+  "slug": "porgy",
+  "name": "Porgy & Bess",
+  "url": "https://www.porgy.at/events/upcoming",
+  "tier": "A",
+  "group": "music",
+  "covers": [
+    "jazz",
+    "world"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 130,
+    "required_fill": {
+      "price_min": 0.6,
+      "category": 0.4
+    },
+    "canary": "class=\"row event_list"
+  },
+  "last_built": "2026-08-08",
+  "notes": "listing HTML gives date/time/title/category; price needs one detail-page fetch per event (185 requests, ~30s)",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 0.605,
+    "p95_lead_days": 247,
+    "sample_records": 185,
+    "sample_truncated": true
+  }
+}

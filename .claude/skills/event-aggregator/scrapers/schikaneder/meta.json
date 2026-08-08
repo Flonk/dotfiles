@@ -1,0 +1,27 @@
+{
+  "slug": "schikaneder",
+  "name": "Schikaneder",
+  "url": "https://schikaneder.at/jart/prj3/schikaneder/main.jart",
+  "tier": "B",
+  "group": "cinema",
+  "covers": [
+    "cinema"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

@@ -98,6 +98,20 @@ figlet-all() {
   done
 }
 
+figlet-fzf() {
+  local fontdir
+  local -a out
+  fontdir=$(figlet -I2)
+  out=("${(@f)$(
+    for f in "$fontdir"/*.flf(N) "$fontdir"/*.tlf(N); do
+      print -r -- "${${f:t}:r}"
+    done | sort | fzf --disabled --print-query --query="${*:-figlet}" \
+      --layout=reverse --preview 'figlet -f {} {q}' --preview-window='up,70%,wrap'
+  )}") || return
+  (( $#out < 2 )) && return
+  figlet -f "$out[2]" "$out[1]"
+}
+
 _nix-shell-run() {
   nix-shell -p "$1" --command "$1"
 }
@@ -178,240 +192,64 @@ hex() {
 
 export GIT_SSL_NO_VERIFY=1
 
-lol() {
-  local branch ticket me verbose=0
-
-  # bail early if not in repo
-  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
-    echo "not a git repository" >&2
-    return 1
-  }
-
-  usage() {
-    cat <<EOF
-usage: gitlog [options]
-
-options:
-  --ticket <TICKET>   override detected ticket (PROJECTKEY-NUMBER)
-  --author <NAME>     override git user.name
-  --verbose           show merge commits
-  --help              show this help
-
-examples:
-  gitlog
-  gitlog --verbose
-  gitlog --ticket ABC-123
-  gitlog --author "Florian Schindler"
-EOF
-  }
-
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      --ticket) ticket="$2"; shift 2 ;;
-      --author) me="$2"; shift 2 ;;
-      --verbose) verbose=1; shift ;;
-      --help) usage; return 0 ;;
-      *) echo "unknown option: $1"; usage; return 1 ;;
-    esac
-  done
-
-  branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
-
-  # auto-detect if not overridden
-  : "${ticket:=$(echo "$branch" | grep -oE '[A-Z]+-[0-9]+')}"
-  : "${me:=$(git config user.name)}"
-
-  git log --date=iso-local --color=always \
-    --pretty=format:"%h|%ad|%an|%s" |
-  awk -F'|' -v tk="$ticket" -v me="$me" -v verbose="$verbose" '
-  function lower(s){ return tolower(s) }
-  function trim(s){ sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); return s }
-
-  BEGIN {
-    me_l = lower(trim(me))
-    n = split(me_l, p, /[[:space:]]+/)
-    two = (n==2)
-    if (two) {
-      fn=p[1]; ln=p[2]
-      r1 = fn ".*[[:space:]]*" ln
-      r2 = ln ".*[[:space:]]*" fn
-    }
-  }
-
-  {
-    hash=$1
-    date_raw=$2
-    author_raw=$3
-    msg=$4
-
-    # hide merge commits unless verbose
-    if (!verbose && msg ~ /^Merge branch/)
-      next
-
-    # format date: remove seconds and timezone
-    # input: 2024-01-13 14:30:45 +0100
-    # output: 2024-01-13 14:30
-    sub(/:[0-9][0-9] [+-][0-9]+$/, "", date_raw)
-    date = date_raw
-
-    author_fmt = sprintf("%20s", substr(author_raw,1,20))
-
-    # parse ticket number from message
-    ticket_str = "    "
-
-    if (match(msg, /[A-Z]+-[0-9]+/)) {
-      full_ticket = substr(msg, RSTART, RLENGTH)
-      if (match(full_ticket, /[0-9]+$/)) {
-        ticket_num = substr(full_ticket, RSTART)
-        ticket_str = sprintf("%04d", ticket_num)
-      }
-    }
-
-    # truncate + pad message
-    msg_clean = sprintf("%-60s", substr(msg, 1, 60))
-
-    # border
-    border = "\033[1;90m│\033[0m"
-
-    final_msg = "\033[33m" ticket_str "\033[0m " border " " msg_clean
-
-    bold_line = (tk != "" && index(msg, tk))
-    pre = bold_line ? "\033[1m" : ""
-    post = bold_line ? "\033[0m" : ""
-
-    # chore slightly faint
-    msg_color = ""
-    if (msg ~ /chore/i)
-      msg_color = "\033[37m"
-
-    # detect self
-    a_l = lower(trim(author_raw))
-    is_me = two ? (a_l ~ r1 || a_l ~ r2) : (a_l == me_l)
-
-    author_out = author_fmt
-    if (is_me)
-      author_out = "\033[1;31m" author_fmt "\033[0m" (bold_line ? "\033[1m" : "")
-
-    printf "%s\033[33m%s\033[0m%s \033[32m%s\033[0m%s \033[36m%s\033[0m%s %s%s%s\n",
-      pre, hash, pre,
-      date, pre,
-      author_out, pre,
-      msg_color, final_msg, "\033[0m",
-      post
-  }' | less -R
-}
-
-# rlol — recursive lol: my commits across every git repo under the cwd (or given dir)
-rlol() {
-  local root="${1:-.}" me mail
-
-  me="$(git config user.name)"
-  mail="$(git config user.email)"
-  : "${me:=$(git -C "$root" config user.name 2>/dev/null)}"
-  : "${mail:=$(git -C "$root" config user.email 2>/dev/null)}"
-
-  if [ -z "$me" ] && [ -z "$mail" ]; then
-    echo "could not determine author (set git user.name / user.email)" >&2
-    return 1
+# walk from $1 down at most $2 levels, calling $3 on every repo found; a repo is
+# never descended into
+_rglr_walk() {
+  local dir="$1" depth="$2" action="$3" sub
+  if [[ -d "$dir/.git" ]]; then
+    "$action" "$dir"
+    return
   fi
-
-  {
-    # find every git repo under root; emit all commits tagged with the repo name,
-    # plus author name + email so awk can decide who's "me"
-    find "$root" -type d -name .git -prune 2>/dev/null | while read -r gitdir; do
-      local repo="${gitdir%/.git}"
-      local name="${repo##*/}"
-      git -C "$repo" log --no-merges --date=iso-local \
-        --pretty=format:"%ad|$name|%h|%an|%ae|%s" 2>/dev/null
-      echo
-    done
-  } | awk -F'|' -v me="$me" -v mail="$mail" '
-    function lower(s){ return tolower(s) }
-    function trim(s){ sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); return s }
-
-    BEGIN {
-      me_l = lower(trim(me))
-      mail_l = lower(trim(mail))
-      n = split(me_l, p, /[[:space:]]+/)
-      two = (n == 2)
-      if (two) {
-        fn = p[1]; ln = p[2]
-        r1 = fn ".*[[:space:]]*" ln
-        r2 = ln ".*[[:space:]]*" fn
-      }
-    }
-
-    {
-      if (NF < 6) next
-      date_raw=$1; repo=$2; hash=$3; author=$4; email=$5
-      # subject may contain "|" — rejoin fields 6..NF
-      subj=$6
-      for (i=7; i<=NF; i++) subj = subj "|" $i
-
-      # decide if this commit is mine
-      a_l = lower(trim(author))
-      e_l = lower(trim(email))
-      is_me = 0
-      if (mail_l != "" && e_l == mail_l) is_me = 1
-      else if (me_l != "") {
-        if (two) is_me = (a_l ~ r1 || a_l ~ r2)
-        else     is_me = (a_l == me_l)
-      }
-      if (!is_me) next
-
-      # trim seconds + timezone: "2024-01-13 14:30:45 +0100" -> "2024-01-13 14:30"
-      sub(/:[0-9][0-9] [+-][0-9]+$/, "", date_raw)
-
-      print date_raw "\t" repo "\t" hash "\t" subj
-    }
-  ' | sort -r | awk -F'\t' '
-    {
-      date_raw=$1; repo=$2; hash=$3; subj=$4
-      repo_fmt = sprintf("%-20s", substr(repo, 1, 20))
-      subj_fmt = sprintf("%-60s", substr(subj, 1, 60))
-      border = "\033[1;90m│\033[0m"
-
-      printf "\033[35m%s\033[0m %s \033[33m%s\033[0m %s \033[32m%s\033[0m %s %s\n",
-        repo_fmt, border, hash, border, date_raw, border, subj_fmt
-    }' | less -R
+  (( depth <= 0 )) && return
+  for sub in "$dir"/*(N/); do
+    _rglr_walk "$sub" $(( depth - 1 )) "$action"
+  done
 }
 
-# rglr — for every subfolder: stash WIP, fetch, pull, restore WIP
+_rglr_header() {
+  local label="$1" rule="${(l:$(( ${#1} + 2 ))::─:)}"
+  printf "\033[1;90m╭%s╮\n│\033[0m \033[1;34m%s\033[0m \033[1;90m│\n╰%s╯\033[0m\n" \
+    "$rule" "$label" "$rule"
+}
+
+_rglr_pull() {
+  local dir="$1"
+  _rglr_header "${dir#./}"
+  (
+    cd "$dir" && git add -A
+    git rm $(git ls-files --deleted) 2>/dev/null
+    git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
+    git fetch --all --tags --prune &&
+    git pull &&
+    git rev-list --max-count=1 --format="%s" HEAD | grep -q -- "--wip--" && git reset HEAD~1
+  )
+}
+
+_rglr_pull_default_branch() {
+  local dir="$1" branch
+  (
+    cd "$dir" || exit
+    if git show-ref --verify --quiet refs/heads/develop; then
+      branch=develop
+    else
+      branch=main
+    fi
+    _rglr_header "${dir#./} ($branch)"
+    git add -A
+    git rm $(git ls-files --deleted) 2>/dev/null
+    git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
+    git checkout "$branch" &&
+    git fetch --all --tags --prune &&
+    git pull
+  )
+}
+
+# rglr [depth] — for every repo up to $depth levels down: stash WIP, fetch, pull, restore WIP
 rglr() {
-  local dir
-  find . -maxdepth 1 -mindepth 1 -type d | while read -r dir; do
-    [[ -d "$dir/.git" ]] || continue
-    echo "▶ ${dir#./}"
-    (
-      cd "$dir" && git add -A
-      git rm $(git ls-files --deleted) 2>/dev/null
-      git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
-      git fetch --all --tags --prune &&
-      git pull &&
-      git rev-list --max-count=1 --format="%s" HEAD | grep -q -- "--wip--" && git reset HEAD~1
-    )
-  done
+  _rglr_walk . "${1:-3}" _rglr_pull
 }
 
-# rglr! — for every subfolder: stash WIP, checkout develop (or main), fetch, pull
+# rglr! [depth] — same, but checkout develop (or main) before pulling
 rglr!() {
-  local dir branch
-  find . -maxdepth 1 -mindepth 1 -type d | while read -r dir; do
-    [[ -d "$dir/.git" ]] || continue
-    (
-      cd "$dir" || exit
-      if git show-ref --verify --quiet refs/heads/develop; then
-        branch=develop
-      else
-        branch=main
-      fi
-      echo "▶ ${dir#./} ($branch)"
-      git add -A
-      git rm $(git ls-files --deleted) 2>/dev/null
-      git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
-      git checkout "$branch" &&
-      git fetch --all --tags --prune &&
-      git pull
-    )
-  done
+  _rglr_walk . "${1:-3}" _rglr_pull_default_branch
 }

@@ -1,6 +1,7 @@
 singleton VolumeWidget 1.0 VolumeWidget.qml
 singleton Theme Theme.qml
 singleton BrightnessWidget 1.0 BrightnessWidget.qml
+singleton CameraWidget 1.0 CameraWidget.qml
 singleton SystemMonitor 1.0 SystemMonitor.qml
 singleton MediaControlWidget 1.0 MediaControlWidget.qml
 singleton WifiWidget 1.0 WifiWidget.qml

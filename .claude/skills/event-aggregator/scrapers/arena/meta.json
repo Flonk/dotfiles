@@ -1,0 +1,28 @@
+{
+  "slug": "arena",
+  "name": "Arena Wien",
+  "url": "https://arena.wien/Home/Programm",
+  "tier": "B",
+  "group": "music",
+  "covers": [
+    "rock",
+    "openair"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

@@ -45,6 +45,7 @@
 
           init = lib.mkBefore ''
             source ${./zshrc.sh}
+            source ${./rlol.sh}
           '';
 
           end = lib.mkAfter ''
@@ -53,6 +54,37 @@
                 cd "$1" && claude --dangerously-skip-permissions --chrome
               else
                 cd ~/repos/personal/dotfiles && claude --dangerously-skip-permissions --chrome
+              fi
+            }
+
+            ticket_fn() {
+              local ticket=$1
+              if [[ -z $ticket ]]; then
+                echo "usage: ticket <TICKET>" >&2
+                return 1
+              fi
+
+              cd ~/repos/ce-ifrs || return 1
+
+              local -a matches
+              matches=(.claude/tickets/$ticket(N/) .claude/tickets/$ticket-*(N/))
+
+              local dir=''${matches[1]:-.claude/tickets/$ticket}
+              local name=''${dir:t}
+              local idfile=$dir/sessionid.txt
+
+              if [[ -s $idfile ]]; then
+                claude --chrome --dangerously-skip-permissions \
+                  --model opus --effort high --name $name \
+                  --resume "$(<$idfile)"
+              else
+                mkdir -p $dir
+                local sid
+                sid=$(</proc/sys/kernel/random/uuid)
+                print -r -- $sid > $idfile
+                claude --chrome --dangerously-skip-permissions \
+                  --model opus --effort high --name $name \
+                  --session-id $sid "implement ticket $ticket"
               fi
             }
 
@@ -131,6 +163,7 @@
 
         ##### Claude
         cc = "cc_fn";
+        ticket = "ticket_fn";
 
         ##### Kubernetes
         k = "kubectl";

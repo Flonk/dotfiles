@@ -1,0 +1,28 @@
+{
+  "slug": "rhiz",
+  "name": "rhiz",
+  "url": "https://rhiz.wien/",
+  "tier": "B",
+  "group": "music",
+  "covers": [
+    "electronic",
+    "experimental"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

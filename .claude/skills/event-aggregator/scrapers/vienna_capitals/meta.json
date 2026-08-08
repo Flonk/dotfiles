@@ -1,0 +1,27 @@
+{
+  "slug": "vienna_capitals",
+  "name": "Vienna Capitals",
+  "url": "https://www.vienna-capitals.at/spielplan",
+  "tier": "B",
+  "group": "sport",
+  "covers": [
+    "ice hockey"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

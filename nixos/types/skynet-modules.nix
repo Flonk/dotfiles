@@ -27,6 +27,7 @@
     ../modules/desktop/gloxwald/options.nix
     ../modules/desktop/stylix/options.nix
     ../modules/desktop/vicinae/options.nix
+    ../modules/desktop/vicinae-askpass/options.nix
     ../modules/desktop/vicinae-bitwarden/options.nix
 
     # development

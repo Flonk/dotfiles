@@ -1,0 +1,33 @@
+{
+  "slug": "belvedere",
+  "name": "Belvedere",
+  "url": "https://www.belvedere.at/ausstellungen",
+  "tier": "A",
+  "group": "museum",
+  "covers": [
+    "art"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 5,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "category": 1.0
+    },
+    "canary": "teaser__node-exposition"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Redirects to /ausstellungen-aktuell; only 8 exhibitions listed (2 permanent 'Dauerausstellung' + 6 temporary), no pagination. ld+json on the page only lists titles/links, no dates, so parsed server HTML teaser cards instead (title, category, venue, <time datetime> pair, detail link). Permanent exhibitions have no dates on the page; end synthesized as today+3y. price_min always null (not shown on this listing page). district hardcoded 1030 for all three venues (Oberes/Unteres Belvedere, Belvedere 21).",
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 8
+  }
+}

@@ -239,6 +239,41 @@ Item {
     anchors.top: parent.top
     spacing: 0
 
+    // CAMERA
+    Section {
+      visible: !bar.lockscreen
+      width: cameraText.implicitWidth + 8
+      topPadding: 0; bottomPadding: 0
+      backgroundColor: {
+        if (CameraWidget.status === "busy") return bar.warningColor;
+        if (CameraWidget.status === "ok") return bar.chargingColor;
+        if (CameraWidget.status === "fail") return bar.errorColor;
+        return "#a3746f";
+      }
+      showTopBorder: false
+      glassEffect: false
+
+      Item {
+        width: parent.width; height: 20
+
+        Text {
+          id: cameraText
+          anchors.centerIn: parent; anchors.verticalCenterOffset: bar.textVerticalOffset
+          text: CameraWidget.busy ? "CAMERA .." : "CAMERA"
+          font.family: Theme.fontFamily; font.pointSize: Theme.fontSizeSmall; font.weight: Font.Bold
+          color: "#000000"
+        }
+
+        MouseArea {
+          enabled: bar.interactive && !CameraWidget.busy
+          anchors.fill: parent
+          hoverEnabled: true
+          cursorShape: Qt.PointingHandCursor
+          onClicked: CameraWidget.reset()
+        }
+      }
+    }
+
     // BRIGHTNESS
     Section {
       visible: !bar.lockscreen

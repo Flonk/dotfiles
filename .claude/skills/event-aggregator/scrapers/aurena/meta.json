@@ -1,0 +1,30 @@
+{
+  "slug": "aurena",
+  "name": "Aurena Auktionen",
+  "url": "https://www.aurena.at/auktionen",
+  "tier": "B",
+  "group": "bargain",
+  "covers": [
+    "auctions",
+    "clearances"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 130,
+    "required_fill": {
+      "category": 0.9
+    },
+    "canary": "id=bidware-state"
+  },
+  "last_built": "2026-08-08",
+  "notes": "SSR page embeds a full JSON state dump in <script id=bidware-state> using custom entities (&q; for \", &a; for &, &l;/&g; for <>) instead of real HTML escaping; decode those first. Each item is a whole multi-lot auction (start=bidding opens, end=bidding closes), not a single ticketed event. Covers all of Austria plus some CH/DE consignors, not Vienna-only, so district/city/address are frequently null (only ~2% Vienna, ~58% have any location at all - rest are shipping-only 'Versandauktionen'). price_min always null: no per-auction price, only per-lot bids not exposed here.",
+  "schedule": {
+    "cadence": "daily",
+    "horizon_days": 30,
+    "basis": "measured",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 189
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "tuwien",
+  "name": "TU Wien Events",
+  "url": "https://www.tuwien.at/en/tu-wien/news/events",
+  "tier": "B",
+  "group": "academic",
+  "covers": [
+    "engineering",
+    "cs",
+    "physics",
+    "maths"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 20,
+    "required_fill": {
+      "venue": 0.9,
+      "category": 0.9
+    },
+    "canary": "wpListItem"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered paginated list at /en/tu-wien/news/events/page/N (10/page). Stops paginating once a page's earliest event exceeds EA_HORIZON_DAYS; site publishes events well into 2027 so many pages exist beyond the horizon. price never shown on list page so price_min/price_text are always null. district only fills ~75% (many venues are Online/Zoom/webinar with no postal code).",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

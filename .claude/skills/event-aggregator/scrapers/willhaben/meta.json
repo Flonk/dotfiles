@@ -1,0 +1,27 @@
+{
+  "slug": "willhaben",
+  "name": "willhaben Tickets",
+  "url": "https://www.willhaben.at/iad/kaufen-und-verkaufen/marktplatz/tickets-4523",
+  "tier": "B",
+  "group": "bargain",
+  "covers": [
+    "resale tickets"
+  ],
+  "status": "dead",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": "robots.txt opens with a blanket statement: \"It is expressively forbidden to use spiders, search robots or other automatic methods to access willhaben.at.\" Site-wide anti-scraping prohibition, not just path-scoped Disallow rules. Not built.",
+  "schedule": {
+    "cadence": "daily",
+    "horizon_days": 30,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

@@ -1,0 +1,1182 @@
+{
+  "buildable": 117,
+  "blocked": 24,
+  "sources": [
+    {
+      "slug": "porgy",
+      "name": "Porgy & Bess",
+      "url": "https://www.porgy.at/events/upcoming",
+      "tier": "A",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wien_gv_at",
+      "name": "Stadt Wien Veranstaltungen",
+      "url": "https://www.wien.gv.at/veranstaltungen.json",
+      "tier": "A",
+      "group": "city",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "volume_at",
+      "name": "Volume.at Events",
+      "url": "https://www.volume.at/events/",
+      "tier": "A",
+      "group": "aggregator",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "meinbezirk",
+      "name": "meinbezirk.at Wien",
+      "url": "https://www.meinbezirk.at/event/wien/list/current-week",
+      "tier": "A",
+      "group": "aggregator",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "eventbrite",
+      "name": "Eventbrite Vienna",
+      "url": "https://www.eventbrite.at/d/austria--vienna/events/",
+      "tier": "A",
+      "group": "aggregator",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "mak",
+      "name": "MAK",
+      "url": "https://www.mak.at/programm",
+      "tier": "A",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "technischesmuseum",
+      "name": "Technisches Museum Wien",
+      "url": "https://www.technischesmuseum.at/ausstellungen",
+      "tier": "A",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "belvedere",
+      "name": "Belvedere",
+      "url": "https://www.belvedere.at/ausstellungen",
+      "tier": "A",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "vienna_events",
+      "name": "vienna-events.com",
+      "url": "https://www.vienna-events.com/en/events",
+      "tier": "A",
+      "group": "aggregator",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "klimtvilla",
+      "name": "Klimt Villa",
+      "url": "https://www.klimtvilla.at/",
+      "tier": "A",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "maw",
+      "name": "MAW Kongresskalender",
+      "url": "https://www.maw.co.at/de/kongresskalender",
+      "tier": "A",
+      "group": "congress",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "khm",
+      "name": "KHM-Museumsverband",
+      "url": "https://www.khm.at/besuchen/ausstellungen/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wienmuseum",
+      "name": "Wien Museum Gruppe",
+      "url": "https://www.wienmuseum.at/ausstellungen",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "schoenbrunn",
+      "name": "Schloss Schönbrunn (SKB)",
+      "url": "https://www.schoenbrunn.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "hofmobiliendepot",
+      "name": "Möbelmuseum / Hofmobiliendepot",
+      "url": "https://www.hofmobiliendepot.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "onb",
+      "name": "Österreichische Nationalbibliothek",
+      "url": "https://www.onb.ac.at/museen",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "albertina",
+      "name": "Albertina + Albertina Modern",
+      "url": "https://www.albertina.at/ausstellungen/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "azw",
+      "name": "Architekturzentrum Wien",
+      "url": "https://www.azw.at/de/programm/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "mumok",
+      "name": "mumok",
+      "url": "https://www.mumok.at/de/ausstellungen",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "leopold",
+      "name": "Leopold Museum",
+      "url": "https://www.leopoldmuseum.org/de/ausstellungen",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "nhm_ausstellung",
+      "name": "NHM Ausstellungen",
+      "url": "https://www.nhm-wien.ac.at/ausstellung",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "secession",
+      "name": "Secession",
+      "url": "https://www.secession.at/ausstellungen/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "jmw",
+      "name": "Jüdisches Museum Wien",
+      "url": "https://www.jmw.at/ausstellungen",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "kunsthauswien",
+      "name": "KunstHausWien",
+      "url": "https://www.kunsthauswien.com/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "dommuseum",
+      "name": "Dom Museum Wien",
+      "url": "https://www.dommuseum.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "hdgoe",
+      "name": "Haus der Geschichte Österreich",
+      "url": "https://www.hdgoe.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "freud_museum",
+      "name": "Sigmund Freud Museum",
+      "url": "https://www.freud-museum.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "volkskundemuseum",
+      "name": "Volkskundemuseum Wien",
+      "url": "https://www.volkskundemuseum.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "hgm",
+      "name": "Heeresgeschichtliches Museum",
+      "url": "https://www.hgm.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "josephinum",
+      "name": "Josephinum",
+      "url": "https://www.josephinum.ac.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "hausdermusik",
+      "name": "Haus der Musik",
+      "url": "https://www.hausdermusik.com/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "mozarthaus",
+      "name": "Mozarthaus Vienna",
+      "url": "https://www.mozarthausvienna.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "ernstfuchsmuseum",
+      "name": "Ernst Fuchs Museum",
+      "url": "https://www.ernstfuchsmuseum.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "bestattungsmuseum",
+      "name": "Bestattungsmuseum",
+      "url": "https://www.bestattungsmuseum.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "hofburg",
+      "name": "Hofburg Wien",
+      "url": "https://www.hofburg-wien.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "srs",
+      "name": "Spanische Hofreitschule",
+      "url": "https://www.srs.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "zoovienna",
+      "name": "Tiergarten Schönbrunn",
+      "url": "https://www.zoovienna.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "kindermuseum",
+      "name": "ZOOM Kindermuseum",
+      "url": "https://www.kindermuseum.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "schmetterlinghaus",
+      "name": "Schmetterlinghaus",
+      "url": "https://www.schmetterlinghaus.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "haus_des_meeres",
+      "name": "Haus des Meeres",
+      "url": "https://www.haus-des-meeres.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "planetarium",
+      "name": "Planetarium Wien",
+      "url": "https://www.planetarium-wien.at/",
+      "tier": "B",
+      "group": "museum",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "konzerthaus",
+      "name": "Wiener Konzerthaus",
+      "url": "https://www.konzerthaus.at/de/programm-und-karten",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wuk",
+      "name": "WUK",
+      "url": "https://www.wuk.at/programm/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wienmodern",
+      "name": "Wien Modern",
+      "url": "https://www.wienmodern.at/programm/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "brut",
+      "name": "brut Wien",
+      "url": "https://www.brut-wien.at/de/programm",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "echoraum",
+      "name": "echoraum",
+      "url": "https://www.echoraum.at/programm/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "rhiz",
+      "name": "rhiz",
+      "url": "https://rhiz.wien/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "fluc",
+      "name": "Fluc",
+      "url": "https://www.fluc.at/programm/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wien_ticket",
+      "name": "Wien-Ticket",
+      "url": "https://www.wien-ticket.at/",
+      "tier": "B",
+      "group": "ticketing",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "sargfabrik",
+      "name": "Sargfabrik",
+      "url": "https://www.sargfabrik.at/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "szene",
+      "name": "Szene Wien",
+      "url": "https://szene.wien/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "chelsea",
+      "name": "Chelsea",
+      "url": "https://chelsea.co.at/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "arena",
+      "name": "Arena Wien",
+      "url": "https://arena.wien/Home/Programm",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "grelleforelle",
+      "name": "Grelle Forelle",
+      "url": "https://grelleforelle.com/programm",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "werk",
+      "name": "Das Werk",
+      "url": "https://werk.wien/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "reigen",
+      "name": "Reigen",
+      "url": "https://www.reigen.at/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "jazzland",
+      "name": "Jazzland",
+      "url": "https://www.jazzland.at/",
+      "tier": "B",
+      "group": "music",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "burgtheater",
+      "name": "Burgtheater",
+      "url": "https://www.burgtheater.at/spielplan",
+      "tier": "B",
+      "group": "theatre",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "volkstheater",
+      "name": "Volkstheater",
+      "url": "https://www.volkstheater.at/spielplan/",
+      "tier": "B",
+      "group": "theatre",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "volksoper",
+      "name": "Volksoper",
+      "url": "https://www.volksoper.at/spielplan/",
+      "tier": "B",
+      "group": "theatre",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "josefstadt",
+      "name": "Theater in der Josefstadt",
+      "url": "https://www.josefstadt.org/programm/spielplan.html",
+      "tier": "B",
+      "group": "theatre",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "neueoperwien",
+      "name": "Neue Oper Wien",
+      "url": "https://www.neueoperwien.at/",
+      "tier": "B",
+      "group": "theatre",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "sirene",
+      "name": "sirene Operntheater",
+      "url": "https://www.sirene.at/",
+      "tier": "B",
+      "group": "theatre",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "bellariakino",
+      "name": "Bellaria Kino",
+      "url": "https://www.bellariakino.at/de",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "filmcasino",
+      "name": "Filmcasino",
+      "url": "https://www.filmcasino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "stadtkinowien",
+      "name": "Stadtkino Wien",
+      "url": "https://www.stadtkinowien.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "nonstopkino",
+      "name": "Nonstop Kino",
+      "url": "https://nonstopkino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "votivkino",
+      "name": "Votivkino",
+      "url": "https://www.votivkino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "breitenseer",
+      "name": "Breitenseer Lichtspiele",
+      "url": "https://breitenseer-lichtspiele.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "filmarchiv",
+      "name": "Filmarchiv Austria",
+      "url": "https://www.filmarchiv.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "topkino",
+      "name": "Top Kino",
+      "url": "https://www.topkino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "filmmuseum",
+      "name": "Österreichisches Filmmuseum",
+      "url": "https://www.filmmuseum.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "schikaneder",
+      "name": "Schikaneder",
+      "url": "https://schikaneder.at/jart/prj3/schikaneder/main.jart",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "gartenbaukino",
+      "name": "Gartenbaukino",
+      "url": "https://www.gartenbaukino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "admiralkino",
+      "name": "Admiral Kino",
+      "url": "https://www.admiralkino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "cinecenter",
+      "name": "Cinecenter",
+      "url": "https://www.cinecenter.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "burgkino",
+      "name": "Burg Kino",
+      "url": "https://www.burgkino.at/",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "haydnkino",
+      "name": "Haydn Kino",
+      "url": "https://www.haydnkino.at/Cinema/Overview",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "cineplexx_actors",
+      "name": "Actors Studio (Cineplexx)",
+      "url": "https://cineplexx.at/cinemas/Actors-Studio",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "cineplexx_urania",
+      "name": "Urania Kino (Cineplexx)",
+      "url": "https://cineplexx.at/cinemas/Urania-Kino",
+      "tier": "B",
+      "group": "cinema",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "japannual",
+      "name": "Japannual",
+      "url": "https://www.japannual.at/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "kinoamdach",
+      "name": "Kino am Dach",
+      "url": "https://www.kinoamdach.at/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "rathausplatz",
+      "name": "Filmfestival Rathausplatz",
+      "url": "https://filmfestival-rathausplatz.at/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "volxkino",
+      "name": "Volxkino",
+      "url": "https://www.volxkino.at/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "viennashorts",
+      "name": "Vienna Shorts",
+      "url": "https://www.viennashorts.com/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "slashfilmfestival",
+      "name": "/slash Filmfestival",
+      "url": "https://slashfilmfestival.com/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wien_gv_sommerkinos",
+      "name": "Stadt Wien Sommerkinos",
+      "url": "https://www.wien.gv.at/kultur/sommerkinos",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "visitingvienna",
+      "name": "VisitingVienna Film Festivals",
+      "url": "https://www.visitingvienna.com/entertainment/events/film-festivals/",
+      "tier": "B",
+      "group": "filmfest",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "marxhalle",
+      "name": "Marx Halle",
+      "url": "https://marxhalle.at/events/",
+      "tier": "B",
+      "group": "fair",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "messecongress",
+      "name": "Messe Wien",
+      "url": "https://www.messecongress.at/",
+      "tier": "B",
+      "group": "fair",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "ottakringerbrauerei",
+      "name": "Ottakringer Brauerei",
+      "url": "https://www.ottakringerbrauerei.at/de/events/",
+      "tier": "B",
+      "group": "food",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "vienna_capitals",
+      "name": "Vienna Capitals",
+      "url": "https://www.vienna-capitals.at/spielplan",
+      "tier": "B",
+      "group": "sport",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "fk_austria",
+      "name": "FK Austria Wien",
+      "url": "https://www.fk-austria.at/teams/profis/spielplan",
+      "tier": "B",
+      "group": "sport",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "skrapid",
+      "name": "SK Rapid",
+      "url": "https://www.skrapid.at/",
+      "tier": "B",
+      "group": "sport",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "vienna_marathon",
+      "name": "Vienna City Marathon",
+      "url": "https://www.vienna-marathon.com/",
+      "tier": "B",
+      "group": "sport",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "eventim",
+      "name": "Eventim.at",
+      "url": "https://www.eventim.at/",
+      "tier": "B",
+      "group": "ticketing",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "ticketmaster",
+      "name": "Ticketmaster.at",
+      "url": "https://www.ticketmaster.at/",
+      "tier": "B",
+      "group": "ticketing",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "alte_schmiede",
+      "name": "Alte Schmiede",
+      "url": "https://www.alte-schmiede.at/",
+      "tier": "B",
+      "group": "literature",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "literaturhaus",
+      "name": "Literaturhaus Wien",
+      "url": "https://www.literaturhaus-wien.at/",
+      "tier": "B",
+      "group": "literature",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "tuwien",
+      "name": "TU Wien Events",
+      "url": "https://www.tuwien.at/en/tu-wien/news/events",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "univie",
+      "name": "Universität Wien Kalender",
+      "url": "https://kalender.univie.ac.at/",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "esi",
+      "name": "Erwin Schrödinger Institut",
+      "url": "https://www.esi.ac.at/events/",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "ista",
+      "name": "ISTA",
+      "url": "https://ista.ac.at/en/news-events/events/",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "imp",
+      "name": "IMP / Vienna BioCenter",
+      "url": "https://www.imp.ac.at/calendar",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "nhm_events",
+      "name": "NHM Veranstaltungskalender",
+      "url": "https://www.nhm.at/veranstaltungskalender",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "boku",
+      "name": "BOKU",
+      "url": "https://boku.ac.at/event/list",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wu",
+      "name": "WU Wien",
+      "url": "https://www.wu.ac.at/universitaet/news-und-events/events",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "ihs",
+      "name": "IHS",
+      "url": "https://www.ihs.ac.at/news-and-events/events-calendar/",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wpi",
+      "name": "Wolfgang Pauli Institute",
+      "url": "https://www.wpi.ac.at/activities_view.php?s=event",
+      "tier": "B",
+      "group": "academic",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "kreisky",
+      "name": "Kreisky Forum",
+      "url": "https://www.kreisky-forum.org/veranstaltungen/",
+      "tier": "B",
+      "group": "society",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "depot",
+      "name": "Depot",
+      "url": "https://www.depot.or.at/programm",
+      "tier": "B",
+      "group": "society",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wienervorlesungen",
+      "name": "Wiener Vorlesungen",
+      "url": "https://www.wienervorlesungen.at/",
+      "tier": "B",
+      "group": "society",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "wko",
+      "name": "WKO Veranstaltungen",
+      "url": "https://www.wko.at/veranstaltungen",
+      "tier": "B",
+      "group": "fair",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "aurena",
+      "name": "Aurena Auktionen",
+      "url": "https://www.aurena.at/auktionen",
+      "tier": "B",
+      "group": "bargain",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "willhaben",
+      "name": "willhaben Tickets",
+      "url": "https://www.willhaben.at/iad/kaufen-und-verkaufen/marktplatz/tickets-4523",
+      "tier": "B",
+      "group": "bargain",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "genussregionen",
+      "name": "Genuss-Festival",
+      "url": "https://festival.genussregionen.at/",
+      "tier": "B",
+      "group": "food",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "strasser_workout",
+      "name": "Strasser Workout",
+      "url": "https://www.instagram.com/michaelstrasser/",
+      "tier": "B",
+      "group": "sport",
+      "status": "unbuilt"
+    },
+    {
+      "slug": "ra_co",
+      "name": "Resident Advisor",
+      "url": "https://ra.co/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot/Claude-Web/anthropic-ai Disallow /",
+      "covered_via": "venue list: grelleforelle,fluc,werk,chelsea,rhiz,arena"
+    },
+    {
+      "slug": "wiener_staatsoper",
+      "name": "Wiener Staatsoper",
+      "url": "https://www.wiener-staatsoper.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot Disallow /",
+      "covered_via": "eventim,ticketmaster,wien_ticket,volume_at"
+    },
+    {
+      "slug": "theater_wien",
+      "name": "Theater an der Wien",
+      "url": "https://www.theater-wien.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot Disallow /",
+      "covered_via": "eventim,ticketmaster,wien_ticket,volume_at"
+    },
+    {
+      "slug": "stadthalle",
+      "name": "Wiener Stadthalle",
+      "url": "https://www.stadthalle.com/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot Disallow /",
+      "covered_via": "eventim,ticketmaster,wien_ticket,volume_at"
+    },
+    {
+      "slug": "viennale",
+      "name": "Viennale",
+      "url": "https://www.viennale.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: anthropic-ai/Claude-Web Disallow /",
+      "covered_via": "wien_gv_sommerkinos,gartenbaukino,stadtkinowien,filmmuseum"
+    },
+    {
+      "slug": "kunsthallewien",
+      "name": "Kunsthalle Wien",
+      "url": "https://kunsthallewien.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ClaudeBot blocked group",
+      "covered_via": "none - accepted loss"
+    },
+    {
+      "slug": "falter",
+      "name": "Falter",
+      "url": "https://www.falter.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: ~50 AI agents blocked",
+      "covered_via": "wien_gv_at,meinbezirk,volume_at,vienna_events"
+    },
+    {
+      "slug": "oefb",
+      "name": "ÖFB",
+      "url": "https://www.oefb.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: anthropic-ai (UNVERIFIED claim)",
+      "covered_via": "fk_austria,skrapid"
+    },
+    {
+      "slug": "iwm",
+      "name": "Inst. f. d. Wissenschaften vom Menschen",
+      "url": "https://www.iwm.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots blocked",
+      "covered_via": "kreisky,depot,wienervorlesungen,univie"
+    },
+    {
+      "slug": "dorotheum",
+      "name": "Dorotheum",
+      "url": "https://www.dorotheum.com/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots blocked",
+      "covered_via": "aurena"
+    },
+    {
+      "slug": "ticketswap",
+      "name": "TicketSwap",
+      "url": "https://www.ticketswap.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "HTTP 403",
+      "covered_via": "willhaben - BARGAIN MONITOR STILL DEGRADED"
+    },
+    {
+      "slug": "polizei_versammlungen",
+      "name": "LPD Versammlungen",
+      "url": "https://www.polizei.gv.at/wien/buergerservice/versammlungen/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "robots: Anthropic-ai/Claude-Web Disallow /; register not published",
+      "covered_via": "meinbezirk local news only"
+    },
+    {
+      "slug": "10times",
+      "name": "10times.com",
+      "url": "https://10times.com/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "HTTP 403",
+      "covered_via": "eventbrite,maw"
+    },
+    {
+      "slug": "wikicfp",
+      "name": "WikiCFP",
+      "url": "http://www.wikicfp.com/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "no connection",
+      "covered_via": "academic calendars"
+    },
+    {
+      "slug": "songkick",
+      "name": "Songkick",
+      "url": "https://www.songkick.com/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "HTTP 406",
+      "covered_via": "volume_at,venue list"
+    },
+    {
+      "slug": "musikverein",
+      "name": "Musikverein",
+      "url": "https://www.musikverein.at/spielplan/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "695-byte JS shell",
+      "covered_via": "eventim,wien_ticket - RECHECK with console.js"
+    },
+    {
+      "slug": "clocate",
+      "name": "clocate.com",
+      "url": "https://www.clocate.com/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "verified negative: not a Vienna listing",
+      "covered_via": "-"
+    },
+    {
+      "slug": "ganz_wien",
+      "name": "ganz-wien.at",
+      "url": "https://www.ganz-wien.at/kunst-kultur/ausstellungen.html",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "verified negative: zero museum coverage",
+      "covered_via": "museum operator groups"
+    },
+    {
+      "slug": "oeaw",
+      "name": "ÖAW",
+      "url": "https://www.oeaw.ac.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "HTTP 403 sitewide",
+      "covered_via": "univie,esi,ista - REAL LOSS"
+    },
+    {
+      "slug": "fwf",
+      "name": "FWF",
+      "url": "https://www.fwf.ac.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "no event calendar (404)",
+      "covered_via": "academic calendars"
+    },
+    {
+      "slug": "meduniwien",
+      "name": "MedUni Wien",
+      "url": "https://www.meduniwien.ac.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "events page empty",
+      "covered_via": "maw"
+    },
+    {
+      "slug": "thirdman",
+      "name": "Third Man Museum",
+      "url": "https://www.thirdmanmuseum.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "dead",
+      "covered_via": "-"
+    },
+    {
+      "slug": "kunstforum",
+      "name": "Kunstforum Wien",
+      "url": "https://www.kunstforumwien.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "connection failed",
+      "covered_via": "-"
+    },
+    {
+      "slug": "kriminalmuseum",
+      "name": "Kriminalmuseum",
+      "url": "https://www.kriminalmuseum.at/",
+      "tier": "C",
+      "group": "blocked",
+      "status": "blocked",
+      "blocked_by": "1 KB stub",
+      "covered_via": "-"
+    }
+  ]
+}

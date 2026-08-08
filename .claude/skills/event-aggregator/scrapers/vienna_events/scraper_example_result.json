@@ -1,0 +1,249 @@
+[
+  {
+    "source": "vienna_events",
+    "source_id": "1839",
+    "url": "https://www.vienna-events.com/en/events/whats-my-age-again-vienna-austria-viper-room-2026-08-07-e1839",
+    "title": "WHAT’S MY AGE AGAIN?",
+    "start": "2026-08-08",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, Rock, Alternative Rock, Punk"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1964",
+    "url": "https://www.vienna-events.com/en/events/christine-jones-all-blues-ein-film-von-sina-moser-and-special-guest-appearances-the-original-jonesmobile-band-live-a-vienna-austria-porgy-and-bess-2026-08-07-e1964",
+    "title": "Christine Jones 'All Blues' – Ein Film von Sina Moser & Special Guest Appearances: The original JONESMOBILe Band – Live! (A)",
+    "start": "2026-08-08",
+    "venue": "Porgy & Bess",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Jazz, Blues"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1840",
+    "url": "https://www.vienna-events.com/en/events/welcome-to-the-eighties-vienna-austria-viper-room-2026-08-13-e1840",
+    "title": "WELCOME TO THE EIGHTIES",
+    "start": "2026-08-14",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, Rock, Pop"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1456",
+    "url": "https://www.vienna-events.com/en/events/welcome-to-the-eighties-vienna-austria-viper-room-2026-08-13-e1456",
+    "title": "WELCOME TO THE EIGHTIES",
+    "start": "2026-08-14",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, Pop, Rock"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1841",
+    "url": "https://www.vienna-events.com/en/events/breakdown-vienna-austria-viper-room-2026-08-14-e1841",
+    "title": "BREAKDOWN",
+    "start": "2026-08-15",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, Metal"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1784",
+    "url": "https://www.vienna-events.com/en/events/mysie-chovo-vienna-austria-chelsea-2026-08-17-e1784",
+    "title": "MYSIE / CHOVO",
+    "start": "2026-08-17",
+    "venue": "Chelsea",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Electronic, Indie Rock, Alternative Rock, Hip Hop, Pop"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1842",
+    "url": "https://www.vienna-events.com/en/events/high-voltage-fairies-in-the-pit-vienna-austria-viper-room-2026-08-27-e1842",
+    "title": "HIGH VOLTAGE FAIRIES IN THE PIT",
+    "start": "2026-08-28",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, Alternative Rock, Metal"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1334",
+    "url": "https://www.vienna-events.com/en/events/kaffkiez-ger-open-air-vienna-austria-arena-2026-08-29-e1334",
+    "title": "KAFFKIEZ (ger) *OPEN AIR*",
+    "start": "2026-08-30",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Indie Rock, Rock"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1700",
+    "url": "https://www.vienna-events.com/en/events/dick-brave-ger-open-air-vienna-austria-arena-2026-09-01-e1700",
+    "title": "DICK BRAVE (ger) *OPEN AIR*",
+    "start": "2026-09-02",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Pop, Rock"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1335",
+    "url": "https://www.vienna-events.com/en/events/von-wegen-lisbeth-ger-open-air-vienna-austria-arena-2026-09-02-e1335",
+    "title": "VON WEGEN LISBETH (ger) *OPEN AIR*",
+    "start": "2026-09-03",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1457",
+    "url": "https://www.vienna-events.com/en/events/jumpdafuckup-vienna-austria-viper-room-2026-09-03-e1457",
+    "title": "JUMPDAFUCKUP",
+    "start": "2026-09-04",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, Metal"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1843",
+    "url": "https://www.vienna-events.com/en/events/near-dark-vienna-austria-viper-room-2026-09-04-e1843",
+    "title": "NEAR DARK",
+    "start": "2026-09-05",
+    "venue": "Viper Room",
+    "city": "Wien",
+    "category": "themeNight",
+    "extra": {
+      "keywords": "themeNight, House, Goth"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1965",
+    "url": "https://www.vienna-events.com/en/events/cc-jop-christoph-cech-jazz-orchestra-project-a-vienna-austria-porgy-and-bess-2026-09-05-e1965",
+    "title": "CC JOP – Christoph Cech Jazz Orchestra Project (A)",
+    "start": "2026-09-06",
+    "venue": "Porgy & Bess",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Funk, Rock, Blues, Jazz"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1701",
+    "url": "https://www.vienna-events.com/en/events/haze-ger-nachholtermin-vienna-austria-arena-2026-09-05-e1701",
+    "title": "HAZE (ger) *NACHHOLTERMIN.*",
+    "start": "2026-09-06",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1336",
+    "url": "https://www.vienna-events.com/en/events/the-bosshoss-ger-vienna-austria-arena-2026-09-06-e1336",
+    "title": "THE BOSSHOSS (ger)",
+    "start": "2026-09-07",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Punk, Rock"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1785",
+    "url": "https://www.vienna-events.com/en/events/l1nkn-p4rk-wirefall-vienna-austria-chelsea-2026-09-07-e1785",
+    "title": "L1NKN P4RK / WIREFALL",
+    "start": "2026-09-07",
+    "venue": "Chelsea",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Rock, Alternative Rock, Metal"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1632",
+    "url": "https://www.vienna-events.com/en/events/david-helbock-sousaphon-trio-ad-vienna-austria-porgy-and-bess-2026-09-07-e1632",
+    "title": "David Helbock Sousaphon Trio (A/D)",
+    "start": "2026-09-08",
+    "venue": "Porgy & Bess",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent, Folk, Jazz"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1337",
+    "url": "https://www.vienna-events.com/en/events/heinz-aus-wien-gaste-vienna-austria-arena-2026-09-09-e1337",
+    "title": "HEINZ AUS WIEN + Gäste",
+    "start": "2026-09-10",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent"
+    }
+  },
+  {
+    "source": "vienna_events",
+    "source_id": "1702",
+    "url": "https://www.vienna-events.com/en/events/heinz-aus-wien-gaste-open-air-vienna-austria-arena-2026-09-09-e1702",
+    "title": "HEINZ AUS WIEN + Gäste *OPEN AIR*",
+    "start": "2026-09-10",
+    "venue": "Arena",
+    "city": "Wien",
+    "category": "liveMusicEvent",
+    "extra": {
+      "keywords": "liveMusicEvent"
+    }
+  }
+]

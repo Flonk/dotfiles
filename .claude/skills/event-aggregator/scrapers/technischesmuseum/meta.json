@@ -1,0 +1,34 @@
+{
+  "slug": "technischesmuseum",
+  "name": "Technisches Museum Wien",
+  "url": "https://www.technischesmuseum.at/ausstellungen",
+  "tier": "A",
+  "group": "museum",
+  "covers": [
+    "tech"
+  ],
+  "status": "built",
+  "method": "jsonld",
+  "expect": {
+    "min_records": 6,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "end": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "description": 1.0
+    },
+    "canary": "href=\"/ausstellung/"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Listing page has no dates, only links to /ausstellung/<slug> detail pages (9 of them). Each detail page has an ExhibitionEvent JSON-LD block with start/end; some blocks contain unescaped control chars so json.loads needs strict=False. Descriptions are double HTML-escaped (e.g. &amp;lt;sup&amp;gt;), so ea.text() is applied twice. No admission price found on detail pages, so price_min/price_text left null (general museum ticket applies, amount not stated here).",
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 9
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "breitenseer",
+  "name": "Breitenseer Lichtspiele",
+  "url": "https://breitenseer-lichtspiele.at/",
+  "tier": "B",
+  "group": "cinema",
+  "covers": [
+    "cinema"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 54,
+    "required_fill": {
+      "description": 0.9
+    },
+    "canary": "grid justify-center grid-cols-6"
+  },
+  "last_built": "2026-08-08",
+  "notes": "single-venue arthouse cinema; homepage server-renders the full program (no pagination); one <a href=/event/...> block per showtime; 9 'geschlossen' + 1 'SOMMERPAUSE' placeholder rows (all at 00:00 Uhr) filtered out as non-events; no per-event price published anywhere, price_min/price_text always null; category always null (site has no genre/category label)",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "measured",
+    "density_per_day": 0.95,
+    "p95_lead_days": 81,
+    "sample_records": 77
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "univie",
+  "name": "Universität Wien Kalender",
+  "url": "https://kalender.univie.ac.at/",
+  "tier": "B",
+  "group": "academic",
+  "covers": [
+    "all fields",
+    "philosophy"
+  ],
+  "status": "built",
+  "method": "jsonld",
+  "expect": {
+    "min_records": 50,
+    "required_fill": {
+      "title": 1.0,
+      "venue": 1.0,
+      "description": 1.0,
+      "category": 0.9
+    },
+    "canary": "###MAINLIST### begin"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered listing at / (TYPO3/UnivieEvents) paginated 3-6 events per page via a cHash-signed 'Weiter' link that must be followed verbatim (guessing cHash values 404s). Each event's own /einzelansicht detail page carries a full schema.org Event JSON-LD block (start/end/location/description/isAccessibleForFree/eventStatus); category text is only in the detail page's HTML (not in the JSON-LD). Also pulls the homepage's repeating 'Teaser' highlight and the 'Ausstellungen' (exhibitions) sidebar box for long-running shows that may not surface in the paginated day list. price_min only set to 0.0 when isAccessibleForFree is literally true; otherwise null (no price field exists in the LD+JSON). city comes from address.addressLocality verbatim (many events are off-site, e.g. Salzburg) rather than assumed Wien.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 0.4,
+    "p95_lead_days": 170,
+    "sample_records": 74
+  }
+}

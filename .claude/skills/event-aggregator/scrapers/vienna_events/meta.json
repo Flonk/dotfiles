@@ -1,0 +1,36 @@
+{
+  "slug": "vienna_events",
+  "name": "vienna-events.com",
+  "url": "https://www.vienna-events.com/en/events",
+  "tier": "A",
+  "group": "aggregator",
+  "covers": [
+    "general"
+  ],
+  "status": "built",
+  "method": "jsonld",
+  "expect": {
+    "min_records": 13,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "category": 1.0,
+      "url": 1.0,
+      "price_min": 0.0,
+      "district": 0.0
+    },
+    "canary": "Events found</h2>"
+  },
+  "last_built": "2026-08-08",
+  "notes": "JSON-LD Event blocks per event card, paginated via ?page=N (20/page, ~156 total, sorted ascending by date). No price info anywhere on listing or in ld+json. location.address is buggy on the site (several venues share one bogus street string, e.g. Porgy & Bess and Viper Room both show '38 Landstrasser Hauptstrasse'), so address/district are left null rather than trusted. startDate/endDate carry spurious 00:00-ish UTC times with no real meaning (site has no actual event times), so times are dropped and only the date is kept. Detail URLs come from card hrefs (site emits a buggy double-slash '/en//events/...' which we normalize); source_id is the trailing 'eNNNN' id.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 40,
+    "basis": "measured",
+    "density_per_day": 0.576,
+    "p95_lead_days": 33,
+    "sample_records": 19,
+    "sample_truncated": false
+  }
+}

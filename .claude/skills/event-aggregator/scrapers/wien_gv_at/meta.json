@@ -1,0 +1,36 @@
+{
+  "slug": "wien_gv_at",
+  "name": "Stadt Wien Veranstaltungen",
+  "url": "https://search.wien.gv.at/site_veranstaltungen/_search/template",
+  "tier": "A",
+  "group": "city",
+  "covers": [
+    "festivals",
+    "graetzl",
+    "markets",
+    "kids"
+  ],
+  "status": "built",
+  "method": "api",
+  "expect": {
+    "min_records": 550,
+    "required_fill": {
+      "district": 0.9,
+      "address": 0.9,
+      "category": 0.9,
+      "description": 0.9
+    },
+    "canary": "daoh_edit"
+  },
+  "last_built": "2026-08-08",
+  "notes": "veranstaltungen.json (geojson) has no dates; real data comes from an Elasticsearch proxy at search.wien.gv.at/site_veranstaltungen/_search/template, POST {id:search_template_specific,params:{query_string,filters,from,size}} with Origin+Referer headers set to wien.gv.at (no API key needed once those are present, plain 'ApiKey ' auth header). One request returns all ~574 live events with structured occurrence dates (daoh_edit.logic.sets); single-type sets are exploded into one record per listed showtime, recurring/opening-hours sets collapse to one record spanning the range. price_min only set when 'Gratis' tag or a fixedPrice is given.",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 148,
+    "basis": "measured",
+    "density_per_day": 2.221,
+    "p95_lead_days": 123,
+    "sample_records": 844,
+    "sample_truncated": false
+  }
+}

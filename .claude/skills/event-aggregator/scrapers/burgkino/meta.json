@@ -1,0 +1,30 @@
+{
+  "slug": "burgkino",
+  "name": "Burg Kino",
+  "url": "https://www.burgkino.at/",
+  "tier": "B",
+  "group": "cinema",
+  "covers": [
+    "cinema"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 24,
+    "required_fill": {
+      "category": 1.0,
+      "price_min": 0.85
+    },
+    "canary": "views-field-field-startdatetime"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Drupal 'movies' views on /movie/<slug> pages; showtimes only bookable/published ~1 week ahead (this-week+next-week), beyond that only a handful of premiere screenings and /coming-soon 'Starting' placeholder dates (no time, no price) reach further out; single-venue cinema, hardcoded address",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "measured",
+    "density_per_day": 0.38,
+    "p95_lead_days": 54,
+    "sample_records": 34
+  }
+}

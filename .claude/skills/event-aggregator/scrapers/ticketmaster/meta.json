@@ -1,0 +1,27 @@
+{
+  "slug": "ticketmaster",
+  "name": "Ticketmaster.at",
+  "url": "https://www.ticketmaster.at/",
+  "tier": "B",
+  "group": "ticketing",
+  "covers": [
+    "blocked-venue proxy"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "daily",
+    "horizon_days": 30,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

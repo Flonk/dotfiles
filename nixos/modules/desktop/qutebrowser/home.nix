@@ -18,6 +18,9 @@ let
     ${lib.optionalString cfg.softwareVideoDecode ''
       export QTWEBENGINE_CHROMIUM_FLAGS="--disable-accelerated-video-decode ''${QTWEBENGINE_CHROMIUM_FLAGS:-}"
     ''}
+    # _autosave.yml survives an unclean kill (system shutdown) and is then
+    # restored on startup; no config option disables that.
+    rm -f "''${XDG_DATA_HOME:-$HOME/.local/share}/qutebrowser/sessions/_autosave.yml"
     exec ${pkgs.systemd}/bin/systemd-run --user --scope --quiet --collect \
       --unit="qutebrowser-$$" \
       --property=MemoryMax=${cfg.memoryMax} \
@@ -231,9 +234,18 @@ in
         url.start_pages = [ "https://news.ycombinator.com" ];
         url.default_page = "https://news.ycombinator.com";
         tabs.last_close = "close";
-        # The memory cap can OOM-kill the browser (QtWebEngine WebRTC leak);
-        # keep the session on disk so a kill or crash restores all windows.
-        auto_save.session = true;
+        auto_save.session = false;
+
+        content = {
+          notifications.enabled = false;
+          geolocation = false;
+          register_protocol_handler = false;
+          persistent_storage = true;
+          mouse_lock = true;
+          javascript.clipboard = "access-paste";
+          tls.certificate_errors = "block";
+        };
+        downloads.location.prompt = false;
       };
 
       extraConfig = ''

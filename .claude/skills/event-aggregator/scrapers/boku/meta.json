@@ -1,0 +1,32 @@
+{
+  "slug": "boku",
+  "name": "BOKU",
+  "url": "https://boku.ac.at/event/list",
+  "tier": "B",
+  "group": "academic",
+  "covers": [
+    "ecology",
+    "agriculture"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 6,
+    "required_fill": {
+      "title": 1.0,
+      "venue": 1.0,
+      "category": 1.0
+    },
+    "canary": "corner-link\" href=\"/event/details/"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Low-volume site (~9 events within a 90d horizon). Server-rendered monthly list at /event/list/{year}/{month} gives id/title/category/teaser only; exact start/end/location come from each event's own .ics feed at /event/details/{id}.ics (TZID Europe/Vienna, no timezone conversion needed). Current-month list page mixes already-past days, so records are dropped if end (or start) is before today. price_min stays null unless description/teaser literally says gratis/frei/kostenlos; BOKU rarely states this so most records have price_min=null. district/city/address only fill for Vienna postal codes parsed out of the ICS LOCATION string (many BOKU events are off-site, e.g. Krems, Tulln, Raabs, or Online Event).",
+  "schedule": {
+    "cadence": "weekly",
+    "horizon_days": 90,
+    "basis": "measured",
+    "density_per_day": 0.1,
+    "p95_lead_days": 80,
+    "sample_records": 9
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "volkskundemuseum",
+  "name": "Volkskundemuseum Wien",
+  "url": "https://www.volkskundemuseum.at/",
+  "tier": "B",
+  "group": "museum",
+  "covers": [
+    "ethnology"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

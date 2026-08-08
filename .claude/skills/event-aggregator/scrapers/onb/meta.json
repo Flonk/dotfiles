@@ -1,0 +1,31 @@
+{
+  "slug": "onb",
+  "name": "Österreichische Nationalbibliothek",
+  "url": "https://www.onb.ac.at/museen",
+  "tier": "B",
+  "group": "museum",
+  "covers": [
+    "prunksaal",
+    "literatur",
+    "papyrus",
+    "globen",
+    "esperanto"
+  ],
+  "status": "unbuilt",
+  "method": null,
+  "expect": {
+    "min_records": null,
+    "required_fill": {},
+    "canary": null
+  },
+  "last_built": null,
+  "notes": null,
+  "schedule": {
+    "cadence": "monthly",
+    "horizon_days": 180,
+    "basis": "prior",
+    "density_per_day": null,
+    "p95_lead_days": null,
+    "sample_records": 0
+  }
+}

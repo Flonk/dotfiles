@@ -1,0 +1,35 @@
+{
+  "slug": "volume_at",
+  "name": "Volume.at Events",
+  "url": "https://www.volume.at/events/",
+  "tier": "A",
+  "group": "aggregator",
+  "covers": [
+    "concerts",
+    "festivals",
+    "fairs",
+    "price"
+  ],
+  "status": "built",
+  "method": "html",
+  "expect": {
+    "min_records": 900,
+    "required_fill": {
+      "venue": 0.95,
+      "category": 0.9,
+      "price_min": 0.7
+    },
+    "canary": "item--event"
+  },
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered per-day agenda at /events/<YYYY-MM-DD>/, ~4-7 days per fetch; scraper walks forward advancing past the last date header seen (dates with zero events are skipped in the markup, so a fixed step would miss/duplicate). No event time or street address in the listing, only city name (district always null, city only set when address text is literally 'Wien'). Cancelled events keep a literal 'abgesagt' badge in the title, not a CSS class (item__title--canceled is present on every single item regardless of status and is NOT a cancellation signal).",
+  "schedule": {
+    "cadence": "daily",
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 6.687,
+    "p95_lead_days": 164,
+    "sample_records": 1304,
+    "sample_truncated": true
+  }
+}

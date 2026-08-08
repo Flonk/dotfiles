@@ -1,0 +1,46 @@
+[
+  {
+    "source": "wpi",
+    "source_id": "450",
+    "url": "https://www.wpi.ac.at/event_view.php?id_activity=450",
+    "title": "Workshop \"Classical/Quantum kinetic/hydrodynamic equations\"",
+    "start": "2026-08-07T14:00",
+    "end": "2026-08-13",
+    "venue": "WPI Seminar room, 8th floor Fak.Math. Univ. Wien",
+    "city": "Wien",
+    "extra": {
+      "organisations": [
+        "WPI",
+        "Inst. CNRS Pauli",
+        "MMM = research platform \"Mathematics-Magnetism-Materials\" @ UniWien"
+      ],
+      "organisers": [
+        "Francois Golse (CMLS Ecole Polytechnique)",
+        "Norbert J Mauser (WPI & ICP c/o U.Wien)",
+        "Jakob Möller (WPI c/o U.Wien)"
+      ]
+    }
+  },
+  {
+    "source": "wpi",
+    "source_id": "437",
+    "url": "https://www.wpi.ac.at/event_view.php?id_activity=437",
+    "title": "Conference HIGHLIGHTS'26 Highlights of Logic, Games and Automata",
+    "start": "2026-09-07",
+    "end": "2026-09-11",
+    "venue": "TU Wien",
+    "city": "Wien",
+    "extra": {
+      "organisations": [
+        "TU Wien",
+        "WPI",
+        "ISTA"
+      ],
+      "organisers": [
+        "Laura Kovács (WPI c/o TU Wien)",
+        "Michael Sammler (ISTA)"
+      ],
+      "external_website": "https://easychair.org/smart-program/Highlights26/overview.html"
+    }
+  }
+]

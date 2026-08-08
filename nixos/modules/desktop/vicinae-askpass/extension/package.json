@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
+  "name": "vicinae-askpass",
+  "title": "Askpass",
+  "description": "Graphical password prompt for sudo, ssh and anything else speaking the askpass protocol",
+  "author": "flo",
+  "license": "MIT",
+  "icon": "extension_icon.svg",
+  "commands": [
+    {
+      "name": "ask",
+      "title": "Ask For Password",
+      "subtitle": "Askpass",
+      "description": "Prompt for a password on behalf of a program that needs one",
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "prompt",
+          "placeholder": "Prompt",
+          "type": "text"
+        },
+        {
+          "name": "channel",
+          "placeholder": "Channel",
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "scripts": {
+    "build": "vici build",
+    "dev": "vici develop",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vicinae/api": "0.16.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.9.3"
+  }
+}
