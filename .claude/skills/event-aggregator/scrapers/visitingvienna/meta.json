@@ -22,9 +22,10 @@
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 14
+    "basis": "measured",
+    "density_per_day": 0.043,
+    "p95_lead_days": 142,
+    "sample_records": 14,
+    "sample_truncated": true
   }
 }

@@ -22,10 +22,11 @@
   "notes": "ld+json Event blocks on /programm/programmuebersicht/ (one per showtime, single screen so startDate is a unique key); PrgID ticket ids paired to events by matching startDate against the ticket <a href=...PrgID=...><time datetime=...> anchors; price scraped per-movie from the 'Normalpreis'/'Einheitspreis' line on each detail page, category has no site label so left null",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 84,
     "basis": "measured",
-    "density_per_day": 0.5,
-    "p95_lead_days": 90,
-    "sample_records": 46
+    "density_per_day": 0.667,
+    "p95_lead_days": 70,
+    "sample_records": 46,
+    "sample_truncated": false
   }
 }

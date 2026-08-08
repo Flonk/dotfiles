@@ -22,11 +22,12 @@
   "last_built": "2026-08-08",
   "notes": "Wix site with no server-rendered schedule markup; all event data is embedded as JSON in the <script id=\"wix-warmup-data\"> tag (Wix Events widget's SSR warmup payload) - parsed as JSON, not scraped from HTML text. 15 screenings currently published, running through 31 Aug 2026 (rest of the summer open-air season); price never stated anywhere (RSVP-only Wix ticketing, no price field) so price_min/price_text always null; category always null (site assigns no per-event category); district taken from the free-text address (occasionally disagrees with the structured postalCode field by a district or two - address text wins as it's what's shown to users).",
   "schedule": {
-    "cadence": "seasonal",
-    "horizon_days": 180,
+    "cadence": "weekly",
+    "horizon_days": 25,
     "basis": "measured",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 15
+    "density_per_day": 0.75,
+    "p95_lead_days": 21,
+    "sample_records": 15,
+    "sample_truncated": false
   }
 }

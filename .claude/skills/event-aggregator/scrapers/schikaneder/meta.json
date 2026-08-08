@@ -21,10 +21,11 @@
   "notes": "Cinema-only (bar/DJ nights not covered, no data on site for those). Walks /kino/kinoprogramm?date=YYYY-MM-DD day by day collecting veranstaltung_ids, then fetches each /kino/veranstaltung_detail page once for its full termin (showtime) list. Programme is only actually published ~2 weeks ahead even though the date-slider widget renders 60 days of clickable tabs; scan stops early after 14 consecutive empty days. price_min taken from the site's generic 'Normalpreis' price box (8,50 EUR, stated as the default unless noted otherwise) since no per-film price exists. No genre/category field on this site, so category is always null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 14,
     "basis": "measured",
-    "density_per_day": null,
-    "p95_lead_days": 12,
-    "sample_records": 32
+    "density_per_day": 2.667,
+    "p95_lead_days": 11,
+    "sample_records": 32,
+    "sample_truncated": false
   }
 }

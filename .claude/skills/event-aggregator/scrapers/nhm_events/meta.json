@@ -23,10 +23,11 @@
   "notes": "Server-rendered HTML calendar paginated via ?datum_von=YYYY-MM-01&dateMode=month&page=N (20/page). Site only publishes events roughly through end of current+3 months (Aug->Nov/Dec 2026 seen); no price data available anywhere so price_min is always null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 293
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 2.616,
+    "p95_lead_days": 98,
+    "sample_records": 293,
+    "sample_truncated": true
   }
 }

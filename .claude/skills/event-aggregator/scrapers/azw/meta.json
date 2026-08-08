@@ -22,10 +22,11 @@
   "notes": "Single server-rendered page has both Ausstellungen and Termine lists, no pagination needed; program is published out to mid-Dec 2026 (~4 months) on this one page. price_min always null, site never states prices on the listing. The permanent exhibit 'Hot Questions - Cold Storage' has a fabricated far-future data-endDate (site sentinel); detected via the 'permanente Ausstellung' label in event-card_date and emitted with end=null, extra.permanent=true instead of passing the sentinel through.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 37
+    "horizon_days": 139,
+    "basis": "measured",
+    "density_per_day": 0.021,
+    "p95_lead_days": 116,
+    "sample_records": 37,
+    "sample_truncated": false
   }
 }

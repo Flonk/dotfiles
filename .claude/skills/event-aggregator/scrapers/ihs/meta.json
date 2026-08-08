@@ -29,6 +29,6 @@
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 2
+    "sample_records": 0
   }
 }

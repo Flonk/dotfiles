@@ -22,10 +22,11 @@
   "notes": "13 records at build time, all in Aug 2026 (site's current published program only runs to end of current Jul/Aug bulletin; next bulletin not yet online). No per-event prices, only a general EUR 15-22 range, so price_min is always null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "horizon_days": 25,
+    "basis": "measured",
+    "density_per_day": 0.929,
+    "p95_lead_days": 21,
+    "sample_records": 13,
+    "sample_truncated": false
   }
 }

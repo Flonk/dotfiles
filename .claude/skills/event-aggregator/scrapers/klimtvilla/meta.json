@@ -25,10 +25,11 @@
   "notes": "Modern Events Calendar plugin on /veranstaltungen/. First batch of Event JSON-LD is server-rendered; rest comes from paginating the admin-ajax.php action=mec_list_load_more endpoint (params scraped from the inline mecListView({...}) settings block) until it returns count=0. Category isn't in the JSON-LD so one extra GET per event fetches the detail page's breadcrumb/category block (only ~15-20 events total, cheap). Site only publishes ~4.5 months out (through Dec 2026 Adventzauber) even though horizon is 180d.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 14
+    "horizon_days": 152,
+    "basis": "measured",
+    "density_per_day": 0.104,
+    "p95_lead_days": 127,
+    "sample_records": 14,
+    "sample_truncated": false
   }
 }

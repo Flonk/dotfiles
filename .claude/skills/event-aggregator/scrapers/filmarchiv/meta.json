@@ -24,10 +24,11 @@
   "notes": "Phoenix LiveView site, but SSR HTML works fine over plain curl. Day-by-day widget at /?day=YYYY-MM-DD lists that day's screenings (each links to /de/kino/film/sc_<id>, a 'programme item' page that itself lists ALL of that item's future showtimes with per-showtime venue + ticket-checkout uuid used as source_id); scraper walks ~60 days to discover sc_ ids then parses each item page once. Site currently only publishes ~3 weeks ahead (Aug 8 build reached 2026-08-30) despite scanning further; price never shown anywhere server-side (ticket widget is JS/iframe) so price_min/price_text always null; category is the 'Im Rahmen von' series label (e.g. 'Kinostart: Kota', 'Kino wie noch nie: Timothée Chalamet').",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 30,
+    "horizon_days": 22,
     "basis": "measured",
-    "density_per_day": 3.5,
-    "p95_lead_days": 22,
-    "sample_records": 76
+    "density_per_day": 3.455,
+    "p95_lead_days": 18,
+    "sample_records": 76,
+    "sample_truncated": false
   }
 }

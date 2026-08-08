@@ -23,11 +23,12 @@
   "last_built": "2026-08-08",
   "notes": "Homepage/programm page only server-render an ld+json Event snippet for the next ~7 days (WP+Fusion theme SEO plugin). Full schedule (45 screenings, Aug 8 - Sep 6 2026, one film block per evening at Rathausplatz) comes from the site's own Events Calendar (tribe) REST API at /wp-json/tribe/events/v1/events. cost field is always empty in the API; FAQ page explicitly states entry is free (\"Der Besuch des Film Festival ist völlig kostenlos\"), so price_min is hardcoded 0. category = the site's own 'Genre' custom field (Oper, Pop, Klassik, Austropop, ...). venue/address hardcoded to Rathausplatz, 1010 Wien; the API's 'Aufführungsort' custom field is where the film was originally recorded, not the screening location, so it is left out.",
   "schedule": {
-    "cadence": "yearly",
-    "horizon_days": 180,
+    "cadence": "weekly",
+    "horizon_days": 32,
     "basis": "measured",
-    "density_per_day": 1.5,
-    "p95_lead_days": 29,
-    "sample_records": 45
+    "density_per_day": 1.552,
+    "p95_lead_days": 27,
+    "sample_records": 45,
+    "sample_truncated": false
   }
 }

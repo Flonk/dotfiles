@@ -25,10 +25,11 @@
   "notes": "Museum building at Laudongasse is closed for renovation; all current programming runs at the Otto Wagner Areal (OWA) satellite site. Three sources combined: (1) /termine lists ~20 dated occurrences (tours, Mostothek, concerts) as server-rendered teaser-element-holder blocks, grouped by month; only shows ~7 weeks ahead currently (through late Sep 2026) - no deeper pagination exists, 'Alle Veranstaltungen anzeigen' just reloads the same unfiltered page. Category isn't on the teaser itself, so 9 category-filter pages are re-fetched to build a dbid->category map. (2) /programm/aktuell lists 2 long-running installations as far-end (2027) records; venue hardcoded to OWA since the page's subtitle-info there is a tag like 'Pilotprojekt', not a location. (3) /ausstellung/meet_otto is a single permanent exhibition (\"Seit 15.10.2025\", no end date) parsed separately -> end null, extra.permanent true, price_min 0 (page states 'Eintritt frei'). No price info anywhere else on site.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 23
+    "horizon_days": 60,
+    "basis": "measured",
+    "density_per_day": 0.024,
+    "p95_lead_days": 49,
+    "sample_records": 23,
+    "sample_truncated": false
   }
 }

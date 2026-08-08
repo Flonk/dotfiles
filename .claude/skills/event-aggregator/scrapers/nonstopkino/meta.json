@@ -21,11 +21,12 @@
   "last_built": "2026-08-08",
   "notes": "Members-only preview-screening events for the nonstop cinema subscription; /events/ lists all ~62 events (past+future) on one page with data-date=\"YYYYMMDD\" per <article>, detail page gives time (colon format only) and location; a few events are in Graz (filtered out, city text contains 'Graz'); price is always unknown (subscription access, not per-ticket, so 'Nur für Mitglieder' etc. goes in category, price_min stays null); one event ('Lord of The Rings Event') lists 3 separate dates in one string and is split into 3 occurrences; site only publishes ~3.5 months ahead currently (last event Nov 2026 as of Aug 2026 scrape) so horizon_days=90 already captures nearly everything",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 90,
+    "cadence": "monthly",
+    "horizon_days": 101,
     "basis": "measured",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 8
+    "density_per_day": 0.1,
+    "p95_lead_days": 84,
+    "sample_records": 8,
+    "sample_truncated": false
   }
 }

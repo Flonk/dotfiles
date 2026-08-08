@@ -25,10 +25,11 @@
   "notes": "Server-rendered HTML at /programm/, TYPO3-based. Paginates via 'Mehr laden' AJAX links whose cHash is only valid when followed sequentially from the previous page (can't be guessed). Fetches each event's own detail page for price (Preis block); ~90 detail requests, adds ~15-20s. Dates are messy free text (bis-ranges, comma lists of days, '&'/'und'-joined dates, month-name dates) parsed heuristically in scrape.py; a handful of multi-date entries collapse to a single occurrence. district hardcoded to 1090 (WUK's own address) unless venue text names another district (e.g. Bräuhausgasse branch = 1050).",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 57
+    "horizon_days": 95,
+    "basis": "measured",
+    "density_per_day": 0.475,
+    "p95_lead_days": 79,
+    "sample_records": 57,
+    "sample_truncated": false
   }
 }

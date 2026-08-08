@@ -22,10 +22,11 @@
   "notes": "Very small site: /veranstaltungen/ is a month-by-month calendar (?ed=YYYY-MM) mostly empty, only 1 event found within the 180d horizon (Nov 2026 symposium). /aktuelle-ausstellungen/ slider gave 2 more special exhibitions but both had end dates already in the past (site not updated) so they were dropped; 2 ongoing/permanent ones kept with extra.permanent=true (Dauerausstellung has no stated start so 'today' is used as a placeholder per repo convention). No price info anywhere on site -> price_min always null.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 3
+    "horizon_days": 112,
+    "basis": "measured",
+    "density_per_day": 0.003,
+    "p95_lead_days": 93,
+    "sample_records": 3,
+    "sample_truncated": false
   }
 }

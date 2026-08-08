@@ -25,10 +25,11 @@
   "notes": "Tiny company site, no ld+json/API. Only ever has one current production announced (found via /projekte/ nav, links with year >= current-1); one record per listed performance date/time. No ticket price on site (owa-wien.at handles ticketing) so price stays null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 400,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 7
+    "horizon_days": 133,
+    "basis": "measured",
+    "density_per_day": 1.167,
+    "p95_lead_days": 111,
+    "sample_records": 7,
+    "sample_truncated": false
   }
 }

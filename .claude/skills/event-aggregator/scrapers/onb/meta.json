@@ -27,10 +27,11 @@
   "notes": "Crawls the 5 sub-museum landing pages for exhibition links (programm/besuch, excluding vergangene-* archives and wanderausstellung touring shows that aren't in Vienna) plus each museum's kalender page for one-off dated events; recurring bookable tours (Fuehrungen, Baby-Fuehrungen etc.) have no published occurrence date on-site (only an external ticket-shop link) and are skipped rather than guessed. Cross-museum joint events (Lange Nacht, Tag des Denkmals) are cross-listed verbatim under every participating museum's calendar and deduped by (title, start).",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 23
+    "horizon_days": 132,
+    "basis": "measured",
+    "density_per_day": 0.089,
+    "p95_lead_days": 110,
+    "sample_records": 23,
+    "sample_truncated": false
   }
 }

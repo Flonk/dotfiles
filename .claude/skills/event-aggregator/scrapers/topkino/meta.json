@@ -22,10 +22,11 @@
   "notes": "Single-venue cinema; gathers film detail URLs from /kino/aktuell + /kino/demnaechst, then reads each /kino/<slug> (or veranstaltung_detail?veranstaltung_id=) page's Termine list; real showtimes only published ~2 weeks ahead, plus occasional far-out premiere placeholder dates (date-only, no room/price); no genre/category or per-showtime price on site (general 8,50 EUR base price mentioned once in a sidebar, not attributable per record, so price_min left null)",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 14,
     "basis": "measured",
-    "density_per_day": 3.4,
-    "p95_lead_days": 45,
-    "sample_records": 68
+    "density_per_day": 1.447,
+    "p95_lead_days": 12,
+    "sample_records": 68,
+    "sample_truncated": false
   }
 }

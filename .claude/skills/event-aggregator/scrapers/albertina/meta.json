@@ -24,10 +24,11 @@
   "notes": "No ld+json/API; listing page (/ausstellungen/) is server-rendered with #aktuell (running) and #vorschau (upcoming) sections linking to detail pages (some under /albertina-modern/ausstellungen/). Dates aren't on the listing itself; each detail page has a free-text sentence 'ist von X bis Y [in der ALBERTINA MODERN] zu sehen' parsed for start/end. Two permanent installations (250 Jahre Albertina, Monet bis Picasso/Sammlung Batliner, Prunkräume) have no published dates; start defaults to today, end emitted as null with extra.permanent=true (no fabricated end date). price_min always null (no prices shown). category always null (site has no category labels). district hardcoded 1010 (both venues are in the 1st district; Albertina Klosterneuburg is linked in nav but has no exhibitions on this listing).",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 14
+    "horizon_days": 130,
+    "basis": "measured",
+    "density_per_day": 0.063,
+    "p95_lead_days": 108,
+    "sample_records": 14,
+    "sample_truncated": false
   }
 }

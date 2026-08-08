@@ -21,10 +21,11 @@
   "notes": "cinema is in Sommerpause until 31 Aug 2026, so no daily Spielplan is live; scraped the '/kinoprogram/sept_okt_2026' bimonthly preview page instead, which lists 19 Schiene (retrospective/series) blocks each with a title, date range and blurb but no individual per-film showtimes yet — one record per Schiene, start/end = the series' published date range. Peter Kubelka's standing 'Jeden Dienstag' cycle has no announced end so its record is bounded to the same Sept-Oct window as everything else on the page (understates its true ongoing run). price never shown on this page so price_min/text always null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 82,
     "basis": "measured",
-    "density_per_day": null,
-    "p95_lead_days": 75,
-    "sample_records": 19
+    "density_per_day": 0.404,
+    "p95_lead_days": 68,
+    "sample_records": 19,
+    "sample_truncated": false
   }
 }

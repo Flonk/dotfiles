@@ -20,11 +20,12 @@
   "last_built": "2026-08-08",
   "notes": "Server-rendered HTML at /calendar plus an offset-paginated partial-HTML endpoint (/index.php?id=222&type=8881&...&offset=N, perpage/total read from data-perpage/data-all attrs on the Show more button). No JSON-LD Event data. Category is the site's own tag (Monday Seminar/VBC Regular Seminar/etc), often absent for one-off talks. No price info anywhere (all null). No address/district on list or detail pages so left null.",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "cadence": "monthly",
+    "horizon_days": 103,
+    "basis": "measured",
+    "density_per_day": 0.279,
+    "p95_lead_days": 86,
+    "sample_records": 24,
+    "sample_truncated": false
   }
 }

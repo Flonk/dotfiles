@@ -24,10 +24,11 @@
   "notes": "/programm sidebar list gives all upcoming Literaturwerkstatt readings in one fetch (no pagination needed); each detail page at /programm/recital/<slug> has a date-test=\"YYYY-MM-DD HH:MM:SS\" attribute for exact start. Site currently only publishes ~2.5 months ahead (through end of Oct 2026), well inside the 180d horizon. No price info anywhere on site -> price_min/price_text always null. category = h3.event-hashtag (series name, e.g. \"124. AUTOR*INNENPROJEKT\"), empty for ~46% of events -> null. Single fixed venue (Schönlaterngasse 9, 1010 Wien) hardcoded. Musikwerkstatt (music) events live under a different section and are intentionally not scraped since covers=readings.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 26
+    "horizon_days": 98,
+    "basis": "measured",
+    "density_per_day": 0.565,
+    "p95_lead_days": 82,
+    "sample_records": 26,
+    "sample_truncated": false
   }
 }

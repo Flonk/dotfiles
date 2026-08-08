@@ -19,11 +19,12 @@
   "last_built": "2026-08-08",
   "notes": "small arthouse cinema; wp-admin-ajax action=get_ajax_posts returns the whole known programme (not paginated by date, currentDate filtering happens client-side); currently in Sommerpause (closed 3.-20. Aug), those 13 closure-placeholder rows are skipped; price never published so price_min is always null",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 180,
+    "cadence": "monthly",
+    "horizon_days": 166,
     "basis": "measured",
-    "density_per_day": 0.05,
-    "p95_lead_days": 140,
-    "sample_records": 7
+    "density_per_day": 0.061,
+    "p95_lead_days": 138,
+    "sample_records": 7,
+    "sample_truncated": false
   }
 }

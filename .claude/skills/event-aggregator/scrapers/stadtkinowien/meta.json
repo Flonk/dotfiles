@@ -23,10 +23,11 @@
   "notes": "single-screen arthouse cinema; /programm/dat/YYYYMMDD/ returns a rolling 3-day window (columns for date, date+1, date+2, empty ones render as bare <div>), tiled by stepping 3 days; year not printed in markup so start dates are computed from the requested offset, not parsed text; price never published anywhere (incl. JS ticket booking app) so price_min/price_text always null; category not published either; 'Geschlossene Veranstaltung' (private closed screenings) skipped as non-public; site was in summer break (Sommerpause 23.7-19.8) at scrape time, program otherwise published out to ~90 days (into November)",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 180,
     "basis": "measured",
-    "density_per_day": 0.31,
+    "density_per_day": 0.359,
     "p95_lead_days": 69,
-    "sample_records": 28
+    "sample_records": 28,
+    "sample_truncated": true
   }
 }

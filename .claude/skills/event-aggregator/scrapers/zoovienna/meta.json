@@ -27,10 +27,11 @@
   "notes": "Site only publishes a handful of ticketed/bookable 'Termine' (Safari Dinner, Polarnacht, workshops, kids advent tours, Artenschutztage); daily animal feedings and the year-round zoo itself are not modelled as occurrences. Site publishes concrete future dates only a few months out per event (site's own 'Nächste Termine' lists), so record count is small and genuinely thin, not a scraper bug.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 12
+    "horizon_days": 161,
+    "basis": "measured",
+    "density_per_day": 0.091,
+    "p95_lead_days": 134,
+    "sample_records": 12,
+    "sample_truncated": false
   }
 }

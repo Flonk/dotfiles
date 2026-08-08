@@ -21,11 +21,12 @@
   "last_built": "2026-08-08",
   "notes": "Only 3 confirmed races (Marathon/Halbmarathon/Staffelmarathon, all Sun 18 Apr 2027) have live registration links; site also lists Vienna10K/5K/DailyMile/InclusionRun cards but with stale prior-year dates and disabled 'Weitere Infos folgen' links (Samstag grid is display:none, opens registration in September) - these are skipped rather than guessed. Filter: card kept only if its (comment-stripped) HTML contains a live registration_options link.",
   "schedule": {
-    "cadence": "monthly",
+    "cadence": "weekly",
     "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "basis": "measured",
+    "density_per_day": 3.0,
+    "p95_lead_days": 253,
+    "sample_records": 3,
+    "sample_truncated": true
   }
 }

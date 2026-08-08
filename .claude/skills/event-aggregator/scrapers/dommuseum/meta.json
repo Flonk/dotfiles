@@ -26,10 +26,11 @@
   "notes": "Site only lists ~4 upcoming Veranstaltungskalender entries (~7 weeks out) plus the one current temporary exhibition scraped from the homepage slider; small min_records reflects that thin real inventory, not a broken parser.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "horizon_days": 60,
+    "basis": "measured",
+    "density_per_day": 0.014,
+    "p95_lead_days": 49,
+    "sample_records": 5,
+    "sample_truncated": false
   }
 }

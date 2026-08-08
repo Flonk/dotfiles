@@ -20,10 +20,11 @@
   "notes": "cineplexx.at is a JS shell (React SPA) whose app.cineplexx.at API has sessions for cinemaId 1025 but the linked movie ids (HO...) 404 on the movies endpoint — Urania's arthouse programme isn't in Cineplexx's central movie DB. The cinema itself now runs as 'URANIA CEENEMA' with its own server-rendered site at ceenema.eu/spielplan, which lists all published days (title, country, runtime, description, showtime) in one static fetch — used that instead. Site only publishes ~24 days ahead (one calendar page, dates without year, no pagination followed); category not labelled per-film so always null; price never published so price_min/price_text always null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 24,
+    "horizon_days": 26,
     "basis": "measured",
-    "density_per_day": 2,
-    "p95_lead_days": 23,
-    "sample_records": 48
+    "density_per_day": 2.087,
+    "p95_lead_days": 22,
+    "sample_records": 48,
+    "sample_truncated": false
   }
 }

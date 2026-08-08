@@ -24,10 +24,11 @@
   "notes": "Only self-run events on /veranstaltungen/alle-veranstaltungen (4 as of build, Palace Concerts are third-party via imperialtickets.com and not listed here); each teaser's itemprop endDate can be bogus (e.g. year before start) so end date is parsed from the visible 'date' text instead; site publishes ~5 months ahead currently, no pagination beyond one page.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 4
+    "horizon_days": 108,
+    "basis": "measured",
+    "density_per_day": 0.018,
+    "p95_lead_days": 90,
+    "sample_records": 4,
+    "sample_truncated": false
   }
 }

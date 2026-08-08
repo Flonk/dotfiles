@@ -21,10 +21,11 @@
   "notes": "showtimes live on ticket.cinecenter.at (booking system embedded via iframe on /tagesprogramm and /wochenplan, not on the homepage itself); site only publishes ~1 week of regular showtimes plus occasional far-out single preview screenings (e.g. a 'Love Birds Filmreihe' date in October); price not per-show (only a general tiered price list on /preise), so price_min/price_text always null; category = film's Genre field from its detail page",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 83
+    "horizon_days": 14,
+    "basis": "measured",
+    "density_per_day": 1.239,
+    "p95_lead_days": 5,
+    "sample_records": 83,
+    "sample_truncated": false
   }
 }

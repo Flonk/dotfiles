@@ -22,11 +22,12 @@
   "last_built": "2026-08-08",
   "notes": "Every event detail page embeds a JetEngine 'WEITERE EVENTS' listing widget (listing_id 197, query_id 3, a curated future-events feed sorted ascending by real event date) that paginates via POST admin-ajax.php action=jet_engine_ajax handler=listing_load_more. The /events/ archive and REST wp/v2/events endpoint were dead ends: archive date_label is publish date not event date, and REST exposes no event-date meta at all. No price or category data exists anywhere on the site (single fixed venue, no taxonomies registered for the events CPT), so those fields are always null. Site currently lists ~93 future events out to ~2027-01-30 (paginates cleanly to an empty page around page 10-11, well past the 180d horizon), so pagination just runs until an empty page.",
   "schedule": {
-    "cadence": "monthly",
+    "cadence": "weekly",
     "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 93
+    "basis": "measured",
+    "density_per_day": 0.578,
+    "p95_lead_days": 166,
+    "sample_records": 93,
+    "sample_truncated": false
   }
 }

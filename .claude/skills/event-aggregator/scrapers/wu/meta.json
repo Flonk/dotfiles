@@ -20,11 +20,12 @@
   "last_built": "2026-08-08",
   "notes": "Server-rendered listing shows only ~8 upcoming events total (no pagination; site just doesn't list many public events). Each item's data-id is expanded into a per-event JSON detail via window.eventCardData.url template (https://www.wu.ac.at/?type=9901&tx_news_pi1[news]={id}), which supplies venue, category tags, description and the real detail/external URL; listing HTML alone only gives title, date range and a Vor Ort/Online hint. One detail id (35731) 500'd on fetch - handled by falling back to the listing page URL and leaving venue/category from the list hint only. price never appears in the feed so price_min/price_text stay null.",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 8
+    "cadence": "monthly",
+    "horizon_days": 80,
+    "basis": "measured",
+    "density_per_day": 0.049,
+    "p95_lead_days": 67,
+    "sample_records": 8,
+    "sample_truncated": false
   }
 }

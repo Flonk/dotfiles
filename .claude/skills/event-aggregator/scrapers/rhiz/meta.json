@@ -22,11 +22,12 @@
   "last_built": "2026-08-08",
   "notes": "Uses the site's own Copilot Events REST API (wp-json/copilot-promotion/v1/promotions), returned unpaginated in one call (12 upcoming shows at build time, spanning Sep-Dec 2026 - that's the site's real publishing horizon, not a horizon_days artifact). No structured price field; some descriptions mention door prices/donations in free text but that's not reliable enough to parse into price_min, so it stays null throughout. category is always null from this API. Detail URL is reconstructed as https://rhiz.wien/?copilot-slug=<slug> per the plugin's own JS routing.",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 90,
+    "cadence": "monthly",
+    "horizon_days": 106,
     "basis": "measured",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 9
+    "density_per_day": 0.184,
+    "p95_lead_days": 88,
+    "sample_records": 9,
+    "sample_truncated": false
   }
 }

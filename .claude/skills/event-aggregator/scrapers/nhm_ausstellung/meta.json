@@ -24,10 +24,11 @@
   "notes": "www.nhm-wien.ac.at/ausstellung redirects (301+302) to www.nhm.at/ausstellung/sonderausstellungen, a single server-rendered page listing 'Aktuelle Sonderausstellungen' (bis-only, start set to scrape date since real opening unknown), 'Vorschau Sonderausstellungen' and 'Dauerausstellungsbereich' (ab-only/seit-only -> permanent, end null). No price data anywhere. Narrenturm items get their own Spitalgasse 2, 1090 venue/address, detected via the 'Narrenturm' mention in the item's info text.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 9
+    "horizon_days": 80,
+    "basis": "measured",
+    "density_per_day": 0.018,
+    "p95_lead_days": 67,
+    "sample_records": 9,
+    "sample_truncated": false
   }
 }

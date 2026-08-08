@@ -21,11 +21,12 @@
   "last_built": "2026-08-08",
   "notes": "concerts.php lists every concert (49 seen, Aug 2026 - Apr 2027) as one flat HTML page, no pagination; clubs.php is a weekly-residency grid with no concrete dates so it's excluded",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 270,
+    "cadence": "monthly",
+    "horizon_days": 127,
     "basis": "measured",
-    "density_per_day": 0.19,
-    "p95_lead_days": 250,
-    "sample_records": 49
+    "density_per_day": 0.198,
+    "p95_lead_days": 106,
+    "sample_records": 49,
+    "sample_truncated": false
   }
 }

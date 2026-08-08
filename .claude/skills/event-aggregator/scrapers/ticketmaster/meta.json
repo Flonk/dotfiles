@@ -22,11 +22,12 @@
   "last_built": "2026-08-08",
   "notes": "listing pages at /discover/wien?page=N carry ld+json Event arrays (20/page, chronological, ~179 total spanning to mid-2027); no price or category in listing, so both are always null; a few results are external ticketing partners (e.g. universe.com) mixed into the Wien feed",
   "schedule": {
-    "cadence": "daily",
-    "horizon_days": 30,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "cadence": "weekly",
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 0.769,
+    "p95_lead_days": 64,
+    "sample_records": 40,
+    "sample_truncated": true
   }
 }

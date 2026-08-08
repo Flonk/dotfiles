@@ -25,10 +25,11 @@
   "notes": "Not the zoo/aquarium's daily program (no ticketed events there) - this scrapes the Lighthouse10 talks/culture calendar at /events-kultur/veranstaltungskalender, which lists both 'Kulturwelle' concerts/cabaret and 'Verein der Freunde'/'Verein Wissenschaft & Forschung' lecture evenings. No price info on this page (left null); links go off-site to rooftop.haus-des-meeres.at or verein-hdm.at ticket pages, some cards have no link at all.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 12
+    "horizon_days": 139,
+    "basis": "measured",
+    "density_per_day": 0.152,
+    "p95_lead_days": 116,
+    "sample_records": 12,
+    "sample_truncated": false
   }
 }

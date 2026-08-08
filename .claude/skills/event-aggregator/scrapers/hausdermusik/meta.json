@@ -22,11 +22,12 @@
   "last_built": "2026-08-08",
   "notes": "Only the /konzerte/ 'Klassik Cool' concert series is real event data (museum itself has no special exhibitions right now); paginates the JetSmartFilters listing (pagenum/N/ pretty URL) sorted ascending by date and fetches each concert detail page for price/venue/description.",
   "schedule": {
-    "cadence": "monthly",
+    "cadence": "weekly",
     "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 65
+    "basis": "measured",
+    "density_per_day": 0.401,
+    "p95_lead_days": 162,
+    "sample_records": 65,
+    "sample_truncated": false
   }
 }

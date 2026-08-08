@@ -25,11 +25,12 @@
   "last_built": "2026-08-08",
   "notes": "Server-rendered HTML listing at /events-2 (+ /events-2/p2, p3...), paginated by 'Weiter →' link presence; category comes from filtering the same listing by ?category=konzert|event|workshop|family-kids|f%C3%BChrung and joining matches. Price/description come from per-event detail page. Site only publishes concerts/workshops/tours through ~early Dec 2026 (~4 months out), well inside the 180d horizon.",
   "schedule": {
-    "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 46
+    "cadence": "weekly",
+    "horizon_days": 100,
+    "basis": "measured",
+    "density_per_day": 0.387,
+    "p95_lead_days": 83,
+    "sample_records": 46,
+    "sample_truncated": false
   }
 }

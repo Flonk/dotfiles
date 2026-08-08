@@ -22,10 +22,11 @@
   "notes": "Static server-rendered HTML, one h2 block per festival with a free-text 'Termin(e):'/'Ort:' li list; no ld+json/API. Each festival's run is emitted as one continuous record (start..end), except Sunset Cinema (two disjoint venue+date pairs -> 2 records) and Architektur.Film.Sommer (comma-listed single dates -> one record per date, past ones dropped). price_min=0 only when an explicit 'Eintritt frei' li is present.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 11
+    "horizon_days": 60,
+    "basis": "measured",
+    "density_per_day": 0.115,
+    "p95_lead_days": 28,
+    "sample_records": 11,
+    "sample_truncated": false
   }
 }

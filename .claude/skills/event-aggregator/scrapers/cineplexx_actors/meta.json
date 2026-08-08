@@ -24,11 +24,12 @@
   "last_built": "2026-08-08",
   "notes": "SPA with no server HTML; showtimes come from app.cineplexx.at JSON API (cinema id 1009). Site only publishes ~6 days ahead, so horizon_days is mostly moot; price is never exposed by the API so price_min/price_text stay null.",
   "schedule": {
-    "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "cadence": "daily",
+    "horizon_days": 6,
+    "basis": "measured",
+    "density_per_day": 5.8,
+    "p95_lead_days": 5,
+    "sample_records": 29,
+    "sample_truncated": false
   }
 }

@@ -27,10 +27,11 @@
   "notes": "Only 4 exhibitions ever listed (2 current on /ausstellungen/aktuell + 2 upcoming on /ausstellungen/vorschau); no price info available site-wide so price_min/price_text always null.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 4
+    "horizon_days": 143,
+    "basis": "measured",
+    "density_per_day": 0.024,
+    "p95_lead_days": 119,
+    "sample_records": 4,
+    "sample_truncated": false
   }
 }

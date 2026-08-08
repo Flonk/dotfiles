@@ -7,21 +7,26 @@
   "covers": [
     "blocked-venue proxy"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 450,
+    "required_fill": {
+      "price_min": 0.9,
+      "category": 0.9,
+      "venue": 0.9
+    },
+    "canary": "event-list-item"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "category listing pages (/de/{konzerte,klassik,kultur,musicals-shows,sport,freizeit}/catalog, paginated /catalog/fromN) embed a base64 GA4 data-tracking blob per <li> with clean date/venue/price/category fields, no per-detail-page fetches needed; some items (city-pass style standing tickets, e.g. hop-on-hop-off bus, museum day tickets) carry a stale placeholder veranstaltungsdatum in the past — detected via start<today and emitted as extra.permanent=true with start=today, end=null instead of trusting the bogus date",
   "schedule": {
-    "cadence": "daily",
-    "horizon_days": 30,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "cadence": "weekly",
+    "horizon_days": 180,
+    "basis": "measured",
+    "density_per_day": 3.706,
+    "p95_lead_days": 165,
+    "sample_records": 667,
+    "sample_truncated": true
   }
 }

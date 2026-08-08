@@ -24,10 +24,11 @@
   "notes": "WP admin-ajax action=ajax_load_events (POST start_date/end_date unix ts + load_future_events=true) returns {events: <html fragment>, end_date, has_future}; loop extending end_date until has_future is falsy. Site is in summer break so listing naturally starts ~Sept 10 (no filtering needed for that); publishes real dates out to ~May 2027 (has_future goes falsy after ~4 pages), well beyond the 180d horizon. category only set for ~1/4 of events (Premiere/Wiederaufnahme/etc, verbatim); price_min parsed from the price-info div only (ticket-col presale text like 'Tickets ab 7.9.2026' was excluded after it corrupted price parsing by matching the year as a price - only used ticket-col text for the free-entry case).",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 0
+    "horizon_days": 89,
+    "basis": "measured",
+    "density_per_day": 0.864,
+    "p95_lead_days": 74,
+    "sample_records": 38,
+    "sample_truncated": false
   }
 }

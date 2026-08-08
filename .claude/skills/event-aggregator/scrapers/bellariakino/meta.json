@@ -21,10 +21,11 @@
   "notes": "cineamo.com platform (shared with votivkino/dokini chain, cinemaId=3000); GET https://api.cineamo.com/showings?cinemaIds[0]=3000&perPage=100 returns all showings (past+future, sorted ascending, ~272 total); filter to today..horizon locally; price never published (external ticket-cloud.de links only) so price_min/price_text always null; category is always the literal string 'movie_series' site-wide, not a real genre",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 74,
     "basis": "measured",
-    "density_per_day": 0.3,
-    "p95_lead_days": 60,
-    "sample_records": 29
+    "density_per_day": 0.433,
+    "p95_lead_days": 62,
+    "sample_records": 29,
+    "sample_truncated": false
   }
 }

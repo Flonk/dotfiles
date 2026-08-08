@@ -23,10 +23,11 @@
   "notes": "Contao CMS, no JSON-LD/API. Three server-rendered HTML pages: de/ausstellungen-programm/programm (talks/conferences, only ~3 listed), de/fuehrungstermine (recurring public guided tours, ~20 listed, window ~3.5 months out), de/ausstellungen-programm (the 5 current exhibitions as teaser tiles). No price info anywhere on the site's public pages, so price_min/price_text are always null. No genuine per-event category taxonomy exists (only an inconsistent <title> tag artifact on ~1 detail page), so category is left null throughout. 2 of 5 exhibitions are genuinely permanent installations with no listed opening date on the site (extra.permanent=true, end=null, start set to scrape date since no other date is knowable); a 3rd ('We Lived...In the Ninth District') has a listed 'ab <date>' start with no end (also permanent). Only 'Der Fall Freud. Dokumente des Unrechts' has an explicit start-end range.",
   "schedule": {
     "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 27
+    "horizon_days": 115,
+    "basis": "measured",
+    "density_per_day": 0.069,
+    "p95_lead_days": 96,
+    "sample_records": 27,
+    "sample_truncated": false
   }
 }

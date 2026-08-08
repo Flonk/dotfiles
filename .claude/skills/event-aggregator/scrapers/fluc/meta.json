@@ -23,10 +23,11 @@
   "notes": "Old-school per-ISO-week calendar pages (YYYY_Flucwoche##.html), one for Fluc and one for Fluc Wanne room per day; no per-event URLs or prices published, so price_min/price_text/category/description stay null and url points at the week page. Real event content only extends ~6-7 weeks out (through late Sept 2026 as of build); weeks beyond that are pre-generated but empty placeholders, so record count tapers to 0 well before EA_HORIZON_DAYS is reached - normal, not a bug.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 50,
     "basis": "measured",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 35
+    "density_per_day": 0.814,
+    "p95_lead_days": 42,
+    "sample_records": 35,
+    "sample_truncated": false
   }
 }

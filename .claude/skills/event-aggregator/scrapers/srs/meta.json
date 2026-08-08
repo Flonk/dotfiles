@@ -25,11 +25,12 @@
   "last_built": "2026-08-08",
   "notes": "Scrapes 10 /de/tickets/<slug> occurrence-calendar pages (Vorführung, Morgenarbeit, geführte Rundgänge DE/EN, Architekturführung DE/EN, Kinderführung, Legende Lipizzaner DE/EN, Briefe ans Christkind); POSTs the CSRF-protected date-range filter form (today..horizon) per page since the default view only shows ~4 weeks. Excludes Piber/Steiermark content (erlebnisse-piber) as out of Vienna scope. ~1470 records for 180d horizon, min_records set conservatively below that.",
   "schedule": {
-    "cadence": "monthly",
-    "horizon_days": 180,
-    "basis": "prior",
-    "density_per_day": null,
-    "p95_lead_days": null,
-    "sample_records": 1470
+    "cadence": "daily",
+    "horizon_days": 162,
+    "basis": "measured",
+    "density_per_day": 10.138,
+    "p95_lead_days": 135,
+    "sample_records": 1470,
+    "sample_truncated": false
   }
 }

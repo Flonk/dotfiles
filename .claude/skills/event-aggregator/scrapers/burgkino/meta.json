@@ -21,10 +21,11 @@
   "notes": "Drupal 'movies' views on /movie/<slug> pages; showtimes only bookable/published ~1 week ahead (this-week+next-week), beyond that only a handful of premiere screenings and /coming-soon 'Starting' placeholder dates (no time, no price) reach further out; single-venue cinema, hardcoded address",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 48,
     "basis": "measured",
-    "density_per_day": 0.38,
-    "p95_lead_days": 54,
-    "sample_records": 34
+    "density_per_day": 0.548,
+    "p95_lead_days": 40,
+    "sample_records": 34,
+    "sample_truncated": false
   }
 }
