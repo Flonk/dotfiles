@@ -5,6 +5,7 @@ import { DatabaseSync } from "node:sqlite";
 
 import { BLACKLIST_PATH, DB_PATH, SCRAPERS } from "./paths.ts";
 import type { EventRecord } from "./schema.ts";
+import { encodeNonAscii } from "./url.ts";
 
 export const FIELDS = [
   "url", "title", "start_at", "end_at", "venue", "district", "city",
@@ -229,7 +230,7 @@ export function toRow(rec: EventRecord): Row {
     price_text: rec.price_text ?? null,
     category: rec.category ?? null,
     description: rec.description ?? null,
-    image: rec.image ?? null,
+    image: rec.image ? encodeNonAscii(rec.image) : null,
     status: rec.status || "scheduled",
     extra: Object.keys(extra).length ? pyDumps(extra, true) : null,
   };

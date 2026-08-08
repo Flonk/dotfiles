@@ -20,7 +20,12 @@ def fetch_image(url):
         try:
             page = ea.fetch(url, timeout=20)
             m = OGIMG_RE.search(page)
-            return url, (m.group(1) if m else None)
+            img = m.group(1) if m else None
+            # the site's own og:image says http://, which does not answer at
+            # all; the identical https:// URL returns the image
+            if img and img.startswith("http://www.admiralkino.at/"):
+                img = "https://" + img[len("http://"):]
+            return url, img
         except Exception:
             continue
     return url, None

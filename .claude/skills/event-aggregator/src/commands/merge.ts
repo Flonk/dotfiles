@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { deriveEnd } from "../db.ts";
 import { EVENTS_JSON, SCRAPERS } from "../paths.ts";
 import type { EventRecord } from "../schema.ts";
+import { encodeNonAscii } from "../url.ts";
 
 type Merged = EventRecord & { uid: string };
 
@@ -23,6 +24,7 @@ export function load(): Merged[] {
         r.end = end;
         r.extra = { ...(r.extra || {}), end_derived: true };
       }
+      if (r.image) r.image = encodeNonAscii(r.image);
       out.push({ ...r, uid });
     }
   }
