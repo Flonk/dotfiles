@@ -5,11 +5,13 @@
     "url": "https://www.albertina.at/ausstellungen/250-jahre-albertina/",
     "title": "250 JAHRE – ALBERTINA",
     "start": "2026-08-08",
-    "end": "2029-08-07",
     "venue": "Albertina",
     "district": 1010,
     "city": "Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
   },
   {
     "source": "albertina",
@@ -17,11 +19,13 @@
     "url": "https://www.albertina.at/ausstellungen/monet-bis-picasso/",
     "title": "MONET BIS PICASSO – Die Sammlung Batliner",
     "start": "2026-08-08",
-    "end": "2029-08-07",
     "venue": "Albertina",
     "district": 1010,
     "city": "Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
   },
   {
     "source": "albertina",
@@ -89,11 +93,13 @@
     "url": "https://www.albertina.at/ausstellungen/prunkraeume/",
     "title": "Prunkräume",
     "start": "2026-08-08",
-    "end": "2029-08-07",
     "venue": "Albertina",
     "district": 1010,
     "city": "Wien",
-    "status": "scheduled"
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
   },
   {
     "source": "albertina",

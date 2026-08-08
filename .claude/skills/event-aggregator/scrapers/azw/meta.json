@@ -19,7 +19,7 @@
     "canary": "class=event-list_item"
   },
   "last_built": "2026-08-08",
-  "notes": "Single server-rendered page has both Ausstellungen and Termine lists, no pagination needed; program is published out to mid-Dec 2026 (~4 months) on this one page. price_min always null, site never states prices on the listing.",
+  "notes": "Single server-rendered page has both Ausstellungen and Termine lists, no pagination needed; program is published out to mid-Dec 2026 (~4 months) on this one page. price_min always null, site never states prices on the listing. The permanent exhibit 'Hot Questions - Cold Storage' has a fabricated far-future data-endDate (site sentinel); detected via the 'permanente Ausstellung' label in event-card_date and emitted with end=null, extra.permanent=true instead of passing the sentinel through.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,

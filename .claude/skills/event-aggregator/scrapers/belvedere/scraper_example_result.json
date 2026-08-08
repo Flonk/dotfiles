@@ -5,13 +5,15 @@
     "url": "https://www.belvedere.at/schau",
     "title": "Schau!",
     "start": "2026-08-08",
-    "end": "2029-08-07",
     "venue": "Oberes Belvedere",
     "district": 1030,
     "city": "Wien",
     "category": "Dauerausstellung",
     "description": "Die Sammlung Belvedere von Cranach bis Lassnig",
-    "status": "scheduled"
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
   },
   {
     "source": "belvedere",
@@ -74,12 +76,14 @@
     "url": "https://www.belvedere.at/galerie-mittelalter",
     "title": "Galerie Mittelalter und Renaissance",
     "start": "2026-08-08",
-    "end": "2029-08-07",
     "venue": "Unteres Belvedere",
     "district": 1030,
     "city": "Wien",
     "category": "Dauerausstellung",
-    "status": "scheduled"
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
   },
   {
     "source": "belvedere",

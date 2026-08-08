@@ -51,14 +51,13 @@ def parse_detail(url, path):
     else:
         start = end = None
 
-    if not start or not end:
-        today = datetime.date.today()
-        start = start or today.isoformat()
-        end = end or (today + datetime.timedelta(days=3 * 365)).isoformat()
+    permanent = not end
+    if not start:
+        start = datetime.date.today().isoformat()
 
     venue = "Albertina Modern" if "/albertina-modern/" in path else "Albertina"
 
-    return {
+    rec = {
         "source": "albertina",
         "source_id": url,
         "url": url,
@@ -75,6 +74,9 @@ def parse_detail(url, path):
         "description": None,
         "status": "scheduled",
     }
+    if permanent:
+        rec["extra"] = {"permanent": True}
+    return rec
 
 
 def main():

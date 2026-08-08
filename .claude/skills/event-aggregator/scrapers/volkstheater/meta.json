@@ -7,15 +7,21 @@
   "covers": [
     "theatre"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 26,
+    "required_fill": {
+      "venue": 1.0,
+      "district": 1.0,
+      "price_min": 0.9,
+      "category": 0.2,
+      "description": 0.85
+    },
+    "canary": "hue-calendar-list"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "WP admin-ajax action=ajax_load_events (POST start_date/end_date unix ts + load_future_events=true) returns {events: <html fragment>, end_date, has_future}; loop extending end_date until has_future is falsy. Site is in summer break so listing naturally starts ~Sept 10 (no filtering needed for that); publishes real dates out to ~May 2027 (has_future goes falsy after ~4 pages), well beyond the 180d horizon. category only set for ~1/4 of events (Premiere/Wiederaufnahme/etc, verbatim); price_min parsed from the price-info div only (ticket-col presale text like 'Tickets ab 7.9.2026' was excluded after it corrupted price parsing by matching the year as a price - only used ticket-col text for the free-entry case).",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,

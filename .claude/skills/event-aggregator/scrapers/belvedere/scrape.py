@@ -24,7 +24,6 @@ LINK_RE = re.compile(r'link--full" href="([^"]+)"')
 
 def main():
     page = ea.fetch(URL)
-    far_end = (datetime.date.today() + datetime.timedelta(days=3 * 365)).isoformat()
 
     recs = []
     for m in ROW_RE.finditer(page):
@@ -52,20 +51,23 @@ def main():
         path = link_m.group(1) if link_m else None
         url = f"https://www.belvedere.at{path}" if path and path.startswith("/") else (path or URL)
 
+        permanent = False
         if len(times) >= 2:
             start = times[0][:10]
             end = times[1][:10]
         elif len(times) == 1:
             start = times[0][:10]
-            end = far_end
+            end = None
+            permanent = True
         else:
             start = datetime.date.today().isoformat()
-            end = far_end
+            end = None
+            permanent = True
 
-        if end < datetime.date.today().isoformat():
+        if end and end < datetime.date.today().isoformat():
             continue
 
-        recs.append({
+        rec = {
             "source": "belvedere",
             "source_id": source_id,
             "url": url,
@@ -81,7 +83,10 @@ def main():
             "category": category,
             "description": description,
             "status": "scheduled",
-        })
+        }
+        if permanent:
+            rec["extra"] = {"permanent": True}
+        recs.append(rec)
 
     ea.emit(recs)
 

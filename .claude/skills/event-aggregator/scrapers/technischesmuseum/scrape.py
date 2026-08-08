@@ -30,9 +30,20 @@ def jsonld_lenient(page):
     return out
 
 
+def kategorie_map(listing):
+    m = {}
+    for match in re.finditer(
+            r'href="/ausstellung/([a-zA-Z0-9_-]+)">.*?<div class="kategorie">(.*?)</div>',
+            listing, re.S):
+        slug, label = match.group(1), re.sub(r"\s+", " ", match.group(2)).strip()
+        m.setdefault(slug, label)
+    return m
+
+
 def main():
     listing = ea.fetch(LIST_URL)
     slugs = sorted(set(re.findall(r'href="/ausstellung/([a-zA-Z0-9_-]+)"', listing)))
+    kategorien = kategorie_map(listing)
 
     records = []
     for slug in slugs:
@@ -53,9 +64,17 @@ def main():
         end = ea.de_date(exhib.get("endDate")) if exhib.get("endDate") else None
         if not start:
             continue
-        today = datetime.date.today().isoformat()
-        if end and end[:10] < today:
-            continue
+
+        description = ea.text(ea.text(exhib.get("description")))
+        kategorie = kategorien.get(slug, "")
+        permanent = ("dauerhaft" in kategorie.lower()
+                     or (description and "Dauerausstellung" in description))
+        if permanent:
+            end = None
+        elif end:
+            today = datetime.date.today().isoformat()
+            if end[:10] < today:
+                continue
 
         loc = exhib.get("location") or {}
         addr = loc.get("address") or {}
@@ -64,7 +83,7 @@ def main():
         locality = addr.get("addressLocality")
         address = ", ".join(p for p in [street, f"{postal} {locality}".strip()] if p) or None
 
-        records.append({
+        rec = {
             "source": SLUG,
             "source_id": slug,
             "url": exhib.get("url") or url,
@@ -78,8 +97,11 @@ def main():
             "price_min": None,
             "price_text": None,
             "category": None,
-            "description": ea.text(ea.text(exhib.get("description"))),
-        })
+            "description": description,
+        }
+        if permanent:
+            rec["extra"] = {"permanent": True}
+        records.append(rec)
 
     ea.emit(records)
 

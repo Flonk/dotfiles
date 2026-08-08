@@ -14,6 +14,10 @@
   venue->city override in scrape.py (`NON_VIENNA` dict) for that case.
 - No prices shown anywhere on the listing, so `price_min`/`price_text` are
   always null — never inferred.
+- "Hot Questions – Cold Storage" has a fabricated far-future `data-endDate`
+  (`2035-02-03`) — the card is labeled `permanente Ausstellung` in
+  `event-card_date`; detect that and emit `end: null`, `extra.permanent: true`
+  instead of the sentinel date.
 - Breaks if AZW restructures the event-card markup (class names) or drops the
   `data-startDate`/`data-endDate` attributes. Re-derive by curling the URL and
   diffing against the `<li class=event-list_item ...>` block structure.

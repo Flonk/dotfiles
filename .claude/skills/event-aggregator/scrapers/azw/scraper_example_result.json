@@ -5,12 +5,14 @@
     "url": "https://www.azw.at/de/termin/hot-questions-cold-storage/",
     "title": "Hot Questions – Cold Storage",
     "start": "2022-02-03",
-    "end": "2035-02-03",
     "venue": "Architekturzentrum Wien - Ausstellungshalle 1",
     "city": "Wien",
     "category": "Ausstellung",
     "description": "Die Schausammlung des Architekturzentrum Wien gibt Einblicke in die bedeutendste und umfassendste Sammlung zur österreichischen Architektur des 20. und 21.…",
-    "status": "scheduled"
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
   },
   {
     "source": "azw",

@@ -16,6 +16,7 @@ TITLE_RE = re.compile(r'class="event-card_title[^"]*">(.*?)</h3>', re.S)
 LOC_RE = re.compile(r'Ort:\s*([^<]*)</div>')
 TIME_RE = re.compile(r'class=event-card_time>([^<]*)<')
 EXCERPT_RE = re.compile(r'class=event-card_excerpt>(.*?)</div>', re.S)
+PERMANENT_RE = re.compile(r'class="event-card_date[^"]*">\s*permanente Ausstellung', re.S)
 
 NON_VIENNA = {"afo architekturforum oberösterreich": "Linz"}
 
@@ -30,19 +31,20 @@ def parse_block(block, cutoff):
         return None
     start_d = sm.group(1)
     end_d = em.group(1) if em else None
+    permanent = bool(PERMANENT_RE.search(block))
     try:
         start_date = datetime.date.fromisoformat(start_d)
     except ValueError:
         return None
     end_date = None
-    if end_d:
+    if end_d and not permanent:
         try:
             end_date = datetime.date.fromisoformat(end_d)
         except ValueError:
             end_date = None
-    if (end_date or start_date) < datetime.date.today():
+    if not permanent and (end_date or start_date) < datetime.date.today():
         return None
-    if start_date > cutoff:
+    if not permanent and start_date > cutoff:
         return None
 
     hm = HREF_RE.search(block)
@@ -75,7 +77,7 @@ def parse_block(block, cutoff):
             if t:
                 start = f"{start_d}T{int(t.group(1)):02d}:{t.group(2)}"
 
-    end = end_d if end_d and end_d != start_d else None
+    end = None if permanent else (end_d if end_d and end_d != start_d else None)
 
     city = "Wien"
     district = None
@@ -86,7 +88,7 @@ def parse_block(block, cutoff):
                 break
         district = ea.district(venue)
 
-    return {
+    rec = {
         "source": "azw",
         "source_id": source_id,
         "url": url,
@@ -103,6 +105,9 @@ def parse_block(block, cutoff):
         "description": description,
         "status": "scheduled",
     }
+    if permanent:
+        rec["extra"] = {"permanent": True}
+    return rec
 
 
 def main():
