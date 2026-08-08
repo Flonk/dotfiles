@@ -343,7 +343,40 @@ build. Ordered by damage done.
    needs a real selector because its first `<img>` is the logo. Most posters live on the
    detail page, not the listing — but several cinema scrapers already fetch detail pages
    for price/runtime, so it is close to free for those.
-3. **End times where the site publishes them.** ~6100 timed records have no `end`. Top
+3. **End times where the site publishes them.** **Largely done 2026-08-08.**
+   `wien_ticket` 642/652 (98%), `wien_gv_at` 559/728 (77%, and it already did this
+   correctly — the gap is genuine, its structured `to` equals `from`), plus 410 derived
+   from cinema runtimes. `srs` was skipped on purpose: it is blacklisted, so filling
+   1470 end times there is work nobody would ever see.
+
+   **`porgy` is a deliberate zero.** The only end-shaped field on the site is the `.ics`
+   export's `DTEND`, and it is *always* exactly `DTSTART + 2h00m` across every id checked,
+   matinees and late shows alike — a CMS default, not data. Left null for all 186.
+
+   ### The occurrence-end vs run-end trap
+
+   `wien_ticket` first came back at 99% fill, which was too good. 198 of those ends were
+   over twelve hours long, and the worst claimed a 14:00 performance ended **fourteen
+   months later** — the scraper had taken the second date in the listing's info text,
+   which is the *production's* last date, and attached it to a single performance.
+
+   Two things made this worse than a cosmetic error. Ranking reads span from
+   `end - start`, so every affected show scored as a 400-day run and got demoted 45
+   points. And the digest's "currently running" clause (`start <= day AND end >= day`)
+   would have put one 14:00 musical on **every single day for fourteen months** — the
+   exact wallpaper the ranking model exists to suppress, manufactured by bad data.
+
+   The tell is structural and worth reusing: **a timed start with a date-only end is
+   almost always a run, not an occurrence.** It cannot be a blanket pipeline rule, though,
+   because that shape is exactly what a legitimate exhibition record looks like — one
+   record, far end. The distinction is semantic, so it has to be fixed per source, where
+   we know whether the source lists productions or performances.
+
+   Removing the bogus end also *raised* the real fill from 90% to 98%: the enrichment pass
+   only filled records whose `end` was still null, so the wrong value had been shadowing
+   the right one. A field that is wrong is worse than a field that is missing, twice over.
+
+   Original notes: ~6100 timed records had no `end`. Top
    gaps: `srs` 1470 (fixed-duration tours, easy), `wko` 1451 (low priority, nationwide),
    `wien_ticket` 650, `haydnkino` 195, `porgy` 185, `wien_gv_at` 169 — top 6 covers 4120.
    275 are already derived at merge time from runtimes the scrapers captured in `extra`.
