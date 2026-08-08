@@ -342,9 +342,26 @@ build. Ordered by damage done.
    usable as a filter). `wko` fills district on 11% of 1800. Without this a Vienna filter
    can't tell "not Vienna" from "unknown", which already produced a false negative on
    Diknu Schneeberger.
-5. **Cadence sanity-check on thin samples.** `admiralkino` (7 records) and `nonstopkino`
-   (8) were measured onto `monthly`, which is wrong for a cinema and will go stale between
-   runs. The density heuristic mis-reads low sample counts as low churn.
+5. ~~**Cadence sanity-check on thin samples.**~~ **Fixed 2026-08-08.** `admiralkino` (7
+   records) and `nonstopkino` (8) had been measured onto `monthly` — wrong for a cinema,
+   and it would go stale between runs. Two causes, both now addressed in `cadence.py`:
+
+   - **Density conflates "few events" with "short window".** A cinema listing 7 films over
+     the next 3 days is not low-churn; its whole programme is replaced within the week.
+     Added `window_cadence(reach)`, where `reach` is how far ahead the published programme
+     extends. It follows `end` where there is one — otherwise a museum whose every
+     exhibition *started* in the past looks like a one-day window, which is how the first
+     version of this rule shoved `belvedere` and `technischesmuseum` to daily.
+   - **The group prior is now a floor.** One snapshot can show that a source is busier than
+     its kind usually is; it cannot show the opposite, because a quiet week at a cinema is
+     a quiet week, not a cinema that stopped turning over. Measurement may tighten the
+     prior, never loosen it. This is what stops `stadtkinowien` (31 records reaching past
+     45 days) from relaxing to monthly.
+
+   Net effect: **25 cadence changes, every one a tightening.** The big aggregators move to
+   daily where they belong (`wien_gv_at`, `eventbrite`, `wien_ticket`, `meinbezirk`,
+   `ticketmaster`), music venues and academic calendars to weekly. `cadence.py --dry` now
+   reports what would change without writing.
 6. **`kindermuseum` silently skips hub pages** when ZOOM's flaky server hangs, so yield
    varies 5–6 per run and `min_records` can't distinguish "slow" from "broken".
 
