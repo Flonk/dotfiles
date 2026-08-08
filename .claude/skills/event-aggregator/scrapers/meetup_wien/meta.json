@@ -1,0 +1,10 @@
+{
+  "slug": "meetup_wien",
+  "name": "Meetup Vienna",
+  "url": "https://www.meetup.com/find/?location=at--Vienna",
+  "tier": "B",
+  "group": "aggregator",
+  "status": "unbuilt",
+  "expect": {},
+  "notes": "19 Event JSON-LD on a board-games query. New source shape; covers the meetup/community and gaming gaps"
+}

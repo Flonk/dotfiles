@@ -1,0 +1,10 @@
+{
+  "slug": "buechereien",
+  "name": "Buechereien Wien",
+  "url": "https://buechereien.wien.gv.at/veranstaltungen",
+  "tier": "B",
+  "group": "literature",
+  "status": "unbuilt",
+  "expect": {},
+  "notes": "39 branches, readings. Host has NO www. prefix - the www. form does not resolve. 200, no JSON-LD, plain HTML parse"
+}

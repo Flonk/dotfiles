@@ -1,0 +1,10 @@
+{
+  "slug": "imba",
+  "name": "IMBA",
+  "url": "https://www.imba.oeaw.ac.at/events",
+  "tier": "B",
+  "group": "academic",
+  "status": "unbuilt",
+  "expect": {},
+  "notes": "/events answers 200 while the site root 403s - the OeAW block is path-scoped, not org-wide"
+}

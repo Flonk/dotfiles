@@ -1,0 +1,10 @@
+{
+  "slug": "parkrun",
+  "name": "parkrun Austria",
+  "url": "https://www.parkrun.co.at/",
+  "tier": "B",
+  "group": "sport",
+  "status": "unbuilt",
+  "expect": {},
+  "notes": "weekly free 5k runs. Perennial by nature - filter per the availability axis"
+}
