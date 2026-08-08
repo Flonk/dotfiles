@@ -4,7 +4,16 @@
   "url": "https://www.imba.oeaw.ac.at/events",
   "tier": "B",
   "group": "academic",
-  "status": "unbuilt",
-  "expect": {},
-  "notes": "/events answers 200 while the site root 403s - the OeAW block is path-scoped, not org-wide"
+  "status": "built",
+  "method": "html",
+  "last_built": "2026-08-08",
+  "expect": {
+    "min_records": 28,
+    "required_fill": {
+      "venue": 1.0,
+      "category": 1.0
+    },
+    "canary": "events-mini-list"
+  },
+  "notes": "/events redirects to a bare homepage; the real listing is /seminars-events (shared IMP/IMBA/GMI Vienna BioCenter seminar calendar, same events as the imp scraper under different ids). Site is fronted by Cloudflare and ~20-30% of requests 403 with a JS challenge even from a real browser UA over plain HTTP/1.1 - scrape.py retries every fetch up to 10x with backoff, which is why a full run takes 1-2 minutes. Discovers events by walking the mini-calendar month-by-month (each page's 'next' link carries its own TYPO3 cHash, arbitrary month/year query combos 404 without one), then fetches each event's detail page for the authoritative 'Date: ..., Time: ..., Speaker: ..., Location: ..., Type: ..., Institute: ..., Host: ...' line (the list-page teaser truncates this for busy days). No price or address/district info anywhere - left null."
 }
