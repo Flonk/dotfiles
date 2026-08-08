@@ -4,7 +4,18 @@
   "url": "https://www.viecc.com/",
   "tier": "B",
   "group": "fair",
-  "status": "unbuilt",
-  "expect": {},
-  "notes": "gaming/con coverage; gaming is 0 records in the whole DB"
+  "status": "built",
+  "method": "html",
+  "last_built": "2026-08-08",
+  "expect": {
+    "min_records": 1,
+    "required_fill": {
+      "venue": 1.0,
+      "address": 1.0,
+      "district": 1.0,
+      "price_min": 1.0
+    },
+    "canary": "Messe Wien"
+  },
+  "notes": "One annual 2-day convention, so this is genuinely a single-record scraper (homepage only, no per-year archive/listing). Homepage's own JSON-LD has no Event type (only WebPage/WebSite/Organization), so this parses the plain HTML: date range from the '21. - 22. November 2026' heading text, opening hours from the Samstag/Sonntag lines, address from the on-page 'Messeplatz 1, 1020 Wien' text, price_min from the lowest of the on-page ticket prices (Adult Samstag/Sonntag/Weekend/Cosplayer). Breaks if next year's page drops the day-range heading format or the Öffnungszeiten lines; re-derive by curling the homepage and grepping for 'Öffnungszeiten'."
 }

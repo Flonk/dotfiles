@@ -1,10 +1,19 @@
 {
   "slug": "meetup_wien",
   "name": "Meetup Vienna",
-  "url": "https://www.meetup.com/find/?location=at--Vienna",
+  "url": "https://www.meetup.com/cities/at/vienna/",
   "tier": "B",
   "group": "aggregator",
-  "status": "unbuilt",
-  "expect": {},
-  "notes": "19 Event JSON-LD on a board-games query. New source shape; covers the meetup/community and gaming gaps"
+  "status": "built",
+  "method": "api",
+  "last_built": "2026-08-08",
+  "expect": {
+    "min_records": 25,
+    "required_fill": {
+      "venue": 0.9,
+      "address": 0.9
+    },
+    "canary": "__NEXT_DATA__"
+  },
+  "notes": "meetup.com/robots.txt has no ClaudeBot rule and no blanket Disallow, but it does disallow the ?location= query pattern used by the /find/?location=at--Vienna URL from the brief, so this uses the path-based city page https://www.meetup.com/cities/at/vienna/ instead (not matched by any Disallow rule) and reads its embedded __NEXT_DATA__ JSON (Next.js SSR props) rather than calling the disallowed /gql*, /mu_api/, or /api* endpoints. pageProps holds several curated arrays (eventsInLocation, todayEvents, thisWeekendEvents, topicalEvents*) that overlap; deduped by event id, ~43 unique events, only ~4 weeks of forward coverage (site doesn't render further ahead server-side; deeper pagination lives behind the disallowed GraphQL API so was not pursued). price_min only set from an explicit feeSettings.amount (6/43 events); most Meetup RSVPs are free but the page never states that outright, so it stays null rather than being assumed 0. Some venue.city values are the organizer's own garbled input (e.g. 'Aruba', a stray plz prefix) - passed through verbatim except a plz accidentally landing in the city field, which is stripped into district instead."
 }

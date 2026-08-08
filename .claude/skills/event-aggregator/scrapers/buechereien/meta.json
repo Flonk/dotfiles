@@ -4,7 +4,19 @@
   "url": "https://buechereien.wien.gv.at/veranstaltungen",
   "tier": "B",
   "group": "literature",
-  "status": "unbuilt",
-  "expect": {},
-  "notes": "39 branches, readings. Host has NO www. prefix - the www. form does not resolve. 200, no JSON-LD, plain HTML parse"
+  "status": "built",
+  "method": "api",
+  "last_built": "2026-08-08",
+  "expect": {
+    "min_records": 170,
+    "required_fill": {
+      "venue": 0.95,
+      "district": 0.85,
+      "address": 0.85,
+      "category": 0.95,
+      "description": 0.9
+    },
+    "canary": "vast_id"
+  },
+  "notes": "Page itself has no data (DNN shell); the DataTables widget it embeds (Portals/0/js/vastat/vatable.js) pulls the real feed from Portals/0/Files/stb_va/stb_va.json, one JSON array covering all ~255 currently-listed occurrences (~250 after filtering past). No per-event page exists, so url is the pretix registration link when one is attached, else the branch's own page. district/address come from a second pass over the ~22 distinct branch pages (regex on their published 'Adresse: Street, PLZ Wien' line), fetched concurrently and best-effort (null on failure, never guessed). price_min only set (0) when the free-text programme description literally says kostenlos/gratis/frei; otherwise null, since most events have no visible price at all."
 }

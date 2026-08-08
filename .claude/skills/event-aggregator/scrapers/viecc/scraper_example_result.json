@@ -1,0 +1,18 @@
+[
+  {
+    "source": "viecc",
+    "source_id": "viecc-2026",
+    "url": "https://www.viecc.com/",
+    "title": "VIECC Vienna Comic Con 2026",
+    "start": "2026-11-21T10:00",
+    "end": "2026-11-22T18:00",
+    "venue": "Messe Wien, Halle A + B",
+    "district": 1020,
+    "city": "Wien",
+    "address": "Messeplatz 1",
+    "price_min": 45.0,
+    "price_text": "Adult Samstag € 48 / Adult Sonntag € 45 / Adult Weekend € 73",
+    "description": "DAS Top-Event für Popkultur und Gaming in Österreich. Erlebe internationale Star-Power aus Film, Fernsehen, Comic, Cosplay, Fantasy & Gaming!",
+    "image": "https://viecc.com/wp-content/uploads/2025/05/VIECC-10-Jahre-Final.png"
+  }
+]
