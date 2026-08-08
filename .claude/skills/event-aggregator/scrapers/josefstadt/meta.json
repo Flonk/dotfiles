@@ -7,21 +7,26 @@
   "covers": [
     "theatre"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 86,
+    "required_fill": {
+      "venue": 1.0,
+      "district": 1.0,
+      "address": 1.0,
+      "description": 0.9
+    },
+    "canary": "spielplan_stuecke.aspx"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Actual programme lives in an ASP.NET WebForms iframe (spielplan_stuecke.aspx), not the wrapper page; parser postbacks the month dropdown. price_min/category almost never available (ticket sales open close to the date), left null on purpose.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 123
   }
 }

@@ -7,7 +7,7 @@
   "covers": [
     "FIXED RULE - no scraping"
   ],
-  "status": "unbuilt",
+  "status": "dead",
   "method": null,
   "expect": {
     "min_records": null,
@@ -15,7 +15,7 @@
     "canary": null
   },
   "last_built": null,
-  "notes": null,
+  "notes": "Source is an Instagram profile (michaelstrasser). Instagram is explicitly flagged as a fixed no-scraping source (covers: 'FIXED RULE - no scraping') and Instagram itself blocks/requires-login for unauthenticated fetches. No alternative event listing found for this source. Marked dead, no data fabricated.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,

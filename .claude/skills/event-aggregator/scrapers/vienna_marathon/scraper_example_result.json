@@ -1,0 +1,38 @@
+[
+  {
+    "source": "vienna_marathon",
+    "source_id": "marathon",
+    "url": "https://www.vienna-marathon.com/?go=marathon",
+    "title": "MARATHON",
+    "start": "2027-04-18",
+    "venue": "Wien",
+    "city": "Wien",
+    "price_min": 155.0,
+    "price_text": "VCM 2027: € 155,– VCM 2027 & Wörthersee Marathon 2026: € 239,– (Limitiert auf 300 Startplätze; Infos www.woerthersee-marathon.at )",
+    "category": "Bewerbe"
+  },
+  {
+    "source": "vienna_marathon",
+    "source_id": "halfmarathon",
+    "url": "https://www.vienna-marathon.com/?go=halfmarathon",
+    "title": "WIENER STÄDTISCHE HALBMARATHON",
+    "start": "2027-04-18",
+    "venue": "Wien",
+    "city": "Wien",
+    "price_min": 130.0,
+    "price_text": "Wiener Städtische Halbmarathon € 130,-",
+    "category": "Bewerbe"
+  },
+  {
+    "source": "vienna_marathon",
+    "source_id": "relay",
+    "url": "https://www.vienna-marathon.com/?go=relay",
+    "title": "Powerade Staffelmarathon",
+    "start": "2027-04-18",
+    "venue": "Wien",
+    "city": "Wien",
+    "price_min": 250.0,
+    "price_text": "Powerade Staffelmarathon 2027: € 250,-",
+    "category": "Bewerbe"
+  }
+]

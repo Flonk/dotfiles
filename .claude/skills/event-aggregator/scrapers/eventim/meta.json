@@ -7,7 +7,7 @@
   "covers": [
     "blocked-venue proxy"
   ],
-  "status": "unbuilt",
+  "status": "dead",
   "method": null,
   "expect": {
     "min_records": null,
@@ -15,7 +15,7 @@
     "canary": null
   },
   "last_built": null,
-  "notes": null,
+  "notes": "www.eventim.at is now a pure B2B/corporate Webflow site (career, partnerships, contact) with zero event data — confirmed via sitemap.xml, which lists only /karriere, /partnerschaft, /kontakt etc. The actual AT consumer ticket shop, www.oeticket.com (also part of CTS Eventim), hard-blocks non-browser clients at the connection level (Akamai): curl gets no response at all on / or /robots.txt over both HTTP/2 and HTTP/1.1 (timeout, HTTP 000), even with a browser UA. No accessible event data on either domain.",
   "schedule": {
     "cadence": "daily",
     "horizon_days": 30,

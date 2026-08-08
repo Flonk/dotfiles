@@ -1,27 +1,38 @@
 {
   "slug": "neueoperwien",
   "name": "Neue Oper Wien",
-  "url": "https://www.neueoperwien.at/",
+  "url": "https://neueoperwien.at/programm/",
   "tier": "B",
   "group": "theatre",
   "covers": [
     "contemporary opera"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 12,
+    "required_fill": {
+      "source": 1.0,
+      "source_id": 1.0,
+      "url": 1.0,
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "description": 1.0,
+      "category": 0.0,
+      "price_min": 0.0,
+      "district": 0.0
+    },
+    "canary": "post-card"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Static WordPress /programm/ page lists all productions for the year as repeated <p>dd.mm.yy – Venue</p> rows inside .post-card <li> blocks; no per-event price/category/id, so those are left null. Only ~4 productions / 18 dates published, all well within any horizon.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 18
   }
 }

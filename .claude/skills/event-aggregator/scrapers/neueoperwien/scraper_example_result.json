@@ -1,0 +1,258 @@
+[
+  {
+    "source": "neueoperwien",
+    "source_id": "geschichte-20260916",
+    "url": "https://neueoperwien.at/geschichte/",
+    "title": "GESCHICHTE",
+    "start": "2026-09-16T19:30",
+    "venue": "MAK Museum für angewandte Kunst",
+    "city": "Wien",
+    "description": "Operette von Oscar Strasnoy",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Operette von Oscar Strasnoy",
+      "premiere": true
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "geschichte-20260919",
+    "url": "https://neueoperwien.at/geschichte/",
+    "title": "GESCHICHTE",
+    "start": "2026-09-19T19:30",
+    "venue": "MAK",
+    "city": "Wien",
+    "description": "Operette von Oscar Strasnoy",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Operette von Oscar Strasnoy"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "geschichte-20260920",
+    "url": "https://neueoperwien.at/geschichte/",
+    "title": "GESCHICHTE",
+    "start": "2026-09-20T19:30",
+    "venue": "MAK",
+    "city": "Wien",
+    "description": "Operette von Oscar Strasnoy",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Operette von Oscar Strasnoy"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "geschichte-20260922",
+    "url": "https://neueoperwien.at/geschichte/",
+    "title": "GESCHICHTE",
+    "start": "2026-09-22T19:30",
+    "venue": "MAK",
+    "city": "Wien",
+    "description": "Operette von Oscar Strasnoy",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Operette von Oscar Strasnoy"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "geschichte-20260923",
+    "url": "https://neueoperwien.at/geschichte/",
+    "title": "GESCHICHTE",
+    "start": "2026-09-23T19:30",
+    "venue": "MAK",
+    "city": "Wien",
+    "description": "Operette von Oscar Strasnoy",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Operette von Oscar Strasnoy"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "future-is-now-20260929",
+    "url": "https://neueoperwien.at/future-is-now/",
+    "title": "FUTURE IS NOW",
+    "start": "2026-09-29T19:30",
+    "venue": "ASC Arnold Schönberg Center",
+    "city": "Wien",
+    "description": "Hotspot NOW 2",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 2",
+      "premiere": true
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "future-is-now-20260930",
+    "url": "https://neueoperwien.at/future-is-now/",
+    "title": "FUTURE IS NOW",
+    "start": "2026-09-30T19:30",
+    "venue": "F23 wir.theater.fabriken.",
+    "city": "Wien",
+    "description": "Hotspot NOW 2",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 2"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "future-is-now-20261006",
+    "url": "https://neueoperwien.at/future-is-now/",
+    "title": "FUTURE IS NOW",
+    "start": "2026-10-06T19:30",
+    "venue": "Theater am Werk",
+    "city": "Wien",
+    "description": "Hotspot NOW 2",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 2"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "future-is-now-20261008",
+    "url": "https://neueoperwien.at/future-is-now/",
+    "title": "FUTURE IS NOW",
+    "start": "2026-10-08T19:30",
+    "venue": "Radio Kulturhaus",
+    "city": "Wien",
+    "description": "Hotspot NOW 2",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 2"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "tree-of-codes-20261031",
+    "url": "https://neueoperwien.at/tree-of-codes/",
+    "title": "TREE OF CODES",
+    "start": "2026-10-31T19:30",
+    "venue": "Reaktor",
+    "city": "Wien",
+    "description": "Oper von Liza Lim",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Oper von Liza Lim",
+      "premiere": true
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "tree-of-codes-20261103",
+    "url": "https://neueoperwien.at/tree-of-codes/",
+    "title": "TREE OF CODES",
+    "start": "2026-11-03T19:30",
+    "venue": "Reaktor",
+    "city": "Wien",
+    "description": "Oper von Liza Lim",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Oper von Liza Lim"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "tree-of-codes-20261105",
+    "url": "https://neueoperwien.at/tree-of-codes/",
+    "title": "TREE OF CODES",
+    "start": "2026-11-05T19:30",
+    "venue": "Reaktor",
+    "city": "Wien",
+    "description": "Oper von Liza Lim",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Oper von Liza Lim"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "tree-of-codes-20261006",
+    "url": "https://neueoperwien.at/tree-of-codes/",
+    "title": "TREE OF CODES",
+    "start": "2026-10-06T19:30",
+    "venue": "Reaktor",
+    "city": "Wien",
+    "description": "Oper von Liza Lim",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Oper von Liza Lim"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "tree-of-codes-20261108",
+    "url": "https://neueoperwien.at/tree-of-codes/",
+    "title": "TREE OF CODES",
+    "start": "2026-11-08T19:30",
+    "venue": "Reaktor",
+    "city": "Wien",
+    "description": "Oper von Liza Lim",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Oper von Liza Lim"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "same-new-story-20261117",
+    "url": "https://neueoperwien.at/same-old-story/",
+    "title": "SAME NEW STORY",
+    "start": "2026-11-17T19:30",
+    "venue": "Akademisches Gymnasium",
+    "city": "Wien",
+    "description": "Hotspot NOW 3",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 3",
+      "premiere": true
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "same-new-story-20261120",
+    "url": "https://neueoperwien.at/same-old-story/",
+    "title": "SAME NEW STORY",
+    "start": "2026-11-20T19:30",
+    "venue": "PAHO",
+    "city": "Wien",
+    "description": "Hotspot NOW 3",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 3"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "same-new-story-20261123",
+    "url": "https://neueoperwien.at/same-old-story/",
+    "title": "SAME NEW STORY",
+    "start": "2026-11-23T19:30",
+    "venue": "VHS Meidling",
+    "city": "Wien",
+    "description": "Hotspot NOW 3",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 3"
+    }
+  },
+  {
+    "source": "neueoperwien",
+    "source_id": "same-new-story-20261125",
+    "url": "https://neueoperwien.at/same-old-story/",
+    "title": "SAME NEW STORY",
+    "start": "2026-11-25T19:30",
+    "venue": "VHS Ottakring",
+    "city": "Wien",
+    "description": "Hotspot NOW 3",
+    "status": "scheduled",
+    "extra": {
+      "subtitle": "Hotspot NOW 3"
+    }
+  }
+]

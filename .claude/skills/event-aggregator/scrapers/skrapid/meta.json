@@ -7,21 +7,24 @@
   "covers": [
     "football"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 27,
+    "required_fill": {
+      "venue": 0.85,
+      "category": 0.95
+    },
+    "canary": "sk_match_date"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Nuxt SPA with no server-rendered data; pulls fixtures from the WP REST API at cms.skrapid.at/wp-json/wp/v2/match (paginated, 100/page) plus wp/v2/competition for category names. Covers all SK Rapid squads (men, women, youth, 2nd team), not just the Bundesliga side. No per-match detail page resolves on the public site, so url points to the general schedule page for every record.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 39
   }
 }

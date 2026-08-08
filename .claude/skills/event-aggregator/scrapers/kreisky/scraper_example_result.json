@@ -1,0 +1,121 @@
+[
+  {
+    "source": "kreisky",
+    "source_id": "politische-klassiker-der-neuen-rechten-antidemokratische-denker-aus-der-weimarer-republik",
+    "url": "https://www.kreisky-forum.org/veranstaltung/politische-klassiker-der-neuen-rechten-antidemokratische-denker-aus-der-weimarer-republik",
+    "title": "Politische »Klassiker« der Neuen Rechten. Antidemokratische Denker aus der Weimarer Republik",
+    "start": "2026-09-07T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "category": "Podiumsdiskussion",
+    "description": "Robert Misik im Gespräch mit Armin Pfhal-Traughber",
+    "extra": {
+      "schwerpunkt": "Demokratie, Diversität und Zusammenhalt"
+    }
+  },
+  {
+    "source": "kreisky",
+    "source_id": "wer-gegen-wen",
+    "url": "https://www.kreisky-forum.org/veranstaltung/wer-gegen-wen",
+    "title": "Wer gegen Wen?",
+    "start": "2026-09-10T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "category": "Podiumsdiskussion",
+    "description": "mit Sara Hassan",
+    "extra": {
+      "schwerpunkt": "Arbeit, Wirtschaft und Soziales"
+    }
+  },
+  {
+    "source": "kreisky",
+    "source_id": "a-training-school-for-elephants-colonialism-its-enduring-legacies-and-what-we-got-to-do-with-it",
+    "url": "https://www.kreisky-forum.org/veranstaltung/a-training-school-for-elephants-colonialism-its-enduring-legacies-and-what-we-got-to-do-with-it",
+    "title": "A Training School for Elephants. Colonialism, its Enduring Legacies and what we got to do with it",
+    "start": "2026-09-22T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "category": "Podiumsdiskussion",
+    "description": "Tessa Szyszkowitz im Gespräch mit Sophy Roberts",
+    "extra": {
+      "schwerpunkt": "Geschichte, Bildung und Wissenschaft"
+    }
+  },
+  {
+    "source": "kreisky",
+    "source_id": "zum-diktator-in-30-tagen-ueber-manipulation-macht-und-warum-demokratie-aufmerksamkeit-braucht",
+    "url": "https://www.kreisky-forum.org/veranstaltung/zum-diktator-in-30-tagen-ueber-manipulation-macht-und-warum-demokratie-aufmerksamkeit-braucht",
+    "title": "ZUM DIKTATOR IN 30 TAGEN.Über Manipulation, Macht und warum Demokratie Aufmerksamkeit braucht.",
+    "start": "2026-09-23T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "description": "mit Blauer Elephant, Daniela Kanoun"
+  },
+  {
+    "source": "kreisky",
+    "source_id": "wie-konnte-das-geschehen",
+    "url": "https://www.kreisky-forum.org/veranstaltung/wie-konnte-das-geschehen",
+    "title": "WIE KONNTE DAS GESCHEHEN?",
+    "start": "2026-09-28T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "category": "Podiumsdiskussion",
+    "description": "Cathrin Kahlweit im Gespräch mit Götz Aly",
+    "extra": {
+      "schwerpunkt": "Demokratie, Diversität und Zusammenhalt"
+    }
+  },
+  {
+    "source": "kreisky",
+    "source_id": "braver-new-world",
+    "url": "https://www.kreisky-forum.org/veranstaltung/braver-new-world",
+    "title": "Braver New World",
+    "start": "2026-10-01T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "description": "Tessa Szyszkowitz im Gespräch mit John Kampfner"
+  },
+  {
+    "source": "kreisky",
+    "source_id": "intercultural-achievement-award-2026",
+    "url": "https://www.kreisky-forum.org/veranstaltung/intercultural-achievement-award-2026",
+    "title": "Intercultural Achievement Award 2026",
+    "start": "2026-10-13T18:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "category": "Bruno Kreisky Special",
+    "extra": {
+      "schwerpunkt": "Demokratie, Diversität und Zusammenhalt"
+    }
+  },
+  {
+    "source": "kreisky",
+    "source_id": "free-trade-as-a-driver-for-africas-economic-integration",
+    "url": "https://www.kreisky-forum.org/veranstaltung/free-trade-as-a-driver-for-africas-economic-integration",
+    "title": "Free trade as a driver for Africa´s economic integration?",
+    "start": "2026-10-19T19:00",
+    "venue": "Bruno Kreisky Forum",
+    "district": 1190,
+    "city": "Wien",
+    "address": "Armbrustergasse 15, 1190 Wien",
+    "category": "Podiumsdiskussion",
+    "description": "Irene Horejs im Gespräch mit H.E. Wamkele Mene, Ambassador Valerie Rugene, Robert Kappel and Leena Koni Hoffmann",
+    "extra": {
+      "schwerpunkt": "Internationale Politik, Europa und Sicherheit"
+    }
+  }
+]

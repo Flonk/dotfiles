@@ -8,15 +8,20 @@
     "opera",
     "operetta"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 60,
+    "required_fill": {
+      "venue": 1.0,
+      "district": 1.0,
+      "price_text": 0.9,
+      "description": 0.9
+    },
+    "canary": "itemprop=\"startDate\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered month pages at /spielplan/<german-month>-<year>.de.html; iterates from current month to EA_HORIZON_DAYS out. Months with no shows (e.g. August, house dark) silently serve the next month's content instead of an empty page, so records are deduped by (source_id, start) across months. No real category field on the listing (only CSS state classes like event-premiere/weekend), so category is left null rather than guessed from the description blurb. Price is a tier label (\"Preise A\"..\"Preise Z\"), not a number, so price_min is always null and price_text carries the label. district hardcoded to 1090 (Volksoper's own address; all listed venues are in-house: Volksoper, Balkon-Foyer).",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,

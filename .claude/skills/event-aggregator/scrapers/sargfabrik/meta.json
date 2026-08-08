@@ -8,18 +8,21 @@
     "world",
     "jazz"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 68,
+    "required_fill": {
+      "category": 0.95,
+      "price_min": 0.5
+    },
+    "canary": "event-calendar-item"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "listing HTML per month (?month=YYYY-MM) gives date/time/title/area/category; price needs one detail-page fetch per event, parsed from the first 'Eintritt: ...' bard text module",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,

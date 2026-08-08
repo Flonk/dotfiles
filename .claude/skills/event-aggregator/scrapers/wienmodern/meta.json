@@ -7,7 +7,7 @@
   "covers": [
     "contemporary"
   ],
-  "status": "unbuilt",
+  "status": "dead",
   "method": null,
   "expect": {
     "min_records": null,
@@ -15,7 +15,7 @@
     "canary": null
   },
   "last_built": null,
-  "notes": null,
+  "notes": "Checked 2026-08-08: site is a single annual festival (Wien Modern, runs late Oct/Nov) with no year-round programme. /programm and /kalender both redirect to a <year>-kalender-details page containing real server-rendered event data (Calendar-day-production <article> items with data-zip/data-venue, date, time, location, price would be on detail pages) -- this IS a scrapeable structure when populated. But right now the newest such page (/2025-kalender-details) only lists the already-past Wien Modern 38 (26 Oct - 30 Nov 2025); the 2026-kalender/2026-kalender-details pages for Wien Modern 39 (opens 30 Oct 2026 per a news post) exist as empty shells with zero Calendar-day-production items, and no 2026 production/detail pages are linked from anywhere on the site yet (checked homepage, /news, /wien-modern-39, sitemap.xml). robots.txt does not block scraping. Genuinely zero forward-looking event data to emit today, so not building against fabricated dates. Re-derive later (likely Sept/Oct, once WM39 programme goes live): fetch https://www.wienmodern.at/kalender, follow redirect to <year>-kalender, then fetch <that>-details for the real listing; parse .Calendar-day-production articles (title h2, category h6.hd-sub, date from parent #day-YYYYMMDD id + Production-time text, venue link text, data-zip for district, morelink href for detail-page url/price).",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,

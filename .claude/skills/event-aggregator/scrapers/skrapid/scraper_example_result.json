@@ -1,0 +1,539 @@
+[
+  {
+    "source": "skrapid",
+    "source_id": "10173",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs Admira Wacker",
+    "start": "2026-09-04T15:00",
+    "venue": "Trainingsplatz Ernst-Happel-Stadion",
+    "city": "Wien",
+    "category": "Testspiele",
+    "status": "scheduled"
+  },
+  {
+    "source": "skrapid",
+    "source_id": "10135",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FC Salzburg",
+    "start": "2026-09-26T17:30",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "8"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9941",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs SC Wiener Viktoria",
+    "start": "2026-11-07T16:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "10"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9940",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs DSG Dynamo Donau",
+    "start": "2026-10-30T20:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "9"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9945",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SC Pötzleinsdorf vs SK Rapid",
+    "start": "2026-10-24T14:00",
+    "venue": "First Vienna Football Campus",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "8"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9939",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FC Altera Porta",
+    "start": "2026-10-17T16:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "7"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9944",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SU Schönbrunn vs SK Rapid",
+    "start": "2026-10-10T16:00",
+    "venue": "Sportunion Schönbrunn",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "6"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9938",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs SV Essling",
+    "start": "2026-10-03T15:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "5"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9943",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "USC Landhaus vs SK Rapid",
+    "start": "2026-09-27T14:00",
+    "venue": "Union Landhaus",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "4"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9937",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs Wiener Sport-Club",
+    "start": "2026-09-19T13:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "3"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9942",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "First Vienna FC vs SK Rapid",
+    "start": "2026-09-12T16:00",
+    "venue": "First Vienna Football Campus",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "2"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9936",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FK Austria Wien",
+    "start": "2026-09-06T15:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Wiener Frauen Landesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "1"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "10099",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs Paide Linnameeskond",
+    "start": "2026-08-12T18:00",
+    "venue": "Allianz Stadion",
+    "city": "Wien",
+    "category": "UEFA Conference League",
+    "status": "scheduled"
+  },
+  {
+    "source": "skrapid",
+    "source_id": "10070",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "FC Blau-Weiß Linz vs SK Rapid",
+    "start": "2026-08-29T15:00",
+    "city": "Wien",
+    "category": "Frauen Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "5"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "10069",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs SC Rheindorf Altach",
+    "start": "2026-08-23T11:00",
+    "city": "Wien",
+    "category": "Frauen Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "4"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "10063",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "TSV Hartberg vs SK Rapid",
+    "start": "2026-08-16T14:00",
+    "city": "Wien",
+    "category": "Frauen Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "3"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9786",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs SKN St. Pölten",
+    "start": "2026-12-13T00:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "2"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9828",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FC Blau-Weiß Linz",
+    "start": "2026-11-22T16:30",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "14"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9824",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SC Rheindorf Altach vs SK Rapid",
+    "start": "2026-11-15T13:30",
+    "venue": "Stadion Schnabelholz",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "13"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9820",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs TSV Hartberg",
+    "start": "2026-10-30T20:15",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "12"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9816",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SKN St. Pölten vs SK Rapid",
+    "start": "2026-10-24T12:00",
+    "venue": "Sportzentrum NÖ St. Pölten",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "11"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9812",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs First Vienna FC",
+    "start": "2026-10-16T20:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "10"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9805",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "FK Austria Wien vs SK Rapid",
+    "start": "2026-10-04T00:00",
+    "venue": "Austria Mädchen AKA Haidestraße",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "9"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9800",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Sturm Graz vs SK Rapid",
+    "start": "2026-09-18T20:15",
+    "venue": "Graz Postplatz",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "7"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9799",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs Linzer Athletik Sport Klub",
+    "start": "2026-09-12T17:30",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "6"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9792",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "FC Blau-Weiß Linz vs SK Rapid",
+    "start": "2026-08-29T18:00",
+    "venue": "ANDREA BINDER ARENA - Kleinmünchen",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "5"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9788",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs SC Rheindorf Altach",
+    "start": "2026-08-23T13:30",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "4"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9787",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "TSV Hartberg vs SK Rapid",
+    "start": "2026-08-16T16:00",
+    "venue": "Stegersbach - Thermenstadion",
+    "city": "Wien",
+    "category": "Frauen Future League",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "3"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9687",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Sturm Graz vs SK Rapid",
+    "start": "2026-08-30T10:30",
+    "venue": "Kartnigs Werbeprofi Arena",
+    "city": "Wien",
+    "category": "2. Liga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "5"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9790",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FK Austria Wien",
+    "start": "2026-10-03T11:00",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "ÖFB Jugendliga U15",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "1"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9789",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FK Austria Wien",
+    "start": "2026-11-03T18:30",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "ÖFB Jugendliga U16",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "1"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9791",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FK Austria Wien",
+    "start": "2026-11-03T18:30",
+    "venue": "Allianz Stadion / Trainingsplätze",
+    "city": "Wien",
+    "category": "ÖFB Jugendliga U18",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "1"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9573",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs FAC",
+    "start": "2026-08-22T15:30",
+    "venue": "Allianz Stadion",
+    "city": "Wien",
+    "category": "2. Liga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "4"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9686",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "FC Hertha Wels vs SK Rapid",
+    "start": "2026-08-14T18:30",
+    "venue": "Eww Stadium",
+    "city": "Wien",
+    "category": "2. Liga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "3"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9542",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs SK Sturm Graz",
+    "start": "2026-08-30T17:00",
+    "venue": "Allianz Stadion",
+    "city": "Wien",
+    "category": "Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "5"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9541",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "FC Salzburg vs SK Rapid",
+    "start": "2026-08-23T19:00",
+    "venue": "Red Bull Arena",
+    "city": "Wien",
+    "category": "Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "4"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9540",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs Grazer AK 1902",
+    "start": "2026-08-16T19:00",
+    "venue": "Allianz Stadion",
+    "city": "Wien",
+    "category": "Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "3"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9539",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SV Ried vs SK Rapid",
+    "start": "2026-08-09T17:00",
+    "venue": "BWT X Oberösterreichische Arena",
+    "city": "Wien",
+    "category": "Bundesliga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "2"
+    }
+  },
+  {
+    "source": "skrapid",
+    "source_id": "9571",
+    "url": "https://www.skrapid.at/teams/spielplan",
+    "title": "SK Rapid vs ASK Voitsberg",
+    "start": "2026-08-08T15:30",
+    "venue": "Allianz Stadion",
+    "city": "Wien",
+    "category": "2. Liga",
+    "status": "scheduled",
+    "extra": {
+      "matchday": "2"
+    }
+  }
+]

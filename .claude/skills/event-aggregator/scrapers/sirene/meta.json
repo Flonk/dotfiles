@@ -7,21 +7,28 @@
   "covers": [
     "contemporary opera"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 5,
+    "required_fill": {
+      "venue": true,
+      "district": true,
+      "address": true,
+      "category": true,
+      "price_min": false,
+      "description": false
+    },
+    "canary": "Jugendstiltheater"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Tiny company site, no ld+json/API. Only ever has one current production announced (found via /projekte/ nav, links with year >= current-1); one record per listed performance date/time. No ticket price on site (owa-wien.at handles ticketing) so price stays null.",
   "schedule": {
     "cadence": "weekly",
-    "horizon_days": 90,
+    "horizon_days": 400,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 7
   }
 }

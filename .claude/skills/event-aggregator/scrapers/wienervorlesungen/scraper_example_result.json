@@ -1,0 +1,18 @@
+[
+  {
+    "source": "wienervorlesungen",
+    "source_id": "2609_ian-mcewan-vienna-humanities-festival",
+    "url": "https://vorlesungen.wien.gv.at/2609_ian-mcewan-vienna-humanities-festival/",
+    "title": "WHAT WE CAN KNOW…AND WHAT WE CAN’T!",
+    "start": "2026-09-26",
+    "venue": "Wiener Rathaus",
+    "district": 1010,
+    "city": "Wien",
+    "category": "Vorlesung",
+    "description": "WHAT WE CAN KNOW…AND WHAT WE CAN’T! — Vortrag von Ian McEwan",
+    "extra": {
+      "speaker": "Ian McEwan",
+      "livestream": true
+    }
+  }
+]

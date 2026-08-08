@@ -8,21 +8,25 @@
     "electronic",
     "experimental"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 6,
+    "required_fill": {
+      "title": 1.0,
+      "venue": 1.0,
+      "district": 1.0
+    },
+    "canary": "copilot-promotion"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Uses the site's own Copilot Events REST API (wp-json/copilot-promotion/v1/promotions), returned unpaginated in one call (12 upcoming shows at build time, spanning Sep-Dec 2026 - that's the site's real publishing horizon, not a horizon_days artifact). No structured price field; some descriptions mention door prices/donations in free text but that's not reliable enough to parse into price_min, so it stays null throughout. category is always null from this API. Detail URL is reconstructed as https://rhiz.wien/?copilot-slug=<slug> per the plugin's own JS routing.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
-    "basis": "prior",
+    "basis": "measured",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 9
   }
 }

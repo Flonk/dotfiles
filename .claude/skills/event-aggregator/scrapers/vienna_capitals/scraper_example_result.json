@@ -1,0 +1,766 @@
+[
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-08-21-hc-slovan-bratislava-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "HC Slovan Bratislava vs Vienna Capitals",
+    "start": "2026-08-21T17:30",
+    "venue": "Budvar Aréna",
+    "city": "Wien",
+    "category": "Pre-Season - Energie AG Motor Cup in České Budějovice",
+    "extra": {
+      "home_away": "away",
+      "game_type": "7",
+      "home_team": "HC Slovan Bratislava",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-08-22-hc-motor-esk-bud-jovice-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "HC Motor České Budějovice vs Vienna Capitals",
+    "start": "2026-08-22T17:00",
+    "city": "Wien",
+    "category": "Pre-Season - Energie AG Motor Cup in České Budějovice",
+    "extra": {
+      "home_away": "away",
+      "game_type": "7",
+      "home_team": "HC Motor České Budějovice",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-08-26-vienna-capitals-vs-university-of-saskatchewan-huskies",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs University of Saskatchewan Huskies",
+    "start": "2026-08-26T19:15",
+    "venue": "Heidi Horten-Arena",
+    "city": "Wien",
+    "category": "Pre-Season - WellCard Trophy in Klagenfurt",
+    "extra": {
+      "home_away": "home",
+      "game_type": "7",
+      "home_team": "Vienna Capitals",
+      "away_team": "University of Saskatchewan Huskies"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-08-28-ec-kac-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC-KAC vs Vienna Capitals",
+    "start": "2026-08-28T19:15",
+    "city": "Wien",
+    "category": "Pre-Season - WellCard Trophy in Klagenfurt",
+    "extra": {
+      "home_away": "away",
+      "game_type": "7",
+      "home_team": "EC-KAC",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-08-29-milano-hockey-club-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Milano Hockey Club vs Vienna Capitals",
+    "start": "2026-08-29T16:00",
+    "venue": "Heidi Horten-Arena",
+    "city": "Wien",
+    "category": "Pre-Season - WellCard Trophy in Klagenfurt",
+    "extra": {
+      "home_away": "away",
+      "game_type": "7",
+      "home_team": "Milano Hockey Club",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-05-vienna-capitals-vs-hk-dukla-trencin",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HK Dukla Trencin",
+    "start": "2026-09-05T14:00",
+    "city": "Wien",
+    "category": "Pre-Season",
+    "extra": {
+      "home_away": "home",
+      "game_type": "7",
+      "home_team": "Vienna Capitals",
+      "away_team": "HK Dukla Trencin"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-11-hydro-feh-rv-r-av19-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Hydro Fehérvár AV19 vs Vienna Capitals",
+    "start": "2026-09-11T19:15",
+    "city": "Wien",
+    "category": "Pre-Season",
+    "extra": {
+      "home_away": "away",
+      "game_type": "7",
+      "home_team": "Hydro Fehérvár AV19",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-18-hcb-s-dtirol-alperia-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "HCB Südtirol Alperia vs Vienna Capitals",
+    "start": "2026-09-18T19:45",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "HCB Südtirol Alperia",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-19-hc-tiwag-innsbruck-die-haie-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "HC TIWAG Innsbruck - Die Haie vs Vienna Capitals",
+    "start": "2026-09-19T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "HC TIWAG Innsbruck - Die Haie",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-23-vienna-capitals-vs-hydro-feh-rv-r-av19",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Hydro Fehérvár AV19",
+    "start": "2026-09-23T19:15",
+    "city": "Wien",
+    "category": "Home Opener",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Hydro Fehérvár AV19"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-25-moser-medical-graz99ers-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Moser Medical Graz99ers vs Vienna Capitals",
+    "start": "2026-09-25T18:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Moser Medical Graz99ers",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-09-26-vienna-capitals-vs-milano-hockey-club",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Milano Hockey Club",
+    "start": "2026-09-26T19:15",
+    "city": "Wien",
+    "category": "Season Ticket Holders Night",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Milano Hockey Club"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-02-vienna-capitals-vs-hc-tiwag-innsbruck-die-haie",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HC TIWAG Innsbruck - Die Haie",
+    "start": "2026-10-02T19:15",
+    "city": "Wien",
+    "category": "Caps Wiesn",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "HC TIWAG Innsbruck - Die Haie"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-04-ec-idm-w-rmepumpen-vsv-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC iDM Wärmepumpen VSV vs Vienna Capitals",
+    "start": "2026-10-04T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "EC iDM Wärmepumpen VSV",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-09-ftc-telekom-budapest-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "FTC-Telekom Budapest vs Vienna Capitals",
+    "start": "2026-10-09T18:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "FTC-Telekom Budapest",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-11-vienna-capitals-vs-hc-falkensteiner-pustertal-w-lfe",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HC Falkensteiner Pustertal Wölfe",
+    "start": "2026-10-11T16:00",
+    "city": "Wien",
+    "category": "Kids Day presented by Dreh & Trink",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "HC Falkensteiner Pustertal Wölfe"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-16-ec-kac-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC-KAC vs Vienna Capitals",
+    "start": "2026-10-16T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "EC-KAC",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-17-vienna-capitals-vs-pioneers-vorarlberg",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Pioneers Vorarlberg",
+    "start": "2026-10-17T19:15",
+    "city": "Wien",
+    "category": "Season Ticket Holders Night",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Pioneers Vorarlberg"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-21-steinbach-black-wings-linz-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Steinbach Black Wings Linz vs Vienna Capitals",
+    "start": "2026-10-21T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Steinbach Black Wings Linz",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-25-vienna-capitals-vs-moser-medical-graz99ers",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Moser Medical Graz99ers",
+    "start": "2026-10-25T14:45",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Moser Medical Graz99ers"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-28-ec-red-bull-salzburg-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC Red Bull Salzburg vs Vienna Capitals",
+    "start": "2026-10-28T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "EC Red Bull Salzburg",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-10-30-olimpija-ljubljana-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Olimpija Ljubljana vs Vienna Capitals",
+    "start": "2026-10-30T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Olimpija Ljubljana",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-01-vienna-capitals-vs-hcb-s-dtirol-alperia",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HCB Südtirol Alperia",
+    "start": "2026-11-01T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "HCB Südtirol Alperia"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-13-vienna-capitals-vs-steinbach-black-wings-linz",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Steinbach Black Wings Linz",
+    "start": "2026-11-13T19:15",
+    "city": "Wien",
+    "category": "Ladies Night",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Steinbach Black Wings Linz"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-15-vienna-capitals-vs-ec-kac",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs EC-KAC",
+    "start": "2026-11-15T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "EC-KAC"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-18-vienna-capitals-vs-olimpija-ljubljana",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Olimpija Ljubljana",
+    "start": "2026-11-18T19:15",
+    "city": "Wien",
+    "category": "Movember Night",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Olimpija Ljubljana"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-21-milano-hockey-club-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Milano Hockey Club vs Vienna Capitals",
+    "start": "2026-11-21T17:00",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Milano Hockey Club",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-22-milano-hockey-club-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Milano Hockey Club vs Vienna Capitals",
+    "start": "2026-11-22T17:00",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Milano Hockey Club",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-25-hydro-feh-rv-r-av19-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Hydro Fehérvár AV19 vs Vienna Capitals",
+    "start": "2026-11-25T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Hydro Fehérvár AV19",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-27-vienna-capitals-vs-ftc-telekom-budapest",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs FTC-Telekom Budapest",
+    "start": "2026-11-27T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "FTC-Telekom Budapest"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-11-29-vienna-capitals-vs-ec-red-bull-salzburg",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs EC Red Bull Salzburg",
+    "start": "2026-11-29T16:00",
+    "city": "Wien",
+    "category": "Kids Day",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "EC Red Bull Salzburg"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-02-hc-falkensteiner-pustertal-w-lfe-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "HC Falkensteiner Pustertal Wölfe vs Vienna Capitals",
+    "start": "2026-12-02T19:45",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "HC Falkensteiner Pustertal Wölfe",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-04-ec-kac-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC-KAC vs Vienna Capitals",
+    "start": "2026-12-04T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "EC-KAC",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-06-vienna-capitals-vs-moser-medical-graz99ers",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Moser Medical Graz99ers",
+    "start": "2026-12-06T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Moser Medical Graz99ers"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-11-vienna-capitals-vs-steinbach-black-wings-linz",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Steinbach Black Wings Linz",
+    "start": "2026-12-11T19:15",
+    "city": "Wien",
+    "category": "Students Night",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Steinbach Black Wings Linz"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-16-pioneers-vorarlberg-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Pioneers Vorarlberg vs Vienna Capitals",
+    "start": "2026-12-16T19:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Pioneers Vorarlberg",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-20-vienna-capitals-vs-ec-red-bull-salzburg",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs EC Red Bull Salzburg",
+    "start": "2026-12-20T16:00",
+    "city": "Wien",
+    "category": "Weihnachtsspiel",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "EC Red Bull Salzburg"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-22-olimpija-ljubljana-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Olimpija Ljubljana vs Vienna Capitals",
+    "start": "2026-12-22T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Olimpija Ljubljana",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-26-vienna-capitals-vs-ftc-telekom-budapest",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs FTC-Telekom Budapest",
+    "start": "2026-12-26T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "FTC-Telekom Budapest"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-28-ec-idm-w-rmepumpen-vsv-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC iDM Wärmepumpen VSV vs Vienna Capitals",
+    "start": "2026-12-28T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "EC iDM Wärmepumpen VSV",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2026-12-30-vienna-capitals-vs-ec-kac",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs EC-KAC",
+    "start": "2026-12-30T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "EC-KAC"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-01-hydro-feh-rv-r-av19-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Hydro Fehérvár AV19 vs Vienna Capitals",
+    "start": "2027-01-01T16:00",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Hydro Fehérvár AV19",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-03-ftc-telekom-budapest-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "FTC-Telekom Budapest vs Vienna Capitals",
+    "start": "2027-01-03T15:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "FTC-Telekom Budapest",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-06-vienna-capitals-vs-olimpija-ljubljana",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Olimpija Ljubljana",
+    "start": "2027-01-06T16:00",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Olimpija Ljubljana"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-08-moser-medical-graz99ers-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Moser Medical Graz99ers vs Vienna Capitals",
+    "start": "2027-01-08T18:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Moser Medical Graz99ers",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-10-vienna-capitals-vs-hc-falkensteiner-pustertal-w-lfe",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HC Falkensteiner Pustertal Wölfe",
+    "start": "2027-01-10T16:00",
+    "city": "Wien",
+    "category": "Kids Day presented by Dreh & Trink",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "HC Falkensteiner Pustertal Wölfe"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-15-vienna-capitals-vs-hc-tiwag-innsbruck-die-haie",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HC TIWAG Innsbruck - Die Haie",
+    "start": "2027-01-15T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "HC TIWAG Innsbruck - Die Haie"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-17-pioneers-vorarlberg-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Pioneers Vorarlberg vs Vienna Capitals",
+    "start": "2027-01-17T17:00",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "Pioneers Vorarlberg",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-20-vienna-capitals-vs-ec-idm-w-rmepumpen-vsv",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs EC iDM Wärmepumpen VSV",
+    "start": "2027-01-20T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "EC iDM Wärmepumpen VSV"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-24-vienna-capitals-vs-hcb-s-dtirol-alperia",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs HCB Südtirol Alperia",
+    "start": "2027-01-24T17:30",
+    "city": "Wien",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "HCB Südtirol Alperia"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-27-hc-tiwag-innsbruck-die-haie-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "HC TIWAG Innsbruck - Die Haie vs Vienna Capitals",
+    "start": "2027-01-27T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "HC TIWAG Innsbruck - Die Haie",
+      "away_team": "Vienna Capitals"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-01-29-vienna-capitals-vs-hydro-feh-rv-r-av19",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "Vienna Capitals vs Hydro Fehérvár AV19",
+    "start": "2027-01-29T19:15",
+    "city": "Wien",
+    "category": "Students Night presented by Wien Energie",
+    "extra": {
+      "home_away": "home",
+      "game_type": "1",
+      "home_team": "Vienna Capitals",
+      "away_team": "Hydro Fehérvár AV19"
+    }
+  },
+  {
+    "source": "vienna_capitals",
+    "source_id": "2027-02-03-ec-red-bull-salzburg-vs-vienna-capitals",
+    "url": "https://www.vienna-capitals.at/spielplan",
+    "title": "EC Red Bull Salzburg vs Vienna Capitals",
+    "start": "2027-02-03T19:15",
+    "city": "Wien",
+    "extra": {
+      "home_away": "away",
+      "game_type": "1",
+      "home_team": "EC Red Bull Salzburg",
+      "away_team": "Vienna Capitals"
+    }
+  }
+]

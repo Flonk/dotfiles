@@ -8,21 +8,25 @@
     "rock",
     "indie"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 40,
+    "required_fill": {
+      "venue": 1.0,
+      "district": 1.0,
+      "address": 1.0
+    },
+    "canary": "wpgb-ajax=action"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Uses the WP Grid Builder admin-ajax endpoint (POST /?wpgb-ajax=refresh&_mehr_laden=<offset>, form field wpgb=<json grid settings>) to page through the homepage 'upcoming events' grid in batches of 12; each event card then gets its own detail page fetched for exact Beginn time, price/tickets, and description. Single fixed venue (Hauffgasse 26, 1110 Wien) for every event. price_min is 0 only when the card/page literally says 'Eintritt frei'; ticketed shows never show a price on-site (only an oeticket link) so price_min/price_text stay null. category is not published anywhere on the site, always null. Site publishes ~14 months out (91 events through Oct 2027 at build time); with the default 90-day horizon only 57 of those are emitted.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
-    "basis": "prior",
+    "basis": "measured",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 57
   }
 }

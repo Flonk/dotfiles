@@ -1,0 +1,233 @@
+[
+  {
+    "source": "fk_austria",
+    "source_id": "2026-08-09-austria-wien-lask",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs LASK",
+    "start": "2026-08-09T19:00",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-08-13-austria-wien-beitar-jerusalem",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Beitar Jerusalem",
+    "start": "2026-08-13T20:30",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "UECL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-08-16-hartberg-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Hartberg vs Austria Wien",
+    "start": "2026-08-16T17:00",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-08-23-austria-wien-wsg-tirol",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs WSG Tirol",
+    "start": "2026-08-23T17:00",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-08-30-salzburg-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Salzburg vs Austria Wien",
+    "start": "2026-08-30T19:00",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-09-05-fcm-traiskirchen-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "FCM Traiskirchen vs Austria Wien",
+    "start": "2026-09-05T17:30",
+    "city": "Wien",
+    "category": "ÖFB Cup"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-09-12-austria-wien-sc-austria-lustenau",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs SC Austria Lustenau",
+    "start": "2026-09-12",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-09-19-grazer-ak-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Grazer AK vs Austria Wien",
+    "start": "2026-09-19",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-10-10-austria-wien-sturm-graz",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Sturm Graz",
+    "start": "2026-10-10",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-10-17-ried-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Ried vs Austria Wien",
+    "start": "2026-10-17",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-10-24-scr-altach-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "SCR Altach vs Austria Wien",
+    "start": "2026-10-24",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-10-31-austria-wien-rapid",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Rapid",
+    "start": "2026-10-31",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-11-06-wsg-tirol-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "WSG Tirol vs Austria Wien",
+    "start": "2026-11-06",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-11-21-austria-wien-salzburg",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Salzburg",
+    "start": "2026-11-21",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-11-28-austria-wien-wolfsberger-ac",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Wolfsberger AC",
+    "start": "2026-11-28",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-12-05-sturm-graz-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Sturm Graz vs Austria Wien",
+    "start": "2026-12-05",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2026-12-12-lask-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "LASK vs Austria Wien",
+    "start": "2026-12-12",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2027-01-23-austria-wien-grazer-ak",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Grazer AK",
+    "start": "2027-01-23",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2027-01-30-rapid-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Rapid vs Austria Wien",
+    "start": "2027-01-30",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2027-02-06-austria-wien-scr-altach",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs SCR Altach",
+    "start": "2027-02-06",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2027-02-13-austria-wien-hartberg",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Hartberg",
+    "start": "2027-02-13",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2027-02-20-sc-austria-lustenau-austria-wien",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "SC Austria Lustenau vs Austria Wien",
+    "start": "2027-02-20",
+    "city": "Wien",
+    "category": "ÖBL"
+  },
+  {
+    "source": "fk_austria",
+    "source_id": "2027-02-27-austria-wien-ried",
+    "url": "https://www.fk-austria.at/teams/profis/spielplan",
+    "title": "Austria Wien vs Ried",
+    "start": "2027-02-27",
+    "venue": "Generali-Arena",
+    "district": 1100,
+    "city": "Wien",
+    "category": "ÖBL"
+  }
+]

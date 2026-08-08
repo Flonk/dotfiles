@@ -7,21 +7,25 @@
   "covers": [
     "football"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 16,
+    "required_fill": {
+      "url": 1.0,
+      "title": 1.0,
+      "category": 0.9
+    },
+    "canary": "game-schedule-row"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered spielplan table (Craft CMS) covers roughly Jun 2026 to Feb 2027 (~6 months ahead, past the 180d horizon). Past-and-future matches are mixed in one table; future ones are identified by goals '-'/'-' and filtered to start>=today. Kickoff time '01:00' is a site placeholder for TBD time, so those emit date-only. Home venue (Generali-Arena, 1100) inferred from FAK logo appearing first in the two-team slot, which reliably tracks home/away; away venue left null. Category is the competition icon's alt text (ÖBL/ÖFB Cup/UECL) with the icon-color suffix stripped; the generic ball icon used for pre-season friendlies has no real competition name so category is null there (all fall outside the current horizon anyway).",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 23
   }
 }

@@ -8,7 +8,7 @@
     "electronic",
     "club"
   ],
-  "status": "unbuilt",
+  "status": "dead",
   "method": null,
   "expect": {
     "min_records": null,
@@ -16,7 +16,7 @@
     "canary": null
   },
   "last_built": null,
-  "notes": null,
+  "notes": "https://werk.wien/ 302-redirects to https://web.werk.wien/ which is the marketing site of a Vienna web-design/SEO agency ('Webdesign, Webshops und Suchmaschinenoptimierung aus Wien') - no event listings, no calendar, no ld+json Event data, nothing music/club related. Its only ld+json is WebPage/ImageObject portfolio schema and a Contao Page node. This is not the 'Das Werk' electronic/club venue implied by tier/group/covers; the domain appears to be squatted/owned by an unrelated agency. Tried to locate the real venue site (werk.club is a parked-domain-for-sale lander, werk.at is an unrelated personal Hugo blog, dwerk.at is a stub, werk-klub.at/werkclub.at/das-werk.at/werk-wien.at/werkclub.wien/werk-club.wien/das-werk.wien/werk.wien.at all fail to resolve) and via search engines (Google/Bing/DuckDuckGo/Ecosia/Mojeek all blocked bot traffic before returning usable results). No usable event data found at the configured url or any plausible alternate; not fabricating one. Re-check manually if a correct URL for this venue is identified.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
