@@ -1,0 +1,19 @@
+{
+  "slug": "ait",
+  "name": "AIT Austrian Institute of Technology",
+  "url": "https://www.ait.ac.at/news-events/events",
+  "tier": "B",
+  "group": "academic",
+  "status": "built",
+  "method": "api",
+  "last_built": "2026-08-08",
+  "expect": {
+    "min_records": 2,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0
+    },
+    "canary": "tx_aitnewsfeatures_newsapi"
+  },
+  "notes": "No JSON-LD on the live page despite the tier note (only a BreadcrumbList); the events list is a jQuery 'load more' widget hitting /index.php?id=2580&tx_aitnewsfeatures_newsapi[...]. Only 3 upcoming events exist on the site at build time -- confirmed genuine (amount=100 still returns 3), not a scraper bug. Teaser gives a coarse day/month range plus a unix timestamp (= the END date); scrape.py combines those for start/end and then enriches from each detail page's free-text 'Datum:'/'Ort:'/'Veranstaltungsort' phrasing for a precise start time and venue where the site states one. No category or price is ever published."
+}

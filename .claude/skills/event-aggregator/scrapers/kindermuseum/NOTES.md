@@ -17,8 +17,11 @@
   mostly irrelevant since there's nothing to paginate.
 - The server is badly flaky: needs a JSESSIONID cookie from an initial redirect, and
   a large fraction of requests just hang for 1-2+ minutes with no data. `scrape.py`
-  builds its own `urllib` opener with a `CookieJar` and fetches with a 20s timeout and
-  2 retries per page; a page that never answers is skipped for that run (yield varies,
-  5-6 of 6 pages typically succeed).
+  builds its own `urllib` opener with a `CookieJar`. `fetch_page` retries each hub
+  page up to 3x (15s timeout per attempt, 2s/4s backoff); if a page still doesn't
+  answer it *raises* rather than returning `None` - a hang is no longer silently
+  indistinguishable from "fewer events this week". A hung page now fails the whole
+  run (non-zero exit, no output emitted) instead of quietly shipping 5/6 pages worth
+  of data as if it were complete.
 - Price: first `€`/`EUR` amount in the article text, else `0` if "Eintritt frei" is
   present, else null.

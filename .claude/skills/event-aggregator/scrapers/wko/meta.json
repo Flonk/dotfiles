@@ -14,12 +14,15 @@
     "min_records": 1200,
     "required_fill": {
       "url": 1.0,
-      "venue": 0.7
+      "venue": 0.8,
+      "city": 0.63,
+      "district": 0.09,
+      "address": 0.08
     },
     "canary": "card-event"
   },
   "last_built": "2026-08-08",
-  "notes": "The /veranstaltungen landing page is JS-rendered and carries no listing; the real data is /veranstaltungen/kalender's list-card markup, fed by POST https://www.wko.at/api/event/filter (JSON body: count, offsetCurrent, aktuelle:true, place:'Österreich', ...). Response elements are pre-rendered HTML card fragments (same markup as kalender.html), no auth needed. Sorted roughly ascending by start date, so pagination stops once total is exhausted (whole dataset is only ~1865 nationwide upcoming events spanning to ~May 2027, well past the 180d horizon knob, so it's always fetched in full rather than horizon-limited - cheap, ~10 requests at count=200 each). Nationwide (Austria), not Vienna-only, matching the aurena precedent: district/city only populate for the ~11%/63% of events with an Austrian postal code in the card (foreign trade fairs and many in-person events show only a city name or nothing). category and price_min are never on the list card (only on each detail page's ld+json, not fetched to keep request volume sane) so both are always null.",
+  "notes": "The /veranstaltungen landing page is JS-rendered and carries no listing; the real data is /veranstaltungen/kalender's list-card markup, fed by POST https://www.wko.at/api/event/filter (JSON body: count, offsetCurrent, aktuelle:true, place:'Österreich', ...). Response elements are pre-rendered HTML card fragments (same markup as kalender.html), no auth needed. Sorted roughly ascending by start date, so pagination stops once total is exhausted (whole dataset is only ~1865 nationwide upcoming events spanning to ~May 2027, well past the 180d horizon knob, so it's always fetched in full rather than horizon-limited - cheap, ~10 requests at count=200 each). Nationwide (Austria), not Vienna-only, matching the aurena precedent. Location parsing is two-tier: (1) the listing pin-text is parsed for both Austrian and foreign 'PLZ City' shapes plus bare city names, filtering out placeholders ('- -', 'MS Teams', ...) and bare federal-state names, giving city on ~67% and Vienna district on ~11%; (2) for the ~24% of records where the listing card has no location tag at all, or where it resolved to a Vienna district (whose card text never carries a street), the detail page's ld+json Place/address is fetched concurrently (8 workers, retried up to 4x) to fill venue, street address, and any city/district it structurally provides - this is the only source of `address` (Vienna only, ~11%: WKO never structures a street for non-Austrian or ambiguous-city events, it only gives free-text venue prose like 'JIExpo Kemayoran, Jakarta', which is deliberately NOT parsed into city to avoid conflating venue/institution names with town names). The wko.at API rate-limits detail-page bursts (HTTP 429) above roughly 10-15 req/s sustained; scoping detail fetches to only the ambiguous ~450 records (not all 1800) keeps the run comfortably under the limiter and finishes in well under a minute. category and price_min are never present anywhere fetched, so both stay null.",
   "schedule": {
     "cadence": "daily",
     "horizon_days": 180,

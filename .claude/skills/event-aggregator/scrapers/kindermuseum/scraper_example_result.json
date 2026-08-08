@@ -1,6 +1,25 @@
 [
   {
     "source": "kindermuseum",
+    "source_id": "1770495443226",
+    "url": "https://www.kindermuseum.at/zoom_programmangebot/zoom_mitmachausstellung",
+    "title": "DONAURAUSCHEN & FLUSSGEFLÜSTER",
+    "start": "2026-08-08",
+    "venue": "ZOOM Kindermuseum",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "price_min": 6.5,
+    "price_text": "€ 6,50",
+    "category": "Ausstellung",
+    "description": "Für Privatbesucher*innen & Schul- und Hortgruppen DONAURAUSCHEN & FLUSSGEFLÜSTER Ausstellung für Kinder von 6 bis 12 Jahren Alter Für Kinder von 6 bis 12 Jahren (1. - 6. Schulstufe ) Beginnzeiten Di. - Do.: 10:30, 12:30 Fr. - So.: 10:00*, 12:00*, 14:45, 16:45 * Geschwister Termine Beim Geschwistertermin können jüngere Geschwister (unter 6 Jahre) mit ihren älteren Geschwistern gemeinsam die Ausstellung besuchen. Dauer: 90 Minuten Preis Für Privatbesucher*innen € 6,50 pro Person Für Institutionen Eintritt frei! Sprudelnder Quellbach, mächtiger Strom, weitverzweigtes Delta am Schwarzen Meer - die",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "kindermuseum",
     "source_id": "1757370821789-2026-10-28T10:00",
     "url": "https://www.kindermuseum.at/zoom_programmangebot/zoom_atelier/atelier-abos",
     "title": "Kunstwerkstatt Herbst 2026",

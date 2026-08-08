@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { deriveEnd } from "../db.ts";
+import { deriveEnd, usableEnd } from "../db.ts";
 import { EVENTS_JSON, SCRAPERS } from "../paths.ts";
 import type { EventRecord } from "../schema.ts";
 import { encodeNonAscii } from "../url.ts";
@@ -19,10 +19,14 @@ export function load(): Merged[] {
         .update(`${r.source}:${r.source_id}`, "utf8")
         .digest("hex")
         .slice(0, 12);
-      const end = deriveEnd(r);
-      if (end) {
-        r.end = end;
-        r.extra = { ...(r.extra || {}), end_derived: true };
+      const published = usableEnd(r.start, r.end);
+      r.end = published;
+      if (!published) {
+        const end = deriveEnd({ ...r, end: null });
+        if (end) {
+          r.end = end;
+          r.extra = { ...(r.extra || {}), end_derived: true };
+        }
       }
       if (r.image) r.image = encodeNonAscii(r.image);
       out.push({ ...r, uid });

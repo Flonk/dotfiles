@@ -1,6 +1,7 @@
 import datetime
 import http.cookiejar
 import re
+import time
 import urllib.request
 
 import ea
@@ -10,6 +11,10 @@ SLUG = "kindermuseum"
 VENUE = "ZOOM Kindermuseum"
 DISTRICT = 1070
 ADDRESS = "Museumsplatz 1, 1070 Wien"
+
+FETCH_TIMEOUT = 15
+FETCH_RETRIES = 3
+FETCH_BACKOFF = (2, 4)
 
 # The site has no central events calendar: each "programm" section has one
 # standing page describing whatever is currently on offer there. A few of
@@ -33,16 +38,27 @@ def make_opener():
     return urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 
 
-def fetch_page(opener, url, timeout=20, retries=2):
-    req = urllib.request.Request(url, headers={
-        "User-Agent": ea.UA, "Accept-Language": "de-AT,de;q=0.9,en;q=0.8"})
-    for _ in range(retries):
+def fetch_page(opener, url, timeout=FETCH_TIMEOUT, retries=FETCH_RETRIES):
+    """Fetch one hub page, retrying with backoff on the server's frequent hangs.
+
+    A hang here is indistinguishable from "the museum genuinely has fewer
+    events this week" once silently swallowed, so after exhausting retries
+    this raises instead of returning None - a failed run is safer than one
+    that quietly emits a truncated record set.
+    """
+    last_exc = None
+    for attempt in range(retries):
+        req = urllib.request.Request(url, headers={
+            "User-Agent": ea.UA, "Accept-Language": "de-AT,de;q=0.9,en;q=0.8"})
         try:
             with opener.open(req, timeout=timeout) as r:
                 return r.read().decode("utf-8", "replace")
-        except Exception:
-            continue
-    return None
+        except Exception as e:
+            last_exc = e
+            if attempt + 1 < retries:
+                time.sleep(FETCH_BACKOFF[min(attempt, len(FETCH_BACKOFF) - 1)])
+    raise RuntimeError(
+        f"kindermuseum: giving up on {url} after {retries} attempts: {last_exc}")
 
 
 def extract_article(html):
@@ -124,8 +140,6 @@ def main():
     for path, category in PAGES:
         url = BASE + path
         html = fetch_page(opener, url)
-        if not html:
-            continue
         chunk = extract_article(html)
         if not chunk:
             continue

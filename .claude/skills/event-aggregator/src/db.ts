@@ -205,14 +205,31 @@ export function deriveEnd(rec: EventRecord): string | null {
   return now(d).slice(0, 16);
 }
 
+/**
+ * Drop an end that lands before its own start.
+ *
+ * 14 records across six sources publish a timed start with a date-only end on
+ * the same day - "2026-09-17T13:30" to "2026-09-17" - which reads as ending at
+ * midnight, ten hours before it began. It is the site describing the day the
+ * thing happens, not the moment it stops. Meaningless either way, and worse
+ * than absent: ranking derives span from `end - start`, so a negative span is
+ * arithmetic on nonsense.
+ */
+export function usableEnd(start: string, end: string | null | undefined): string | null {
+  if (!end) return null;
+  const k = (s: string) => (s.includes("T") ? s : `${s}T00:00`);
+  return k(end) < k(start) ? null : end;
+}
+
 export function eventId(rec: EventRecord): string {
   return `${rec.source}-${rec.source_id}-${rec.start}`;
 }
 
 export function toRow(rec: EventRecord): Row {
   const extra: Record<string, unknown> = { ...(rec.extra || {}) };
-  const end = rec.end || deriveEnd(rec);
-  if (end && !rec.end) extra["end_derived"] = true;
+  const published = usableEnd(rec.start, rec.end);
+  const end = published ?? deriveEnd({ ...rec, end: null });
+  if (end && !published) extra["end_derived"] = true;
 
   const row: Row = {
     id: eventId(rec),

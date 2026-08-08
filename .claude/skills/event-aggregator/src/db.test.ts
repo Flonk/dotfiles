@@ -66,6 +66,24 @@ test("deriveEnd rolls over midnight", () => {
   );
 });
 
+test("an end before its own start is dropped", () => {
+  // A timed start with a date-only end on the same day reads as ending at
+  // midnight, hours before it began. Seen on ait, klimtvilla, wko and others.
+  assert.equal(db.usableEnd("2026-09-17T13:30", "2026-09-17"), null);
+  assert.equal(db.usableEnd("2026-08-08T13:00", "2026-08-08"), null);
+  // but a later date-only end is a real multi-day run
+  assert.equal(db.usableEnd("2026-09-17T13:30", "2026-09-18"), "2026-09-18");
+  assert.equal(db.usableEnd("2026-09-17", "2026-09-17"), "2026-09-17");
+  assert.equal(db.usableEnd("2026-09-17T13:30", "2026-09-17T15:00"), "2026-09-17T15:00");
+  assert.equal(db.usableEnd("2026-09-17", null), null);
+});
+
+test("a dropped end still lets a runtime-derived one through", () => {
+  const row = db.toRow(rec({ end: "2026-08-08", extra: { duration_min: 90 } }));
+  assert.equal(row["end_at"], "2026-08-08T22:00");
+  assert.match(String(row["extra"]), /"end_derived": true/);
+});
+
 test("toRow marks a derived end so it is distinguishable from a published one", () => {
   const row = db.toRow(rec({ extra: { duration_min: 90 } }));
   assert.equal(row["end_at"], "2026-08-08T22:00");

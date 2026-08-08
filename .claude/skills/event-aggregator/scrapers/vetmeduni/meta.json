@@ -1,0 +1,19 @@
+{
+  "slug": "vetmeduni",
+  "name": "Vetmeduni Wien",
+  "url": "https://www.vetmeduni.ac.at/universitaet/infoservice/veranstaltungen",
+  "tier": "B",
+  "group": "academic",
+  "status": "built",
+  "method": "html",
+  "last_built": "2026-08-08",
+  "expect": {
+    "min_records": 12,
+    "required_fill": {
+      "category": 1.0,
+      "end": 0.9
+    },
+    "canary": "news-headline-link"
+  },
+  "notes": "Original url in this file 404'd (no JSON-LD, no de/ prefix); real listing is /universitaet/infoservice/veranstaltungen, paginated ~6/page via /page-N, sorted by date ascending. Detail pages have labelled 'Ort:'/'Veranstaltungsbeginn:'/'Veranstaltungsende:'/'Veranstaltungskategorie:' text that scrape.py parses; some entries (online seminars, internal ceremonies) omit 'Ort:' so venue fill is ~60%, never guessed."
+}
