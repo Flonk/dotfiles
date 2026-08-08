@@ -7,21 +7,27 @@
   "covers": [
     "readings"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 18,
+    "required_fill": {
+      "venue": 0.95,
+      "district": 0.95,
+      "city": 0.95,
+      "address": 0.95,
+      "description": 0.9
+    },
+    "canary": "recitals-entry two-months"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "/programm sidebar list gives all upcoming Literaturwerkstatt readings in one fetch (no pagination needed); each detail page at /programm/recital/<slug> has a date-test=\"YYYY-MM-DD HH:MM:SS\" attribute for exact start. Site currently only publishes ~2.5 months ahead (through end of Oct 2026), well inside the 180d horizon. No price info anywhere on site -> price_min/price_text always null. category = h3.event-hashtag (series name, e.g. \"124. AUTOR*INNENPROJEKT\"), empty for ~46% of events -> null. Single fixed venue (Schönlaterngasse 9, 1010 Wien) hardcoded. Musikwerkstatt (music) events live under a different section and are intentionally not scraped since covers=readings.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 26
   }
 }

@@ -1,0 +1,74 @@
+[
+  {
+    "source": "leopold",
+    "source_id": "155",
+    "url": "https://www.leopoldmuseum.org/de/ausstellungen/155/herbert-boeckl-hans-josephsohn",
+    "title": "HERBERT BOECKL – HANS JOSEPHSOHN",
+    "start": "2026-07-24",
+    "end": "2027-01-10",
+    "venue": "Leopold Museum",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "description": "Archetypen des Figuralen",
+    "status": "scheduled"
+  },
+  {
+    "source": "leopold",
+    "source_id": "152",
+    "url": "https://www.leopoldmuseum.org/de/ausstellungen/152/premiere",
+    "title": "PREMIERE!",
+    "start": "2026-04-24",
+    "end": "2026-10-11",
+    "venue": "Leopold Museum",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "description": "Die Sammlung der Oesterreichischen Nationalbank",
+    "status": "scheduled"
+  },
+  {
+    "source": "leopold",
+    "source_id": "107",
+    "url": "https://www.leopoldmuseum.org/de/ausstellungen/107/wien-1900",
+    "title": "WIEN 1900",
+    "start": "2019-03-16",
+    "venue": "Leopold Museum",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "description": "Aufbruch in die Moderne",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "leopold",
+    "source_id": "153",
+    "url": "https://www.leopoldmuseum.org/de/ausstellungen/153/neu-sachlich",
+    "title": "NEU. SACHLICH.",
+    "start": "2026-11-13",
+    "end": "2027-02-28",
+    "venue": "Leopold Museum",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "description": "Fotografie der 1920er- und 1930er-Jahre",
+    "status": "scheduled"
+  },
+  {
+    "source": "leopold",
+    "source_id": "154",
+    "url": "https://www.leopoldmuseum.org/de/ausstellungen/154/modern-fashion",
+    "title": "MODERN FASHION",
+    "start": "2027-02-26",
+    "end": "2027-06-27",
+    "venue": "Leopold Museum",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "description": "Wiener Werkstätte & Paris",
+    "status": "scheduled"
+  }
+]

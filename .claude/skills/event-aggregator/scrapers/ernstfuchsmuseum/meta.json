@@ -8,7 +8,7 @@
     "architecture",
     "art"
   ],
-  "status": "unbuilt",
+  "status": "dead",
   "method": null,
   "expect": {
     "min_records": null,
@@ -16,7 +16,7 @@
     "canary": null
   },
   "last_built": null,
-  "notes": null,
+  "notes": "No usable event data: homepage has no ld+json/calendar, wp-json posts endpoint has only 2 ever-published posts ('Aktuelles') and both are bare image+title with no exhibition date range in the body, only a post-published date. The regiondo.at ticket widget (linked from the site) lists a single undated general-admission ticket, no dated events. Museum is effectively a permanent private collection with occasional undated special-exhibition announcements; nothing here maps to a dated occurrence without fabricating dates.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,

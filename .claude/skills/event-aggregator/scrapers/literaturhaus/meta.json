@@ -7,21 +7,27 @@
   "covers": [
     "readings"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 12,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "category": 0.9
+    },
+    "canary": "class=\"date-info\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Server-rendered .event blocks on /programm/veranstaltungen/, paginated (?/seite/N/); site only publishes ~2.5 months ahead (through late Oct 2026 as of Aug 2026), no price info anywhere on listing or detail pages.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 90,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 18
   }
 }

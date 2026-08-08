@@ -1,0 +1,49 @@
+[
+  {
+    "source": "josephinum",
+    "source_id": "pernkopf",
+    "url": "https://www.josephinum.ac.at/veranstaltungen/detail/pernkopf/",
+    "title": "Pernkopf & Co – Anatomie während der NS-Zeit und ihre Relevanz für die Gegenwart",
+    "start": "2026-11-09T09:00",
+    "venue": "Josephinum",
+    "district": 1090,
+    "city": "Wien",
+    "address": "Währinger Straße 25, 1090 Wien",
+    "description": "Eintägiges Symposium mit Beiträgen zur Geschichte der Anatomie im Nationalsozialismus",
+    "status": "scheduled"
+  },
+  {
+    "source": "josephinum",
+    "source_id": "dauerausstellung",
+    "url": "https://www.josephinum.ac.at/aktuelle-ausstellungen/detail/dauerausstellung/",
+    "title": "Dauerausstellung",
+    "start": "2026-08-08",
+    "venue": "Josephinum",
+    "district": 1090,
+    "city": "Wien",
+    "address": "Währinger Straße 25, 1090 Wien",
+    "category": "Ausstellung",
+    "description": "Präsentiert werden die anatomische Wachsmodelle aus dem 18. Jahrhundert sowie die Geschichte Josephs II., jene der I. und II. Wiener Medizinischen Schule bis hin zu den dunkelsten Seiten unseres Landes im Nationalsozialismus. Ebenso wird die heutige Hightech-Medizin präsentiert.",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "josephinum",
+    "source_id": "die-seligmann-fragmente-und-beethovens-aerzte-1",
+    "url": "https://www.josephinum.ac.at/aktuelle-ausstellungen/detail/die-seligmann-fragmente-und-beethovens-aerzte-1/",
+    "title": "Die \"Seligmann-Fragmente\" und Beethovens Ärzte",
+    "start": "2023-10-25",
+    "venue": "Josephinum",
+    "district": 1090,
+    "city": "Wien",
+    "address": "Währinger Straße 25, 1090 Wien",
+    "category": "Ausstellung",
+    "description": "Die mutmaßlichen Schädelteile von Ludwig van Beethoven werden erstmals im Josephinum präsentiert.",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  }
+]

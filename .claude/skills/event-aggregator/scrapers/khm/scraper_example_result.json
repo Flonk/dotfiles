@@ -1,0 +1,220 @@
+[
+  {
+    "source": "khm",
+    "source_id": "canaletto-bellotto",
+    "url": "https://www.khm.at/ausstellungen/canaletto-bellotto",
+    "title": "Canaletto & Bellotto",
+    "start": "2026-03-24",
+    "end": "2026-09-06",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz, 1010 Wien",
+    "price_min": 22.0,
+    "price_text": "Ab 22,00€",
+    "category": "Sonderausstellungen",
+    "status": "scheduled"
+  },
+  {
+    "source": "khm",
+    "source_id": "aegyptisch-orientalische-sammlung",
+    "url": "https://www.khm.at/ausstellungen/aegyptisch-orientalische-sammlung",
+    "title": "Ägyptisch-Orientalische Sammlung",
+    "start": "2026-08-08",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Dauerausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "antikensammlung",
+    "url": "https://www.khm.at/ausstellungen/antikensammlung",
+    "title": "Antikensammlung",
+    "start": "2026-08-08",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Dauerausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "gemaeldegalerie",
+    "url": "https://www.khm.at/ausstellungen/gemaeldegalerie",
+    "title": "Gemäldegalerie",
+    "start": "2026-08-08",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Dauerausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "kunstkammer-wien",
+    "url": "https://www.khm.at/ausstellungen/kunstkammer-wien",
+    "title": "Kunstkammer Wien",
+    "start": "2026-08-08",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Dauerausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "muenzkabinett",
+    "url": "https://www.khm.at/ausstellungen/muenzkabinett",
+    "title": "Münzkabinett",
+    "start": "2026-08-08",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Dauerausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "gesamtkunstwerk-kunsthistorisches-museum",
+    "url": "https://www.khm.at/ausstellungen/gesamtkunstwerk-kunsthistorisches-museum",
+    "title": "Gesamtkunstwerk Kunsthistorisches Museum",
+    "start": "2026-08-08",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Dauerausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "kopf-kragen-muenzen-machen-mode",
+    "url": "https://www.khm.at/ausstellungen/kopf-kragen-muenzen-machen-mode",
+    "title": "Kopf & Kragen. Münzen machen Mode",
+    "start": "2025-11-11",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Sonderausstellungen",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "my-story-antike-frauenportraets-und-ihr-nachleben",
+    "url": "https://www.khm.at/ausstellungen/my-story-antike-frauenportraets-und-ihr-nachleben",
+    "title": "My Story – Antike Frauenporträts und ihr Nachleben",
+    "start": "2026-08-08",
+    "end": "2026-09-20",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Vitrine EXTRA #8",
+    "status": "scheduled"
+  },
+  {
+    "source": "khm",
+    "source_id": "sammlung-alter-musikinstrumente",
+    "url": "https://www.khm.at/ausstellungen/sammlung-alter-musikinstrumente",
+    "title": "Sammlung alter Musikinstrumente",
+    "start": "2026-08-08",
+    "venue": "Neue Hofburg",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Heldenplatz",
+    "category": "Dauerausstellungen Neue Hofburg",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "hofjagd-und-ruestkammer",
+    "url": "https://www.khm.at/ausstellungen/hofjagd-und-ruestkammer",
+    "title": "Hofjagd- und Rüstkammer",
+    "start": "2026-08-08",
+    "venue": "Neue Hofburg",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Heldenplatz",
+    "category": "Dauerausstellungen Neue Hofburg",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "ephesos-museum",
+    "url": "https://www.khm.at/ausstellungen/ephesos-museum",
+    "title": "Ephesos Museum",
+    "start": "2026-08-08",
+    "venue": "Neue Hofburg",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Heldenplatz",
+    "category": "Dauerausstellungen Neue Hofburg",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "khm",
+    "source_id": "tatort-ephesos",
+    "url": "https://www.khm.at/ausstellungen/tatort-ephesos",
+    "title": "Tatort Ephesos",
+    "start": "2026-10-20",
+    "end": "2027-03-29",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Vorschau",
+    "status": "scheduled"
+  },
+  {
+    "source": "khm",
+    "source_id": "bernini-malerei-und-marmor",
+    "url": "https://www.khm.at/ausstellungen/bernini-malerei-und-marmor",
+    "title": "Bernini. Malerei und Marmor",
+    "start": "2026-12-02",
+    "end": "2027-04-04",
+    "venue": "Kunsthistorisches Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Maria-Theresien-Platz",
+    "category": "Vorschau",
+    "status": "scheduled"
+  }
+]

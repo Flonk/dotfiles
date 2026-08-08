@@ -8,21 +8,26 @@
     "furniture",
     "design"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 1,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "category": 1.0
+    },
+    "canary": "class=\"teaser-item\" itemscope=\"itemscope\" itemtype=\"http://schema.org/Event\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Real url redirects to moebelmuseumwien.at/en/; scraper fetches /en/program/events which lists exhibitions, events and guided tours via schema.org Event microdata teaser blocks. Site currently only publishes one item (the running special exhibition); category filter checkboxes exist (Exhibition/Event/Guided Tour) but produced no extra results when queried.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 1
   }
 }

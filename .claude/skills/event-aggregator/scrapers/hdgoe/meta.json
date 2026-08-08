@@ -7,15 +7,21 @@
   "covers": [
     "history"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 55,
+    "required_fill": {
+      "venue": 1.0,
+      "district": 1.0,
+      "category": 1.0,
+      "description": 0.9,
+      "address": 1.0
+    },
+    "canary": "category/kalender"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Weekly-paginated JSON endpoint Frontend/load_calendar_events (POST start=YYYY-MM-DD, returns 7 days) drives ~70 recurring tour/kids/event occurrences over the horizon; 4 current exhibitions come from the /category/kalender page's currentProgramElemHolder block, with start/end parsed from teaser+detail text (2 are permanent/open-ended). price_min only set for cat_id 147 (Veranstaltungen, explicitly free) and for exhibitions (general admission price); guided-tour prices are ambiguous (tour fee vs included) so left null.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,

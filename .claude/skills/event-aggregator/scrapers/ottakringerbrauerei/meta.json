@@ -1,28 +1,32 @@
 {
   "slug": "ottakringerbrauerei",
   "name": "Ottakringer Brauerei",
-  "url": "https://www.ottakringerbrauerei.at/de/events/",
+  "url": "https://www.ottakringerbrauerei.at/de/events-locations/eventkalender/",
   "tier": "B",
   "group": "food",
   "covers": [
     "whisky festival",
     "events"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 25,
+    "required_fill": {
+      "venue": 1.0,
+      "district": 1.0,
+      "city": 1.0
+    },
+    "canary": "event-calendar-item__title"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "The listing URL from meta (/de/events/) redirects to a rental-location page with no data; the real listing lives at /de/events-locations/eventkalender/ (linked from nav). Server-rendered HTML, no ld+json, no XHR endpoint, no pagination (all ~38 upcoming occurrences on one page). Listing gives day/month + time but no year and isn't strictly chronological (a Nov date appears after a Dec one, and a March-next-year date is tacked on last), so scrape.py fetches each event's detail page to read the authoritative 'DD.MM.YYYY[ - DD.MM.YYYY]' date line and description. price_min/category always null (site never states prices or categories; tickets go through external sellers like oeticket). venue/district hardcoded to the brewery (Ottakringer Brauerei, 1160) since every event is on-site.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 37
   }
 }

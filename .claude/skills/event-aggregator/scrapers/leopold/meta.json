@@ -7,21 +7,26 @@
   "covers": [
     "art"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 3,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0
+    },
+    "canary": "exhibition-wrap"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Fetches /de/ausstellungen (current, 3 shows) + /de/ausstellungen/vorschau (upcoming, 2 shows), no ld+json or API. Server-rendered <article class=\"exhibition\"> cards with title, subtitle, and a German date range string parsed by hand (en-dash separated, 'Seit DD.MM.YYYY' means permanent -> end null + extra.permanent true). No category or price shown anywhere on listing or detail pages, so both are always null. There's also /de/ausstellungen/archiv for past shows, intentionally not fetched.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 5
   }
 }

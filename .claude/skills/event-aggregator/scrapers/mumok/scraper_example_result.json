@@ -1,0 +1,58 @@
+[
+  {
+    "source": "mumok",
+    "source_id": "terminal-piece",
+    "url": "https://www.mumok.at/ausstellungen/terminal-piece",
+    "title": "Terminal Piece",
+    "start": "2026-06-20",
+    "end": "2027-02-07",
+    "venue": "mumok",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "category": "Ausstellung",
+    "extra": {}
+  },
+  {
+    "source": "mumok",
+    "source_id": "tolia-astakhishvili",
+    "url": "https://www.mumok.at/ausstellungen/tolia-astakhishvili",
+    "title": "Tolia Astakhishvili Figure of the Child",
+    "start": "2026-06-20",
+    "end": "2026-11-01",
+    "venue": "mumok",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "category": "Ausstellung",
+    "extra": {}
+  },
+  {
+    "source": "mumok",
+    "source_id": "cameron-rowland",
+    "url": "https://www.mumok.at/ausstellungen/cameron-rowland",
+    "title": "Cameron Rowland",
+    "start": "2026-11-14",
+    "end": "2027-04-04",
+    "venue": "mumok",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "category": "Ausstellung",
+    "extra": {}
+  },
+  {
+    "source": "mumok",
+    "source_id": "verena-paravel",
+    "url": "https://www.mumok.at/ausstellungen/verena-paravel",
+    "title": "Verena Paravel: Cosmofonia",
+    "start": "2026-12-05",
+    "end": "2027-05-30",
+    "venue": "mumok",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Museumsplatz 1, 1070 Wien",
+    "category": "Ausstellung",
+    "extra": {}
+  }
+]

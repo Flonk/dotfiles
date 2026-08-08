@@ -1,0 +1,19 @@
+[
+  {
+    "source": "hofburg",
+    "source_id": "museumsfuehrung",
+    "url": "https://www.sisimuseum-hofburg.at/fuehrungen/termine/museumsfuehrung",
+    "title": "Sisi Museum und Kaiserappartements",
+    "start": "2025-12-01",
+    "end": "2026-10-05",
+    "venue": "Sisi Museum",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Hofburg, Michaelerkuppel, 1010 Wien",
+    "price_min": 17.0,
+    "price_text": "Erwachsene: € 25,00 Studierende: € 23,00 Kinder: € 17,00",
+    "category": "Museumsführung",
+    "description": "Begeben Sie sich auf die Spuren der außergewöhnlichen Kaiserin Elisabeth und tauchen Sie ein in das persönliche Lebensumfeld des Kaiserpaares.",
+    "status": "scheduled"
+  }
+]

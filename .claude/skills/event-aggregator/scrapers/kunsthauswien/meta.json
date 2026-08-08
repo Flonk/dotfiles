@@ -8,21 +8,26 @@
     "art",
     "ecology"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "api",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 30,
+    "required_fill": {
+      "venue": 1.0,
+      "city": 1.0,
+      "address": 1.0,
+      "district": 1.0
+    },
+    "canary": "date_Entry"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Craft CMS GraphQL API at /api/ (no auth needed). Three sources combined: (1) exhibitions section entries filtered by endDate >= today gives the 2 current temporary exhibitions as single far-end records; (2) a hardcoded permanent record for 'Museum Hundertwasser' (the venue's core permanent collection, data-page=\"permanentCollection\", no published end date -> extra.permanent true); (3) the 'date' entry type gives ~40 dated occurrences (tours/talks/workshops/screenings) which are combined with their parent 'events' section entries for title/url/subtitle. Occurrence date comes from date_Entry.date; time-of-day comes from date_Entry.startTime/endTime falling back to the parent event's startTime/endTime (these carry a bogus placeholder date, only HH:MM is meaningful). No price data anywhere via the API, price_min/price_text always null. Site only publishes ~5 months of dated events ahead (through mid-Feb 2027); horizon_days=180 covers essentially all of it already.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 43
   }
 }

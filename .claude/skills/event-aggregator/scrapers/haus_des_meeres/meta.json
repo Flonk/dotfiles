@@ -8,21 +8,27 @@
     "marine",
     "biology"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 8,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "category": 1.0
+    },
+    "canary": "Vergangene Veranstaltungen"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Not the zoo/aquarium's daily program (no ticketed events there) - this scrapes the Lighthouse10 talks/culture calendar at /events-kultur/veranstaltungskalender, which lists both 'Kulturwelle' concerts/cabaret and 'Verein der Freunde'/'Verein Wissenschaft & Forschung' lecture evenings. No price info on this page (left null); links go off-site to rooftop.haus-des-meeres.at or verein-hdm.at ticket pages, some cards have no link at all.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 12
   }
 }

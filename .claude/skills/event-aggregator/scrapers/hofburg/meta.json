@@ -7,15 +7,23 @@
   "covers": [
     "palace"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 1,
+    "required_fill": {
+      "title": 1,
+      "start": 1,
+      "end": 1,
+      "venue": 1,
+      "district": 1,
+      "price_min": 1,
+      "category": 1
+    },
+    "canary": "class=\"teaser-item\" itemscope=\"itemscope\" itemtype=\"http://schema.org/Event\""
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Site only lists a single perpetual 'event' (the Sisi Museum/Kaiserappartements guided tour, currently 2025-12-01..2026-10-05) via a microdata Event teaser on /fuehrungen/termine; no other exhibitions/events published. Scraper is generic over multiple teaser-item blocks in case more get added.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,

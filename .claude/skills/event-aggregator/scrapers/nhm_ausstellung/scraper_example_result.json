@@ -1,0 +1,143 @@
+[
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "alpengletscher",
+    "url": "https://www.nhm.at/ausstellung/sonderausstellungen/alpengletscher",
+    "title": "Alpengletscher im Wandel: Historische Vergleichsfotos von Jürgen Merz",
+    "start": "2026-08-08",
+    "end": "2027-01-10",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "am Rundgang, Ebene 1",
+    "status": "scheduled"
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "cockaigne",
+    "url": "https://www.nhm.at/ausstellung/sonderausstellungen/cockaigne",
+    "title": "Cockaigne. Schlaraffenland der Zukunft?",
+    "start": "2026-08-08",
+    "end": "2026-09-14",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "Sonderausstellung im Saal 21 auf der 2. Ebene",
+    "status": "scheduled"
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "gutes_sammeln_boeses_sammeln",
+    "url": "https://www.nhm.at/gutes_sammeln_boeses_sammeln",
+    "title": "Gutes Sammeln – Böses Sammeln",
+    "start": "2026-08-08",
+    "end": "2027-06-27",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "150 Jahre Naturhistorisches Museum Wien – Sonderausstellung in den Sonderausstellungsräumen im 1. Stock",
+    "status": "scheduled"
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "vorsicht_hochspannung",
+    "url": "https://www.nhm.at/vorsicht_hochspannung",
+    "title": "Vorsicht Hochspannung",
+    "start": "2026-08-08",
+    "end": "2027-04-24",
+    "venue": "Narrenturm",
+    "district": 1090,
+    "city": "Wien",
+    "address": "Spitalgasse 2, 1090 Wien",
+    "category": "Sonderausstellung",
+    "description": "Sonderausstellung im Narrenturm – Der elektrische Unfall – eine Klasse für sich",
+    "status": "scheduled"
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "voices_of_nature",
+    "url": "https://www.nhm.at/voices_of_nature",
+    "title": "Voices of Nature",
+    "start": "2026-08-08",
+    "end": "2026-09-08",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "Song Contest der Tiere – Ein Pfad mit Audioguide durch die Schausäle auf der 2. Ebene.",
+    "status": "scheduled"
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "frisch_gemausert",
+    "url": "https://www.nhm.at/frisch_gemausert",
+    "title": "Frisch gemausert",
+    "start": "2026-09-30",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "Die neuen Lebensräume der Vögel – Dauerausstellung im 2. Stock.",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "gen_changers",
+    "url": "https://www.nhm.at/gen_changers",
+    "title": "GENchangers.",
+    "start": "2026-10-14",
+    "end": "2027-07-26",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "Entschlüsselte Geheimnisse aus frühmittelalterlichen Gräberfeldern – Sonderausstellung im Saal 21 im 2. Stock",
+    "status": "scheduled"
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "die_kunst_der_moulage_1",
+    "url": "https://www.nhm.at/die_kunst_der_moulage_1",
+    "title": "Die Kunst der Moulage",
+    "start": "2025-10-08",
+    "venue": "Narrenturm",
+    "district": 1090,
+    "city": "Wien",
+    "address": "Spitalgasse 2, 1090 Wien",
+    "category": "Sonderausstellung",
+    "description": "Verewigte Krankheitsbilder – Die neue Dauerausstellung im Narrenturm.",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  },
+  {
+    "source": "nhm_ausstellung",
+    "source_id": "eiszeitkinder_und_ihre_welt_",
+    "url": "https://www.nhm.at/eiszeitkinder_und_ihre_welt_",
+    "title": "Eiszeitkinder und ihre Welt",
+    "start": "2025-05-21",
+    "venue": "Naturhistorisches Museum Wien",
+    "district": 1010,
+    "city": "Wien",
+    "address": "Burgring 7, 1010 Wien",
+    "category": "Sonderausstellung",
+    "description": "Der neue Kindersaal",
+    "status": "scheduled",
+    "extra": {
+      "permanent": true
+    }
+  }
+]

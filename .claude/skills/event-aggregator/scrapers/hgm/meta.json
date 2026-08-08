@@ -8,21 +8,25 @@
     "history",
     "military"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 20,
+    "required_fill": {
+      "title": 1.0,
+      "start": 1.0,
+      "venue": 1.0
+    },
+    "canary": "section-event-list"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "https://www.hgm.at/events lists all upcoming events on one server-rendered page (no pagination found); 30 events found, spanning ~2 months out (through mid-Oct 2026). No genuine category field on site (badge is a location tag, used as venue), so category is always null. price parsed from 'Kostenfrei'/'X Euro' badge text.",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 30
   }
 }

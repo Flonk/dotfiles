@@ -11,21 +11,30 @@
     "schatzkammer",
     "wagenburg"
   ],
-  "status": "unbuilt",
-  "method": null,
+  "status": "built",
+  "method": "html",
   "expect": {
-    "min_records": null,
-    "required_fill": {},
-    "canary": null
+    "min_records": 10,
+    "required_fill": {
+      "title": 1.0,
+      "url": 1.0,
+      "start": 1.0,
+      "venue": 1.0,
+      "district": 1.0,
+      "category": 1.0,
+      "end": 0.28,
+      "price_min": 0.07
+    },
+    "canary": "tx_theme_exhibitionlist"
   },
-  "last_built": null,
-  "notes": null,
+  "last_built": "2026-08-08",
+  "notes": "Only covers the main KHM building + Neue Hofburg (Kunstkammer, Gemäldegalerie, Ephesos, Hofjagd- und Rüstkammer, etc.) via /ausstellungen and /ausstellungen/vorschau. Weltmuseum, Theatermuseum, Schatzkammer and Wagenburg are separate KHM-Museumsverband sites not reachable from this page (Schatzkammer links out to kaiserliche-schatzkammer.at) and are NOT covered here; they'd need their own scrapers. Permanent collections and exhibitions with no published end get extra.permanent=true, end=null, start defaulted to today (unknown real start).",
   "schedule": {
     "cadence": "monthly",
     "horizon_days": 180,
     "basis": "prior",
     "density_per_day": null,
     "p95_lead_days": null,
-    "sample_records": 0
+    "sample_records": 14
   }
 }

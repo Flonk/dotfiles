@@ -1,0 +1,32 @@
+[
+  {
+    "source": "bestattungsmuseum",
+    "source_id": "fuehrung-2026-09-05",
+    "url": "https://www.bestattungsmuseum.at/fuehrungen",
+    "title": "Öffentliche Führung im Bestattungsmuseum Wien",
+    "start": "2026-09-05",
+    "venue": "Bestattungsmuseum Wien",
+    "district": 1110,
+    "city": "Wien",
+    "address": "Simmeringer Hauptstrasse 234, 1110 Wien",
+    "price_min": 15.0,
+    "price_text": "18 Euro regulär / 15 Euro ermäßigt",
+    "category": "Öffentliche Führungen",
+    "description": "Öffentliche Führung durch das Bestattungsmuseum Wien mit Guides zur Wiener Bestattungskultur."
+  },
+  {
+    "source": "bestattungsmuseum",
+    "source_id": "scheintot-2026-09-19",
+    "url": "https://shop.bestattungsmuseum.at/tickets/Besuch-im-Museum-Vortrag-Scheintot-die-Angst-lebendig-begraben-zu-werden",
+    "title": "Sondervortrag: „Scheintot – die Angst lebendig begraben zu werden“",
+    "start": "2026-09-19",
+    "venue": "Bestattungsmuseum Wien",
+    "district": 1110,
+    "city": "Wien",
+    "address": "Simmeringer Hauptstrasse 234, 1110 Wien",
+    "price_min": 39.0,
+    "price_text": "39 Euro (Kombiticket Museum & Vortrag)",
+    "category": "Sondervortrag",
+    "description": "Kombiticket: Museumsbesuch & Vortrag mit Prof. Dr. med. univ. Roland Sedivy und Cornelia Fassl über den Scheintod und die historische Angst, lebendig begraben zu werden."
+  }
+]

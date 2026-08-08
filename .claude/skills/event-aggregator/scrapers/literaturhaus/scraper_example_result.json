@@ -1,0 +1,346 @@
+[
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/sommerpause/",
+    "url": "https://www.literaturhaus-wien.at/event/sommerpause/",
+    "title": "Sommerpause",
+    "start": "2026-07-11",
+    "end": "2026-09-07",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "status": "scheduled"
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/l-u-f-t-die-aufzeichnensysteme-der-forscherin-von-hanne-romer/",
+    "url": "https://www.literaturhaus-wien.at/event/l-u-f-t-die-aufzeichnensysteme-der-forscherin-von-hanne-romer/",
+    "title": "L U F T – Die .aufzeichnensysteme der Forscherin von Hanne Römer",
+    "start": "2026-09-09T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#VERNISSAGE",
+    "description": "¡Vernissage!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#VERNISSAGE"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/tag-der-offenen-tur-im-literaturhaus-wien/",
+    "url": "https://www.literaturhaus-wien.at/event/tag-der-offenen-tur-im-literaturhaus-wien/",
+    "title": "Tag der offenen Tür im Literaturhaus Wien",
+    "start": "2026-09-12T14:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#BEGEGNUNG",
+    "description": "¡Literaturmeile Zieglergasse!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#BEGEGNUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/tamara-stajner-luft-nach-unten/",
+    "url": "https://www.literaturhaus-wien.at/event/tamara-stajner-luft-nach-unten/",
+    "title": "Tamara Štajner Luft nach unten",
+    "start": "2026-09-15T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/sarah-wipauer-fehlende-gespenster/",
+    "url": "https://www.literaturhaus-wien.at/event/sarah-wipauer-fehlende-gespenster/",
+    "title": "Sarah Wipauer Fehlende Gespenster",
+    "start": "2026-09-17T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/clemens-j-setz-mein-leben-als-noiseband/",
+    "url": "https://www.literaturhaus-wien.at/event/clemens-j-setz-mein-leben-als-noiseband/",
+    "title": "Clemens J. Setz Mein Leben als Noiseband",
+    "start": "2026-09-22T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/juliet-grames-die-verlorenen-von-santa-chiona/",
+    "url": "https://www.literaturhaus-wien.at/event/juliet-grames-die-verlorenen-von-santa-chiona/",
+    "title": "Juliet Grames Die Verlorenen von Santa Chiona",
+    "start": "2026-09-23T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/ilija-trojanow-christian-muhrbeck-wo-europa-endet-und-immer-wieder-beginnt/",
+    "url": "https://www.literaturhaus-wien.at/event/ilija-trojanow-christian-muhrbeck-wo-europa-endet-und-immer-wieder-beginnt/",
+    "title": "Ilija Trojanow & Christian Muhrbeck Wo Europa endet und immer wieder beginnt",
+    "start": "2026-09-24T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/radka-denemarkova-schokoladenblut/",
+    "url": "https://www.literaturhaus-wien.at/event/radka-denemarkova-schokoladenblut/",
+    "title": "Radka Denemarková Schokoladenblut",
+    "start": "2026-09-29T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG",
+    "description": "¡Ahoj - Tschechien setzt über!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/lucie-faulerova-ich-habe-den-tod-gerettet-petr-borkovec-cecile-und-andere/",
+    "url": "https://www.literaturhaus-wien.at/event/lucie-faulerova-ich-habe-den-tod-gerettet-petr-borkovec-cecile-und-andere/",
+    "title": "Lucie Faulerová Ich habe den Tod gerettet Petr Borkovec Cécile und andere",
+    "start": "2026-09-30T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG",
+    "description": "¡Ahoj - Tschechien setzt über!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/anna-bloch-stickova-gedichte-michal-ajvaz-passagen-unter-glas/",
+    "url": "https://www.literaturhaus-wien.at/event/anna-bloch-stickova-gedichte-michal-ajvaz-passagen-unter-glas/",
+    "title": "Anna Bloch-Štičková Gedichte Michal Ajvaz Passagen unter Glas",
+    "start": "2026-10-01T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG",
+    "description": "¡Ahoj - Tschechien setzt über!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/nathalie-rouanet-durch-nebel-und-nacht/",
+    "url": "https://www.literaturhaus-wien.at/event/nathalie-rouanet-durch-nebel-und-nacht/",
+    "title": "Nathalie Rouanet Durch Nebel und Nacht",
+    "start": "2026-10-06T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/die-geschichte-der-kindertransporte-1938-39/",
+    "url": "https://www.literaturhaus-wien.at/event/die-geschichte-der-kindertransporte-1938-39/",
+    "title": "Die Geschichte der Kindertransporte 1938/39",
+    "start": "2026-10-08T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#ÖEB",
+    "description": "¡Präsentation | Gespräch!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#ÖEB"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/evelyn-bubich-all-these-pretty-girls/",
+    "url": "https://www.literaturhaus-wien.at/event/evelyn-bubich-all-these-pretty-girls/",
+    "title": "Evelyn Bubich All These Pretty Girls",
+    "start": "2026-10-13T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #PROSA",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#PROSA"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/tanja-sljivar-nationaltheater/",
+    "url": "https://www.literaturhaus-wien.at/event/tanja-sljivar-nationaltheater/",
+    "title": "Tanja Šljivar Nationaltheater",
+    "start": "2026-10-15T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/luca-kieser-simsalabim-simon-brenner/",
+    "url": "https://www.literaturhaus-wien.at/event/luca-kieser-simsalabim-simon-brenner/",
+    "title": "Luca Kieser Simsalabim, Simon Brenner",
+    "start": "2026-10-20T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG",
+    "description": "¡Premiere!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/und-jeden-tag-der-blumenstrausz-im-milchglasfenster-vis-a-vis-friederike-mayrocker-ein-fest-fur-anne-zauner/",
+    "url": "https://www.literaturhaus-wien.at/event/und-jeden-tag-der-blumenstrausz-im-milchglasfenster-vis-a-vis-friederike-mayrocker-ein-fest-fur-anne-zauner/",
+    "title": "„und jeden Tag der Blumenstrausz / im Milchglasfenster vis-à-vis“ (Friederike Mayröcker) Ein Fest für Anne Zauner",
+    "start": "2026-10-22T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG",
+    "description": "¡Feier!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG"
+      ]
+    }
+  },
+  {
+    "source": "literaturhaus",
+    "source_id": "https://www.literaturhaus-wien.at/event/ulli-lust-die-frau-als-mensch-2-schamaninnen/",
+    "url": "https://www.literaturhaus-wien.at/event/ulli-lust-die-frau-als-mensch-2-schamaninnen/",
+    "title": "Ulli Lust Die Frau als Mensch 2. Schamaninnen",
+    "start": "2026-10-27T19:00",
+    "venue": "Literaturhaus Wien",
+    "district": 1070,
+    "city": "Wien",
+    "address": "Zieglergasse 26A, 1070 Wien",
+    "category": "#LESUNG, #COMIC",
+    "description": "¡Comics!",
+    "status": "scheduled",
+    "extra": {
+      "tags": [
+        "#LESUNG",
+        "#COMIC"
+      ]
+    }
+  }
+]
