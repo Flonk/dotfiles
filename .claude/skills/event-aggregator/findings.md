@@ -74,6 +74,200 @@ hotel clearance auction is "fucking cool". Same category, opposite verdict.
 cheaply rank up: "pay 5€ for a 1000€ conference ticket and even get free food out of it.
 It's arbitrage." Unifying concept is **value per euro paid**. Store face value + currency.
 
+## Output shape: lineup sections
+
+The digest condenses whole categories into one-line lineups — reads like a festival bill
+and collapses ~600 daily records to a scannable handful. Two so far: `Acts today`
+and `Movies today`.
+
+### `Acts today`
+
+```
+Acts today
+Ed Sheeran · Megadeath · Bonobo · ...
+```
+
+Named "acts", not "music" — the section legitimately carries cabaret, dance and comedy,
+which venue-based classification pulls in anyway.
+
+Ordering is two-tier:
+
+1. **Artists Flo follows on Spotify** — always first, regardless of size
+2. **Everyone else** — descending by Spotify play count
+
+So a followed 200-listener act outranks a stadium headliner. Tier 1 is the personalisation;
+tier 2 is a fame prior standing in for "would he have heard of them".
+
+**Blocker: there is no `artist` field.** The schema stores `title`, and venues conflate
+artist with event name — `ROTZPIPN | ANTI CORNETTOS` is two bands, `BEHAVE!` is a club
+night, `Diknu Schneeberger & Christian Bakanic Quartett` is two leads plus an ensemble
+noun, `technolog` is a night not a person. Ranking by artist requires extracting artists
+from titles first. Options, cheapest first: a per-source hint in `extra` where the site
+already separates them; a title-splitting pass on the known separators (`·  |  &  ,  vs
+feat.  presents  w/`); resolving each candidate against the Spotify search API and keeping
+what matches. Unresolved names must still render — degrade to showing the raw title, never
+drop a gig because the parse failed.
+
+Needs Spotify: followed-artists list (`user-follow-read`) and per-artist popularity.
+Play count is not exposed per user; artist `popularity` (0–100) is the available proxy.
+
+### `Movies today`
+
+```
+Movies today
+Drowning by Numbers · Kedi · OLDBOY · ... · The Odyssey (8 screens)
+```
+
+Ordering is **inverse ubiquity** — the opposite of `Acts today`. A film screening once, at
+one repertory house, ranks above the blockbuster on eight screens, because the one-off is
+the thing Flo would otherwise miss. This is signal 2 (rare / one-off) applied within a
+category, and it needs no external API: screen-count is already in the data as
+`COUNT(*) GROUP BY title`.
+
+Blockbusters are not dropped — they sort last and carry a `(n screens)` suffix, so the
+line still answers "is anything on that I'd want to see" without pretending Toy Story
+isn't playing.
+
+Title normalisation is required before grouping: the same film arrives as `The Odyssey` /
+`Die Odyssee`, and as `Backrooms` / `Backrooms: Everything Must Go (Extended Version)` /
+`Backrooms: Everything Must Go Edition (Extended Version)`. Match on a normalised key and
+keep the shortest variant for display. German and English titles for the same film must
+collapse to one entry, which regex alone will not do — needs a title-alias pass.
+
+**Per-film payload.** Each entry carries: **image**, **1½-sentence blurb**, **rating**,
+**genre**, **cinema + time**. Layout deferred, but the intended shape is dense and
+3-column-ish, images in outer columns left and right.
+
+Where each piece comes from:
+
+| piece | source | state |
+|---|---|---|
+| cinema + time | already in the DB | ✅ have it |
+| image | `image` schema field, per-site scrape | backlog item, see parser pass |
+| blurb | TMDB `overview` | needs external |
+| genre | TMDB `genres` | needs external |
+| rating | TMDB `vote_average` | needs external |
+
+Site descriptions are unusable as a uniform blurb, measured 2026-08-08:
+`haydnkino` (223 records — the largest cinema source), `burgkino` and `filmcasino` carry
+**none at all**; `admiralkino` averages 17 characters, `gartenbaukino` 30, `breitenseer`
+38 — too short to be a blurb; `cinecenter` 677 and `filmarchiv` 682 — need trimming. A
+uniform 1½ sentences cannot be assembled from that spread.
+
+**TMDB is the approved integration** (Flo: *"TMDB is fine"*). One lookup keyed on
+title+year yields `overview` (blurb), `genres`, `vote_average` (rating), `poster_path`
+(consistent image), and the alternate-titles list that solves the German/English collapse
+above — five requirements, one integration.
+
+Rating renders bare as `8/10` — no source label, no provenance chrome.
+
+Note this section only makes sense for the repertory tail: cinema is ★☆☆ with **routine
+screenings excluded**, and inverse ubiquity is what implements that exclusion. With a
+per-film payload this rich, the blockbuster tail should be cut rather than rendered with a
+`(10 screens)` suffix.
+
+### `Film festivals` — separate section
+
+Festivals do **not** fold into `Movies today`. They are listed on their own, because they
+are a different unit: a festival is a multi-day run to plan around, not a screening to
+catch tonight. This is also what the ★☆☆ cinema rule already implies — *festivals and
+special programmes only*, routine screenings excluded.
+
+Eight sources already feed this: `rathausplatz` (45 — filmed concerts, see its meta note),
+`volxkino` (15), `visitingvienna` (14, a festival directory), `wien_gv_sommerkinos` (11),
+and `japannual` / `kinoamdach` / `slashfilmfestival` / `viennashorts` at **1 record each**
+— those four emit one whole-festival record with a date range rather than a per-screening
+breakdown, because off-season their sites publish only the edition dates. So the section
+renders festival *runs*, not screenings, and needs the lead-time question answered:
+`viennashorts` currently sits 9 months out (25–30 May 2027).
+
+Note the sections described so far — `Acts today`, `Movies today` — are the **routine
+daily** ones. Festivals, and anything else episodic, get their own treatment.
+
+## Inverse specificity — the demotion model
+
+Measured across the whole DB 2026-08-08: 9474 upcoming records (after blacklist) in 6583
+distinct `(title, venue)` blocks. Two axes, both **demotions, never cuts**.
+
+| axis | threshold | hits | action |
+|---|---|---|---|
+| run length | ≥ 8 occurrences | 93 blocks / 1475 records (15.6%) | rank way down |
+| span | ≥ 91 days, non-permanent | 161 records | rank way down |
+| permanents | `extra.permanent` | 67 | keep, rank low, **never cut** |
+
+**Measure REMAINING, not total.** This is what makes both demotions self-repealing: a
+22-night play sits demoted all season, then surfaces as last-chance when 2 dates are left;
+a 144-day exhibition is wallpaper for 143 days and a must-see on its final weekend.
+
+- *Run length needs no code.* The DB retains past events (345 of them), so any query
+  filtered `start_at >= today` already returns remaining, not total. Verified: total and
+  remaining are the same number by construction.
+- *Span must use days-left, not days-long*, and **must exclude same-day events** — most
+  records with an `end` are single-day events where `end` is just a finish time, span 0.
+  They swamp the axis otherwise. Threshold that works: `span >= 30d AND days_left <= 21`,
+  which surfaced 18 real closings including URSI FÜRTLER (1d left of 144), Institute of
+  Queer Ecology (1d of 121), RICHARD PRINCE (8d of 121), Innovation Corner (8d of 187).
+
+**Run length ≥ 8 conflates three different things** — do not demote blindly:
+
+1. **Timetabled attractions** → demote. Planetarium repertoire (~19 shows, ~350 records),
+   museum Führungen (NHM Narrenturm 65×, Über den Dächern Wiens 53×, MAK ×4, Konzerthaus
+   backstage 32×), cinema multiplex runs, WKO `Gründungs-Webseminar` boilerplate.
+2. **Theatre seasons** → keep, collapse to one entry with a date range. Josefstadt
+   *Komödie der Verführung* 22×, *Hamlet* 10×; Volksoper *West Side Story* 16×,
+   *Zauberflöte* 14×. 154 records. A play running 22 nights is 22 chances at one thing.
+3. **Lecture / residency series** → keep. `Ringvorlesung Environment and Climate Research`
+   14×, Porgy & Bess *Wednesday Night Prayer Orchestra* 8×, arthouse doc runs like
+   *Mit Hasan in Gaza* 11×.
+
+The discriminator is **whether attending twice makes sense**, not the count.
+
+Caveat for whoever implements the scorer: permanents store `end_at IS NULL`. Treating null
+as a 1-day span ranks the Albertina's permanent collection *above* a one-night gig. Handle
+null-end explicitly.
+
+Inverse specificity is a good axe for wallpaper but does not produce a digest on its own —
+it cuts roughly 25%, not 95%.
+
+## Blacklist
+
+`blacklist.json` — excluded at **read time only**, so records are still scraped and stored
+and removing an entry brings them straight back with no re-scrape. Supports `sources`
+(by slug), `venues` and `titles` (substring). `db.blacklist()` / `db.blacklisted()`.
+
+Currently excluded: **`srs`** (Spanische Hofreitschule) — 1470 records, 13% of the entire
+DB, six guided tours repeating daily forever.
+
+## Rotation change detection
+
+For fixed-repertoire sources — Planetarium, Urania Sternwarte, museum tour programmes,
+Konzerthaus backstage — the useful interaction is not listing them daily but being told
+**when the rotation changes**. Demote the 26 repeats, alert on the transition.
+
+Already in place, no new schema needed: `events.first_seen`, `events.gone`, and the `runs`
+table logging `n_new` / `n_gone` per scrape. Verified by simulation — dropping a show and
+adding one reported exactly:
+
+```
+entered:  + Der Mond - Unser kosmischer Nachbar   12 dates from 2026-08-14
+left:     - EXO:Aliens                            26 dates dropped
+```
+
+**Alert on new distinct TITLE, not new records.** `n_new > 0` also fires on ordinary
+schedule extension — the Planetarium publishing January dates for a show already running
+is not a rotation change. Group by title before alerting.
+
+Needs ≥2 successful runs of a source before there is anything to diff.
+
+### Rotation diff
+
+**What left rotation and what came on**, restricted to blocks with **run length > 2**
+(below that it is not a rotation, it is just an event). This is the mechanism that makes
+demoting the repertoire safe — nothing new slips past while its 26 repeats sit ranked down.
+
+Implemented as `rotate.py`, on demand. Cadence (weekly, start-of-week, whatever) is a
+scheduling question, deliberately deferred — the mechanism does not care when it is run.
+
 ## Known-unsolved
 
 - **The music discovery lane.** Flo: *"Specificity is important but I don't believe you can
@@ -85,9 +279,71 @@ It's arbitrage." Unifying concept is **value per euro paid**. Store face value +
 - **No retrospect** unless history is captured from day one.
 - **Dedupe is mandatory** — Popfest appeared in 5 sources at once.
 
+## Backlog
+
+### Nightly parser pass
+
+Work that means re-opening scrapers, batched into an overnight agent run like the original
+build. Ordered by damage done.
+
+1. **`volume_at` has no start times.** 0 of 1304 records carry one — the biggest source and
+   the main gig listing in town is date-only, so ~25 real gigs a day can't be placed in a
+   calendar. Highest priority: a missing `end` is cosmetic, a missing `start` makes the
+   record unusable.
+2. **Cinema scrapers should capture `image`.** Schema field added (optional, absolute URL).
+   Quality bar is deliberately low — poster, production still, anything representative;
+   only a site logo or placeholder is wrong. Availability varies per site: `gartenbaukino`
+   has JSON-LD `image`, `votivkino` has `og:image`, `filmcasino`/`stadtkinowien` have plain
+   `<img>` stills, `haydnkino` uses a predictable `/FilmImg/<slug>.jpg` path, `topkino`
+   needs a real selector because its first `<img>` is the logo. Most posters live on the
+   detail page, not the listing — but several cinema scrapers already fetch detail pages
+   for price/runtime, so it is close to free for those.
+3. **End times where the site publishes them.** ~6100 timed records have no `end`. Top
+   gaps: `srs` 1470 (fixed-duration tours, easy), `wko` 1451 (low priority, nationwide),
+   `wien_ticket` 650, `haydnkino` 195, `porgy` 185, `wien_gv_at` 169 — top 6 covers 4120.
+   275 are already derived at merge time from runtimes the scrapers captured in `extra`.
+4. **Geography on `volume_at` and `wko`.** Both are Austria-wide, not Vienna. `volume_at`
+   has 0 district and `city='Wien'` on 920 of 1304 (correct — null when out of town, so
+   usable as a filter). `wko` fills district on 11% of 1800. Without this a Vienna filter
+   can't tell "not Vienna" from "unknown", which already produced a false negative on
+   Diknu Schneeberger.
+5. **Cadence sanity-check on thin samples.** `admiralkino` (7 records) and `nonstopkino`
+   (8) were measured onto `monthly`, which is wrong for a cinema and will go stale between
+   runs. The density heuristic mis-reads low sample counts as low churn.
+6. **`kindermuseum` silently skips hub pages** when ZOOM's flaky server hangs, so yield
+   varies 5–6 per run and `min_records` can't distinguish "slow" from "broken".
+
+### Missing STEM coverage — new sources needed
+
+Congresses/conferences are ★★★ and STEM is not fully covered. Audited 2026-08-08 against
+the 10 institutional calendars actually scraped. Ordered by value.
+
+1. **ÖAW is the biggest single loss.** `oeaw.ac.at` 403s sitewide, already in
+   `registry.json` as blocked. The Academy runs **IQOQI** (quantum optics), the **Space
+   Research Institute** and acoustics research — none of it visible. Worth retrying with a
+   different fetch approach before writing it off; a 403 on a browser UA is not the same
+   as a robots ban.
+2. **`univie` does not deliver what its note claims.** `findings.md` said "all fields incl.
+   philosophy, linguistics", but live output is financial econometrics, media law,
+   Byzantine studies and a campus tour — 6 of 14 sampled records were the same
+   Byzantinistik congress. The central TYPO3 calendar does **not** aggregate faculty
+   colloquia; physics/chemistry/astronomy talks live on per-faculty pages. Either scrape
+   those separately or stop claiming the coverage.
+3. **No source at all, not even a blocked entry:**
+   - **Chemistry** — no dedicated calendar anywhere in the registry
+   - **Astronomy / astrophysics research** — the `planetarium` scraper's 532 records are
+     public shows, not colloquia; Univie's Institut für Astrophysik is unscraped
+   - **Vetmeduni Wien** — veterinary medicine, absent from the registry entirely
+   - **AIT** — Austria's largest non-university research institute
+   - **CeMM, IMBA, GMI** — the other Vienna BioCenter institutes; only IMP is scraped
+4. **MedUni Wien** events page lists nothing, so clinical medicine outside MAW's
+   commercial congresses is uncovered. Already noted as blocked; recheck periodically.
+
+Sanity check on the ★★★ case: a **marine mammal** congress would be caught (NHM). A
+**chemistry** congress or a **quantum optics** talk would not.
+
 ## Still needed from Flo
 
-- STEM/humanities topic picks (list was ~60 checkboxes; IT confirmed top)
 - Home district, for proximity weighting
 - Calendar shape, filter aggressiveness, history, lead time — all deliberately deferred
 

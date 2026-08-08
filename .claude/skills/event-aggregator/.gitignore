@@ -1,1 +1,4 @@
 events.json
+events.db
+events.db-wal
+events.db-shm

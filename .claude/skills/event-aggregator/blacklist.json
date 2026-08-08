@@ -1,0 +1,11 @@
+{
+  "_": "Excluded from output. Records are still scraped and stored - this filters at read time only, so removing an entry brings them straight back with no re-scrape.",
+  "sources": [
+    {
+      "slug": "srs",
+      "why": "Spanische Hofreitschule - 1470 records, 13% of the whole DB, six guided tours repeating daily forever. Pure wallpaper."
+    }
+  ],
+  "venues": [],
+  "titles": []
+}

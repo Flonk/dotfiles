@@ -1977,5 +1977,17 @@
     "extra": {
       "planned_start": true
     }
+  },
+  {
+    "source": "votivkino",
+    "source_id": "https://www.votivkino.at/film/parallele-leben/-planned",
+    "url": "https://www.votivkino.at/film/parallele-leben/",
+    "title": "Parallele Leben",
+    "start": "2026-12-04",
+    "city": "Wien",
+    "status": "scheduled",
+    "extra": {
+      "planned_start": true
+    }
   }
 ]

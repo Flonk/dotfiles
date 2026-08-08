@@ -4,7 +4,13 @@
   "title": "occurrence",
   "description": "One listed occurrence of an event, as emitted by a scraper. Continuous runs (exhibitions) are a single record with a distant end.",
   "type": "object",
-  "required": ["source", "source_id", "url", "title", "start"],
+  "required": [
+    "source",
+    "source_id",
+    "url",
+    "title",
+    "start"
+  ],
   "additionalProperties": false,
   "properties": {
     "source": {
@@ -15,35 +21,95 @@
       "type": "string",
       "description": "The site's own id for this occurrence; fall back to the detail URL"
     },
-    "url": { "type": "string", "format": "uri" },
-    "title": { "type": "string", "minLength": 1 },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
     "start": {
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}:[0-9]{2})?$",
       "description": "Local Europe/Vienna. Date-only means the time is unknown, not all-day"
     },
     "end": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}:[0-9]{2})?$"
     },
-    "venue": { "type": ["string", "null"] },
-    "district": { "type": ["integer", "null"], "minimum": 1010, "maximum": 1230 },
-    "city": { "type": ["string", "null"], "default": "Wien" },
-    "address": { "type": ["string", "null"] },
+    "venue": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "district": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1010,
+      "maximum": 1230
+    },
+    "city": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": "Wien"
+    },
+    "address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "price_min": {
-      "type": ["number", "null"],
+      "type": [
+        "number",
+        "null"
+      ],
       "minimum": 0,
       "description": "EUR. 0 means free, null means unknown. Never guess"
     },
-    "price_text": { "type": ["string", "null"] },
+    "price_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "category": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "The source's own label, verbatim. Do not normalise"
     },
-    "description": { "type": ["string", "null"] },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "image": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "description": "Absolute URL of a poster, still, or any representative image. Quality bar is low - a production still or venue photo is fine. Null if the page has none. Never a site logo or placeholder."
+    },
     "status": {
       "type": "string",
-      "enum": ["scheduled", "cancelled", "postponed"],
+      "enum": [
+        "scheduled",
+        "cancelled",
+        "postponed"
+      ],
       "default": "scheduled"
     },
     "extra": {

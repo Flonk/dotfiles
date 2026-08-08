@@ -739,18 +739,5 @@
     "price_text": "€ 10,50.-",
     "description": "Ein Film von Philip Brophy",
     "status": "scheduled"
-  },
-  {
-    "source": "gartenbaukino",
-    "source_id": "prg-19295",
-    "url": "https://www.gartenbaukino.at/programm/programmuebersicht/an-evening-with-fran-lebowitz/",
-    "title": "AN EVENING WITH FRAN LEBOWITZ",
-    "start": "2026-11-05T19:30",
-    "venue": "Gartenbaukino",
-    "district": 1010,
-    "city": "Wien",
-    "address": "Parkring 12, 1010 Wien",
-    "description": "One of America's most insightful social commentators live on stage!",
-    "status": "scheduled"
   }
 ]

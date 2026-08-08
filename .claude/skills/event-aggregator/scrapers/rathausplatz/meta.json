@@ -6,7 +6,8 @@
   "group": "filmfest",
   "covers": [
     "open air",
-    "free"
+    "free",
+    "filmed concerts"
   ],
   "status": "built",
   "method": "api",
@@ -21,7 +22,7 @@
     "canary": "wp-json/tribe"
   },
   "last_built": "2026-08-08",
-  "notes": "Homepage/programm page only server-render an ld+json Event snippet for the next ~7 days (WP+Fusion theme SEO plugin). Full schedule (45 screenings, Aug 8 - Sep 6 2026, one film block per evening at Rathausplatz) comes from the site's own Events Calendar (tribe) REST API at /wp-json/tribe/events/v1/events. cost field is always empty in the API; FAQ page explicitly states entry is free (\"Der Besuch des Film Festival ist völlig kostenlos\"), so price_min is hardcoded 0. category = the site's own 'Genre' custom field (Oper, Pop, Klassik, Austropop, ...). venue/address hardcoded to Rathausplatz, 1010 Wien; the API's 'Aufführungsort' custom field is where the film was originally recorded, not the screening location, so it is left out.",
+  "notes": "Homepage/programm page only server-render an ld+json Event snippet for the next ~7 days (WP+Fusion theme SEO plugin). Full schedule (45 screenings, Aug 8 - Sep 6 2026, one film block per evening at Rathausplatz) comes from the site's own Events Calendar (tribe) REST API at /wp-json/tribe/events/v1/events. cost field is always empty in the API; FAQ page explicitly states entry is free (\"Der Besuch des Film Festival ist völlig kostenlos\"), so price_min is hardcoded 0. category = the site's own 'Genre' custom field (Oper, Pop, Klassik, Austropop, ...). venue/address hardcoded to Rathausplatz, 1010 Wien; the API's 'Aufführungsort' custom field is where the film was originally recorded, not the screening location, so it is left out. SCOPE: only the summer Filmfestival programme (filmed concerts/opera screened outdoors), NOT the Rathausplatz venue in general - ice rink, food festivals, Sport.Platz etc. come via wien_gv_at/meinbezirk. Records are concert FILMS: they belong in the Acts lineup, not Movies.",
   "schedule": {
     "cadence": "weekly",
     "horizon_days": 32,
