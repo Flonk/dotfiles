@@ -1,3 +1,4 @@
+import { num, parse, str, today } from "./args.ts";
 import { main as digest } from "./commands/digest.ts";
 import { main as merge } from "./commands/merge.ts";
 import { main as rotate } from "./commands/rotate.ts";
@@ -26,49 +27,6 @@ const USAGE = `ea <command> [options]
     --top N            default 15
 `;
 
-type Flags = { bare: string[]; flags: Map<string, string | true> };
-
-// Only these consume the next argument. Without the list, `--seed porgy` reads
-// porgy as the value of --seed and silently drops it from the slug list.
-const VALUE_FLAGS = new Set(["date", "limit", "jobs", "min-run", "top"]);
-
-function parse(argv: string[]): Flags {
-  const bare: string[] = [];
-  const flags = new Map<string, string | true>();
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i] as string;
-    if (!a.startsWith("--")) {
-      bare.push(a);
-      continue;
-    }
-    const [key, inline] = a.slice(2).split("=", 2) as [string, string | undefined];
-    if (inline !== undefined) {
-      flags.set(key, inline);
-      continue;
-    }
-    const next = argv[i + 1];
-    if (VALUE_FLAGS.has(key) && next !== undefined && !next.startsWith("--")) {
-      flags.set(key, next);
-      i++;
-    } else {
-      flags.set(key, true);
-    }
-  }
-  return { bare, flags };
-}
-
-function num(f: Flags, key: string, dflt: number): number {
-  const v = f.flags.get(key);
-  const n = typeof v === "string" ? Number(v) : NaN;
-  return Number.isFinite(n) ? n : dflt;
-}
-
-function today(): string {
-  const d = new Date();
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
 async function run(): Promise<number> {
   const [cmd, ...rest] = process.argv.slice(2);
   const f = parse(rest);
@@ -84,9 +42,7 @@ async function run(): Promise<number> {
       });
     case "digest":
       return digest({
-        date: typeof f.flags.get("date") === "string"
-          ? (f.flags.get("date") as string)
-          : today(),
+        date: str(f, "date", today()),
         limit: num(f, "limit", 40),
         why: f.flags.has("why"),
       });

@@ -14,6 +14,7 @@ there is no build step, and `node:sqlite` means no runtime dependencies at all.
 direnv allow          # or: nix-shell
 npm install           # dev-only: typescript + @types/node
 node src/cli.ts       # usage
+npm run check         # tsc --noEmit + node --test
 ```
 
 - [findings.md](findings.md) — 1. what I want · 2. what sites to scrape · ranking model · backlog
@@ -29,7 +30,9 @@ node src/cli.ts       # usage
 | `scrape.ts` | spawns a Python scraper, parses its stdout, validates |
 | `rank.ts` | inverse-specificity scoring |
 | `pool.ts` | bounded concurrency, results streamed as they land |
+| `args.ts` | argv parsing |
 | `commands/` | one file per subcommand |
+| `*.test.ts` | 54 tests, `node:test`, no framework |
 
 `node src/cli.ts scrape` takes `--all` (ignore cadence), `--seed` (ingest sample files
 instead of fetching), `--dry`, `--jobs N`, and positional slugs.

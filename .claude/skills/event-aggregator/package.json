@@ -14,7 +14,9 @@
     "rotate": "node src/cli.ts rotate",
     "merge": "node src/cli.ts merge",
     "stats": "node src/cli.ts stats",
-    "typecheck": "tsc --noEmit"
+    "test": "node --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
