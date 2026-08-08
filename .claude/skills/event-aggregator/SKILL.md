@@ -5,7 +5,7 @@ description: Placeholder for a Vienna event aggregator that syncs into Flo's Goo
 
 # event-aggregator
 
-**Status: scrapers being built. 1 of 117 done.**
+**Status: 110 scrapers built, 7 dead. ~11.3k events. Pipeline + calendar sync not built.**
 
 - [findings.md](findings.md) — 1. what I want · 2. what sites to scrape
 - [event.schema.json](event.schema.json) — the one record shape every scraper emits
