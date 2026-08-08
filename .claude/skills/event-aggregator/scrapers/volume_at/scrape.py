@@ -1,12 +1,24 @@
+import concurrent.futures
 import datetime
 import html
 import re
 import sys
+import time
 
 import ea
 
 BASE = "https://www.volume.at"
 LIST = BASE + "/events/{}/"
+
+DETAIL_WORKERS = 8
+DETAIL_RETRIES = 2
+DETAIL_TIMEOUT = 12
+RUN_BUDGET = 220  # seconds; check.py hard-kills at 300, leave margin
+
+TIME_BLOCK_RE = re.compile(r'meta__time">(.*?)</div>', re.S)
+TIME_ITEM_RE = re.compile(r'<b>([^<]*)</b>\s*([^<]*)</span>')
+ADDR_BLOCK_RE = re.compile(
+    r'<address class="item__location[^"]*">.*?</address>', re.S)
 
 HEADER_RE = re.compile(
     r'<span class="day">(\d+)</span>\s*<div>\s*<span class="weekday">[^<]*</span>\s*'
@@ -95,17 +107,128 @@ def parse_page(page, cursor):
     return out, dates_seen
 
 
+def parse_detail(url, deadline):
+    """Fetch a detail page and pull start time, street address and district.
+
+    Returns a dict with any subset of start_time/address/district filled in;
+    missing pieces are simply absent (never guessed). Any fetch/parse
+    failure yields an empty dict so the listing-derived record is used as-is.
+    """
+    out = {}
+    page = None
+    for attempt in range(DETAIL_RETRIES):
+        if time.time() > deadline:
+            return out
+        try:
+            page = ea.fetch(url, timeout=DETAIL_TIMEOUT)
+            break
+        except Exception:
+            if attempt + 1 < DETAIL_RETRIES:
+                time.sleep(0.3 * (attempt + 1))
+    if page is None:
+        return out
+
+    tb = TIME_BLOCK_RE.search(page)
+    if tb:
+        labels = {}
+        for label, val in TIME_ITEM_RE.findall(tb.group(1)):
+            label = label.strip().rstrip(":")
+            val = val.strip()
+            labels[label] = val
+        chosen = labels.get("Beginn") or labels.get("Einlass")
+        if chosen:
+            tm = re.search(r"(\d{1,2})[:.](\d{2})", chosen)
+            if tm:
+                out["start_time"] = f"{int(tm.group(1)):02d}:{tm.group(2)}"
+
+    street = postal = locality = None
+    for node in ea.jsonld(page):
+        if "postalCode" in node or "streetAddress" in node:
+            street = node.get("streetAddress") or street
+            postal = node.get("postalCode") or postal
+            locality = node.get("addressLocality") or locality
+            break
+
+    if street and postal and locality:
+        out["address"] = f"{street}, {postal} {locality}"
+    elif street or postal or locality:
+        out["address"] = ", ".join(p for p in (street, postal, locality) if p)
+    else:
+        am = ADDR_BLOCK_RE.search(page)
+        if am:
+            addr_text = ea.text(am.group(0))
+            if addr_text:
+                title_m = re.search(r'address__title">\s*([^<]*?)\s*<', am.group(0))
+                venue_name = ea.text(title_m.group(1)) if title_m else None
+                if venue_name and addr_text.startswith(venue_name):
+                    addr_text = addr_text[len(venue_name):].strip(" ,")
+                if addr_text:
+                    out["address"] = addr_text
+                pm = re.search(r"\b(\d{4,5})\b", addr_text or "")
+                if pm:
+                    postal = pm.group(1)
+
+    if postal:
+        try:
+            pc = int(postal)
+            if 1010 <= pc <= 1230:
+                out["district"] = pc
+        except ValueError:
+            pass
+
+    return out
+
+
+def enrich(records, deadline):
+    ex = concurrent.futures.ThreadPoolExecutor(max_workers=DETAIL_WORKERS)
+    try:
+        futs = {ex.submit(parse_detail, r["url"], deadline): r for r in records}
+        remaining = max(deadline - time.time(), 0)
+        done, not_done = concurrent.futures.wait(
+            futs, timeout=remaining, return_when=concurrent.futures.ALL_COMPLETED)
+        for fut in not_done:
+            sys.stderr.write(f"detail timed out {futs[fut]['url']}\n")
+        for fut in done:
+            r = futs[fut]
+            try:
+                extra = fut.result()
+            except Exception as e:
+                sys.stderr.write(f"detail failed {r['url']}: {e}\n")
+                continue
+            t = extra.get("start_time")
+            if t:
+                r["start"] = f"{r['start']}T{t}"
+            if extra.get("address"):
+                r["address"] = extra["address"]
+            if extra.get("district"):
+                r["district"] = extra["district"]
+    finally:
+        ex.shutdown(wait=False, cancel_futures=True)
+    return records
+
+
 def main():
+    deadline = time.time() + RUN_BUDGET
     cutoff = ea.horizon()
     cursor = datetime.date.today()
     seen_ids = set()
     records = []
     for _ in range(120):
+        if time.time() > deadline:
+            sys.stderr.write("listing walk hit run budget, stopping early\n")
+            break
         url = LIST.format(cursor.isoformat())
-        try:
-            page = ea.fetch(url)
-        except Exception as e:
-            sys.stderr.write(f"fetch failed {url}: {e}\n")
+        page = None
+        for attempt in range(DETAIL_RETRIES):
+            try:
+                page = ea.fetch(url, timeout=DETAIL_TIMEOUT)
+                break
+            except Exception as e:
+                if attempt + 1 < DETAIL_RETRIES:
+                    time.sleep(0.3 * (attempt + 1))
+                else:
+                    sys.stderr.write(f"fetch failed {url}: {e}\n")
+        if page is None:
             break
         items, dates_seen = parse_page(page, cursor)
         if not dates_seen:
@@ -118,6 +241,7 @@ def main():
         cursor = max(dates_seen) + datetime.timedelta(days=1)
         if cursor > cutoff:
             break
+    enrich(records, deadline)
     ea.emit(records)
 
 

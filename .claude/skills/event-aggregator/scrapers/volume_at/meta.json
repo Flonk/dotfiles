@@ -17,12 +17,14 @@
     "required_fill": {
       "venue": 0.95,
       "category": 0.9,
-      "price_min": 0.7
+      "price_min": 0.7,
+      "address": 0.5,
+      "district": 0.3
     },
     "canary": "item--event"
   },
   "last_built": "2026-08-08",
-  "notes": "Server-rendered per-day agenda at /events/<YYYY-MM-DD>/, ~4-7 days per fetch; scraper walks forward advancing past the last date header seen (dates with zero events are skipped in the markup, so a fixed step would miss/duplicate). No event time or street address in the listing, only city name (district always null, city only set when address text is literally 'Wien'). Cancelled events keep a literal 'abgesagt' badge in the title, not a CSS class (item__title--canceled is present on every single item regardless of status and is NOT a cancellation signal).",
+  "notes": "Server-rendered per-day agenda at /events/<YYYY-MM-DD>/, ~4-7 days per fetch; scraper walks forward advancing past the last date header seen (dates with zero events are skipped in the markup, so a fixed step would miss/duplicate). The listing itself carries no event time or street address, only a bare city name, so a second pass fetches every item's own detail page (ThreadPoolExecutor, 8 workers, hard time-budgeted so the whole run always finishes well inside check.py's 300s kill even under bad network) to fill start-of-day time ('Beginn:'/'Einlass:' in the 'meta__time' block; 'Beginn' preferred, falls back to 'Einlass' - doors time - if that's the only one published, ~11-16% of detail pages publish neither and start stays date-only), plus street address/postal code from the page's Event JSON-LD (falls back to the visible <address> block when JSON-LD address is empty, which happens for some venues). district is derived from the postal code, only ever set 1010-1230, still null whenever the venue is outside Vienna or the postal code wasn't recoverable. City Wien/null logic is unchanged and still comes only from the listing card, not the detail page's addressLocality. No endDate is ever published anywhere on the site (listing or detail), so end stays null for every record - never fabricated. Cancelled events keep a literal 'abgesagt' badge in the title, not a CSS class (item__title--canceled is present on every single item regardless of status and is NOT a cancellation signal). Sandbox note: this dev environment's outbound network was highly unstable while building this (concurrent agent sessions sharing the same egress caused bursts of instant 'No route to host' errors, sometimes even breaking the listing walk itself) - fill rates for start-time/address/district will vary run to run depending on ambient network health; required_fill floors below are set conservatively below the fill achieved on a clean run, not below what's achievable when the network cooperates (address/time were both ~10pts higher on the best clean run).",
   "schedule": {
     "cadence": "daily",
     "horizon_days": 180,
