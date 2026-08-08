@@ -660,6 +660,26 @@ Two deliberate residues:
   only on how strictly they read it. Collapsing them would mean making the agents depend on
   node, which is not worth it.
 
+### Digest rendering — terminal first
+
+Flo, 2026-08-09: *"i just want text, like in this terminal, forget images for now"* and
+*"images we can do with chafa later"*. So the digest is a **terminal artefact**, not a web
+page. `node src/cli.ts brief` prints it; `--json` is there for whatever consumes it later.
+Posters stay in the DB as URLs, and when they are wanted in the terminal they go through
+**chafa**, not an HTML renderer.
+
+Open, in the order they hurt:
+
+1. **"Acts" lists event titles, not artists.** This is the section Flo predicted he would
+   scroll past, and he was right. The lineup currently reads *"Muss es sein? Es muss sein! |
+   Auf Beetho · Zartl Sommer Jazzbrunch 09.08.2026 · SALONPARCOURS #32"* — programmes, not
+   names. Needs an artist-extraction step before the Spotify ranking (follows first, then
+   plays) is even meaningful.
+2. **wien_gv_at emits venue-level records, not events.** `tschauner-buehne`,
+   `theater-im-park`, `metastadt open air` are *venues with a summer programme*, and they
+   land in Acts with no time and no act. They are not occurrences at all.
+3. **No rating on movies.** TMDB agreed, not integrated.
+
 ## Still needed from Flo
 
 - Home district, for proximity weighting

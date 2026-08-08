@@ -1,4 +1,5 @@
 import { num, parse, str, today } from "./args.ts";
+import { main as brief } from "./commands/brief.ts";
 import { main as digest } from "./commands/digest.ts";
 import { main as merge } from "./commands/merge.ts";
 import { main as rotate } from "./commands/rotate.ts";
@@ -21,6 +22,11 @@ const USAGE = `ea <command> [options]
   rotate [slug...]     what entered or left a fixed repertoire
     --min-run N        run length to care about (default 3)
     --all              include sources with no change
+
+  brief                the day grouped into sections, ranked inside each
+    --date YYYY-MM-DD  default today
+    --limit N          rows per section (default 12)
+    --json             machine-readable
 
   merge                flat events.json export from the sample files
   stats                store health: fill rates, failures, top sources
@@ -51,6 +57,12 @@ async function run(): Promise<number> {
         slugs: f.bare,
         minRun: num(f, "min-run", 3),
         all: f.flags.has("all"),
+      });
+    case "brief":
+      return brief({
+        date: str(f, "date", today()),
+        limit: num(f, "limit", 12),
+        json: f.flags.has("json"),
       });
     case "merge":
       return merge();

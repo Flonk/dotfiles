@@ -4,6 +4,10 @@
     {
       "slug": "srs",
       "why": "Spanische Hofreitschule - 1470 records, 13% of the whole DB, six guided tours repeating daily forever. Pure wallpaper."
+    },
+    {
+      "slug": "aurena",
+      "why": "Auction house, not an events venue. 178 of the 554 records for 2026-08-09 - a third of the day - and they are industrial lots: '4-Achs Abrollkipper mit Ladekran Volvo', 'Dusche; Bad; Sanitaer', 'Solarenergie; Wechselrichter'. Nothing you would attend. Remove this entry if you ever want auctions back; the records are still stored."
     }
   ],
   "venues": [],
