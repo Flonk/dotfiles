@@ -83,7 +83,7 @@ bindGrid(kpKeys)
 
 -- MONITOR SCALE (of the active window's monitor)
 for _, s in ipairs({
-  { keys = { "plus", "KP_Add" },       delta = "up" },
+  { keys = { "plus", "equal", "KP_Add" }, delta = "up" },
   { keys = { "minus", "KP_Subtract" }, delta = "down" },
 }) do
   for _, key in ipairs(s.keys) do
