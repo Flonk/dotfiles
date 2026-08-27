@@ -11,7 +11,10 @@ in
   config = lib.mkMerge [
     {
       programs.gloxwald.stylix.enable = cfg.enable;
-      stylix.base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${cfg.scheme}.yaml";
+      stylix = {
+        enable = lib.mkDefault true;
+        base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${cfg.scheme}.yaml";
+      };
     }
     (lib.mkIf cfg.enable {
       programs.gloxwald.stylix = {
