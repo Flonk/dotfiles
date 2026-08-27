@@ -399,7 +399,7 @@ in
         script = pkgs.writeShellScript "system-rebuild.sh" ''
           set -euo pipefail
           echo "Rebuilding NixOS system configuration..."
-          sudo nixos-rebuild switch --fast --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.host}
+          sudo nixos-rebuild switch --no-reexec --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.host}
         '';
         usage = "Runs nixos-rebuild switch for ${config.skynet.whoami.host} (requires sudo).";
       }
