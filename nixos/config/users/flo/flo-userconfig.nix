@@ -48,7 +48,7 @@
     development = {
       "claude-code" = {
         enable = true;
-        service.enable = true;
+        service.enable = false;
       };
       obsidian = {
         enable = true;
