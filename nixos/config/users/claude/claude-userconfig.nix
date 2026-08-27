@@ -9,9 +9,6 @@
       sops.enable = true;
       zsh.enable = true;
     };
-    desktop = {
-      stylix.enable = true;
-    };
     development = {
       claude-code = {
         enable = true;
