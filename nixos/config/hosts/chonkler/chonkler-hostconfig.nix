@@ -39,8 +39,7 @@
         "gopro-webcam".enable = true;
       };
       os = {
-        # IPU6 webcam — re-enabled 2026-07-04 with out-of-tree intel_cvs +
-        # DWC PHY fix (see obsidian://claude/video-setup).
+        # IPU6 webcam — uses in-tree intel_cvs since 7.2 (see obsidian://claude/video-setup).
         ipu6.enable = true;
         memory-pressure.enable = true;
         powersaver.enable = true;

@@ -1,0 +1,106 @@
+From aea89223d0d1cc84ca6d7513421c62189d8f001e Mon Sep 17 00:00:00 2001
+From: Arun T <arun.t@intel.com>
+Date: Thu, 6 Aug 2026 21:06:46 +0530
+Subject: [PATCH] ipu6epmtl: route ov08x40 through Intel CVS path
+
+---
+ config/linux/ipu6epmtl/sensors/ov08x40-uf.xml | 10 ++++++--
+ src/v4l2/MediaControl.cpp                     | 23 +++++++++++++------
+ 2 files changed, 24 insertions(+), 9 deletions(-)
+
+diff --git a/config/linux/ipu6epmtl/sensors/ov08x40-uf.xml b/config/linux/ipu6epmtl/sensors/ov08x40-uf.xml
+index 1ae3438..834eb92 100644
+--- a/config/linux/ipu6epmtl/sensors/ov08x40-uf.xml
++++ b/config/linux/ipu6epmtl/sensors/ov08x40-uf.xml
+@@ -15,10 +15,13 @@
+     <Sensor name="ov08x40-uf" description="ov08x40 as sensor.">
+         <MediaCtlConfig id="0" ConfigMode="AUTO" outputWidth="3856" outputHeight="2176" format="V4L2_PIX_FMT_SGRBG10"> <!-- RAW10 BE capture -->
+             <format name="ov08x40 $I2CBUS" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
++            <format name="Intel CVS" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
++            <format name="Intel CVS" pad="1" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
+             <format name="Intel IPU6 CSI-2 $CSI_PORT" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
+             <format name="Intel IPU6 CSI2 BE SOC 0" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
+             <!--format name="Intel IPU6 CSI2 BE SOC 0" pad="1" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/ -->
+-            <link srcName="ov08x40 $I2CBUS" srcPad="0" sinkName="Intel IPU6 CSI-2 $CSI_PORT" sinkPad="0" enable="true"/>
++            <link srcName="ov08x40 $I2CBUS" srcPad="0" sinkName="Intel CVS" sinkPad="0" enable="true"/>
++            <link srcName="Intel CVS" srcPad="1" sinkName="Intel IPU6 CSI-2 $CSI_PORT" sinkPad="0" enable="true"/>
+             <link srcName="Intel IPU6 CSI-2 $CSI_PORT" srcPad="1" sinkName="Intel IPU6 CSI2 BE SOC 0" sinkPad="0" enable="true"/>
+             <link srcName="Intel IPU6 CSI2 BE SOC 0" srcPad="1" sinkName="Intel IPU6 BE SOC capture 0" sinkPad="0" enable="true"/>
+ 
+@@ -28,9 +31,12 @@
+         </MediaCtlConfig>
+         <MediaCtlConfig id="0" mediaCfg="1" ConfigMode="AUTO" outputWidth="3856" outputHeight="2176" format="V4L2_PIX_FMT_SGRBG10"> <!-- RAW10 BE capture -->
+             <format name="ov08x40 $I2CBUS" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
++            <format name="Intel CVS" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
++            <format name="Intel CVS" pad="1" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
+             <format name="Intel IPU6 CSI2 $CSI_PORT" pad="0" width="3856" height="2176" format="V4L2_MBUS_FMT_SGRBG10_1X10"/>
+ 
+-            <link srcName="ov08x40 $I2CBUS" srcPad="0" sinkName="Intel IPU6 CSI2 $CSI_PORT" sinkPad="0" enable="true"/>
++            <link srcName="ov08x40 $I2CBUS" srcPad="0" sinkName="Intel CVS" sinkPad="0" enable="true"/>
++            <link srcName="Intel CVS" srcPad="1" sinkName="Intel IPU6 CSI2 $CSI_PORT" sinkPad="0" enable="true"/>
+             <link srcName="Intel IPU6 CSI2 $CSI_PORT" srcPad="1" sinkName="Intel IPU6 ISYS Capture $CAPTURE_ID" sinkPad="0" enable="true"/>
+ 
+             <videonode name="Intel IPU6 ISYS Capture $CAPTURE_ID" videoNodeType="VIDEO_GENERIC"/>
+diff --git a/src/v4l2/MediaControl.cpp b/src/v4l2/MediaControl.cpp
+index cd93f09..42727fc 100644
+--- a/src/v4l2/MediaControl.cpp
++++ b/src/v4l2/MediaControl.cpp
+@@ -63,7 +63,9 @@ struct MediaEntity {
+     char devname[32];
+ };
+ 
+-static const string ivscName = "Intel IVSC CSI";
++static const string ivscName = "Intel CVS";
++static const string ivscLegacyName = "Intel IVSC CSI";
++
+ MediaControl* MediaControl::sInstance = nullptr;
+ Mutex MediaControl::sLock;
+ 
+@@ -909,18 +911,20 @@ int MediaControl::mediaCtlSetup(int cameraId, MediaCtlConf* mc, int width, int h
+     }
+ 
+     MediaEntity* ivsc = getEntityByName(ivscName.c_str());
++    if (!ivsc) ivsc = getEntityByName(ivscLegacyName.c_str());
+     if (ivsc) {
+         for (uint32_t i = 0; i < ivsc->numLinks; ++i) {
+             if (ivsc->links[i].sink->entity == ivsc) {
+                 MediaEntity* sensor = ivsc->links[i].source->entity;
+                 int sensor_entity_id = sensor->info.id;
+-                LOG1("@%s, found %s -> %s", __func__, sensor->info.name, ivscName.c_str());
++                LOG1("@%s, found %s -> %s", __func__, sensor->info.name, ivsc->info.name);
+                 for (McLink& link : mc->links) {
+-                    if (link.srcEntity == sensor_entity_id) {
++                    if (link.srcEntity == sensor_entity_id &&
++                        link.sinkEntity != static_cast<int>(ivsc->info.id)) {
+                         LOG1("@%s, skip %s, link %s -> %s", __func__, link.srcEntityName.c_str(),
+-                             ivscName.c_str(), link.sinkEntityName.c_str());
++                             ivsc->info.name, link.sinkEntityName.c_str());
+                         link.srcEntity = ivsc->info.id;
+-                        link.srcEntityName = ivscName;
++                        link.srcEntityName = ivsc->info.name;
+                         for (uint32_t j = 0; j < ivsc->info.pads; ++j) {
+                             if (ivsc->pads[j].flags & MEDIA_PAD_FL_SOURCE) {
+                                 link.srcPad = j;
+@@ -1008,6 +1012,7 @@ int MediaControl::getLensName(string* lensName) {
+ int MediaControl::getPrivacyDeviceName(std::string* name) {
+     CheckAndLogError(!name, UNKNOWN_ERROR, "nullptr input");
+     MediaEntity* ivsc = getEntityByName(ivscName.c_str());
++    if (!ivsc) ivsc = getEntityByName(ivscLegacyName.c_str());
+ 
+     if (!ivsc) {
+         return BAD_VALUE;
+@@ -1093,8 +1098,12 @@ int MediaControl::getI2CBusAddress(const string& sensorEntityName, const string&
+         for (int i = 0; i < linksCount; i++) {
+             if (strcmp(links[i].sink->entity->info.name, sinkEntityName.c_str()) == 0) {
+                 entityName = entity.info.name;
+-                if (strcmp(entityName, ivscName.c_str()) == 0) {
+-                    return getI2CBusAddress(sensorEntityName, ivscName, i2cBus);
++		if ((strcmp(entityName, ivscName.c_str()) == 0) ||
++			(strcmp(entityName, ivscLegacyName.c_str()) == 0)) {
++			std::string matchedIvscName =
++			(strcmp(entityName, ivscName.c_str()) == 0) ? ivscName : ivscLegacyName;
++
++                    return getI2CBusAddress(sensorEntityName, matchedIvscName, i2cBus);
+                 }
+                 break;
+             }
