@@ -216,9 +216,10 @@ _rglr_pull() {
   local dir="$1"
   _rglr_header "${dir#./}"
   (
-    cd "$dir" && git add -A
+    cd "$dir" || exit
+    git add -A
     git rm $(git ls-files --deleted) 2>/dev/null
-    git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
+    git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"
     git fetch --all --tags --prune &&
     git pull &&
     git rev-list --max-count=1 --format="%s" HEAD | grep -q -- "--wip--" && git reset HEAD~1
@@ -237,7 +238,7 @@ _rglr_pull_default_branch() {
     _rglr_header "${dir#./} ($branch)"
     git add -A
     git rm $(git ls-files --deleted) 2>/dev/null
-    git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]" &&
+    git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"
     git checkout "$branch" &&
     git fetch --all --tags --prune &&
     git pull
