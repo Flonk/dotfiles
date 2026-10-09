@@ -14,6 +14,7 @@ in
       stylix = {
         enable = lib.mkDefault true;
         base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${cfg.scheme}.yaml";
+        targets.rofi.enable = false;
       };
     }
     (lib.mkIf cfg.enable {

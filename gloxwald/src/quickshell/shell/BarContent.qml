@@ -239,15 +239,15 @@ Item {
     anchors.top: parent.top
     spacing: 0
 
-    // CAMERA
+    // HEADPHONES
     Section {
       visible: !bar.lockscreen
-      width: cameraText.implicitWidth + 8
+      width: headphonesText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
       backgroundColor: {
-        if (CameraWidget.status === "busy") return bar.warningColor;
-        if (CameraWidget.status === "ok") return bar.chargingColor;
-        if (CameraWidget.status === "fail") return bar.errorColor;
+        if (HeadphonesWidget.status === "busy") return bar.warningColor;
+        if (HeadphonesWidget.status === "ok") return bar.chargingColor;
+        if (HeadphonesWidget.status === "fail") return bar.errorColor;
         return "#a3746f";
       }
       showTopBorder: false
@@ -257,19 +257,19 @@ Item {
         width: parent.width; height: 20
 
         Text {
-          id: cameraText
+          id: headphonesText
           anchors.centerIn: parent; anchors.verticalCenterOffset: bar.textVerticalOffset
-          text: CameraWidget.busy ? "CAMERA .." : "CAMERA"
+          text: HeadphonesWidget.busy ? "HEADPHONES .." : "HEADPHONES"
           font.family: Theme.fontFamily; font.pointSize: Theme.fontSizeSmall; font.weight: Font.Bold
           color: "#000000"
         }
 
         MouseArea {
-          enabled: bar.interactive && !CameraWidget.busy
+          enabled: bar.interactive && !HeadphonesWidget.busy
           anchors.fill: parent
           hoverEnabled: true
           cursorShape: Qt.PointingHandCursor
-          onClicked: CameraWidget.reset()
+          onClicked: HeadphonesWidget.reconnect()
         }
       }
     }

@@ -88,6 +88,7 @@
       configPackages = [
         (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/11-bluetooth-policy.conf" ''
           wireplumber.settings = { bluetooth.autoswitch-to-headset-profile = false }
+          monitor.bluez.properties = { bluez5.roles = [ a2dp_sink a2dp_source ] }
         '')
       ];
     };

@@ -42,6 +42,7 @@
     ../modules/leisure/gopro-webcam/options.nix
     ../modules/leisure/minecraft/options.nix
     ../modules/leisure/obs-studio/options.nix
+    ../modules/leisure/photocraft/options.nix
     ../modules/leisure/spotify/options.nix
 
     # os

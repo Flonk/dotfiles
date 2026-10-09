@@ -1,5 +1,8 @@
 import { useState, useRef, useCallback } from "react";
-import { execFileSync } from "child_process";
+import { execFileSync, spawn } from "child_process";
+import { writeFileSync, mkdtempSync } from "fs";
+import { join } from "path";
+import { tmpdir } from "os";
 import { Action, ActionPanel, Clipboard, List } from "@vicinae/api";
 import { VaultItem, getPassword } from "./rbw";
 
@@ -76,7 +79,17 @@ async function autofillCredentials(item: VaultItem, masterPassword: string) {
   const js = AUTOFILL_JS
     .replace("__USERNAME__", JSON.stringify(username))
     .replace("__PASSWORD__", JSON.stringify(password));
-  execFileSync("qutebrowser", [`:jseval ${js}`, `:mode-enter insert`]);
+  const dir = mkdtempSync(join(process.env.XDG_RUNTIME_DIR ?? tmpdir(), "bw-autofill-"));
+  const jsPath = join(dir, "fill.js");
+  writeFileSync(jsPath, js, { mode: 0o600 });
+  try {
+    execFileSync("qutebrowser", [`:jseval --file ${jsPath}`, `:mode-enter insert`]);
+  } finally {
+    spawn("sh", ["-c", `sleep 5; rm -rf -- '${dir}'`], {
+      detached: true,
+      stdio: "ignore",
+    }).unref();
+  }
   execFileSync("notify-send", ["🔑 Autofilled", item.name]);
   execFileSync("vicinae", ["close"]);
 }

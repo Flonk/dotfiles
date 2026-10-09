@@ -28,15 +28,59 @@ let
       /cert-ignore /bpp:32 /size:"''${RES}" \
       -gfx +rfx
   '';
+
+  workspaces = {
+    rf-test = "dtbxrftest";
+    rf-preprod = "dtbxrfpreprod";
+    rf-prod = "dtbxrfprod";
+    ifrs-preprod = "dtbxifrspreprod";
+    ifrs-prod = "dtbxifrsprod";
+  };
+
+  crdp = pkgs.buildNpmPackage {
+    pname = "crdp";
+    version = "1.0.0";
+    src = ./crdp;
+    npmDepsHash = "sha256-6oMU3oGPXJH6LsClNQC/lxV6fJUW3Jr7GE8WJMmBVaQ=";
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    postInstall = ''
+      makeWrapper ${pkgs.nodejs}/bin/node $out/bin/crdp \
+        --add-flags $out/lib/node_modules/crdp/dist/main.js \
+        --set CRDP_HOST_FILE ${config.sops.secrets.rdp3ithost.path} \
+        --set CRDP_PORT_FILE ${config.sops.secrets.rdp3itport.path} \
+        --set CRDP_USER_FILE ${config.sops.secrets.rdp3ituser.path} \
+        --set CRDP_PASS_FILE ${config.sops.secrets.rdp3itpass.path} \
+        --set CRDP_WORKSPACES ${
+          lib.escapeShellArg (
+            builtins.toJSON (lib.mapAttrs (_: key: config.sops.secrets.${key}.path) workspaces)
+          )
+        } \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            pkgs-2405.freerdp
+            pkgs.procps
+            pkgs.xdotool
+            pkgs.xinput
+            pkgs.xclip
+            pkgs.wl-clipboard
+            pkgs.imagemagick
+          ]
+        }
+    '';
+  };
 in
 {
   config = lib.mkIf config.skynet.module.projects.andamp.CEIFRS {
     wayland.windowManager.hyprland.settings.window_rule = [
       { match.class = "xfreerdp"; float = false; }
+      { match.tag = "crdp-locked"; border_color = "rgb(FF0000) rgb(880808)"; }
     ];
 
     home.packages = [
       pkgs-2405.freerdp
+      crdp
     ];
 
     skynet.cli.scripts = [
@@ -52,29 +96,15 @@ in
       }
     ];
 
-    sops.secrets.rdp3ithost = {
-      key = "rdp3ithost";
-      inherit sopsFile;
-    };
-
-    sops.secrets.rdp3itport = {
-      key = "rdp3itport";
-      inherit sopsFile;
-    };
-
-    sops.secrets.rdp3ittitle = {
-      key = "rdp3ittitle";
-      inherit sopsFile;
-    };
-
-    sops.secrets.rdp3ituser = {
-      key = "rdp3ituser";
-      inherit sopsFile;
-    };
-
-    sops.secrets.rdp3itpass = {
-      key = "rdp3itpass";
-      inherit sopsFile;
-    };
+    sops.secrets = lib.genAttrs (
+      [
+        "rdp3ithost"
+        "rdp3itport"
+        "rdp3ittitle"
+        "rdp3ituser"
+        "rdp3itpass"
+      ]
+      ++ lib.attrValues workspaces
+    ) (key: { inherit key sopsFile; });
   };
 }

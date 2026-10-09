@@ -9,7 +9,7 @@
     home.packages = with pkgs; [
       gnome-keyring
       libsecret
-      gcr
+      gcr_3
     ];
 
     # Run gnome-keyring as a user service so apps can persist secrets (e.g. Zed OAuth tokens)

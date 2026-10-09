@@ -27,6 +27,42 @@ in
       description = "Launch qutebrowser with --disable-accelerated-video-decode (leak experiment, 2026-07-12).";
     };
 
+    # glvnd ranks 10_nvidia.json above 50_mesa.json, so QtWebEngine initialises
+    # NVIDIA EGL and holds /dev/nvidia0 + renderD129 open while rendering on the
+    # Intel iGPU (renderD128). Restricting the vendor list to Mesa keeps the
+    # browser off the dGPU entirely (crash experiment, see claude/video-setup.md).
+    pinToIgpu = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Restrict qutebrowser's EGL/GLX vendor to Mesa so it never touches the dGPU (crash experiment, 2026-08-13).";
+    };
+
+    # Screencast frames arrive as dmabuf-backed GpuMemoryBuffers wrapped in
+    # gpu::CompoundImageBacking. Tearing a screenshare down destroys them and
+    # trips a NOTREACHED in SharedImageManager::OnRepresentationDestroyed,
+    # which is fatal because QtWebEngine's GPU service is in-process. This
+    # keeps capture/video frames off GpuMemoryBuffers entirely.
+    # OFF since 2026-08-13: it did stop the abort, but pushing those frames into
+    # CPU memory made teardown balloon the main process to the 11G cap twice in
+    # a row — freeze via direct reclaim (Rule 9), then OOM kill. A survivable
+    # abort with session restore beats a hang. Re-enable only with a fix for
+    # the balloon.
+    disableGpuMemoryBufferVideoFrames = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Launch qutebrowser with --disable-gpu-memory-buffer-video-frames (screenshare-teardown crash, 2026-08-13).";
+    };
+
+    # Takes the viz Display off SkiaOutputSurfaceImpl and onto a software output
+    # surface. OFF by default: the "hang" it was meant to fix turned out to be
+    # the memory balloon, not a GPU spin, and this flag pushes even more work
+    # into CPU memory. Only worth trying once the balloon is understood.
+    softwareCompositing = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Launch qutebrowser with --disable-gpu-compositing (screenshare-teardown hang, 2026-08-13).";
+    };
+
     memoryMax = mkOption {
       type = types.str;
       default = "11G";

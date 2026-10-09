@@ -18,11 +18,23 @@ let
     ${lib.optionalString cfg.softwareVideoDecode ''
       export QTWEBENGINE_CHROMIUM_FLAGS="--disable-accelerated-video-decode ''${QTWEBENGINE_CHROMIUM_FLAGS:-}"
     ''}
+    ${lib.optionalString cfg.softwareCompositing ''
+      export QTWEBENGINE_CHROMIUM_FLAGS="--disable-gpu-compositing ''${QTWEBENGINE_CHROMIUM_FLAGS:-}"
+    ''}
+    ${lib.optionalString cfg.disableGpuMemoryBufferVideoFrames ''
+      export QTWEBENGINE_CHROMIUM_FLAGS="--disable-gpu-memory-buffer-video-frames ''${QTWEBENGINE_CHROMIUM_FLAGS:-}"
+    ''}
+    ${lib.optionalString cfg.pinToIgpu ''
+      export __EGL_VENDOR_LIBRARY_FILENAMES=/run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
+      export __GLX_VENDOR_LIBRARY_NAME=mesa
+      export LIBVA_DRIVER_NAME=iHD
+    ''}
     # _autosave.yml survives an unclean kill (system shutdown) and is then
     # restored on startup; no config option disables that.
     rm -f "''${XDG_DATA_HOME:-$HOME/.local/share}/qutebrowser/sessions/_autosave.yml"
     exec ${pkgs.systemd}/bin/systemd-run --user --scope --quiet --collect \
       --unit="qutebrowser-$$" \
+      --description="qutebrowser" \
       --property=MemoryMax=${cfg.memoryMax} \
       -- ${basePkg}/bin/qutebrowser "$@"
   '';

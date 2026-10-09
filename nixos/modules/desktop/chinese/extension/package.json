@@ -21,7 +21,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vicinae/api": "0.16.8"
+    "@vicinae/api": "0.29.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

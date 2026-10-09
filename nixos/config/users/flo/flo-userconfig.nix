@@ -60,6 +60,7 @@
     leisure = {
       minecraft.enable = true;
       "obs-studio".enable = true;
+      photocraft.enable = true;
       spotify.enable = true;
     };
     os = {
