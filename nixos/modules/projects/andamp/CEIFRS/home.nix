@@ -35,6 +35,7 @@ let
     rf-prod = "dtbxrfprod";
     ifrs-preprod = "dtbxifrspreprod";
     ifrs-prod = "dtbxifrsprod";
+    adf-prod = "rfadfprod";
   };
 
   crdp = pkgs.buildNpmPackage {
