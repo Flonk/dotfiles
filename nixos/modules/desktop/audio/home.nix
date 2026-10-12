@@ -21,6 +21,30 @@ let
     '') cfg.trustedBluetoothHeadsets
   );
 
+  a2dpWatchdogScript = pkgs.writeShellScript "bluetooth-a2dp-watchdog.sh" ''
+    log() { echo "[a2dp-watchdog] $*"; }
+    declare -A last
+    ${pkgs.systemd}/bin/journalctl --user -f -n0 -o cat -u wireplumber.service \
+      | ${pkgs.gnugrep}/bin/grep --line-buffered -oE "Failure in Bluetooth audio transport /org/bluez/hci[0-9]+/dev_[0-9A-F_]+" \
+      | while read -r line; do
+          mac=$(echo "''${line##*dev_}" | ${pkgs.coreutils}/bin/tr _ :)
+          now=$(${pkgs.coreutils}/bin/date +%s)
+          if (( now - ''${last[$mac]:-0} < 60 )); then
+            log "$mac failed again within 60s, skipping"
+            continue
+          fi
+          last[$mac]=$now
+          log "$mac transport stuck, reconnecting"
+          ${pkgs.bluez}/bin/bluetoothctl disconnect "$mac" > /dev/null
+          sleep 2
+          if ${pkgs.bluez}/bin/bluetoothctl connect "$mac" > /dev/null; then
+            log "$mac reconnected"
+          else
+            log "$mac reconnect failed"
+          fi
+        done
+  '';
+
   # --- EasyEffects: startup wrapper with diagnostics ---
   eeStartScript = pkgs.writeShellScript "easyeffects-start.sh" ''
     log() { echo "[ee-start] $(${pkgs.coreutils}/bin/date '+%F %H:%M:%S') $*"; }
@@ -252,6 +276,22 @@ in
         Install.WantedBy = [ "graphical-session.target" ];
       };
     })
+
+    {
+      systemd.user.services.bluetooth-a2dp-watchdog = {
+        Unit = {
+          Description = "Reconnect Bluetooth headsets whose A2DP transport gets stuck";
+          After = [ "wireplumber.service" ];
+          PartOf = [ "graphical-session.target" ];
+        };
+        Service = {
+          ExecStart = "${a2dpWatchdogScript}";
+          Restart = "always";
+          RestartSec = "3s";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
+    }
 
     # --- EasyEffects ---
     (lib.mkIf cfg.easyeffects.enable {
