@@ -54,9 +54,6 @@
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
-  hardware.bluetooth.package = pkgs.bluez.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [ ./bluez-open-remote-configured-stream.patch ];
-  });
   hardware.bluetooth.settings = {
     General = {
       Experimental = "true";
