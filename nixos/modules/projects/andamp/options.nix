@@ -16,5 +16,9 @@ in
       type = types.bool;
       default = false;
     };
+    doubletunnel = mkOption {
+      type = types.bool;
+      default = false;
+    };
   };
 }

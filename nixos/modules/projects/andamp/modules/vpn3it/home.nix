@@ -55,36 +55,60 @@ let
     export VPN_PASS_FILE="${config.sops.secrets.vpn3itpass.path}"
     exec ${./vpn3it.sh} "$@"
   '';
+
+  doubletunnel = pkgs.writeShellScriptBin "doubletunnel" ''
+    export AWK="${pkgs.gawk}/bin/awk"
+    export OPENVPN="${pkgs.openvpn}/bin/openvpn"
+    export VPN3IT="${vpn3it}/bin/vpn3it"
+    export VPN_HOST_FILE="${config.sops.secrets.vpn3ithost.path}"
+    export ANDAMP_OVPN_FILE="${config.sops.secrets.andamp-vpn.path}"
+    export ANDAMP_USER_FILE="${config.sops.secrets.andamp-vpn-user.path}"
+    export ANDAMP_PASS_FILE="${config.sops.secrets.andamp-vpn-pass.path}"
+    exec ${./doubletunnel.sh} "$@"
+  '';
+
+  cfg = config.skynet.module.projects.andamp;
 in
 {
-  config =
-    lib.mkIf (config.skynet.module.projects.andamp.CEFKM || config.skynet.module.projects.andamp.CEIFRS)
-      {
-        skynet.cli.scripts = [
-          {
-            command = [
-              "3it"
-              "vpn"
-            ];
-            title = "Connect to vpn3it VPN";
-            script = "${vpn3it}/bin/vpn3it";
-            usage = "Connect to vpn3it VPN. Prompts for Authy token only when needed.";
-          }
-        ];
-
-        sops.secrets.vpn3ithost = {
-          key = "vpn3ithost";
-          sopsFile = ./secrets/secrets.json;
-        };
-
-        sops.secrets.vpn3ituser = {
-          key = "vpn3ituser";
-          sopsFile = ./secrets/secrets.json;
-        };
-
-        sops.secrets.vpn3itpass = {
-          key = "vpn3itpass";
-          sopsFile = ./secrets/secrets.json;
-        };
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.CEFKM || cfg.CEIFRS || cfg.doubletunnel) {
+      sops.secrets.vpn3ithost = {
+        key = "vpn3ithost";
+        sopsFile = ./secrets/secrets.json;
       };
+
+      sops.secrets.vpn3ituser = {
+        key = "vpn3ituser";
+        sopsFile = ./secrets/secrets.json;
+      };
+
+      sops.secrets.vpn3itpass = {
+        key = "vpn3itpass";
+        sopsFile = ./secrets/secrets.json;
+      };
+    })
+    (lib.mkIf (cfg.CEFKM || cfg.CEIFRS) {
+      skynet.cli.scripts = [
+        {
+          command = [
+            "3it"
+            "vpn"
+          ];
+          title = "Connect to vpn3it VPN";
+          script = "${vpn3it}/bin/vpn3it";
+          usage = "Connect to vpn3it VPN. Prompts for Authy token only when needed.";
+        }
+      ];
+    })
+    (lib.mkIf cfg.doubletunnel {
+      skynet.cli.scripts = [
+        {
+          command = [ "doubletunnel" ];
+          title = "Connect to 3it through andamp";
+          script = "${doubletunnel}/bin/doubletunnel";
+          usage = "Connect the andamp VPN without taking the default route, then connect vpn3it through it. Prompts for the Authy token.";
+        }
+      ];
+    })
+  ];
 }

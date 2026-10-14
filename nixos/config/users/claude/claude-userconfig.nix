@@ -16,5 +16,6 @@
       };
       obsidian.enable = true;
     };
+    projects.andamp.doubletunnel = true;
   };
 }
