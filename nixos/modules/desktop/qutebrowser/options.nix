@@ -23,7 +23,7 @@ in
     # the culprit (keep this on); still leaks => upstream Chromium bug.
     softwareVideoDecode = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = "Launch qutebrowser with --disable-accelerated-video-decode (leak experiment, 2026-07-12).";
     };
 

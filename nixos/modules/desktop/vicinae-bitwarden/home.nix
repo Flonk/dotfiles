@@ -46,6 +46,7 @@ in
     home.activation.rbwSetPinentry = lib.hm.dag.entryAfter [ "installPackages" ] ''
       if [ -f "${config.xdg.configHome}/rbw/config.json" ]; then
         run ${pkgs.rbw}/bin/rbw config set pinentry ${pinentry-rbw}/bin/pinentry-rbw
+        run ${pkgs.rbw}/bin/rbw config set lock_timeout 28800
       fi
     '';
 

@@ -67,3 +67,14 @@ export async function getPassword(item: VaultItem, masterPassword: string): Prom
   const password = await rbw(masterPassword, args);
   return password.trim();
 }
+
+export function matchItems(items: VaultItem[], query: string): VaultItem[] {
+  if (!query) return items;
+  const q = query.toLowerCase();
+  return items.filter(
+    (item) =>
+      item.name.toLowerCase().includes(q) ||
+      (item.user?.toLowerCase().includes(q) ?? false) ||
+      (item.uris?.some((u) => u.toLowerCase().includes(q)) ?? false),
+  );
+}

@@ -9,7 +9,8 @@ let
     name = "open-bitwarden";
     runtimeInputs = with pkgs; [ wl-clipboard ];
     text = ''
-      link="vicinae://launch/@flo/vicinae-bitwarden/search"
+      command="''${1:-search}"
+      link="vicinae://launch/@flo/vicinae-bitwarden/$command"
 
       # Only prefill from the active tab if qutebrowser is the focused window
       if hyprctl activewindow -j | grep -qE '"class"[[:space:]]*:[[:space:]]*"org\.qutebrowser\.qutebrowser"'; then
@@ -45,6 +46,7 @@ in
         wayland.windowManager.hyprland.extraConfig = ''
           hl.bind("MOD3 + B", hl.dsp.exec_cmd("xdg-open vicinae://launch/@Gelei/store.vicinae.bluetooth/devices"))
           hl.bind("MOD3 + P", hl.dsp.exec_cmd("open-bitwarden"))
+          hl.bind("MOD3 + A", hl.dsp.exec_cmd("open-bitwarden autofill"))
           hl.bind("MOD3 + T", hl.dsp.exec_cmd("xdg-open vicinae://launch/@gebeto/store.raycast.translate/quick-translate"))
         '';
       };

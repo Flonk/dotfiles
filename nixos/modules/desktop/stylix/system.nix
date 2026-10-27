@@ -29,5 +29,15 @@ in
       };
       targets.grub.enable = false;
     };
+
+    fonts.fontconfig.defaultFonts =
+      let
+        emoji = lib.mkAfter [ "Noto Color Emoji" ];
+      in
+      {
+        monospace = emoji;
+        sansSerif = emoji;
+        serif = emoji;
+      };
   };
 }

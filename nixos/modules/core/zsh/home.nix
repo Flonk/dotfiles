@@ -51,10 +51,9 @@
           end = lib.mkAfter ''
             cc_fn() {
               if [[ -n "$1" ]]; then
-                cd "$1" && claude --dangerously-skip-permissions --chrome
-              else
-                cd ~/repos/personal/dotfiles && claude --dangerously-skip-permissions --chrome
+                cd "$1" || return 1
               fi
+              claude --dangerously-skip-permissions --chrome
             }
 
             ticket_fn() {

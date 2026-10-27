@@ -20,6 +20,20 @@
           "type": "text"
         }
       ]
+    },
+    {
+      "name": "autofill",
+      "title": "Autofill",
+      "subtitle": "Bitwarden",
+      "description": "Autofill the first vault match into qutebrowser",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "query",
+          "placeholder": "Search query",
+          "type": "text"
+        }
+      ]
     }
   ],
   "scripts": {
