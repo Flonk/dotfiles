@@ -45,12 +45,15 @@
       "vicinae-askpass".enable = true;
       "vicinae-bitwarden".enable = true;
     };
-    development = {
+    ai = {
       "claude-code" = {
         enable = true;
         service.enable = false;
       };
       "copilot-cli".enable = true;
+      pi.enable = true;
+    };
+    development = {
       obsidian = {
         enable = true;
         ui.enable = true;

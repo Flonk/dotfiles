@@ -9,11 +9,13 @@
       sops.enable = true;
       zsh.enable = true;
     };
-    development = {
+    ai = {
       claude-code = {
         enable = true;
         service.enable = true;
       };
+    };
+    development = {
       obsidian.enable = true;
     };
     projects.andamp.doubletunnel = true;

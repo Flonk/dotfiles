@@ -13,8 +13,9 @@
     ../../modules/core/sops/home.nix
     ../../modules/core/ssh/home.nix
     ../../modules/core/zsh/home.nix
-    ../../modules/development/claude-code/home.nix
-    ../../modules/development/copilot-cli/home.nix
+    ../../modules/ai/claude-code/home.nix
+    ../../modules/ai/copilot-cli/home.nix
+    ../../modules/ai/pi/home.nix
 
     ../../modules/development/obsidian/home.nix
     ../../modules/development/vscode/home.nix

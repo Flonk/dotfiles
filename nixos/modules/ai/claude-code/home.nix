@@ -29,7 +29,7 @@ let
 in
 {
   config = lib.mkMerge [
-    (lib.mkIf config.skynet.module.development.claude-code.enable {
+    (lib.mkIf config.skynet.module.ai.claude-code.enable {
       home.packages = [
         pkgs.gh
         claudeScript
@@ -45,7 +45,7 @@ in
           { match = { class = "^Xephyr$"; title = "^auto-xephyr$"; }; suppress_event = "activatefocus"; }
         ];
     })
-    (lib.mkIf config.skynet.module.development.claude-code.service.enable {
+    (lib.mkIf config.skynet.module.ai.claude-code.service.enable {
       systemd.user.services.claude-remote-control = {
         Unit = {
           Description = "Claude Code Remote Control";

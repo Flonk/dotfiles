@@ -1,5 +1,10 @@
 {
   imports = [
+    # ai
+    ../modules/ai/claude-code/options.nix
+    ../modules/ai/copilot-cli/options.nix
+    ../modules/ai/pi/options.nix
+
     # assorted
     ../modules/assorted/avahi/options.nix
 
@@ -31,8 +36,6 @@
     ../modules/desktop/vicinae-bitwarden/options.nix
 
     # development
-    ../modules/development/claude-code/options.nix
-    ../modules/development/copilot-cli/options.nix
     ../modules/development/dnsmasq/options.nix
     ../modules/development/obsidian/options.nix
     ../modules/development/qemu/options.nix
