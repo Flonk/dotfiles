@@ -50,6 +50,7 @@
         enable = true;
         service.enable = false;
       };
+      "copilot-cli".enable = true;
       obsidian = {
         enable = true;
         ui.enable = true;

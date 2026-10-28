@@ -14,6 +14,7 @@
     ../../modules/core/ssh/home.nix
     ../../modules/core/zsh/home.nix
     ../../modules/development/claude-code/home.nix
+    ../../modules/development/copilot-cli/home.nix
 
     ../../modules/development/obsidian/home.nix
     ../../modules/development/vscode/home.nix

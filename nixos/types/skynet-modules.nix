@@ -32,6 +32,7 @@
 
     # development
     ../modules/development/claude-code/options.nix
+    ../modules/development/copilot-cli/options.nix
     ../modules/development/dnsmasq/options.nix
     ../modules/development/obsidian/options.nix
     ../modules/development/qemu/options.nix
