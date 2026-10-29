@@ -45,6 +45,7 @@
     # leisure
     ../modules/leisure/gopro-webcam/options.nix
     ../modules/leisure/minecraft/options.nix
+    ../modules/leisure/lutris/options.nix
     ../modules/leisure/obs-studio/options.nix
     ../modules/leisure/artcraft/options.nix
     ../modules/leisure/spotify/options.nix

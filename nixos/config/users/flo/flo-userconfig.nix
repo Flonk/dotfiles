@@ -63,6 +63,7 @@
     };
     leisure = {
       minecraft.enable = true;
+      lutris.enable = true;
       "obs-studio".enable = true;
       artcraft = {
         photocraft.enable = true;
