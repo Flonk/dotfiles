@@ -13,14 +13,21 @@ let
     ];
     text = ''
       export YDOTOOL_SOCKET=/run/ydotoold/socket
+      click() {
+        if id -nG | grep -qw ydotool; then
+          ydotool click "$1"
+        else
+          /run/wrappers/bin/sg ydotool -c "ydotool click $1"
+        fi
+      }
       state="''${XDG_RUNTIME_DIR:-/tmp}/autoclicker.held"
       if [ -f "$state" ]; then
         rm -f "$state"
-        ydotool click 0x80
+        click 0x80
         notify-send -t 1500 "🖱️ Left click released"
       else
         touch "$state"
-        ydotool click 0x40
+        click 0x40
         notify-send -t 1500 "🖱️ Left click held"
       fi
     '';
