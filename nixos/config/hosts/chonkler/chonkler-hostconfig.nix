@@ -16,6 +16,7 @@
     module = {
       assorted = {
         avahi.enable = false;
+        autoclicker.enable = true;
       };
       desktop = {
         audio = {

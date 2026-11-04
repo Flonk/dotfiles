@@ -7,6 +7,7 @@
 
     # assorted
     ../modules/assorted/avahi/options.nix
+    ../modules/assorted/autoclicker/options.nix
 
     # core
     ../modules/core/bitwarden/options.nix
