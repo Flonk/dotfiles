@@ -13,15 +13,16 @@ let
     ];
     text = ''
       export YDOTOOL_SOCKET=/run/ydotoold/socket
-      pidfile="''${XDG_RUNTIME_DIR:-/tmp}/autoclicker.pid"
-      if [ -f "$pidfile" ] && kill "$(cat "$pidfile")" 2>/dev/null; then
-        rm -f "$pidfile"
-        notify-send -t 1500 "🖱️ Autoclicker off"
-        exit 0
+      state="''${XDG_RUNTIME_DIR:-/tmp}/autoclicker.held"
+      if [ -f "$state" ]; then
+        rm -f "$state"
+        ydotool click 0x80
+        notify-send -t 1500 "🖱️ Left click released"
+      else
+        touch "$state"
+        ydotool click 0x40
+        notify-send -t 1500 "🖱️ Left click held"
       fi
-      ydotool click -r 1000000 -D "''${1:-50}" 0xC0 >/dev/null 2>&1 &
-      echo $! > "$pidfile"
-      notify-send -t 1500 "🖱️ Autoclicker on"
     '';
   };
 in
