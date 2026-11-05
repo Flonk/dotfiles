@@ -30,6 +30,7 @@ float pulseAnim(float n){
 const float PAD = 0.0464;      // design gap, measured from the artwork
 const float SDF_BOX   = 0.75;
 const float SDF_RANGE = 0.25;
+float gFarPad = SDF_RANGE;
 
 // the early-out branches return far + SDF_RANGE — clear of every coast
 // band, so the switch never re-enters shelf/relief range (it used to sit
@@ -37,14 +38,14 @@ const float SDF_RANGE = 0.25;
 // max() keeps the field growing past the texture's clamp plateau
 float sdJ(vec2 p) {
     float far = length(p) - 0.57;   // J fits in radius 0.554
-    if (far > 0.05) return far + SDF_RANGE;
+    if (far > 0.05) return far + gFarPad;
     vec2 uv = vec2(p.x, -p.y)/(2.0*SDF_BOX) + 0.5;
     vec4 t = texture(iChannel0, uv);
     return max((t.r - 0.5) * SDF_RANGE + (t.b - 0.5) * gCoast, far);
 }
 float sdP(vec2 p) {
     float far = length(p) - 0.66;   // P fits in radius 0.646
-    if (far > 0.09) return far + SDF_RANGE;
+    if (far > 0.09) return far + gFarPad;
     vec2 uv = vec2(p.x, -p.y)/(2.0*SDF_BOX) + 0.5;
     vec4 t = texture(iChannel0, uv);
     return max((t.g - 0.5) * SDF_RANGE + (t.b - 0.5) * gCoast, far);
@@ -354,6 +355,295 @@ vec3 render(vec2 p, vec2 tp){
     return quadTree(gr, n2, depth, tp);
 }
 
+float goldBand(vec2 q, vec2 dir, vec2 nrm, float t, float side){
+    if(t < 0. || t > 1.) return 0.;
+    float front = side * mix(-GOLD_REACH, GOLD_REACH, t);
+    float s = side * (dot(q, nrm) - front)
+            + GOLD_WOBBLE * sin(dot(q, dir) * 5. + iTime * 1.3);
+    float w = s > 0. ? GOLD_FRONT : GOLD_TAIL;
+    return exp(-s * s / (w * w));
+}
+
+float goldWave(vec2 q, vec2 dir, vec2 nrm){
+    float k = floor(iTime / GOLD_PERIOD);
+    float start = k * GOLD_PERIOD + random(vec2(k, 3.1)) * (GOLD_PERIOD - GOLD_DUR);
+    float side = (random(vec2(k, 5.9)) < 0.5) ? -1. : 1.;
+    float g = goldBand(q, dir, nrm, (iTime - start) / GOLD_DUR, side);
+    float mside = (fract(u_dev_gold_at * 7.31) < 0.5) ? -1. : 1.;
+    return max(g, goldBand(q, dir, nrm, (iTime - u_dev_gold_at) / GOLD_DUR, mside));
+}
+
+vec3 field(vec2 p, vec2 q, vec2 tp){
+    vec2 dir = vec2(cos(FIELD_ANGLE), sin(FIELD_ANGLE));
+    vec2 nrm = vec2(-dir.y, dir.x);
+    float u = dot(p, dir) * FIELD_ROWS;
+    float v = dot(p, nrm) * FIELD_ROWS;
+    v += FIELD_WAVE_AMP * sin(u * FIELD_WAVE_FREQ + iTime * FIELD_WAVE_RATE);
+    float lane = floor(v);
+    float ph = lane * FIELD_LANE_FREQ + iTime * FIELD_LANE_RATE;
+    u -= FIELD_SPEED * (iTime - FIELD_LANE_VAR * cos(ph) / FIELD_LANE_RATE)
+       + random(vec2(lane, 7.7)) * 13.;
+    vec2 id = mod(vec2(floor(u), lane), 1024.);
+    vec2 l = vec2(fract(u), fract(v)) - 0.5;
+    vec2 lo = l.x * dir + l.y * nrm;
+    float g = goldWave(q - lo / (FIELD_ROWS * gZoom), dir, nrm);
+    float gb = goldWave(q, dir, nrm);
+    float amp = FIELD_AMP * (1. + GOLD_SWELL * g);
+    vec2 gp = lo / amp;
+
+    float n = random(id);
+    float frame = mod(iTime * mix(FIELD_CLOCK.x, FIELD_CLOCK.y, n) * 2. * SPEED
+                      + n * LOOP_LEN, LOOP_LEN);
+    vec2 pJ = gp, pP = gp;
+    if(frame >= ROT_START && frame < ROT_START+T_ROTATE){
+        float a = cubicInOut((frame-ROT_START)/T_ROTATE)*6.28318530718;
+        float sd = (fract(n*7.3) < 0.5) ? -1. : 1.;
+        pJ = rotAround(gp, CJ, sd*a);
+        pP = rotAround(gp, CP, -sd*a);
+    }
+    float dj = sdJ(pJ);
+    float dp = max(sdP(pP), PAD - dj);
+    float k = amp / (FIELD_ROWS * gZoom);
+
+    vec3 col = vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+    col += GOLD_BOT * GOLD_GLOW * gb;
+    float da = min(dj, dp);
+    col = mix(col, vec3(0.3), S(da * k));
+    float fj = fillAnim(frame, FILLJ_START);
+    float fp = fillAnim(frame, FILLP_START);
+    float wj = max(dj, length(pJ-SEED_J) - (fj*(RJ+0.02)-0.02));
+    float wp = max(dp, length(pP-SEED_P) - (fp*(RP+0.02)-0.02));
+    col = mix(col, ampGradient(gp), S(min(wj, wp) * k));
+    vec3 gold = mix(GOLD_BOT, GOLD_TOP, clamp(gp.y + 0.5, 0., 1.));
+    return mix(col, gold, g * S(da * k));
+}
+
+vec3 drop(vec2 q, vec2 tp){
+    float cs = 1. / DROP_ROWS;
+    float tau = iTime - gDropStart;
+    float cyc = floor(tau / DROP_CYCLE);
+    tau -= cyc * DROP_CYCLE;
+    float flushAt = DROP_CYCLE - DROP_FLUSH;
+    float fl = max(tau - flushAt, 0.);
+    float sink = 0.5 * DROP_G * fl * fl;
+    float tspawn = min(tau, flushAt);
+
+    float c = floor(q.x / cs);
+    float lx = fract(q.x / cs) - 0.5;
+    float h = (q.y + 0.5) / cs;
+    float top = DROP_ROWS + 1.;
+    vec2 cid = vec2(c, cyc * 17.3);
+    float rate = mix(DROP_RATE.x, DROP_RATE.y, random(cid + 0.17));
+    float ns = floor(tspawn * rate);
+    float j0 = floor(h + sink);
+
+    vec3 col = vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+    float kscr = DROP_AMP * cs;
+    for(int i = 0; i < 5; i++){
+        float k = (i == 0) ? j0 : ns - float(i - 1);
+        if(k < 0. || k >= DROP_ROWS) continue;
+        if(i > 0 && k == j0) continue;
+        float s = (k + DROP_JITTER * random(cid + k * 1.31)) / rate;
+        if(s > tspawn) continue;
+        float tf = sqrt(2. * (top - k) / DROP_G);
+        float dt = tau - s;
+        float tilt = (random(cid + k * 2.7) - 0.5) * 2. * DROP_TILT;
+        float y, ang;
+        if(dt < tf){
+            y = top - 0.5 * DROP_G * dt * dt;
+            ang = tilt + DROP_SPIN * (tf - dt) * sign(random(cid + k * 3.3) - 0.5);
+        } else {
+            float b = dt - tf;
+            y = k + DROP_BOUNCE * exp(-b * 8.) * abs(sin(b * 18.));
+            ang = tilt;
+        }
+        y -= sink;
+        vec2 gp = vec2(lx, h - y - 0.5) / DROP_AMP;
+        if(dot(gp, gp) > 1.) continue;
+        gp = gp * Rot(ang);
+        float dj = sdJ(gp);
+        float dp = max(sdP(gp), PAD - dj);
+        vec3 ac = random(cid + k * 5.1) < DROP_FILL ? ampGradient(gp) : vec3(0.3);
+        col = mix(col, ac, S(min(dj, dp) * kscr));
+    }
+    return col;
+}
+
+float glyphDist(vec2 p){
+    float dj = sdJ(p);
+    return min(dj, max(sdP(p), PAD - dj));
+}
+
+float solidMap(vec3 p){
+    vec2 w = vec2(glyphDist(p.xy) + SOLID_BEVEL, abs(p.z) - SOLID_DEPTH + SOLID_BEVEL);
+    return min(max(w.x, w.y), 0.) + length(max(w, 0.)) - SOLID_BEVEL;
+}
+
+vec3 solidNormal(vec3 p){
+    vec2 e = vec2(SOLID_NEPS, 0.);
+    vec2 g = vec2(glyphDist(p.xy + e.xy) - glyphDist(p.xy - e.xy),
+                  glyphDist(p.xy + e.yx) - glyphDist(p.xy - e.yx));
+    g = normalize(g + 1e-7);
+    vec2 w = vec2(glyphDist(p.xy) + SOLID_BEVEL, abs(p.z) - SOLID_DEPTH + SOLID_BEVEL);
+    vec2 nw = (w.x > 0. && w.y > 0.) ? normalize(w)
+            : (w.x > w.y ? vec2(1., 0.) : vec2(0., 1.));
+    return normalize(vec3(g * nw.x, sign(p.z) * nw.y));
+}
+
+float solidLight(vec3 n, vec3 L, vec3 F, vec3 up, float amb){
+    return amb * mix(SOLID_GROUND, 1., dot(n, up) * 0.5 + 0.5)
+         + (1. - amb) * max(dot(n, L), 0.)
+         + SOLID_FILL * max(dot(n, F), 0.);
+}
+
+vec3 acesApprox(vec3 v){
+    v = max(v, 0.) * 0.6;
+    return clamp((v * (2.51 * v + 0.03)) / (v * (2.43 * v + 0.59) + 0.14), 0., 1.);
+}
+
+float raySphere4Inner(vec3 ro, vec3 rd, float ra){
+    float r2 = ra * ra;
+    vec3 d2 = rd * rd, d3 = d2 * rd, o2 = ro * ro, o3 = o2 * ro;
+    float ka = 1. / dot(d2, d2);
+    float k3 = ka * dot(ro, d3);
+    float k2 = ka * dot(o2, d2);
+    float k1 = ka * dot(o3, rd);
+    float k0 = ka * (dot(o2, o2) - r2 * r2);
+    float c2 = k2 - k3 * k3;
+    float c1 = k1 + 2. * k3 * k3 * k3 - 3. * k3 * k2;
+    float c0 = k0 - 3. * k3 * k3 * k3 * k3 + 6. * k3 * k3 * k2 - 4. * k3 * k1;
+    float p = c2 * c2 + c0 / 3.;
+    float q = c2 * c2 * c2 - c2 * c0 + c1 * c1;
+    float h = q * q - p * p * p;
+    if(h < 0.) return -1.;
+    float sh = sqrt(h);
+    float s = sign(q + sh) * pow(abs(q + sh), 1. / 3.);
+    float t = sign(q - sh) * pow(abs(q - sh), 1. / 3.);
+    vec2 w = vec2(s + t, s - t);
+    vec2 v = vec2(w.x + c2 * 4., w.y * sqrt(3.)) * 0.5;
+    float r = length(v);
+    return abs(v.y) / sqrt(r + v.x) - c1 / r - k3;
+}
+
+vec3 superquadricEnv(vec3 ro, vec3 rd){
+    vec3 o = vec3(0.);
+    float A = 1.;
+    vec3 L = normalize(SQ_LIGHT);
+    for(int i = 0; i < 3; i++){
+        if(A < 0.05) break;
+        float z = raySphere4Inner(ro, rd, SQ_ROOM);
+        if(z <= 0.) break;
+        vec3 p = ro + rd * z;
+        vec3 n = -normalize(p * p * p);
+        float f = 1. + dot(n, rd);
+        f *= f;
+        o += A * pow(max(0., dot(n, L)), 9.) * (SQ_OFFSET + sin(-f + SQ_BASE));
+        A *= mix(.3, .7, f);
+        rd = reflect(rd, n);
+        ro = p + 2e-3 * n;
+    }
+    vec3 c = acesApprox(o * SQ_GAIN);
+    return mix(1.055 * pow(c, vec3(1. / 2.4)) - 0.055, 12.92 * c, step(c, vec3(0.0031308)));
+}
+
+float solidMarch(vec3 ro, vec3 rd, int steps, out float dmin, out float tmin){
+    dmin = 1e9;
+    tmin = 0.;
+    vec3 bx = vec3(0.7, 0.7, SOLID_DEPTH + 0.01);
+    vec3 m = 1. / (rd + vec3(1e-6));
+    vec3 n0 = m * ro;
+    vec3 k = abs(m) * bx;
+    vec3 t1 = -n0 - k, t2 = -n0 + k;
+    float tN = max(max(t1.x, t1.y), t1.z);
+    float tF = min(min(t2.x, t2.y), t2.z);
+    if(tN > tF || tF < 0.) return -1.;
+    float t = max(tN, 0.);
+    tmin = t;
+    for(int i = 0; i < steps; i++){
+        float d = solidMap(ro + rd * t);
+        if(d < dmin){ dmin = d; tmin = t; }
+        if(d < max(0.0002, t * SOLID_HIT_PX / (SOLID_FOCAL * iResolution.y))) return t;
+        t += d * 0.9;
+        if(t > tF) break;
+    }
+    return -1.;
+}
+
+vec3 solidSample(vec2 q, vec2 tp){
+    vec3 bg = mix(GRAD_BOT, GRAD_TOP, 0.5) * SOLID_GLOW * (1. - smoothstep(0., SOLID_GLOW_R, length(q)))
+            + vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+
+    float a = iTime * SOLID_SPIN;
+    float b = SOLID_TILT * sin(iTime * SOLID_TILT_RATE);
+    mat3 ry = mat3(cos(a), 0., -sin(a), 0., 1., 0., sin(a), 0., cos(a));
+    mat3 rx = mat3(1., 0., 0., 0., cos(b), sin(b), 0., -sin(b), cos(b));
+    mat3 M = ry * rx;
+    mat3 Mi = transpose(M);
+
+    vec3 rd = normalize(vec3(q, SOLID_FOCAL));
+    vec3 oro = Mi * vec3(0., 0., -SOLID_DIST);
+    vec3 ord = Mi * rd;
+
+    float dmin, tmin;
+    float t = solidMarch(oro, ord, SOLID_STEPS, dmin, tmin);
+    bool hit = t >= 0.;
+    if(!hit && dmin > 1e8) return bg;
+    float px = tmin / (SOLID_FOCAL * iResolution.y);
+    float cov = hit ? 1. : 1. - smoothstep(0., 1.5 * px, dmin);
+    if(cov < 0.001) return bg;
+    if(!hit) t = tmin;
+
+    vec3 L = Mi * normalize(SOLID_LIGHT);
+    vec3 Fo = Mi * normalize(SOLID_FILL_DIR);
+    vec3 up = Mi * vec3(0., 1., 0.);
+    vec3 matte = vec3(0.);
+    {
+        vec3 po = oro + ord * t;
+        vec3 no = solidNormal(po);
+        vec3 base = ampGradient(po.xy) * mix(1., 0.5, 1. - abs(no.z));
+        float dif = max(dot(no, L), 0.);
+        float spec = pow(max(dot(no, normalize(L - ord)), 0.), MATTE_SHINE);
+        matte = base * solidLight(no, L, Fo, up, MATTE_AMBIENT) + vec3(spec) * MATTE_SPEC;
+    }
+    if(u_solid_matte > 0.999) return mix(bg, matte, cov);
+
+    vec3 col = vec3(0.);
+    float A = 1.;
+    vec3 ro = oro, dir = ord;
+    for(int bnc = 0; bnc <= SOLID_BOUNCES; bnc++){
+        vec3 po = ro + dir * t;
+        vec3 no = solidNormal(po);
+        vec3 base = ampGradient(po.xy) * mix(1., 0.5, 1. - abs(no.z));
+        float dif = max(dot(no, L), 0.);
+        float spec = pow(max(dot(no, normalize(L - dir)), 0.), SOLID_SHINE);
+        col += A * (base * solidLight(no, L, Fo, up, 0.12) * SOLID_KD + vec3(spec) * SOLID_SPEC);
+        float f = 1. + dot(no, dir);
+        f *= f;
+        A *= mix(.3, .7, f) * SOLID_REFL;
+        dir = reflect(dir, no);
+        ro = po + no * 0.015;
+        if(bnc == SOLID_BOUNCES) break;
+        float dm, tm;
+        t = solidMarch(ro, dir, SOLID_STEPS / 2, dm, tm);
+        if(t < 0.) break;
+    }
+    col += A * superquadricEnv(M * ro, M * dir);
+    return mix(bg, mix(col, matte, u_solid_matte), cov);
+}
+
+vec3 solid(vec2 q, vec2 tp){
+    gFarPad = 0.;
+    vec3 c = vec3(0.);
+    float px = 1. / iResolution.y;
+    for(int i = 0; i < SOLID_SS; i++)
+        for(int j = 0; j < SOLID_SS; j++){
+            vec2 o = (vec2(i, j) + 0.5) / float(SOLID_SS) - 0.5;
+            c += solidSample(q + o * px, tp);
+        }
+    gFarPad = SDF_RANGE;
+    return c / float(SOLID_SS * SOLID_SS);
+}
+
 // --- key indicator -----------------------------------------------------------
 vec3 keyIndicator(vec3 col, vec2 q){
     // the circle leads the amp by IND_LAG both ways: max of the live and the
@@ -384,11 +674,10 @@ vec3 keyIndicator(vec3 col, vec2 q){
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     gSeed = 100. * vec2(sk_seed(0), sk_seed(1));
-    sequenceModes();
-    gCoast = COASTF_AMT * P.terra;
-
     vec2 p = (fragCoord-0.5*iResolution.xy)/iResolution.y;
     vec2 q = p;
+    sequenceModes(q);
+    gCoast = COASTF_AMT * P.terra;
 
     // global zoom-out (offset half a period) plus the wham zoom, centered
     // on a target orbiting off-screen so each zoom lands somewhere new
@@ -406,7 +695,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     // noise coords, counter-scrolling slowly against the grid
     vec2 tp = vec2(p.x, p.y + iTime*SCROLL*BG_SPEED) * NOISE_SCALE;
 
-    vec3 col = render(p, tp);
+    vec3 col = vec3(0.);
+    if(P.field + P.drop + P.solid < 0.999) col = render(p, tp);
+    if(P.field > 0.001) col = mix(col, field(p, q, tp), P.field);
+    if(P.drop > 0.001) col = mix(col, drop(q, tp), P.drop);
+    if(P.solid > 0.001) col = mix(col, solid(q, tp), P.solid);
     gCoast = 0.;   // the key indicator keeps clean brand glyphs
     fragColor = vec4(keyIndicator(col, q), 1.0);
 }

@@ -20,6 +20,13 @@ layout(std140, binding = 0) uniform buf {
     float u_last_failed_unlock_time;
     float u_auth_started_time;
     vec2 u_key_bases;
+    int u_dev_mode;
+    float u_dev_mode_at;
+    float u_dev_gold_at;
+    int u_dev_prev_mode;
+    float u_dev_prev_at;
+    float u_dev_switch_at;
+    float u_solid_matte;
 
     vec3 iResolution;
     vec3 u_indicator_color;

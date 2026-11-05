@@ -62,10 +62,11 @@ const float PILE_GAIN = 7.;      // brightness pile-up at the horizon
 const float SCROLL_MIN = 0.045;  // tile content scroll speed, random per tile
 const float SCROLL_MAX = 0.09;
 
-// mode transitions ease over TRANS_DUR; the global zoom flips on ZOOM_PERIOD,
+// mode transitions circle-wipe over WIPE_DUR; the global zoom flips on ZOOM_PERIOD,
 // offset by half — tuned so with the default two-mode playlist the four
 // quarters run 2d-in, 2d-out, 3d-out, 3d-in
-const float TRANS_DUR   = 1.2;   // mode/zoom flip transition duration
+const float TRANS_DUR   = 1.2;   // zoom flip / cloud fade duration
+const float WIPE_DUR    = 0.4;
 const float ZOOM_PERIOD = 60. * 8.; // seconds per zoom flip
 const float ZOOM_OUT    = 0.30;  // global zoom-out amount
 const float ZOOM_ECC    = 5.7;   // zoom target distance from screen center
@@ -161,9 +162,76 @@ const float IND_LAG    = 0.08;   // circle leads the amp by this, in and out
 const vec3 GRAD_TOP = vec3(0.212, 0.671, 0.729);
 const vec3 GRAD_BOT = vec3(0.063, 0.596, 0.706);
 
+const float FIELD_ROWS      = 24.;
+const float FIELD_AMP       = 0.45;
+const float FIELD_ANGLE     = 0.6;
+const float FIELD_SPEED     = 0.6;
+const float FIELD_LANE_VAR  = 0.5;
+const float FIELD_LANE_FREQ = 0.37;
+const float FIELD_LANE_RATE = 0.11;
+const float FIELD_WAVE_AMP  = 0.6;
+const float FIELD_WAVE_FREQ = 0.15;
+const float FIELD_WAVE_RATE = 0.2;
+const vec2  FIELD_CLOCK     = vec2(0.3, 1.);
+
+const float GOLD_PERIOD = 30.;
+const float GOLD_DUR    = 3.5;
+const float GOLD_REACH  = 1.3;
+const float GOLD_FRONT  = 0.02;
+const float GOLD_TAIL   = 0.175;
+const float GOLD_WOBBLE = 0.;
+const float GOLD_SWELL  = 0.2;
+const float GOLD_GLOW   = 0.08;
+const vec3  GOLD_TOP    = GRAD_TOP;
+const vec3  GOLD_BOT    = GRAD_BOT;
+
+const float DROP_ROWS   = 12.;
+const float DROP_AMP    = 0.45;
+const float DROP_G      = 60.;
+const vec2  DROP_RATE   = vec2(0.1, 0.35);
+const float DROP_JITTER = 0.6;
+const float DROP_CYCLE  = 40.;
+const float DROP_FLUSH  = 1.5;
+const float DROP_TILT   = 0.25;
+const float DROP_SPIN   = 4.;
+const float DROP_BOUNCE = 0.15;
+const float DROP_FILL   = 0.35;
+
+const float SOLID_DIST   = 3.2;
+const float SOLID_FOCAL  = 2.;
+const float SOLID_DEPTH  = 0.12;
+const float SOLID_BEVEL  = 0.025;
+const float SOLID_NEPS   = 0.02;
+const vec3  SOLID_FILL_DIR = vec3(0.6, -0.6, -0.5);
+const float SOLID_FILL   = 0.35;
+const float SOLID_GROUND = 0.6;
+const float SOLID_SPIN   = 0.15;
+const float SOLID_TILT   = 0.3;
+const float SOLID_TILT_RATE = 0.085;
+const int   SOLID_STEPS  = 96;
+const float SOLID_HIT_PX = 0.5;
+const int   SOLID_SS     = 2;
+const vec3  SOLID_LIGHT  = vec3(-0.6, 0.7, -0.8);
+const float SOLID_SHINE  = 64.;
+const float SOLID_SPEC   = 0.8;
+const float SOLID_REFL   = 1.;
+const float SOLID_KD     = 0.35;
+const int   SOLID_BOUNCES = 2;
+const float SOLID_GLOW   = 0.2;
+const float SOLID_GLOW_R = 0.8;
+const float MATTE_AMBIENT = 0.25;
+const float MATTE_SHINE   = 8.;
+const float MATTE_SPEC    = 0.08;
+
+const float SQ_ROOM   = 5.;
+const vec3  SQ_LIGHT  = vec3(1., -2., -1.);
+const float SQ_OFFSET = 1.1;
+const vec3  SQ_BASE   = vec3(3.9, 0.6, 0.9);
+const float SQ_GAIN   = 11.;
+
 // --- modes -------------------------------------------------------------------
 // a mode is one ModeParams entry in the playlist below; the sequencer
-// (20_modes) walks it, easing between neighbours over TRANS_DUR
+// (20_modes) walks it, circle-wiping between neighbours over WIPE_DUR
 struct ModeParams {
     float pad;      // squircle padding to its cell edge
     float bg;       // background noise + stars visibility
@@ -183,34 +251,23 @@ struct ModeParams {
     float squir;    // tile squareness on top of SQUIRCLENESS (1 = square)
     float warhol;   // pop-palette strength (per-square colors + inversion)
     float big;      // chance a cell promotes to one huge amp
+    float field;
+    float drop;
+    float solid;
 };
 
-// each step grows the pad and zooms in (wham) — visual complexity goes up,
-// so fewer but bigger planets. the event horizon dies out within the pad,
-// so cells of different levels stay continuous
-const int MODE_COUNT = 5;
+const int MODE_COUNT = 4;
 const ModeParams MODES[MODE_COUNT] = ModeParams[MODE_COUNT](
-    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big
+    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid
     // 2d base: flat — border ring, no noise/stars/shade/distortion
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15),
-    // 3d mono: sparse starfield, white horizon (the old aurora), white sun
-    ModeParams(0.25, 1., 0.25, 0.75, 0.,  0.12,   -0.3,  0.6, 0.,   0.,  0.,  0.,   0.,  0.25, 0.,  0.,  0.15),
-    // 3d full: colored aurora, warm sun, clouds, ocean + terrain, nebula
-    ModeParams(0.45, 1., 0.25, 0.75, 0.,  0.12,   -0.65, 0.6, 1.,   1.,  1.,  1.,   1.,  3.,   0.,  0.,  0.15),
-    // back to base before the pop hits
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15),
-    // warhol: flat pop-color squares, normal/inverted per tile, more bigs
-    ModeParams(0.,   0., 0.,   0.,   0.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   1.,  1.,  0.85)
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1.)
 );
 
 const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D);
-
-// two super-modes, each opening on the circles base block: the planets arc
-// is blocks 0-2 (circles -> 3d balls -> planets), the warhol arc blocks 3-4
-// (circles -> squares); sk_seed(2) decides which arc a session opens on
-const int   WARHOL_START = 3;    // playlist index of the warhol arc's circles block
-const float WARHOL_FIRST = 0.5;  // chance a session opens on the warhol arc
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;

@@ -20,28 +20,25 @@ greet-dev:
 grub-dev resolution="1920x1080":
     cd src/grub && bash preview.sh {{resolution}}
 
-# Live-iterate a lockscreen shader: recompile on save; the preview window
-# hot-swaps the shader in place (LockShaderPass watches the .qsb when SHADER_DEV=1)
-shader-dev scene="yamp":
+# Live-iterate the lockscreen shader: recompile on save; the preview window
+# hot-swaps the shader in place (LockShaderPass watches the .qsb when SHADER_DEV=1).
+# Keys 1-9 jump to that playlist mode, 0 returns to the normal sequence
+shader-dev:
     #!/usr/bin/env bash
     set -euo pipefail
-    just shader-build {{scene}}
-    watchexec -w ./src/quickshell/lockscreen/shaders/scenes/{{scene}} -e glsl -- \
-        just shader-build {{scene}} &
+    just shader-build
+    watchexec -w ./src/quickshell/lockscreen/shaders/scenes/yamp -w ./src/quickshell/lockscreen/qt_preamble.glsl -e glsl -- \
+        just shader-build &
     trap 'kill $! 2>/dev/null' EXIT
-    SHADER_DEV=1 SHADER_SCENE={{scene}} quickshell --path ./src/quickshell/shell/preview.qml
+    SHADER_DEV=1 quickshell --path ./src/quickshell/shell/preview.qml
 
-# Preview one lockscreen shader in a floating window (no lock, no bar)
-shader-preview scene="yamp":
-    just shader-build {{scene}}
-    SHADER_SCENE={{scene}} quickshell --path ./src/quickshell/shell/preview.qml
+# Preview the lockscreen shader in a floating window (no lock, no bar)
+shader-preview:
+    just shader-build
+    quickshell --path ./src/quickshell/shell/preview.qml
 
-# Build a single lockscreen shader scene (.glsl → .frag.qsb)
-shader-build scene:
-    ONLY_SCENE={{scene}} ./src/quickshell/lockscreen/convert-shaders.sh
-
-# Build all lockscreen shaders
-shader-build-all:
+# Build the lockscreen shader (.glsl → .frag.qsb)
+shader-build:
     ./src/quickshell/lockscreen/convert-shaders.sh
 
 # Clean compiled shaders

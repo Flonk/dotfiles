@@ -1,13 +1,12 @@
 // preview.qml — standalone lockscreen-shader preview.
 //
-// Renders a single scene in a normal floating window (no session lock, no bar),
+// Renders yamp in a normal floating window (no session lock, no bar),
 // reusing the real LockContext so the clock/envelope uniforms behave exactly as
 // they do on the lockscreen. Run against the working tree so it picks up freshly
 // compiled .qsb files — the installed shell reads its shaders from /nix/store and
 // will not see your edits.
 //
 //   qs -p ./quickshell/shell/preview.qml
-//   SHADER_SCENE=auroras qs -p ./quickshell/shell/preview.qml
 //
 // See the `shader-dev` just recipe for the watch-recompile-reload loop.
 import QtQuick
@@ -19,10 +18,33 @@ FloatingWindow {
     implicitHeight: 800
     color: "black"
 
-    // Scene name from $SHADER_SCENE, defaulting to the lockscreen default.
-    property string scene: (typeof Quickshell.env === "function"
-        ? (Quickshell.env("SHADER_SCENE") || "yamp")
-        : "yamp")
+    readonly property bool dev: Quickshell.env("SHADER_DEV") === "1"
+    readonly property var modeNames: ["base", "field", "drop", "3d amp"]
+
+    component DevButton: Rectangle {
+        id: btn
+        property string label
+        property bool active: false
+        property color accent: "#3aa8b8"
+        signal clicked()
+        implicitWidth: btnText.implicitWidth + 16
+        implicitHeight: 24
+        radius: 4
+        color: active ? accent : (btnMouse.pressed ? "#55ffffff" : btnMouse.containsMouse ? "#33ffffff" : "#1affffff")
+        Text {
+            id: btnText
+            anchors.centerIn: parent
+            text: btn.label
+            color: btn.active ? "black" : "white"
+            font.pixelSize: 12
+        }
+        MouseArea {
+            id: btnMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: btn.clicked()
+        }
+    }
 
     LockContext {
         id: ctx
@@ -57,7 +79,7 @@ FloatingWindow {
             anchors.fill: parent
         }
 
-        Component.onCompleted: sceneLoader.setSource("shaders/scenes/" + win.scene + ".qml", {
+        Component.onCompleted: sceneLoader.setSource("shaders/scenes/yamp.qml", {
             "context": Qt.binding(() => ctx),
             "frameCount": Qt.binding(() => surface.frameCount),
             "dummyTexture": dummyTexture,
@@ -72,15 +94,109 @@ FloatingWindow {
             id: keyInput
             focus: true
             visible: false
-            Keys.onPressed: ctx.recordKeypress()
+            Keys.onPressed: event => {
+                if (win.dev && event.key >= Qt.Key_0 && event.key <= Qt.Key_9) {
+                    if (event.key === Qt.Key_0)
+                        ctx.jumpToMode(-1);
+                    else
+                        ctx.jumpToMode(event.key - Qt.Key_1);
+                    event.accepted = true;
+                    return;
+                }
+                if (win.dev && event.key === Qt.Key_M) {
+                    ctx.matte = !ctx.matte;
+                    event.accepted = true;
+                    return;
+                }
+                if (win.dev && event.key === Qt.Key_A) {
+                    ctx.fxaa = !ctx.fxaa;
+                    event.accepted = true;
+                    return;
+                }
+                if (win.dev && event.key === Qt.Key_P) {
+                    ctx.setTimeScale(ctx.timeScale === 0 ? 1 : 0);
+                    event.accepted = true;
+                    return;
+                }
+                ctx.recordKeypress();
+            }
         }
 
-        // Scene label + name overlay.
+        Rectangle {
+            visible: win.dev
+            anchors { left: parent.left; top: parent.top; margins: 12 }
+            width: panel.implicitWidth + 20
+            height: panel.implicitHeight + 20
+            radius: 6
+            color: "#cc111111"
+            border.color: "#33ffffff"
+
+            Column {
+                id: panel
+                anchors.centerIn: parent
+                spacing: 8
+
+                Text {
+                    color: "#ccffffff"
+                    font.pixelSize: 12
+                    font.family: "monospace"
+                    text: "t " + ctx.elapsedTime.toFixed(1) + "s   x" + ctx.timeScale
+                }
+
+                Row {
+                    spacing: 4
+                    DevButton { label: "auto"; active: ctx.devMode < 0; onClicked: ctx.jumpToMode(-1) }
+                    Repeater {
+                        model: win.modeNames
+                        DevButton {
+                            required property int index
+                            required property string modelData
+                            label: (index + 1) + " " + modelData
+                            active: ctx.devMode === index
+                            onClicked: ctx.jumpToMode(index)
+                        }
+                    }
+                }
+
+                Row {
+                    spacing: 4
+                    DevButton { label: "gold wave"; accent: "#d9a530"; onClicked: ctx.sendGoldWave() }
+                    DevButton { label: "keypress"; onClicked: ctx.recordKeypress() }
+                    DevButton { label: "fail"; accent: "#e35532"; onClicked: ctx.sendFail() }
+                    DevButton { label: "matte"; active: ctx.matte; onClicked: ctx.matte = !ctx.matte }
+                    DevButton { label: "aa"; active: ctx.fxaa; onClicked: ctx.fxaa = !ctx.fxaa }
+                }
+
+                Row {
+                    spacing: 4
+                    DevButton {
+                        label: ctx.timeScale === 0 ? "play" : "pause"
+                        onClicked: ctx.setTimeScale(ctx.timeScale === 0 ? 1 : 0)
+                    }
+                    Repeater {
+                        model: [0.25, 1, 4, 16]
+                        DevButton {
+                            required property real modelData
+                            label: "x" + modelData
+                            active: ctx.timeScale === modelData
+                            onClicked: ctx.setTimeScale(modelData)
+                        }
+                    }
+                    DevButton { label: "+10s"; onClicked: ctx.skip(10) }
+                    DevButton { label: "+60s"; onClicked: ctx.skip(60) }
+                    DevButton { label: "+8m"; onClicked: ctx.skip(480) }
+                }
+            }
+        }
+
         Text {
             anchors { left: parent.left; bottom: parent.bottom; margins: 12 }
             color: "#aaffffff"
             font.pixelSize: 13
-            text: win.scene + "   " + (sceneLoader.item?.authorText ?? "")
+            text: "yamp   " + (sceneLoader.item?.authorText ?? "")
+                + (win.dev
+                    ? "   mode " + (ctx.devMode < 0 ? "auto" : ctx.devMode + 1) + "   [1-9 jump, 0 auto, m matte, p pause, a aa]"
+                    : "")
         }
     }
 }

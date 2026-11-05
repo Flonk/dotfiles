@@ -31,7 +31,12 @@ ShaderEffect {
                 .toString().replace(/^file:\/\//, "")
             : ""
         watchChanges: true
-        onFileChanged: pass._rev++
+        onFileChanged: reloadDebounce.restart()
+    }
+    Timer {
+        id: reloadDebounce
+        interval: 200
+        onTriggered: pass._rev++
     }
 
     property vector3d iResolution: Qt.vector3d(width, height, 1.0)
@@ -67,4 +72,11 @@ ShaderEffect {
     property real u_last_failed_unlock_time: context ? context.lastFailedUnlockTime : 0
     property real u_auth_started_time: context ? context.authStartedTime : 0
     property vector2d u_key_bases: context ? Qt.vector2d(context.keypulseBase, context.keyBase) : Qt.vector2d(0, 0)
+    property int u_dev_mode: context ? context.devMode : -1
+    property real u_dev_mode_at: context ? context.devModeAt : 0
+    property real u_dev_gold_at: context ? context.devGoldAt : -1000
+    property int u_dev_prev_mode: context ? context.devPrevMode : -1
+    property real u_dev_prev_at: context ? context.devPrevAt : 0
+    property real u_dev_switch_at: context ? context.devSwitchAt : -1000
+    property real u_solid_matte: context ? context.solidMatte : 0
 }

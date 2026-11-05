@@ -20,6 +20,13 @@ layout(std140, binding = 0) uniform buf {
     float u_last_failed_unlock_time;
     float u_auth_started_time;
     vec2 u_key_bases;
+    int u_dev_mode;
+    float u_dev_mode_at;
+    float u_dev_gold_at;
+    int u_dev_prev_mode;
+    float u_dev_prev_at;
+    float u_dev_switch_at;
+    float u_solid_matte;
 
     vec3 iResolution;
     vec3 u_indicator_color;
@@ -113,27 +120,30 @@ float sk_attention_envelope() { return sk_attention_envelope_at(iTime); }
 // ---------------------------------------------------------------------------
 // Shader body follows (injected by convert-shaders.sh)
 // ---------------------------------------------------------------------------
-#define S smoothstep
+void mainImage(out vec4 fragColor, in vec2 fragCoord){
+    vec2 px = 1. / iResolution.xy;
+    vec2 uv = vec2(fragCoord.x, iResolution.y - fragCoord.y) * px;
+    const vec3 luma = vec3(0.299, 0.587, 0.114);
 
-const float SPEED = 0.1;
+    vec3 cc = texture(iChannel0, uv).rgb;
+    float lc = dot(cc, luma);
+    float l00 = dot(texture(iChannel0, uv + vec2(-0.5, -0.5) * px).rgb, luma);
+    float l10 = dot(texture(iChannel0, uv + vec2( 0.5, -0.5) * px).rgb, luma);
+    float l01 = dot(texture(iChannel0, uv + vec2(-0.5,  0.5) * px).rgb, luma);
+    float l11 = dot(texture(iChannel0, uv + vec2( 0.5,  0.5) * px).rgb, luma);
 
-vec4 Line(vec2 uv, float speed, float height, vec3 col) {
-  uv.y += S(1., 0., abs(uv.x)) * sin(iTime * SPEED * speed + uv.x * height) * .2 * (1.0 + sk_attention_envelope() * 0.4);
-  return vec4(S(.06 * S(.2, .9, abs(uv.x)), 0., abs(uv.y) - .004) * col, 1.0) * S(1., .3, abs(uv.x));
-}
+    vec2 dir = vec2((l01 + l11) - (l00 + l10), (l00 + l01) - (l10 + l11));
+    float reduce = max((l00 + l10 + l01 + l11) * (1. / 32.), 1. / 128.);
+    float rcp = 1. / (min(abs(dir.x), abs(dir.y)) + reduce);
+    dir = clamp(dir * rcp, -8., 8.) * px;
 
-void mainImage(out vec4 O, in vec2 I) {
-  vec2 uv = (I - .5 * iResolution.xy) / iResolution.y;
-  O = vec4(0.);
-  float attention = sk_attention_envelope();
-  for (float i = 0.; i <= 5.; i += 1.) {
-    float t = i / 5.;
-    vec3 c = vec3(.2 + t * .7, .2 + t * .4, 0.3);
-    float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
-    c = mix(vec3(lum), c, 1.0 + 0.2 * attention);
-    c = mix(c, sk_fail_color, sk_fail_envelope());
-    O += Line(uv, 1. + t, 4. + t, c);
-  }
+    vec3 a = 0.5 * (texture(iChannel0, uv - dir / 6.).rgb + texture(iChannel0, uv + dir / 6.).rgb);
+    vec3 b = a * 0.5 + 0.25 * (texture(iChannel0, uv - dir * 0.5).rgb + texture(iChannel0, uv + dir * 0.5).rgb);
+
+    float lmin = min(lc, min(min(l00, l10), min(l01, l11)));
+    float lmax = max(lc, max(max(l00, l10), max(l01, l11)));
+    float lb = dot(b, luma);
+    fragColor = vec4((lb < lmin || lb > lmax) ? a : b, 1.);
 }
 
 // --- Qt entry point ---

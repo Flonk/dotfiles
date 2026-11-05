@@ -62,18 +62,19 @@ void main() {
 }
 WRAPPER
 
-        if "$QSB" --glsl "300 es,440" -o "$out_qsb" "$out_frag" 2>/dev/null; then
+        if "$QSB" --glsl "300 es,440" -o "$out_qsb.tmp" "$out_frag"; then
+            cat "$out_qsb.tmp" > "$out_qsb" && rm -f "$out_qsb.tmp"
             echo "  OK: $label"
             return 0
         else
-            echo "FAIL: $label"
-            rm -f "$out_qsb"
+            echo "FAIL: $label (keeping previous $out_qsb)"
+            rm -f "$out_qsb.tmp"
             return 1
         fi
     }
 
     # Compile buffer passes (bufferA, bufferB, bufferC, ...)
-    for buf in "$scene_dir"/buffer*.glsl; do
+    for buf in "$scene_dir"/buffer*.glsl "$scene_dir"/post*.glsl; do
         [ -f "$buf" ] || continue
         buf_name=$(basename "$buf" .glsl)
         buf_frag="$OUTPUT_DIR/${name}_${buf_name}.frag"

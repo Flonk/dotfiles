@@ -9,15 +9,6 @@ Item {
     // (bar and input still work) — one GPU-heavy render per lock
     property bool renderScene: true
 
-    // Resolved scene name from the shared context (identical on every monitor)
-    property string shader: context.activeShader
-
-    property string _activeShader: ""
-
-    function _pickShader() {
-        _activeShader = shader;
-    }
-
     // Per-surface frame counter; also drives the shared clock in LockContext
     // (frameTick ignores all but the first surface that ever ticked)
     property int _iFrame: 0
@@ -47,7 +38,6 @@ Item {
         color: "black"
     }
 
-    onShaderChanged: _reloadShader()
     onRenderSceneChanged: _reloadShader()
     Component.onCompleted: _reloadShader()
 
@@ -56,8 +46,7 @@ Item {
             shaderLoader.setSource("");
             return;
         }
-        _pickShader();
-        shaderLoader.setSource("shaders/scenes/" + _activeShader + ".qml", {
+        shaderLoader.setSource("shaders/scenes/yamp.qml", {
             "context": Qt.binding(() => root.context),
             "frameCount": Qt.binding(() => root._iFrame),
             "dummyTexture": dummyTexture,

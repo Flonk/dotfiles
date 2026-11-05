@@ -20,6 +20,13 @@ layout(std140, binding = 0) uniform buf {
     float u_last_failed_unlock_time;
     float u_auth_started_time;
     vec2 u_key_bases;
+    int u_dev_mode;
+    float u_dev_mode_at;
+    float u_dev_gold_at;
+    int u_dev_prev_mode;
+    float u_dev_prev_at;
+    float u_dev_switch_at;
+    float u_solid_matte;
 
     vec3 iResolution;
     vec3 u_indicator_color;
@@ -177,10 +184,11 @@ const float PILE_GAIN = 7.;      // brightness pile-up at the horizon
 const float SCROLL_MIN = 0.045;  // tile content scroll speed, random per tile
 const float SCROLL_MAX = 0.09;
 
-// mode transitions ease over TRANS_DUR; the global zoom flips on ZOOM_PERIOD,
+// mode transitions circle-wipe over WIPE_DUR; the global zoom flips on ZOOM_PERIOD,
 // offset by half — tuned so with the default two-mode playlist the four
 // quarters run 2d-in, 2d-out, 3d-out, 3d-in
-const float TRANS_DUR   = 1.2;   // mode/zoom flip transition duration
+const float TRANS_DUR   = 1.2;   // zoom flip / cloud fade duration
+const float WIPE_DUR    = 0.4;
 const float ZOOM_PERIOD = 60. * 8.; // seconds per zoom flip
 const float ZOOM_OUT    = 0.30;  // global zoom-out amount
 const float ZOOM_ECC    = 5.7;   // zoom target distance from screen center
@@ -276,9 +284,76 @@ const float IND_LAG    = 0.08;   // circle leads the amp by this, in and out
 const vec3 GRAD_TOP = vec3(0.212, 0.671, 0.729);
 const vec3 GRAD_BOT = vec3(0.063, 0.596, 0.706);
 
+const float FIELD_ROWS      = 24.;
+const float FIELD_AMP       = 0.45;
+const float FIELD_ANGLE     = 0.6;
+const float FIELD_SPEED     = 0.6;
+const float FIELD_LANE_VAR  = 0.5;
+const float FIELD_LANE_FREQ = 0.37;
+const float FIELD_LANE_RATE = 0.11;
+const float FIELD_WAVE_AMP  = 0.6;
+const float FIELD_WAVE_FREQ = 0.15;
+const float FIELD_WAVE_RATE = 0.2;
+const vec2  FIELD_CLOCK     = vec2(0.3, 1.);
+
+const float GOLD_PERIOD = 30.;
+const float GOLD_DUR    = 3.5;
+const float GOLD_REACH  = 1.3;
+const float GOLD_FRONT  = 0.02;
+const float GOLD_TAIL   = 0.175;
+const float GOLD_WOBBLE = 0.;
+const float GOLD_SWELL  = 0.2;
+const float GOLD_GLOW   = 0.08;
+const vec3  GOLD_TOP    = GRAD_TOP;
+const vec3  GOLD_BOT    = GRAD_BOT;
+
+const float DROP_ROWS   = 12.;
+const float DROP_AMP    = 0.45;
+const float DROP_G      = 60.;
+const vec2  DROP_RATE   = vec2(0.1, 0.35);
+const float DROP_JITTER = 0.6;
+const float DROP_CYCLE  = 40.;
+const float DROP_FLUSH  = 1.5;
+const float DROP_TILT   = 0.25;
+const float DROP_SPIN   = 4.;
+const float DROP_BOUNCE = 0.15;
+const float DROP_FILL   = 0.35;
+
+const float SOLID_DIST   = 3.2;
+const float SOLID_FOCAL  = 2.;
+const float SOLID_DEPTH  = 0.12;
+const float SOLID_BEVEL  = 0.025;
+const float SOLID_NEPS   = 0.02;
+const vec3  SOLID_FILL_DIR = vec3(0.6, -0.6, -0.5);
+const float SOLID_FILL   = 0.35;
+const float SOLID_GROUND = 0.6;
+const float SOLID_SPIN   = 0.15;
+const float SOLID_TILT   = 0.3;
+const float SOLID_TILT_RATE = 0.085;
+const int   SOLID_STEPS  = 96;
+const float SOLID_HIT_PX = 0.5;
+const int   SOLID_SS     = 2;
+const vec3  SOLID_LIGHT  = vec3(-0.6, 0.7, -0.8);
+const float SOLID_SHINE  = 64.;
+const float SOLID_SPEC   = 0.8;
+const float SOLID_REFL   = 1.;
+const float SOLID_KD     = 0.35;
+const int   SOLID_BOUNCES = 2;
+const float SOLID_GLOW   = 0.2;
+const float SOLID_GLOW_R = 0.8;
+const float MATTE_AMBIENT = 0.25;
+const float MATTE_SHINE   = 8.;
+const float MATTE_SPEC    = 0.08;
+
+const float SQ_ROOM   = 5.;
+const vec3  SQ_LIGHT  = vec3(1., -2., -1.);
+const float SQ_OFFSET = 1.1;
+const vec3  SQ_BASE   = vec3(3.9, 0.6, 0.9);
+const float SQ_GAIN   = 11.;
+
 // --- modes -------------------------------------------------------------------
 // a mode is one ModeParams entry in the playlist below; the sequencer
-// (20_modes) walks it, easing between neighbours over TRANS_DUR
+// (20_modes) walks it, circle-wiping between neighbours over WIPE_DUR
 struct ModeParams {
     float pad;      // squircle padding to its cell edge
     float bg;       // background noise + stars visibility
@@ -298,34 +373,23 @@ struct ModeParams {
     float squir;    // tile squareness on top of SQUIRCLENESS (1 = square)
     float warhol;   // pop-palette strength (per-square colors + inversion)
     float big;      // chance a cell promotes to one huge amp
+    float field;
+    float drop;
+    float solid;
 };
 
-// each step grows the pad and zooms in (wham) — visual complexity goes up,
-// so fewer but bigger planets. the event horizon dies out within the pad,
-// so cells of different levels stay continuous
-const int MODE_COUNT = 5;
+const int MODE_COUNT = 4;
 const ModeParams MODES[MODE_COUNT] = ModeParams[MODE_COUNT](
-    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big
+    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid
     // 2d base: flat — border ring, no noise/stars/shade/distortion
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15),
-    // 3d mono: sparse starfield, white horizon (the old aurora), white sun
-    ModeParams(0.25, 1., 0.25, 0.75, 0.,  0.12,   -0.3,  0.6, 0.,   0.,  0.,  0.,   0.,  0.25, 0.,  0.,  0.15),
-    // 3d full: colored aurora, warm sun, clouds, ocean + terrain, nebula
-    ModeParams(0.45, 1., 0.25, 0.75, 0.,  0.12,   -0.65, 0.6, 1.,   1.,  1.,  1.,   1.,  3.,   0.,  0.,  0.15),
-    // back to base before the pop hits
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15),
-    // warhol: flat pop-color squares, normal/inverted per tile, more bigs
-    ModeParams(0.,   0., 0.,   0.,   0.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   1.,  1.,  0.85)
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1.)
 );
 
 const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D);
-
-// two super-modes, each opening on the circles base block: the planets arc
-// is blocks 0-2 (circles -> 3d balls -> planets), the warhol arc blocks 3-4
-// (circles -> squares); sk_seed(2) decides which arc a session opens on
-const int   WARHOL_START = 3;    // playlist index of the warhol arc's circles block
-const float WARHOL_FIRST = 0.5;  // chance a session opens on the warhol arc
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;
@@ -416,8 +480,8 @@ float stars(vec2 p, float dens){
 }
 // --- mode sequencer ------------------------------------------------------------
 // The ModeParams struct and the MODES playlist live in 00_knobs. The
-// sequencer walks the playlist and eases the global P between neighbours
-// over TRANS_DUR at each boundary — so any mode expressible as parameters
+// sequencer walks the playlist and swaps the global P between neighbours
+// per pixel behind a circle wipe (WIPE_DUR) — so any mode expressible as parameters
 // transitions for free. Structural modes (different traversal/tile content)
 // branch on modeFrom/modeTo/modeBlend instead; keep those branches rare.
 
@@ -426,6 +490,7 @@ int   modeFrom  = 0;   // structural hooks branch on these
 int   modeTo    = 0;
 float modeBlend = 1.;  // eased from->to progress, 1 once settled
 float modeTime  = 0.;  // seconds into the current playlist block
+float gDropStart = 0.;
 
 ModeParams mixParams(ModeParams a, ModeParams b, float t){
     return ModeParams(
@@ -437,16 +502,25 @@ ModeParams mixParams(ModeParams a, ModeParams b, float t){
         mix(a.warm, b.warm, t), mix(a.terra, b.terra, t),
         mix(a.neb, b.neb, t), mix(a.star, b.star, t),
         mix(a.squir, b.squir, t), mix(a.warhol, b.warhol, t),
-        mix(a.big, b.big, t));
+        mix(a.big, b.big, t), mix(a.field, b.field, t),
+        mix(a.drop, b.drop, t), mix(a.solid, b.solid, t));
 }
 
-void sequenceModes(){
-    // super-mode order: sk_seed(2) may open the session on the warhol arc
-    // by skipping the clock past the planets arc, onto its circles block
+float wipe(vec2 q, float t){
+    float x = clamp(t / WIPE_DUR, 0., 1.);
+    if(x >= 1.) return 1.;
+    float r = (1. - pow(1. - x, 3.)) * (0.5 * length(iResolution.xy) / iResolution.y + 0.01);
+    return S(length(q) - r);
+}
+
+ModeParams evalModes(vec2 q, float time, int devMode, float devAt){
     float skip = 0.;
-    if(sk_seed(2) < WARHOL_FIRST)
-        for(int i = 0; i < WARHOL_START; i++) skip += MODE_DUR[i];
-    float t = iTime + skip;
+    float since = time;
+    if(devMode >= 0){
+        for(int i = 0; i < devMode % MODE_COUNT; i++) skip += MODE_DUR[i];
+        since = time - devAt;
+    }
+    float t = since + skip;
     float total = 0.;
     for(int i = 0; i < MODE_COUNT; i++) total += MODE_DUR[i];
     float c = mod(t, total);
@@ -457,23 +531,35 @@ void sequenceModes(){
             modeTo    = i;
             modeFrom  = (i + MODE_COUNT - 1) % MODE_COUNT;
             modeTime  = c - acc;
-            modeBlend = smoothstep(0., TRANS_DUR, modeTime);
+            modeBlend = wipe(q, modeTime);
             break;
         }
         acc += d;
     }
     // very first block (already active at iTime 0, wherever the skip landed
     // it): no flip-in from the notional previous mode
-    if(iTime <= modeTime + 0.001) modeFrom = modeTo;
-    P = mixParams(MODES[modeFrom], MODES[modeTo], modeBlend);
+    if(since <= modeTime + 0.001) modeFrom = modeTo;
+    if(MODES[modeTo].drop > 0.5) gDropStart = time - modeTime;
+    else if(MODES[modeFrom].drop > 0.5) gDropStart = time - modeTime - MODE_DUR[modeFrom];
+    ModeParams r = mixParams(MODES[modeFrom], MODES[modeTo], modeBlend);
 
     // clouds don't blend through transitions — the pad/zoom retune makes
     // them slide. instead they fade in for TRANS_DUR after the transition
     // lands, and fade out over the last TRANS_DUR before the next one
     float d = MODE_DUR[modeTo];
-    P.cloud = MODES[modeTo].cloud
+    r.cloud = MODES[modeTo].cloud
             * smoothstep(TRANS_DUR, 2.*TRANS_DUR, modeTime)
             * (1. - smoothstep(d - TRANS_DUR, d, modeTime));
+    return r;
+}
+
+void sequenceModes(vec2 q){
+    float sw = iTime - u_dev_switch_at;
+    bool switching = sw >= 0. && sw < WIPE_DUR;
+    ModeParams prev;
+    if(switching) prev = evalModes(q, u_dev_switch_at, u_dev_prev_mode, u_dev_prev_at);
+    P = evalModes(q, iTime, u_dev_mode, u_dev_mode_at);
+    if(switching) P = mixParams(prev, P, wipe(q, sw));
 }
 // yamp scene body — see 00_knobs.glsl for the full scene description and
 // 20_modes.glsl for the mode system. All mode-dependent values come from
@@ -507,6 +593,7 @@ float pulseAnim(float n){
 const float PAD = 0.0464;      // design gap, measured from the artwork
 const float SDF_BOX   = 0.75;
 const float SDF_RANGE = 0.25;
+float gFarPad = SDF_RANGE;
 
 // the early-out branches return far + SDF_RANGE — clear of every coast
 // band, so the switch never re-enters shelf/relief range (it used to sit
@@ -514,14 +601,14 @@ const float SDF_RANGE = 0.25;
 // max() keeps the field growing past the texture's clamp plateau
 float sdJ(vec2 p) {
     float far = length(p) - 0.57;   // J fits in radius 0.554
-    if (far > 0.05) return far + SDF_RANGE;
+    if (far > 0.05) return far + gFarPad;
     vec2 uv = vec2(p.x, -p.y)/(2.0*SDF_BOX) + 0.5;
     vec4 t = texture(iChannel0, uv);
     return max((t.r - 0.5) * SDF_RANGE + (t.b - 0.5) * gCoast, far);
 }
 float sdP(vec2 p) {
     float far = length(p) - 0.66;   // P fits in radius 0.646
-    if (far > 0.09) return far + SDF_RANGE;
+    if (far > 0.09) return far + gFarPad;
     vec2 uv = vec2(p.x, -p.y)/(2.0*SDF_BOX) + 0.5;
     vec4 t = texture(iChannel0, uv);
     return max((t.g - 0.5) * SDF_RANGE + (t.b - 0.5) * gCoast, far);
@@ -831,6 +918,295 @@ vec3 render(vec2 p, vec2 tp){
     return quadTree(gr, n2, depth, tp);
 }
 
+float goldBand(vec2 q, vec2 dir, vec2 nrm, float t, float side){
+    if(t < 0. || t > 1.) return 0.;
+    float front = side * mix(-GOLD_REACH, GOLD_REACH, t);
+    float s = side * (dot(q, nrm) - front)
+            + GOLD_WOBBLE * sin(dot(q, dir) * 5. + iTime * 1.3);
+    float w = s > 0. ? GOLD_FRONT : GOLD_TAIL;
+    return exp(-s * s / (w * w));
+}
+
+float goldWave(vec2 q, vec2 dir, vec2 nrm){
+    float k = floor(iTime / GOLD_PERIOD);
+    float start = k * GOLD_PERIOD + random(vec2(k, 3.1)) * (GOLD_PERIOD - GOLD_DUR);
+    float side = (random(vec2(k, 5.9)) < 0.5) ? -1. : 1.;
+    float g = goldBand(q, dir, nrm, (iTime - start) / GOLD_DUR, side);
+    float mside = (fract(u_dev_gold_at * 7.31) < 0.5) ? -1. : 1.;
+    return max(g, goldBand(q, dir, nrm, (iTime - u_dev_gold_at) / GOLD_DUR, mside));
+}
+
+vec3 field(vec2 p, vec2 q, vec2 tp){
+    vec2 dir = vec2(cos(FIELD_ANGLE), sin(FIELD_ANGLE));
+    vec2 nrm = vec2(-dir.y, dir.x);
+    float u = dot(p, dir) * FIELD_ROWS;
+    float v = dot(p, nrm) * FIELD_ROWS;
+    v += FIELD_WAVE_AMP * sin(u * FIELD_WAVE_FREQ + iTime * FIELD_WAVE_RATE);
+    float lane = floor(v);
+    float ph = lane * FIELD_LANE_FREQ + iTime * FIELD_LANE_RATE;
+    u -= FIELD_SPEED * (iTime - FIELD_LANE_VAR * cos(ph) / FIELD_LANE_RATE)
+       + random(vec2(lane, 7.7)) * 13.;
+    vec2 id = mod(vec2(floor(u), lane), 1024.);
+    vec2 l = vec2(fract(u), fract(v)) - 0.5;
+    vec2 lo = l.x * dir + l.y * nrm;
+    float g = goldWave(q - lo / (FIELD_ROWS * gZoom), dir, nrm);
+    float gb = goldWave(q, dir, nrm);
+    float amp = FIELD_AMP * (1. + GOLD_SWELL * g);
+    vec2 gp = lo / amp;
+
+    float n = random(id);
+    float frame = mod(iTime * mix(FIELD_CLOCK.x, FIELD_CLOCK.y, n) * 2. * SPEED
+                      + n * LOOP_LEN, LOOP_LEN);
+    vec2 pJ = gp, pP = gp;
+    if(frame >= ROT_START && frame < ROT_START+T_ROTATE){
+        float a = cubicInOut((frame-ROT_START)/T_ROTATE)*6.28318530718;
+        float sd = (fract(n*7.3) < 0.5) ? -1. : 1.;
+        pJ = rotAround(gp, CJ, sd*a);
+        pP = rotAround(gp, CP, -sd*a);
+    }
+    float dj = sdJ(pJ);
+    float dp = max(sdP(pP), PAD - dj);
+    float k = amp / (FIELD_ROWS * gZoom);
+
+    vec3 col = vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+    col += GOLD_BOT * GOLD_GLOW * gb;
+    float da = min(dj, dp);
+    col = mix(col, vec3(0.3), S(da * k));
+    float fj = fillAnim(frame, FILLJ_START);
+    float fp = fillAnim(frame, FILLP_START);
+    float wj = max(dj, length(pJ-SEED_J) - (fj*(RJ+0.02)-0.02));
+    float wp = max(dp, length(pP-SEED_P) - (fp*(RP+0.02)-0.02));
+    col = mix(col, ampGradient(gp), S(min(wj, wp) * k));
+    vec3 gold = mix(GOLD_BOT, GOLD_TOP, clamp(gp.y + 0.5, 0., 1.));
+    return mix(col, gold, g * S(da * k));
+}
+
+vec3 drop(vec2 q, vec2 tp){
+    float cs = 1. / DROP_ROWS;
+    float tau = iTime - gDropStart;
+    float cyc = floor(tau / DROP_CYCLE);
+    tau -= cyc * DROP_CYCLE;
+    float flushAt = DROP_CYCLE - DROP_FLUSH;
+    float fl = max(tau - flushAt, 0.);
+    float sink = 0.5 * DROP_G * fl * fl;
+    float tspawn = min(tau, flushAt);
+
+    float c = floor(q.x / cs);
+    float lx = fract(q.x / cs) - 0.5;
+    float h = (q.y + 0.5) / cs;
+    float top = DROP_ROWS + 1.;
+    vec2 cid = vec2(c, cyc * 17.3);
+    float rate = mix(DROP_RATE.x, DROP_RATE.y, random(cid + 0.17));
+    float ns = floor(tspawn * rate);
+    float j0 = floor(h + sink);
+
+    vec3 col = vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+    float kscr = DROP_AMP * cs;
+    for(int i = 0; i < 5; i++){
+        float k = (i == 0) ? j0 : ns - float(i - 1);
+        if(k < 0. || k >= DROP_ROWS) continue;
+        if(i > 0 && k == j0) continue;
+        float s = (k + DROP_JITTER * random(cid + k * 1.31)) / rate;
+        if(s > tspawn) continue;
+        float tf = sqrt(2. * (top - k) / DROP_G);
+        float dt = tau - s;
+        float tilt = (random(cid + k * 2.7) - 0.5) * 2. * DROP_TILT;
+        float y, ang;
+        if(dt < tf){
+            y = top - 0.5 * DROP_G * dt * dt;
+            ang = tilt + DROP_SPIN * (tf - dt) * sign(random(cid + k * 3.3) - 0.5);
+        } else {
+            float b = dt - tf;
+            y = k + DROP_BOUNCE * exp(-b * 8.) * abs(sin(b * 18.));
+            ang = tilt;
+        }
+        y -= sink;
+        vec2 gp = vec2(lx, h - y - 0.5) / DROP_AMP;
+        if(dot(gp, gp) > 1.) continue;
+        gp = gp * Rot(ang);
+        float dj = sdJ(gp);
+        float dp = max(sdP(gp), PAD - dj);
+        vec3 ac = random(cid + k * 5.1) < DROP_FILL ? ampGradient(gp) : vec3(0.3);
+        col = mix(col, ac, S(min(dj, dp) * kscr));
+    }
+    return col;
+}
+
+float glyphDist(vec2 p){
+    float dj = sdJ(p);
+    return min(dj, max(sdP(p), PAD - dj));
+}
+
+float solidMap(vec3 p){
+    vec2 w = vec2(glyphDist(p.xy) + SOLID_BEVEL, abs(p.z) - SOLID_DEPTH + SOLID_BEVEL);
+    return min(max(w.x, w.y), 0.) + length(max(w, 0.)) - SOLID_BEVEL;
+}
+
+vec3 solidNormal(vec3 p){
+    vec2 e = vec2(SOLID_NEPS, 0.);
+    vec2 g = vec2(glyphDist(p.xy + e.xy) - glyphDist(p.xy - e.xy),
+                  glyphDist(p.xy + e.yx) - glyphDist(p.xy - e.yx));
+    g = normalize(g + 1e-7);
+    vec2 w = vec2(glyphDist(p.xy) + SOLID_BEVEL, abs(p.z) - SOLID_DEPTH + SOLID_BEVEL);
+    vec2 nw = (w.x > 0. && w.y > 0.) ? normalize(w)
+            : (w.x > w.y ? vec2(1., 0.) : vec2(0., 1.));
+    return normalize(vec3(g * nw.x, sign(p.z) * nw.y));
+}
+
+float solidLight(vec3 n, vec3 L, vec3 F, vec3 up, float amb){
+    return amb * mix(SOLID_GROUND, 1., dot(n, up) * 0.5 + 0.5)
+         + (1. - amb) * max(dot(n, L), 0.)
+         + SOLID_FILL * max(dot(n, F), 0.);
+}
+
+vec3 acesApprox(vec3 v){
+    v = max(v, 0.) * 0.6;
+    return clamp((v * (2.51 * v + 0.03)) / (v * (2.43 * v + 0.59) + 0.14), 0., 1.);
+}
+
+float raySphere4Inner(vec3 ro, vec3 rd, float ra){
+    float r2 = ra * ra;
+    vec3 d2 = rd * rd, d3 = d2 * rd, o2 = ro * ro, o3 = o2 * ro;
+    float ka = 1. / dot(d2, d2);
+    float k3 = ka * dot(ro, d3);
+    float k2 = ka * dot(o2, d2);
+    float k1 = ka * dot(o3, rd);
+    float k0 = ka * (dot(o2, o2) - r2 * r2);
+    float c2 = k2 - k3 * k3;
+    float c1 = k1 + 2. * k3 * k3 * k3 - 3. * k3 * k2;
+    float c0 = k0 - 3. * k3 * k3 * k3 * k3 + 6. * k3 * k3 * k2 - 4. * k3 * k1;
+    float p = c2 * c2 + c0 / 3.;
+    float q = c2 * c2 * c2 - c2 * c0 + c1 * c1;
+    float h = q * q - p * p * p;
+    if(h < 0.) return -1.;
+    float sh = sqrt(h);
+    float s = sign(q + sh) * pow(abs(q + sh), 1. / 3.);
+    float t = sign(q - sh) * pow(abs(q - sh), 1. / 3.);
+    vec2 w = vec2(s + t, s - t);
+    vec2 v = vec2(w.x + c2 * 4., w.y * sqrt(3.)) * 0.5;
+    float r = length(v);
+    return abs(v.y) / sqrt(r + v.x) - c1 / r - k3;
+}
+
+vec3 superquadricEnv(vec3 ro, vec3 rd){
+    vec3 o = vec3(0.);
+    float A = 1.;
+    vec3 L = normalize(SQ_LIGHT);
+    for(int i = 0; i < 3; i++){
+        if(A < 0.05) break;
+        float z = raySphere4Inner(ro, rd, SQ_ROOM);
+        if(z <= 0.) break;
+        vec3 p = ro + rd * z;
+        vec3 n = -normalize(p * p * p);
+        float f = 1. + dot(n, rd);
+        f *= f;
+        o += A * pow(max(0., dot(n, L)), 9.) * (SQ_OFFSET + sin(-f + SQ_BASE));
+        A *= mix(.3, .7, f);
+        rd = reflect(rd, n);
+        ro = p + 2e-3 * n;
+    }
+    vec3 c = acesApprox(o * SQ_GAIN);
+    return mix(1.055 * pow(c, vec3(1. / 2.4)) - 0.055, 12.92 * c, step(c, vec3(0.0031308)));
+}
+
+float solidMarch(vec3 ro, vec3 rd, int steps, out float dmin, out float tmin){
+    dmin = 1e9;
+    tmin = 0.;
+    vec3 bx = vec3(0.7, 0.7, SOLID_DEPTH + 0.01);
+    vec3 m = 1. / (rd + vec3(1e-6));
+    vec3 n0 = m * ro;
+    vec3 k = abs(m) * bx;
+    vec3 t1 = -n0 - k, t2 = -n0 + k;
+    float tN = max(max(t1.x, t1.y), t1.z);
+    float tF = min(min(t2.x, t2.y), t2.z);
+    if(tN > tF || tF < 0.) return -1.;
+    float t = max(tN, 0.);
+    tmin = t;
+    for(int i = 0; i < steps; i++){
+        float d = solidMap(ro + rd * t);
+        if(d < dmin){ dmin = d; tmin = t; }
+        if(d < max(0.0002, t * SOLID_HIT_PX / (SOLID_FOCAL * iResolution.y))) return t;
+        t += d * 0.9;
+        if(t > tF) break;
+    }
+    return -1.;
+}
+
+vec3 solidSample(vec2 q, vec2 tp){
+    vec3 bg = mix(GRAD_BOT, GRAD_TOP, 0.5) * SOLID_GLOW * (1. - smoothstep(0., SOLID_GLOW_R, length(q)))
+            + vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+
+    float a = iTime * SOLID_SPIN;
+    float b = SOLID_TILT * sin(iTime * SOLID_TILT_RATE);
+    mat3 ry = mat3(cos(a), 0., -sin(a), 0., 1., 0., sin(a), 0., cos(a));
+    mat3 rx = mat3(1., 0., 0., 0., cos(b), sin(b), 0., -sin(b), cos(b));
+    mat3 M = ry * rx;
+    mat3 Mi = transpose(M);
+
+    vec3 rd = normalize(vec3(q, SOLID_FOCAL));
+    vec3 oro = Mi * vec3(0., 0., -SOLID_DIST);
+    vec3 ord = Mi * rd;
+
+    float dmin, tmin;
+    float t = solidMarch(oro, ord, SOLID_STEPS, dmin, tmin);
+    bool hit = t >= 0.;
+    if(!hit && dmin > 1e8) return bg;
+    float px = tmin / (SOLID_FOCAL * iResolution.y);
+    float cov = hit ? 1. : 1. - smoothstep(0., 1.5 * px, dmin);
+    if(cov < 0.001) return bg;
+    if(!hit) t = tmin;
+
+    vec3 L = Mi * normalize(SOLID_LIGHT);
+    vec3 Fo = Mi * normalize(SOLID_FILL_DIR);
+    vec3 up = Mi * vec3(0., 1., 0.);
+    vec3 matte = vec3(0.);
+    {
+        vec3 po = oro + ord * t;
+        vec3 no = solidNormal(po);
+        vec3 base = ampGradient(po.xy) * mix(1., 0.5, 1. - abs(no.z));
+        float dif = max(dot(no, L), 0.);
+        float spec = pow(max(dot(no, normalize(L - ord)), 0.), MATTE_SHINE);
+        matte = base * solidLight(no, L, Fo, up, MATTE_AMBIENT) + vec3(spec) * MATTE_SPEC;
+    }
+    if(u_solid_matte > 0.999) return mix(bg, matte, cov);
+
+    vec3 col = vec3(0.);
+    float A = 1.;
+    vec3 ro = oro, dir = ord;
+    for(int bnc = 0; bnc <= SOLID_BOUNCES; bnc++){
+        vec3 po = ro + dir * t;
+        vec3 no = solidNormal(po);
+        vec3 base = ampGradient(po.xy) * mix(1., 0.5, 1. - abs(no.z));
+        float dif = max(dot(no, L), 0.);
+        float spec = pow(max(dot(no, normalize(L - dir)), 0.), SOLID_SHINE);
+        col += A * (base * solidLight(no, L, Fo, up, 0.12) * SOLID_KD + vec3(spec) * SOLID_SPEC);
+        float f = 1. + dot(no, dir);
+        f *= f;
+        A *= mix(.3, .7, f) * SOLID_REFL;
+        dir = reflect(dir, no);
+        ro = po + no * 0.015;
+        if(bnc == SOLID_BOUNCES) break;
+        float dm, tm;
+        t = solidMarch(ro, dir, SOLID_STEPS / 2, dm, tm);
+        if(t < 0.) break;
+    }
+    col += A * superquadricEnv(M * ro, M * dir);
+    return mix(bg, mix(col, matte, u_solid_matte), cov);
+}
+
+vec3 solid(vec2 q, vec2 tp){
+    gFarPad = 0.;
+    vec3 c = vec3(0.);
+    float px = 1. / iResolution.y;
+    for(int i = 0; i < SOLID_SS; i++)
+        for(int j = 0; j < SOLID_SS; j++){
+            vec2 o = (vec2(i, j) + 0.5) / float(SOLID_SS) - 0.5;
+            c += solidSample(q + o * px, tp);
+        }
+    gFarPad = SDF_RANGE;
+    return c / float(SOLID_SS * SOLID_SS);
+}
+
 // --- key indicator -----------------------------------------------------------
 vec3 keyIndicator(vec3 col, vec2 q){
     // the circle leads the amp by IND_LAG both ways: max of the live and the
@@ -861,11 +1237,10 @@ vec3 keyIndicator(vec3 col, vec2 q){
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     gSeed = 100. * vec2(sk_seed(0), sk_seed(1));
-    sequenceModes();
-    gCoast = COASTF_AMT * P.terra;
-
     vec2 p = (fragCoord-0.5*iResolution.xy)/iResolution.y;
     vec2 q = p;
+    sequenceModes(q);
+    gCoast = COASTF_AMT * P.terra;
 
     // global zoom-out (offset half a period) plus the wham zoom, centered
     // on a target orbiting off-screen so each zoom lands somewhere new
@@ -883,7 +1258,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     // noise coords, counter-scrolling slowly against the grid
     vec2 tp = vec2(p.x, p.y + iTime*SCROLL*BG_SPEED) * NOISE_SCALE;
 
-    vec3 col = render(p, tp);
+    vec3 col = vec3(0.);
+    if(P.field + P.drop + P.solid < 0.999) col = render(p, tp);
+    if(P.field > 0.001) col = mix(col, field(p, q, tp), P.field);
+    if(P.drop > 0.001) col = mix(col, drop(q, tp), P.drop);
+    if(P.solid > 0.001) col = mix(col, solid(q, tp), P.solid);
     gCoast = 0.;   // the key indicator keeps clean brand glyphs
     fragColor = vec4(keyIndicator(col, q), 1.0);
 }

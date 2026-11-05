@@ -21,8 +21,10 @@ Item {
         id: nebSrc; sourceItem: nebTex; hideSource: true
         wrapMode: ShaderEffectSource.Repeat
     }
+    readonly property bool fxaa: context ? context.fxaa : true
 
     LockShaderPass {
+        id: mainPass
         anchors.fill: parent
         context: parent.context; frameCount: parent.frameCount; dummyTexture: parent.dummyTexture
         shaderName: "yamp"
@@ -30,5 +32,14 @@ Item {
         iChannel1: noiseSrc
         iChannel2: cloudSrc
         iChannel3: nebSrc
+    }
+    ShaderEffectSource { id: mainSrc; sourceItem: mainPass; hideSource: parent.fxaa; live: parent.fxaa }
+
+    LockShaderPass {
+        anchors.fill: parent
+        context: parent.context; frameCount: parent.frameCount; dummyTexture: parent.dummyTexture
+        visible: parent.fxaa
+        shaderName: "yamp_postFxaa"
+        iChannel0: mainSrc
     }
 }

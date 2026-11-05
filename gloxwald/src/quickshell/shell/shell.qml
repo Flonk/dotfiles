@@ -52,9 +52,7 @@ ShellRoot {
         function lock(): void { lockScreen(); }
     }
 
-    function lockScreen(shader) {
-        lockContext.shader = (shader && shader !== "") ? shader : "yamp";
-        lockContext.resolveShader();
+    function lockScreen() {
         lockContext.elapsedTime = 0;
         lockContext.clockStart = Date.now();
         lockContext._clockOwner = null;

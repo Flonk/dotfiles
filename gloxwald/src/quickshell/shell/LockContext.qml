@@ -6,34 +6,49 @@ Scope {
     id: root
     signal unlocked()
 
-    property string shader: "yamp"
-    // Concrete scene, resolved once per lock by resolveShader() and shared by every
-    // monitor's LockSurface so they all render the same shader.
-    property string activeShader: ""
+    property int devMode: -1
+    property real devModeAt: 0
 
-    readonly property var _allShaders: [
-        "002_blue", "20221105_inercia_intended_one", "2d_clouds", "3d_fire_340",
-        "8x8_pixel_character", "abacate_with_suggar", "apollonian_with_a_twist_ii",
-        "ashanoha", "auroras", "breathing_rings", "cat_and_boy_12", "chilly_waves_2",
-        "colorful_underwater_bubbles_ii", "crazy_spiral_thing", "dark_transit",
-        "disco_sun_vortex", "discoteq_2", "fragment_plane", "gliding",
-        "global_wind_circulation", "glsl_2d_tutorials", "hexagonal_grid_traversal_3d",
-        "hexagonal_pattern_logic", "inside_the_torus", "isovalues_3",
-        "mandelbrot_distance", "mobius_spiral", "monster", "racing_to_the_future",
-        "raymarched_hexagonal_truchet", "raytraced_transformed_spheres",
-        "renkli_toplar", "segmented_spiral_whirlpool", "shadertober_06b_husky",
-        "sincos_3d", "starship_reentry", "superquadratic_reflections",
-        "synthwave_canyon", "the_universe_within", "ui_noise_halo", "ui_test_5",
-        "voxel_star_field", "wavey_spheres", "weird_truchet", "windows_95", "yamp",
-    ]
-
-    function resolveShader() {
-        activeShader = (shader !== "random")
-            ? shader
-            : _allShaders[Math.floor(Math.random() * _allShaders.length)];
+    property real devGoldAt: -1000
+    property bool matte: false
+    property bool fxaa: true
+    property real solidMatte: matte ? 1 : 0
+    Behavior on solidMatte {
+        NumberAnimation { duration: 400; easing.type: Easing.InOutCubic }
     }
+    property real timeScale: 1
+    property real _anchorT: 0
+    property double _anchorMs: 0
 
-    Component.onCompleted: resolveShader()
+    property int devPrevMode: -1
+    property real devPrevAt: 0
+    property real devSwitchAt: -1000
+
+    function jumpToMode(i) {
+        devPrevMode = devMode;
+        devPrevAt = devModeAt;
+        devSwitchAt = elapsedTime;
+        devMode = i;
+        devModeAt = elapsedTime;
+    }
+    function sendGoldWave() {
+        devGoldAt = elapsedTime;
+    }
+    function sendFail() {
+        lastFailedUnlockTime = elapsedTime;
+    }
+    function _rebase() {
+        _anchorT = elapsedTime;
+        _anchorMs = Date.now();
+    }
+    function setTimeScale(s) {
+        _rebase();
+        timeScale = s;
+    }
+    function skip(seconds) {
+        _rebase();
+        _anchorT += seconds;
+    }
 
     property string currentText: ""
     property bool unlockInProgress: false
@@ -51,7 +66,11 @@ Scope {
     function frameTick(owner) {
         if (_clockOwner === null) _clockOwner = owner;
         if (_clockOwner !== owner) return;
-        const t = (Date.now() - clockStart) / 1000;
+        if (_anchorMs !== 0 && timeScale === 0) return;
+        const now = Date.now();
+        const t = _anchorMs === 0
+            ? (now - clockStart) / 1000
+            : _anchorT + (now - _anchorMs) / 1000 * timeScale;
         // always advance so the repaint chain never stalls
         elapsedTime = t > elapsedTime ? t : elapsedTime + 0.0005;
     }
