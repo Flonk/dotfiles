@@ -16,7 +16,7 @@ ShaderEffect {
     // not this component file, so we go up one level to shell/shaders/
     vertexShader: "../default.vert.qsb"
     fragmentShader: shaderName
-        ? "../" + shaderName + ".frag.qsb" + (_rev > 0 ? "?r=" + _rev : "")
+        ? "../" + shaderName + ".frag.qsb" + (_dev ? "?b=" + _boot + "&r=" + _rev : "")
         : ""
 
     // dev hot-reload (preview only): with $SHADER_DEV set, watch the compiled
@@ -25,6 +25,7 @@ ShaderEffect {
     // the url is resolved to a file path
     property bool _dev: Quickshell.env("SHADER_DEV") === "1"
     property int _rev: 0
+    readonly property double _boot: Date.now()
     FileView {
         path: pass._dev && pass.shaderName
             ? Qt.resolvedUrl("shaders/" + pass.shaderName + ".frag.qsb")
@@ -43,12 +44,18 @@ ShaderEffect {
     property real iTime: context ? context.elapsedTime : 0
     property int iFrame: frameCount
     property vector4d iMouse: Qt.vector4d(0, 0, 0, 0)
-    property vector4d iClock: {
-        let d = new Date();
-        let h = d.getHours();
-        let m = d.getMinutes();
-        return Qt.vector4d(Math.floor(h / 10), h % 10,
-                           Math.floor(m / 10), m % 10);
+    property vector4d iClock: Qt.vector4d(0, 0, 0, 0)
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            let d = new Date();
+            let h = d.getHours();
+            let m = d.getMinutes();
+            pass.iClock = Qt.vector4d(Math.floor(h / 10), h % 10, Math.floor(m / 10), m % 10);
+        }
     }
 
     // 32 random floats, rolled once when the pass is created — shaders read

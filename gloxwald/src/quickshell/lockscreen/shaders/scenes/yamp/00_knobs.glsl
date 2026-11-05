@@ -223,6 +223,117 @@ const float MATTE_AMBIENT = 0.25;
 const float MATTE_SHINE   = 8.;
 const float MATTE_SPEC    = 0.08;
 
+const float HALF_ROWS   = 64.;
+const float HALF_ANGLE  = 0.785398;
+const float HALF_MAX    = 0.85;
+const float HALF_BG     = 0.;
+const float HALF_AMBIENT = 0.08;
+const float HALF_ORBIT  = 0.25;
+const float HALF_LIGHT_Z = 0.6;
+const float HALF_SHINE  = 24.;
+const float HALF_GLINT  = 0.6;
+const float HALF_DIST   = SOLID_DIST;
+const float HALF_SPIN   = 0.15;
+const float HALF_TILT   = 0.3;
+const float HALF_TILT_RATE = 0.085;
+const float HALF_CONTRAST = 1.6;
+const vec3  HALF_GREY   = vec3(0.3);
+const float HALF_TINT_LO = 0.2;
+const float HALF_TINT_HI = 0.8;
+
+const vec3  SHADOW_CAM    = vec3(0., 1.2, -3.5);
+const vec3  SHADOW_TARGET = vec3(0., 0.5, 1.5);
+const float SHADOW_FOCAL  = 1.6;
+const float SHADOW_WALL_Z = 2.;
+const float SHADOW_YAW    = -0.45;
+const vec3  SHADOW_AMP_POS = vec3(1.77, 0.5, -3.66);
+const vec3  SHADOW_LIGHT  = vec3(4.38, 0.6, -9.06);
+const float SHADOW_LIGHT_RANGE = 14.;
+const float SHADOW_GAIN   = 2.2;
+const float SHADOW_FACE   = -0.45;
+const float SHADOW_RIG_YAW = 0.28;
+const float SHADOW_SWAY   = 0.25;
+const float SHADOW_SWAY_RATE = 0.15;
+const float SHADOW_K      = 256.;
+const int   SHADOW_STEPS  = 96;
+const vec3  SHADOW_WALL   = vec3(0.13, 0.42, 0.47);
+const float SHADOW_FILM_GRAIN = 0.15;
+const float SHADOW_FILM_FPS   = 24.;
+const float SHADOW_WALL_GRAIN = 0.012;
+const float SHADOW_WALL_BUMP  = 0.6;
+const float SHADOW_WALL_TONE  = 0.05;
+const vec3  SHADOW_FLOOR  = vec3(0.08, 0.26, 0.30);
+const float SHADOW_AMB    = 0.06;
+const float SHADOW_CORNER = 0.55;
+const float SHADOW_FLOOR_GAIN = 3.;
+const float SHADOW_PLANK_W = 0.14;
+const float SHADOW_PLANK_L = 1.;
+const float SHADOW_PLANK_GAP = 0.006;
+const float SHADOW_PLANK_VAR = 0.15;
+const float SHADOW_PLANK_DARK = 0.3;
+const float SHADOW_SKIRT_H = 0.08;
+const float SHADOW_SKIRT_D = 0.022;
+const float SHADOW_SKIRT_BEAD = 0.55;
+const vec3  SHADOW_SKIRT  = vec3(0.22, 0.48, 0.52);
+const vec2  SHADOW_SKIRT_SS = vec2(0.05, 0.04);
+const float SHADOW_SIDE_X    = -2.12;
+const float SHADOW_COUCH_FWD  = 3.8;
+const float SHADOW_COUCH_LEFT = 0.65;
+const float SHADOW_COUCH_W    = 1.6;
+const float SHADOW_COUCH_L    = 1.8;
+const float SHADOW_COUCH_TOP  = 1.7;
+const float SHADOW_COUCH_LEG  = 0.35;
+const vec3  SHADOW_COUCH      = vec3(0.13, 0.21, 0.24);
+const float SHADOW_LEG_TOP    = 0.085;
+const float SHADOW_LEG_TOE    = 0.04;
+const float SHADOW_LEG_SPLAY  = 0.05;
+const float SHADOW_LEG_FERRULE = 0.05;
+const vec3  SHADOW_WOOD       = vec3(0.03, 0.042, 0.046);
+const float SHADOW_WOOD_SHEEN = 0.25;
+const vec3  SHADOW_BRASS      = vec3(0.025, 0.032, 0.035);
+const float SHADOW_BRASS_SHINE = 0.35;
+const float SHADOW_COUCH_AMB  = 0.45;
+const float SHADOW_COUCH_UNDER = 0.4;
+const float SHADOW_COUCH_SPREAD = 0.3;
+const float SHADOW_FELT_SCALE  = 0.04;
+const float SHADOW_FELT_FINE   = 0.8;
+const float SHADOW_FELT_MOTTLE = 0.08;
+const float SHADOW_FELT_GRAIN  = 0.1;
+const float SHADOW_FELT_SHEEN  = 0.06;
+const float SHADOW_FELT_STONE  = 0.3;
+const float SHADOW_FELT_STONE_SCALE = 0.05;
+const float SHADOW_OUTLET_SCREEN_X = 0.88;
+const float SHADOW_OUTLET_Y      = 0.32;
+const vec2  SHADOW_OUTLET_SIZE   = vec2(0.6, 0.31);
+const float SHADOW_OUTLET_T      = 0.03;
+const float SHADOW_OUTLET_SOCKET = 0.095;
+const float SHADOW_OUTLET_PLUG   = 0.1;
+const vec3  SHADOW_OUTLET_COL    = vec3(0.2, 0.42, 0.46);
+const vec3  SHADOW_OUTLET_ACCENT = vec3(0.1, 0.32, 0.35);
+const float SHADOW_OUTLET_GLOSS  = 0.25;
+const float SHADOW_OUTLET_SCALE  = 0.7;
+const float SHADOW_OUTLET_INSERT = 0.12;
+const float SHADOW_OUTLET_GROOVE = 0.004;
+const float SHADOW_OUTLET_PROUD  = 0.006;
+const float SHADOW_OUTLET_INSERT_TINT = 1.1;
+const vec3  SHADOW_OUTLET_SS     = vec3(0.07, 0.16, 0.05);
+const vec3  SHADOW_CLIP_COL      = vec3(0.4, 0.44, 0.45);
+const float SHADOW_CLIP_SHINE    = 0.8;
+const float SHADOW_CABLE_R       = 0.011;
+const vec2  SHADOW_CABLE_DROP    = vec2(0.06, 0.34);
+const float SHADOW_CABLE_LEAD    = 0.2;
+const vec2  SHADOW_CABLE_OUT1    = vec2(1.2, 0.78);
+const vec2  SHADOW_CABLE_OUT2    = vec2(1.2, 0.92);
+const vec2  SHADOW_PHONE_SCREEN  = vec2(0.82, 0.74);
+const float SHADOW_PHONE_YAW     = 0.7;
+const vec3  SHADOW_PHONE_SIZE    = vec3(0.28, 0.58, 0.03);
+const vec3  SHADOW_PHONE_COL     = vec3(0.02, 0.025, 0.03);
+const float SHADOW_PHONE_BRIGHT  = 1.6;
+const float SHADOW_PHONE_GLOW    = 0.03;
+const float SHADOW_PHONE_DIGIT   = 0.045;
+const float SHADOW_PHONE_TIME_Y  = 0.;
+const vec3  SHADOW_CABLE_COL     = vec3(0.03, 0.045, 0.05);
+
 const float SQ_ROOM   = 5.;
 const vec3  SQ_LIGHT  = vec3(1., -2., -1.);
 const float SQ_OFFSET = 1.1;
@@ -254,20 +365,24 @@ struct ModeParams {
     float field;
     float drop;
     float solid;
+    float halftone;
+    float shadow;
 };
 
-const int MODE_COUNT = 4;
+const int MODE_COUNT = 6;
 const ModeParams MODES[MODE_COUNT] = ModeParams[MODE_COUNT](
-    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid
+    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid halftone shadow
     // 2d base: flat — border ring, no noise/stars/shade/distortion
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1.)
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  0.,  1., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  0.,  0.,  1.)
 );
 
 const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D);
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;

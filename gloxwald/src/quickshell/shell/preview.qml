@@ -19,7 +19,7 @@ FloatingWindow {
     color: "black"
 
     readonly property bool dev: Quickshell.env("SHADER_DEV") === "1"
-    readonly property var modeNames: ["base", "field", "drop", "3d amp"]
+    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "", "", "", ""]
 
     component DevButton: Rectangle {
         id: btn
@@ -151,7 +151,7 @@ FloatingWindow {
                         DevButton {
                             required property int index
                             required property string modelData
-                            label: (index + 1) + " " + modelData
+                            label: modelData ? (index + 1) + " " + modelData : String(index + 1)
                             active: ctx.devMode === index
                             onClicked: ctx.jumpToMode(index)
                         }

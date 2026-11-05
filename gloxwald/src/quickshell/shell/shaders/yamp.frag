@@ -345,6 +345,117 @@ const float MATTE_AMBIENT = 0.25;
 const float MATTE_SHINE   = 8.;
 const float MATTE_SPEC    = 0.08;
 
+const float HALF_ROWS   = 64.;
+const float HALF_ANGLE  = 0.785398;
+const float HALF_MAX    = 0.85;
+const float HALF_BG     = 0.;
+const float HALF_AMBIENT = 0.08;
+const float HALF_ORBIT  = 0.25;
+const float HALF_LIGHT_Z = 0.6;
+const float HALF_SHINE  = 24.;
+const float HALF_GLINT  = 0.6;
+const float HALF_DIST   = SOLID_DIST;
+const float HALF_SPIN   = 0.15;
+const float HALF_TILT   = 0.3;
+const float HALF_TILT_RATE = 0.085;
+const float HALF_CONTRAST = 1.6;
+const vec3  HALF_GREY   = vec3(0.3);
+const float HALF_TINT_LO = 0.2;
+const float HALF_TINT_HI = 0.8;
+
+const vec3  SHADOW_CAM    = vec3(0., 1.2, -3.5);
+const vec3  SHADOW_TARGET = vec3(0., 0.5, 1.5);
+const float SHADOW_FOCAL  = 1.6;
+const float SHADOW_WALL_Z = 2.;
+const float SHADOW_YAW    = -0.45;
+const vec3  SHADOW_AMP_POS = vec3(1.77, 0.5, -3.66);
+const vec3  SHADOW_LIGHT  = vec3(4.38, 0.6, -9.06);
+const float SHADOW_LIGHT_RANGE = 14.;
+const float SHADOW_GAIN   = 2.2;
+const float SHADOW_FACE   = -0.45;
+const float SHADOW_RIG_YAW = 0.28;
+const float SHADOW_SWAY   = 0.25;
+const float SHADOW_SWAY_RATE = 0.15;
+const float SHADOW_K      = 256.;
+const int   SHADOW_STEPS  = 96;
+const vec3  SHADOW_WALL   = vec3(0.13, 0.42, 0.47);
+const float SHADOW_FILM_GRAIN = 0.15;
+const float SHADOW_FILM_FPS   = 24.;
+const float SHADOW_WALL_GRAIN = 0.012;
+const float SHADOW_WALL_BUMP  = 0.6;
+const float SHADOW_WALL_TONE  = 0.05;
+const vec3  SHADOW_FLOOR  = vec3(0.08, 0.26, 0.30);
+const float SHADOW_AMB    = 0.06;
+const float SHADOW_CORNER = 0.55;
+const float SHADOW_FLOOR_GAIN = 3.;
+const float SHADOW_PLANK_W = 0.14;
+const float SHADOW_PLANK_L = 1.;
+const float SHADOW_PLANK_GAP = 0.006;
+const float SHADOW_PLANK_VAR = 0.15;
+const float SHADOW_PLANK_DARK = 0.3;
+const float SHADOW_SKIRT_H = 0.08;
+const float SHADOW_SKIRT_D = 0.022;
+const float SHADOW_SKIRT_BEAD = 0.55;
+const vec3  SHADOW_SKIRT  = vec3(0.22, 0.48, 0.52);
+const vec2  SHADOW_SKIRT_SS = vec2(0.05, 0.04);
+const float SHADOW_SIDE_X    = -2.12;
+const float SHADOW_COUCH_FWD  = 3.8;
+const float SHADOW_COUCH_LEFT = 0.65;
+const float SHADOW_COUCH_W    = 1.6;
+const float SHADOW_COUCH_L    = 1.8;
+const float SHADOW_COUCH_TOP  = 1.7;
+const float SHADOW_COUCH_LEG  = 0.35;
+const vec3  SHADOW_COUCH      = vec3(0.13, 0.21, 0.24);
+const float SHADOW_LEG_TOP    = 0.085;
+const float SHADOW_LEG_TOE    = 0.04;
+const float SHADOW_LEG_SPLAY  = 0.05;
+const float SHADOW_LEG_FERRULE = 0.05;
+const vec3  SHADOW_WOOD       = vec3(0.03, 0.042, 0.046);
+const float SHADOW_WOOD_SHEEN = 0.25;
+const vec3  SHADOW_BRASS      = vec3(0.025, 0.032, 0.035);
+const float SHADOW_BRASS_SHINE = 0.35;
+const float SHADOW_COUCH_AMB  = 0.45;
+const float SHADOW_COUCH_UNDER = 0.4;
+const float SHADOW_COUCH_SPREAD = 0.3;
+const float SHADOW_FELT_SCALE  = 0.04;
+const float SHADOW_FELT_FINE   = 0.8;
+const float SHADOW_FELT_MOTTLE = 0.08;
+const float SHADOW_FELT_GRAIN  = 0.1;
+const float SHADOW_FELT_SHEEN  = 0.06;
+const float SHADOW_FELT_STONE  = 0.3;
+const float SHADOW_FELT_STONE_SCALE = 0.05;
+const float SHADOW_OUTLET_SCREEN_X = 0.88;
+const float SHADOW_OUTLET_Y      = 0.32;
+const vec2  SHADOW_OUTLET_SIZE   = vec2(0.6, 0.31);
+const float SHADOW_OUTLET_T      = 0.03;
+const float SHADOW_OUTLET_SOCKET = 0.095;
+const float SHADOW_OUTLET_PLUG   = 0.1;
+const vec3  SHADOW_OUTLET_COL    = vec3(0.2, 0.42, 0.46);
+const vec3  SHADOW_OUTLET_ACCENT = vec3(0.1, 0.32, 0.35);
+const float SHADOW_OUTLET_GLOSS  = 0.25;
+const float SHADOW_OUTLET_SCALE  = 0.7;
+const float SHADOW_OUTLET_INSERT = 0.12;
+const float SHADOW_OUTLET_GROOVE = 0.004;
+const float SHADOW_OUTLET_PROUD  = 0.006;
+const float SHADOW_OUTLET_INSERT_TINT = 1.1;
+const vec3  SHADOW_OUTLET_SS     = vec3(0.07, 0.16, 0.05);
+const vec3  SHADOW_CLIP_COL      = vec3(0.4, 0.44, 0.45);
+const float SHADOW_CLIP_SHINE    = 0.8;
+const float SHADOW_CABLE_R       = 0.011;
+const vec2  SHADOW_CABLE_DROP    = vec2(0.06, 0.34);
+const float SHADOW_CABLE_LEAD    = 0.2;
+const vec2  SHADOW_CABLE_OUT1    = vec2(1.2, 0.78);
+const vec2  SHADOW_CABLE_OUT2    = vec2(1.2, 0.92);
+const vec2  SHADOW_PHONE_SCREEN  = vec2(0.82, 0.74);
+const float SHADOW_PHONE_YAW     = 0.7;
+const vec3  SHADOW_PHONE_SIZE    = vec3(0.28, 0.58, 0.03);
+const vec3  SHADOW_PHONE_COL     = vec3(0.02, 0.025, 0.03);
+const float SHADOW_PHONE_BRIGHT  = 1.6;
+const float SHADOW_PHONE_GLOW    = 0.03;
+const float SHADOW_PHONE_DIGIT   = 0.045;
+const float SHADOW_PHONE_TIME_Y  = 0.;
+const vec3  SHADOW_CABLE_COL     = vec3(0.03, 0.045, 0.05);
+
 const float SQ_ROOM   = 5.;
 const vec3  SQ_LIGHT  = vec3(1., -2., -1.);
 const float SQ_OFFSET = 1.1;
@@ -376,20 +487,24 @@ struct ModeParams {
     float field;
     float drop;
     float solid;
+    float halftone;
+    float shadow;
 };
 
-const int MODE_COUNT = 4;
+const int MODE_COUNT = 6;
 const ModeParams MODES[MODE_COUNT] = ModeParams[MODE_COUNT](
-    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid
+    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid halftone shadow
     // 2d base: flat — border ring, no noise/stars/shade/distortion
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1.)
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1., 0., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  0.,  1., 0.),
+    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  0.,  0.,  1.)
 );
 
 const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D);
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;
@@ -503,7 +618,8 @@ ModeParams mixParams(ModeParams a, ModeParams b, float t){
         mix(a.neb, b.neb, t), mix(a.star, b.star, t),
         mix(a.squir, b.squir, t), mix(a.warhol, b.warhol, t),
         mix(a.big, b.big, t), mix(a.field, b.field, t),
-        mix(a.drop, b.drop, t), mix(a.solid, b.solid, t));
+        mix(a.drop, b.drop, t), mix(a.solid, b.solid, t),
+        mix(a.halftone, b.halftone, t), mix(a.shadow, b.shadow, t));
 }
 
 float wipe(vec2 q, float t){
@@ -601,14 +717,14 @@ float gFarPad = SDF_RANGE;
 // max() keeps the field growing past the texture's clamp plateau
 float sdJ(vec2 p) {
     float far = length(p) - 0.57;   // J fits in radius 0.554
-    if (far > 0.05) return far + gFarPad;
+    if (far > (gFarPad > 0. ? 0.05 : SDF_RANGE * 0.5)) return far + gFarPad;
     vec2 uv = vec2(p.x, -p.y)/(2.0*SDF_BOX) + 0.5;
     vec4 t = texture(iChannel0, uv);
     return max((t.r - 0.5) * SDF_RANGE + (t.b - 0.5) * gCoast, far);
 }
 float sdP(vec2 p) {
     float far = length(p) - 0.66;   // P fits in radius 0.646
-    if (far > 0.09) return far + gFarPad;
+    if (far > (gFarPad > 0. ? 0.09 : SDF_RANGE * 0.5)) return far + gFarPad;
     vec2 uv = vec2(p.x, -p.y)/(2.0*SDF_BOX) + 0.5;
     vec4 t = texture(iChannel0, uv);
     return max((t.g - 0.5) * SDF_RANGE + (t.b - 0.5) * gCoast, far);
@@ -1207,6 +1323,721 @@ vec3 solid(vec2 q, vec2 tp){
     return c / float(SOLID_SS * SOLID_SS);
 }
 
+vec3 halftone(vec2 q, vec2 tp){
+    float ca = cos(HALF_ANGLE), sa = sin(HALF_ANGLE);
+    mat2 R = mat2(ca, sa, -sa, ca);
+    vec2 u = R * q * HALF_ROWS;
+    vec2 cid = floor(u);
+    vec2 l = transpose(R) * (fract(u) - 0.5);
+    vec2 qc = transpose(R) * ((cid + 0.5) / HALF_ROWS);
+
+    float a = iTime * HALF_SPIN;
+    float b = HALF_TILT * sin(iTime * HALF_TILT_RATE);
+    mat3 ry = mat3(cos(a), 0., -sin(a), 0., 1., 0., sin(a), 0., cos(a));
+    mat3 rx = mat3(1., 0., 0., 0., cos(b), sin(b), 0., -sin(b), cos(b));
+    mat3 M = ry * rx;
+    mat3 Mi = transpose(M);
+    vec3 rd = normalize(vec3(qc, SOLID_FOCAL));
+    vec3 oro = Mi * vec3(0., 0., -HALF_DIST);
+    vec3 ord = Mi * rd;
+
+    gFarPad = 0.;
+    float dmin, tmin;
+    float t = solidMarch(oro, ord, SOLID_STEPS, dmin, tmin);
+    float lum = HALF_BG, glint = 0., gy = 0.;
+    if(t >= 0.){
+        vec3 po = oro + ord * t;
+        vec3 nw = M * solidNormal(po);
+        float la = iTime * HALF_ORBIT;
+        vec3 L = normalize(vec3(cos(la), sin(la), -HALF_LIGHT_Z));
+        lum = HALF_AMBIENT + (1. - HALF_AMBIENT) * max(dot(nw, L), 0.);
+        lum = clamp((lum - 0.5) * HALF_CONTRAST + 0.5, 0., 1.);
+        glint = pow(max(dot(reflect(-L, nw), -rd), 0.), HALF_SHINE) * HALF_GLINT;
+        gy = po.y;
+    }
+    gFarPad = SDF_RANGE;
+
+    vec3 col = vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+    float s = HALF_MAX * sqrt(clamp(lum, 0., 1.));
+    if(s < 0.01) return col;
+    vec2 gp = l / s;
+    float dj = sdJ(gp);
+    float d = min(dj, max(sdP(gp), PAD - dj));
+    vec3 tint = mix(HALF_GREY, mix(GRAD_BOT, GRAD_TOP, clamp(gy + 0.5, 0., 1.)), smoothstep(HALF_TINT_LO, HALF_TINT_HI, lum));
+    vec3 ink = mix(tint, vec3(1.), glint);
+    return mix(col, ink, S(d * s / HALF_ROWS));
+}
+
+float solidShadow(vec3 ro, vec3 rd, float tmax){
+    vec3 bx = vec3(0.85, 0.85, SOLID_DEPTH + 0.15);
+    vec3 m = 1. / (rd + vec3(1e-6));
+    vec3 n0 = m * ro;
+    vec3 k = abs(m) * bx;
+    vec3 t1 = -n0 - k, t2 = -n0 + k;
+    float tN = max(max(t1.x, t1.y), t1.z);
+    float tF = min(min(t2.x, t2.y), t2.z);
+    if(tN > tF || tF < 0. || tN > tmax) return 1.;
+    float res = 1.;
+    float t = max(tN, 0.);
+    for(int i = 0; i < SHADOW_STEPS; i++){
+        float d = solidMap(ro + rd * t);
+        if(d < 0.0005) return 0.;
+        if(d < 0.1) res = min(res, SHADOW_K * d / t);
+        t += clamp(d, 0.002, 0.1);
+        if(t > tF) break;
+    }
+    res = clamp(res, 0., 1.);
+    return res * res * (3. - 2. * res);
+}
+
+float gPx = 0.001;
+
+float floorBoards(vec2 xz){
+    float u = xz.x / SHADOW_PLANK_W;
+    float ix = floor(u);
+    float v = (xz.y + random(vec2(ix, 1.7)) * SHADOW_PLANK_L) / SHADOW_PLANK_L;
+    float iz = floor(v);
+    vec2 e = vec2(min(fract(u), 1. - fract(u)) * SHADOW_PLANK_W,
+                  min(fract(v), 1. - fract(v)) * SHADOW_PLANK_L);
+    vec2 fw = vec2(gPx) + 1e-5;
+    float gap = smoothstep(0., 1.5, min(e.x / fw.x, e.y / fw.y) * 0.5)
+              * smoothstep(0., SHADOW_PLANK_GAP, min(e.x, e.y));
+    float tone = mix(1. - SHADOW_PLANK_VAR, 1. + SHADOW_PLANK_VAR, random(vec2(ix, iz)));
+    float grain = texture(iChannel2, vec2(xz.x * 0.7 + ix * 0.37, xz.y * 0.06 + iz * 0.21)).r;
+    return tone * mix(0.65, 1.25, grain) * mix(SHADOW_PLANK_DARK, 1., gap);
+}
+
+float skirtProfile(vec2 p){
+    float D = SHADOW_SKIRT_D, H = SHADOW_SKIRT_H;
+    float R = D * SHADOW_SKIRT_BEAD;
+    float hb = H - R;
+    vec2 q = abs(p - vec2(D * 0.5, hb * 0.5)) - vec2(D * 0.5, hb * 0.5);
+    float board = length(max(q, 0.)) + min(max(q.x, q.y), 0.);
+    float bead = length(p - vec2(D * 0.55, hb)) - R;
+    float k = R * 0.8;
+    float h = clamp(0.5 + 0.5 * (bead - board) / k, 0., 1.);
+    float d = mix(bead, board, h) - k * h * (1. - h);
+    return d;
+}
+
+float skirtUnion(vec3 p){
+    return min(skirtProfile(vec2(SHADOW_WALL_Z - p.z, p.y)), skirtProfile(vec2(p.x - SHADOW_SIDE_X, p.y)));
+}
+
+float sdRoundCone(vec3 p, vec3 a, vec3 b, float r1, float r2){
+    vec3 ba = b - a;
+    float l2 = dot(ba, ba);
+    float rr = r1 - r2;
+    float a2 = l2 - rr * rr;
+    float il2 = 1. / l2;
+    vec3 pa = p - a;
+    float y = dot(pa, ba);
+    float z = y - l2;
+    vec3 xv = pa * l2 - ba * y;
+    float x2 = dot(xv, xv);
+    float y2 = y * y * l2;
+    float z2 = z * z * l2;
+    float k = sign(rr) * rr * rr * x2;
+    if(sign(z) * a2 * z2 > k) return sqrt(x2 + z2) * il2 - r2;
+    if(sign(y) * a2 * y2 < k) return sqrt(x2 + y2) * il2 - r1;
+    return (sqrt(x2 * a2 * il2) + y * rr) * il2 - r1;
+}
+
+vec3 couchTop(int i){
+    return vec3(i < 2 ? -0.17 : -SHADOW_COUCH_W + 0.17, SHADOW_COUCH_LEG + 0.02, i % 2 == 0 ? 0.2 : SHADOW_COUCH_L - 0.2);
+}
+
+vec3 couchFoot(int i){
+    vec3 h = couchTop(i);
+    return vec3(h.x + (i < 2 ? SHADOW_LEG_SPLAY : -SHADOW_LEG_SPLAY), SHADOW_LEG_TOE, h.z + (i % 2 == 0 ? -SHADOW_LEG_SPLAY : SHADOW_LEG_SPLAY));
+}
+
+float couchSdf(vec3 p, out float foot){
+    vec3 b = vec3(SHADOW_COUCH_W, SHADOW_COUCH_TOP - SHADOW_COUCH_LEG, SHADOW_COUCH_L) * 0.5;
+    vec3 q = abs(p - vec3(-b.x, SHADOW_COUCH_LEG + b.y, b.z)) - b + 0.08;
+    float body = length(max(q, 0.)) + min(max(q.x, max(q.y, q.z)), 0.) - 0.08;
+    float leg = 1e9, mat = 1.;
+    for(int i = 0; i < 4; i++){
+        vec3 lo = couchFoot(i);
+        vec3 hi = couchTop(i);
+        float d = sdRoundCone(p, lo, hi, SHADOW_LEG_TOE, SHADOW_LEG_TOP);
+        vec3 pq = abs(p - vec3(hi.x, SHADOW_COUCH_LEG, hi.z)) - vec3(0.07, 0.012, 0.07);
+        float plate = length(max(pq, 0.)) + min(max(pq.x, max(pq.y, pq.z)), 0.);
+        if(d < leg){
+            leg = d;
+            mat = (p.y - lo.y + SHADOW_LEG_TOE) < SHADOW_LEG_FERRULE ? 2. : 1.;
+        }
+        if(plate < leg){ leg = plate; mat = 1.; }
+    }
+    foot = leg < body ? mat : 0.;
+    return min(body, leg);
+}
+
+float couchShadow(vec3 ro, vec3 rd, float tmax){
+    vec3 bmin = vec3(-SHADOW_COUCH_W - 0.1, 0., -0.2), bmax = vec3(0.15, SHADOW_COUCH_TOP + 0.1, SHADOW_COUCH_L + 0.2);
+    vec3 inv = 1. / (rd + vec3(1e-6));
+    vec3 ta = (bmin - ro) * inv, tb = (bmax - ro) * inv;
+    vec3 t0 = min(ta, tb), t1 = max(ta, tb);
+    float tN = max(max(t0.x, t0.y), t0.z), tF = min(min(t1.x, t1.y), min(t1.z, tmax));
+    if(tN > tF || tF < 0.) return 1.;
+    float res = 1., t = max(tN, 0.01), foot;
+    for(int i = 0; i < 64; i++){
+        float d = couchSdf(ro + rd * t, foot);
+        if(d < 0.001) return 0.;
+        res = min(res, SHADOW_K * 0.25 * d / t);
+        t += clamp(d, 0.01, 0.4);
+        if(t > tF) break;
+    }
+    return clamp(res, 0., 1.);
+}
+
+float felt(vec3 p, vec3 n){
+    vec3 w = pow(abs(n), vec3(4.));
+    w /= w.x + w.y + w.z;
+    vec3 s = p * SHADOW_FELT_SCALE;
+    float m = 0.;
+    for(int i = 0; i < 2; i++){
+        vec3 o = s * (i == 0 ? 1. : 2.3);
+        m += (texture(iChannel1, fract(o.yz)).r * w.x + texture(iChannel1, fract(o.xz)).r * w.y + texture(iChannel1, fract(o.xy)).r * w.z) * 0.5;
+    }
+    vec3 f = p * SHADOW_FELT_FINE;
+    float g = texture(iChannel1, fract(f.yz)).r * w.x + texture(iChannel1, fract(f.xz)).r * w.y + texture(iChannel1, fract(f.xy)).r * w.z;
+    vec3 z = p * SHADOW_FELT_STONE_SCALE;
+    float st = texture(iChannel2, z.yz).r * w.x + texture(iChannel2, z.xz).r * w.y + texture(iChannel2, z.xy).r * w.z;
+    return mix(1. - SHADOW_FELT_MOTTLE, 1. + SHADOW_FELT_MOTTLE, m) * mix(1. - SHADOW_FELT_GRAIN, 1. + SHADOW_FELT_GRAIN, g)
+         * mix(1., st, SHADOW_FELT_STONE);
+}
+
+vec2 gOutletPos, gOutletQ;
+vec2 gCableDir;
+vec2 gPath[5];
+vec3 gPhoneC;
+vec2 gPhoneU, gPhoneR;
+
+vec3 bez3(vec3 a, vec3 b, vec3 c, vec3 d, float t){
+    float s = 1. - t;
+    return s * s * s * a + 3. * s * s * t * b + 3. * s * t * t * c + t * t * t * d;
+}
+
+float capsuleDist(vec3 p, vec3 a, vec3 b){
+    vec3 pa = p - a, ba = b - a;
+    return length(pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0., 1.));
+}
+
+float cableSdf(vec3 q){
+    float S = SHADOW_OUTLET_SCALE;
+    vec2 hs = SHADOW_OUTLET_SIZE * 0.5;
+    float r = SHADOW_CABLE_R;
+    float z0 = SHADOW_OUTLET_T * 0.27 + SHADOW_OUTLET_PLUG;
+    vec3 pq = abs(q / S - vec3(hs.x * 0.5, -0.005, z0 + 0.0175)) - vec3(0.026, 0.01, 0.0175) + 0.004;
+    float plug = (length(max(pq, 0.)) + min(max(pq.x, max(pq.y, pq.z)), 0.) - 0.004) * S;
+    vec3 p0 = vec3(hs.x * 0.5, -0.005, z0 + 0.035) * S;
+    vec3 p3 = vec3(p0.x + SHADOW_CABLE_DROP.x, -gOutletPos.y + r, SHADOW_CABLE_DROP.y);
+    vec3 df = vec3(gCableDir.x, 0., gCableDir.y);
+    vec3 c1 = p0 + vec3(0., 0., 0.12);
+    vec3 c2 = p3 - df * 0.18 + vec3(0., 0.02, 0.);
+    float d = 1e9;
+    vec3 prev = p0;
+    for(int i = 1; i <= 10; i++){
+        vec3 cur = bez3(p0, c1, c2, p3, float(i) / 10.);
+        d = min(d, capsuleDist(q, prev, cur));
+        prev = cur;
+    }
+    return min(plug, d - r);
+}
+
+float outletSdf(vec3 q, out float mat){
+    float S = SHADOW_OUTLET_SCALE;
+    vec3 qs = q / S;
+    vec2 hs = SHADOW_OUTLET_SIZE * 0.5;
+    float th = SHADOW_OUTLET_T;
+    vec2 rq = abs(qs.xy) - hs + 0.035;
+    float d2 = length(max(rq, 0.)) + min(max(rq.x, rq.y), 0.) - 0.035;
+    vec2 w = vec2(d2 + 0.006, abs(qs.z - th * 0.5) - th * 0.5 + 0.006);
+    float plate = min(max(w.x, w.y), 0.) + length(max(w, 0.)) - 0.006;
+    float insert = 1e9, clips = 1e9;
+    float ih = SHADOW_OUTLET_INSERT, ib = 0.007;
+    for(int i = 0; i < 2; i++){
+        vec2 c = vec2(i == 0 ? -hs.x * 0.5 : hs.x * 0.5, 0.);
+        vec2 hq = abs(qs.xy - c) - (ih + SHADOW_OUTLET_GROOVE) + 0.02;
+        float hole = length(max(hq, 0.)) + min(max(hq.x, hq.y), 0.) - 0.02;
+        plate = max(plate, -max(hole, th * 0.15 - qs.z));
+        vec2 iq = abs(qs.xy - c) - ih + 0.018;
+        float i2 = length(max(iq, 0.)) + min(max(iq.x, iq.y), 0.) - 0.018;
+        float itop = th + SHADOW_OUTLET_PROUD;
+        vec2 iw = vec2(i2 + ib, abs(qs.z - itop * 0.5) - itop * 0.5 + ib);
+        float ins = min(max(iw.x, iw.y), 0.) + length(max(iw, 0.)) - ib;
+        float cyl = length(qs.xy - c) - SHADOW_OUTLET_SOCKET;
+        ins = max(ins, -max(cyl, th * 0.27 - qs.z));
+        insert = min(insert, ins);
+        vec3 kq = vec3(qs.x - c.x, abs(qs.y) - SHADOW_OUTLET_SOCKET + 0.004, qs.z - th * 0.6);
+        vec3 kb = abs(kq) - vec3(0.017, 0.006, th * 0.32) + 0.002;
+        clips = min(clips, length(max(kb, 0.)) + min(max(kb.x, max(kb.y, kb.z)), 0.) - 0.002);
+    }
+    vec3 cq = abs(qs - vec3(hs.x * 0.5, 0., th * 0.27 + SHADOW_OUTLET_PLUG * 0.5)) - vec3(0.068, 0.068, SHADOW_OUTLET_PLUG * 0.5) + 0.018;
+    float charger = length(max(cq, 0.)) + min(max(cq.x, max(cq.y, cq.z)), 0.) - 0.018;
+    plate *= S;
+    insert *= S;
+    clips *= S;
+    charger *= S;
+    float cable = cableSdf(q);
+    float d = min(min(min(plate, insert), charger), min(cable, clips));
+    mat = d == cable ? 2. : d == charger ? 1. : d == clips ? 3. : d == insert ? 4. : 0.;
+    return d;
+}
+
+vec3 outletLocal(vec3 p){
+    return vec3(p.x - gOutletPos.x, p.y - gOutletPos.y, SHADOW_WALL_Z - p.z);
+}
+
+float outletMarch(vec3 ro, vec3 rd, float tmax, out float mat){
+    vec3 lo = outletLocal(ro), ld = vec3(rd.x, rd.y, -rd.z);
+    vec3 bmin = vec3(-SHADOW_OUTLET_SIZE.x * 0.5 * SHADOW_OUTLET_SCALE - 0.01, -gOutletPos.y - 0.01, -0.01);
+    vec3 bmax = vec3(SHADOW_OUTLET_SIZE.x * 0.5 * SHADOW_OUTLET_SCALE + SHADOW_CABLE_DROP.x + 0.1, SHADOW_OUTLET_SIZE.y * 0.5 * SHADOW_OUTLET_SCALE + 0.01, max(SHADOW_CABLE_DROP.y, SHADOW_OUTLET_T + SHADOW_OUTLET_PLUG + 0.2) + 0.05);
+    vec3 inv = 1. / (ld + vec3(1e-7));
+    vec3 ta = (bmin - lo) * inv, tb = (bmax - lo) * inv;
+    vec3 t0 = min(ta, tb), t1 = max(ta, tb);
+    float tN = max(max(t0.x, t0.y), t0.z), tF = min(min(t1.x, t1.y), min(t1.z, tmax));
+    if(tN > tF || tF < 0.) return -1.;
+    float t = max(tN, 0.);
+    for(int i = 0; i < 64; i++){
+        float d = outletSdf(lo + ld * t, mat);
+        if(d < 0.0002) return t;
+        t += d;
+        if(t > tF) break;
+    }
+    return -1.;
+}
+
+vec3 gCo, gCright, gCfwd, gLight, gAmpPos;
+mat3 gAmpMi;
+
+vec3 outletAlbedo(vec3 qw, int id, out float emit){
+    vec3 q = qw / SHADOW_OUTLET_SCALE;
+    vec2 hs = SHADOW_OUTLET_SIZE * 0.5;
+    float floorZ = SHADOW_OUTLET_T * 0.27 + 0.002;
+    float px = gPx / SHADOW_OUTLET_SCALE + 1e-5;
+    emit = 0.;
+    if(id == 17) return SHADOW_CABLE_COL;
+    if(id == 18) return SHADOW_CLIP_COL;
+    if(id == 16){
+        vec2 c = vec2(hs.x * 0.5, -0.005);
+        if(q.z < SHADOW_OUTLET_T * 0.27 + SHADOW_OUTLET_PLUG - 0.004) return SHADOW_OUTLET_COL * 0.95;
+        vec2 d = abs(q.xy - c);
+        float port = 1. - smoothstep(-px, px, max(d.x - 0.03, d.y - 0.011));
+        float tongue = 1. - smoothstep(-px, px, max(d.x - 0.024, d.y - 0.004));
+        emit = 1. - smoothstep(-px, px, length(q.xy - vec2(c.x, 0.044)) - 0.006);
+        return mix(mix(SHADOW_OUTLET_COL * 0.95, vec3(0.02), port), SHADOW_OUTLET_ACCENT, tongue);
+    }
+    if(id == 15) return SHADOW_OUTLET_COL;
+    vec3 col = SHADOW_OUTLET_COL * SHADOW_OUTLET_INSERT_TINT;
+    vec2 c = vec2(-hs.x * 0.5, 0.);
+    vec2 r = q.xy - c;
+    if(q.z < floorZ && length(r) < SHADOW_OUTLET_SOCKET){
+        col *= 0.7;
+        float holes = min(length(r - vec2(0.046, 0.)), length(r + vec2(0.046, 0.))) - 0.011;
+        col = mix(col, vec3(0.03), 1. - smoothstep(-px, px, holes));
+    }
+    return col;
+}
+
+vec2 catmull(vec2 a, vec2 b, vec2 c, vec2 d, float t){
+    return 0.5 * (2. * b + (c - a) * t + (2. * a - 5. * b + 4. * c - d) * t * t + (3. * b - a - 3. * c + d) * t * t * t);
+}
+
+vec3 cableFloor(vec2 p){
+    float best = 1e9;
+    vec2 perp = vec2(0.);
+    for(int s = 0; s < 4; s++){
+        vec2 a = s == 0 ? 2. * gPath[0] - gPath[1] : gPath[s - 1];
+        vec2 b = gPath[s], c = gPath[s + 1];
+        vec2 d = s == 3 ? 2. * gPath[4] - gPath[3] : gPath[s + 2];
+        vec2 prev = b;
+        for(int i = 1; i <= 6; i++){
+            vec2 cur = catmull(a, b, c, d, float(i) / 6.);
+            vec2 pa = p - prev, ba = cur - prev;
+            vec2 h = pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0., 1.);
+            float l = length(h);
+            if(l < best){ best = l; perp = h / max(l, 1e-6); }
+            prev = cur;
+        }
+    }
+    return vec3(best, perp);
+}
+
+vec3 phoneLocal(vec3 p){
+    vec2 d = p.xz - gPhoneC.xz;
+    return vec3(dot(d, gPhoneR), p.y - SHADOW_PHONE_SIZE.z * 0.5, dot(d, gPhoneU));
+}
+
+float phoneSdfM(vec3 q, out float mat){
+    vec3 b = vec3(SHADOW_PHONE_SIZE.x, SHADOW_PHONE_SIZE.z, SHADOW_PHONE_SIZE.y) * 0.5;
+    vec2 rq = abs(q.xz) - b.xz + 0.04;
+    float d2 = length(max(rq, 0.)) + min(max(rq.x, rq.y), 0.) - 0.04;
+    vec2 w = vec2(d2 + 0.008, abs(q.y) - b.y + 0.008);
+    float body = min(max(w.x, w.y), 0.) + length(max(w, 0.)) - 0.008;
+    float r = SHADOW_CABLE_R;
+    vec3 pq = abs(q - vec3(0., 0., -b.z - 0.018)) - vec3(0.016, 0.007, 0.02) + 0.003;
+    float plug = length(max(pq, 0.)) + min(max(pq.x, max(pq.y, pq.z)), 0.) - 0.003;
+    vec3 a0 = vec3(0., 0., -b.z - 0.036), a1 = vec3(0., -b.y + r, -b.z - SHADOW_CABLE_LEAD * 0.6);
+    vec3 h = a0 + vec3(0., 0., -0.03);
+    float stub = min(capsuleDist(q, a0, h), capsuleDist(q, h, a1)) - r;
+    float acc = min(plug, stub);
+    mat = acc < body ? 1. : 0.;
+    return min(body, acc);
+}
+
+float phoneSdf(vec3 q){
+    float m;
+    return phoneSdfM(q, m);
+}
+
+bool phoneBox(vec3 ro, vec3 rd){
+    vec3 lo = phoneLocal(ro);
+    vec3 ld = vec3(dot(rd.xz, gPhoneR), rd.y, dot(rd.xz, gPhoneU));
+    vec3 hb = vec3(SHADOW_PHONE_SIZE.x, SHADOW_PHONE_SIZE.z, SHADOW_PHONE_SIZE.y) * 0.5 + 0.02;
+    vec3 inv = 1. / (ld + vec3(1e-7));
+    vec3 lb = -hb - vec3(0., 0., SHADOW_CABLE_LEAD * 0.6 + 0.05);
+    vec3 ta = (lb - lo) * inv, tb = (hb - lo) * inv;
+    vec3 t0 = min(ta, tb), t1 = max(ta, tb);
+    return max(max(t0.x, t0.y), t0.z) < min(min(t1.x, t1.y), t1.z);
+}
+
+float phoneMarch(vec3 ro, vec3 rd, float tmax){
+    vec3 lo = phoneLocal(ro);
+    vec3 ld = vec3(dot(rd.xz, gPhoneR), rd.y, dot(rd.xz, gPhoneU));
+    vec3 hb = vec3(SHADOW_PHONE_SIZE.x, SHADOW_PHONE_SIZE.z, SHADOW_PHONE_SIZE.y) * 0.5 + 0.01;
+    vec3 inv = 1. / (ld + vec3(1e-7));
+    vec3 lb = -hb - vec3(0., 0., SHADOW_CABLE_LEAD * 0.6 + 0.05);
+    vec3 ta = (lb - lo) * inv, tb = (hb - lo) * inv;
+    vec3 t0 = min(ta, tb), t1 = max(ta, tb);
+    float tN = max(max(t0.x, t0.y), t0.z), tF = min(min(t1.x, t1.y), min(t1.z, tmax));
+    if(tN > tF || tF < 0.) return -1.;
+    float t = max(tN, 0.);
+    for(int i = 0; i < 40; i++){
+        float d = phoneSdf(lo + ld * t);
+        if(d < 0.0002) return t;
+        t += d;
+        if(t > tF) break;
+    }
+    return -1.;
+}
+
+float segDist(vec2 p, vec2 a, vec2 b){
+    vec2 pa = p - a, ba = b - a;
+    return length(pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0., 1.));
+}
+
+float digitDist(vec2 p, int n){
+    int masks[10] = int[10](0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F);
+    int m = masks[clamp(n, 0, 9)];
+    float w = 0.5, h = 1.;
+    vec2 A[7] = vec2[7](vec2(-w, h), vec2(w, h), vec2(w, 0.), vec2(-w, -h), vec2(-w, 0.), vec2(-w, h), vec2(-w, 0.));
+    vec2 B[7] = vec2[7](vec2(w, h), vec2(w, 0.), vec2(w, -h), vec2(w, -h), vec2(-w, -h), vec2(-w, 0.), vec2(w, 0.));
+    float d = 1e9;
+    for(int s = 0; s < 7; s++)
+        if(((m >> s) & 1) == 1) d = min(d, segDist(p, A[s], B[s]));
+    return d - 0.13;
+}
+
+vec3 phoneScreen(vec2 s){
+    float px = gPx + 1e-5;
+    vec3 col = vec3(0.);
+    vec4 c = iClock;
+    float ch = SHADOW_PHONE_DIGIT;
+    vec2 tp = (vec2(-s.y, s.x) - vec2(0., SHADOW_PHONE_TIME_Y)) / ch;
+    float d = min(min(digitDist(tp - vec2(-3.3, 0.), int(c.x)), digitDist(tp - vec2(-1.3, 0.), int(c.y))),
+                  min(digitDist(tp - vec2(1.3, 0.), int(c.z)), digitDist(tp - vec2(3.3, 0.), int(c.w))));
+    d = min(d, min(length(tp - vec2(0., 0.45)), length(tp - vec2(0., -0.45))) - 0.15);
+    return mix(col, GRAD_TOP, 1. - smoothstep(-px, px, d * ch));
+}
+
+float sceneTrace(vec3 ro, vec3 rd, out int id, out vec3 n, out vec3 clp, out vec3 cln){
+    float t = 1e9;
+    id = -1;
+    n = vec3(0., 1., 0.);
+    clp = vec3(0.);
+    cln = vec3(0., 1., 0.);
+    if(rd.y < 0.){ t = -ro.y / rd.y; id = 0; }
+    if(rd.z > 0.){
+        float tt = (SHADOW_WALL_Z - ro.z) / rd.z;
+        if(tt < t){ t = tt; id = 1; n = vec3(0., 0., -1.); }
+    }
+    if(rd.x < 0.){
+        float tt = (SHADOW_SIDE_X - ro.x) / rd.x;
+        if(tt < t){ t = tt; id = 22; n = vec3(1., 0., 0.); }
+    }
+    {
+        float ys = SHADOW_SKIRT_H * 1.05;
+        float ts = ro.y <= ys ? 0. : (rd.y < 0. ? (ys - ro.y) / rd.y : 1e9);
+        if(ts < t){
+            for(int i = 0; i < 64; i++){
+                float ds = skirtUnion(ro + rd * ts);
+                if(ds < 0.0002){
+                    t = ts; id = 2;
+                    vec3 sp = ro + rd * ts;
+                    vec2 e = vec2(0.0005, 0.);
+                    n = normalize(vec3(skirtUnion(sp + e.xyy) - skirtUnion(sp - e.xyy),
+                                       skirtUnion(sp + e.yxy) - skirtUnion(sp - e.yxy),
+                                       skirtUnion(sp + e.yyx) - skirtUnion(sp - e.yyx)));
+                    break;
+                }
+                ts += ds * 0.9;
+                if(ts > t) break;
+            }
+        }
+    }
+    {
+        float m;
+        float to = outletMarch(ro, rd, t, m);
+        if(to > 0. && to < t){
+            t = to;
+            id = m > 3.5 ? 19 : m > 2.5 ? 18 : m > 1.5 ? 17 : m > 0.5 ? 16 : 15;
+            vec3 lp = outletLocal(ro + rd * to);
+            clp = lp;
+            vec2 e = vec2(0.0005, 0.);
+            vec3 g = vec3(outletSdf(lp + e.xyy, m) - outletSdf(lp - e.xyy, m),
+                          outletSdf(lp + e.yxy, m) - outletSdf(lp - e.yxy, m),
+                          outletSdf(lp + e.yyx, m) - outletSdf(lp - e.yyx, m));
+            n = normalize(vec3(g.x, g.y, -g.z));
+        }
+    }
+    {
+        float tp = phoneMarch(ro, rd, t);
+        if(tp > 0. && tp < t){
+            t = tp;
+            vec3 lp = phoneLocal(ro + rd * tp);
+            clp = lp;
+            vec2 e = vec2(0.0005, 0.);
+            vec3 g = vec3(phoneSdf(lp + e.xyy) - phoneSdf(lp - e.xyy), phoneSdf(lp + e.yxy) - phoneSdf(lp - e.yxy), phoneSdf(lp + e.yyx) - phoneSdf(lp - e.yyx));
+            g = normalize(g);
+            n = vec3(g.x * gPhoneR.x + g.z * gPhoneU.x, g.y, g.x * gPhoneR.y + g.z * gPhoneU.y);
+            float pm;
+            phoneSdfM(lp, pm);
+            id = pm > 0.5 ? 17 : g.y > 0.9 ? 21 : 20;
+        }
+    }
+    {
+        vec3 lro = vec3(dot(ro - gCo, gCright), ro.y, dot(ro - gCo, gCfwd));
+        vec3 lrd = vec3(dot(rd, gCright), rd.y, dot(rd, gCfwd));
+        float tc = 0., foot;
+        for(int i = 0; i < 80; i++){
+            float d = couchSdf(lro + lrd * tc, foot);
+            if(d < 0.0005 * (1. + tc)){
+                if(tc < t){
+                    t = tc;
+                    id = foot > 1.5 ? 7 : foot > 0.5 ? 6 : 5;
+                    vec2 e = vec2(0.002, 0.);
+                    vec3 lp = lro + lrd * tc;
+                    clp = lp;
+                    vec3 ln = normalize(vec3(couchSdf(lp + e.xyy, foot) - couchSdf(lp - e.xyy, foot),
+                                             couchSdf(lp + e.yxy, foot) - couchSdf(lp - e.yxy, foot),
+                                             couchSdf(lp + e.yyx, foot) - couchSdf(lp - e.yyx, foot)));
+                    n = ln.x * gCright + vec3(0., ln.y, 0.) + ln.z * gCfwd;
+                    cln = ln;
+                }
+                break;
+            }
+            tc += d;
+            if(tc > t) break;
+        }
+    }
+    return t;
+}
+
+float raufaser(vec2 w){
+    vec2 u = w / (SHADOW_WALL_GRAIN * 512.);
+    float h = texture(iChannel1, fract(u)).r * 0.6 + texture(iChannel1, fract(u * 2.3 + 0.37)).r * 0.4;
+    return h * h;
+}
+
+vec3 shadeScene(vec3 ro, vec3 rd, float t, int id, vec3 n, vec3 clp, vec3 cln, vec3 grain){
+    if(id < 0) return grain;
+    vec3 p = ro + rd * t;
+    gPx = t / (SHADOW_FOCAL * iResolution.y) / sqrt(max(abs(dot(n, rd)), 0.3));
+    if(id == 21) return phoneScreen(clp.xz) * SHADOW_PHONE_BRIGHT + grain;
+    vec3 cf = id == 0 ? cableFloor(p.xz) : vec3(1e9, 0., 0.);
+    bool onCable = cf.x < SHADOW_CABLE_R;
+    if(onCable){
+        float a = cf.x / SHADOW_CABLE_R;
+        n = normalize(vec3(cf.y * a, sqrt(max(1. - a * a, 0.)), cf.z * a));
+    }
+    float rauh = 0.5;
+    if(id == 1 || id == 22){
+        vec2 wv = id == 1 ? p.xy : p.zy;
+        vec3 T = id == 1 ? vec3(1., 0., 0.) : vec3(0., 0., 1.);
+        float e = SHADOW_WALL_GRAIN;
+        rauh = raufaser(wv);
+        vec2 g = vec2(raufaser(wv + vec2(e, 0.)) - rauh, raufaser(wv + vec2(0., e)) - rauh) / e;
+        float fade = 1. - smoothstep(1., 4., gPx / SHADOW_WALL_GRAIN);
+        n = normalize(n - (g.x * T + g.y * vec3(0., 1., 0.)) * SHADOW_WALL_BUMP * SHADOW_WALL_GRAIN * fade);
+    }
+    vec3 tl = gLight - p;
+    float dist = length(tl);
+    vec3 ld = tl / dist;
+    float dif = max(dot(n, ld), 0.) / (1. + pow(dist / SHADOW_LIGHT_RANGE, 2.));
+
+    float sh = 1.;
+    if(dif > 0.){
+        gFarPad = 0.;
+        sh = solidShadow(gAmpMi * (p + n * 0.002 - gAmpPos), gAmpMi * ld, dist);
+        gFarPad = SDF_RANGE;
+    }
+    if(dif > 0. && sh > 0.){
+        float m;
+        if(outletMarch(p + n * 0.002, ld, dist, m) > 0.) sh = 0.;
+    }
+    if(dif > 0. && sh > 0. && id < 5){
+        vec3 sp = p + n * 0.004 - gCo;
+        sh = min(sh, couchShadow(vec3(dot(sp, gCright), sp.y, dot(sp, gCfwd)),
+                                 vec3(dot(ld, gCright), ld.y, dot(ld, gCfwd)), dist));
+    }
+
+    float ao = 1.;
+    if(id == 0){
+        ao = mix(SHADOW_CORNER, 1., smoothstep(0., 0.6, SHADOW_WALL_Z - SHADOW_SKIRT_D - p.z))
+           * mix(SHADOW_CORNER, 1., smoothstep(0., 0.6, p.x - SHADOW_SIDE_X - SHADOW_SKIRT_D));
+        vec3 fl = p - gCo;
+        vec2 fxz = vec2(dot(fl, gCright), dot(fl, gCfwd));
+        for(int i = 0; i < 4; i++)
+            ao *= mix(0.3, 1., smoothstep(SHADOW_LEG_TOE * 0.6, SHADOW_LEG_TOE * 3.5, length(fxz - couchFoot(i).xz)));
+        vec2 fb = abs(fxz - vec2(-SHADOW_COUCH_W * 0.5, SHADOW_COUCH_L * 0.5)) - vec2(SHADOW_COUCH_W, SHADOW_COUCH_L) * 0.5;
+        float fd = length(max(fb, 0.)) + min(max(fb.x, fb.y), 0.);
+        ao *= mix(SHADOW_COUCH_UNDER, 1., smoothstep(-0.1, SHADOW_COUCH_SPREAD, fd));
+        if(!onCable) ao *= mix(0.45, 1., smoothstep(SHADOW_CABLE_R, SHADOW_CABLE_R * 3., cf.x));
+    }
+    if(id == 1) ao = mix(SHADOW_CORNER, 1., smoothstep(0., 0.125, p.y - SHADOW_SKIRT_H)) * mix(SHADOW_CORNER, 1., smoothstep(0., 0.4, p.x - SHADOW_SIDE_X));
+    if(id == 22) ao = mix(SHADOW_CORNER, 1., smoothstep(0., 0.125, p.y - SHADOW_SKIRT_H)) * mix(SHADOW_CORNER, 1., smoothstep(0., 0.4, SHADOW_WALL_Z - p.z));
+    if(id == 2){
+        ao = mix(SHADOW_CORNER, 1., smoothstep(0., 0.03, p.y));
+        float gy = SHADOW_SKIRT_H - SHADOW_SKIRT_D * SHADOW_SKIRT_BEAD * 2.6;
+        float gw = SHADOW_SKIRT_D * 0.12 + gPx;
+        ao *= 1. - 0.55 * (1. - smoothstep(0., gw, abs(p.y - gy)));
+    }
+    float emit = 0.;
+    vec3 albedo = id == 0 ? (onCable ? SHADOW_CABLE_COL : SHADOW_FLOOR * floorBoards(p.xz))
+                : id == 20 ? SHADOW_PHONE_COL
+                : (id == 1 || id == 22) ? SHADOW_WALL * mix(1. - SHADOW_WALL_TONE, 1. + SHADOW_WALL_TONE, rauh)
+                : id == 5 ? SHADOW_COUCH * felt(clp, cln) + SHADOW_FELT_SHEEN * pow(1. - max(dot(n, -rd), 0.), 4.)
+                : id == 6 ? SHADOW_WOOD * mix(0.75, 1.25, texture(iChannel1, fract(vec2((clp.x + clp.z) * 1.7, clp.y * 0.08))).r)
+                : id == 7 ? SHADOW_BRASS
+                : id >= 15 ? outletAlbedo(clp, id, emit) : SHADOW_SKIRT;
+    float gain = SHADOW_GAIN * (id == 0 ? SHADOW_FLOOR_GAIN : 1.);
+    float amb = (id >= 5 && id <= 7) ? SHADOW_COUCH_AMB : SHADOW_AMB;
+    float sp = pow(max(dot(reflect(-ld, n), -rd), 0.), id == 7 ? 60. : 24.);
+    vec3 spec = id == 6 ? vec3(SHADOW_WOOD_SHEEN) * sp
+              : id == 7 ? vec3(SHADOW_BRASS_SHINE) * sp
+              : id == 18 ? vec3(SHADOW_CLIP_SHINE) * pow(max(dot(reflect(-ld, n), -rd), 0.), 70.)
+              : id == 20 ? vec3(0.)
+              : (id >= 15 || onCable) ? vec3(SHADOW_OUTLET_GLOSS) * pow(max(dot(reflect(-ld, n), -rd), 0.), 32.) : vec3(0.);
+    vec2 pd = abs(vec2(dot(p.xz - gPhoneC.xz, gPhoneR), dot(p.xz - gPhoneC.xz, gPhoneU))) - SHADOW_PHONE_SIZE.xy * 0.5;
+    float glow = id == 0 ? exp(-length(max(pd, 0.)) * 12.) * SHADOW_PHONE_GLOW : 0.;
+    return albedo * (amb + gain * dif * sh) * ao + spec * sh * float(dif > 0.) + SHADOW_OUTLET_ACCENT * 3. * emit + GRAD_TOP * glow + grain;
+}
+
+vec2 floorAt(vec3 ro, vec3 f, vec3 r, vec3 u, mat3 yaw, vec2 frac){
+    vec2 q = vec2((frac.x - 0.5) * iResolution.x / iResolution.y, 0.5 - frac.y);
+    vec3 rd = yaw * normalize(f * SHADOW_FOCAL + r * q.x + u * q.y);
+    return (ro + rd * (-ro.y / min(rd.y, -1e-3))).xz;
+}
+
+vec3 shadowPlayRaw(vec2 q, vec2 tp){
+    vec3 ro = SHADOW_CAM;
+    vec3 f = normalize(SHADOW_TARGET - ro);
+    vec3 r = normalize(cross(vec3(0., 1., 0.), f));
+    vec3 u = cross(f, r);
+    vec3 rd = normalize(f * SHADOW_FOCAL + r * q.x + u * q.y);
+    mat3 yaw = mat3(cos(SHADOW_YAW), 0., -sin(SHADOW_YAW), 0., 1., 0., sin(SHADOW_YAW), 0., cos(SHADOW_YAW));
+    vec3 pivot = vec3(0., 0., SHADOW_WALL_Z);
+    ro = pivot + yaw * (ro - pivot);
+    rd = yaw * rd;
+
+    gCfwd = normalize(yaw * vec3(f.x, 0., f.z));
+    gCright = vec3(gCfwd.z, 0., -gCfwd.x);
+    gCo = vec3(ro.x, 0., ro.z) + gCfwd * SHADOW_COUCH_FWD - gCright * SHADOW_COUCH_LEFT;
+    mat3 rig = mat3(cos(SHADOW_RIG_YAW), 0., -sin(SHADOW_RIG_YAW), 0., 1., 0., sin(SHADOW_RIG_YAW), 0., cos(SHADOW_RIG_YAW));
+    vec3 rp = vec3(ro.x, 0., ro.z);
+    gLight = rp + rig * (SHADOW_LIGHT - rp);
+    gAmpPos = rp + rig * (SHADOW_AMP_POS - rp);
+    float a = SHADOW_FACE + SHADOW_RIG_YAW + SHADOW_SWAY * sin(iTime * SHADOW_SWAY_RATE);
+    gAmpMi = transpose(mat3(cos(a), 0., -sin(a), 0., 1., 0., sin(a), 0., cos(a)));
+    {
+        float qx = (SHADOW_OUTLET_SCREEN_X - 0.5) * iResolution.x / iResolution.y;
+        float qy = 0.;
+        vec3 hit;
+        for(int i = 0; i < 4; i++){
+            vec3 d0 = yaw * (f * SHADOW_FOCAL + r * qx + u * qy);
+            vec3 d1 = yaw * (f * SHADOW_FOCAL + r * qx + u * (qy + 0.01));
+            vec3 h0 = ro + d0 * (SHADOW_WALL_Z - ro.z) / d0.z;
+            vec3 h1 = ro + d1 * (SHADOW_WALL_Z - ro.z) / d1.z;
+            qy += (SHADOW_OUTLET_Y - h0.y) * 0.01 / (h1.y - h0.y);
+            hit = h0;
+        }
+        gOutletPos = vec2(hit.x, SHADOW_OUTLET_Y);
+        gOutletQ = vec2(qx, qy);
+    }
+    {
+        vec2 cfw = normalize((yaw * vec3(f.x, 0., f.z)).xz), crt = vec2(cfw.y, -cfw.x);
+        vec2 c = floorAt(ro, f, r, u, yaw, SHADOW_PHONE_SCREEN);
+        gPhoneC = vec3(c.x, SHADOW_PHONE_SIZE.z * 0.5, c.y);
+        float pa = SHADOW_PHONE_YAW;
+        gPhoneU = vec2(cos(pa) * cfw.x - sin(pa) * cfw.y, sin(pa) * cfw.x + cos(pa) * cfw.y);
+        gPhoneR = vec2(gPhoneU.y, -gPhoneU.x);
+        float lx = SHADOW_OUTLET_SIZE.x * 0.25 * SHADOW_OUTLET_SCALE + SHADOW_CABLE_DROP.x;
+        gPath[0] = vec2(gOutletPos.x + lx, SHADOW_WALL_Z - SHADOW_CABLE_DROP.y);
+        gPath[4] = c - gPhoneU * SHADOW_PHONE_SIZE.y * 0.5;
+        gPath[3] = gPath[4] - gPhoneU * SHADOW_CABLE_LEAD;
+        gPath[1] = floorAt(ro, f, r, u, yaw, SHADOW_CABLE_OUT1);
+        gPath[2] = floorAt(ro, f, r, u, yaw, SHADOW_CABLE_OUT2);
+        vec2 dw = normalize(gPath[1] - gPath[0]);
+        gCableDir = vec2(dw.x, -dw.y);
+    }
+
+    vec3 grain = vec3(mix(NOISE_LO, NOISE_HI, texture(iChannel1, fract(tp)).r));
+    int id;
+    vec3 n, clp, cln;
+    vec2 dq = q - gOutletQ;
+    bool ss = abs(dq.x) < SHADOW_OUTLET_SS.x && dq.y > -SHADOW_OUTLET_SS.y && dq.y < SHADOW_OUTLET_SS.z;
+    if(rd.z > 0.){
+        float yw = ro.y + rd.y * (SHADOW_WALL_Z - ro.z) / rd.z;
+        ss = ss || (yw > -SHADOW_SKIRT_SS.x && yw < SHADOW_SKIRT_H + SHADOW_SKIRT_SS.y);
+    }
+    ss = ss || phoneBox(ro, rd);
+    if(!ss){
+        float t = sceneTrace(ro, rd, id, n, clp, cln);
+        return shadeScene(ro, rd, t, id, n, clp, cln, grain);
+    }
+    vec3 col = vec3(0.);
+    float px = 1. / iResolution.y;
+    for(int i = 0; i < 2; i++)
+        for(int j = 0; j < 2; j++){
+            vec2 qq = q + (vec2(i, j) - 0.5) * 0.5 * px;
+            vec3 rs = yaw * normalize(f * SHADOW_FOCAL + r * qq.x + u * qq.y);
+            float t = sceneTrace(ro, rs, id, n, clp, cln);
+            col += shadeScene(ro, rs, t, id, n, clp, cln, grain);
+        }
+    return col * 0.25;
+}
+
+uint pcg(uint v){
+    uint state = v * 747796405u + 2891336453u;
+    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    return (word >> 22u) ^ word;
+}
+
+float pcgHash(uvec3 v){
+    return float(pcg(v.x + pcg(v.y + pcg(v.z)))) / 4294967295.;
+}
+
+vec3 shadowPlay(vec2 q, vec2 tp){
+    vec3 col = shadowPlayRaw(q, tp);
+    uvec2 px = uvec2(ivec2(floor(gl_FragCoord.xy)));
+    uint fr = uint(iTime * SHADOW_FILM_FPS);
+    float g = pcgHash(uvec3(px, fr)) + pcgHash(uvec3(px, fr + 7919u)) - 1.;
+    float l = dot(col, vec3(0.299, 0.587, 0.114));
+    return max(col + g * SHADOW_FILM_GRAIN * (0.3 + 0.7 * 4. * l * (1. - l)), 0.);
+}
+
 // --- key indicator -----------------------------------------------------------
 vec3 keyIndicator(vec3 col, vec2 q){
     // the circle leads the amp by IND_LAG both ways: max of the live and the
@@ -1259,10 +2090,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 tp = vec2(p.x, p.y + iTime*SCROLL*BG_SPEED) * NOISE_SCALE;
 
     vec3 col = vec3(0.);
-    if(P.field + P.drop + P.solid < 0.999) col = render(p, tp);
+    if(P.field + P.drop + P.solid + P.halftone + P.shadow < 0.999) col = render(p, tp);
     if(P.field > 0.001) col = mix(col, field(p, q, tp), P.field);
     if(P.drop > 0.001) col = mix(col, drop(q, tp), P.drop);
     if(P.solid > 0.001) col = mix(col, solid(q, tp), P.solid);
+    if(P.halftone > 0.001) col = mix(col, halftone(q, tp), P.halftone);
+    if(P.shadow > 0.001) col = mix(col, shadowPlay(q, tp), P.shadow);
     gCoast = 0.;   // the key indicator keeps clean brand glyphs
     fragColor = vec4(keyIndicator(col, q), 1.0);
 }

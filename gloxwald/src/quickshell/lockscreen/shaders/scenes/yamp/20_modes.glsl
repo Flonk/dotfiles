@@ -23,7 +23,8 @@ ModeParams mixParams(ModeParams a, ModeParams b, float t){
         mix(a.neb, b.neb, t), mix(a.star, b.star, t),
         mix(a.squir, b.squir, t), mix(a.warhol, b.warhol, t),
         mix(a.big, b.big, t), mix(a.field, b.field, t),
-        mix(a.drop, b.drop, t), mix(a.solid, b.solid, t));
+        mix(a.drop, b.drop, t), mix(a.solid, b.solid, t),
+        mix(a.halftone, b.halftone, t), mix(a.shadow, b.shadow, t));
 }
 
 float wipe(vec2 q, float t){
