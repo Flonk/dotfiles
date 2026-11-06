@@ -14,7 +14,7 @@ ShaderEffect {
 
     // Paths resolve relative to the instantiating file (shell/shaders/scenes/),
     // not this component file, so we go up one level to shell/shaders/
-    vertexShader: "../default.vert.qsb"
+    vertexShader: shaderName ? "../default.vert.qsb" : ""
     fragmentShader: shaderName
         ? "../" + shaderName + ".frag.qsb" + (_dev ? "?b=" + _boot + "&r=" + _rev : "")
         : ""
@@ -54,7 +54,8 @@ ShaderEffect {
             let d = new Date();
             let h = d.getHours();
             let m = d.getMinutes();
-            pass.iClock = Qt.vector4d(Math.floor(h / 10), h % 10, Math.floor(m / 10), m % 10);
+            let c = Qt.vector4d(Math.floor(h / 10), h % 10, Math.floor(m / 10), m % 10);
+            if (!c.fuzzyEquals(pass.iClock)) pass.iClock = c;
         }
     }
 
@@ -72,6 +73,12 @@ ShaderEffect {
     property var iChannel1: dummyTexture
     property var iChannel2: dummyTexture
     property var iChannel3: dummyTexture
+    property var iChannel4: dummyTexture
+    property var iChannel5: dummyTexture
+    property var iChannel6: dummyTexture
+    property var iChannel7: dummyTexture
+    property var iChannel8: dummyTexture
+    property var iChannel9: dummyTexture
 
     property int u_indicator_type: 0
     property vector3d u_indicator_color: Qt.vector3d(1, 1, 1)
@@ -86,4 +93,7 @@ ShaderEffect {
     property real u_dev_prev_at: context ? context.devPrevAt : 0
     property real u_dev_switch_at: context ? context.devSwitchAt : -1000
     property real u_solid_matte: context ? context.solidMatte : 0
+    property vector2d u_prism_beam: context ? context.prismBeam : Qt.vector2d(0, 0)
+    property real u_prism_chunk: 0
+    property vector4d u_prism_ray: Qt.vector4d(0, 0, 0, 0)
 }

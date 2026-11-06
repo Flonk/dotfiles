@@ -73,13 +73,21 @@ WRAPPER
         fi
     }
 
-    # Compile buffer passes (bufferA, bufferB, bufferC, ...)
+    parts=()
+    for part in "$scene_dir"/[0-9][0-9]_*.glsl; do
+        [ -f "$part" ] && parts+=("$part")
+    done
+
+    # Compile buffer passes (buffer*: shared NN_ parts + the buffer body) and
+    # post passes (post*: standalone)
     for buf in "$scene_dir"/buffer*.glsl "$scene_dir"/post*.glsl; do
+        buf_parts=("$buf")
+        case "$(basename "$buf")" in buffer*) buf_parts=("${parts[@]}" "$buf") ;; esac
         [ -f "$buf" ] || continue
         buf_name=$(basename "$buf" .glsl)
         buf_frag="$OUTPUT_DIR/${name}_${buf_name}.frag"
         buf_qsb="$OUTPUT_DIR/${name}_${buf_name}.frag.qsb"
-        if compile_pass "$buf_frag" "$buf_qsb" "${name}/${buf_name}" "$buf"; then
+        if compile_pass "$buf_frag" "$buf_qsb" "${name}/${buf_name}" "${buf_parts[@]}"; then
             ok=$((ok + 1))
         else
             fail=$((fail + 1))
@@ -87,11 +95,7 @@ WRAPPER
     done
 
     # Compile main (image) pass: sorted NN_*.glsl parts first, shader.glsl last
-    body_parts=()
-    for part in "$scene_dir"/[0-9][0-9]_*.glsl; do
-        [ -f "$part" ] && body_parts+=("$part")
-    done
-    body_parts+=("$shader")
+    body_parts=("${parts[@]}" "$shader")
     if compile_pass "$output_frag" "$output_qsb" "$name" "${body_parts[@]}"; then
         ok=$((ok + 1))
     else

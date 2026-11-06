@@ -11,7 +11,6 @@ Scope {
 
     property real devGoldAt: -1000
     property bool matte: false
-    property bool fxaa: true
     property real solidMatte: matte ? 1 : 0
     Behavior on solidMatte {
         NumberAnimation { duration: 400; easing.type: Easing.InOutCubic }
@@ -23,6 +22,8 @@ Scope {
     property int devPrevMode: -1
     property real devPrevAt: 0
     property real devSwitchAt: -1000
+    property vector2d prismBeam: Qt.vector2d(0, 0)
+    property int prismRoll: 0
 
     function jumpToMode(i) {
         devPrevMode = devMode;

@@ -27,6 +27,9 @@ layout(std140, binding = 0) uniform buf {
     float u_dev_prev_at;
     float u_dev_switch_at;
     float u_solid_matte;
+    vec2 u_prism_beam;
+    vec4 u_prism_ray;
+    float u_prism_chunk;
 
     vec3 iResolution;
     vec3 u_indicator_color;
@@ -40,11 +43,17 @@ layout(std140, binding = 0) uniform buf {
     mat4 iSeed1;
 };
 
-// Up to four input textures, resolved from QML properties.
+// Up to ten input textures, resolved from QML properties.
 layout(binding = 1) uniform sampler2D iChannel0;
 layout(binding = 2) uniform sampler2D iChannel1;
 layout(binding = 3) uniform sampler2D iChannel2;
 layout(binding = 4) uniform sampler2D iChannel3;
+layout(binding = 5) uniform sampler2D iChannel4;
+layout(binding = 6) uniform sampler2D iChannel5;
+layout(binding = 7) uniform sampler2D iChannel6;
+layout(binding = 8) uniform sampler2D iChannel7;
+layout(binding = 9) uniform sampler2D iChannel8;
+layout(binding = 10) uniform sampler2D iChannel9;
 
 // ---------------------------------------------------------------------------
 // Shared constants

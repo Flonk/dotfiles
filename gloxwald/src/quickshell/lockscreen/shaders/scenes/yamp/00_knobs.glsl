@@ -1,20 +1,21 @@
-// yamp: yasuo quadtree scene, X glyphs replaced by the and& ampersand.
+// yamp: and& ampersand lockscreen, cycling through a playlist of modes.
 // The build (convert-shaders.sh) concatenates NN_*.glsl in order, then
 // shader.glsl:
-//   00_knobs  — every tuning constant, incl. the mode table and playlist
-//   10_lib    — generic helpers (rng, easing, squircle, stars)
-//   20_modes  — mode sequencer machinery, structural-mode hooks
-//   shader    — the scene: amp SDFs, quadtree, key indicator, mainImage
+//   00_knobs   — shared tuning constants, the mode table and playlist
+//   10_lib     — generic helpers (rng, easing, sdf primitives, ray/box, grain)
+//   20_modes   — mode sequencer machinery
+//   30_amp     — glyph SDF and the per-amp spin/fill clock
+//   40..42     — 2d modes: tiles (quadtree), field, drop
+//   50_solid   — raymarched 3d amp, 3d amp mode and halftone
+//   60..63     — shadow room: structure, outlet, phone, render
+//   shader     — key indicator, mainImage
+// Mode-specific knobs live at the top of their mode's file.
 //
-// Per tile, on its own clock (speed n*2*SPEED), the loop runs:
+// Per amp, on its own clock (speed n*2*SPEED), the loop runs:
 //   off (long) -> rotate (J/P counter-spin 360) -> off (short)
 //   -> fill J (gradient wipe) -> fill P (offset wipe) -> on -> unfill -> loop
 // sdJ/sdP sample a baked SDF texture (gen_sdf.py); the design gap (PAD) of
 // the J is carved out of the P, so the pieces stay separated even mid-spin.
-// Tiles are squircles (SQUIRCLENESS knob); the rim band refracts the content
-// like glass (DISTORT knobs). The background noise (iChannel1) counter-scrolls
-// and gets sucked toward each tile's rim, piling up into a bright event
-// horizon that forms the border (PILE knobs) — no drawn ring.
 
 // --- knobs ------------------------------------------------------------------
 const float SPEED      = 0.8;    // global animation speed multiplier
@@ -27,45 +28,15 @@ const float T_ON       = 2.;  // fully white hold
 const float T_UNFILL   = 1.;  // wipes reverse out
 const float T_REST     = 0.2;   // grey tail before the loop restarts
 
-const float AMP_SCALE  = 0.94;  // glyph size within its tile
-const float SCROLL     = 0.03; // vertical scroll speed
-const float PAD_ZOOM   = 1.;   // how much tile content zooms out with the
-                               // pad (1 = match the planet's shrink, 0 = off)
-
-const float SQUIRCLENESS = 0.;   // tile shape: 0 = circle, 1 = square
-const float DISTORT_BAND = 0.12;  // rim band that refracts
-
-const float DARKEN = 0.25;        // off-amp darkening per subdivision level
-
 const float NOISE_LO    = 0.0;   // background noise brightness range
 const float NOISE_HI    = 0.05;
 const float NOISE_SCALE = 3.0;   // background noise texture frequency
 const float BG_SPEED    = 0.3;   // background scroll, fraction of SCROLL
-const float STAR_BRIGHT = 0.7;   // starfield brightness
-const float STAR_CELL   = 6.;    // star spacing in screen pixels (sheet 1)
-const float STAR_R      = 0.9;   // star radius, screen pixels
-const float STAR_POW    = 17.;   // brightness distribution (lower = denser)
-const float STAR_DRIFT  = 0.01;  // second-sheet drift for depth parallax
+const float SCROLL      = 0.03;  // vertical scroll speed
 
-// baked kaliset nebula (gen_nebula.py): the texture holds the two raw
-// field layers, colored live below
-const float NEB_SCALE   = 0.25;  // nebula frequency vs the background coords
-const vec3  NEB1_COL    = vec3(0.20, 0.35, 0.80); // layer 1: blue wash
-const float NEB1_BRIGHT = 0.9;
-const vec3  NEB2_COL    = vec3(1.50, 0.50, 0.40); // layer 2: orange filaments
-const float NEB2_BRIGHT = 1.8;
-
-const float PILE_BAND = 0.001;    // event-horizon falloff width (tile units)
-const float PILE_PULL = 0.35;    // how far the noise is sucked inward (uv units)
-const float PILE_GAIN = 7.;      // brightness pile-up at the horizon
-
-const float SCROLL_MIN = 0.045;  // tile content scroll speed, random per tile
-const float SCROLL_MAX = 0.09;
-
-// mode transitions circle-wipe over WIPE_DUR; the global zoom flips on ZOOM_PERIOD,
-// offset by half — tuned so with the default two-mode playlist the four
-// quarters run 2d-in, 2d-out, 3d-out, 3d-in
-const float TRANS_DUR   = 1.2;   // zoom flip / cloud fade duration
+// mode transitions circle-wipe over WIPE_DUR; the global zoom flips on
+// ZOOM_PERIOD, offset by half
+const float TRANS_DUR   = 1.2;   // zoom flip duration
 const float WIPE_DUR    = 0.4;
 const float ZOOM_PERIOD = 60. * 8.; // seconds per zoom flip
 const float ZOOM_OUT    = 0.30;  // global zoom-out amount
@@ -73,82 +44,8 @@ const float ZOOM_ECC    = 5.7;   // zoom target distance from screen center
 const float ZOOM_DRIFT  = 2300.7;  // zoom target orbit period (s) — offbeat
                                  // vs ZOOM_PERIOD so the spot always differs
 
-const float RING_BRIGHT = 0.3;    // border ring brightness
-const float RING_WIDTH  = 0.0025; // border ring half-width, screen-height
-                                  // units — same thickness at every level
-
-// 3d planet dressing (after Otavio Good's CC0 planet shader): a sun drifts
-// around the top; each tile gets a blinn-phong glint, domain-warped clouds
-// and an atmosphere ("aurora") tint on its event horizon. per-mode
-// strengths live in the mode table (spec/cloud/aur)
-const float SUN_PERIOD = 397.;   // sun azimuth drift period (s)
-const float SUN_SWING  = 0.9;    // sun azimuth swing amplitude
-const float SUN_HEIGHT = 1.8;    // sun elevation
-const float SUN_Z      = 0.7;    // sun toward-viewer component
-const vec3  SUN_COL    = vec3(1.66, 1.39, 0.87); // warm sun tint
-const vec3  SUN_WHITE  = vec3(1.31);             // mono-mode sun tint
-const float SPEC_POW   = 12.;    // glint tightness
-const float SPEC_GAIN  = 0.3;    // sun reflection strength
-
-const float CLOUD_SCALE = 1.1;   // cloud texture frequency (tile units)
-const float CLOUD_DRIFT = 0.012; // cloud scroll speed
-const float CLOUD_WARP  = 1.2;   // vortex swirl strength (x the blurry sample)
-const float CLOUD_SHARP = 0.8;   // contrast exponent (lower = denser)
-const float CLOUD_GAIN  = 3.;    // coverage boost after sharpening
-const float CLOUD_HEIGHT = 0.04; // shell height: shadow offset sunward (tile units)
-const float CLOUD_SHADOW = 0.75; // ground darkening under the cloud shell
-const float CLOUD_FADE   = 0.1;  // cloud thinning band at the shell edge (tile units)
-
-// full-planet terrain (terra field): the tile interior becomes ocean, the
-// amps land, the filled amps high terrain; the sun then only reflects off
-// the water. the amp SDFs double as height fields: distance to the coast
-// drives shelves/beaches/snowlines, and its gradient drives the emboss
-const vec3 WATER_COL   = vec3(0.02, 0.09, 0.18); // deep ocean
-const vec3 WATER_SHALL = vec3(0.05, 0.22, 0.28); // shallow shelf at coasts
-const float COAST_W    = 0.06;  // shallow shelf width (amp units) — must
-                                // stay inside the SDF clamp (~0.07 usable)
-const vec3 SAND_COL    = vec3(0.55, 0.47, 0.26); // beach ring
-const float SAND_W     = 0.035; // beach ring width
-const vec3 LAND_COL    = vec3(0.10, 0.19, 0.11); // low terrain (amps), muted
-const vec3 HIGH_BOT    = vec3(0.45, 0.32, 0.18); // high terrain: rim rock...
-const vec3 HIGH_TOP    = vec3(0.95, 0.95, 0.90); // ...to snowfields
-const float SNOW_D     = 0.05;  // rock-to-snow rim width (amp units)
-const float SNOW_DETAIL = 0.35; // how much detail mottling shows on snow
-const float DETAIL_SCALE = 5.;  // terrain detail texture frequency
-const float DETAIL_AMT   = 0.6; // terrain detail brightness modulation
-const vec3  SPECK_COL  = vec3(0.30, 0.20, 0.10); // lowland dirt specks
-const float SPECK_SCALE = 3.7;  // speck texture frequency
-const float SPECK_WARP  = 1.5;  // speck spiral distortion
-const float SPECK_LO    = 0.25; // speck threshold window (squared sample)
-const float SPECK_HI    = 0.55;
-const float SPECK_AMT   = 0.8;  // speck opacity on the lowland
-const float CORNER_ROUND = 0.02; // round off sharp glyph corners (amp units)
-const float COASTF_AMT   = 0.05; // baked coastline fbm amplitude (amp units)
-const float AMP_PAD      = 0.25; // shrink amps within their cells so the
-                                 // coast bands fit before the cell boundary
-const float RELIEF     = 0.4;   // emboss strength at coasts/ridges (negative flips)
-const float RELIEF_W   = 0.05;  // emboss band width (amp units), zero beyond
-
-const vec3  AUR_COLOR   = vec3(0.15, 0.5, 1.0);  // atmosphere glow color
-const vec3  AUR_SUNSET  = vec3(1.9, 0.5, 0.08);  // sun-facing rim color
-const float AUR_SUN_POW = 1.;    // sunset concentration on the sun side
-const float AUR_GLOW    = 0.25;  // additive horizon glow strength
-const vec3  HAZE_COL    = vec3(0.45, 0.60, 0.85); // haze tint, desaturated
-const float ATMO_BASE   = 0.12;  // constant atmosphere veil over the disc
-const float ATMO_HAZE   = 0.45;  // limb haze: extra tint at the rim
-const float ATMO_POW    = 2.;    // haze concentration toward the limb
-
-// warhol mode: tiles become flat pop-color squares, no pad, no borders.
-// each square hashes a palette color and a normal/inverted flip; the fill
-// wipe is suppressed — tiles spin, then sit still. normal = black bg, amps
-// printed in the color; inverted = color bg, black amps. colors are
-// oklch-matched to the andamp blue (same lightness/chroma, rotated hue)
-const vec3 WARHOL_COLS[4] = vec3[4](
-    vec3(0.138, 0.633, 0.717),   // andamp blue
-    vec3(0.768, 0.456, 0.581),   // pink
-    vec3(0.482, 0.619, 0.336),   // lime
-    vec3(0.764, 0.495, 0.304));  // orange
-const float WARHOL_INV  = 0.5;   // chance a square is inverted
+const float FILM_GRAIN = 0.15;
+const float FILM_FPS   = 24.;
 
 // key indicator: on keypress a black circle fills the screen while a blue
 // amp zooms in; each key bumps the amp, errors turn it red, inactivity
@@ -162,227 +59,26 @@ const float IND_LAG    = 0.08;   // circle leads the amp by this, in and out
 const vec3 GRAD_TOP = vec3(0.212, 0.671, 0.729);
 const vec3 GRAD_BOT = vec3(0.063, 0.596, 0.706);
 
-const float FIELD_ROWS      = 24.;
-const float FIELD_AMP       = 0.45;
-const float FIELD_ANGLE     = 0.6;
-const float FIELD_SPEED     = 0.6;
-const float FIELD_LANE_VAR  = 0.5;
-const float FIELD_LANE_FREQ = 0.37;
-const float FIELD_LANE_RATE = 0.11;
-const float FIELD_WAVE_AMP  = 0.6;
-const float FIELD_WAVE_FREQ = 0.15;
-const float FIELD_WAVE_RATE = 0.2;
-const vec2  FIELD_CLOCK     = vec2(0.3, 1.);
-
-const float GOLD_PERIOD = 30.;
-const float GOLD_DUR    = 3.5;
-const float GOLD_REACH  = 1.3;
-const float GOLD_FRONT  = 0.02;
-const float GOLD_TAIL   = 0.175;
-const float GOLD_WOBBLE = 0.;
-const float GOLD_SWELL  = 0.2;
-const float GOLD_GLOW   = 0.08;
-const vec3  GOLD_TOP    = GRAD_TOP;
-const vec3  GOLD_BOT    = GRAD_BOT;
-
-const float DROP_ROWS   = 12.;
-const float DROP_AMP    = 0.45;
-const float DROP_G      = 60.;
-const vec2  DROP_RATE   = vec2(0.1, 0.35);
-const float DROP_JITTER = 0.6;
-const float DROP_CYCLE  = 40.;
-const float DROP_FLUSH  = 1.5;
-const float DROP_TILT   = 0.25;
-const float DROP_SPIN   = 4.;
-const float DROP_BOUNCE = 0.15;
-const float DROP_FILL   = 0.35;
-
-const float SOLID_DIST   = 3.2;
-const float SOLID_FOCAL  = 2.;
-const float SOLID_DEPTH  = 0.12;
-const float SOLID_BEVEL  = 0.025;
-const float SOLID_NEPS   = 0.02;
-const vec3  SOLID_FILL_DIR = vec3(0.6, -0.6, -0.5);
-const float SOLID_FILL   = 0.35;
-const float SOLID_GROUND = 0.6;
-const float SOLID_SPIN   = 0.15;
-const float SOLID_TILT   = 0.3;
-const float SOLID_TILT_RATE = 0.085;
-const int   SOLID_STEPS  = 96;
-const float SOLID_HIT_PX = 0.5;
-const int   SOLID_SS     = 2;
-const vec3  SOLID_LIGHT  = vec3(-0.6, 0.7, -0.8);
-const float SOLID_SHINE  = 64.;
-const float SOLID_SPEC   = 0.8;
-const float SOLID_REFL   = 1.;
-const float SOLID_KD     = 0.35;
-const int   SOLID_BOUNCES = 2;
-const float SOLID_GLOW   = 0.2;
-const float SOLID_GLOW_R = 0.8;
-const float MATTE_AMBIENT = 0.25;
-const float MATTE_SHINE   = 8.;
-const float MATTE_SPEC    = 0.08;
-
-const float HALF_ROWS   = 64.;
-const float HALF_ANGLE  = 0.785398;
-const float HALF_MAX    = 0.85;
-const float HALF_BG     = 0.;
-const float HALF_AMBIENT = 0.08;
-const float HALF_ORBIT  = 0.25;
-const float HALF_LIGHT_Z = 0.6;
-const float HALF_SHINE  = 24.;
-const float HALF_GLINT  = 0.6;
-const float HALF_DIST   = SOLID_DIST;
-const float HALF_SPIN   = 0.15;
-const float HALF_TILT   = 0.3;
-const float HALF_TILT_RATE = 0.085;
-const float HALF_CONTRAST = 1.6;
-const vec3  HALF_GREY   = vec3(0.3);
-const float HALF_TINT_LO = 0.2;
-const float HALF_TINT_HI = 0.8;
-
-const vec3  SHADOW_CAM    = vec3(0., 1.2, -3.5);
-const vec3  SHADOW_TARGET = vec3(0., 0.5, 1.5);
-const float SHADOW_FOCAL  = 1.6;
-const float SHADOW_WALL_Z = 2.;
-const float SHADOW_YAW    = -0.45;
-const vec3  SHADOW_AMP_POS = vec3(1.77, 0.5, -3.66);
-const vec3  SHADOW_LIGHT  = vec3(4.38, 0.6, -9.06);
-const float SHADOW_LIGHT_RANGE = 14.;
-const float SHADOW_GAIN   = 2.2;
-const float SHADOW_FACE   = -0.45;
-const float SHADOW_RIG_YAW = 0.28;
-const float SHADOW_SWAY   = 0.25;
-const float SHADOW_SWAY_RATE = 0.15;
-const float SHADOW_K      = 256.;
-const int   SHADOW_STEPS  = 96;
-const vec3  SHADOW_WALL   = vec3(0.13, 0.42, 0.47);
-const float SHADOW_FILM_GRAIN = 0.15;
-const float SHADOW_FILM_FPS   = 24.;
-const float SHADOW_WALL_GRAIN = 0.012;
-const float SHADOW_WALL_BUMP  = 0.6;
-const float SHADOW_WALL_TONE  = 0.05;
-const vec3  SHADOW_FLOOR  = vec3(0.08, 0.26, 0.30);
-const float SHADOW_AMB    = 0.06;
-const float SHADOW_CORNER = 0.55;
-const float SHADOW_FLOOR_GAIN = 3.;
-const float SHADOW_PLANK_W = 0.14;
-const float SHADOW_PLANK_L = 1.;
-const float SHADOW_PLANK_GAP = 0.006;
-const float SHADOW_PLANK_VAR = 0.15;
-const float SHADOW_PLANK_DARK = 0.3;
-const float SHADOW_SKIRT_H = 0.08;
-const float SHADOW_SKIRT_D = 0.022;
-const float SHADOW_SKIRT_BEAD = 0.55;
-const vec3  SHADOW_SKIRT  = vec3(0.22, 0.48, 0.52);
-const vec2  SHADOW_SKIRT_SS = vec2(0.05, 0.04);
-const float SHADOW_SIDE_X    = -2.12;
-const float SHADOW_COUCH_FWD  = 3.8;
-const float SHADOW_COUCH_LEFT = 0.65;
-const float SHADOW_COUCH_W    = 1.6;
-const float SHADOW_COUCH_L    = 1.8;
-const float SHADOW_COUCH_TOP  = 1.7;
-const float SHADOW_COUCH_LEG  = 0.35;
-const vec3  SHADOW_COUCH      = vec3(0.13, 0.21, 0.24);
-const float SHADOW_LEG_TOP    = 0.085;
-const float SHADOW_LEG_TOE    = 0.04;
-const float SHADOW_LEG_SPLAY  = 0.05;
-const float SHADOW_LEG_FERRULE = 0.05;
-const vec3  SHADOW_WOOD       = vec3(0.03, 0.042, 0.046);
-const float SHADOW_WOOD_SHEEN = 0.25;
-const vec3  SHADOW_BRASS      = vec3(0.025, 0.032, 0.035);
-const float SHADOW_BRASS_SHINE = 0.35;
-const float SHADOW_COUCH_AMB  = 0.45;
-const float SHADOW_COUCH_UNDER = 0.4;
-const float SHADOW_COUCH_SPREAD = 0.3;
-const float SHADOW_FELT_SCALE  = 0.04;
-const float SHADOW_FELT_FINE   = 0.8;
-const float SHADOW_FELT_MOTTLE = 0.08;
-const float SHADOW_FELT_GRAIN  = 0.1;
-const float SHADOW_FELT_SHEEN  = 0.06;
-const float SHADOW_FELT_STONE  = 0.3;
-const float SHADOW_FELT_STONE_SCALE = 0.05;
-const float SHADOW_OUTLET_SCREEN_X = 0.88;
-const float SHADOW_OUTLET_Y      = 0.32;
-const vec2  SHADOW_OUTLET_SIZE   = vec2(0.6, 0.31);
-const float SHADOW_OUTLET_T      = 0.03;
-const float SHADOW_OUTLET_SOCKET = 0.095;
-const float SHADOW_OUTLET_PLUG   = 0.1;
-const vec3  SHADOW_OUTLET_COL    = vec3(0.2, 0.42, 0.46);
-const vec3  SHADOW_OUTLET_ACCENT = vec3(0.1, 0.32, 0.35);
-const float SHADOW_OUTLET_GLOSS  = 0.25;
-const float SHADOW_OUTLET_SCALE  = 0.7;
-const float SHADOW_OUTLET_INSERT = 0.12;
-const float SHADOW_OUTLET_GROOVE = 0.004;
-const float SHADOW_OUTLET_PROUD  = 0.006;
-const float SHADOW_OUTLET_INSERT_TINT = 1.1;
-const vec3  SHADOW_OUTLET_SS     = vec3(0.07, 0.16, 0.05);
-const vec3  SHADOW_CLIP_COL      = vec3(0.4, 0.44, 0.45);
-const float SHADOW_CLIP_SHINE    = 0.8;
-const float SHADOW_CABLE_R       = 0.011;
-const vec2  SHADOW_CABLE_DROP    = vec2(0.06, 0.34);
-const float SHADOW_CABLE_LEAD    = 0.2;
-const vec2  SHADOW_CABLE_OUT1    = vec2(1.2, 0.78);
-const vec2  SHADOW_CABLE_OUT2    = vec2(1.2, 0.92);
-const vec2  SHADOW_PHONE_SCREEN  = vec2(0.82, 0.74);
-const float SHADOW_PHONE_YAW     = 0.7;
-const vec3  SHADOW_PHONE_SIZE    = vec3(0.28, 0.58, 0.03);
-const vec3  SHADOW_PHONE_COL     = vec3(0.02, 0.025, 0.03);
-const float SHADOW_PHONE_BRIGHT  = 1.6;
-const float SHADOW_PHONE_GLOW    = 0.03;
-const float SHADOW_PHONE_DIGIT   = 0.045;
-const float SHADOW_PHONE_TIME_Y  = 0.;
-const vec3  SHADOW_CABLE_COL     = vec3(0.03, 0.045, 0.05);
-
-const float SQ_ROOM   = 5.;
-const vec3  SQ_LIGHT  = vec3(1., -2., -1.);
-const float SQ_OFFSET = 1.1;
-const vec3  SQ_BASE   = vec3(3.9, 0.6, 0.9);
-const float SQ_GAIN   = 11.;
-
 // --- modes -------------------------------------------------------------------
-// a mode is one ModeParams entry in the playlist below; the sequencer
-// (20_modes) walks it, circle-wiping between neighbours over WIPE_DUR
-struct ModeParams {
-    float pad;      // squircle padding to its cell edge
-    float bg;       // background noise + stars visibility
-    float light;    // sun diffuse: lift on the sunlit side toward white
-    float dark;     // sun diffuse: shadow on the night side toward black
-    float ring;     // border ring visibility (styled by RING_BRIGHT/RING_WIDTH)
-    float distort;  // glass refraction strength at the tile rim
-    float wham;     // extra global zoom-out
-    float spec;     // sun specular glint strength
-    float cloud;    // cloud coverage
-    float aur;      // aurora: atmosphere tint + glow on the event horizon
-    float warm;     // sun glint tint: 0 = SUN_WHITE, 1 = SUN_COL
-    float terra;    // terrain palette: ocean interior, land amps,
-                    // high-terrain fills, water-only glint
-    float neb;      // kaliset nebula visibility in the background
-    float star;     // starfield density (scales the brightness power law)
-    float squir;    // tile squareness on top of SQUIRCLENESS (1 = square)
-    float warhol;   // pop-palette strength (per-square colors + inversion)
-    float big;      // chance a cell promotes to one huge amp
-    float field;
-    float drop;
-    float solid;
-    float halftone;
-    float shadow;
-};
+// the playlist runs the modes in order, MODE_DUR each; the sequencer
+// (20_modes) circle-wipes between neighbours over WIPE_DUR
+const int MODE_TILES    = 0;
+const int MODE_FIELD    = 1;
+const int MODE_DROP     = 2;
+const int MODE_SOLID    = 3;
+const int MODE_HALFTONE = 4;
+const int MODE_SHADOW   = 5;
+const int MODE_PENROSE  = 6;
+const int MODE_SCOPE    = 7;
+const int MODE_SPECTRUM = 8;
+const int MODE_PRISM    = 9;
+const int MODE_COUNT    = 10;
 
-const int MODE_COUNT = 6;
-const ModeParams MODES[MODE_COUNT] = ModeParams[MODE_COUNT](
-    //         pad   bg  light dark  ring distort wham   spec cloud aur  warm terra neb  star squir warhol big field drop solid halftone shadow
-    // 2d base: flat — border ring, no noise/stars/shade/distortion
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0., 0., 0., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 1., 0., 0., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  1., 0., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  1., 0., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  0.,  1., 0.),
-    ModeParams(0.01, 0., 0.,   0.,   1.,  0.,     0.,    0.,  0.,   0.,  0.,  0.,   0.,  0.,   0.,  0.,  0.15, 0.,  0.,  0.,  0.,  1.)
-);
+const float MODE_AA[MODE_COUNT]    = float[MODE_COUNT](0., 0., 0., 1., 1., 1., 0., 0., 0., 0.);
+const float MODE_GRAIN[MODE_COUNT] = float[MODE_COUNT](0., 0., 0., 0., 0., 1., 0., 0., 0., 0.);
 
 const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D);
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D, D, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;

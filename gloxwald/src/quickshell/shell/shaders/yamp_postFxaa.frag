@@ -27,6 +27,9 @@ layout(std140, binding = 0) uniform buf {
     float u_dev_prev_at;
     float u_dev_switch_at;
     float u_solid_matte;
+    vec2 u_prism_beam;
+    vec4 u_prism_ray;
+    float u_prism_chunk;
 
     vec3 iResolution;
     vec3 u_indicator_color;
@@ -40,11 +43,17 @@ layout(std140, binding = 0) uniform buf {
     mat4 iSeed1;
 };
 
-// Up to four input textures, resolved from QML properties.
+// Up to ten input textures, resolved from QML properties.
 layout(binding = 1) uniform sampler2D iChannel0;
 layout(binding = 2) uniform sampler2D iChannel1;
 layout(binding = 3) uniform sampler2D iChannel2;
 layout(binding = 4) uniform sampler2D iChannel3;
+layout(binding = 5) uniform sampler2D iChannel4;
+layout(binding = 6) uniform sampler2D iChannel5;
+layout(binding = 7) uniform sampler2D iChannel6;
+layout(binding = 8) uniform sampler2D iChannel7;
+layout(binding = 9) uniform sampler2D iChannel8;
+layout(binding = 10) uniform sampler2D iChannel9;
 
 // ---------------------------------------------------------------------------
 // Shared constants
@@ -125,7 +134,12 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord){
     vec2 uv = vec2(fragCoord.x, iResolution.y - fragCoord.y) * px;
     const vec3 luma = vec3(0.299, 0.587, 0.114);
 
-    vec3 cc = texture(iChannel0, uv).rgb;
+    vec4 c0 = texture(iChannel0, uv);
+    if(c0.a < 0.001){
+        fragColor = vec4(c0.rgb, 1.);
+        return;
+    }
+    vec3 cc = c0.rgb;
     float lc = dot(cc, luma);
     float l00 = dot(texture(iChannel0, uv + vec2(-0.5, -0.5) * px).rgb, luma);
     float l10 = dot(texture(iChannel0, uv + vec2( 0.5, -0.5) * px).rgb, luma);
@@ -143,7 +157,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord){
     float lmin = min(lc, min(min(l00, l10), min(l01, l11)));
     float lmax = max(lc, max(max(l00, l10), max(l01, l11)));
     float lb = dot(b, luma);
-    fragColor = vec4((lb < lmin || lb > lmax) ? a : b, 1.);
+    fragColor = vec4(mix(cc, (lb < lmin || lb > lmax) ? a : b, c0.a), 1.);
 }
 
 // --- Qt entry point ---

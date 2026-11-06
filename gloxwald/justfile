@@ -27,7 +27,7 @@ shader-dev:
     #!/usr/bin/env bash
     set -euo pipefail
     just shader-build
-    watchexec -w ./src/quickshell/lockscreen/shaders/scenes/yamp -w ./src/quickshell/lockscreen/qt_preamble.glsl -e glsl -- \
+    watchexec -w ./src/quickshell/lockscreen/shaders/scenes/yamp -w ./src/quickshell/lockscreen/qt_preamble.glsl -e glsl,qml -- \
         just shader-build &
     trap 'kill $! 2>/dev/null' EXIT
     SHADER_DEV=1 quickshell --path ./src/quickshell/shell/preview.qml
@@ -40,6 +40,19 @@ shader-preview:
 # Build the lockscreen shader (.glsl → .frag.qsb)
 shader-build:
     ./src/quickshell/lockscreen/convert-shaders.sh
+
+# Bake the penrose label SDF atlas (shaders/assets/penrose_labels.png)
+gen-labels:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    rsfs=$(nix-build '<nixpkgs>' -A texlivePackages.rsfs --no-out-link)/fonts/type1/public/rsfs/rsfs10.pfb
+    lmmath=$(nix-build '<nixpkgs>' -A lmmath --no-out-link)/share/fonts/opentype/latinmodern-math.otf
+    cd ./src/quickshell/lockscreen/shaders/scenes/yamp
+    nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy])" --run "python3 gen_labels.py $rsfs $lmmath"
+
+# Bake the scope beam path (shaders/assets/scope_path.png) from yamp_sdf.png
+gen-scope:
+    cd ./src/quickshell/lockscreen/shaders/scenes/yamp && nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scikit-image])" --run "python3 gen_scope.py"
 
 # Clean compiled shaders
 shader-clean:
