@@ -1,7 +1,8 @@
 // --- prism: white light dispersed through an amp-shaped glass prism -----------
 // the beam is rolled per session by scene.qml (u_prism_ray: glyph-space start
 // xy, angle z), from the left half of the screen through the centre with some
-// jitter; u_prism_beam (x = height, y = tilt) offsets it from the preview panel. bufferPrismState traces PRISM_RAYS wavelengths through the
+// jitter; u_prism_beam (x = height, y = tilt) offsets it from the preview panel.
+// bufferPrismState traces PRISM_RAYS wavelengths through the
 // glyph SDF (Snell at every edge, total internal reflection where it happens)
 // into iChannel8 (prismTexel(ray, j) = j-th path point in glyph space, xy),
 // w = 1 while the path goes on. bufferPrismLight sums the spectral rays
@@ -9,9 +10,9 @@
 // light buffer, PRISM_CHUNK rays per update (u_prism_chunk, driven by
 // scene.qml) accumulated over its own previous output in iChannel9, only
 // when the beam moves; the main pass tonemaps it from iChannel8.
-const int   PRISM_RAYS     = 20000;
+const int   PRISM_RAYS     = 4000;
 const int   PRISM_ROW      = 125;
-const int   PRISM_CHUNK    = 48;
+const int   PRISM_CHUNK    = 10;
 const int   PRISM_PTS      = 10;
 
 // state texel of path point j of ray i: PRISM_ROW rays side by side per row
@@ -74,33 +75,69 @@ vec4 prismState(int i, int j){
     return vec4(0.);
 }
 
-// linear light of rays [i0, i0 + PRISM_CHUNK)
+// a single ray's line profile at signed distance s (beam width w), and its
+// antiderivative in s
+float prismProfile(float s, float w){
+    float x = s / w;
+    return sqrt(PRISM_BEAM_W / w) * (exp(-x * x) + PRISM_GLOW * exp(-abs(s) / (6. * w)));
+}
+
+float prismErf(float x){
+    float x2 = x * x;
+    return sign(x) * sqrt(1. - exp(-x2 * (1.2732395 + 0.147 * x2) / (1. + 0.147 * x2)));
+}
+
+float prismCum(float s, float w){
+    return sqrt(PRISM_BEAM_W / w) * (0.8862269 * w * prismErf(s / w)
+        + PRISM_GLOW * sign(s) * 6. * w * (1. - exp(-abs(s) / (6. * w))));
+}
+
+vec2 prismPt(vec4 p){ return p.xy * PRISM_SCALE + PRISM_CENTER; }
+
+// linear light of rays [i0, i0 + PRISM_CHUNK). Each neighbouring pair of rays
+// that takes the same route is a ribbon: the continuum of rays between them,
+// i.e. the line profile averaged across the ribbon. Pairs that part ways
+// (different bounces, far apart) fall back to drawing the ray as a line.
 vec3 prismLight(vec2 q, int i0){
     vec3 norm = vec3(0.);
     for(int i = 0; i < 96; i++) norm += prismSpectral(mix(400., 700., (float(i) + 0.5) / 96.));
     norm *= float(PRISM_RAYS) / 96.;
 
+    vec4 A[PRISM_PTS], B[PRISM_PTS];
+    for(int j = 0; j < PRISM_PTS; j++) A[j] = texelFetch(iChannel8, prismTexel(i0, j), 0);
     vec3 light = vec3(0.);
     for(int i = i0; i < i0 + PRISM_CHUNK; i++){
         if(i >= PRISM_RAYS) break;
-        vec3 c = prismSpectral(prismLambda(i)) / norm;
-        vec2 a = texelFetch(iChannel8, prismTexel(i, 0), 0).xy * PRISM_SCALE + PRISM_CENTER;
-        float e = 0.;
+        bool pair = i + 1 < PRISM_RAYS;
+        for(int j = 0; j < PRISM_PTS; j++) B[j] = pair ? texelFetch(iChannel8, prismTexel(i + 1, j), 0) : vec4(0.);
+        vec3 cA = prismSpectral(prismLambda(i)) / norm;
+        vec3 cB = pair ? prismSpectral(prismLambda(i + 1)) / norm : cA;
         for(int j = 1; j < PRISM_PTS; j++){
-            vec4 b4 = texelFetch(iChannel8, prismTexel(i, j), 0);
-            if(b4.w < 0.5) break;
-            vec2 b = b4.xy * PRISM_SCALE + PRISM_CENTER;
-            bool last = j == PRISM_PTS - 1 || texelFetch(iChannel8, prismTexel(i, j + 1), 0).w < 0.5;
-            vec2 ab = b - a;
-            float h = clamp(dot(q - a, ab) / dot(ab, ab), 0., 1.);
-            float dist = length(q - a - ab * h);
-            float s = h * length(ab);
-            float w = PRISM_BEAM_W + (last && j > 1 ? s * PRISM_SPREAD : 0.);
-            float x = dist / w;
-            e += sqrt(PRISM_BEAM_W / w) * (exp(-x * x) + PRISM_GLOW * exp(-dist / (w * 6.)));
-            a = b;
+            if(A[j].w < 0.5) break;
+            bool lastA = j == PRISM_PTS - 1 || A[j + 1].w < 0.5;
+            bool lastB = j == PRISM_PTS - 1 || B[j + 1].w < 0.5;
+            vec2 a0 = prismPt(A[j - 1]), a1 = prismPt(A[j]);
+            vec2 b0 = prismPt(B[j - 1]), b1 = prismPt(B[j]);
+            vec2 ab = a1 - a0;
+            float h = clamp(dot(q - a0, ab) / dot(ab, ab), 0., 1.);
+            vec2 da = q - a0 - ab * h;
+            vec2 n = normalize(vec2(-ab.y, ab.x));
+            float sA = length(da) * (dot(da, n) < 0. ? -1. : 1.);
+            float w = PRISM_BEAM_W + (lastA && j > 1 ? h * length(ab) * PRISM_SPREAD : 0.);
+            bool same = B[j].w > 0.5 && lastA == lastB && A[j - 1].z == B[j - 1].z
+                && length(a0 - b0) < 0.02 && length(a1 - b1) < (lastA ? 0.3 : 0.02);
+            if(!same){
+                light += cA * prismProfile(sA, w);
+                continue;
+            }
+            vec2 bb = b1 - b0;
+            vec2 db = q - b0 - bb * clamp(dot(q - b0, bb) / dot(bb, bb), 0., 1.);
+            float sB = length(db) * (dot(db, n) < 0. ? -1. : 1.);
+            float d = sB - sA;
+            float e = abs(d) < 1e-6 ? prismProfile(sA, w) : (prismCum(sB, w) - prismCum(sA, w)) / d;
+            light += 0.5 * (cA + cB) * e;
         }
-        light += c * e;
+        for(int j = 0; j < PRISM_PTS; j++) A[j] = B[j];
     }
     return light;
 }

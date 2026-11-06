@@ -20,7 +20,7 @@ Item {
     Image { id: labels; source: "../assets/penrose_labels.png"; visible: false; onStatusChanged: scene.rebake() }
     ShaderEffectSource { id: labelsSrc; sourceItem: labels; hideSource: true }
 
-    readonly property int modeCount: 10
+    readonly property int modeCount: 11
     readonly property real modeDur: 480
     readonly property int scopeMode: 7
     function modeLive(t, mode, at, m) {
@@ -127,7 +127,7 @@ Item {
 
     LockShaderPass {
         id: prismState
-        width: 1250; height: 160
+        width: 1250; height: 32
         dummyTexture: parent.dummyTexture
         u_prism_ray: scene.prismRay
         u_prism_beam: scene.context ? scene.context.prismBeam : Qt.vector2d(0, 0)
@@ -167,7 +167,7 @@ Item {
             } else scene.prismBaking = false;
         }
     }
-    readonly property int prismChunks: 417
+    readonly property int prismChunks: 400
     property int prismChunk: 0
     property bool prismBaking: false
     Timer {

@@ -19,7 +19,7 @@ FloatingWindow {
     color: "black"
 
     readonly property bool dev: Quickshell.env("SHADER_DEV") === "1"
-    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "penrose", "scope", "spectrum", "prism"]
+    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "penrose", "scope", "spectrum", "prism", "gasket"]
 
     component DevButton: Rectangle {
         id: btn
@@ -111,6 +111,11 @@ FloatingWindow {
                 }
                 if (win.dev && event.key === Qt.Key_Minus) {
                     ctx.jumpToMode(9);
+                    event.accepted = true;
+                    return;
+                }
+                if (win.dev && event.key === Qt.Key_Equal) {
+                    ctx.jumpToMode(10);
                     event.accepted = true;
                     return;
                 }
@@ -217,7 +222,7 @@ FloatingWindow {
             font.pixelSize: 13
             text: "yamp   " + (sceneLoader.item?.authorText ?? "")
                 + (win.dev
-                    ? "   mode " + (ctx.devMode < 0 ? "auto" : ctx.devMode + 1) + "   [1-9 - jump, 0 auto, m matte, p pause]"
+                    ? "   mode " + (ctx.devMode < 0 ? "auto" : ctx.devMode + 1) + "   [1-9 - = jump, 0 auto, m matte, p pause]"
                     : "")
         }
     }

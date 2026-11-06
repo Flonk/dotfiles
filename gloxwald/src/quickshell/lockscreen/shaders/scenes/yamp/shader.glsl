@@ -33,7 +33,8 @@ vec3 renderMode(int m, vec2 p, vec2 q, vec2 tp){
     if(m == MODE_PENROSE) return penrose(q, tp);
     if(m == MODE_SCOPE) return scope(q, tp);
     if(m == MODE_SPECTRUM) return spectrum(q, tp);
-    return prism(q, tp);
+    if(m == MODE_PRISM) return prism(q, tp);
+    return gasket(q, tp);
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )

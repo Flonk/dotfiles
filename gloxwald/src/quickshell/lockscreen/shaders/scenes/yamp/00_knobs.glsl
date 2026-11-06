@@ -72,13 +72,14 @@ const int MODE_PENROSE  = 6;
 const int MODE_SCOPE    = 7;
 const int MODE_SPECTRUM = 8;
 const int MODE_PRISM    = 9;
-const int MODE_COUNT    = 10;
+const int MODE_GASKET   = 10;
+const int MODE_COUNT    = 11;
 
-const float MODE_AA[MODE_COUNT]    = float[MODE_COUNT](0., 0., 0., 1., 1., 1., 0., 0., 0., 0.);
-const float MODE_GRAIN[MODE_COUNT] = float[MODE_COUNT](0., 0., 0., 0., 0., 1., 0., 0., 0., 0.);
+const float MODE_AA[MODE_COUNT]    = float[MODE_COUNT](0., 0., 0., 1., 1., 1., 0., 0., 0., 0., 0.);
+const float MODE_GRAIN[MODE_COUNT] = float[MODE_COUNT](0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0.);
 
 const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D, D, D, D, D);
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D, D, D, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;
