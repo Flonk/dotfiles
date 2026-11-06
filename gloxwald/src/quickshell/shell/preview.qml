@@ -19,7 +19,7 @@ FloatingWindow {
     color: "black"
 
     readonly property bool dev: Quickshell.env("SHADER_DEV") === "1"
-    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "penrose", "scope", "spectrum", "prism", "gasket"]
+    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "penrose", "scope", "spectrum", "prism", "gasket", "gravity"]
 
     component DevButton: Rectangle {
         id: btn
@@ -101,24 +101,6 @@ FloatingWindow {
             focus: true
             visible: false
             Keys.onPressed: event => {
-                if (win.dev && event.key >= Qt.Key_0 && event.key <= Qt.Key_9) {
-                    if (event.key === Qt.Key_0)
-                        ctx.jumpToMode(-1);
-                    else
-                        ctx.jumpToMode(event.key - Qt.Key_1);
-                    event.accepted = true;
-                    return;
-                }
-                if (win.dev && event.key === Qt.Key_Minus) {
-                    ctx.jumpToMode(9);
-                    event.accepted = true;
-                    return;
-                }
-                if (win.dev && event.key === Qt.Key_Equal) {
-                    ctx.jumpToMode(10);
-                    event.accepted = true;
-                    return;
-                }
                 if (win.dev && event.key === Qt.Key_M) {
                     ctx.matte = !ctx.matte;
                     event.accepted = true;
@@ -222,7 +204,7 @@ FloatingWindow {
             font.pixelSize: 13
             text: "yamp   " + (sceneLoader.item?.authorText ?? "")
                 + (win.dev
-                    ? "   mode " + (ctx.devMode < 0 ? "auto" : ctx.devMode + 1) + "   [1-9 - = jump, 0 auto, m matte, p pause]"
+                    ? "   mode " + (ctx.devMode < 0 ? "auto" : ctx.devMode + 1) + "   [m matte, p pause]"
                     : "")
         }
     }

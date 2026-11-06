@@ -20,7 +20,7 @@ Item {
     Image { id: labels; source: "../assets/penrose_labels.png"; visible: false; onStatusChanged: scene.rebake() }
     ShaderEffectSource { id: labelsSrc; sourceItem: labels; hideSource: true }
 
-    readonly property int modeCount: 11
+    readonly property int modeCount: 12
     readonly property real modeDur: 480
     readonly property int scopeMode: 7
     function modeLive(t, mode, at, m) {
@@ -31,6 +31,8 @@ Item {
     }
     readonly property bool scopeLive: context ? modeLive(context.elapsedTime, context.devMode, context.devModeAt, scopeMode)
         || (context.elapsedTime - context.devSwitchAt < 1 && modeLive(context.devSwitchAt, context.devPrevMode, context.devPrevAt, scopeMode)) : false
+    readonly property bool gravityLive: context ? modeLive(context.elapsedTime, context.devMode, context.devModeAt, 11)
+        || (context.elapsedTime - context.devSwitchAt < 1 && modeLive(context.devSwitchAt, context.devPrevMode, context.devPrevAt, 11)) : false
     readonly property bool prismLive: context ? modeLive(context.elapsedTime, context.devMode, context.devModeAt, 9)
         || (context.elapsedTime - context.devSwitchAt < 1 && modeLive(context.devSwitchAt, context.devPrevMode, context.devPrevAt, 9)) : false
 
@@ -211,6 +213,34 @@ Item {
     }
 
     LockShaderPass {
+        id: gravState
+        width: 38; height: 34
+        context: parent.context; dummyTexture: parent.dummyTexture
+        u_aspect: scene.width / Math.max(scene.height, 1)
+        shaderName: "yamp_bufferGravState"
+        blending: false
+        iChannel9: gravStateSrc
+    }
+    ShaderEffectSource {
+        id: gravStateSrc; sourceItem: gravState; hideSource: true
+        live: scene.gravityLive; recursive: true; smooth: false; format: ShaderEffectSource.RGBA32F
+    }
+
+    LockShaderPass {
+        id: gravTrail
+        anchors.fill: parent
+        context: parent.context; dummyTexture: parent.dummyTexture
+        shaderName: "yamp_bufferGravTrail"
+        blending: false
+        iChannel8: gravStateSrc
+        iChannel9: gravTrailSrc
+    }
+    ShaderEffectSource {
+        id: gravTrailSrc; sourceItem: gravTrail; hideSource: true
+        live: scene.gravityLive; recursive: true; format: ShaderEffectSource.RGBA32F
+    }
+
+    LockShaderPass {
         id: mainPass
         anchors.fill: parent
         context: parent.context; frameCount: parent.frameCount; dummyTexture: parent.dummyTexture
@@ -225,6 +255,8 @@ Item {
         iChannel7: penroseStateSrc
         iChannel8: prismLightSrc
         iChannel9: scopeSrc
+        iChannel10: gravStateSrc
+        iChannel11: gravTrailSrc
     }
     ShaderEffectSource { id: mainSrc; sourceItem: mainPass; hideSource: true }
 

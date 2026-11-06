@@ -79,6 +79,8 @@ ShaderEffect {
     property var iChannel7: dummyTexture
     property var iChannel8: dummyTexture
     property var iChannel9: dummyTexture
+    property var iChannel10: dummyTexture
+    property var iChannel11: dummyTexture
 
     property int u_indicator_type: 0
     property vector3d u_indicator_color: Qt.vector3d(1, 1, 1)
@@ -96,4 +98,5 @@ ShaderEffect {
     property vector2d u_prism_beam: context ? context.prismBeam : Qt.vector2d(0, 0)
     property real u_prism_chunk: 0
     property vector4d u_prism_ray: Qt.vector4d(0, 0, 0, 0)
+    property real u_aspect: height > 0 ? width / height : 1
 }
