@@ -1,53 +1,45 @@
 // --- mode sequencer ------------------------------------------------------------
-// Walks the playlist and fills W, the per-pixel weight of each mode: 1 on
-// the active mode, split between neighbours behind a circle wipe (WIPE_DUR)
+// The playlist (scenes with a transition after each) is walked once a frame
+// in LockContext (seqInfo), which hands over the slot playing as u_seq (mode,
+// seconds into it, a number unique to this showing, the mode before) and
+// u_seq2 (the mode after, how long this slot runs, how long the one before
+// ran; scene lengths live in LockContext's sceneTable). Scenes cut
+// straight into transitions and out of them; each transition draws the
+// scene before it and the one after it (gPrevCol, gNextCol) into its own
+// handover.
 
 float W[MODE_COUNT];
+// each mode's own clock (seconds since its slot began) and a number unique
+// to that showing, for the transitions
+float gModeT[MODE_COUNT];
+float gModeK[MODE_COUNT];
 float gDropStart = 0.;
 
-float wipe(vec2 q, float t){
-    float x = clamp(t / WIPE_DUR, 0., 1.);
-    if(x >= 1.) return 1.;
-    float r = (1. - pow(1. - x, 3.)) * (0.5 * length(iResolution.xy) / iResolution.y + 0.01);
-    return S(length(q) - r);
-}
+// the slot playing at time (dev jumps restart the playlist at the chosen
+// mode): a scene (gScene), or a transition (gTrans) between gPrev and gNext;
+// every mode it touches gets its own clock in gModeT and a number unique to
+// this showing in gModeK
+int gScene = 0, gTrans = -1, gPrev = 0, gNext = 0;
+vec3 gPrevCol = vec3(0.), gNextCol = vec3(0.);
 
-void addModes(vec2 q, float time, int devMode, float devAt, float k){
-    float skip = 0.;
-    float since = time;
-    if(devMode >= 0){
-        for(int i = 0; i < devMode % MODE_COUNT; i++) skip += MODE_DUR[i];
-        since = time - devAt;
-    }
-    float total = 0.;
-    for(int i = 0; i < MODE_COUNT; i++) total += MODE_DUR[i];
-    float c = mod(since + skip, total);
-    float acc = 0.;
-    int to = 0;
-    float modeTime = 0.;
-    for(int i = 0; i < MODE_COUNT; i++){
-        if(c < acc + MODE_DUR[i]){
-            to = i;
-            modeTime = c - acc;
-            break;
-        }
-        acc += MODE_DUR[i];
-    }
-    int from = (to + MODE_COUNT - 1) % MODE_COUNT;
-    // very first block (already active at iTime 0, wherever the skip landed
-    // it): no wipe-in from the notional previous mode
-    if(since <= modeTime + 0.001) from = to;
-    if(to == MODE_DROP) gDropStart = time - modeTime;
-    else if(from == MODE_DROP) gDropStart = time - modeTime - MODE_DUR[from];
-    float b = wipe(q, modeTime);
-    W[from] += k * (1. - b);
-    W[to] += k * b;
-}
+bool isTransition(int m){ return m == MODE_FLAP || (m >= MODE_SHATTER && m <= MODE_STAMP); }
 
 void sequenceModes(vec2 q){
+    int m = int(u_seq.x + 0.5);
+    float modeTime = u_seq.y, lap = u_seq.z;
     for(int i = 0; i < MODE_COUNT; i++) W[i] = 0.;
-    float sw = iTime - u_dev_switch_at;
-    float b = (sw >= 0. && sw < WIPE_DUR) ? wipe(q, sw) : 1.;
-    if(b < 1.) addModes(q, u_dev_switch_at, u_dev_prev_mode, u_dev_prev_at, 1. - b);
-    addModes(q, iTime, u_dev_mode, u_dev_mode_at, b);
+    W[m] = 1.;
+    gModeT[m] = modeTime;
+    gModeK[m] = lap;
+    gTrans = -1;
+    gScene = m;
+    if(isTransition(m)){
+        gTrans = m;
+        gPrev = int(u_seq.w + 0.5);
+        gNext = int(u_seq2.x + 0.5);
+        W[gPrev] = 1.;
+        W[gNext] = 1.;
+        if(gPrev == MODE_DROP) gDropStart = iTime - modeTime - u_seq2.z;
+        if(gNext == MODE_DROP) gDropStart = iTime - modeTime + MODE_DUR[m];
+    } else if(m == MODE_DROP) gDropStart = iTime - modeTime;
 }

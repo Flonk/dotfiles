@@ -31,6 +31,17 @@ layout(std140, binding = 0) uniform buf {
     vec4 u_prism_ray;
     float u_prism_chunk;
     float u_aspect;
+    vec4 u_seq;
+    vec4 u_seq2;
+    int u_traffic_map;
+    int u_traffic_cars;
+    int u_traffic_debug;
+    vec4 u_clock_prev;
+    float u_clock_at;
+    float u_lst;
+    mat4 u_planets;
+    float u_algol;
+    mat4 u_bodies;
 
     vec3 iResolution;
     vec3 u_indicator_color;
@@ -44,7 +55,7 @@ layout(std140, binding = 0) uniform buf {
     mat4 iSeed1;
 };
 
-// Up to twelve input textures, resolved from QML properties.
+// Up to sixteen input textures, resolved from QML properties.
 layout(binding = 1) uniform sampler2D iChannel0;
 layout(binding = 2) uniform sampler2D iChannel1;
 layout(binding = 3) uniform sampler2D iChannel2;
@@ -57,6 +68,17 @@ layout(binding = 9) uniform sampler2D iChannel8;
 layout(binding = 10) uniform sampler2D iChannel9;
 layout(binding = 11) uniform sampler2D iChannel10;
 layout(binding = 12) uniform sampler2D iChannel11;
+layout(binding = 13) uniform sampler2D iChannel12;
+layout(binding = 14) uniform sampler2D iChannel13;
+layout(binding = 15) uniform sampler2D iChannel14;
+layout(binding = 16) uniform sampler2D iChannel15;
+layout(binding = 17) uniform sampler2D iChannel16;
+layout(binding = 18) uniform sampler2D iChannel17;
+layout(binding = 19) uniform sampler2D iChannel18;
+layout(binding = 20) uniform sampler2D iChannel19;
+layout(binding = 21) uniform sampler2D iChannel20;
+layout(binding = 22) uniform sampler2D iChannel21;
+layout(binding = 23) uniform sampler2D iChannel22;
 
 // ---------------------------------------------------------------------------
 // Shared constants

@@ -23,14 +23,123 @@ Scope {
     property real devPrevAt: 0
     property real devSwitchAt: -1000
     property vector2d prismBeam: Qt.vector2d(0, 0)
+    // traffic sub-modes: -1 the grid, else a map baked by gen_maps.py (same
+    // order as its MAPS); rolled each time the scene comes on unless pinned
+    readonly property var trafficMapNames: ["magic roundabout", "arc de triomphe", "spaghetti junction", "newark airport", "katy freeway", "auckland cmj", "putrajaya", "puxi viaduct", "nanpu bridge", "diverging diamond", "praterstern", "votivkirche", "mixing bowl", "squirrel hill", "huangjuewan", "central park south", "acropolis", "salzburg", "monaco", "le quesnoy"]
+    property int trafficMap: 0
+    property bool trafficMapPinned: false
+    property int trafficCars: -1
+    property bool trafficDebug: false
+    property bool trafficMinimap: false
+    property bool trafficMeter: false
+    property bool trafficStuck: false
+    property bool showGrid: false
+
+    readonly property int modeCount: 28
+    readonly property real sceneLength: 240
+    readonly property var sceneTable: [
+        { name: "base", mode: 0, weight: 1, length: 1 },
+        { name: "field", mode: 1, weight: 1, length: 1 },
+        { name: "drop", mode: 2, weight: 1, length: 1 },
+        { name: "3d amp", mode: 3, weight: 1, length: 1 },
+        { name: "halftone", mode: 4, weight: 1, length: 1 },
+        { name: "shadow", mode: 5, weight: 1, length: 1 },
+        { name: "penrose", mode: 6, weight: 1, length: 1 },
+        { name: "scope", mode: 7, weight: 1, length: 1 },
+        { name: "spectrum", mode: 8, weight: 1, length: 1 },
+        { name: "prism", mode: 9, weight: 2, length: 1 },
+        { name: "gasket", mode: 10, weight: 1, length: 1 },
+        { name: "gravity", mode: 11, weight: 1, length: 1 },
+        { name: "fluid", mode: 12, weight: 1, length: 1 },
+        { name: "grid", mode: 14, weight: 2, length: 1 },
+        { name: "stars", mode: 15, weight: 1, length: 1 },
+        { name: "fish", mode: 25, weight: 2, length: 1 },
+        { name: "traffic", mode: 26, weight: 5, length: 2 },
+        { name: "conveyor", mode: 27, weight: 1, length: 1 }
+    ]
+    readonly property var sceneModes: sceneTable.map(s => s.mode)
+    readonly property var transitionModes: [13, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    readonly property var transitionLengths: ({ 13: 10.5, 16: 9.5, 17: 6, 18: 6.5, 19: 7, 20: 7, 21: 7, 22: 6, 23: 7, 24: 6.5 })
+    readonly property var modeDurations: {
+        let d = new Array(modeCount).fill(sceneLength);
+        for (const s of sceneTable) d[s.mode] = sceneLength * s.length;
+        for (const m in transitionLengths) d[m] = transitionLengths[m];
+        return d;
+    }
+    readonly property int playlistScenes: 48
+    property var modeOrder: interleave(sceneModes, i => transitionModes[i % transitionModes.length])
+    function interleave(scenes, pick) {
+        let o = [];
+        for (let i = 0; i < scenes.length; i++) o.push(scenes[i], pick(i));
+        return o;
+    }
+    readonly property var seqInfo: {
+        const pl = modeOrder, dur = pl.map(x => modeDurations[x]);
+        if (heldSeq) {
+            const s = heldSeq.slot % pl.length, b = (s + pl.length - 1) % pl.length;
+            return [pl[s], Math.min(elapsedTime - heldSeq.start, dur[s] - 1), heldSeq.lap, pl[b], pl[(s + 1) % pl.length], dur[s], dur[b], s];
+        }
+        const total = dur.reduce((a, b) => a + b, 0);
+        let skip = 0, since = elapsedTime;
+        if (devMode >= 0) {
+            const ds = Math.max(pl.indexOf(devMode % modeCount), 0);
+            for (let i = 0; i < ds; i++) skip += dur[i];
+            since = elapsedTime - devModeAt;
+        }
+        const c = ((since + skip) % total + total) % total;
+        let acc = 0, slot = 0;
+        while (slot < pl.length - 1 && c >= acc + dur[slot]) acc += dur[slot++];
+        const lap = Math.floor((since + skip) / total) * pl.length + slot;
+        const before = (slot + pl.length - 1) % pl.length;
+        return [pl[slot], c - acc, lap, pl[before], pl[(slot + 1) % pl.length], dur[slot], dur[before], slot];
+    }
+    readonly property vector4d seqA: Qt.vector4d(seqInfo[0], seqInfo[1], seqInfo[2], seqInfo[3])
+    readonly property vector4d seqB: Qt.vector4d(seqInfo[4], seqInfo[5], seqInfo[6], 0)
+    function shuffled(a) {
+        let o = a.slice();
+        for (let i = o.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [o[i], o[j]] = [o[j], o[i]];
+        }
+        return o;
+    }
+    function pickScenes(n) {
+        const live = sceneTable.filter(s => s.weight > 0);
+        let o = [];
+        for (let i = 0; i < n; i++) {
+            const pool = live.length > 1 ? live.filter(s => s.mode !== o[o.length - 1]) : live;
+            let r = Math.random() * pool.reduce((a, s) => a + s.weight, 0), pick = pool[pool.length - 1].mode;
+            for (const s of pool) if ((r -= s.weight) < 0) { pick = s.mode; break; }
+            o.push(pick);
+        }
+        return o;
+    }
+    function shuffleModes() {
+        const t = shuffled(transitionModes);
+        modeOrder = interleave(pickScenes(playlistScenes), i => t[i % t.length]);
+    }
     property int prismRoll: 0
 
+    property bool holdScene: false
+    property var heldSeq: null
+    function _hold() {
+        heldSeq = null;
+        if (!holdScene) return;
+        const s = seqInfo;
+        heldSeq = transitionModes.indexOf(s[0]) >= 0
+            ? { slot: s[7] + 1, start: elapsedTime, lap: s[2] + 1 }
+            : { slot: s[7], start: elapsedTime - s[1], lap: s[2] };
+    }
+    onHoldSceneChanged: _hold()
+
     function jumpToMode(i) {
+        if (i >= 0 && modeOrder.indexOf(i % modeCount) < 0) modeOrder = [i % modeCount, transitionModes[0]].concat(modeOrder);
         devPrevMode = devMode;
         devPrevAt = devModeAt;
         devSwitchAt = elapsedTime;
         devMode = i;
         devModeAt = elapsedTime;
+        _hold();
     }
     function sendGoldWave() {
         devGoldAt = elapsedTime;

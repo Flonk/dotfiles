@@ -23,8 +23,15 @@ mkdir -p "$ASSETS_DST"
 cp "$ASSETS_SRC"/*.jpg "$ASSETS_SRC"/*.png "$ASSETS_DST/" 2>/dev/null || true
 echo "Assets copied to $ASSETS_DST"
 
-# Compile shared vertex shader
-"$QSB" --glsl "300 es,440" -o "$OUTPUT_DIR/default.vert.qsb" "$SCRIPT_DIR/default.vert"
+# Compile shared vertex shader, batchable: the scene renderer batches opaque
+# ShaderEffects and needs that variant, or the pipeline fails to build.
+# Only replaced when it changed, so a running preview keeps its copy.
+"$QSB" --batchable --glsl "300 es,440" -o "$OUTPUT_DIR/default.vert.qsb.tmp" "$SCRIPT_DIR/default.vert"
+if cmp -s "$OUTPUT_DIR/default.vert.qsb.tmp" "$OUTPUT_DIR/default.vert.qsb"; then
+    rm -f "$OUTPUT_DIR/default.vert.qsb.tmp"
+else
+    mv "$OUTPUT_DIR/default.vert.qsb.tmp" "$OUTPUT_DIR/default.vert.qsb"
+fi
 echo "  OK: default.vert"
 
 ok=0

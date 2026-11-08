@@ -63,6 +63,7 @@ ShellRoot {
         lockContext.keyBase = 0.0;
         lockContext.currentText = "";
         lockContext.showFailure = false;
+        lockContext.shuffleModes();
         lock.locked = true;
     }
 }

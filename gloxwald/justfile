@@ -42,6 +42,34 @@ shader-build:
     ./src/quickshell/lockscreen/convert-shaders.sh
 
 # Bake the penrose label SDF atlas (shaders/assets/penrose_labels.png)
+gen-sky:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    font=$(nix-build '<nixpkgs>' -A montserrat --no-out-link)/share/fonts/ttf/Montserrat-SemiBold.ttf
+    emoji=$(nix-build '<nixpkgs>' -A noto-fonts-color-emoji --no-out-link)/share/fonts/noto/NotoColorEmoji.ttf
+    data=$(mktemp -d)
+    for f in stars.6.json constellations.lines.json constellations.json; do
+        curl -sfL -o "$data/$f" "https://raw.githubusercontent.com/ofrohn/d3-celestial/master/data/$f"
+    done
+    cd ./src/quickshell/lockscreen/shaders/scenes/yamp
+    nix-shell -p "python3.withPackages(p: [p.pillow p.numpy])" --run "python3 gen_sky.py $data $font $emoji"
+
+# Bake the traffic scene's road maps from OpenStreetMap (shaders/assets/maps.png);
+# name words (comma separated) to rebuild just the maps whose names hold them
+gen-maps *only:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    font=$(nix-build '<nixpkgs>' -A montserrat --no-out-link)/share/fonts/ttf/Montserrat-SemiBold.ttf
+    cd ./src/quickshell/lockscreen/shaders/scenes/yamp
+    nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy p.shapely])" --run "python3 gen_maps.py ${XDG_CACHE_HOME:-$HOME/.cache}/gloxwald-osm $font {{only}}"
+
+gen-flapfont:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    font=$(nix-build '<nixpkgs>' -A montserrat --no-out-link)/share/fonts/ttf/Montserrat-SemiBold.ttf
+    cd ./src/quickshell/lockscreen/shaders/scenes/yamp
+    nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy])" --run "python3 gen_flapfont.py $font"
+
 gen-labels:
     #!/usr/bin/env bash
     set -euo pipefail

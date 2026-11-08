@@ -45,6 +45,22 @@ ShaderEffect {
     property int iFrame: frameCount
     property vector4d iMouse: Qt.vector4d(0, 0, 0, 0)
     property vector4d iClock: Qt.vector4d(0, 0, 0, 0)
+    property vector4d u_clock_prev: Qt.vector4d(0, 0, 0, 0)
+    property real u_clock_at: -1000
+    property matrix4x4 u_bodies: Qt.matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    property matrix4x4 u_planets: Qt.matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    readonly property real u_algol: {
+        const jd = Date.now() / 86400000 + 2440587.5;
+        const P = 2.867328;
+        const ph = (((jd - 2445641.5135) / P) % 1 + 1) % 1;
+        const h = (ph > 0.5 ? ph - 1 : ph) * P * 24;
+        return 2.1 + 1.3 * Math.exp(-(h / 2.6) * (h / 2.6));
+    }
+    readonly property real u_lst: {
+        const days = Date.now() / 86400000 + 2440587.5 - 2451545.0;
+        const hours = 18.697374558 + 24.06570982441908 * days + 16.3738 / 15;
+        return (((hours % 24) + 24) % 24) / 24 * 2 * Math.PI;
+    }
     Timer {
         interval: 1000
         running: true
@@ -55,7 +71,11 @@ ShaderEffect {
             let h = d.getHours();
             let m = d.getMinutes();
             let c = Qt.vector4d(Math.floor(h / 10), h % 10, Math.floor(m / 10), m % 10);
-            if (!c.fuzzyEquals(pass.iClock)) pass.iClock = c;
+            if (!c.fuzzyEquals(pass.iClock)) {
+                pass.u_clock_prev = pass.iClock;
+                pass.u_clock_at = pass.iTime;
+                pass.iClock = c;
+            }
         }
     }
 
@@ -81,6 +101,17 @@ ShaderEffect {
     property var iChannel9: dummyTexture
     property var iChannel10: dummyTexture
     property var iChannel11: dummyTexture
+    property var iChannel12: dummyTexture
+    property var iChannel13: dummyTexture
+    property var iChannel14: dummyTexture
+    property var iChannel15: dummyTexture
+    property var iChannel16: dummyTexture
+    property var iChannel17: dummyTexture
+    property var iChannel18: dummyTexture
+    property var iChannel19: dummyTexture
+    property var iChannel20: dummyTexture
+    property var iChannel21: dummyTexture
+    property var iChannel22: dummyTexture
 
     property int u_indicator_type: 0
     property vector3d u_indicator_color: Qt.vector3d(1, 1, 1)
@@ -99,4 +130,9 @@ ShaderEffect {
     property real u_prism_chunk: 0
     property vector4d u_prism_ray: Qt.vector4d(0, 0, 0, 0)
     property real u_aspect: height > 0 ? width / height : 1
+    property vector4d u_seq: context ? context.seqA : Qt.vector4d(0, 0, 0, 0)
+    property vector4d u_seq2: context ? context.seqB : Qt.vector4d(0, 0, 0, 0)
+    property int u_traffic_map: context ? context.trafficMap : 0
+    property int u_traffic_cars: context ? context.trafficCars : -1
+    property int u_traffic_debug: context ? (context.trafficDebug ? 1 : 0) + (context.trafficMinimap ? 2 : 0) + (context.trafficMeter ? 4 : 0) + (context.trafficStuck ? 8 : 0) + (context.showGrid ? 16 : 0) : 0
 }

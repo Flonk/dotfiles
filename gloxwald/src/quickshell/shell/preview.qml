@@ -11,6 +11,7 @@
 // See the `shader-dev` just recipe for the watch-recompile-reload loop.
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 FloatingWindow {
     id: win
@@ -19,7 +20,8 @@ FloatingWindow {
     color: "black"
 
     readonly property bool dev: Quickshell.env("SHADER_DEV") === "1"
-    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "penrose", "scope", "spectrum", "prism", "gasket", "gravity"]
+    property bool scenesOpen: true
+    readonly property var modeNames: ["base", "field", "drop", "3d amp", "halftone", "shadow", "penrose", "scope", "spectrum", "prism", "gasket", "gravity", "fluid", "flap", "grid", "stars", "shatter", "title", "iris", "ink", "typewriter", "peel", "glitch", "blinds", "stamp", "fish", "traffic", "conveyor"]
 
     component DevButton: Rectangle {
         id: btn
@@ -46,11 +48,20 @@ FloatingWindow {
         }
     }
 
+    FileView {
+        path: "/tmp/claude-1000/-home-flo-repos-personal-dotfiles/fb121087-7040-40a5-8153-d912d0bad83a/scratchpad/jump"
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: { const a = text().split(":"), m = parseInt(a[0]); if (a.length > 1) { ctx.trafficMapPinned = true; ctx.trafficMap = parseInt(a[1]); ctx.trafficCars = a.length > 2 ? parseInt(a[2]) : -1; const d = a.length > 3 ? parseInt(a[3]) : 0; ctx.trafficDebug = (d & 1) !== 0; ctx.trafficMinimap = (d & 2) !== 0; ctx.trafficMeter = (d & 4) !== 0; ctx.trafficStuck = (d & 8) !== 0; } if (m >= 0) ctx.jumpToMode(m); }
+    }
+
     LockContext {
         id: ctx
         Component.onCompleted: {
             clockStart = Date.now();
             elapsedTime = 0;
+            shuffleModes();
+            if (Quickshell.env("SHADER_START")) jumpToMode(parseInt(Quickshell.env("SHADER_START")));
         }
     }
 
@@ -85,11 +96,28 @@ FloatingWindow {
             anchors.fill: parent
         }
 
-        Component.onCompleted: sceneLoader.setSource("shaders/scenes/yamp.qml", {
-            "context": Qt.binding(() => ctx),
-            "frameCount": Qt.binding(() => surface.frameCount),
-            "dummyTexture": dummyTexture,
-        })
+        // the scene is loaded here, outside quickshell's own reload, so watch
+        // the built scene file and reload it ourselves; a bumped query makes
+        // the engine compile it afresh instead of reusing its cached copy
+        property int sceneRev: 0
+        function loadScene() {
+            sceneLoader.setSource("shaders/scenes/yamp.qml" + (sceneRev ? "?r=" + sceneRev : ""), {
+                "context": Qt.binding(() => ctx),
+                "frameCount": Qt.binding(() => surface.frameCount),
+                "dummyTexture": dummyTexture,
+            });
+        }
+        Component.onCompleted: loadScene()
+        FileView {
+            path: Qt.resolvedUrl("shaders/scenes/yamp.qml").toString().replace(/^file:\/\//, "")
+            watchChanges: true
+            onFileChanged: sceneReload.restart()
+        }
+        Timer {
+            id: sceneReload
+            interval: 300
+            onTriggered: { surface.sceneRev++; surface.loadScene(); }
+        }
 
         // Interactive scenes read key envelopes; let the preview drive them.
         MouseArea {
@@ -101,16 +129,6 @@ FloatingWindow {
             focus: true
             visible: false
             Keys.onPressed: event => {
-                if (win.dev && event.key === Qt.Key_M) {
-                    ctx.matte = !ctx.matte;
-                    event.accepted = true;
-                    return;
-                }
-                if (win.dev && event.key === Qt.Key_P) {
-                    ctx.setTimeScale(ctx.timeScale === 0 ? 1 : 0);
-                    event.accepted = true;
-                    return;
-                }
                 ctx.recordKeypress();
             }
         }
@@ -133,50 +151,81 @@ FloatingWindow {
                     color: "#ccffffff"
                     font.pixelSize: 12
                     font.family: "monospace"
-                    text: "t " + ctx.elapsedTime.toFixed(1) + "s   x" + ctx.timeScale
+                    text: (win.scenesOpen ? "\u25be " : "\u25b8 ") + "t " + ctx.elapsedTime.toFixed(1) + "s   x" + ctx.timeScale
+                    MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: win.scenesOpen = !win.scenesOpen }
                 }
 
-                Row {
-                    spacing: 4
-                    DevButton { label: "auto"; active: ctx.devMode < 0; onClicked: ctx.jumpToMode(-1) }
+                Column {
+                    visible: win.scenesOpen
+                    spacing: 2
+                    DevButton { width: 120; label: "auto"; active: ctx.devMode < 0; onClicked: { ctx.trafficMapPinned = false; ctx.jumpToMode(-1); } }
                     Repeater {
-                        model: win.modeNames
+                        model: [{ title: "scenes", modes: ctx.sceneModes, accent: "#3aa8b8" }, { title: "transitions", modes: ctx.transitionModes, accent: "#d9a530" }]
+                        Column {
+                            id: group
+                            required property var modelData
+                            spacing: 2
+                            topPadding: 6
+                            Text {
+                                text: group.modelData.title
+                                color: group.modelData.accent
+                                font.pixelSize: 11
+                                font.family: "monospace"
+                                font.bold: true
+                            }
+                            Repeater {
+                                model: group.modelData.modes
+                                DevButton {
+                                    required property int modelData
+                                    width: 120
+                                    accent: group.modelData.accent
+                                    label: { const s = ctx.sceneTable.find(x => x.mode === modelData); return win.modeNames[modelData] + (s ? " " + s.weight + " " + s.length : ""); }
+                                    active: ctx.devMode === modelData
+                                    onClicked: ctx.jumpToMode(modelData)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            visible: win.dev
+            anchors { right: parent.right; bottom: parent.bottom; margins: 12 }
+            width: sceneTools.implicitWidth + 20
+            height: sceneTools.implicitHeight + 20
+            radius: 6
+            color: "#cc111111"
+            border.color: "#33ffffff"
+
+            Column {
+                id: sceneTools
+                anchors.centerIn: parent
+                spacing: 8
+
+                Grid {
+                    columns: 5
+                    spacing: 4
+                    visible: ctx.devMode === 26
+                    FileView {
+                        id: mapCars
+                        property var cars: []
+                        path: Qt.resolvedUrl("shaders/assets/maps.json").toString().replace("file://", "")
+                        watchChanges: true
+                        onFileChanged: reload()
+                        onLoaded: cars = JSON.parse(text())
+                    }
+                    Repeater {
+                        model: ctx.trafficMapNames
                         DevButton {
-                            required property int index
                             required property string modelData
-                            label: modelData ? (index + 1) + " " + modelData : String(index + 1)
-                            active: ctx.devMode === index
-                            onClicked: ctx.jumpToMode(index)
+                            required property int index
+                            label: modelData + (mapCars.cars[index] !== undefined ? " " + mapCars.cars[index] : "")
+                            active: ctx.trafficMap === index
+                            onClicked: { ctx.trafficMapPinned = true; ctx.trafficCars = -1; ctx.trafficMap = index; }
                         }
                     }
-                }
-
-                Row {
-                    spacing: 4
-                    DevButton { label: "gold wave"; accent: "#d9a530"; onClicked: ctx.sendGoldWave() }
-                    DevButton { label: "keypress"; onClicked: ctx.recordKeypress() }
-                    DevButton { label: "fail"; accent: "#e35532"; onClicked: ctx.sendFail() }
-                    DevButton { label: "matte"; active: ctx.matte; onClicked: ctx.matte = !ctx.matte }
-                }
-
-                Row {
-                    spacing: 4
-                    DevButton {
-                        label: ctx.timeScale === 0 ? "play" : "pause"
-                        onClicked: ctx.setTimeScale(ctx.timeScale === 0 ? 1 : 0)
-                    }
-                    Repeater {
-                        model: [0.25, 1, 4, 16]
-                        DevButton {
-                            required property real modelData
-                            label: "x" + modelData
-                            active: ctx.timeScale === modelData
-                            onClicked: ctx.setTimeScale(modelData)
-                        }
-                    }
-                    DevButton { label: "+10s"; onClicked: ctx.skip(10) }
-                    DevButton { label: "+60s"; onClicked: ctx.skip(60) }
-                    DevButton { label: "+8m"; onClicked: ctx.skip(480) }
                 }
 
                 Row {
@@ -195,17 +244,62 @@ FloatingWindow {
                         text: "  height " + ctx.prismBeam.x.toFixed(2) + "  tilt " + (ctx.prismBeam.y * 180 / Math.PI).toFixed(1) + "°"
                     }
                 }
-            }
-        }
 
-        Text {
-            anchors { left: parent.left; bottom: parent.bottom; margins: 12 }
-            color: "#aaffffff"
-            font.pixelSize: 13
-            text: "yamp   " + (sceneLoader.item?.authorText ?? "")
-                + (win.dev
-                    ? "   mode " + (ctx.devMode < 0 ? "auto" : ctx.devMode + 1) + "   [m matte, p pause]"
-                    : "")
+                Row {
+                    spacing: 4
+                    DevButton {
+                        label: ctx.timeScale === 0 ? "play" : "pause"
+                        onClicked: ctx.setTimeScale(ctx.timeScale === 0 ? 1 : 0)
+                    }
+                    DevButton {
+                        label: "hold"
+                        active: ctx.holdScene
+                        onClicked: ctx.holdScene = !ctx.holdScene
+                    }
+                    Repeater {
+                        model: [0.25, 1, 4, 16]
+                        DevButton {
+                            required property real modelData
+                            label: "x" + modelData
+                            active: ctx.timeScale === modelData
+                            onClicked: ctx.setTimeScale(modelData)
+                        }
+                    }
+                    DevButton { label: "+10s"; onClicked: ctx.skip(10) }
+                    DevButton { label: "+60s"; onClicked: ctx.skip(60) }
+                    DevButton { label: "+8m"; onClicked: ctx.skip(480) }
+                    DevButton {
+                        label: "lanes"
+                        visible: ctx.seqInfo[0] === 26
+                        active: ctx.trafficDebug
+                        onClicked: ctx.trafficDebug = !ctx.trafficDebug
+                    }
+                    DevButton {
+                        label: "minimap"
+                        visible: ctx.seqInfo[0] === 26
+                        active: ctx.trafficMinimap
+                        onClicked: ctx.trafficMinimap = !ctx.trafficMinimap
+                    }
+                    DevButton {
+                        label: "meter"
+                        visible: ctx.seqInfo[0] === 26
+                        active: ctx.trafficMeter
+                        onClicked: ctx.trafficMeter = !ctx.trafficMeter
+                    }
+                    DevButton {
+                        label: "stuck"
+                        visible: ctx.seqInfo[0] === 26
+                        active: ctx.trafficStuck
+                        onClicked: ctx.trafficStuck = !ctx.trafficStuck
+                    }
+                    DevButton {
+                        label: "grid"
+                        visible: ctx.seqInfo[0] === 27
+                        active: ctx.showGrid
+                        onClicked: ctx.showGrid = !ctx.showGrid
+                    }
+                }
+            }
         }
     }
 }

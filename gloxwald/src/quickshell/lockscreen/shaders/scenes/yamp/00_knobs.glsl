@@ -34,12 +34,14 @@ const float NOISE_SCALE = 3.0;   // background noise texture frequency
 const float BG_SPEED    = 0.3;   // background scroll, fraction of SCROLL
 const float SCROLL      = 0.03;  // vertical scroll speed
 
-// mode transitions circle-wipe over WIPE_DUR; the global zoom flips on
-// ZOOM_PERIOD, offset by half
+// the global zoom flips on ZOOM_PERIOD, offset by half
 const float TRANS_DUR   = 1.2;   // zoom flip duration
-const float WIPE_DUR    = 0.4;
 const float ZOOM_PERIOD = 60. * 8.; // seconds per zoom flip
 const float ZOOM_OUT    = 0.30;  // global zoom-out amount
+
+// during a scene a bar PROGRESS_H px tall along the bottom edge shrinks towards
+// the next transition
+const float PROGRESS_H  = 2.;
 const float ZOOM_ECC    = 5.7;   // zoom target distance from screen center
 const float ZOOM_DRIFT  = 2300.7;  // zoom target orbit period (s) — offbeat
                                  // vs ZOOM_PERIOD so the spot always differs
@@ -60,8 +62,9 @@ const vec3 GRAD_TOP = vec3(0.212, 0.671, 0.729);
 const vec3 GRAD_BOT = vec3(0.063, 0.596, 0.706);
 
 // --- modes -------------------------------------------------------------------
-// the playlist runs the modes in order, MODE_DUR each; the sequencer
-// (20_modes) circle-wipes between neighbours over WIPE_DUR
+// modes are scenes (MODE_DUR D) or transitions (flap, shatter: short, one
+// cycle each, on their own clock, carrying the handover from the scene
+// before to the scene after; see the sequencer (20_modes)
 const int MODE_TILES    = 0;
 const int MODE_FIELD    = 1;
 const int MODE_DROP     = 2;
@@ -74,13 +77,42 @@ const int MODE_SPECTRUM = 8;
 const int MODE_PRISM    = 9;
 const int MODE_GASKET   = 10;
 const int MODE_GRAVITY  = 11;
-const int MODE_COUNT    = 12;
+const int MODE_FLUID    = 12;
+const int MODE_FLAP     = 13;
+const int MODE_GRID     = 14;
+const int MODE_STARS    = 15;
+const int MODE_SHATTER  = 16;
+const int MODE_TITLE    = 17;
+const int MODE_IRIS   = 18;
+const int MODE_INK    = 19;
+const int MODE_TYPE   = 20;
+const int MODE_PEEL   = 21;
+const int MODE_GLITCH = 22;
+const int MODE_BLINDS = 23;
+const int MODE_STAMP  = 24;
+const int MODE_FISH     = 25;
+const int MODE_TRAFFIC  = 26;
+const int MODE_CONVEYOR = 27;
+const int MODE_COUNT    = 28;
 
-const float MODE_AA[MODE_COUNT]    = float[MODE_COUNT](0., 0., 0., 1., 1., 1., 0., 0., 0., 0., 0., 0.);
-const float MODE_GRAIN[MODE_COUNT] = float[MODE_COUNT](0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.);
+const float MODE_AA[MODE_COUNT]    = float[MODE_COUNT](0., 0., 0., 1., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.);
+const float MODE_GRAIN[MODE_COUNT] = float[MODE_COUNT](0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.);
 
-const float D = 480.;
-const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D, D, D, D, D, D, D);
+const float D = 180.;
+const float T_FLAP = 10.5;
+const float T_SHATTER = 9.5;
+const float T_TITLE = 6.;
+const float T_IRIS = 6.5;
+const float T_INK = 7.0;
+const float T_TYPE = 7.0;
+const float T_PEEL = 7.0;
+const float T_GLITCH = 6.0;
+const float T_BLINDS = 7.0;
+const float T_STAMP = 6.5;
+// transitions all show the amp this tall, centred, and the tagline
+const float TRANS_AMP = 0.546;
+
+const float MODE_DUR[MODE_COUNT] = float[MODE_COUNT](D, D, D, D, D, D, D, D, D, D, D, D, D, T_FLAP, D, D, T_SHATTER, T_TITLE, T_IRIS, T_INK, T_TYPE, T_PEEL, T_GLITCH, T_BLINDS, T_STAMP, D, D, D);
 
 // derived state boundaries — don't touch, tune the knobs above
 const float ROT_START    = T_OFF1;
