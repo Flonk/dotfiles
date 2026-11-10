@@ -78,6 +78,10 @@ gen-labels:
     cd ./src/quickshell/lockscreen/shaders/scenes/yamp
     nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy])" --run "python3 gen_labels.py $rsfs $lmmath"
 
+# Bake the conveyor's settled start state into bufferConveyor.glsl
+gen-conveyor:
+    cd ./src/quickshell/lockscreen/shaders/scenes/yamp && nix-shell -p "python3.withPackages(p: [p.moderngl p.numpy])" --run "python3 gen_conveyor.py"
+
 # Bake the scope beam path (shaders/assets/scope_path.png) from yamp_sdf.png
 gen-scope:
     cd ./src/quickshell/lockscreen/shaders/scenes/yamp && nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scikit-image])" --run "python3 gen_scope.py"

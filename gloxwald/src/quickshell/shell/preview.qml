@@ -268,6 +268,7 @@ FloatingWindow {
                     DevButton { label: "+10s"; onClicked: ctx.skip(10) }
                     DevButton { label: "+60s"; onClicked: ctx.skip(60) }
                     DevButton { label: "+8m"; onClicked: ctx.skip(480) }
+                    DevButton { label: "restart"; accent: "#d9a530"; onClicked: { surface.sceneRev++; surface.loadScene(); } }
                     DevButton {
                         label: "lanes"
                         visible: ctx.seqInfo[0] === 26
