@@ -204,6 +204,7 @@ Item {
         penroseSrc.scheduleUpdate();
         prismRebuild();
         mapStaticSrc.scheduleUpdate();
+        conveyorSlabSrc.scheduleUpdate();
     }
     onWidthChanged: rebake()
     onHeightChanged: rebake()
@@ -433,6 +434,52 @@ Item {
     }
 
     LockShaderPass {
+        id: conveyorSlab
+        anchors.fill: parent
+        context: parent.context; dummyTexture: parent.dummyTexture
+        shaderName: "yamp_bufferConveyorSlab"
+        blending: false
+        iChannel1: noiseSrc
+        onStatusChanged: if (status === ShaderEffect.Compiled) conveyorSlabSrc.scheduleUpdate()
+    }
+    ShaderEffectSource {
+        id: conveyorSlabSrc; sourceItem: conveyorSlab; hideSource: true
+        live: false; smooth: false; format: ShaderEffectSource.RGBA16F
+    }
+
+    LockShaderPass {
+        id: conveyorBack
+        anchors.fill: parent
+        context: parent.context; dummyTexture: parent.dummyTexture
+        shaderName: "yamp_bufferConveyorBack"
+        blending: false
+        iChannel0: texSrc
+        iChannel1: noiseSrc
+        iChannel16: conveyorSlabSrc
+        iChannel17: conveyorSrc
+    }
+    ShaderEffectSource {
+        id: conveyorBackSrc; sourceItem: conveyorBack; hideSource: true
+        live: scene.conveyorLive; smooth: false; format: ShaderEffectSource.RGBA16F
+    }
+
+    LockShaderPass {
+        id: conveyorItems
+        anchors.fill: parent
+        context: parent.context; dummyTexture: parent.dummyTexture
+        shaderName: "yamp_bufferConveyorItems"
+        blending: false
+        iChannel0: texSrc
+        iChannel1: noiseSrc
+        iChannel16: conveyorBackSrc
+        iChannel17: conveyorSrc
+    }
+    ShaderEffectSource {
+        id: conveyorItemsSrc; sourceItem: conveyorItems; hideSource: true
+        live: scene.conveyorLive; smooth: false; format: ShaderEffectSource.RGBA16F
+    }
+
+    LockShaderPass {
         id: conveyorDraw
         anchors.fill: parent
         context: parent.context; dummyTexture: parent.dummyTexture
@@ -440,6 +487,7 @@ Item {
         blending: false
         iChannel0: texSrc
         iChannel1: noiseSrc
+        iChannel16: conveyorItemsSrc
         iChannel17: conveyorSrc
     }
     ShaderEffectSource {

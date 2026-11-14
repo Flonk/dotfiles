@@ -6396,7 +6396,7 @@ vec3 traffic(vec2 q, vec2 tp){ return mpRender(q, tp); }
 // (progress, holder, since done, extra), the jam, the sorter, the sim clock
 // and the splash.
 const int   CV_N       = 400;
-const int   CV_NFRAME  = 56;
+const int   CV_NFRAME  = 46;
 const float CV_K       = 0.8;
 const float CV_M       = 0.78 * CV_K;
 const float CV_DSIZE   = 0.06;
@@ -6457,8 +6457,8 @@ const int   CV_QC_K[5] = int[](CS_STAMP, CS_SQUEEZE, CS_WEIGH, CS_STRETCH, CS_SC
 const float CV_QREJ[5] = float[](0.03, 0.04, 0.04, 0.04, 0.05);
 
 const vec2 CV_PTS[58] = vec2[](
-    vec2(CVX(-35.), CVR(12.)), vec2(CVX(2.), CVR(12.)),
-    vec2(CVX(-35.), CVR(15.)), vec2(CVX(28.2), CVR(15.)),
+    vec2(CVX(-37.), CVR(12.)), vec2(CVX(2.), CVR(12.)),
+    vec2(CVX(-37.), CVR(15.)), vec2(CVX(28.2), CVR(15.)),
     vec2(CVX(28.2), CVR(15.)), vec2(CVX(28.2), CVR(-15.)),
     vec2(CVX(32.), CVR(-15.)), vec2(CVX(4.), CVR(-15.)), vec2(CVX(2.), CVR(-12.)), vec2(CVX(3.), CVR(-10.)), vec2(CVX(9.), CVR(-10.)), vec2(CVX(9.), CVR(-7.)), vec2(CVX(2.), CVR(-7.)), vec2(CVX(2.), CVR(-4.)),
     vec2(CVX(18.), CVR(-4.)), vec2(CVX(26.), CVG(-6.)), vec2(CVX(26.), CVR(9.)), vec2(CVX(9.), CVR(9.)),
@@ -6467,10 +6467,10 @@ const vec2 CV_PTS[58] = vec2[](
     vec2(CVX(-29.), CVR(3.)), vec2(CVX(-29.), CVR(-1.)),
     vec2(CVX(-29.), CVR(-1.)), vec2(CVG(-27.08), CVR(-1.)), vec2(CVX(-17.), CVR(-4.)), vec2(CVX(-8.), CVR(-4.)), vec2(CVX(-8.), CVR(-15.)), vec2(CVG(-9.4), CVR(-15.)), vec2(CVG(-10.1), CVR(-14.4)), vec2(CVG(-11.9), CVR(-14.4)), vec2(CVG(-12.6), CVR(-15.)), vec2(CVX(-17.), CVR(-15.)), vec2(CVX(-19.), CVR(-11.)),
     vec2(CVX(-28.), CVR(-11.)), vec2(CVX(-28.5), CVR(-12.)), vec2(CVX(-28.5), -1.3),
-    vec2(CVX(-35.), CVR(9.)), vec2(CVX(-5.), CVR(9.)), vec2(CVX(-5.), CVR(9.)), vec2(CVX(-5.), CVR(9.)),
+    vec2(CVX(-37.), CVR(9.)), vec2(CVX(-5.), CVR(9.)), vec2(CVX(-5.), CVR(9.)), vec2(CVX(-5.), CVR(9.)),
     vec2(CVX(19.), CVR(7.)), vec2(CVG(20.42), CVG(7.17)), vec2(CVG(22.42), CVG(1.17)), vec2(CVX(22.), CVR(-1.)), vec2(CVG(0.), CVR(-1.)), vec2(CVG(0.), CVR(-15.)),
     vec2(CVG(-5.), CVR(-15.)), vec2(CVG(-5.), CVR(3.)), vec2(CVX(-29.), CVR(3.)),
-    vec2(CVX(-10.), CVR(15.)), vec2(CVX(-10.), CVR(6.)), vec2(CVX(-37.), CVR(6.)), vec2(CVX(-37.), CVR(-13.6)), vec2(CVX(-35.), CVR(-13.6)), vec2(CVX(-35.), CVR(15.))
+    vec2(CVX(-10.), CVR(15.)), vec2(CVX(-10.), CVR(6.)), vec2(CVX(-31.), CVR(6.)), vec2(CVX(-31.), CVR(3.4)), vec2(CVX(-37.), CVR(3.4)), vec2(CVX(-37.), CVR(15.))
 );
 const int CV_T0[10] = int[](0, 2, 4, 6, 20, 23, 25, 39, 43, 52);
 const int CV_TN[10] = int[](2, 2, 2, 14, 3, 2, 14, 2, 9, 6);
@@ -6504,7 +6504,7 @@ const float CV_PSPLIT  = -0.26;
 const vec4  CV_WELDROOM = vec4(-7., 6., 7., 17.);
 const vec2  CV_PICK[2] = vec2[](vec2(CVX(-5.), CVR(9.)), vec2(CVX(2.), CVR(12.)));
 const vec2  CV_JOIN[2] = vec2[](vec2(CVX(-1.), CVR(15.)), vec2(CVX(5.), CVR(15.)));
-const vec2  CV_ARMB[2] = vec2[](vec2(CVX(-3.), CVG(8.)), vec2(CVX(4.), CVG(17.)));
+const vec2  CV_ARMB[2] = vec2[](vec2(CVX(-3.), CVG(9.)), vec2(CVX(4.), CVG(17.)));
 const float CV_ARML[2] = float[](0.115, 0.075);
 const int   CV_ARMK[2] = int[](2, 1);
 const vec2  CV_SEAM[2] = vec2[](vec2(0.22, -0.33), vec2(0.05, -0.05));
@@ -6656,7 +6656,7 @@ float cvSpeed(int t, float s, vec2 p){
         if(p.y > CVR(-4.) - 0.001 && p.x < CVX(-8.) - 0.0005) return 0.05;
         return s > pe ? min(0.25 + 3. * (s - pe), 1.3) : CV_BELT_V * 0.25;
     }
-    if(t == CT_FRAME) return p.y < CVR(-13.) && p.x > CVX(-37.) + 0.001 ? 0.05 : (abs(p.x - CVX(-10.)) < 0.001 && p.y > CVR(6.) + 0.001) || (abs(p.x - CVX(-37.)) < 0.001 && p.y < CVR(6.) - 0.001) ? 0.6 : 0.12;
+    if(t == CT_FRAME) return p.y < CVR(3.5) && p.x < CVX(-31.) - 0.001 && p.x > CVX(-37.) + 0.001 ? 0.05 : (abs(p.x - CVX(-10.)) < 0.001 && p.y > CVR(6.) + 0.001) || (abs(p.x - CVX(-31.)) < 0.001 && p.y < CVR(6.) - 0.001) ? 0.6 : 0.12;
     return CV_BELT_V;
 }
 
@@ -6846,6 +6846,11 @@ float cvFit(float asp){ return min(0.5 * asp / CV_HALF_W, 0.5 / CV_HALF_H); }
 
 vec4 cvState(int x, int y){ return texelFetch(iChannel17, ivec2(x, y), 0); }
 
+int cvSlot(ivec2 c, int k){
+    if(c.x < 0 || c.y < 0 || c.x >= AG_GX || c.y >= AG_GY) return -1;
+    return int(texelFetch(iChannel17, ivec2(AG_TEX * c.x + (k >> 2), AG_BIN0 + c.y), 0)[k & 3] + 0.5) - 1;
+}
+
 float cvHash(float n){ return fract(sin(n * 127.1) * 43758.5453); }
 
 vec3 cvLavaRamp(float t){
@@ -6926,7 +6931,7 @@ float cvTrapezoid(vec2 p, float r1, float r2, float he){
 const vec3  CV_SLAB   = vec3(0.165, 0.17, 0.175);
 const vec3  CV_HOLE   = vec3(0.042, 0.044, 0.048);
 const vec3  CV_MC     = vec3(0.3, 0.31, 0.32);
-const vec3  CV_SAND   = vec3(0.46, 0.39, 0.28);
+const vec3  CV_SAND   = vec3(0.32, 0.26, 0.18);
 const float CV_TUN    = CV_CELL;
 const float CV_TUN_UP = CV_CELL - CV_ROWOFF;
 const float CV_RISER  = CVX(-32.);
@@ -6959,16 +6964,18 @@ float cvMouldD(vec2 g, int kind){ return sdRoundBox(g - CV_MCEN[kind], CV_MHALF[
 // elevator carries the sand from the pit back up to the hopper
 const float CV_RET_X   = CVX(-10.);
 const float CV_RET_Y   = CVG(7.);
-const float CV_DROP_X  = CVX(-37.);
-const float CV_PAT_X   = CVX(-35.);
-const vec2  CV_PIT     = vec2(CVG(-35.5), CVG(-12.5));
-const vec2  CV_PIT_H   = vec2(CVG(1.5), CVG(1.5));
-const vec2  CV_HOPPER  = vec2(CVX(-33.), CVG(3.5));
-const float CV_SELEV_X = CVX(-31.);
-const float CV_FRAME_V = 0.12;
-const vec2  CV_WASHY   = vec2(CVG(-9.), CVG(-5.));
-const vec2  CV_DRYY    = vec2(CVG(-4.), CVG(0.));
-const vec2  CV_FILLY   = vec2(CVG(1.), CVG(2.5));
+const float CV_DROP_X  = CVX(-31.);
+const float CV_PAT_X   = CVX(-37.);
+const vec2  CV_PIT     = vec2(CVG(-31.), CVG(4.));
+const vec2  CV_PIT_H   = vec2(CVG(1.), CVG(1.));
+const vec2  CV_HOPPER  = vec2(CVG(-34.9), CVG(7.));
+const float CV_SELEV_X = CVX(-32.);
+const float CV_RUN_Y   = CVR(3.4);
+const float CV_RUNF    = CVG(3.);
+const float CV_RUNC    = CVG(5.);
+const vec2  CV_WASHX   = vec2(CVG(-33.3), CVG(-32.));
+const vec2  CV_DRYX    = vec2(CVG(-34.4), CVG(-33.3));
+const vec2  CV_FILLX   = vec2(CVG(-35.4), CVG(-34.4));
 
 // an empty flask, open at the top, around glyph point g of a piece's mould
 float cvFlask(vec2 g, int kind){
@@ -6980,8 +6987,8 @@ float cvCarveReturn(vec2 q){
     float d = sdBox(q - vec2((CV_RET_X + CV_DROP_X) * 0.5, CV_RET_Y), vec2((CV_RET_X - CV_DROP_X) * 0.5 + CVG(0.5), CV_CELL));
     d = min(d, sdBox(q - vec2(CV_RET_X, (CV_TOPY + CV_RET_Y) * 0.5), vec2(CVG(0.5), (CV_TOPY - CV_RET_Y) * 0.5)));
     d = min(d, sdBox(q - vec2(CV_DROP_X, (CV_RET_Y + CV_PIT.y) * 0.5), vec2(CVG(0.5), (CV_RET_Y - CV_PIT.y) * 0.5)));
-    d = min(d, sdBox(q - CV_PIT, CV_PIT_H));
-    return min(d, sdBox(q - vec2(CV_PAT_X, (CV_TOPY + CV_PIT.y) * 0.5 + 0.01), vec2(CVG(0.5), (CV_TOPY - CV_PIT.y) * 0.5 + 0.01)));
+    d = min(d, sdBox(q - vec2((CV_PAT_X + CV_PIT.x + CV_PIT_H.x - CVG(0.5)) * 0.5, (CV_RUNF + CV_RUNC) * 0.5), vec2((CV_PIT.x + CV_PIT_H.x - CV_PAT_X + CVG(0.5)) * 0.5, (CV_RUNC - CV_RUNF) * 0.5)));
+    return min(d, sdBox(q - vec2(CV_PAT_X, (CV_TOPY + CV_RUNF) * 0.5 + 0.01), vec2(CVG(0.5), (CV_TOPY - CV_RUNF) * 0.5 + 0.01)));
 }
 
 // the mould knocked off a piece `f` seconds after the hammer hit its top:
@@ -7082,11 +7089,14 @@ vec3 cvTowerFlask(vec3 col, vec2 q, vec2 c, float id, float dirt, float wet, flo
 // paternoster wet from the wash, drying, filling with fresh sand
 vec3 cvFrameItem(vec3 col, vec2 q, vec2 p, float id){
     vec3 st = vec3(1., 0., 0.);
-    bool pat = abs(p.x - CV_PAT_X) < 0.001 && p.y > CVR(-13.6) + 0.001;
-    if(pat) st = vec3(0.15 * (1. - smoothstep(CV_PIT.y, CV_WASHY.x, p.y)),
-                      smoothstep(CV_WASHY.x, CV_WASHY.x + 0.03, p.y) * (1. - smoothstep(CV_DRYY.x, CV_DRYY.y, p.y)),
-                      smoothstep(CV_FILLY.x, CV_FILLY.y, p.y));
-    else if(p.y < CVR(-13.)) st.x = 1. - 0.85 * smoothstep(0.05, 0.9, (p.x - CV_DROP_X) / (CV_PAT_X - CV_DROP_X));
+    bool pat = abs(p.x - CV_PAT_X) < 0.001 && p.y > CV_RUN_Y + 0.001;
+    if(pat) st = vec3(0., 0., 1.);
+    else if(p.y < CV_RUN_Y + 0.001 && p.x < CV_DROP_X - 0.0005){
+        float u = -p.x;
+        st.x = p.x > CV_WASHX.y ? 1. - 0.85 * smoothstep(0.05, 0.9, (CV_DROP_X - p.x) / (CV_DROP_X - CV_WASHX.y)) : 0.15 * (1. - smoothstep(-CV_WASHX.y, -CV_WASHX.y + CVG(0.6), u));
+        st.y = smoothstep(-CV_WASHX.y, -CV_WASHX.y + 0.03, u) * (1. - smoothstep(-CV_DRYX.y, -CV_DRYX.x, u));
+        st.z = smoothstep(-CV_FILLX.y, -CV_FILLX.x, u);
+    }
     vec2 c = p + vec2(0., (CV_MCEN[0].y - CV_MHALF[0].y) * CV_SIZE);
     if(pat) col = cvMach(col, sdBox(q - c + vec2(0., 0.002), vec2(0.014, 0.0015)), 0.7);
     return cvTowerFlask(col, q, c, id, st.x, st.y, st.z);
@@ -7271,6 +7281,7 @@ float cvCarve(vec2 q){
     d = min(d, sdBox(q - vec2(CVG(-18.), CVG(-1.)), vec2(CVG(11.), CVG(3.))));
     d = min(d, sdBox(q - vec2(CVG(-11.), CVG(-10.)), vec2(CVG(4.), CVG(5.))));
     d = min(d, sdBox(q - vec2(CVG(-17.5), CVG(-10.)), vec2(CVG(1.5), CVG(5.))));
+    d = min(d, sdBox(q - vec2(CVG(-33.5), CVG(-10.)), vec2(CVG(3.5), CVG(5.))));
     d = min(d, sdBox(q - vec2(CVG(11.), CVG(2.)), vec2(CVG(12.), CVG(3.))));
     d = min(d, sdBox(q - vec2(CVG(21.5), CVG(6.)), vec2(CVG(1.5), CVG(1.))));
     d = min(d, sdBox(q - vec2(CVG(25.5), CVG(2.)), vec2(CVG(1.5), CVG(4.))));
@@ -7287,7 +7298,8 @@ float cvCarve(vec2 q){
     d = max(d, -sdBox(q - vec2(CVG(-10.5), CVG(0.)), vec2(CVG(0.5), CVG(2.))));
     d = min(d, sdBox(q - vec2(CVG(-6.5), CVG(1.5)), vec2(CVG(0.5), CVG(0.5))));
     d = max(d, -sdBox(q - vec2(CVG(-9.5), CVG(-1.5)), vec2(CVG(1.5), CVG(0.5))));
-    d = max(d, -sdBox(q - vec2(CVG(1.5), CVG(8.5)), vec2(CVG(0.5), CVG(2.5))));
+    d = max(d, -sdBox(q - vec2(CVG(1.5), CVG(9.5)), vec2(CVG(0.5), CVG(1.5))));
+    d = max(d, -sdBox(q - vec2(CVG(-3.), CVG(8.5)), vec2(CVG(4.), CVG(0.5))));
     d = max(d, -sdBox(q - vec2(CVG(4.), CVG(10.5)), vec2(CVG(3.), CVG(0.5))));
     return max(d, -sdBox(q - vec2(CVG(19.5), CVG(6.5)), vec2(CVG(0.5), CVG(0.5))));
 }
@@ -7295,11 +7307,12 @@ float cvCarve(vec2 q){
 vec3 cvSlab(vec2 q, vec2 tp, float carve);
 
 vec3 cvWallHoles(vec3 col, vec2 q, vec2 tp){
-    if(q.x < CVG(-9.) || q.x > CVG(16.) || q.y < CVG(-5.) || q.y > CVG(4.)) return col;
+    if(q.x < CVG(-9.) || q.x > CVG(16.) || q.y < CVG(-5.) || q.y > CVG(8.)) return col;
     float vent = sdBox(q - vec2(CVG(-6.5), CVG(1.5)), vec2(CVG(0.5), CVG(0.5)));
     float h = min(min(sdBox(q - vec2(CVG(5.5), CVG(0.5)), vec2(CVG(0.5), CVG(0.5))), sdBox(q - vec2(CVG(10.5), CVG(2.)), vec2(CVG(0.5), CVG(1.)))), sdBox(q - vec2(CVG(15.5), CVG(2.)), vec2(CVG(0.5), CVG(2.))));
     h = min(h, min(vent, sdBox(q - vec2(CVG(-7.5), CVG(-1.5)), vec2(CVG(0.5), CVG(0.5)))));
     h = min(h, sdBox(q - vec2(CVG(-7.5), CVG(-4.5)), vec2(CVG(0.5), CVG(0.5))));
+    h = min(h, sdBox(q - vec2(CVG(-2.5), CVG(7.)), vec2(CVG(4.5), CVG(1.))));
     if(h > 0.) return col;
     vec3 back = cvSlab(q, tp, 1.) * vec3(0.6, 0.6, 0.66) * mix(0.55, 1., smoothstep(0., CVG(0.35), -h));
     col = mix(col, back, S(h));
@@ -7329,6 +7342,134 @@ vec3 cvSlab(vec2 q, vec2 tp, float carve){
     float ao = 0.55 + 0.45 * floor(smoothstep(0., 0.02, -carve) * 4.) / 4.;
     vec3 hole = floor(vec3(0.034, 0.036, 0.04) * (0.9 + 0.2 * h) * hb * hg * ao * 160. + 0.5) / 160.;
     return carve < 0. ? hole : col;
+}
+
+// ---- the shell: the factory is a box with a one tile outer wall and a roof,
+// a furnace tower over the lava riser, the reception glazed onto the street;
+// beyond it the night city above the street, earth below
+const float CV_GROUND = CVG(-15.);
+
+float cvFactory(vec2 q){
+    float d = min(sdBox(q - vec2(CVG(-2.), CVG(1.5)), vec2(CVG(36.), CVG(17.5))), sdBox(q - vec2(CVG(-31.5), CVG(40.)), vec2(CVG(2.5), CVG(21.))));
+    return min(d, sdBox(q - vec2(CVG(-29.), CVG(-38.)), vec2(CVG(2.), CVG(23.))));
+}
+
+float cvInterior(vec2 q){
+    float d = min(sdBox(q - vec2(CVG(-2.), CVG(1.5)), vec2(CVG(35.), CVG(16.5))), sdBox(q - vec2(CVG(-31.5), CVG(40.)), vec2(CVG(1.5), CVG(22.))));
+    return min(d, sdBox(q - vec2(CVG(-29.), CVG(-38.)), vec2(CVG(1.), CVG(24.))));
+}
+
+float cvGlass(vec2 q){ return sdBox(q - vec2(CVG(-37.5), CVG(-10.)), vec2(CVG(0.5), CVG(5.))); }
+
+// a visitor every CV_VISIT_P seconds: in off the street, rings at the desk,
+// gets a badge, joins the guide and leaves through the tour door
+const float CV_VISIT_P = 26.;
+float cvVisitT(){ return mod(iTime + 3., CV_VISIT_P); }
+float cvVisitorX(float t, out float walk, out float alpha){
+    walk = 0.;
+    alpha = 1.;
+    if(t < 3.6){ walk = 1.; return mix(-40.5, -35., t / 3.6); }
+    if(t < 8.) return -35.;
+    if(t < 10.4){ walk = 1.; return mix(-35., -32.7, (t - 8.) / 2.4); }
+    if(t < 14.) return -32.7;
+    alpha = 1. - smoothstep(14.9, 15.6, t);
+    if(t < 15.6){ walk = 1.; return mix(-32.7, -30.95, (t - 14.) / 1.6); }
+    return -30.95;
+}
+float cvEntranceOpen(){
+    float t = cvVisitT(), w, a;
+    return t < 4.5 ? 1. - smoothstep(0.8, 1.6, abs(cvVisitorX(t, w, a) + 37.5)) : 0.;
+}
+float cvTourDoorOpen(){ float t = cvVisitT(); return smoothstep(13.6, 14.3, t) * (1. - smoothstep(15.8, 16.6, t)); }
+
+vec3 cvShell(vec3 col, vec2 q){
+    float f = cvFactory(q), in_ = cvInterior(q);
+    if(f > 0.004 || in_ < -0.004) return col;
+    float wall = max(f, -in_);
+    vec3 clad = q.y < CV_GROUND ? vec3(0.2, 0.2, 0.19) * (0.85 + 0.2 * tcNoise(q * 220.)) : vec3(0.15, 0.16, 0.18) * (0.88 + 0.12 * step(0.5, fract((q.y > CVG(18.) && (q.x < CVG(-34.) || q.x > CVG(-29.)) ? q.y : q.x) / CVG(0.25))));
+    vec2 tq = fract(q / CV_CELL);
+    clad *= 1. - 0.3 * S((min(min(tq.x, 1. - tq.x), min(tq.y, 1. - tq.y))) * CV_CELL - 0.0007);
+    col = mix(col, clad, S(wall));
+    col = mix(col, vec3(0.32, 0.34, 0.37), S(abs(f) - 0.0007));
+    return mix(col, vec3(0.06), S(abs(in_) - 0.0006) * 0.6);
+}
+
+vec3 cvCity(vec2 q){
+    float h = clamp((q.y - CV_GROUND) / CVG(40.), 0., 1.);
+    vec3 o = mix(vec3(0.2, 0.12, 0.2), vec3(0.02, 0.03, 0.08), smoothstep(0., 0.8, h));
+    o += vec3(0.9, 0.95, 1.) * 0.6 * step(0.996, random(floor(q / 0.0016))) * smoothstep(0.35, 0.6, h);
+    vec2 mc = vec2(CVG(12.), CVG(21.));
+    float md = length(q - mc) - CVG(0.75);
+    o += vec3(0.7, 0.75, 0.9) * 0.18 * exp(-max(md, 0.) / 0.03);
+    o = mix(o, vec3(0.92, 0.9, 0.82) * (0.85 + 0.15 * tcNoise(q * 300.)), S(md));
+    o += vec3(0.3, 0.3, 0.4) * 0.12 * smoothstep(0.55, 0.85, tcNoise(vec2(q.x * 6. + iTime * 0.01, q.y * 18.))) * smoothstep(0.3, 0.6, h);
+    float bw = CVG(1.8), bi = floor(q.x / bw), bx = fract(q.x / bw);
+    float r = cvHash(bi + 11.);
+    float bh = CV_GROUND + CVG(2. + 44. * r * r * r);
+    float inset = step(0.1 + 0.15 * cvHash(bi + 3.), bx) * step(bx, 0.92);
+    vec2 wi = floor(vec2(q.x / CVG(0.3), (q.y - CV_GROUND) / CVG(0.4)));
+    vec2 wf = fract(vec2(q.x / CVG(0.3), (q.y - CV_GROUND) / CVG(0.4)));
+    float lit = step(0.65, cvHash(wi.x * 13.1 + wi.y * 7.7)) * step(abs(wf.x - 0.5), 0.22) * step(abs(wf.y - 0.5), 0.2);
+    vec3 city = vec3(0.035, 0.04, 0.065) * (0.8 + 0.4 * cvHash(bi)) + vec3(1., 0.8, 0.45) * 0.3 * lit * (0.85 + 0.15 * sin(iTime * 0.3 + wi.x));
+    o = mix(o, city, S(q.y - bh) * inset);
+    o += vec3(1., 0.2, 0.15) * 0.8 * step(0.5, fract(iTime * 0.5 + r)) * S(length(q - vec2((bi + 0.5) * bw, bh + 0.002)) - 0.0012) * step(0.6, r);
+    if(q.y < CV_GROUND){
+        float pp = CVG(1.) / 10.;
+        vec2 pix = floor(q / pp), id = floor(pix / 10.);
+        float r = cvHash(pix.x * 1.37 + pix.y * 91.13), h = cvHash(id.x * 17.3 + id.y * 91.7);
+        float dep = floor((CV_GROUND - q.y) / CV_CELL);
+        o = vec3(0.07, 0.048, 0.032) * (0.85 + 0.25 * r) * (0.92 + 0.12 * h) * (1. - 0.08 * min(dep, 4.));
+        o = floor(o * 64. + 0.5) / 64.;
+    }
+    o = mix(o, vec3(0.14, 0.14, 0.15) * (0.9 + 0.2 * tcNoise(q * 300.)), S(abs(q.y - CV_GROUND + CVG(0.1)) - CVG(0.1)));
+    vec2 rp = vec2(q.x + q.y * 0.12, q.y + iTime * 0.7);
+    vec2 rc = floor(rp / vec2(0.004, 0.03)), rf = fract(rp / vec2(0.004, 0.03));
+    o += vec3(0.5, 0.55, 0.65) * 0.2 * step(0.86, cvHash(rc.x * 7.1 + rc.y * 3.3)) * smoothstep(0., 0.1, rf.y) * (1. - smoothstep(0.35, 0.55, rf.y)) * (1. - smoothstep(0.1, 0.25, abs(rf.x - 0.5))) * step(CV_GROUND, q.y);
+    return o;
+}
+
+vec3 cvRoof(vec3 col, vec2 q){
+    float ry = CVG(19.);
+    if(q.y < ry - 0.002 || q.y > ry + CVG(4.)) return col;
+    for(int k = 0; k < 3 + CVZ; k++){
+        float x = CVG(-18. + 13. * float(k));
+        float v = sdBox(q - vec2(x, ry + CVG(0.35)), vec2(CVG(0.6), CVG(0.35)));
+        col = mix(col, vec3(0.13, 0.14, 0.16), S(v));
+        col = mix(col, vec3(0.25, 0.27, 0.3), S(abs(v) - 0.0006));
+        col = mix(col, vec3(0.08), S(sdBox(q - vec2(x, ry + CVG(0.35)), vec2(CVG(0.45), 0.0006))));
+        col = mix(col, vec3(0.13, 0.14, 0.16), S(sdBox(q - vec2(x, ry + CVG(0.75)), vec2(CVG(0.75), CVG(0.06)))));
+    }
+    vec2 at = vec2(CVG(27.), ry);
+    col = mix(col, vec3(0.2), S(sdSegment(q, at, at + vec2(0., CVG(3.))) - 0.0006));
+    for(int k = 1; k < 4 + CVZ; k++) col = mix(col, vec3(0.2), S(sdSegment(q, at + vec2(-CVG(0.25), CVG(0.7) * float(k)), at + vec2(CVG(0.25), CVG(0.7) * float(k))) - 0.0004));
+    vec2 bl = at + vec2(0., CVG(3.05));
+    float on = step(0.5, fract(iTime * 0.7));
+    col = mix(col, mix(vec3(0.3, 0.05, 0.05), vec3(1.5, 0.2, 0.15), on), S(length(q - bl) - 0.0016));
+    return col + vec3(1., 0.15, 0.1) * 0.25 * on * exp(-length(q - bl) / 0.01);
+}
+
+vec3 cvOutside(vec3 col, vec2 q){
+    float f = cvFactory(q), g = cvGlass(q);
+    if(f > -0.002){
+        col = mix(col, cvCity(q), S(-f));
+        col = cvRoof(col, q);
+    }
+    if(g < 0.004){
+        vec3 oc = cvCity(q);
+        vec3 o = oc * vec3(0.78, 0.9, 1.) + vec3(0.03, 0.05, 0.06);
+        o += vec3(0.6, 0.75, 0.85) * 0.12 * smoothstep(0.8, 1., sin((q.y + q.x * 2.5) * 140.) * 0.5 + 0.5);
+        float dr = sdBox(q - vec2(CVG(-37.5), CV_GROUND + CVG(1.)), vec2(CVG(0.5), CVG(1.)));
+        float op = cvEntranceOpen();
+        o = mix(o, oc, op * S(dr));
+        o += vec3(1., 0.75, 0.45) * 0.08 * exp(-(CVG(-37.) - q.x) / 0.02) * (1. - smoothstep(CV_GROUND, CV_GROUND + CVG(3.), q.y));
+        col = mix(col, o, S(g));
+        float ty = (0.5 - abs(fract((q.y - CV_GROUND - CVG(2.)) / CVG(2.5)) - 0.5)) * CVG(2.5);
+        col = mix(col, vec3(0.2, 0.21, 0.23), S(max(ty - 0.0014, g)));
+        col = mix(col, vec3(0.2, 0.21, 0.23), S(abs(g) - 0.0011) * (1. - op * step(dr, 0.002) * step(CV_GROUND + 0.002, q.y)));
+        col = mix(col, vec3(0.28, 0.3, 0.33), S(abs(dr) - 0.0008) * (1. - op));
+        col = mix(col, vec3(0.6, 0.62, 0.66), S(sdBox(q - vec2(CVG(-37.25), CV_GROUND + CVG(1.)), vec2(0.0008, CVG(0.3)))) * (1. - op));
+    }
+    return col;
 }
 
 vec3 cvBelts(vec3 col, vec2 q){
@@ -7392,10 +7533,10 @@ vec3 cvStream(vec3 col, vec2 q, vec2 a, vec2 b, float on, float seed){
     return col + vec3(1., 0.5, 0.15) * 0.3 * on * exp(-length(q - b) / 0.01);
 }
 
-vec3 cvPours(vec3 col, vec2 q, vec4 st[31]){
+vec3 cvPours(vec3 col, vec2 q){
     if(q.x > CVG(-23.) || q.y < CVG(9.) || q.y > CVG(18.)) return col;
     for(int li = 0; li < 3 + CVZ; li++){
-        vec4 ps = st[li];
+        vec4 ps = cvState(li, CV_ROW);
         float on = ps.w > float(cvBatchN(li)) - 0.5 ? smoothstep(0.06, 0.12, ps.x) * (1. - smoothstep(0.8, 0.86, ps.x)) : 0.;
         int kind = li == 0 ? 1 : li == 1 ? 0 : 2;
         float bot = CV_ST_Y[li] + (CV_MCEN[kind].y + CV_MHALF[kind].y) * CV_SIZE - 0.004;
@@ -7507,10 +7648,9 @@ vec3 cvHeroScreen(vec3 col, vec2 q, vec2 mc, vec2 mh, float asp){
     vec3 sc = mix(vec3(0.08, 0.2, 0.24), vec3(0.01, 0.02, 0.03), smoothstep(0., 1.3, length(r - vec2(0., 0.2))));
     float z = 1.1;
     vec2 cp = cvStPos(CS_WEIGH), w = cp + (q - mc) / z;
-    vec4 sl[AG_TEX];
-    agSlots(iChannel17, w, asp, sl);
+    ivec2 slc = agCellOf(w, asp);
     for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+        int i = cvSlot(slc, k);
         if(i < 0) break;
         vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
         if(cvI(r1.x) != CT_FIN || abs(r0.x - cp.x) > 0.01) continue;
@@ -7545,14 +7685,126 @@ vec3 cvMonRoom(vec3 col, vec2 q, float asp){
     float chair = min(sdBox(q - vec2(op.x - CVG(0.05), fl + CVG(0.35)), vec2(CVG(0.45), 0.0014)), sdBox(q - vec2(op.x - CVG(0.5), fl + CVG(0.7)), vec2(0.0014, CVG(0.4))));
     chair = min(chair, sdBox(q - vec2(op.x - CVG(0.05), fl + CVG(0.17)), vec2(0.0012, CVG(0.17))));
     col = mix(col, CV_MC * 0.7, S(chair));
-    vec2 g = (q - op - vec2(0., 0.0008 * sin(iTime * 2.))) / CV_SIZE;
+    return col;
+}
+
+vec3 cvMug(vec3 col, vec2 q, vec2 c, float full, float steam){
+    float m = sdBox(q - c, vec2(CVG(0.11), CVG(0.13)));
+    col = mix(col, vec3(0.01), S(m - 0.001) * 0.4);
+    col = mix(col, vec3(0.9, 0.88, 0.84), S(m));
+    col = mix(col, vec3(0.25, 0.13, 0.05), S(max(m + 0.0008, q.y - c.y - CVG(0.13) + 0.0012)) * full * step(c.y + CVG(0.13) - 0.0025, q.y));
+    col = mix(col, vec3(0.9, 0.88, 0.84), S(abs(length(q - c - vec2(CVG(0.14), 0.)) - CVG(0.06)) - 0.0007));
+    for(int k = 0; k < 3 + CVZ; k++){
+        float fk = float(k), u = fract(iTime * 0.6 + fk / 3.);
+        vec2 p = c + vec2(0.002 * sin(u * 8. + fk * 2.), CVG(0.18) + u * CVG(0.6));
+        col = mix(col, vec3(0.85), S(length(q - p) - 0.0012 - 0.002 * u) * 0.3 * steam * (1. - u));
+    }
+    return col;
+}
+
+vec3 cvArmchair(vec3 col, vec2 q, float cx, float f, bool front){
+    float fl = CVG(6.);
+    vec3 red = vec3(0.5, 0.09, 0.08) * (0.75 + 0.35 * tcNoise(q * 260. + cx * 50.));
+    red = mix(red, vec3(0.62, 0.32, 0.26), smoothstep(0.72, 0.9, tcNoise(q * 90. + cx * 17.)) * 0.6);
+    if(!front){
+        float leg = min(sdBox(q - vec2(cx - CVG(0.45), fl + CVG(0.05)), vec2(0.0012, CVG(0.05))), sdBox(q - vec2(cx + CVG(0.45), fl + CVG(0.05)), vec2(0.0012, CVG(0.05))));
+        col = mix(col, vec3(0.2, 0.12, 0.06), S(leg));
+        float body = min(sdRoundBox(q - vec2(cx, fl + CVG(0.22)), vec2(CVG(0.62), CVG(0.13)), 0.003), sdRoundBox(q - vec2(cx - f * CVG(0.52), fl + CVG(0.72)), vec2(CVG(0.15), CVG(0.62)), 0.004));
+        float sag = sdRoundBox(q - vec2(cx + f * CVG(0.05), fl + CVG(0.36) - 0.0012 * (1. - pow(abs(q.x - cx) / CVG(0.55), 2.))), vec2(CVG(0.5), CVG(0.06)), 0.003);
+        body = min(body, sag);
+        col = mix(col, vec3(0.01), S(body - 0.0015) * 0.45);
+        col = mix(col, red, S(body));
+        col = mix(col, vec3(0.25, 0.04, 0.04), S(abs(body) - 0.0005));
+        vec2 pc = vec2(cx - f * CVG(0.5), fl + CVG(0.95));
+        float pt = sdBox(q - pc, vec2(CVG(0.1), CVG(0.12)));
+        col = mix(col, vec3(0.42, 0.12, 0.14), S(pt));
+        col = mix(col, vec3(0.85, 0.75, 0.6), S(abs(pt) - 0.0003) * step(0.5, fract((q.x + q.y) * 1400.)) * 0.7);
+        col = mix(col, vec3(0.12, 0.02, 0.02), S(sdSegment(q, vec2(cx - f * CVG(0.55), fl + CVG(0.55)), vec2(cx - f * CVG(0.45), fl + CVG(0.7))) - 0.0005));
+    } else {
+        float arm = sdRoundBox(q - vec2(cx - f * CVG(0.05), fl + CVG(0.5)), vec2(CVG(0.52), CVG(0.09)), 0.004);
+        col = mix(col, vec3(0.01), S(arm - 0.0012) * 0.4);
+        col = mix(col, red * 1.08, S(arm));
+        col = mix(col, vec3(0.25, 0.04, 0.04), S(abs(arm) - 0.0005));
+    }
+    return col;
+}
+
+vec3 cvLounger(vec3 col, vec2 q, vec2 p, float f, float seed, float rc){
+    vec2 g = Rot(rc) * (q - p - vec2(0., 0.0007 * sin(iTime * (1.3 + 0.4 * seed) + seed * 5.))) / CV_SIZE;
+    g.x *= f;
+    float od = glyphDist(g) * CV_SIZE;
+    col = mix(col, vec3(0.01), S(od - 0.0015) * 0.4);
+    col = mix(col, ampGradient(g) * 0.9, S(od));
+    for(int e = 0; e < 2 + CVZ; e++){
+        vec2 gc = p + Rot(-rc) * vec2((0.0055 - 0.0048 * float(e)) * f, 0.0045) * CV_AMPK;
+        float blink = step(0.97, fract(iTime * 0.31 + seed));
+        col = mix(col, vec3(0.05), S(abs(length((q - gc) * vec2(1., 1. + 6. * blink)) - 0.0017) - 0.00045));
+    }
+    return col;
+}
+
+vec3 cvOverseer(vec3 col, vec2 q){
+    if(q.x < CVG(-7.) || q.x > CVG(7.) || q.y < CVG(6.) || q.y > CVG(10.)) return col;
+    float fl = CVG(6.);
+    vec2 mc = vec2(CVG(-6.3), fl + CVG(0.9));
+    float mb = sdRoundBox(q - mc, vec2(CVG(0.65), CVG(0.9)), 0.003);
+    col = mix(col, vec3(0.01), S(mb - 0.002) * 0.5);
+    col = mix(col, vec3(0.16, 0.15, 0.15) * (0.85 + 0.25 * smoothstep(-CVG(0.6), CVG(0.6), q.x - mc.x)), S(mb));
+    col = mix(col, vec3(0.08, 0.2, 0.25) + vec3(0.1, 0.4, 0.5) * step(0.5, fract(iTime * 0.5)), S(sdBox(q - mc - vec2(0., CVG(0.55)), vec2(CVG(0.35), CVG(0.15)))));
+    col = cvMach(col, sdBox(q - vec2(mc.x + CVG(0.35), fl + CVG(1.05)), vec2(CVG(0.42), CVG(0.12))), 1.);
+    col = cvMach(col, sdBox(q - vec2(mc.x + CVG(0.65), fl + CVG(0.88)), vec2(CVG(0.08), CVG(0.08))), 0.8);
+    col = cvMach(col, sdBox(q - vec2(mc.x + CVG(0.45), fl + CVG(0.1)), vec2(CVG(0.45), 0.0015)), 1.1);
+    float P = 44., tau = mod(iTime + 6., P);
+    vec2 sit = vec2(CVG(2.95), fl + CV_ROWOFF + CVG(0.35));
+    float fy = fl + CV_ROWOFF, xc = CVG(-4.95), xd = CVG(2.95);
+    vec2 op = sit;
+    float face = 1., walk = 0.;
+    float cupMode = 0.;
+    if(tau < 28.) cupMode = 1.;
+    else if(tau < 28.5) op = mix(sit, vec2(xd, fy), smoothstep(28., 28.5, tau));
+    else if(tau < 32.4){ op = vec2(mix(xd, xc, (tau - 28.5) / 3.9), fy); face = -1.; walk = 1.; }
+    else if(tau < 36.4){ op = vec2(xc, fy); face = -1.; cupMode = 2.; }
+    else if(tau < 40.3){ op = vec2(mix(xc, xd, (tau - 36.4) / 3.9), fy); walk = 1.; cupMode = 3.; }
+    else if(tau < 40.8){ op = mix(vec2(xd, fy), sit, smoothstep(40.3, 40.8, tau)); cupMode = 3.; }
+    else cupMode = 1.;
+    op.y += walk * 0.0015 * abs(sin(iTime * 11.)) + (1. - walk) * 0.0008 * sin(iTime * 2.);
+    float tx = CVG(-2.5);
+    col = cvArmchair(col, q, CVG(-3.85), 1., false);
+    col = cvLounger(col, q, vec2(CVG(-3.75), fl + CV_ROWOFF + CVG(0.3)), 1., 0.2, 0.);
+    col = cvLounger(col, q, vec2(CVG(-1.25), fl + CV_ROWOFF + CVG(0.05)), -1., 0.7, -0.69);
+    col = cvArmchair(col, q, CVG(-1.15), -1., false);
+    col = cvArmchair(col, q, CVG(-3.85), 1., true);
+    col = cvArmchair(col, q, CVG(-1.15), -1., true);
+    float tb = min(sdBox(q - vec2(tx, fl + CVG(0.45)), vec2(CVG(0.45), 0.0018)), min(sdBox(q - vec2(tx - CVG(0.35), fl + CVG(0.22)), vec2(0.0012, CVG(0.22))), sdBox(q - vec2(tx + CVG(0.35), fl + CVG(0.22)), vec2(0.0012, CVG(0.22)))));
+    col = mix(col, vec3(0.32, 0.2, 0.11) * (0.85 + 0.15 * sin(q.x * 900.)), S(tb));
+    col = cvMug(col, q, vec2(tx - CVG(0.18), fl + CVG(0.6)), 1., 0.6);
+    float dop = 1. - smoothstep(CVG(0.8), CVG(1.8), abs(op.x - CVG(1.5)));
+    float dw = mix(CVG(1.), CVG(0.15), dop);
+    float dr = sdBox(q - vec2(CVG(1.) + dw * 0.5, fl + CVG(1.)), vec2(dw * 0.5, CVG(1.)));
+    col = mix(col, vec3(0.28, 0.17, 0.09) * (0.85 + 0.15 * sin(q.y * 600.)), S(dr));
+    col = mix(col, vec3(0.16, 0.09, 0.05), S(abs(dr) - 0.0008));
+    col = mix(col, vec3(0.16, 0.09, 0.05), S(abs(sdBox(q - vec2(CVG(1.) + dw * 0.5, fl + CVG(1.3)), vec2(max(dw * 0.5 - CVG(0.15), 0.), CVG(0.4)))) - 0.0006) * step(0.3, dw / CVG(1.)));
+    col = mix(col, vec3(0.72, 0.56, 0.24), S(length(q - vec2(CVG(1.) + dw - CVG(0.15), fl + CVG(0.9))) - 0.0015) * step(0.5, dw / CVG(1.)));
+    vec2 g = (q - op) / CV_SIZE;
+    g.x *= face;
     float od = glyphDist(g) * CV_SIZE;
     col = mix(col, vec3(0.01), S(od - 0.0015) * 0.4);
     col = mix(col, ampGradient(g) * 0.95, S(od));
-    col += vec3(0.5, 0.7, 1.) * 0.25 * S(od) * smoothstep(-0.2, 0.6, g.x);
+    if(tau < 28. || tau > 40.8) col += vec3(0.5, 0.7, 1.) * 0.25 * S(od) * smoothstep(-0.2, 0.6, g.x);
     for(int e = 0; e < 2 + CVZ; e++){
-        vec2 gc = op + vec2(0.0055 - 0.0048 * float(e), 0.0045) * CV_AMPK;
+        vec2 gc = op + vec2((0.0055 - 0.0048 * float(e)) * face, 0.0045) * CV_AMPK;
         col = mix(col, vec3(0.05), S(abs(length(q - gc) - 0.0017) - 0.00045));
+    }
+    float since = tau > 36.4 ? tau - 36.4 : tau + P - 36.4;
+    float steam = 1. - smoothstep(10., 26., since);
+    if(cupMode == 2.){
+        vec2 cc = vec2(mc.x + CVG(0.45), fl + CVG(0.25));
+        float pour = smoothstep(32.9, 33.1, tau) * (1. - smoothstep(35.6, 35.8, tau));
+        col = mix(col, vec3(0.3, 0.16, 0.06), S(sdBox(q - vec2(cc.x, (fl + CVG(0.8) + cc.y) * 0.5), vec2(0.0007, (fl + CVG(0.8) - cc.y) * 0.5 - CVG(0.13)))) * pour);
+        col = cvMug(col, q, cc, smoothstep(33., 35.6, tau), smoothstep(34., 35.6, tau));
+    } else {
+        vec2 cc = op + vec2(CVG(0.62) * face, CVG(-0.05) + (cupMode == 1. ? CVG(0.25) * smoothstep(0.9, 1., sin(iTime * 0.5)) : 0.));
+        col = cvMug(col, q, cc, cupMode == 0. ? 0. : 1., cupMode == 0. ? 0. : steam);
     }
     return col;
 }
@@ -7576,10 +7828,9 @@ vec3 cvHeatLifts(vec3 col, vec2 q, float asp){
             col = mix(col, CV_MC * (0.55 + 0.25 * cleat), S(d));
         }
     }
-    vec4 sl[AG_TEX];
-    agSlots(iChannel17, vec2(q.x < CVG(6.) ? CVX(2.) : CVX(9.), q.y), asp, sl);
+    ivec2 slc = agCellOf(vec2(q.x < CVG(6.) ? CVX(2.) : CVX(9.), q.y), asp);
     for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+        int i = cvSlot(slc, k);
         if(i < 0) break;
         vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
         if(cvI(r1.x) != CT_MAIN) continue;
@@ -7788,10 +8039,9 @@ vec3 cvHangers(vec3 col, vec2 q, float asp){
     col = cvMach(col, sdBox(q - vec2(CVG(14.), c - 0.001), vec2(CVG(5.), 0.001)), 0.6);
     if(q.x < CVG(19.5)){
         for(int pass = 0; pass < 2 + CVZ; pass++){
-            vec4 sl[AG_TEX];
-            agSlots(iChannel17, vec2(q.x, pass == 0 ? CVR(-4.) : CVR(-6.8)), asp, sl);
+            ivec2 slc = agCellOf(vec2(q.x, pass == 0 ? CVR(-4.) : CVR(-6.8)), asp);
             for(int k = 0; k < AG_SLOTS + CVZ; k++){
-                int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+                int i = cvSlot(slc, k);
                 if(i < 0) break;
                 vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
                 if(cvI(r1.x) != CT_MAIN || ((cvI(r1.w) >> CS_CAUSTIC) & 1) == 1) continue;
@@ -8059,11 +8309,10 @@ vec3 cvDripBack(vec3 col, vec2 q){
 
 vec3 cvDripFront(vec3 col, vec2 q, float asp){
     if(q.x < CVG(8.5) || q.x > CVG(21.) || q.y < CVG(6.) || q.y > CVG(8.)) return col;
-    vec4 sl[AG_TEX];
-    agSlots(iChannel17, vec2(q.x, CVR(7.)), asp, sl);
+    ivec2 slc = agCellOf(vec2(q.x, CVR(7.)), asp);
     float ty = CVG(6.6);
     for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+        int i = cvSlot(slc, k);
         if(i < 0) break;
         vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
         if(cvI(r1.x) != CT_MAIN || abs(r0.y - CVR(7.)) > 0.002 || r0.x < CVG(9.) || r0.x > CVG(20.)) continue;
@@ -8158,7 +8407,6 @@ vec3 cvArm(vec3 col, vec2 q, int a, vec4 st){
     float an = atan(v.y, v.x), al = acos(clamp(l / (2. * L), -1., 1.)) * (a == 0 ? -1. : 1.);
     vec2 el = b + L * vec2(cos(an + al), sin(an + al));
     float mount = a == 0 ? -1. : 1.;
-    if(a == 0) col = cvMach(col, sdBox(q - vec2(b.x, (b.y + CVG(CV_WELDROOM.y)) * 0.5), vec2(0.0045, (b.y - CVG(CV_WELDROOM.y)) * 0.5)), 0.7);
     col = cvMach(col, sdRoundBox(q - b - vec2(0., 0.006 * mount), vec2(0.018, 0.007) * CV_K, 0.003), 0.8);
     col = cvMach(col, sdSegment(q, b, el) - 0.0045 * CV_K, 1.);
     col = cvMach(col, sdSegment(q, el, tip) - 0.0035 * CV_K, 1.);
@@ -8487,11 +8735,10 @@ vec3 cvPolishFront(vec3 col, vec2 q, vec4 st){
 vec3 cvTrapDoor(vec3 col, vec2 q, float asp){
     vec2 hg = vec2(CVG(-8.), CVG(-4.));
     if(q.x < hg.x - 0.005 || q.x > hg.x + CVG(1.) + 0.005 || q.y > hg.y + 0.005 || q.y < hg.y - CVG(1.2)) return col;
-    vec4 sl[AG_TEX];
-    agSlots(iChannel17, vec2(CVX(-8.), CVR(-5.)), asp, sl);
+    ivec2 slc = agCellOf(vec2(CVX(-8.), CVR(-5.)), asp);
     float op = 0.;
     for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+        int i = cvSlot(slc, k);
         if(i < 0) break;
         vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
         if(cvI(r1.x) != CT_PACK) continue;
@@ -8505,6 +8752,197 @@ vec3 cvTrapDoor(vec3 col, vec2 q, float asp){
     col = mix(col, vec3(0.36, 0.23, 0.12) * (0.85 + 0.15 * sin(lq.x * 700.)), S(door));
     col = mix(col, vec3(0.2, 0.12, 0.06), S(abs(door) - 0.0005));
     return cvMach(col, length(q - hg - vec2(0.002, -0.002)) - 0.0022, 1.1);
+}
+
+// the reception in the bottom left corner: a waiting sofa, the brand on the
+// wall, the front desk, and the door guided tours will leave by
+vec3 cvAmpStand(vec3 col, vec2 q, vec2 p, float f, float seed){
+    vec2 g = (q - p) / CV_SIZE;
+    g.x *= f;
+    float od = glyphDist(g) * CV_SIZE;
+    if(od > 0.004) return col;
+    col = mix(col, vec3(0.01), S(od - 0.0015) * 0.4);
+    col = mix(col, ampGradient(g) * 0.9, S(od));
+    for(int e = 0; e < 2 + CVZ; e++){
+        vec2 gc = p + vec2((0.0055 - 0.0048 * float(e)) * f, 0.0045) * CV_AMPK;
+        float blink = step(0.97, fract(iTime * 0.31 + seed));
+        col = mix(col, vec3(0.05), S(abs(length((q - gc) * vec2(1., 1. + 6. * blink)) - 0.0017) - 0.00045));
+    }
+    return col;
+}
+
+vec3 cvBadge(vec3 col, vec2 q, vec2 p){
+    col = mix(col, vec3(0.7, 0.1, 0.1), S(min(sdSegment(q, p + vec2(-0.0035, 0.007), p + vec2(0., 0.0015)), sdSegment(q, p + vec2(0.0035, 0.007), p + vec2(0., 0.0015))) - 0.0004));
+    float b = sdBox(q - p, vec2(0.0022, 0.0016));
+    col = mix(col, vec3(0.95), S(b));
+    return mix(col, GRAD_TOP * 0.8, S(sdBox(q - p - vec2(0., 0.0008), vec2(0.0022, 0.0004))));
+}
+
+vec3 cvClock(vec3 col, vec2 q, vec2 c, float r, float off){
+    float cr = length(q - c);
+    col = mix(col, vec3(0.01), S(cr - r - 0.0015) * 0.35);
+    col = mix(col, vec3(0.93, 0.93, 0.9), S(cr - r));
+    col = mix(col, vec3(0.12), S(abs(cr - r) - 0.0007));
+    float ha = 6.2832 * (iTime / 600. + off / 12.), ma = 6.2832 * iTime / 50.;
+    col = mix(col, vec3(0.1), S(sdSegment(q, c, c + r * 0.55 * vec2(sin(ha), cos(ha))) - 0.0006));
+    col = mix(col, vec3(0.1), S(sdSegment(q, c, c + r * 0.8 * vec2(sin(ma), cos(ma))) - 0.0003));
+    return mix(col, vec3(0.75, 0.75, 0.73), S(sdBox(q - c + vec2(0., r + CVG(0.18)), vec2(r * 0.7, CVG(0.05)))));
+}
+
+vec3 cvReception(vec3 col, vec2 q){
+    if(q.x > CVG(-29.9) || q.y < CVG(-15.1) || q.y > CVG(-4.9)) return col;
+    float fl = CVG(-15.), cl = CVG(-5.);
+    float room = sdBox(q - vec2(CVG(-33.5), CVG(-10.)), vec2(CVG(3.5), CVG(5.)));
+    float inR = S(room);
+    vec2 tl = vec2(q.x / CVG(1.25), (q.y - fl) / CVG(1.));
+    vec2 tfr = fract(tl);
+    float vein = smoothstep(0.82, 0.95, tcNoise(vec2(q.x * 90. + q.y * 40., q.y * 30.) + floor(tl) * 3.1));
+    vec3 stone = vec3(0.46, 0.45, 0.43) * (0.95 + 0.06 * cvHash(floor(tl.x) * 7.3 + floor(tl.y) * 3.1) + 0.04 * tcNoise(q * 200.)) - vec3(0.06) * vein;
+    stone *= 1. - 0.18 * S((0.5 - max(abs(tfr.x - 0.5), abs(tfr.y - 0.5))) * CVG(1.) - 0.0004);
+    col = mix(col, stone, inR);
+    for(int k = 0; k < 5 + CVZ; k++){
+        float lx = CVG(-36.3 + 1.45 * float(k));
+        float dy = cl - q.y, dxl = abs(q.x - lx);
+        col += vec3(1., 0.88, 0.7) * 0.22 * smoothstep(0.35 * dy + 0.004, 0.2 * dy, dxl) * exp(-dy / 0.07) * inR;
+        col = mix(col, vec3(1.5, 1.35, 1.1), S(sdBox(q - vec2(lx, cl - 0.0012), vec2(CVG(0.2), 0.0009))));
+    }
+    col = mix(col, vec3(0.88, 0.88, 0.86), S(abs(q.y - cl + CVG(0.08)) - CVG(0.08)) * inR);
+    col = mix(col, vec3(0.06, 0.06, 0.07) * (0.9 + 0.2 * tcNoise(q * 400.)), S(q.y - fl - CVG(0.2)) * inR);
+    col = mix(col, vec3(0.3, 0.31, 0.33), S(abs(q.y - fl - CVG(0.2)) - 0.0005) * inR);
+
+    vec2 aw = vec2(CVG(-34.), fl + CVG(3.));
+    float acc = sdBox(q - aw, vec2(CVG(1.9), CVG(3.)));
+    col = mix(col, vec3(0.01), S(acc - 0.003) * 0.4 * inR);
+    vec3 slat = vec3(0.1, 0.1, 0.11) * (0.85 + 0.25 * step(0.35, fract(q.x / CVG(0.18))));
+    col = mix(col, slat, S(acc));
+    vec2 lc = aw + vec2(0., CVG(0.75));
+    vec2 lg = (q - lc) / 0.05;
+    float gd = glyphDist(lg) * 0.05;
+    col += GRAD_TOP * 0.45 * (0.9 + 0.1 * sin(iTime * 1.1)) * exp(-max(gd, 0.) / 0.005) * step(0., gd) * (1. - smoothstep(0.35, 0.56, length(lg))) * S(acc);
+    vec3 steel = vec3(0.72, 0.74, 0.78) * (0.85 + 0.1 * sin(q.x * 2600.) + 0.15 * smoothstep(-0.5, 0.5, lg.y));
+    col = mix(col, vec3(0.02), S(gd - 0.0015) * 0.6);
+    col = mix(col, steel, S(gd));
+    vec2 np = lc - vec2(0., CVG(1.45));
+    col = mix(col, vec3(0.75, 0.76, 0.8), S(sdBox(q - np, vec2(CVG(0.9), 0.0008))));
+    for(int k = 0; k < 7 + CVZ; k++){
+        float w = CVG(0.05 + 0.07 * cvHash(float(k) + 21.));
+        col = mix(col, vec3(0.85), S(sdBox(q - np - vec2(CVG(-0.75 + 0.25 * float(k)), -CVG(0.18)), vec2(w, CVG(0.06)))));
+    }
+    for(int k = 0; k < 3 + CVZ; k++) col = cvClock(col, q, vec2(CVG(-35.2 + 1.2 * float(k)), fl + CVG(7.4)), CVG(0.32), float(k) * 5. - 6.);
+
+    vec2 dc = vec2(CVG(-30.95), fl + CVG(1.1));
+    float tdo = cvTourDoorOpen();
+    float door0 = sdBox(q - dc, vec2(CVG(0.5), CVG(1.1)));
+    col = mix(col, vec3(0.01), S(door0 - 0.002) * 0.4);
+    vec3 corr = vec3(0.03, 0.035, 0.04) + vec3(0.25, 0.22, 0.15) * 0.15 * smoothstep(-CVG(1.1), CVG(1.1), q.y - dc.y);
+    col = mix(col, corr, S(door0));
+    float dw = CVG(0.5) * (1. - 0.85 * tdo);
+    vec2 dpc = vec2(dc.x + CVG(0.5) - dw, dc.y);
+    float door = sdBox(q - dpc, vec2(dw, CVG(1.1)));
+    vec3 frost = mix(corr, vec3(0.62, 0.68, 0.72), 0.55) + 0.05 * tcNoise(q * 500.);
+    col = mix(col, frost, S(door));
+    col = mix(col, vec3(0.68, 0.7, 0.74), S(abs(door) - 0.0011));
+    col = mix(col, vec3(0.8, 0.82, 0.86), S(sdBox(q - dpc - vec2(-dw + CVG(0.15), 0.), vec2(0.0008, CVG(0.35)))));
+    col = mix(col, vec3(0.5, 0.52, 0.56), S(abs(door0) - 0.0014));
+    vec2 rd = vec2(CVG(-30.22), fl + CVG(1.15));
+    float rb = sdRoundBox(q - rd, vec2(CVG(0.1), CVG(0.18)), 0.0008);
+    col = mix(col, vec3(0.06), S(rb));
+    vec3 led = mix(vec3(1., 0.15, 0.1), vec3(0.2, 1., 0.4), step(0.05, tdo));
+    col = mix(col, led, S(length(q - rd - vec2(0., CVG(0.1))) - 0.0011));
+    col += led * 0.15 * exp(-length(q - rd - vec2(0., CVG(0.1))) / 0.005) * inR;
+
+    vec2 sg = vec2(CVG(-30.95), fl + CVG(3.));
+    float sb = sdRoundBox(q - sg, vec2(CVG(0.42), CVG(0.28)), 0.0015);
+    col = mix(col, vec3(0.01), S(sb - 0.0015) * 0.35);
+    col = mix(col, vec3(0.12, 0.13, 0.15), S(sb));
+    vec2 fp = sg - vec2(CVG(0.15), CVG(0.16));
+    col = mix(col, vec3(0.9), S(sdSegment(q, fp, fp + vec2(0., CVG(0.32))) - 0.0005));
+    float wave = 0.0015 * sin(iTime * 4. + (q.x - fp.x) * 400.);
+    float flag = max(max(q.x - fp.x - CVG(0.24), fp.x - q.x), abs(q.y - fp.y - CVG(0.25) - wave) - CVG(0.07) * (1. - (q.x - fp.x) / CVG(0.24)));
+    col = mix(col, GRAD_TOP, S(flag));
+    col = mix(col, vec3(0.9), S(sdSegment(q, sg + vec2(CVG(0.08), -CVG(0.05)), sg + vec2(CVG(0.3), -CVG(0.05))) - 0.0005));
+    col = mix(col, vec3(0.9), S(min(sdSegment(q, sg + vec2(CVG(0.3), -CVG(0.05)), sg + vec2(CVG(0.22), CVG(0.03))), sdSegment(q, sg + vec2(CVG(0.3), -CVG(0.05)), sg + vec2(CVG(0.22), -CVG(0.13)))) - 0.0005));
+
+    vec2 pc = vec2(CVG(-35.55), fl);
+    for(int k = 0; k < 6 + CVZ; k++){
+        float a = (float(k) - 2.5) * 0.13 + 0.02 * sin(iTime * 0.7 + float(k));
+        float len = CVG(1.1 + 0.6 * cvHash(float(k) + 9.));
+        vec2 base = pc + vec2(CVG(0.06) * (float(k) - 2.5), CVG(0.75));
+        vec2 rel = Rot(-a) * (q - base);
+        float leaf = max(abs(rel.x) - CVG(0.07) * (1. - rel.y / len) - 0.0004, max(-rel.y, rel.y - len));
+        vec3 lcol = vec3(0.1, 0.26, 0.14) * (0.8 + 0.3 * cvHash(float(k)));
+        lcol = mix(lcol, vec3(0.55, 0.6, 0.25), S(abs(abs(rel.x) - CVG(0.05) * (1. - rel.y / len)) - 0.0003) * 0.6);
+        col = mix(col, lcol, S(leaf));
+    }
+    float pot = sdRoundBox(q - pc - vec2(0., CVG(0.38)), vec2(CVG(0.24), CVG(0.38)), 0.001);
+    col = mix(col, vec3(0.01), S(pot - 0.0015) * 0.35);
+    col = mix(col, vec3(0.86, 0.86, 0.84) * (0.9 + 0.12 * smoothstep(-CVG(0.24), CVG(0.24), q.x - pc.x)), S(pot));
+
+    float sx = CVG(-36.45);
+    vec3 leather = vec3(0.05, 0.05, 0.055) * (0.9 + 0.2 * tcNoise(q * 300.));
+    float cb = sdRoundBox(q - vec2(sx - CVG(0.35), fl + CVG(0.95)), vec2(CVG(0.12), CVG(0.45)), 0.002);
+    col = mix(col, vec3(0.01), S(cb - 0.0015) * 0.4);
+    col = mix(col, leather, S(cb));
+    vec2 vp = vec2(sx - CVG(0.05), fl + CVG(0.5) + CV_SIZE * 0.5);
+    col = cvLounger(col, q, vp, 1., 2.3, 0.08);
+    col = cvBadge(col, q, vp + vec2(0.0035, -0.004));
+    float seat = sdRoundBox(q - vec2(sx, fl + CVG(0.42)), vec2(CVG(0.48), CVG(0.13)), 0.002);
+    col = mix(col, vec3(0.01), S(seat - 0.0015) * 0.4);
+    col = mix(col, leather * 1.3, S(seat));
+    col = mix(col, vec3(0.22), S(abs(seat) - 0.0004) * 0.5);
+    float leg = min(sdSegment(q, vec2(sx - CVG(0.4), fl), vec2(sx - CVG(0.3), fl + CVG(0.3))), sdSegment(q, vec2(sx + CVG(0.4), fl), vec2(sx + CVG(0.3), fl + CVG(0.3))));
+    col = mix(col, vec3(0.75, 0.77, 0.8), S(leg - 0.0007));
+
+    float dx = CVG(-33.5);
+    vec2 rp = vec2(dx + CVG(0.45), fl + CVG(0.7) + CV_SIZE * 0.5 + 0.0006 * sin(iTime * 9.) * step(0.5, fract(iTime * 0.15)));
+    col = cvAmpStand(col, q, rp, -1., 7.1);
+    vec2 hs = rp + vec2(0., CV_SIZE * 0.38);
+    col = mix(col, vec3(0.08), S(abs(length((q - hs) * vec2(1., 1.3)) - CVG(0.32)) - 0.0006) * step(hs.y - CVG(0.05), q.y));
+    col = mix(col, vec3(0.08), S(sdSegment(q, hs + vec2(-CVG(0.3), -CVG(0.05)), hs + vec2(-CVG(0.45), -CVG(0.35))) - 0.0005));
+    vec2 mon = vec2(dx - CVG(0.1), fl + CVG(1.45));
+    col = mix(col, vec3(0.08), S(sdBox(q - mon + vec2(0., CVG(0.25)), vec2(0.0006, CVG(0.12)))));
+    col = mix(col, vec3(0.04), S(sdRoundBox(q - mon, vec2(CVG(0.04), CVG(0.22)), 0.0008)));
+    col += vec3(0.3, 0.7, 0.9) * 0.1 * exp(-max(q.x - mon.x, 0.) / 0.006) * step(abs(q.y - mon.y), CVG(0.22)) * step(mon.x, q.x) * step(q.x, rp.x);
+    float desk = sdRoundBox(q - vec2(dx, fl + CVG(0.6)), vec2(CVG(1.1), CVG(0.5)), 0.002);
+    col = mix(col, vec3(0.01), S(desk - 0.002) * 0.5);
+    col = mix(col, vec3(0.86, 0.86, 0.85) * (0.88 + 0.12 * smoothstep(fl, fl + CVG(1.1), q.y)), S(desk));
+    float plinth = sdBox(q - vec2(dx, fl + CVG(0.05)), vec2(CVG(1.), CVG(0.05)));
+    col = mix(col, vec3(0.03), S(plinth));
+    col += GRAD_TOP * 0.5 * exp(-abs(q.y - fl - CVG(0.11)) / 0.002) * step(abs(q.x - dx), CVG(1.)) * inR;
+    vec2 eg = (q - vec2(dx, fl + CVG(0.6))) / 0.012;
+    col = mix(col, vec3(0.55, 0.57, 0.6), S(glyphDist(eg) * 0.012) * S(desk));
+    float top = sdRoundBox(q - vec2(dx, fl + CVG(1.13)), vec2(CVG(1.18), CVG(0.04)), 0.0008);
+    col = mix(col, vec3(0.04, 0.045, 0.05), S(top));
+    col = mix(col, vec3(0.35, 0.38, 0.42), S(abs(q.y - fl - CVG(1.17)) - 0.0004) * S(top + 0.001));
+    float ding = cvVisitT() - 4.4;
+    float chk = ding > 0. && ding < 1.1 ? 1. - ding / 1.1 : 0.;
+    vec2 tb = vec2(dx - CVG(0.85), fl + CVG(1.3));
+    col = mix(col, vec3(0.5), S(sdSegment(q, tb - vec2(0., CVG(0.13)), tb) - 0.0006));
+    float tab = sdRoundBox(Rot(-0.5) * (q - tb - vec2(0., CVG(0.05))), vec2(CVG(0.14), CVG(0.04)), 0.0008);
+    col = mix(col, vec3(0.05), S(tab));
+    col = mix(col, mix(vec3(0.2, 0.45, 0.6), vec3(0.3, 1., 0.5), chk), S(tab + 0.0008));
+    col += vec3(0.3, 1., 0.5) * 0.25 * chk * exp(-length(q - tb) / 0.01) * inR;
+
+    vec2 gp = vec2(CVG(-31.75), fl + CV_SIZE * 0.5 + 0.0012 * abs(sin(iTime * 1.7)));
+    vec2 hand = gp + vec2(CVG(0.42), CVG(0.15));
+    vec2 tip = hand + vec2(0.006 * sin(iTime * 1.7), CVG(1.75));
+    col = mix(col, vec3(0.2, 0.15, 0.1), S(sdSegment(q, hand, tip) - 0.0006));
+    float fw = 0.0025 * sin(iTime * 5. - (q.x - tip.x) * 300.);
+    float tf = max(max(tip.x - q.x, q.x - tip.x - CVG(0.65)), abs(q.y - tip.y + CVG(0.2) - fw) - CVG(0.2) * (1. - 0.6 * (q.x - tip.x) / CVG(0.65)));
+    col = mix(col, vec3(0.01), S(tf - 0.0012) * 0.3);
+    col = mix(col, mix(GRAD_BOT, GRAD_TOP, smoothstep(-CVG(0.2), CVG(0.2), q.y - tip.y + CVG(0.2))) * (0.9 + 0.2 * sin(iTime * 5. - (q.x - tip.x) * 300.)), S(tf));
+    col = cvAmpStand(col, q, gp, -1., 3.9);
+    col = mix(col, vec3(0.9, 0.75, 0.2), S(sdRoundBox(q - gp - vec2(-0.001, CV_SIZE * 0.43), vec2(0.008, 0.0022), 0.001)));
+    col = mix(col, vec3(0.9, 0.75, 0.2) * 0.8, S(sdBox(q - gp - vec2(-0.008, CV_SIZE * 0.4), vec2(0.004, 0.001))));
+    float vt = cvVisitT(), vw, va;
+    float vx = cvVisitorX(vt, vw, va);
+    vec2 wp = vec2(CVG(vx), fl + CV_SIZE * 0.5 + vw * 0.0015 * abs(sin(iTime * 11.)));
+    if(va > 0. && abs(q.x - wp.x) < 0.03 && abs(q.y - wp.y) < 0.03){
+        vec3 c2 = cvAmpStand(col, q, wp, 1., 5.5);
+        if(vt > 6.) c2 = cvBadge(c2, q, wp + vec2(0.0035, -0.004));
+        col = mix(col, c2, va);
+    }
+    return col;
 }
 
 vec3 cvClassBack(vec3 col, vec2 q, vec4 st){
@@ -8531,7 +8969,10 @@ vec3 cvClassBack(vec3 col, vec2 q, vec4 st){
     vec2 sb = vec2(CVG(-27.08), CVR(-1.));
     float sk = cvSAtSt(CS_CLASS);
     vec3 wood = vec3(0.3, 0.19, 0.11) * (0.85 + 0.15 * tcNoise(q * 200.));
+    vec2 s0 = cvAt(CT_PACK, sk - CV_GAP), s1 = cvAt(CT_PACK, sk - CV_GAP * 11.);
+    bool seats = q.x > min(s0.x, s1.x) - CVG(0.6) && q.x < max(s0.x, s1.x) + CVG(0.6) && q.y < max(s0.y, s1.y) - CV_SIZE * 0.5 + 0.002;
     for(int r = 1; r < 12 + CVZ; r++){
+        if(!seats) break;
         vec2 p = cvAt(CT_PACK, sk - CV_GAP * float(r));
         float yb = p.y - CV_SIZE * 0.5;
         float stp = sdBox(q - vec2(p.x, (yb + CVG(-4.)) * 0.5), vec2(CVG(0.5), (yb - CVG(-4.)) * 0.5));
@@ -8715,13 +9156,12 @@ vec3 cvHatFly(vec3 col, vec2 q, float t){
 // running on a rail up the left wall, stopping at every step: a stamp, a
 // squeeze, a scale, a stretch and a scanner, each in a niche in the right
 // wall beside a boot for the ones that fail
-vec3 cvColumn(vec3 col, vec2 q, vec4 st[31], float asp){
+vec3 cvColumn(vec3 col, vec2 q, float asp){
     if(q.x < CVG(-6.5) || q.x > CVG(-1.8) || q.y < CVG(-15.5) || q.y > CVG(4.)) return col;
     col = cvMach(col, sdBox(q - vec2(CVG(-6.) + 0.003, CVG(-5.75)), vec2(0.003, CVG(9.25))), 0.6);
-    vec4 sl[AG_TEX];
-    agSlots(iChannel17, vec2(CVG(-5.), q.y), asp, sl);
+    ivec2 slc = agCellOf(vec2(CVG(-5.), q.y), asp);
     for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+        int i = cvSlot(slc, k);
         if(i < 0) break;
         vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
         if(cvI(r1.x) != CT_FIN || abs(r0.x - CVG(-5.)) > 0.004 || r0.y < CVR(-15.) + 0.001 || r0.y > CVR(3.) - 0.001) continue;
@@ -8738,7 +9178,7 @@ vec3 cvColumn(vec3 col, vec2 q, vec4 st[31], float asp){
         int k = CV_QC_K[j];
         vec2 a = cvStPos(k);
         if(abs(q.y - a.y) > CVG(1.2)) continue;
-        vec4 s = st[k];
+        vec4 s = cvState(k, CV_ROW);
         float x = s.x >= 0. ? s.x : 0.;
         if(j == 0){
             float press = s.x >= 0. ? smoothstep(0.2, 0.45, x) * (1. - smoothstep(0.6, 0.85, x)) : 0.;
@@ -8796,19 +9236,19 @@ vec3 cvColumn(vec3 col, vec2 q, vec4 st[31], float asp){
     return col;
 }
 
-vec3 cvQC(vec3 col, vec2 q, vec4 st[31], vec4 jam, vec4 so){
+vec3 cvQC(vec3 col, vec2 q, vec4 jam, vec4 so){
     if(q.y < CVG(-7.) || q.y > CVG(6.)) return col;
     vec2 sp = cvStPos(CS_STAMP);
     if(abs(q.x - sp.x) < 0.05){
         bool jm = jam.x == float(CS_STAMP) && jam.y < CV_FIX_AT;
-        float p = st[CS_STAMP].x >= 0. && !jm ? st[CS_STAMP].x : 0.;
+        float p = cvState(CS_STAMP, CV_ROW).x >= 0. && !jm ? cvState(CS_STAMP, CV_ROW).x : 0.;
         float press = smoothstep(0.2, 0.45, p) * (1. - smoothstep(0.6, 0.85, p));
         col = cvHead(col, q, CS_STAMP, press, vec2(0.012, 0.006), 1.1, 0.045, sp.y + CV_SIZE * 0.5);
         col += GRAD_TOP * 0.4 * press * press * exp(-length(q - sp - vec2(0., CV_SIZE * 0.5)) / 0.012);
     }
     sp = cvStPos(CS_WEIGH);
     if(abs(q.x - sp.x) < 0.05){
-        float p = st[CS_WEIGH].x;
+        float p = cvState(CS_WEIGH, CV_ROW).x;
         float sink = p >= 0. ? 0.002 * (1. - exp(-p * 6.) * cos(p * 22.)) : 0.;
         col = cvMach(col, sdBox(q - vec2(sp.x, sp.y - CV_SIZE * 0.5 - 0.002 - sink), vec2(0.02, 0.0022) * CV_K), 1.2);
         vec2 c = vec2(sp.x, sp.y - 0.046);
@@ -8820,12 +9260,12 @@ vec3 cvQC(vec3 col, vec2 q, vec4 st[31], vec4 jam, vec4 so){
     if(abs(q.x - sp.x) < 0.05){
         float c = cvCeil(CS_SCAN);
         col = cvMach(col, sdBox(q - vec2(sp.x, c - 0.001), vec2(0.016, 0.0025) * CV_K), 1.);
-        if(st[CS_SCAN].x >= 0.){
-            float y = sp.y - CV_SIZE * 0.5 + CV_SIZE * (0.5 - 0.5 * cos(st[CS_SCAN].x * 9.42));
+        if(cvState(CS_SCAN, CV_ROW).x >= 0.){
+            float y = sp.y - CV_SIZE * 0.5 + CV_SIZE * (0.5 - 0.5 * cos(cvState(CS_SCAN, CV_ROW).x * 9.42));
             col += vec3(1., 0.15, 0.1) * 0.8 * S(abs(q.y - y) - 0.0006) * step(abs(q.x - sp.x), 0.015 * CV_K);
         }
-        bool lit = st[CS_SCAN].z < 1.2;
-        vec3 lc = st[CS_SCAN].w > 0.5 ? vec3(1., 0.15, 0.1) : vec3(0.25, 1., 0.5);
+        bool lit = cvState(CS_SCAN, CV_ROW).z < 1.2;
+        vec3 lc = cvState(CS_SCAN, CV_ROW).w > 0.5 ? vec3(1., 0.15, 0.1) : vec3(0.25, 1., 0.5);
         vec2 lp = vec2(sp.x, c + 0.016);
         col = mix(col, lit ? lc : CV_SLAB * 0.6, S(length(q - lp) - 0.0035 * CV_K));
         if(lit) col += lc * 0.15 * exp(-length(q - lp) / 0.01);
@@ -8833,12 +9273,12 @@ vec3 cvQC(vec3 col, vec2 q, vec4 st[31], vec4 jam, vec4 so){
     return col;
 }
 
-vec3 cvPack(vec3 col, vec2 q, vec4 st[31], vec4 jam){
+vec3 cvPack(vec3 col, vec2 q, vec4 jam){
     if(q.y < CVG(-12.) || q.y > CVG(-4.)) return col;
     vec2 sp = cvStPos(CS_BOX);
     if(abs(q.x - sp.x) < 0.05){
         float tl = cvState(CX_HATFLY, CV_ROW).x;
-        if(st[CS_BOX].x < 0. && tl < 0.46){
+        if(cvState(CS_BOX, CV_ROW).x < 0. && tl < 0.46){
             float u = clamp(tl / 0.34, 0., 1.);
             vec2 bp = vec2(sp.x, mix(CVG(-5.6), sp.y, u * u));
             vec2 d = (q - bp) / (CV_M * CV_AMPK), bd = d - vec2(0., -0.0015);
@@ -8866,7 +9306,7 @@ vec3 cvPack(vec3 col, vec2 q, vec4 st[31], vec4 jam){
     sp = cvStPos(CS_TAPE);
     if(abs(q.x - sp.x) < 0.05){
         bool jm = jam.x == float(CS_TAPE) && jam.y < CV_FIX_AT;
-        float p = st[CS_TAPE].x >= 0. && !jm ? st[CS_TAPE].x : 0.;
+        float p = cvState(CS_TAPE, CV_ROW).x >= 0. && !jm ? cvState(CS_TAPE, CV_ROW).x : 0.;
         float c = cvCeil(CS_TAPE), top = sp.y + 0.02 * CV_M;
         float grow = smoothstep(0.15, 0.75, p), reach = smoothstep(0., 0.15, p) * (1. - smoothstep(0.8, 1., p));
         float hy = mix(c + 0.008, top - 0.045 * CV_M * grow + 0.004, reach);
@@ -8882,7 +9322,7 @@ vec3 cvPack(vec3 col, vec2 q, vec4 st[31], vec4 jam){
     }
     sp = cvStPos(CS_LABEL);
     if(abs(q.x - sp.x) < 0.05){
-        float p = st[CS_LABEL].x >= 0. ? st[CS_LABEL].x : 0.;
+        float p = cvState(CS_LABEL, CV_ROW).x >= 0. ? cvState(CS_LABEL, CV_ROW).x : 0.;
         float down = smoothstep(0.3, 0.55, p) * (1. - smoothstep(0.65, 0.9, p));
         col = cvHead(col, q, CS_LABEL, down, vec2(0.011, 0.005), 1., 0.04, sp.y + 0.02 * CV_M);
     }
@@ -8952,130 +9392,67 @@ vec3 cvTowerFlask(vec3 col, vec2 q, vec2 c, float id, float dirt, float wet, flo
     return col;
 }
 
-const float CV_FDT    = 0.5;
-const float CV_FALL_V = 0.6;
-
-float cvBeltY(){ return CV_RET_Y - CV_CELL + 0.002; }
-float cvPitY(){ return CV_PIT.y - CV_PIT_H.y + 0.012; }
-
-// flask `id` on its round: out of the hatch and left along the return tunnel,
-// down the shaft, blasted in the pit and over to the paternoster, up through
-// wash, dryer and filler, off into the head of line id % 3. Bottom centre at
-// p, false once it has left; dirt, wet, fill its state
-bool cvFlaskPath(float id, out vec2 p, out vec3 st, out bool carried){
-    float TA = (CV_RET_X - CV_DROP_X) / CV_FRAME_V;
-    float TB = (cvBeltY() - cvPitY()) / CV_FALL_V;
-    float TC = CV_FDT * 0.9;
-    float tt = iTime - id * CV_FDT;
-    carried = false;
-    st = vec3(1., 0., 0.);
-    if(tt < 0.) return false;
-    if(tt < TA){
-        p = vec2(CV_RET_X - tt * CV_FRAME_V, cvBeltY() + CVG(2.) * (1. - smoothstep(0., 0.35, tt)));
-        return true;
-    }
-    tt -= TA;
-    if(tt < TB){
-        p = vec2(CV_DROP_X, cvBeltY() - tt * CV_FALL_V);
-        return true;
-    }
-    tt -= TB;
-    if(tt < TC){
-        float u = tt / TC;
-        p = vec2(mix(CV_DROP_X, CV_PAT_X, smoothstep(0.6, 1., u)), cvPitY() + 0.001 * sin(iTime * 60.) * (1. - u));
-        st.x = 1. - 0.85 * smoothstep(0.05, 0.6, u);
-        return true;
-    }
-    tt -= TC;
-    int row = int(mod(id, 3.));
-    p = vec2(CV_PAT_X, cvPitY() + tt * CV_FRAME_V);
-    carried = true;
-    if(p.y > CV_ST_Y[row] - CV_SIZE * 0.5) return false;
-    st = vec3(0.15 * (1. - smoothstep(CV_PIT.y, CV_WASHY.x, p.y)),
-              smoothstep(CV_WASHY.x, CV_WASHY.x + 0.03, p.y) * (1. - smoothstep(CV_DRYY.x, CV_DRYY.y, p.y)),
-              smoothstep(CV_FILLY.x, CV_FILLY.y, p.y));
-    return true;
-}
-
-vec3 cvFlaskDraw(vec3 col, vec2 q, float id){
-    vec2 p;
-    vec3 st;
-    bool carried;
-    if(!cvFlaskPath(id, p, st, carried)) return col;
-    if(abs(q.x - p.x) > 0.03 || abs(q.y - p.y - 0.014) > 0.03) return col;
-    if(carried) col = cvMach(col, sdBox(q - p + vec2(0., 0.002), vec2(0.014, 0.0015)), 0.7);
-    return cvTowerFlask(col, q, p, id, st.x, st.y, st.z);
-}
-
 vec3 cvFlasks(vec3 col, vec2 q){
-    float y0 = cvBeltY();
-    float TA = (CV_RET_X - CV_DROP_X) / CV_FRAME_V;
-    float TB = (y0 - cvPitY()) / CV_FALL_V;
-    float TC = CV_FDT * 0.9;
-    if(q.x < CVG(-32.) && q.x > CVG(-39.)){
-        if(abs(q.x - CV_DROP_X) < CV_CELL && q.y < CV_RET_Y && q.y > CV_PIT.y){
-            col = mix(col, CV_SAND * (0.5 + 0.5 * tcNoise(vec2(q.x * 500., (q.y + iTime * 0.4) * 500.))), S(abs(q.x - CV_DROP_X - 0.011) - 0.0012) * 0.8);
-        }
-        vec2 pq = q - CV_PIT;
-        if(all(lessThan(abs(pq), CV_PIT_H + 0.02))){
-            float floorY = CV_PIT.y - CV_PIT_H.y;
-            float dune = floorY + 0.012 + 0.006 * sin(pq.x * 90. + 1.) + 0.003 * tcNoise(vec2(pq.x * 200., iTime * 0.2));
-            col = mix(col, CV_SAND * (0.5 + 0.4 * tcNoise(q * 400.)), S(max(sdBox(pq, CV_PIT_H), q.y - dune)));
-            col += CV_SAND * 0.08 * step(sdBox(pq, CV_PIT_H), 0.) * (0.6 + 0.4 * tcNoise(q * 120. + vec2(iTime * 6., 0.)));
-            for(int s = -1; s <= 1 + CVZ; s += 2){
-                vec2 nz = vec2(CV_PIT.x + float(s) * (CV_PIT_H.x - 0.003), dune + 0.02);
-                col = cvMach(col, sdBox(q - nz, vec2(0.0025, 0.003)), 0.9);
-                for(int j = 0; j < 4 + CVZ; j++){
-                    float a = fract(iTime * 4. + cvHash(float(j) + float(s) * 7.));
-                    vec2 a0 = nz + vec2(-float(s) * 0.003, 0.002 * float(j - 2));
-                    vec2 a1 = a0 + vec2(-float(s) * 0.035, -0.008) * (0.3 + a);
-                    col += vec3(0.85, 0.9, 1.) * 0.18 * S(sdSegment(q, mix(a0, a1, a * 0.6), a1) - 0.0005) * (1. - a);
-                }
-            }
-            for(int j = 0; j < 10 + CVZ; j++){
-                float fj = float(j);
-                float a = fract(iTime * 1.8 + cvHash(fj + 0.7));
-                vec2 o = vec2(CV_DROP_X + (cvHash(fj + 2.1) - 0.5) * 0.02, dune + 0.01);
-                vec2 p = o + vec2(0.05 * a * (cvHash(fj + 5.) - 0.5), 0.03 * a - 0.05 * a * a);
-                col = mix(col, CV_SAND * 0.9, S(length(q - p) - 0.0008) * (1. - a));
+    if(q.x > CVG(-29.5) || q.x < CVG(-39.) || q.y < CV_RUNF - 0.02 || q.y > CV_TOPY + 0.03) return col;
+    if(abs(q.x - CV_DROP_X) < CV_CELL && q.y < CV_RET_Y && q.y > CV_PIT.y){
+        col = mix(col, CV_SAND * (0.5 + 0.5 * tcNoise(vec2(q.x * 500., (q.y + iTime * 0.4) * 500.))), S(abs(q.x - CV_DROP_X - 0.011) - 0.0012) * 0.8);
+    }
+    vec2 pq = q - CV_PIT;
+    if(all(lessThan(abs(pq), CV_PIT_H + 0.02))){
+        float floorY = CV_PIT.y - CV_PIT_H.y;
+        float dune = floorY + 0.012 + 0.006 * sin(pq.x * 90. + 1.) + 0.003 * tcNoise(vec2(pq.x * 200., iTime * 0.2));
+        col = mix(col, CV_SAND * (0.5 + 0.4 * tcNoise(q * 400.)), S(max(sdBox(pq, CV_PIT_H), q.y - dune)));
+        col += CV_SAND * 0.08 * step(sdBox(pq, CV_PIT_H), 0.) * (0.6 + 0.4 * tcNoise(q * 120. + vec2(iTime * 6., 0.)));
+        for(int s = -1; s <= 1 + CVZ; s += 2){
+            vec2 nz = vec2(CV_PIT.x + float(s) * (CV_PIT_H.x - 0.003), dune + 0.02);
+            col = cvMach(col, sdBox(q - nz, vec2(0.0025, 0.003)), 0.9);
+            for(int j = 0; j < 4 + CVZ; j++){
+                float a = fract(iTime * 4. + cvHash(float(j) + float(s) * 7.));
+                vec2 a0 = nz + vec2(-float(s) * 0.003, 0.002 * float(j - 2));
+                vec2 a1 = a0 + vec2(-float(s) * 0.035, -0.008) * (0.3 + a);
+                col += vec3(0.85, 0.9, 1.) * 0.18 * S(sdSegment(q, mix(a0, a1, a * 0.6), a1) - 0.0005) * (1. - a);
             }
         }
-        if(abs(q.x - CV_PAT_X) < 0.03 && q.y > CV_PIT.y - 0.05 && q.y < CV_TOPY + 0.03){
-            col = mix(col, CV_MC * 0.5, S(abs(q.x - CV_PAT_X + 0.015) - 0.0008));
-            float dryK = smoothstep(0.03, 0., max(CV_DRYY.x - q.y, q.y - CV_DRYY.y));
-            col += vec3(1., 0.35, 0.06) * 0.1 * dryK * step(abs(q.x - CV_PAT_X), 0.017);
-            col = mix(col, vec3(1.3, 0.4, 0.06) * (0.8 + 0.2 * sin(iTime * 3. + q.y * 40.)), S(sdBox(q - vec2(CV_PAT_X - 0.0155, (CV_DRYY.x + CV_DRYY.y) * 0.5), vec2(0.0015, (CV_DRYY.y - CV_DRYY.x) * 0.5))));
-            if(q.y > CV_WASHY.x - 0.02 && q.y < CV_WASHY.y + 0.02){
-                for(int k = 0; k < 3 + CVZ; k++){
-                    vec2 nz = vec2(CV_PAT_X + 0.0155, mix(CV_WASHY.x, CV_WASHY.y, (float(k) + 0.5) / 3.));
-                    col = cvMach(col, sdBox(q - nz, vec2(0.0022, 0.003)), 0.9);
-                    for(int j = 0; j < 5 + CVZ; j++){
-                        float a = fract(iTime * 2.5 + cvHash(float(j + k * 5) + 0.3));
-                        vec2 p = nz + vec2(-0.03 * a, (cvHash(float(j + k * 5)) - 0.5) * 0.02 * a - 0.008 * a * a);
-                        col = mix(col, vec3(0.6, 0.8, 0.9), S(length(q - p) - 0.0008) * (1. - a * 0.6));
-                    }
-                }
-            }
-            if(q.y > CV_DRYY.x && q.y < CV_DRYY.y + 0.04){
-                for(int j = 0; j < 4 + CVZ; j++){
-                    float a = fract(iTime * 0.6 + float(j) * 0.25);
-                    vec2 sc = vec2(CV_PAT_X + 0.006 * sin(a * 6. + float(j)), CV_DRYY.x + 0.02 + a * 0.11);
-                    col = mix(col, vec3(0.75), S(length(q - sc) - 0.004 - a * 0.006) * 0.15 * (1. - a));
-                }
-            }
-            float nzY = CV_FILLY.y + 0.022;
-            col = cvMach(col, sdBox(q - vec2(CV_PAT_X, nzY), vec2(0.004, 0.003)), 0.9);
-            float stream = sdSegment(q, vec2(CV_PAT_X, nzY - 0.003), vec2(CV_PAT_X, CV_FILLY.x)) - 0.0012;
-            col = mix(col, CV_SAND * (0.6 + 0.5 * tcNoise(vec2(q.x * 600., (q.y + iTime * 0.3) * 600.))), S(stream));
+        for(int j = 0; j < 10 + CVZ; j++){
+            float fj = float(j);
+            float a = fract(iTime * 1.8 + cvHash(fj + 0.7));
+            vec2 o = vec2(CV_DROP_X + (cvHash(fj + 2.1) - 0.5) * 0.02, dune + 0.01);
+            vec2 p = o + vec2(0.05 * a * (cvHash(fj + 5.) - 0.5), 0.03 * a - 0.05 * a * a);
+            col = mix(col, CV_SAND * 0.9, S(length(q - p) - 0.0008) * (1. - a));
         }
     }
-    return col;
+    if(abs(q.x - CV_PAT_X) < 0.03) col = mix(col, CV_MC * 0.5, S(abs(q.x - CV_PAT_X + 0.015) - 0.0008));
+    if(q.y > CV_RUNC + 0.01 || q.x > CV_WASHX.y + 0.02) return col;
+    if(q.x > CV_WASHX.x - 0.02){
+        for(int k = 0; k < 3 + CVZ; k++){
+            vec2 nz = vec2(mix(CV_WASHX.x, CV_WASHX.y, (float(k) + 0.5) / 3.), CV_RUNC - 0.003);
+            col = cvMach(col, sdBox(q - nz, vec2(0.003, 0.0022)), 0.9);
+            for(int j = 0; j < 5 + CVZ; j++){
+                float a = fract(iTime * 2.5 + cvHash(float(j + k * 5) + 0.3));
+                vec2 p = nz + vec2((cvHash(float(j + k * 5)) - 0.5) * 0.016 * a, -0.035 * a);
+                col = mix(col, vec3(0.6, 0.8, 0.9), S(length(q - p) - 0.0008) * (1. - a * 0.6));
+            }
+        }
+    }
+    float dryK = smoothstep(0.02, 0., max(CV_DRYX.x - q.x, q.x - CV_DRYX.y)) * step(CV_RUNF, q.y);
+    col += vec3(1., 0.35, 0.06) * 0.1 * dryK;
+    col = mix(col, vec3(1.3, 0.4, 0.06) * (0.8 + 0.2 * sin(iTime * 3. + q.x * 40.)), S(sdBox(q - vec2((CV_DRYX.x + CV_DRYX.y) * 0.5, CV_RUNC - 0.0025), vec2((CV_DRYX.y - CV_DRYX.x) * 0.5, 0.0013))));
+    if(q.x > CV_DRYX.x - 0.01 && q.x < CV_DRYX.y + 0.01){
+        for(int j = 0; j < 4 + CVZ; j++){
+            float a = fract(iTime * 0.6 + float(j) * 0.25);
+            vec2 sc = vec2(mix(CV_DRYX.x, CV_DRYX.y, 0.2 + 0.6 * cvHash(float(j) + 1.3)) + 0.004 * sin(a * 6. + float(j)), CV_RUNF + 0.04 + a * 0.02);
+            col = mix(col, vec3(0.75), S(length(q - sc) - 0.003 - a * 0.004) * 0.15 * (1. - a));
+        }
+    }
+    float nzY = CV_RUNC - 0.003;
+    col = cvMach(col, sdBox(q - vec2(CV_HOPPER.x, nzY), vec2(0.004, 0.003)), 0.9);
+    float stream = sdSegment(q, vec2(CV_HOPPER.x, nzY - 0.003), vec2(CV_HOPPER.x, CV_RUNF + 0.035)) - 0.0012;
+    return mix(col, CV_SAND * (0.6 + 0.5 * tcNoise(vec2(q.x * 600., (q.y + iTime * 0.3) * 600.))), S(stream));
 }
 
 vec3 cvSand(vec3 col, vec2 q, float carve){
     if(q.x > CVG(-30.) && q.x < CV_RET_X - 0.02 && abs(q.y - CV_RET_Y) > CVG(1.5)) return col;
     if(q.x > CV_RET_X + 0.03) return col;
-    col = cvSandSeg(col, q, vec2(CV_RET_X + 0.009, CV_TOPY - CV_SIZE * 0.5 - 0.003), vec2(CV_RET_X + 0.009, CV_RET_Y - CV_CELL - 0.003), carve, 0.25);
     col = cvSandSeg(col, q, vec2(CV_RET_X + 0.009, CV_RET_Y - CV_CELL - 0.003), vec2(CV_DROP_X + 0.011, CV_RET_Y - CV_CELL - 0.003), carve, 0.12);
     float pitB = CV_PIT.y - CV_PIT_H.y + 0.004;
     col = cvSandSeg(col, q, vec2(CV_PIT.x + CV_PIT_H.x, pitB), vec2(CV_SELEV_X, pitB), carve, 0.1);
@@ -9092,8 +9469,7 @@ vec3 cvSand(vec3 col, vec2 q, float carve){
         col = mix(col, CV_SAND * 0.8, S(sdBox(vec2(q.x - CV_SELEV_X - 0.001, cell - 0.0005), vec2(0.0032, 0.0022))) * step(sh, 0.));
     }
     col = cvSandSeg(col, q, vec2(CV_SELEV_X, topY), vec2(CV_HOPPER.x + 0.02, topY), carve, 0.1);
-    col = cvSandSeg(col, q, vec2(CV_HOPPER.x, CV_HOPPER.y - 0.03), vec2(CV_HOPPER.x, CV_FILLY.y + 0.022), carve, 0.2);
-    col = cvSandSeg(col, q, vec2(CV_HOPPER.x, CV_FILLY.y + 0.022), vec2(CV_PAT_X + 0.004, CV_FILLY.y + 0.022), carve, 0.2);
+    col = cvSandSeg(col, q, vec2(CV_HOPPER.x, CV_HOPPER.y - 0.03), vec2(CV_HOPPER.x, CV_RUNC), carve, 0.2);
     vec2 hq = q - CV_HOPPER;
     float hop = cvTrapezoid(hq, 0.01, 0.035, 0.03);
     if(hop < 0.01){
@@ -9140,12 +9516,12 @@ vec3 cvMouldPress(vec3 col, vec2 q, int k, vec4 st, vec4 jam){
 // the paternoster's pistons, one in the wall by the head of each line, out
 // when they have just pushed a flask across
 vec3 cvPistons(vec3 col, vec2 q){
-    if(q.x < CVG(-36.) || q.x > CVG(-34.) || q.y < CVG(8.) || q.y > CVG(17.)) return col;
+    if(q.x < CVG(-38.) || q.x > CVG(-36.) || q.y < CVG(8.) || q.y > CVG(17.)) return col;
     for(int li = 0; li < 3 + CVZ; li++){
         float since = cvState(CX_PUSH + li, CV_ROW).x;
         float ext = 1. - smoothstep(0.12, 0.45, since);
         float y = CV_ST_Y[li];
-        float wall = CVG(-35.);
+        float wall = CVG(-37.);
         col = cvMach(col, sdBox(q - vec2(wall - CVG(0.45), y), vec2(CVG(0.4), 0.006)), 0.75);
         float hx = wall + ext * CVG(0.35);
         col = cvMach(col, sdBox(q - vec2((wall + hx) * 0.5, y), vec2(max((hx - wall) * 0.5, 0.0005), 0.0018)), 1.1);
@@ -9154,99 +9530,146 @@ vec3 cvPistons(vec3 col, vec2 q){
     return col;
 }
 
-vec3 cvScene(vec2 q, vec2 tp){
-    float fit = cvFit(iResolution.x / iResolution.y);
-    float asp = iResolution.x / iResolution.y / fit;
-    q = q / fit + vec2(CV_CX, CV_CY);
-    vec4 st[31];
-    for(int k = 0; k < CV_NS + CVZ; k++) st[k] = cvState(k, CV_ROW);
-    vec4 jam = cvState(CX_JAM, CV_ROW), so = cvState(CX_SORT, CV_ROW);
+float cvFitNow(){ return cvFit(iResolution.x / iResolution.y); }
+vec2 cvQ(vec2 q){ return q / cvFitNow() + vec2(CV_CX, CV_CY); }
+float cvAspNow(){ return iResolution.x / iResolution.y / cvFitNow(); }
+
+vec4 cvLayersSlab(vec2 q, vec2 tp){
     float carve = cvCarve(q);
     vec3 col = cvSlab(q, tp, carve);
     col = cvWallHoles(col, q, tp);
+    col = cvShell(col, q);
+    return vec4(col, carve);
+}
+
+vec4 cvLayersBack(vec2 q, vec4 prev){
+    vec3 col = prev.rgb;
+    float carve = prev.a;
+    col = cvOutside(col, q);
     col = cvVeins(col, q, carve);
     col = cvHeater(col, q, carve);
     col = cvDrum(col, q);
     col = cvDripBack(col, q);
-    col = cvSplat(col, q, st[CS_FLICK]);
+    col = cvSplat(col, q, cvState(CS_FLICK, CV_ROW));
     col = cvSand(col, q, carve);
     col = cvFlasks(col, q);
     col = cvFans(col, q);
-    col = cvPanel(col, (q - vec2(CVG(-23.5), CVG(-13.6))) / 0.6, st[CS_LABEL].w);
+    col = cvPanel(col, (q - vec2(CVG(-23.5), CVG(-13.6))) / 0.6, cvState(CS_LABEL, CV_ROW).w);
     col = cvBelts(col, q);
-    col = cvHeatLifts(col, q, max(asp, 2.3));
-    col = cvMonRoom(col, q, max(asp, 2.3));
+    return vec4(col, carve);
+}
+
+vec4 cvLayersRooms(vec2 q, vec4 prev){
+    vec3 col = prev.rgb;
+    float asp = max(cvAspNow(), 2.3);
+    col = cvHeatLifts(col, q, asp);
+    col = cvMonRoom(col, q, asp);
+    col = cvOverseer(col, q);
     col = cvPlinko(col, q);
-    col = cvXray(col, q, st[CS_XRAY], false);
-    vec2 gs = cvGoopShake(st[CS_CLEAR].x);
-    for(int k = CS_PRIME + 1; k <= CS_CLEAR + CVZ; k++) col = cvBoothBack(col, k == CS_CLEAR ? q + gs : q, k, st[k]);
-    col = cvGoopStains(col, q + gs, st[CS_CLEAR].x);
-    col = cvCatapult(col, q, st[CS_PRIME + 1].x);
-    col = cvTiltTable(col, q, st[CS_PRIME + 2].x);
-    col = cvPolishBack(col, q, st[CS_POLISH]);
-    col = cvClassBack(col, q, st[CS_CLASS]);
-    col = cvTrapDoor(col, q, max(asp, 2.3));
+    col = cvXray(col, q, cvState(CS_XRAY, CV_ROW), false);
+    vec2 gs = cvGoopShake(cvState(CS_CLEAR, CV_ROW).x);
+    for(int k = CS_PRIME + 1; k <= CS_CLEAR + CVZ; k++) col = cvBoothBack(col, k == CS_CLEAR ? q + gs : q, k, cvState(k, CV_ROW));
+    col = cvGoopStains(col, q + gs, cvState(CS_CLEAR, CV_ROW).x);
+    col = cvCatapult(col, q, cvState(CS_PRIME + 1, CV_ROW).x);
+    col = cvTiltTable(col, q, cvState(CS_PRIME + 2, CV_ROW).x);
+    col = cvPolishBack(col, q, cvState(CS_POLISH, CV_ROW));
+    col = cvClassBack(col, q, cvState(CS_CLASS, CV_ROW));
+    col = cvTrapDoor(col, q, asp);
     col = cvBounceRoom(col, q, cvState(CX_HATFLY, CV_ROW).x);
-    col = cvCoronBack(col, q, st[CS_HAT]);
+    col = cvCoronBack(col, q, cvState(CS_HAT, CV_ROW));
+    col = cvReception(col, q);
+    return vec4(col, prev.a);
+}
 
-    vec4 sl[AG_TEX];
-    agSlots(iChannel17, q, max(asp, 2.3), sl);
-    int ids[AG_SLOTS];
-    float keys[AG_SLOTS];
-    int nid = 0;
+float cvItemKey(int i){
+    vec4 r1 = cvState(i, 1);
+    int t = cvI(r1.x);
+    float rk = t == CT_DROP ? 1. : t == CT_MAIN ? 2. : t == CT_FIN ? 3. : t == CT_SLIDE || t == CT_REJ ? 4. : t == CT_PACK ? 5. : 0.;
+    return rk * 100. + r1.y;
+}
+
+vec4 cvLayersItems(vec2 q, vec4 prev){
+    ivec2 c = agCellOf(q, max(cvAspNow(), 2.3));
+    if(c.x < 0 || c.y < 0 || c.x >= AG_GX || c.y >= AG_GY) return prev;
+    uint hit = 0u;
+    int n = 0;
     for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        int i = int(sl[k >> 2][k & 3] + 0.5) - 1;
+        int i = cvSlot(c, k);
         if(i < 0) break;
-        vec4 r1 = cvState(i, 1);
-        int t = cvI(r1.x);
-        float rk = t == CT_DROP ? 1. : t == CT_MAIN ? 2. : t == CT_FIN ? 3. : t == CT_SLIDE || t == CT_REJ ? 4. : t == CT_PACK ? 5. : 0.;
-        float key = rk * 100. + r1.y;
-        int j = nid;
-        while(j > 0 && keys[j - 1] > key){ ids[j] = ids[j - 1]; keys[j] = keys[j - 1]; j--; }
-        ids[j] = i;
-        keys[j] = key;
-        nid++;
+        n = k + 1;
+        if(cvI(cvState(i, 1).x) < 0) continue;
+        vec2 d = (q - cvState(i, 0).xy) / CV_M;
+        if(dot(d, d) <= 0.0056) hit |= 1u << uint(k);
     }
-    for(int k = 0; k < AG_SLOTS + CVZ; k++){
-        if(k >= nid) break;
-        col = cvItem(col, q, ids[k]);
+    vec3 col = prev.rgb;
+    while(hit != 0u){
+        int bk = -1, bi = -1;
+        float bkey = 1e9;
+        for(int k = 0; k < AG_SLOTS + CVZ; k++){
+            if(k >= n) break;
+            if((hit & (1u << uint(k))) == 0u) continue;
+            int i = cvSlot(c, k);
+            float key = cvItemKey(i);
+            if(key < bkey){ bkey = key; bk = k; bi = i; }
+        }
+        hit &= ~(1u << uint(bk));
+        col = cvItem(col, q, bi);
     }
+    return vec4(col, prev.a);
+}
 
+vec4 cvLayersMachines(vec2 q, vec4 prev){
+    vec3 col = prev.rgb;
+    float asp = max(cvAspNow(), 2.3);
+    vec4 jam = cvState(CX_JAM, CV_ROW);
     col = cvWind(col, q);
     col = cvPistons(col, q);
-    col = cvCaustic(col, q, st[CS_CAUSTIC]);
-    col = cvHangers(col, q, max(asp, 2.3));
-    col = cvFlickArm(col, q, st[CS_FLICK]);
+    col = cvCaustic(col, q, cvState(CS_CAUSTIC, CV_ROW));
+    col = cvHangers(col, q, asp);
+    col = cvFlickArm(col, q, cvState(CS_FLICK, CV_ROW));
     col = cvCamera(col, q);
-    col = cvDripFront(col, q, max(asp, 2.3));
-    col = cvRotor(col, q, st[CS_CAUSTIC]);
-    col = cvPours(col, q, st);
+    col = cvDripFront(col, q, asp);
+    col = cvRotor(col, q, cvState(CS_CAUSTIC, CV_ROW));
+    col = cvPours(col, q);
     col = cvBasin(col, q, cvState(CX_SPLASH, CV_ROW).xy);
-    for(int k = 3; k < 6 + CVZ; k++) col = cvHammer(col, q, k, st[k], jam);
-    for(int k = CS_PRESS; k < CS_PRESS + 3 + CVZ; k++) col = cvMouldPress(col, q, k, st[k], jam);
-    col = cvArm(col, q, 0, st[CS_WELD1]);
-    col = cvArm(col, q, 1, st[CS_WELD2]);
-    col = cvXray(col, q, st[CS_XRAY], true);
-    col = cvGrinder(col, q, st[CS_GRIND]);
-    col = cvBootAt(col, q, cvStPos(CS_BOOT), CVG(17.), st[CS_BOOT].x, st[CS_BOOT].z);
+    for(int k = 3; k < 6 + CVZ; k++) col = cvHammer(col, q, k, cvState(k, CV_ROW), jam);
+    for(int k = CS_PRESS; k < CS_PRESS + 3 + CVZ; k++) col = cvMouldPress(col, q, k, cvState(k, CV_ROW), jam);
+    return vec4(col, prev.a);
+}
+
+vec4 cvLayersStations(vec2 q, vec4 prev){
+    vec3 col = prev.rgb;
+    col = cvArm(col, q, 0, cvState(CS_WELD1, CV_ROW));
+    col = cvArm(col, q, 1, cvState(CS_WELD2, CV_ROW));
+    col = cvXray(col, q, cvState(CS_XRAY, CV_ROW), true);
+    col = cvGrinder(col, q, cvState(CS_GRIND, CV_ROW));
+    col = cvBootAt(col, q, cvStPos(CS_BOOT), CVG(17.), cvState(CS_BOOT, CV_ROW).x, cvState(CS_BOOT, CV_ROW).z);
     for(int j = 0; j < 5 + CVZ; j++){
         int k = CV_QC_K[j];
         vec4 kt = cvState(CX_QK + j, CV_ROW);
-        float bx = st[k].x >= 0. && cvI(kt.y) == cvI(st[k].y) && kt.z > 0.5 ? st[k].x : -1.;
+        vec4 sk = cvState(k, CV_ROW);
+        float bx = sk.x >= 0. && cvI(kt.y) == cvI(sk.y) && kt.z > 0.5 ? sk.x : -1.;
         col = cvBootAt(col, q, cvStPos(k), cvStPos(k).y + CVG(0.95), bx, kt.x);
     }
-    col = cvCoatRing(col, q, st[CS_PRIME + 1].x);
-    col = cvPlotter(col, q, st[CS_PRIME + 2].x);
-    col = cvGoopCannon(col, q + gs, st[CS_CLEAR].x);
-    col = cvColumn(col, q, st, max(asp, 2.3));
+    col = cvCoatRing(col, q, cvState(CS_PRIME + 1, CV_ROW).x);
+    col = cvPlotter(col, q, cvState(CS_PRIME + 2, CV_ROW).x);
+    col = cvGoopCannon(col, q + cvGoopShake(cvState(CS_CLEAR, CV_ROW).x), cvState(CS_CLEAR, CV_ROW).x);
+    col = cvColumn(col, q, max(cvAspNow(), 2.3));
+    return vec4(col, prev.a);
+}
+
+vec3 cvLayersFront(vec2 q, vec4 prev){
+    vec3 col = prev.rgb;
+    float fit = cvFitNow(), asp = cvAspNow();
+    vec4 jam = cvState(CX_JAM, CV_ROW);
     col = cvVentSmoke(col, q);
-    col = cvPolishFront(col, q, st[CS_POLISH]);
-    col = cvHatRig(col, q, st[CS_HAT]);
+    col = cvPolishFront(col, q, cvState(CS_POLISH, CV_ROW));
+    col = cvHatRig(col, q, cvState(CS_HAT, CV_ROW));
     col = cvHatFly(col, q, cvState(CX_HATFLY, CV_ROW).x);
-    col = cvPack(col, q, st, jam);
+    col = cvPack(col, q, jam);
     col = cvJamLamp(col, q, jam);
     col *= 1. - 0.2 * smoothstep(0.65, 1.3, length((q - vec2(CV_CX, CV_CY)) * vec2(0.8, 1.)));
-    col = cvKickedAt(col, q, cvStPos(CS_BOOT), st[CS_BOOT].z, asp, fit, false);
+    col = cvKickedAt(col, q, cvStPos(CS_BOOT), cvState(CS_BOOT, CV_ROW).z, asp, fit, false);
     for(int j = 0; j < 5 + CVZ; j++) col = cvKickedAt(col, q, cvStPos(CV_QC_K[j]), cvState(CX_QK + j, CV_ROW).x, asp, fit, true);
     if((u_traffic_debug & 16) != 0){
         vec2 gc = q / CV_CELL;
@@ -9263,86 +9686,76 @@ vec3 cvScene(vec2 q, vec2 tp){
 vec3 conveyor(vec2 q, vec2 tp){ return texture(iChannel18, roomUV(q)).rgb; }
 const int CV_BAKED = 1;
 const vec4 CV_BAKE[853] = vec4[](
-    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(0.316157758, -0.417219996, 6.0547552e-07, 0.), vec4(3., 0.63700223, 0., 197.),
-    vec4(-1.01181602, 0.253734052, 0., 3.), vec4(9., 2.31918764, 0., 0.), vec4(0.241551846, -0.270579994, -6.0547552e-07, 0.), vec4(3., 1.13141084, 0., 197.),
-    vec4(-0.337272018, 0.374635994, 0., 1.), vec4(0., 0.674544036, 0., 262145.), vec4(-0.742509246, -0.02128575, -6.0547552e-07, 0.), vec4(6., 0.0953767151, 0., 14974949.),
-    vec4(0.560556769, -0.00662799925, 6.0547552e-07, 0.), vec4(8., 0.358095765, 0., 2097637.), vec4(0.403465509, -0.417219996, -6.0547552e-07, 0.), vec4(3., 0.549694479, 0., 197.),
-    vec4(-1.01181602, 0.374635845, 0., 3.), vec4(9., 2.44008946, 0., 0.), vec4(-0.747863948, 0.46262002, 0., 0.), vec4(1., 0.263952076, 0., 524288.),
-    vec4(-0.308206171, 0.46262002, 0., 0.), vec4(1., 0.703609824, 0., 524290.), vec4(-0.0733199716, 0.46262002, 0., 0.), vec4(1., 0.938495994, 0., 524306.),
-    vec4(0.695244908, 0.265227646, 9.07334709, 0.), vec4(3., 2.97878432, 0., 2097349.), vec4(-1.01181602, 0.403963953, 0., 3.), vec4(9., 2.46941757, 0., 0.),
-    vec4(-0.70666796, 0.198667988, 0., 3.), vec4(9., 0.692003965, 0., 0.), vec4(-0.886666715, 0.198667988, 0., 3.), vec4(9., 0.872002721, 0., 0.),
-    vec4(0.269424617, -0.182595998, 6.0547552e-07, 0.), vec4(3., 1.26565039, 0., 197.), vec4(-0.481235683, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.36684525, 0., 14974951.),
-    vec4(0.412746191, 0.128214777, 4.33052492, 0.), vec4(8., 0.39074856, 1.26669931, 2097637.), vec4(-0.362642616, 0.198667988, 0., 3.), vec4(9., 0.347978622, 0., 0.),
-    vec4(-0.597417593, -0.0624270439, -6.0547552e-07, 0.), vec4(6., 0.246188462, 0., 14974951.), vec4(0.711857617, 0.231121197, 7.9777503, 0.), vec4(3., 2.97893143, 0., 2097349.),
-    vec4(0.75106293, 0.300754935, 12.5281649, 0.), vec4(3., 2.72983599, 0.933349609, 2097349.), vec4(0.524101973, 0.46262002, 0., 0.), vec4(1., 1.53591788, 0., 524503.),
-    vec4(-0.146640003, -0.219256192, -6.0547552e-07, 0.), vec4(8., 1.67384839, 0.5, 2367461.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
-    vec4(-0.146640003, -0.0286242384, -6.0547552e-07, 0.), vec4(8., 1.86448038, 0., 6569957.), vec4(0.734650314, 0.270519316, 0.276185215, 0.), vec4(3., 2.813622, 0., 2097349.),
-    vec4(0.183804169, 0.46262002, 0., 0.), vec4(1., 1.19562018, 0., 524498.), vec4(-0.568397462, -0.0706558079, -6.0547552e-07, 0.), vec4(6., 0.276352674, 0., 14974951.),
-    vec4(-0.390743136, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.457337797, 0., 14974951.), vec4(0.741172731, 0.284025699, 0.142508656, 0.), vec4(3., 2.8096621, 0., 2097349.),
-    vec4(-1.01181602, -0.374748766, 0., 3.), vec4(9., 1.69070482, 0., 0.), vec4(-1.070472, -0.345742404, 0., 3.), vec4(9., 1.60021842, 0., 0.),
-    vec4(-0.806519985, 0.374635994, 0., 1.), vec4(0., 0.205296069, 0., 262144.), vec4(-0.395927966, 0.374635994, 0., 1.), vec4(0., 0.615888059, 0., 262145.),
-    vec4(-0.102647997, 0.46262002, 0., 0.), vec4(1., 0.909168005, 0., 524306.), vec4(0.248763606, 0.0143547487, 5.90493298, 0.), vec4(8., 0.537388504, 1.46336186, 2098149.),
-    vec4(-0.527307987, 0.198667988, 0., 3.), vec4(9., 0.512643993, 0., 0.), vec4(-0.713492095, -0.0295136757, -6.0547552e-07, 0.), vec4(6., 0.125537843, 0., 14974949.),
-    vec4(0.708677053, 0.228389695, 9.3586235, 0.), vec4(3., 2.94561529, 0., 2097349.), vec4(-0.747863948, 0.374635994, 0., 1.), vec4(0., 0.263952076, 0., 262144.),
-    vec4(-1.01181602, 0.0360683426, 0., 3.), vec4(9., 2.10152197, 0., 0.), vec4(0.0753371194, 0.46262002, 0., 0.), vec4(1., 1.08715308, 0., 524370.),
-    vec4(0.714487731, 0.256148309, 0.507203877, 0.), vec4(3., 2.94989586, 0., 2097349.), vec4(-0.493208379, 0.46262002, 0., 0.), vec4(1., 0.518607616, 0., 524290.),
-    vec4(-0.451071501, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.397009432, 0., 14974951.), vec4(0.0586560331, -0.00662799925, -0.00372569263, 0.), vec4(8., 0.859996557, 0., 2101221.),
-    vec4(-0.689207971, 0.46262002, 0., 0.), vec4(1., 0.322608054, 0., 524288.), vec4(-1.01181602, -0.180425346, 0., 3.), vec4(9., 1.88502824, 0., 0.),
-    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(-0.73864156, 0.198667988, 0., 3.), vec4(9., 0.723977566, 0., 0.),
-    vec4(0.30794397, -0.0946120024, 2.61791979e-06, 0.), vec4(3., 1.78436291, 9.98791147e-05, 197.), vec4(0.0970251486, -0.364793718, -6.0547552e-07, 0.), vec4(3., 0.884192526, 0., 197.),
-    vec4(0.0805489495, -0.340079397, 6.0547552e-07, 0.), vec4(3., 0.913895428, 0., 197.), vec4(-0.510357261, -0.0871133357, -6.0547552e-07, 0.), vec4(6., 0.336681068, 0., 14974951.),
-    vec4(0.190631956, -0.0946120024, 6.0547552e-07, 0.), vec4(3., 1.66705096, 0., 197.), vec4(-1.01181602, 0.108237661, 0., 3.), vec4(9., 2.17369127, 0., 0.),
-    vec4(-0.558642805, 0.198667988, 0., 3.), vec4(9., 0.54397881, 0., 0.), vec4(0.72254926, 0.243005127, 5.79534054, 0.), vec4(3., 2.81772852, 0., 2097349.),
-    vec4(0.725586176, 0.240644336, 0.58894217, 0.), vec4(3., 2.94989586, 0., 2097349.), vec4(0.278615892, -0.0946120024, 6.0547552e-07, 0.), vec4(3., 1.75503492, 0., 197.),
-    vec4(0.739483237, 0.307492465, 1.50721669, 0.), vec4(3., 2.95004249, 0., 2097349.), vec4(0.681603909, 0.46262002, 0., 0.), vec4(1., 1.69341981, 0., 524503.),
-    vec4(-0.146640003, -0.314572126, -6.0547552e-07, 0.), vec4(8., 1.57853246, 0., 2363365.), vec4(-1.01181602, 0.181569263, 0., 3.), vec4(9., 2.24702287, 0., 0.),
-    vec4(-0.0439919978, 0.46262002, 0., 0.), vec4(1., 0.967823982, 0., 524306.), vec4(0.366599917, 0.46262002, 0., 0.), vec4(1., 1.37841594, 0., 524503.),
-    vec4(-0.318644434, 0.198667988, 0., 3.), vec4(9., 0.30398044, 0., 0.), vec4(0.72175616, 0.304775327, 1.41976547, 0.), vec4(3., 2.94989586, 0., 2097349.),
-    vec4(-0.539377391, -0.0788845718, -6.0547552e-07, 0.), vec4(6., 0.306516886, 0., 14974951.), vec4(-0.462374687, 0.46262002, 0., 0.), vec4(1., 0.549441338, 0., 524290.),
-    vec4(-0.439629734, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.2967782, 0., 14974949.), vec4(0.717577875, 0.246539712, 0.449489057, 0.), vec4(3., 2.97907853, 0., 2097349.),
-    vec4(-0.0146640269, 0.46262002, 0., 0.), vec4(1., 0.997151971, 0.5, 524306.), vec4(0.744366288, 0.291056991, 0.386507183, 0.), vec4(3., 2.80584884, 0., 2097349.),
-    vec4(0.264044106, -0.417219996, -6.0547552e-07, 0.), vec4(3., 0.689115882, 0., 197.), vec4(-0.930660009, 0.286651999, 0., 2.), vec4(7., 0.0811560005, 0., 1048576.),
-    vec4(0.721069992, 0.244471788, 0.509254694, 0.), vec4(3., 2.94989586, 0., 2097349.), vec4(-1.01181602, 0.433292061, 0., 3.), vec4(9., 2.49874568, 0., 0.),
-    vec4(0.806546152, -0.417219996, -6.0547552e-07, 0.), vec4(3., 0.146613836, 0., 197.), vec4(-0.420907319, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.427173615, 0., 14974951.),
-    vec4(0.278716058, 0.227995992, -0.0368661918, 0.), vec4(3., 3.28726792, 0., 2097637.), vec4(-0.425255954, 0.374635994, 0., 1.), vec4(0., 0.586560071, 0., 262145.),
-    vec4(0.331223935, 0.227995992, -6.0547552e-07, 0.), vec4(3., 3.3397758, 0., 2097637.), vec4(-1.03730452, 0.198667988, 0., 3.), vec4(9., 1.02264059, 0., 0.),
-    vec4(-0.131975964, 0.46262002, 0., 0.), vec4(1., 0.879840016, 0., 524306.), vec4(-0.339039922, 0.46262002, 0., 0.), vec4(1., 0.672776103, 0., 524290.),
-    vec4(0.0136562362, -0.00662799925, -6.0547552e-07, 0.), vec4(8., 0.904996336, 0., 2363365.), vec4(0.716478944, 0.259145319, 0.60066092, 0.), vec4(3., 2.9416554, 0., 2097349.),
-    vec4(-0.431540996, 0.46262002, 0., 0.), vec4(1., 0.580274999, 0., 524290.), vec4(-0.71853596, 0.46262002, 0., 0.), vec4(1., 0.293280065, 0., 524288.),
-    vec4(0.763660967, 0.275481761, 10.629158, 0.), vec4(3., 2.70050788, 0.483337402, 2097349.), vec4(-0.559622943, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.41677141, 0., 14974949.),
-    vec4(-0.800793529, -0.00662799925, -0.000582467474, 0.), vec4(6., 0.0350544639, 0., 14974949.), vec4(-0.626437724, -0.0541982837, -6.0547552e-07, 0.), vec4(6., 0.21602428, 0., 14974951.),
-    vec4(0.858659029, -0.417219996, 2.58336222e-05, 0.), vec4(3., 0.0945009664, 0., 197.), vec4(-0.360578954, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.487501979, 0., 14974951.),
-    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(0.613852501, -0.417219996, 6.0547552e-07, 0.), vec4(3., 0.339307457, 0., 197.),
-    vec4(-0.684474945, -0.0377415977, -6.0547552e-07, 0.), vec4(6., 0.15569897, 0., 14974951.), vec4(-1.01181602, -0.108264022, 0., 3.), vec4(9., 1.95718956, 0., 0.),
-    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(-0.51070869, 0.286651999, 0., 2.), vec4(7., 0.501107335, 0., 1048580.),
-    vec4(-0.369873554, 0.46262002, 0., 0.), vec4(1., 0.641942441, 0., 524290.), vec4(-1.01181602, -0.0360968523, 0., 3.), vec4(9., 2.02935672, 0., 0.),
-    vec4(0.0779788047, -0.182595998, 6.0547552e-07, 0.), vec4(3., 1.45709622, 0., 197.), vec4(0.890915453, -0.0495365858, -3.63488674, 0.), vec4(2., 0.52072686, 0., 197.),
-    vec4(-0.524041831, 0.46262002, 0., 0.), vec4(1., 0.487774163, 0., 524290.), vec4(0.711672604, 0.232951358, 7.05303288, 0.), vec4(3., 2.94989586, 0., 2097349.),
-    vec4(-0.799609423, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.65675783, 0., 14974949.), vec4(-0.400707304, 0.46262002, 0., 0.), vec4(1., 0.61110872, 0., 524290.),
-    vec4(-1.01181602, -0.253753006, 0., 3.), vec4(9., 1.81170058, 0., 0.), vec4(-0.773159802, 0.286651999, 0., 2.), vec4(7., 0.238656178, 0., 1048576.),
-    vec4(0.278616011, 0.46262002, 0., 0.), vec4(1., 1.29043198, 0.5, 524498.), vec4(0.2199599, -0.0946120024, 6.0547552e-07, 0.), vec4(3., 1.69637895, 0., 197.),
-    vec4(-0.771526337, -0.0130578233, -1.41277621e-06, 0.), vec4(6., 0.0652155876, 0., 14974949.), vec4(-0.0536132529, 0.374635994, 0., 1.), vec4(0., 0.958202779, 0., 262153.),
-    vec4(-0.679616213, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.53676462, 0., 14974949.), vec4(0.249287903, -0.0946120024, -6.0547552e-07, 0.), vec4(3., 1.72570693, 0., 197.),
-    vec4(-0.30794403, 0.374635994, 0., 1.), vec4(0., 0.703872025, 0., 262145.), vec4(0.383731812, 0.227995992, -6.0547552e-07, 0.), vec4(3., 3.39228368, 0., 2097637.),
-    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(0.772978604, -0.154138416, 102.483109, 0.), vec4(3., 1.84301901, 0., 197.),
-    vec4(-0.278616041, 0.286651999, 0., 2.), vec4(7., 0.733199954, 0., 1048580.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
-    vec4(0.1154854, -0.0946120024, 6.0547552e-07, 0.), vec4(3., 1.5919044, 0., 197.), vec4(-1.04056811, -0.3761608, 0., 3.), vec4(9., 1.6605407, 0., 0.),
-    vec4(-0.689207971, 0.374635994, 0., 1.), vec4(0., 0.322608054, 0., 262144.), vec4(0.741596937, -0.122035429, 103.268509, 0.), vec4(3., 1.81369102, 0., 197.),
-    vec4(-0.777191937, 0.374635994, 0., 1.), vec4(0., 0.234624073, 0., 262144.), vec4(-0.90816009, 0.374635994, 0., 1.), vec4(0., 0.103655957, 0., 262144.),
-    vec4(0.0733200014, -0.112152219, -6.0547552e-07, 0.), vec4(3., 1.53219879, 0., 197.), vec4(-0.278616041, 0.374635994, 0., 1.), vec4(0., 0.733200014, 0.5, 262145.),
-    vec4(-0.0803617537, -0.417219996, -6.0547552e-07, 0.), vec4(8., 1.40960634, 0., 2363365.), vec4(-0.188614935, 0.374635994, 0., 1.), vec4(0., 0.82320112, 0., 262153.),
-    vec4(0.43623969, 0.227995992, -6.0547552e-07, 0.), vec4(3., 3.44479156, 0., 2097637.), vec4(-1.070472, -0.315581292, 0., 3.), vec4(9., 1.57005727, 0., 0.),
-    vec4(-0.655457795, -0.0459695272, -6.0547552e-07, 0.), vec4(6., 0.185860097, 0., 14974951.), vec4(-0.0181215964, 0.458872944, 0., 2.), vec4(10., 0.879840016, 0.483337402, 1048612.),
-    vec4(-1.01181602, -0.325918734, 0., 3.), vec4(9., 1.73953485, 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
-    vec4(0.488747567, 0.227995992, -6.0547552e-07, 0.), vec4(3., 3.49729943, 0., 2097637.), vec4(-0.233615488, 0.286651999, 0., 2.), vec4(7., 0.778200507, 0., 1048612.),
-    vec4(-0.600708127, 0.286651999, 0., 2.), vec4(7., 0.411107868, 0., 1048580.), vec4(-1.0686394, 0.198667988, 0., 3.), vec4(9., 1.05397546, 0., 0.),
-    vec4(-1.070472, -0.375903547, 0., 3.), vec4(9., 1.63037956, 0., 0.), vec4(0.879818678, 0.194183469, -2.81509137, 0.), vec4(2., 0.275725842, 0., 197.),
-    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(-0.366599977, 0.374635994, 0., 1.), vec4(0., 0.645216048, 0., 262145.),
-    vec4(0.857076526, 0.435794771, -1.13496733, 0.), vec4(2., 0.0307258368, 0., 197.), vec4(-0.71853596, 0.374635994, 0., 1.), vec4(0., 0.293280065, 0., 262144.),
-    vec4(-0.90816009, 0.46262002, 0., 0.), vec4(1., 0.103655949, 0., 524288.), vec4(-1.01181602, 0.46262002, 0., 3.), vec4(9., 2.52807379, 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(-1.070472, 0.286652088, 0., 3.), vec4(9., 1.29629767, 0., 0.),
+    vec4(0.774859667, -0.0454078764, 3.88474107, 0.), vec4(3., 2.39605236, 0.0833129883, 2097349.), vec4(-0.454583973, 0.46262002, 0., 0.), vec4(1., 0.615888, 0., 524290.),
+    vec4(0.723479211, 0.248881668, 0.633473456, 0.), vec4(3., 2.94989586, 0., 2097349.), vec4(-0.392070681, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.456010252, 0., 14974951.),
+    vec4(-0.79565984, 0.46262002, 0., 0.), vec4(1., 0.274812132, 0., 524288.), vec4(0.663454652, -0.155804515, 54.6269646, 0.), vec4(3., 1.93100297, 0., 197.),
+    vec4(-0.146640003, 0.00137562526, -6.0547552e-07, 0.), vec4(8., 1.89448023, 0., 14958565.), vec4(0.0146640325, 0.374635994, 0., 1.), vec4(0., 1.08513606, 0., 262153.),
+    vec4(-1.070472, 0.227996096, 0., 3.), vec4(9., 1.23764169, 0., 0.), vec4(0.229539722, -0.270579994, 6.0547552e-07, 0.), vec4(3., 1.11939871, 0., 197.),
+    vec4(-0.0146639664, 0.374635994, 0., 1.), vec4(0., 1.05580807, 0., 262153.), vec4(0.366600066, 0.46262002, 0., 0.), vec4(1., 1.43707204, 0., 524499.),
+    vec4(-0.692640364, 0.198667988, 0., 3.), vec4(9., 0.67797637, 0., 0.), vec4(-0.278616041, 0.46262002, 0., 0.), vec4(1., 0.791855931, 0.75, 524290.),
+    vec4(-0.512641609, 0.198667988, 0., 3.), vec4(9., 0.497977585, 0., 0.), vec4(0.773617387, -0.196131468, 57.7685585, 0.), vec4(3., 1.81369102, 0., 197.),
+    vec4(0.142837778, 0.46262002, 0., 0.), vec4(1., 1.21330976, 0., 524370.), vec4(-0.542567968, -0.299908042, -5.97402504e-05, 0.), vec4(6., 1.35885859, 0., 15007719.),
+    vec4(0.839105904, 0.46262002, 0., 0.), vec4(1., 1.90957785, 0., 524503.), vec4(-0.322607934, -0.399623185, -6.0547552e-07, 0.), vec4(6., 1.05988634, 0., 14974967.),
+    vec4(-0.0439918973, 0.374635994, 0., 1.), vec4(0., 1.02648008, 0., 262153.), vec4(-0.146640003, -0.123940155, -6.0547552e-07, 0.), vec4(8., 1.76916444, 0., 6569957.),
+    vec4(-0.27463907, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.13178754, 0., 14974949.), vec4(-0.483911961, 0.46262002, 0., 0.), vec4(1., 0.586560011, 0., 524290.),
+    vec4(-0.689207733, -0.299907982, -6.0547552e-07, 0.), vec4(6., 1.50549853, 0., 15007719.), vec4(-0.0439921059, 0.46262002, 0., 0.), vec4(1., 1.02647984, 0., 524306.),
+    vec4(0.740064144, 0.311694115, 1.63026357, 0.), vec4(3., 2.95324135, 0., 2097349.), vec4(-0.332642823, 0.198667988, 0., 3.), vec4(9., 0.317978829, 0., 0.),
+    vec4(0.0811733231, -0.313529313, -6.0547552e-07, 0.), vec4(3., 0.944488168, 0., 197.), vec4(-0.271426022, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.576654911, 0., 14974951.),
+    vec4(-0.0146641349, 0.46262002, 0., 0.), vec4(1., 1.05580783, 0., 524370.), vec4(-0.39463228, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.25178075, 0., 14974949.),
+    vec4(0.278616011, -0.240905315, 6.0547552e-07, 0.), vec4(3., 1.19814968, 0., 197.), vec4(-1.070472, 0.46261996, 0., 3.), vec4(9., 1.4722656, 0., 0.),
+    vec4(-0.0733198971, 0.374635994, 0., 1.), vec4(0., 0.99715209, 0., 262153.), vec4(-0.131976008, 0.286651999, 0., 2.), vec4(7., 0.938495994, 0., 1048612.),
+    vec4(-0.973377347, 0.1224152, 0., 3.), vec4(9., 1.03496611, 0., 0.), vec4(0.0827078521, -0.0946120024, -6.0547552e-07, 0.), vec4(3., 1.55912685, 0., 197.),
+    vec4(0.0439920314, 0.374635994, 0., 1.), vec4(0., 1.11446404, 0., 262153.), vec4(-1.06757927, 0.1224152, 0., 3.), vec4(9., 1.12916803, 0., 0.),
+    vec4(-0.278615952, 0.374635994, 0., 1.), vec4(0., 0.79185605, 0.25, 262145.), vec4(-0.466097742, -0.417219996, -6.0547552e-07, 0.), vec4(6., 1.2098856, 0., 14974967.),
+    vec4(0.762261569, 0.289520532, 11.0631104, 0.), vec4(3., 2.70050788, 0.533325195, 2097349.), vec4(-1.070472, 0.169340119, 0., 3.), vec4(9., 1.17898571, 0., 0.),
+    vec4(-0.841304362, 0.198667988, 0., 3.), vec4(9., 0.826640308, 0., 0.), vec4(-0.747863948, 0.46262002, 0., 0.), vec4(1., 0.322608024, 0., 524288.),
+    vec4(0.381264001, 0.0813560039, 0., 0.), vec4(8., 0.537388504, 1.08000004, 2098149.), vec4(0.681604028, 0.46262002, 0., 0.), vec4(1., 1.75207591, 0., 524503.),
+    vec4(-0.0733200759, 0.46262002, 0., 0.), vec4(1., 0.997151852, 0., 524306.), vec4(-0.79565984, 0.286651999, 0., 2.), vec4(7., 0.274812132, 0., 1048576.),
+    vec4(-0.301587164, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.546493769, 0., 14974951.), vec4(-0.689207971, 0.286651999, 0., 2.), vec4(7., 0.381264031, 0., 1048576.),
+    vec4(0.726804137, 0.243652314, 0.644020319, 0.), vec4(3., 2.96746707, 0., 2097349.), vec4(0.0733200014, -0.144554734, 6.0547552e-07, 0.), vec4(3., 1.49979627, 0., 197.),
+    vec4(0.527903974, -0.00760800019, 0., 0.), vec4(8., 0.39074856, 0.900000036, 2097637.), vec4(-0.0146639943, 0.46262005, 0., 2.), vec4(10., 0.938495994, 1.2333374, 1048612.),
+    vec4(-0.953159988, 0.46262002, 0., 0.), vec4(1., 0.117312007, 0.5, 0.), vec4(-0.51462549, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.37177396, 0., 14974949.),
+    vec4(0.30790782, -0.0946119726, -0.00175321836, 0.), vec4(3., 1.78436291, -0.00860706996, 197.), vec4(-0.634618759, 0.110683993, -6.0547552e-07, 0.), vec4(8., 2.49176717, 0., 14974949.),
+    vec4(-0.361909568, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.486171365, 0., 14974951.), vec4(0.0983451754, -0.366773754, 6.0547552e-07, 0.), vec4(3., 0.881812811, 0., 197.),
+    vec4(0.665329874, -0.200658679, 55.4123611, 0.), vec4(3., 1.90167499, 0., 197.), vec4(-0.540343225, -0.0786107108, -6.0547552e-07, 0.), vec4(6., 0.305512965, 0., 14974949.),
+    vec4(0.154181495, 0.0195732769, 8.61694145, 0.), vec4(8., 0.684028566, 1.25, 2099173.), vec4(0.456601202, 0.46262002, 0., 0.), vec4(1., 1.52707314, 0., 524503.),
+    vec4(0.278615892, -0.0946120024, 6.0547552e-07, 0.), vec4(3., 1.75503492, 0., 197.), vec4(-0.71853596, 0.46262002, 0., 0.), vec4(1., 0.351936013, 0., 524288.),
+    vec4(-0.568558812, -0.0706100613, -6.0547552e-07, 0.), vec4(6., 0.276184976, 0., 14974949.), vec4(-0.512127578, -0.0866113529, -6.0547552e-07, 0.), vec4(6., 0.334840953, 0., 14974949.),
+    vec4(-0.913049102, 0.1224152, 0., 3.), vec4(9., 0.974637866, 0., 0.), vec4(-0.689207971, 0.46262002, 0., 0.), vec4(1., 0.381264001, 0., 524288.),
+    vec4(-0.943213224, 0.1224152, 0., 3.), vec4(9., 1.00480199, 0., 0.), vec4(-0.146640003, -0.219256192, -6.0547552e-07, 0.), vec4(8., 1.67384839, 0.75, 2367461.),
+    vec4(0.278616041, 0.46262002, 0., 0.), vec4(1., 1.34908795, 0.25, 524498.), vec4(-0.689207971, 0.374635994, 0., 1.), vec4(0., 0.381264061, 0., 262144.),
+    vec4(-1.03370559, 0.1224152, 0., 3.), vec4(9., 1.09529436, 0., 0.), vec4(-0.278615952, 0.286651999, 0., 2.), vec4(7., 0.791855991, 0.75, 1048580.),
+    vec4(-1.070472, 0.433292031, 0., 3.), vec4(9., 1.44293761, 0., 0.), vec4(-1.070472, 0.403964043, 0., 3.), vec4(9., 1.41360962, 0., 0.),
+    vec4(-0.10264805, 0.46262002, 0., 0.), vec4(1., 0.967823863, 0., 524306.), vec4(-0.293986022, -0.401531875, -6.0547552e-07, 0.), vec4(6., 1.03055835, 0., 14974951.),
+    vec4(-0.744749188, -0.0206505954, -6.0547552e-07, 0.), vec4(6., 0.093048431, 0., 14974949.), vec4(0.508659422, -0.417219996, 6.0547552e-07, 0.), vec4(3., 0.444500566, 0., 197.),
+    vec4(-0.0503603518, -0.417219996, -6.0547552e-07, 0.), vec4(8., 1.37960494, 0., 2363365.), vec4(-0.420706451, 0.286651999, 0., 2.), vec4(7., 0.649765491, 0., 1048580.),
+    vec4(0.0974760875, -0.280923814, 6.0547552e-07, 0.), vec4(3., 0.980942249, 0., 197.), vec4(-0.510707617, 0.286651999, 0., 2.), vec4(7., 0.559764385, 0., 1048580.),
+    vec4(0.722100317, 0.240560994, 0.479957819, 0.), vec4(3., 2.95940113, 0., 2097349.), vec4(-1.070472, 0.315980077, 0., 3.), vec4(9., 1.32562566, 0., 0.),
+    vec4(0.150788769, -0.270579994, 6.0547552e-07, 0.), vec4(3., 1.04064775, 0., 197.), vec4(0.698372543, -0.231049389, 56.1977615, 0.), vec4(3., 1.872347, 0., 197.),
+    vec4(0.749197066, 0.296439469, 12.5581388, 0.), vec4(3., 2.72983599, 1., 2097349.), vec4(-0.468643397, 0.198667988, 0., 3.), vec4(9., 0.453979403, 0., 0.),
+    vec4(0.0733200312, 0.374635994, 0., 1.), vec4(0., 1.14379203, 0., 262153.), vec4(0.726128042, 0.241175234, 0.607692182, 0.), vec4(3., 2.96350718, 0., 2097349.),
+    vec4(-1.070472, 0.374636054, 0., 3.), vec4(9., 1.38428164, 0., 0.), vec4(-0.30794403, 0.46262002, 0., 0.), vec4(1., 0.762527943, 0., 524290.),
+    vec4(-1.070472, 0.345308065, 0., 3.), vec4(9., 1.35495365, 0., 0.), vec4(-1.070472, 0.2573241, 0., 3.), vec4(9., 1.26696968, 0., 0.),
+    vec4(0.0436561033, -0.00662799925, -6.0547552e-07, 0.), vec4(8., 0.874996483, 0., 2363365.), vec4(-0.483911991, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.364168942, 0., 14974949.),
+    vec4(-0.102647893, 0.374635994, 0., 1.), vec4(0., 0.967824101, 0., 262153.), vec4(-0.953159988, 0.286651999, 0., 2.), vec4(7., 0.117312014, 0.5, 0.),
+    vec4(-0.131976083, 0.46262002, 0., 0.), vec4(1., 0.938495874, 0., 524306.), vec4(0.743226707, -0.229174152, 56.9831581, 0.), vec4(3., 1.84301901, 0., 197.),
+    vec4(-0.211115092, 0.374635994, 0., 1.), vec4(0., 0.85935688, 0., 262153.), vec4(0.158655062, -0.417219996, 6.0547552e-07, 0.), vec4(3., 0.794504941, 0., 197.),
+    vec4(-1.070472, 0.198668107, 0., 3.), vec4(9., 1.2083137, 0., 0.), vec4(-0.161304042, 0.46262002, 0., 0.), vec4(1., 0.909167886, 0., 524306.),
+    vec4(0.718860447, 0.240733624, 0.39968437, 0.), vec4(3., 2.97524023, 0., 2097349.), vec4(-0.87263912, 0.198667988, 0., 3.), vec4(9., 0.857975125, 0., 0.),
+    vec4(-0.648642182, 0.198667988, 0., 3.), vec4(9., 0.633978188, 0., 0.), vec4(-0.337271988, 0.46262002, 0., 0.), vec4(1., 0.733199954, 0., 524290.),
+    vec4(-0.395927995, 0.46262002, 0., 0.), vec4(1., 0.674543977, 0., 524290.), vec4(-0.366600007, 0.46262002, 0., 0.), vec4(1., 0.703871965, 0., 524290.),
+    vec4(0.235480487, -0.182595998, 6.0547552e-07, 0.), vec4(3., 1.29959452, 0., 197.), vec4(0.350964516, -0.417219996, -6.0547552e-07, 0.), vec4(3., 0.602195501, 0., 197.),
+    vec4(0.658814609, 0.011963116, 0.0122663286, 0.), vec4(8., 0.240150943, 0.21085988, 2097637.), vec4(0.533754289, 0.227995992, -6.0547552e-07, 0.), vec4(3., 3.54230618, 0., 2097637.),
+    vec4(0.473745316, 0.227995992, -6.0547552e-07, 0.), vec4(3., 3.48229718, 0., 2097637.), vec4(0.653756201, 0.319667488, 0.132795095, 0.), vec4(3., 2.97922397, 0.75, 2097605.),
+    vec4(-0.219960004, -0.133481055, -6.0547552e-07, 0.), vec4(6., 0.666989982, 0., 14974951.), vec4(0.710198402, 0.236070305, 5.70823574, 0.), vec4(3., 2.97128034, 0., 2097349.),
+    vec4(-0.425255954, 0.46262002, 0., 0.), vec4(1., 0.645215988, 0., 524290.), vec4(-1.00354147, 0.1224152, 0., 3.), vec4(9., 1.06513023, 0., 0.),
+    vec4(-0.24126184, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.606819093, 0., 14974951.), vec4(-0.809969485, 0.198667988, 0., 3.), vec4(9., 0.79530549, 0., 0.),
+    vec4(0.862898946, -0.0495368242, -1.56510866, 0.), vec4(2., 0.520726979, 0., 197.), vec4(0.909189403, 0.19418323, -4.9849124, 0.), vec4(2., 0.275725961, 0., 197.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(-0.331748307, -0.0946120024, -6.0547552e-07, 0.), vec4(6., 0.516332626, 0., 14974951.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
@@ -9463,19 +9876,29 @@ const vec4 CV_BAKE[853] = vec4[](
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
     vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
-    vec4(-1., 128., 0., 5.), vec4(-1., 48., 0., 3.), vec4(1., -1., 1., 0.), vec4(0.483337402, 133., 0.983337402, 0.),
-    vec4(-1., -1., 3.9833374, 0.), vec4(0., 124., 0.483337402, 0.), vec4(0.386669934, 74., 0.983337402, 139.), vec4(-1., -1., 0.233337402, -1.),
-    vec4(0., 73., 1.7166748, -1.), vec4(0.833357811, 18., 1.75, -1.), vec4(0.964466214, 37., 1.93334961, -1.), vec4(0.990478575, 47., 1.9833374, -1.),
-    vec4(0., 64., 1.4833374, -1.), vec4(-1., -1., 0.983337402, -1.), vec4(-1., -1., 3.2333374, 0.), vec4(-1., -1., 8.2333374, -1.),
-    vec4(-1., -1., 6.4833374, -1.), vec4(-1., -1., 5.2333374, 192.), vec4(-1., -1., 0.483337402, -1.), vec4(-1., -1., 0.483337402, -1.),
-    vec4(-1., -1., 0.233337402, -1.), vec4(0.817307413, -1., 0., 2.), vec4(0.483337402, 24., 2.7333374, -1.), vec4(0., 26., 4.9833374, -1.),
-    vec4(0.483337402, 114., 1.7333374, -1.), vec4(0.977783203, 67., 1.7333374, 0.), vec4(-1., -1., 26.4833374, -1.), vec4(0.988891602, 82., 1.7333374, -1.),
-    vec4(-1., -1., 0.733337402, -1.), vec4(-1., -1., 10.7333374, -1.), vec4(-1., -1., 0., 0.), vec4(4., 2.38336182, 0., 0.),
-    vec4(10., 0., 0., 0.), vec4(599.983337, 0., 0., 0.), vec4(1.17658031, 0.876907229, 0., 0.), vec4(1.91668701, 1.91668701, 1.91668701, 1.91668701),
-    vec4(1.91668701, 1.91668701, 1.91668701, 1.91668701), vec4(1.70001221, 1.70001221, 1.70001221, 1.70001221), vec4(0., 0., 0., 0.), vec4(0., 0., 0., 0.),
-    vec4(0., 0., 0., 0.), vec4(10., -1., 0., 0.), vec4(10., 24., 0., 0.), vec4(2.9666748, -1., 0., 0.),
-    vec4(10., 26., 0., 0.), vec4(3.2166748, -1., 0., 0.), vec4(9.33388233, 0., 0., 0.), vec4(0.700003564, 0., 0., 0.),
-    vec4(0.333312988, 82., 0.3984375, 0.10546875), vec4(0., 0., 0., 0.), vec4(0., 0., 0., 0.), vec4(0., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.), vec4(9., 9., 0., 0.), vec4(-1., 0., 0., 0.),
+    vec4(-1., 77., 0., 1.), vec4(-1., 73., 0., 3.), vec4(0.5, 53., 0., 1.), vec4(0.233337402, 42., 0.733337402, 0.),
+    vec4(0.733337402, 15., 5.2333374, 0.), vec4(0.733337402, 79., 1.7333374, 0.), vec4(0.986669958, 32., 1.7333374, 57.), vec4(-1., -1., 1.7333374, 96.),
+    vec4(-1., -1., 0.866699219, -1.), vec4(0.600000024, 56., 1.25, -1.), vec4(0.720000029, 48., 1.43334961, -1.), vec4(0.704764247, 66., 1.4833374, -1.),
+    vec4(-1., -1., 1.7333374, -1.), vec4(0.977783203, 23., 2.2333374, -1.), vec4(-1., -1., 2.4833374, 0.), vec4(0.966674805, 19., 1.2333374, -1.),
+    vec4(0., 26., 21.7333374, -1.), vec4(-1., -1., 20.4833374, 180.), vec4(-1., -1., 17.7333374, -1.), vec4(0.64444989, 58., 1.7333374, -1.),
+    vec4(0.64444989, 105., 1.7333374, -1.), vec4(0.649038374, -1., 0., 5.), vec4(0.733337402, 75., 1.7333374, -1.), vec4(-1., -1., 0.233337402, -1.),
+    vec4(0.233337402, 76., 0.983337402, -1.), vec4(0., 13., 0.983337402, 0.), vec4(-1., -1., 40.9833374, -1.), vec4(0.488891602, 123., 6.4833374, -1.),
+    vec4(-1., -1., 0.233337402, -1.), vec4(0.977783203, 21., 1.2333374, -1.), vec4(-1., 103., 0., 4.), vec4(4., 2.38336182, 0., 0.),
+    vec4(10., 0., 0., 0.), vec4(599.983337, 0., 0., 0.), vec4(6.17658281, 0.876907229, 0., 0.), vec4(10., 10., 10., 10.),
+    vec4(1.91668701, 1.91668701, 1.91668701, 1.91668701), vec4(1.91668701, 1.91668701, 1.91668701, 1.91668701), vec4(0., 0., 0., 0.), vec4(0., 0., 0., 0.),
+    vec4(0., 0., 0., 0.), vec4(10., -1., 0., 0.), vec4(10., 75., 0., 0.), vec4(4.2166748, 23., 0., 0.),
+    vec4(10., -1., 0., 0.), vec4(10., -1., 0., 0.), vec4(1.08388209, 0., 0., 0.), vec4(1., 0., 0., 0.),
+    vec4(6.83331299, 122., 0.32421875, 0.443359375), vec4(0., 0., 0., 0.), vec4(0., 0., 0., 0.), vec4(0., 0., 0., 0.),
     vec4(0., 0., 0., 0.)
 );
 
