@@ -5,6 +5,7 @@ import { setTimeout as sleep } from "node:timers/promises";
 
 export const display = ":9";
 export const hostDisplay = process.env.DISPLAY || ":0";
+export const headless = process.env.CRDP_BACKEND === "xvfb";
 export const state = join(process.env.XDG_RUNTIME_DIR || "/tmp", "crdp");
 mkdirSync(state, { recursive: true });
 

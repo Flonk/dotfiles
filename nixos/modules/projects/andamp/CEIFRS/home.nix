@@ -53,6 +53,7 @@ let
         --set CRDP_PORT_FILE ${config.sops.secrets.rdp3itport.path} \
         --set CRDP_USER_FILE ${config.sops.secrets.rdp3ituser.path} \
         --set CRDP_PASS_FILE ${config.sops.secrets.rdp3itpass.path} \
+        --set CRDP_BACKEND ${config.skynet.module.projects.andamp.crdpBackend} \
         --set CRDP_WORKSPACES ${
           lib.escapeShellArg (
             builtins.toJSON (lib.mapAttrs (_: key: config.sops.secrets.${key}.path) workspaces)
@@ -67,6 +68,7 @@ let
             pkgs.xclip
             pkgs.wl-clipboard
             pkgs.imagemagick
+            pkgs.xorg-server
           ]
         }
     '';

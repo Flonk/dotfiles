@@ -16,6 +16,13 @@ in
       type = types.bool;
       default = false;
     };
+    crdpBackend = mkOption {
+      type = types.enum [
+        "xephyr"
+        "xvfb"
+      ];
+      default = "xephyr";
+    };
     doubletunnel = mkOption {
       type = types.bool;
       default = false;

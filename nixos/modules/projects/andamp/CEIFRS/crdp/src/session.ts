@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { alive, die, display, hostDisplay, kill, ok, readSecret, spawnDetached, state, waitFor } from "./proc.js";
+import { alive, die, display, headless, hostDisplay, kill, ok, readSecret, spawnDetached, state, waitFor } from "./proc.js";
 import { geometry, xUp } from "./x11.js";
 
 const tiled = () => geometry() !== "640x480";
@@ -16,7 +16,8 @@ export async function start(size?: string): Promise<void> {
     die("already running");
   }
   if (!xUp()) {
-    spawnDetached("xephyr", "auto-xephyr", [], { DISPLAY: hostDisplay });
+    if (headless) spawnDetached("xephyr", "Xvfb", [display, "-screen", "0", "1920x1080x24"]);
+    else spawnDetached("xephyr", "auto-xephyr", [], { DISPLAY: hostDisplay });
     if (!(await waitFor(40, xUp))) die(`Xephyr did not come up, see ${join(state, "xephyr.log")}`);
     await waitFor(12, tiled);
   }
@@ -32,7 +33,7 @@ export async function start(size?: string): Promise<void> {
     "+rfx",
     "+clipboard",
   ]);
-  if (!alive("clip")) {
+  if (!headless && !alive("clip")) {
     spawnDetached("clip", "wl-paste", ["--type", "text", "--watch", "xclip", "-selection", "clipboard", "-i"]);
   }
   if (!(await waitFor(120, connected))) die(`no session window, see ${join(state, "freerdp.log")}`);
@@ -42,7 +43,7 @@ export async function start(size?: string): Promise<void> {
 
 export function stop(): void {
   for (const name of ["keepalive", "clip", "freerdp", "xephyr"]) kill(name);
-  ok("pkill", "-f", `Xephyr ${display} `);
+  ok("pkill", "-f", `(Xephyr|Xvfb) ${display} `);
 }
 
 export function status(): void {

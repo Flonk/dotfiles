@@ -18,6 +18,10 @@
     development = {
       obsidian.enable = true;
     };
-    projects.andamp.doubletunnel = true;
+    projects.andamp = {
+      CEIFRS = true;
+      crdpBackend = "xvfb";
+      doubletunnel = true;
+    };
   };
 }

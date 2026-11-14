@@ -8,4 +8,6 @@
 
   skynet.whoami.installation = "claude-hetzner";
 
+  dconf.enable = false;
+
 }
