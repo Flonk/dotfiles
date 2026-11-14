@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { js } from "./js.js";
+import { js, markUnverified } from "./js.js";
 import { die, display, run, state } from "./proc.js";
 import { keepalive, start, status, stop } from "./session.js";
 import { begin, end, hold, transactionFlag, unlock, within } from "./transaction.js";
@@ -17,8 +17,10 @@ crdp key KEY...        e.g. ctrl+s super+r Return
 crdp paste TEXT        put TEXT on the session clipboard and ctrl+v it
 crdp clip              print the session clipboard
 crdp edge [url]        open url in InPrivate Edge via Win+R (new tab if an InPrivate window exists)
-crdp js [--workspace W] CODE|FILE|-
+crdp js [--workspace W] [--focused] CODE|FILE|-
                        run CODE as an async function body in the focused DevTools console, prints the returned value as JSON
+                       after start, click, dclick, type, key, paste or edge it refuses to paste until rerun with --focused:
+                       check crdp shot first that the Console prompt has the cursor, otherwise the code lands in the page
                        W is ${Object.keys(JSON.parse(process.env.CRDP_WORKSPACES ?? "{}")).join(" | ")}, the tab is navigated there first unless it's already open
                        calls are queued globally and run one at a time, waiters report their position on stderr
                        --transaction T (or CRDP_TRANSACTION=T) runs inside transaction T, skipping the queue
@@ -46,6 +48,7 @@ async function edge(url = ""): Promise<void> {
 
 async function main(): Promise<void> {
   if (screen.includes(cmd)) within(token ?? die(`${cmd} needs --transaction T (or CRDP_TRANSACTION=T), see crdp transaction start`));
+  if (["start", "click", "dclick", "type", "key", "paste", "edge"].includes(cmd)) markUnverified([cmd, ...args].join(" ").slice(0, 80));
   switch (cmd) {
     case "start":
       return start(args[0]);
