@@ -82,9 +82,6 @@
         CEFKM = true;
         CEIFRS = true;
       };
-      personal = {
-        dwain.enable = true;
-      };
     };
   };
 }

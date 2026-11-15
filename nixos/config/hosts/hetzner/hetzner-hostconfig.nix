@@ -15,6 +15,9 @@
       ];
     };
 
-    module = { };
+    module.projects.personal.smallweb = {
+      enable = true;
+      host = "188.245.217.118";
+    };
   };
 }
