@@ -29,6 +29,7 @@
     ../modules/desktop/google-chrome/options.nix
     ../modules/desktop/hyprland/options.nix
     ../modules/desktop/i18n/options.nix
+    ../modules/desktop/mazama/options.nix
     ../modules/desktop/qutebrowser/options.nix
     ../modules/desktop/gloxwald/options.nix
     ../modules/desktop/stylix/options.nix

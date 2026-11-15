@@ -30,6 +30,7 @@
     ../../modules/desktop/google-chrome/home.nix
     ../../modules/desktop/hyprland/home.nix
     ../../modules/desktop/i18n/home.nix
+    ../../modules/desktop/mazama/home.nix
     ../../modules/desktop/qutebrowser/home.nix
     ../../modules/desktop/gloxwald/home.nix
     ../../modules/desktop/stylix/home.nix

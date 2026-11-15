@@ -33,6 +33,7 @@
       foot.enable = true;
       "google-chrome".enable = true;
       i18n.enable = true;
+      mazama.enable = true;
       qutebrowser.enable = true;
       gloxwald.enable = true;
       stylix = {

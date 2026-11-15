@@ -30,6 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    mazama = {
+      url = "github:Flonk/mazama";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     gloxwald = {
       url = "path:../gloxwald";
       inputs.nixpkgs.follows = "nixpkgs";

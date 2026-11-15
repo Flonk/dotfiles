@@ -337,6 +337,26 @@
         "type": "github"
       }
     },
+    "mazama": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794701097,
+        "narHash": "sha256-jxQR2RLbPr53D4NCdigTGAP/K2SaPeGOx46Wr/2HnSk=",
+        "owner": "Flonk",
+        "repo": "mazama",
+        "rev": "b4c751c90b529b14571405a6d9ca0eac5b2b4ed3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Flonk",
+        "repo": "mazama",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1778869304,
@@ -496,6 +516,7 @@
         "balaclava": "balaclava",
         "gloxwald": "gloxwald",
         "home-manager": "home-manager",
+        "mazama": "mazama",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-2405": "nixpkgs-2405",
         "sops-nix": "sops-nix",
