@@ -19,7 +19,7 @@ let
     entries=$(${pkgs.jq}/bin/jq -r '
       to_entries[]
       | select(.value.user? and .value.ip?)
-      | [.key, .value.user, .value.ip]
+      | [.key, .value.user, .value.ip, (.value.knock // false | tostring)]
       | join("\t")
     ' "$REGISTRY")
 
@@ -34,6 +34,27 @@ let
       --query="''${1:-}" --select-1 --exit-0
   '';
 
+  sops = config.skynet.module.core.sops.enable;
+
+  knock = pkgs.writeShellScript "skynet-ssh-knock.sh" (
+    if sops then
+      ''
+        set -euo pipefail
+        rc=$(mktemp)
+        trap 'rm -f "$rc"' EXIT
+        printf '[default]\n\n[target]\nSPA_SERVER %s\nACCESS tcp/22\nALLOW_IP source\nUSE_HMAC Y\nKEY_BASE64 %s\nHMAC_KEY_BASE64 %s\n' \
+          "$1" "$(cat ${config.sops.secrets.fwknop-key.path})" "$(cat ${config.sops.secrets.fwknop-hmac.path})" > "$rc"
+        echo "Knocking on $1..."
+        ${pkgs.fwknop}/bin/fwknop --rc-file "$rc" -n target
+        sleep 1
+      ''
+    else
+      ''
+        echo "fwknop keys need core.sops enabled" >&2
+        exit 1
+      ''
+  );
+
   sshScript = pkgs.writeShellScript "skynet-ssh.sh" ''
     set -euo pipefail
 
@@ -42,6 +63,8 @@ let
     user=$(echo "$selected" | cut -f2)
     ip=$(echo "$selected" | cut -f3)
     host=$(echo "$selected" | cut -f1)
+
+    [[ $(echo "$selected" | cut -f4) == true ]] && ${knock} "$ip"
 
     echo "Connecting to $host ($user@$ip)..."
     exec ${pkgs.openssh}/bin/ssh "$user@$ip"
@@ -66,6 +89,8 @@ let
     fi
     ${pkgs.git}/bin/git push
 
+    [[ $(echo "$selected" | cut -f4) == true ]] && ${knock} "$ip"
+
     echo "→ Rebuilding $installation on $ip..."
     exec ${pkgs.openssh}/bin/ssh -t "$user@$ip" \
       "cd ~/repos/personal/dotfiles && git pull && home-manager switch --flake ./nixos#$installation"
@@ -73,6 +98,11 @@ let
 in
 {
   config = lib.mkIf config.skynet.module.core.ssh.enable {
+    sops.secrets = lib.mkIf sops {
+      fwknop-key.sopsFile = ./secrets/fwknop.json;
+      fwknop-hmac.sopsFile = ./secrets/fwknop.json;
+    };
+
     skynet.cli.scripts = [
       {
         command = [ "ssh" ];

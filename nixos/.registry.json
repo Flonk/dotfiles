@@ -6,6 +6,7 @@
     "user": "claude",
     "hostname": "claw",
     "ip": "188.245.217.118",
+    "knock": true,
     "sshPublicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGgUI7jQvMZykHaz8OdaxHRuW9Tgx7XCPodIwBL8XbRz root@claw"
   },
   "flo-ebert": {

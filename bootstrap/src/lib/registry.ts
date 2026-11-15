@@ -7,6 +7,7 @@ interface RegistryEntry {
   hostname: string;
   ip: string;
   sshPublicKey: string;
+  knock?: boolean;
 }
 
 export async function updateRegistry(
@@ -37,6 +38,7 @@ export async function updateRegistry(
   );
 
   registry[installationName] = {
+    ...registry[installationName],
     user: user || "",
     hostname: hostname || "",
     ip: ip || host,

@@ -22,6 +22,16 @@ in
         type = types.listOf types.str;
         default = [ ];
       };
+      knock = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+        };
+        interface = mkOption {
+          type = types.str;
+          default = "eth0";
+        };
+      };
     };
 
     primaryMonitor = {
