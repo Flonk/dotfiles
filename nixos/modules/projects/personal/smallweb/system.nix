@@ -10,9 +10,9 @@ let
   repo = "${state}/homepage";
   site = "${repo}/t3";
   env = {
-    GOPHER_HOST = cfg.host;
+    GOPHER_HOST = cfg.gopherHost;
     GOPHER_PORT = "70";
-    GEMINI_HOST = cfg.host;
+    GEMINI_HOST = cfg.geminiHost;
     GEMINI_PORT = "1965";
     HOME = state;
   };
@@ -62,7 +62,7 @@ in
         cd ${repo}
         git fetch origin main
         target=$(git rev-parse origin/main)
-        if [ -f ${state}/built ] && [ "$(cat ${state}/built)" = "$target" ] && [ -f t3/dist/gopher/gophermap ]; then
+        if [ -f ${state}/built ] && [ "$(cat ${state}/built)" = "$target ${cfg.gopherHost} ${cfg.geminiHost}" ] && [ -f t3/dist/gopher/gophermap ]; then
           exit 0
         fi
         git reset --hard "$target"
@@ -71,7 +71,7 @@ in
         mkdir -p ${state}/gemini-cert node_modules/.cache
         ln -sfn ${state}/gemini-cert node_modules/.cache/gemini
         npm run build
-        echo "$target" > ${state}/built
+        echo "$target ${cfg.gopherHost} ${cfg.geminiHost}" > ${state}/built
       '';
       serviceConfig = base // {
         Type = "oneshot";

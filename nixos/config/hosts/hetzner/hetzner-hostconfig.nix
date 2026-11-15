@@ -17,7 +17,8 @@
 
     module.projects.personal.smallweb = {
       enable = true;
-      host = "188.245.217.118";
+      gopherHost = "gopher.t3.at";
+      geminiHost = "gemini.t3.at";
     };
   };
 }

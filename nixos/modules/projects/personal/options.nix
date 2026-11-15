@@ -9,7 +9,11 @@ in
         type = types.bool;
         default = false;
       };
-      host = mkOption {
+      gopherHost = mkOption {
+        type = types.str;
+        default = "localhost";
+      };
+      geminiHost = mkOption {
         type = types.str;
         default = "localhost";
       };
