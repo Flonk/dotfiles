@@ -12,10 +12,15 @@ Item {
     // Per-surface frame counter; also drives the shared clock in LockContext
     // (frameTick ignores all but the first surface that ever ticked)
     property int _iFrame: 0
+    property bool _presented: false
     Connections {
         target: root.Window.window
         function onFrameSwapped() {
             root._iFrame += 1;
+            if (!root._presented) {
+                root._presented = true;
+                root._reloadShader();
+            }
             // black surfaces barely repaint — they can't sustain the clock
             // loop, so never own it
             if (root.renderScene) root.context.frameTick(root);
@@ -39,9 +44,10 @@ Item {
     }
 
     onRenderSceneChanged: _reloadShader()
-    Component.onCompleted: _reloadShader()
 
     function _reloadShader() {
+        if (!_presented)
+            return;
         if (!renderScene) {
             shaderLoader.setSource("");
             return;
@@ -57,6 +63,7 @@ Item {
     Loader {
         id: shaderLoader
         anchors.fill: parent
+        asynchronous: true
     }
 
     // ---- Keypress dot indicator (for shaders without built-in feedback) ----
