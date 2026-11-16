@@ -44,7 +44,7 @@ const float CV_ROWOFF  = 0.0227;
 #define CVG(j) ((j) * CV_CELL)
 
 const float CV_HALF_W  = 1.07;
-const float CV_HALF_H  = 0.5;
+const float CV_HALF_H  = CV_HALF_W / 1.6;
 const float CV_CX      = -0.05;
 const float CV_CY      = 0.06;
 const float CV_TANK_Y  = CVG(-12.);
