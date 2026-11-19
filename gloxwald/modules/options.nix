@@ -4,12 +4,8 @@ let
   asciiDefault = builtins.readFile ../ascii.txt;
 
   lockScript = pkgs.writeShellScript "gloxwald-lock" ''
-    uid=$(id -u)
     for i in $(seq 20); do
-      id=$(ls -t /run/user/"$uid"/quickshell/by-id/ 2>/dev/null | head -1)
-      if [ -n "$id" ]; then
-        ${pkgs.quickshell}/bin/quickshell ipc -i "$id" call lock lock && exit 0
-      fi
+      ${pkgs.quickshell}/bin/quickshell ipc call lock lock && exit 0
       sleep 0.5
     done
     exit 1
