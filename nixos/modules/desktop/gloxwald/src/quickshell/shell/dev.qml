@@ -162,7 +162,7 @@ FloatingWindow {
             win.reloadTab();
         }
         function state(): string {
-            return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
+            return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, dock: win.dock, logOpen: win.logOpen, geo: [sidebar, sideScroll, logBox, stage].map(i => [Math.round(i.x), Math.round(i.y), Math.round(i.width), Math.round(i.height)]), grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
         }
     }
 
