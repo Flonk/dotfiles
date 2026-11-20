@@ -33,7 +33,7 @@ in
       size = mkOption {
         type = types.int;
         default = 10;
-        description = "Pixel size of the T3 label text used by the chrome header and qutebrowser tabs";
+        description = "Pixel size of the T3 label text used by the chrome header, hy3 tabs and qutebrowser tabs";
       };
       tracking = mkOption {
         type = types.float;
