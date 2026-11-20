@@ -29,6 +29,12 @@ in
       };
     };
 
+    qutebrowser.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "T3 chrome styling for qutebrowser (only applies when qutebrowser is enabled)";
+    };
+
     stylix = {
       enable = mkOption {
         type = types.bool;
