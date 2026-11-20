@@ -850,12 +850,20 @@ FloatingWindow {
             visible: win.tabName === "greeter"
 
             Frame {
+                ChromeSurface {
+                    anchors.fill: parent
+                }
+
                 TermView {
                     id: term
                     anchors.fill: parent
+                    anchors.topMargin: 44
+                    anchors.leftMargin: 8
+                    anchors.rightMargin: 8
+                    anchors.bottomMargin: 8
                     active: win.tabName === "greeter"
                     fg: Theme.app600
-                    bg: Theme.app100
+                    bg: "transparent"
                     fontFamily: win.theme.fontFamily ?? "monospace"
                     onColsChanged: termResize.restart()
                     onRowsChanged: termResize.restart()

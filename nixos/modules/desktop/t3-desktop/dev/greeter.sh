@@ -17,7 +17,7 @@ start() {
     local cols=$1 rows=$2
     "${T[@]}" kill-session -t greeter 2>/dev/null || true
     local cmd
-    cmd=$(printf 'while :; do env -u TMUX TERM=xterm-kitty COLORTERM=truecolor %q --test --ascii %q --user %q --bg %q --fg %q --accent %q; sleep 0.3; done' \
+    cmd=$(printf 'while :; do env -u TMUX TERM=xterm-kitty COLORTERM=truecolor %q --test --transparent --ascii %q --user %q --bg %q --fg %q --accent %q; sleep 0.3; done' \
         "$DEV/t3greet" "$ROOT/ascii.txt" "$USER" \
         "$(theme app100 '#0b0e14')" "$(theme app600 '#e6e1cf')" "$(theme wm800 '#ff9624')")
     "${T[@]}" new-session -d -s greeter -x "$cols" -y "$rows" "$cmd" \; \
