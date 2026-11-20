@@ -349,8 +349,20 @@ in
           echo ""
           echo "Updating flake inputs..."
           nix flake update ~/repos/personal/dotfiles
+          export SKYNET_REPO=~/repos/personal/dotfiles
+          failed=()
+          ${lib.concatMapStringsSep "\n" (u: ''
+            echo ""
+            echo "Running updater: ${u.name}"
+            ${u.script} || failed+=(${lib.escapeShellArg u.name})
+          '') config.skynet.cli.updaters}
+          if ((''${#failed[@]})); then
+            echo ""
+            echo "Failed updaters: ''${failed[*]}" >&2
+            exit 1
+          fi
         '';
-        usage = "Runs nix flake update to fetch the latest versions of all flake inputs.";
+        usage = "Runs nix flake update, then every updater registered via skynet.cli.updaters.";
       }
       {
         command = [ "rebuild" ];

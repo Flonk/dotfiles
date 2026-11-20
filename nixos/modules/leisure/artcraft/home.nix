@@ -6,18 +6,19 @@
 }:
 let
   cfg = config.skynet.module.leisure.artcraft;
+  versions = lib.importJSON ./versions.json;
+  jq = "${pkgs.jq}/bin/jq";
 
   mkCraft =
     {
       pname,
-      version,
-      sha256,
       wrapperArgs ? "",
     }:
     let
+      inherit (versions.${pname}) version hash;
       src = pkgs.fetchurl {
         url = "https://github.com/storytold/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-        inherit sha256;
+        inherit hash;
       };
       contents = pkgs.appimageTools.extract { inherit pname version src; };
     in
@@ -32,25 +33,46 @@ let
 
   photocraft = mkCraft {
     pname = "photocraft";
-    version = "0.5.0";
-    sha256 = "f54d863807053bbdfcffa0d624ef7e49d3fd41310c7bb1ede48536f69929d22f";
     wrapperArgs = "--set PHOTOCRAFT_NO_DESKTOP_INTEGRATION 1";
   };
 
   filmcraft = mkCraft {
     pname = "filmcraft";
-    version = "0.4.0";
-    sha256 = "d8410dea7b2b064ede1ead87dd894bca3537a4dfda1a44297158849f56ba2d4c";
   };
 
   vectorcraft = mkCraft {
     pname = "vectorcraft";
-    version = "0.7.0";
-    sha256 = "f6928f9adf423ad0a145ebfe3b142a95d3d26f550b05249c2012145701f98b60";
   };
+
+  updater = pkgs.writeShellScript "artcraft-update.sh" ''
+    set -euo pipefail
+    file="$SKYNET_REPO/nixos/modules/leisure/artcraft/versions.json"
+    for app in ${lib.concatStringsSep " " (builtins.attrNames versions)}; do
+      current=$(${jq} -r --arg a "$app" '.[$a].version' "$file")
+      latest=$(${pkgs.curl}/bin/curl -fsSL "https://api.github.com/repos/storytold/$app/releases/latest" | ${jq} -r '.tag_name | ltrimstr("v")')
+      if [[ "$current" == "$latest" ]]; then
+        echo "$app: $current (up to date)"
+        continue
+      fi
+      url="https://github.com/storytold/$app/releases/download/v$latest/$app-$latest-linux-x86_64.AppImage"
+      hash=$(nix store prefetch-file --json "$url" | ${jq} -r .hash)
+      tmp=$(mktemp)
+      ${jq} --arg a "$app" --arg v "$latest" --arg h "$hash" '.[$a] = {version: $v, hash: $h}' "$file" > "$tmp"
+      mv "$tmp" "$file"
+      echo "$app: $current -> $latest"
+    done
+  '';
 in
 {
   config = lib.mkMerge [
+    (lib.mkIf (cfg.photocraft.enable || cfg.filmcraft.enable || cfg.vectorcraft.enable) {
+      skynet.cli.updaters = [
+        {
+          name = "artcraft";
+          script = updater;
+        }
+      ];
+    })
     (lib.mkIf cfg.photocraft.enable {
       home.packages = [ photocraft ];
 

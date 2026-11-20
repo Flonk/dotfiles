@@ -36,3 +36,17 @@ skynet.cli.scripts = [{
 ```
 
 - For sub-fzf scripts (like sops), use `config.skynet.cli.fzfThemeArgs` for consistent styling
+
+## Skynet Updaters
+
+Modules that pin versions by hand (fetchurl + hash) register an updater so `skynet update` bumps them after `nix flake update`:
+
+```nix
+skynet.cli.updaters = [{
+  name = "artcraft";
+  script = pkgs.writeShellScript "artcraft-update.sh" ''...'';
+}];
+```
+
+- The script runs with `SKYNET_REPO` set to the dotfiles checkout and edits pinned data in place (e.g. a `versions.json` next to the module, read via `lib.importJSON`)
+- See `nixos/modules/leisure/artcraft/` for the reference implementation
