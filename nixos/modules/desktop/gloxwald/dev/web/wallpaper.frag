@@ -17,6 +17,7 @@ uniform sampler2D dotsTex;
 uniform sampler2D grainTex;
 uniform sampler2D gradientTex;
 uniform sampler2D markTex;
+uniform sampler2D ampTex;
 
 out vec4 fragColor;
 
@@ -92,9 +93,49 @@ float mastheadDots(vec2 p) {
     return cover / 16.0 * fade;
 }
 
+const float AMP_HEIGHT = 340.0;
+const vec2 AMP_MARGIN = vec2(56.0, 48.0);
+const vec3 AMP_GREY = vec3(0.155);
+const float AMP_DEPTH = 7.0;
+const vec2 LIGHT = vec2(0.70710678, 0.70710678);
+
+vec2 ampCenter() {
+    return vec2(border + AMP_MARGIN.x + AMP_HEIGHT * 0.42, screenSize.y - border - AMP_MARGIN.y - AMP_HEIGHT * 0.5);
+}
+
+float ampDist(vec2 p) {
+    vec2 g = (p - ampCenter()) / AMP_HEIGHT;
+    g.y = -g.y;
+    float far = length(g) - 0.66;
+    if (far > 0.05)
+        return far * AMP_HEIGHT;
+    vec3 t = texture(ampTex, vec2(g.x, -g.y) / 1.5 + 0.5).rgb;
+    float dj = (t.r - 0.5) * 0.25;
+    float dp = (t.g - 0.5) * 0.25;
+    return max(min(dj, max(dp, 0.0464 - dj)), far) * AMP_HEIGHT;
+}
+
+vec3 sunkenAmp(vec2 p, vec3 c) {
+    float d = ampDist(p);
+    if (d > 2.0)
+        return c;
+    float inside = clamp(0.5 - d, 0.0, 1.0);
+    vec2 e = vec2(0.75, 0.0);
+    vec2 n = normalize(vec2(ampDist(p + e.xy) - ampDist(p - e.xy), ampDist(p + e.yx) - ampDist(p - e.yx)) + 1e-6);
+    float wall = 1.0 - smoothstep(0.0, 2.5, -d);
+    float dropped = 0.0;
+    for (int i = 1; i <= 6; i++)
+        dropped += smoothstep(-0.75, 0.75, ampDist(p - LIGHT * AMP_DEPTH * float(i) / 6.0));
+    dropped /= 6.0;
+    float lit = wall * max(dot(n, LIGHT), 0.0);
+    float shade = max(dropped, wall * max(-dot(n, LIGHT), 0.0));
+    vec3 floor_ = AMP_GREY * (1.0 - 0.85 * shade) + 0.16 * lit;
+    return mix(c, floor_, inside);
+}
+
 vec3 wallpaper(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-    vec3 c = mix(ground, grain.rgb, grain.a);
+    vec3 c = mix(sunkenAmp(p, ground), grain.rgb, grain.a);
     return mix(c, accent, 0.55 * mastheadDots(p));
 }
 

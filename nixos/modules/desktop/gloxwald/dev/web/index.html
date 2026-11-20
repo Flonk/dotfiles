@@ -160,7 +160,7 @@ function frame() {
     gl.uniform3fv(u('ground'), hex(palette.ground || '#0b0f12'));
     gl.uniform3fv(u('accent'), hex(palette.accent || '#1d9eb6'));
     gl.uniform4f(u('markRect'), Math.round(w / 2 - T3.markSize / 2), Math.round((T3.band - T3.markSize) / 2), T3.markSize, T3.markSize);
-    [['noiseTex', 'noise'], ['dotsTex', 'dots'], ['grainTex', 'grain'], ['gradientTex', 'gradient'], ['markTex', 'mark']]
+    [['noiseTex', 'noise'], ['dotsTex', 'dots'], ['grainTex', 'grain'], ['gradientTex', 'gradient'], ['markTex', 'mark'], ['ampTex', 'amp']]
       .forEach(([name, key], i) => {
         gl.activeTexture(gl.TEXTURE0 + i);
         gl.bindTexture(gl.TEXTURE_2D, textures[key]);
@@ -181,6 +181,7 @@ function frame() {
   textures.noise = texture(await loadImage(CHROME + 'noise.png'), false);
   textures.dots = texture(await loadImage(CHROME + 'dots.png'), false);
   textures.grain = texture(await loadImage(CHROME + 'grain.png'), true);
+  textures.amp = texture(await loadImage('../../src/quickshell/lockscreen/shaders/assets/yamp_sdf.png'), false);
   await document.fonts.ready;
   textures.mark = texture(markCanvas(), false);
   size();
