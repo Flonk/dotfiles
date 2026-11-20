@@ -160,12 +160,13 @@ Flickable {
         property alias loader: ld
         property Component bar
         property real s: 1
+        property int h: 20
         width: root.frameW * s
-        height: 20 * s
+        height: h * s
 
         Item {
             width: root.frameW
-            height: 20
+            height: strip.h
             scale: strip.s
             transformOrigin: Item.TopLeft
 
@@ -192,7 +193,7 @@ Flickable {
         width: root.width - 48
         spacing: 6
 
-        GroupTitle { text: "bar  " + root.frameW + "px  @ " + root.zoom + "x" }
+        GroupTitle { text: "header + bar  " + root.frameW + "px  @ " + root.zoom + "x" }
 
         Item {
             id: overview
@@ -246,6 +247,24 @@ Flickable {
 
                 BarStrip {
                     s: root.zoom
+                    h: T3.band
+                    bar: Component {
+                        ChromeHeader {
+                            screenSize: Qt.vector2d(root.frameW, T3.band)
+                            monitor: Hyprland.focusedMonitor
+                        }
+                    }
+                }
+
+                Text {
+                    x: barScroll.contentX
+                    text: "BarContent (lockscreen bar)"
+                    color: "#66ffffff"
+                    font.pixelSize: 11
+                }
+
+                BarStrip {
+                    s: root.zoom
                     bar: Component {
                         BarContent {
                             monitor: Hyprland.focusedMonitor
@@ -256,7 +275,7 @@ Flickable {
 
                 Text {
                     x: barScroll.contentX
-                    text: "lockscreen variant"
+                    text: "BarContent, lockscreen variant"
                     color: "#66ffffff"
                     font.pixelSize: 11
                 }

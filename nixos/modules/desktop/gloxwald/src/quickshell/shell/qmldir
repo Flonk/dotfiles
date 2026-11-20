@@ -1,4 +1,5 @@
 singleton Theme Theme.qml
+singleton T3 T3.qml
 singleton Clipboard Clipboard.qml
 singleton SystemMonitor SystemMonitor.qml
 singleton VolumeWidget VolumeWidget.qml
@@ -7,8 +8,6 @@ singleton HeadphonesWidget HeadphonesWidget.qml
 singleton MediaControlWidget MediaControlWidget.qml
 singleton WifiWidget WifiWidget.qml
 singleton LanguageWidget LanguageWidget.qml
-Bar 1.0 Bar.qml
-BarWindow 1.0 BarWindow.qml
 BarContent 1.0 BarContent.qml
 BarSegment 1.0 BarSegment.qml
 BarText 1.0 BarText.qml
@@ -26,3 +25,7 @@ LockSceneTools 1.0 LockSceneTools.qml
 TermView 1.0 TermView.qml
 GrubView 1.0 GrubView.qml
 BarGallery 1.0 BarGallery.qml
+Chrome 1.0 Chrome.qml
+ChromeScreen 1.0 ChromeScreen.qml
+ChromeHeader 1.0 ChromeHeader.qml
+ChromeSurface 1.0 ChromeSurface.qml

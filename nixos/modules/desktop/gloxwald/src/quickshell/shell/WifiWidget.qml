@@ -17,6 +17,24 @@ Singleton {
     property string publicIp: ""
     property var _lastSample: null
 
+    function formatRate(bytesPerSecond: real): string {
+        const units = ["B", "K", "M", "G", "T"];
+        let value = Number(bytesPerSecond);
+        let unit = 0;
+        if (!isFinite(value) || value <= 0)
+            return "  0B";
+        while (value >= 1000 && unit < units.length - 1) {
+            value /= 1000;
+            unit++;
+        }
+        const mantissa = unit === 0 || value >= 10 ? Math.round(value).toString() : value.toFixed(1);
+        return mantissa.padStart(3, " ") + units[unit];
+    }
+
+    function openCommander(): void {
+        Quickshell.execDetached(["xdg-open", "vicinae://launch/@dagimg-dot/store.vicinae.wifi-commander/scan-wifi"]);
+    }
+
     function run(proc): void {
         if (!proc.running)
             proc.running = true;

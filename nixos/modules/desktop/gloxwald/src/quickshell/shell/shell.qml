@@ -5,7 +5,7 @@ import Quickshell.Wayland
 import Quickshell.Io
 
 ShellRoot {
-    Bar {}
+    Chrome {}
 
     LockContext {
         id: lockContext
