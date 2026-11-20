@@ -27,7 +27,6 @@
   boot.kernelPackages = pkgs.linuxPackages_latest; # currently 7.0.12
 
   boot.initrd.kernelModules = [ "xe" ];
-  boot.initrd.systemd.enable = true;
   boot.blacklistedKernelModules = [ "i915" ];
   boot.kernelParams = [
     "xe.force_probe=7d51"

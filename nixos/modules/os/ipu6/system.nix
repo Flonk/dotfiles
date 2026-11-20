@@ -42,7 +42,7 @@ in
       # Don't stay dead for the whole session after early-boot failures.
       startLimitIntervalSec = 0;
       serviceConfig = {
-        RestartSec = 5;
+        RestartSec = lib.mkForce 5;
         # The IPU6 driver historically wedged in D-state on shutdown; keep the
         # stop path short — see obsidian://claude/video-setup.
         TimeoutStopSec = lib.mkForce "1s";

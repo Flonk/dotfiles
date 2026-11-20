@@ -1,14 +1,14 @@
 {
   "filmcraft": {
-    "version": "0.4.0",
-    "hash": "sha256-2EEN6nsrBk7eHq2H3YlLyjU3pN/aGkQpcViEn1a6LUw="
+    "version": "0.20.1",
+    "hash": "sha256-SiWuyy6UgbZec1NSi8qeSoxTiN1V8Uhv/mRQLgi9+gI="
   },
   "photocraft": {
-    "version": "0.5.0",
-    "hash": "sha256-9U2GOAcFO738/6DWJO9+SdP9QTEMe7Ht5IU29pkp0i8="
+    "version": "0.23.1",
+    "hash": "sha256-BXR7PlJ+HgoMHeOZcDYc84yPyn6NPjYB7yCC+w5t0X8="
   },
   "vectorcraft": {
-    "version": "0.7.0",
-    "hash": "sha256-9pKPmt9COtChRev+OxQqldPSb1ULBSScIBIUVwH5i2A="
+    "version": "0.24.1",
+    "hash": "sha256-vc5+gumB+fTtC/JfpvJeb+T6sn6JZB5vlIiZ4BsTpRQ="
   }
 }
