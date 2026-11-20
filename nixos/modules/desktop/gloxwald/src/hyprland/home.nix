@@ -175,6 +175,7 @@ in
           { leaf = "windowsMove";      enabled = true;  speed = 2;  bezier = "md3_decel"; style = "slide"; }
           { leaf = "fade";             enabled = true;  speed = 10; bezier = "md3_decel"; }
           { leaf = "fadeLayers";       enabled = true;  speed = 5;  bezier = "md3_decel"; }
+          { leaf = "fadeSwitch";       enabled = false; speed = 5;  bezier = "md3_decel"; }
           { leaf = "workspaces";       enabled = true;  speed = 2;  bezier = "md3_decel"; style = "slide"; }
           { leaf = "specialWorkspace"; enabled = true;  speed = 2;  bezier = "md3_decel"; style = "slide"; }
           { leaf = "border";           enabled = false; speed = 2;  bezier = "md3_decel"; }
