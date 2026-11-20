@@ -103,9 +103,9 @@ fn random_hex() -> String {
     buf.iter().map(|b| format!("{b:02x}")).collect()
 }
 
-fn auth(client_path: &str) {
-    let raw: Value = serde_json::from_str(&fs::read_to_string(client_path).unwrap_or_else(|e| {
-        eprintln!("cannot read {client_path}: {e}");
+fn client_from_file(path: &str) -> (String, String) {
+    let raw: Value = serde_json::from_str(&fs::read_to_string(path).unwrap_or_else(|e| {
+        eprintln!("cannot read {path}: {e}");
         exit(1)
     }))
     .unwrap_or_else(|e| {
@@ -113,10 +113,27 @@ fn auth(client_path: &str) {
         exit(1)
     });
     let c = raw.get("installed").or_else(|| raw.get("web")).unwrap_or(&raw);
-    let (Some(id), Some(secret)) = (c["client_id"].as_str(), c["client_secret"].as_str()) else {
-        eprintln!("client json has no client_id/client_secret");
-        exit(1)
+    match (c["client_id"].as_str(), c["client_secret"].as_str()) {
+        (Some(id), Some(secret)) => (id.to_string(), secret.to_string()),
+        _ => {
+            eprintln!("client json has no client_id/client_secret");
+            exit(1)
+        }
+    }
+}
+
+fn auth(client_path: Option<&str>) {
+    let (id, secret) = match client_path {
+        Some(path) => client_from_file(path),
+        None => match (read_secret("client_id"), read_secret("client_secret")) {
+            (Some(id), Some(secret)) => (id, secret),
+            _ => {
+                eprintln!("No OAuth client in sops yet. Download the Desktop app client JSON from the Google Cloud console and run: skynet calendar auth <file.json>");
+                exit(1)
+            }
+        },
     };
+    let (id, secret) = (id.as_str(), secret.as_str());
 
     let listener = TcpListener::bind("127.0.0.1:0").expect("bind");
     let redirect = format!("http://127.0.0.1:{}", listener.local_addr().unwrap().port());
@@ -527,9 +544,9 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     match args.get(1).map(String::as_str) {
         Some("run") => run(),
-        Some("auth") if args.len() >= 3 => auth(&args[2]),
+        Some("auth") => auth(args.get(2).map(String::as_str)),
         _ => {
-            eprintln!("usage: calbus run | calbus auth <client_secret.json>");
+            eprintln!("usage: calbus run | calbus auth [client_secret.json]");
             exit(2)
         }
     }
