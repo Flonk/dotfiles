@@ -89,8 +89,8 @@ in
             export SOPS_AGE_KEY_FILE="''${SOPS_AGE_KEY_FILE:-$HOME/.config/sops/age/keys.txt}"
             repo="$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/repos/personal/dotfiles")"
             secrets="$repo/nixos/assets/secrets/secrets.json"
-            client="''${1:-$(ls -t "$HOME"/Downloads/client_secret_*.json 2>/dev/null | head -1)}"
-            [ -n "$client" ] || { echo "usage: skynet calendar auth <client_secret.json>"; exit 1; }
+            client="''${1:-$(ls -t "$HOME"/Downloads/client_secret_*.json 2>/dev/null | head -1 || true)}"
+            [ -n "$client" ] || { echo "No ~/Downloads/client_secret_*.json found. Download the Desktop app OAuth client JSON from the Google Cloud console, or pass its path: skynet calendar auth <file.json>"; exit 1; }
             creds="$(${calbus}/bin/calbus auth "$client")"
             for n in ${lib.concatStringsSep " " secretNames}; do
               ${pkgs.sops}/bin/sops set "$secrets" "[\"google_calendar_$n\"]" "$(echo "$creds" | ${pkgs.jq}/bin/jq -c ".$n")"
