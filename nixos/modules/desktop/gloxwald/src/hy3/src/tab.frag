@@ -92,7 +92,7 @@ void main() {
 	}
 
 	if (chromeTextures > 0.5 && gl_FragColor.a > 0.0) {
-		gl_FragColor.rgb = chromeShade(chromeColor(monitorPix), mix(0.1, 0.8, chrome)) * gl_FragColor.a;
+		gl_FragColor.rgb = chromeShade(chromeColor(monitorPix), mix(0.025, 0.8, chrome)) * gl_FragColor.a;
 	}
 
 	if (applyBlur && gl_FragColor.a != 1.0) {
