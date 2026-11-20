@@ -341,11 +341,11 @@ in
     # Built-in skynet scripts
     skynet.cli.scripts = [
       {
-        command = [ "update" ];
-        title = "Update flake inputs";
-        script = pkgs.writeShellScript "update.sh" ''
+        command = [ "upgrade" ];
+        title = "Upgrade flake inputs and pinned packages";
+        script = pkgs.writeShellScript "upgrade.sh" ''
           set -euo pipefail
-          ${pkgs.toilet}/bin/toilet -f future "update" | cat
+          ${pkgs.toilet}/bin/toilet -f future "upgrade" | cat
           echo ""
           echo "Updating flake inputs..."
           nix flake update ~/repos/personal/dotfiles
@@ -366,13 +366,16 @@ in
       }
       {
         command = [ "rebuild" ];
-        title = "Rebuild home-manager config";
+        title = "Rebuild home-manager and NixOS config";
         script = pkgs.writeShellScript "rebuild.sh" ''
           set -euo pipefail
           echo "Rebuilding home-manager configuration..."
           home-manager switch --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.installation}
+          echo ""
+          echo "Rebuilding NixOS system configuration..."
+          sudo /run/current-system/sw/bin/nixos-rebuild switch --no-reexec --flake $HOME/repos/personal/dotfiles/nixos
         '';
-        usage = "Runs home-manager switch for ${config.skynet.whoami.installation}.";
+        usage = "Runs home-manager switch for ${config.skynet.whoami.installation}, then nixos-rebuild switch for ${config.skynet.whoami.host}.";
       }
       {
         command = [ "keys" ];
@@ -404,16 +407,6 @@ in
           fi
         '';
         usage = "Shows public SSH keys (ed25519 by default, --all includes RSA).";
-      }
-      {
-        command = [ "system" "rebuild" ];
-        title = "Rebuild NixOS system config";
-        script = pkgs.writeShellScript "system-rebuild.sh" ''
-          set -euo pipefail
-          echo "Rebuilding NixOS system configuration..."
-          sudo nixos-rebuild switch --no-reexec --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.host}
-        '';
-        usage = "Runs nixos-rebuild switch for ${config.skynet.whoami.host} (requires sudo).";
       }
     ];
 

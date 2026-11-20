@@ -39,7 +39,7 @@ skynet.cli.scripts = [{
 
 ## Skynet Updaters
 
-Modules that pin versions by hand (fetchurl + hash) register an updater so `skynet update` bumps them after `nix flake update`:
+Modules that pin versions by hand (fetchurl + hash) register an updater so `skynet upgrade` bumps them after `nix flake update`:
 
 ```nix
 skynet.cli.updaters = [{

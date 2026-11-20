@@ -45,7 +45,7 @@ in
             options = {
               name = mkOption {
                 type = types.str;
-                description = "Name shown while `skynet update` runs this updater";
+                description = "Name shown while `skynet upgrade` runs this updater";
               };
               script = mkOption {
                 type = types.path;
@@ -55,7 +55,7 @@ in
           }
         );
         default = [ ];
-        description = "Updaters registered by modules, run by `skynet update` after `nix flake update`";
+        description = "Updaters registered by modules, run by `skynet upgrade` after `nix flake update`";
       };
     };
   };

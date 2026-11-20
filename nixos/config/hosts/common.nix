@@ -12,6 +12,7 @@ in
   imports = [
     ../../modules/assorted/avahi/system.nix
     ../../modules/assorted/autoclicker/system.nix
+    ../../modules/core/skynet-scripts/system.nix
     ../../modules/core/ssh/system.nix
     ../../modules/desktop/stylix/system.nix
     ../../modules/desktop/audio/system.nix
