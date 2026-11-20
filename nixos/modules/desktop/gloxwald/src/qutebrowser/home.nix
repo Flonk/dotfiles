@@ -102,8 +102,6 @@ in
       completion = { scrollbar.width = 8; scrollbar.padding = 0; };
 
       colors = {
-        webpage.bg = ground;
-
         tabs = {
           bar.bg = ink;
           indicator = { start = accent2; stop = accent; error = danger; system = "rgb"; };

@@ -1,4 +1,3 @@
-        text: value || "--"
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
