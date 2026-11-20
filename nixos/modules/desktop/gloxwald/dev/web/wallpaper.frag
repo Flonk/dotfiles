@@ -93,14 +93,28 @@ float mastheadDots(vec2 p) {
     return cover / 16.0 * fade;
 }
 
+float gridDots(vec2 p) {
+    const float s = 0.29237170472273677;
+    const float k = 0.9563047559630354;
+    float cover = 0.0;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            vec2 q = p + (vec2(float(i), float(j)) + 0.5) / 4.0 - 0.5;
+            q = vec2(k * q.x + s * q.y, -s * q.x + k * q.y);
+            float r = length(mod(q, 2.5) - 1.25);
+            cover += 1.0 - smoothstep(0.4, 0.7, r);
+        }
+    }
+    return cover / 16.0;
+}
+
 const float AMP_HEIGHT = 340.0;
-const vec2 AMP_MARGIN = vec2(56.0, 48.0);
 const vec3 AMP_GREY = vec3(0.155);
 const float AMP_DEPTH = 7.0;
 const vec2 LIGHT = vec2(0.70710678, 0.70710678);
 
 vec2 ampCenter() {
-    return vec2(border + AMP_MARGIN.x + AMP_HEIGHT * 0.42, screenSize.y - border - AMP_MARGIN.y - AMP_HEIGHT * 0.5);
+    return vec2(screenSize.x * 0.5, (bandHeight + screenSize.y - border) * 0.5);
 }
 
 float ampDist(vec2 p) {
@@ -120,22 +134,20 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     if (d > 2.0)
         return c;
     float inside = clamp(0.5 - d, 0.0, 1.0);
-    vec2 e = vec2(0.75, 0.0);
-    vec2 n = normalize(vec2(ampDist(p + e.xy) - ampDist(p - e.xy), ampDist(p + e.yx) - ampDist(p - e.yx)) + 1e-6);
-    float wall = 1.0 - smoothstep(0.0, 2.5, -d);
-    float dropped = 0.0;
+    float shadow = 0.0;
     for (int i = 1; i <= 6; i++)
-        dropped += smoothstep(-0.75, 0.75, ampDist(p - LIGHT * AMP_DEPTH * float(i) / 6.0));
-    dropped /= 6.0;
-    float lit = wall * max(dot(n, LIGHT), 0.0);
-    float shade = max(dropped, wall * max(-dot(n, LIGHT), 0.0));
-    vec3 floor_ = AMP_GREY * (1.0 - 0.85 * shade) + 0.16 * lit;
+        shadow += smoothstep(-0.75, 0.75, ampDist(p - LIGHT * AMP_DEPTH * float(i) / 6.0));
+    shadow /= 6.0;
+    vec3 floor_ = AMP_GREY * (1.0 - 0.85 * shadow);
+    float ring = clamp(0.5 - d, 0.0, 1.0) - clamp(-0.5 - d, 0.0, 1.0);
+    floor_ = mix(floor_, lift(floor_), 0.25 * ring / max(inside, 1e-4));
     return mix(c, floor_, inside);
 }
 
 vec3 wallpaper(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
     vec3 c = mix(sunkenAmp(p, ground), grain.rgb, grain.a);
+    c = mix(c, vec3(1.0), 0.07 * gridDots(p));
     return mix(c, accent, 0.55 * mastheadDots(p));
 }
 
