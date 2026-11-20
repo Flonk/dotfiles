@@ -7,7 +7,7 @@
 }:
 {
   config = lib.mkIf config.skynet.module.desktop.mazama.enable {
-    home.packages = [ inputs.mazama.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+    programs.mazama.enable = true;
 
     xdg.desktopEntries.mazama = {
       name = "mazama";

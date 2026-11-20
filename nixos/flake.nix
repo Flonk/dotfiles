@@ -86,6 +86,7 @@
           modules = [
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
+            inputs.mazama.homeManagerModules.default
             inputs.stylix.homeModules.stylix
             ./modules/desktop/gloxwald/home.nix
             ./config/installations/${name}.nix

@@ -187,11 +187,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794701097,
-        "narHash": "sha256-jxQR2RLbPr53D4NCdigTGAP/K2SaPeGOx46Wr/2HnSk=",
+        "lastModified": 1795201656,
+        "narHash": "sha256-7T8wzzQOmx6feoDnSjw/s6M7Cm7jDYNaZnHQSmMO7fQ=",
         "owner": "Flonk",
         "repo": "mazama",
-        "rev": "b4c751c90b529b14571405a6d9ca0eac5b2b4ed3",
+        "rev": "b7f033ba468584af59de81e4f82cc4edc94067aa",
         "type": "github"
       },
       "original": {
