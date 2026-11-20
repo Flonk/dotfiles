@@ -17,7 +17,7 @@ in
         source = "${./t3.txt}";
         color."1" = accent;
         padding = {
-          top = 7;
+          top = 1;
           left = 2;
           right = 3;
         };
