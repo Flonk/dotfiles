@@ -78,7 +78,12 @@ def accent_scheme(scheme_path, accent, out):
     hue = np.arctan2(b, a)
     for key in ("base00", "base01", "base02", "base03"):
         colours[key] = to_hex(rehue(parse(colours[key]), hue + np.radians(24.0)))[1:]
-    colours["base0D"] = to_hex(rehue(parse(colours["base0D"]), hue, np.hypot(a, b)))[1:]
+    def distance(key):
+        _, ka, kb = srgb_to_oklab(parse(colours[key]))
+        return abs((np.arctan2(kb, ka) - hue + np.pi) % (2 * np.pi) - np.pi)
+
+    slot = min(("base08", "base09", "base0A", "base0B", "base0C", "base0D", "base0E"), key=distance)
+    colours[slot] = to_hex(rehue(parse(colours[slot]), hue, np.hypot(a, b)))[1:]
     name = re.search(r"^name:\s*\"?([^\"\n]*)", text, re.M).group(1)
     with open(out, "w") as f:
         f.write(f'system: "base16"\nname: "{name} (gloxwald accent)"\nvariant: "dark"\npalette:\n')

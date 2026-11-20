@@ -87,7 +87,7 @@ in
       accentScheme = mkOption {
         type = types.bool;
         default = true;
-        description = "Tint the base16 scheme towards the accent: backgrounds take the accent hue, base0D becomes the accent at the scheme's lightness";
+        description = "Tint the base16 scheme towards the accent: backgrounds take the accent hue, the colour slot (base08-base0E) nearest the accent's hue becomes the accent at that slot's lightness";
       };
       accent = mkOption {
         type = types.str;
