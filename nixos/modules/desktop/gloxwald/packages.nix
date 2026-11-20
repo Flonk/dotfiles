@@ -2,6 +2,7 @@
   pkgs,
   rev ? "dev",
   accent ? "#1d9eb6",
+  ground ? null,
 }:
 let
   quickshellSrc = builtins.path {
@@ -26,7 +27,7 @@ let
   } ''
     mkdir -p $out
     cp ${chromeStatic}/*.png $out/
-    python3 -I ${./dev/bake-chrome.py} '${accent}' $out/gradient.png $out/palette.json
+    python3 -I ${./dev/bake-chrome.py} '${accent}' $out/gradient.png $out/palette.json '${if ground == null then "" else ground}'
   '';
 in
 {

@@ -10,6 +10,7 @@ let
   gloxwaldPkgs = import ../../packages.nix {
     inherit pkgs;
     accent = config.programs.gloxwald.stylix.accent;
+    ground = config.programs.gloxwald.stylix.ground;
   };
 
   hypr-scale = pkgs.writeShellApplication {

@@ -6,6 +6,7 @@ let
   gloxwaldPkgs = import ../../packages.nix {
     inherit pkgs;
     accent = config.programs.gloxwald.stylix.accent;
+    ground = config.programs.gloxwald.stylix.ground;
   };
 
   quickshellConfigDir = pkgs.runCommand "gloxwald-quickshell-shell" { } ''
@@ -29,7 +30,7 @@ let
       app800 = c.base06;
       app900 = c.base07;
       wm800 = config.programs.gloxwald.stylix.accent;
-      ground = config.programs.gloxwald.stylix.ground;
+      ground = (builtins.fromJSON (builtins.readFile "${gloxwaldPkgs.chrome}/palette.json")).ground;
       labelSize = config.programs.gloxwald.label.size;
       labelTracking = config.programs.gloxwald.label.tracking;
       error400 = c.base08;

@@ -9,6 +9,7 @@
     ./stylix.nix
     ./src/hyprland/home.nix
     ./src/i18n/home.nix
+    ./src/foot/home.nix
     ./src/mako/home.nix
     ./src/qutebrowser/home.nix
     ./src/quickshell/home.nix

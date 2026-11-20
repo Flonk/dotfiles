@@ -19,9 +19,9 @@ in
       description = "Window manager accent color (borders, active tabs)";
     };
     ground = mkOption {
-      type = types.str;
-      default = "#100e0a";
-      description = "Desktop ground colour behind the windows, inside the chrome frame";
+      type = types.nullOr types.str;
+      default = null;
+      description = "Desktop ground colour behind the windows, inside the chrome frame; derived from the accent when null";
     };
     wallpaper = mkOption {
       type = types.nullOr (types.either types.path types.package);

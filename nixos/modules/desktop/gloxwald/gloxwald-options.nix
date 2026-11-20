@@ -42,6 +42,19 @@ in
       };
     };
 
+    foot = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Give foot the ground colour with transparency so the desktop ground and grain show through (only applies when foot is enabled)";
+      };
+      alpha = mkOption {
+        type = types.float;
+        default = 0.88;
+        description = "Foot background opacity";
+      };
+    };
+
     qutebrowser.enable = mkOption {
       type = types.bool;
       default = true;
@@ -65,9 +78,9 @@ in
         description = "Accent color (borders, active tabs, bar highlights)";
       };
       ground = mkOption {
-        type = types.str;
-        default = "#100e0a";
-        description = "Desktop ground colour behind the windows, inside the chrome frame";
+        type = types.nullOr types.str;
+        default = null;
+        description = "Desktop ground colour behind the windows, inside the chrome frame; derived from the accent when null";
       };
     };
 

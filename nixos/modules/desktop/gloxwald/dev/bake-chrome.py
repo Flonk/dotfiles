@@ -50,8 +50,19 @@ def shift(rgb, dl, dc, dh):
     return oklab_to_srgb(np.array([L + dl, c * np.cos(h), c * np.sin(h)]))
 
 
-def main(accent_hex, out, palette_out):
-    accent = np.array([int(accent_hex.lstrip("#")[i:i + 2], 16) / 255 for i in (0, 2, 4)])
+def parse(hex_):
+    return np.array([int(hex_.lstrip("#")[i:i + 2], 16) / 255 for i in (0, 2, 4)])
+
+
+def derive_ground(accent):
+    _, a, b = srgb_to_oklab(accent)
+    h = np.arctan2(b, a) + np.radians(24.0)
+    return oklab_to_srgb(np.array([0.1647, 0.0087 * np.cos(h), 0.0087 * np.sin(h)]))
+
+
+def main(accent_hex, out, palette_out, ground_hex=""):
+    accent = parse(accent_hex)
+    ground = parse(ground_hex) if ground_hex else derive_ground(accent)
     stop1 = accent
     stop2 = shift(accent, 0.087, -0.009, 24.0)
     glow = shift(accent, 0.16, -0.031, 24.0 * 1.8)
@@ -76,8 +87,8 @@ def main(accent_hex, out, palette_out):
     Image.fromarray(np.round(np.clip(color, 0, 1) * 255).astype(np.uint8), "RGB").save(out, optimize=True)
     to_hex = lambda c: "#" + "".join(f"{round(float(v) * 255):02x}" for v in np.clip(c, 0, 1))
     with open(palette_out, "w") as f:
-        json.dump({"accent": to_hex(stop1), "accent2": to_hex(stop2), "glow": to_hex(glow)}, f)
+        json.dump({"accent": to_hex(stop1), "accent2": to_hex(stop2), "glow": to_hex(glow), "ground": to_hex(ground)}, f)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    main(*sys.argv[1:5])

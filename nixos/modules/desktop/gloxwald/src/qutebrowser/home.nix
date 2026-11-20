@@ -10,6 +10,7 @@ let
   gloxwaldPkgs = import ../../packages.nix {
     inherit pkgs;
     accent = g.stylix.accent;
+    ground = g.stylix.ground;
   };
   palette = builtins.fromJSON (builtins.readFile "${gloxwaldPkgs.chrome}/palette.json");
 
@@ -19,7 +20,7 @@ let
 
   ink = "#000000";
   cream = "#ddd6c4";
-  ground = g.stylix.ground;
+  ground = palette.ground;
   accent = g.stylix.accent;
   accent2 = palette.accent2;
   glow = palette.glow;
