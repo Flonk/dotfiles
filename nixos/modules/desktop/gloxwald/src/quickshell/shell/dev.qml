@@ -396,57 +396,6 @@ FloatingWindow {
                     }
                 }
 
-                SectionTitle { text: "frame" }
-
-                Flow {
-                    width: side.width
-                    spacing: 4
-                    Repeater {
-                        model: win.resolutions
-                        DevButton {
-                            required property var modelData
-                            required property int index
-                            label: modelData[0] + "×" + modelData[1]
-                            accent: "#d9a530"
-                            active: win.resIndex === index
-                            onClicked: win.resIndex = index
-                        }
-                    }
-                    DevButton {
-                        label: win.fit ? "fit" : "1:1"
-                        accent: "#d9a530"
-                        active: !win.fit
-                        onClicked: win.fit = !win.fit
-                    }
-                }
-
-                SectionTitle { text: "theme" }
-
-                Repeater {
-                    model: win.themeKeys
-                    ThemeField {}
-                }
-
-                DevButton {
-                    label: "reset to installed theme"
-                    onClicked: themeResetJob.kick()
-                }
-
-                SectionTitle { text: "actions" }
-
-                Flow {
-                    width: side.width
-                    spacing: 4
-                    DevButton {
-                        label: "reload " + win.tabNames[win.tab] + "  ctrl+r"
-                        onClicked: win.reloadTab()
-                    }
-                    DevButton {
-                        label: "reload all"
-                        onClicked: win.reloadAll()
-                    }
-                }
-
                 SectionTitle { text: win.tabNames[win.tab] }
 
                 Column {
@@ -503,6 +452,57 @@ FloatingWindow {
                             label: "rebuild iso"
                             onClicked: grubJob.kick()
                         }
+                    }
+                }
+
+                SectionTitle { text: "frame" }
+
+                Flow {
+                    width: side.width
+                    spacing: 4
+                    Repeater {
+                        model: win.resolutions
+                        DevButton {
+                            required property var modelData
+                            required property int index
+                            label: modelData[0] + "×" + modelData[1]
+                            accent: "#d9a530"
+                            active: win.resIndex === index
+                            onClicked: win.resIndex = index
+                        }
+                    }
+                    DevButton {
+                        label: win.fit ? "fit" : "1:1"
+                        accent: "#d9a530"
+                        active: !win.fit
+                        onClicked: win.fit = !win.fit
+                    }
+                }
+
+                SectionTitle { text: "theme" }
+
+                Repeater {
+                    model: win.themeKeys
+                    ThemeField {}
+                }
+
+                DevButton {
+                    label: "reset to installed theme"
+                    onClicked: themeResetJob.kick()
+                }
+
+                SectionTitle { text: "actions" }
+
+                Flow {
+                    width: side.width
+                    spacing: 4
+                    DevButton {
+                        label: "reload " + win.tabNames[win.tab] + "  ctrl+r"
+                        onClicked: win.reloadTab()
+                    }
+                    DevButton {
+                        label: "reload all"
+                        onClicked: win.reloadAll()
                     }
                 }
             }
