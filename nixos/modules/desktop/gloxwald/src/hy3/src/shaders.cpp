@@ -26,6 +26,7 @@ Hy3Shaders::Hy3Shaders() {
 		s.borderColor = glGetUniformLocation(program, "borderColor");
 		s.borderWidth = glGetUniformLocation(program, "borderWidth");
 		s.outerRadius = glGetUniformLocation(program, "outerRadius");
+		s.chrome = glGetUniformLocation(program, "chrome");
 	}
 }
 

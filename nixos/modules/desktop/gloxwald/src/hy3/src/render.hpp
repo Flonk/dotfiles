@@ -16,6 +16,7 @@ public:
 	    const CHyprColor& fillColor,
 	    const CHyprColor& borderColor,
 	    int borderWidth,
-	    int radius
+	    int radius,
+	    float chrome = 0.0f
 	);
 };

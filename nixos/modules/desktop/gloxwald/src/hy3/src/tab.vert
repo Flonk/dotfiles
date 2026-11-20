@@ -7,9 +7,11 @@ uniform highp vec2 monitorSize;
 
 varying highp vec2 pixCoord;
 varying highp vec2 monitorTexCoord;
+varying highp vec2 monitorPix;
 
 void main() {
 	pixCoord = pos * pixelSize;
 	monitorTexCoord = (pixelOffset + pixCoord) / monitorSize;
+	monitorPix = pixelOffset + pixCoord;
 	gl_Position = vec4(proj * vec3(monitorTexCoord, 1.0), 1.0);
 }

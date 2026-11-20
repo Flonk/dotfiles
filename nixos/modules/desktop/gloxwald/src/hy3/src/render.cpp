@@ -24,7 +24,8 @@ void Hy3Render::renderTab(
     const CHyprColor& fillColor,
     const CHyprColor& borderColor,
     int borderWidth,
-    int radius
+    int radius,
+    float chrome
 ) {
 	static auto& shader = Hy3Shaders::instance()->tab;
 	auto& rdata = ctx.m_data;
@@ -87,6 +88,7 @@ void Hy3Render::renderTab(
 	GLCALL(glUniform1f(shader.opacity, opacity));
 	GLCALL(glUniform1f(shader.outerRadius, radius));
 	GLCALL(glUniform1f(shader.borderWidth, borderWidth));
+	GLCALL(glUniform1f(shader.chrome, chrome));
 
 	GLCALL(glBindVertexArray(shader.program->getUniformLocation(SHADER_SHADER_VAO)));
 	GLCALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));

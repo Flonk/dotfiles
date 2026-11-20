@@ -19,6 +19,7 @@ public:
 		GLint borderColor;
 		GLint borderWidth;
 		GLint outerRadius;
+		GLint chrome;
 	} tab;
 
 	static Hy3Shaders* instance();

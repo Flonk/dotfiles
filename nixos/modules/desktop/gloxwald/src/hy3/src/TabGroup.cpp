@@ -246,7 +246,8 @@ void Hy3TabBarEntry::render(Render::CRenderContext& ctx, float scale, CBox& box,
 	    color,
 	    border_color,
 	    *border_width,
-	    radius
+	    radius,
+	    this->active->value()
 	);
 
 	this->renderText(ctx, scale, box, opacity);
