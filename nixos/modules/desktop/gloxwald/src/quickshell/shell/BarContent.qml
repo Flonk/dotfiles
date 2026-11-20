@@ -44,6 +44,7 @@ Item {
 
   // CENTER - launcher button
   AppLauncherDisplay {
+    objectName: "launcher"
     id: centerSection
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: parent.top
@@ -62,6 +63,7 @@ Item {
 
     // CPU
     Section {
+      objectName: "cpu"
       width: cpuText.implicitWidth + cpuBars.width + 12
       topPadding: 0; bottomPadding: 0
       backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
@@ -101,6 +103,7 @@ Item {
 
     // MEMORY
     Section {
+      objectName: "memory"
       width: memoryText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
       backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
@@ -121,6 +124,7 @@ Item {
 
     // DISK
     Section {
+      objectName: "disk"
       width: diskText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
       backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
@@ -150,6 +154,7 @@ Item {
     spacing: 0
 
     Section {
+      objectName: "media"
       width: 270
       topPadding: 0; bottomPadding: 0; leftPadding: 1; rightPadding: 1
       backgroundColor: Qt.rgba(Theme.app200.r, Theme.app200.g, Theme.app200.b, 0.2)
@@ -174,6 +179,7 @@ Item {
     spacing: 0
 
     WorkspacesDisplay {
+      objectName: "workspaces"
       visible: bar.showWorkspaces && bar.monitor !== null
       monitor: bar.monitor
       textVerticalOffset: bar.textVerticalOffset
@@ -183,6 +189,7 @@ Item {
 
     // Author credit shown on lockscreen
     Section {
+      objectName: "author"
       visible: bar.authorText !== ""
       width: authorLabel.implicitWidth + 10
       topPadding: 0; bottomPadding: 0
@@ -204,6 +211,7 @@ Item {
 
     // WIFI
     Section {
+      objectName: "wifi"
       id: wifiSection
       visible: bar.showWifi && !bar.lockscreen
       width: wifiDisplay.implicitWidth + 26
@@ -241,6 +249,7 @@ Item {
 
     // HEADPHONES
     Section {
+      objectName: "headphones"
       visible: !bar.lockscreen
       width: headphonesText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
@@ -276,6 +285,7 @@ Item {
 
     // BRIGHTNESS
     Section {
+      objectName: "brightness"
       visible: !bar.lockscreen
       width: brightnessText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
@@ -309,6 +319,7 @@ Item {
 
     // VOLUME
     Section {
+      objectName: "volume"
       visible: !bar.lockscreen
       width: volumeText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
@@ -346,6 +357,7 @@ Item {
 
     // BATTERY
     Section {
+      objectName: "battery"
       width: batteryText.implicitWidth + 8
       topPadding: 0; bottomPadding: 0
       backgroundColor: {
@@ -373,6 +385,7 @@ Item {
 
     // CLOCK
     Section {
+      objectName: "clock"
       width: clockText.implicitWidth + 34
       topPadding: 0; bottomPadding: 0
       leftPadding: 18; rightPadding: 16
@@ -413,6 +426,7 @@ Item {
 
     // LANGUAGE
     Section {
+      objectName: "language"
       id: langSection
       visible: !bar.lockscreen && LanguageWidget.available
       width: langText.implicitWidth + 24

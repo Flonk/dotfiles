@@ -23,6 +23,7 @@ FloatingWindow {
     property bool fit: true
     property bool logOpen: true
     property bool logAll: false
+    property real barZoom: 2
     readonly property int sidebarWidth: 330
     readonly property var tabSources: [["dev", "theme"], ["dev", "theme", "shader"], ["dev", "theme", "greeter"], ["dev", "theme", "grub"]]
     property int sceneRev: 0
@@ -55,8 +56,7 @@ FloatingWindow {
 
     function reloadTab() {
         if (tab === 0) {
-            barLoader.active = false;
-            barLoader.active = true;
+            gallery.reload();
         } else if (tab === 1) {
             sceneRev++;
             lockCtx.reset();
@@ -69,8 +69,7 @@ FloatingWindow {
     }
 
     function reloadAll() {
-        barLoader.active = false;
-        barLoader.active = true;
+        gallery.reload();
         shaderJob.kick();
         lockCtx.reset();
         greeterJob.kick();
@@ -402,7 +401,20 @@ FloatingWindow {
                     width: side.width
                     spacing: 6
                     visible: win.tab === 0
-                    Hint { text: "The real BarContent at the bottom of the frame; workspaces follow the focused Hyprland monitor." }
+                    Hint { text: "The live bar at the frame width, its lockscreen variant, a zoomed crop of every named section (objectName in BarContent), each reusable component on its own, and the live state of every data singleton." }
+                    Flow {
+                        width: side.width
+                        spacing: 4
+                        Repeater {
+                            model: [1, 2, 3, 4]
+                            DevButton {
+                                required property int modelData
+                                label: "zoom " + modelData + "x"
+                                active: win.barZoom === modelData
+                                onClicked: win.barZoom = modelData
+                            }
+                        }
+                    }
                 }
 
                 Column {
@@ -591,20 +603,12 @@ FloatingWindow {
             anchors.fill: parent
             visible: win.tab === 0
 
-            Frame {
-                Rectangle {
-                    anchors.fill: parent
-                    color: Theme.app100
-                }
-
-                Loader {
-                    id: barLoader
-                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-                    height: 20
-                    sourceComponent: BarContent {
-                        monitor: Hyprland.focusedMonitor
-                    }
-                }
+            BarGallery {
+                id: gallery
+                anchors.fill: parent
+                frameW: win.frameW
+                zoom: win.barZoom
+                active: win.tab === 0
             }
         }
 

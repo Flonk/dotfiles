@@ -32,3 +32,4 @@ TermView 1.0 TermView.qml
 GrubView 1.0 GrubView.qml
 LockScenePicker 1.0 LockScenePicker.qml
 LockSceneTools 1.0 LockSceneTools.qml
+BarGallery 1.0 BarGallery.qml
