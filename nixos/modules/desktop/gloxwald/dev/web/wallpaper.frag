@@ -108,7 +108,7 @@ float gridDots(vec2 p) {
     return cover / 16.0;
 }
 
-const float AMP_HEIGHT = 143.0;
+const float AMP_HEIGHT = 100.0;
 const vec3 AMP_DARK = vec3(0.012, 0.013, 0.015);
 const float SPOT_BELOW = 60.0;
 const float SPOT_RANGE = 700.0;
@@ -116,7 +116,7 @@ const float SPOT_CONE = 0.62;
 const float SPOT_GROUND = 0.2;
 const float SPOT_WALL = 1.0;
 const float SPOT_FLOOR = 0.15;
-const float AMP_DEPTH = 10.0;
+const float AMP_DEPTH = 7.0;
 
 vec2 spotPos() {
     return vec2(screenSize.x * 0.5, screenSize.y + SPOT_BELOW);
