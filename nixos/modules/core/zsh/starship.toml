@@ -15,7 +15,7 @@ $git_status\
 when = 'test -z "$SSH_CONNECTION"'
 command = 'printf "%s" "$USER"'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[ $output ](fg:base00 bg:blue)'
+format = '[ $output ](fg:base00 bg:accent)'
 
 [custom.user_ssh]
 when = 'test -n "$SSH_CONNECTION"'
@@ -27,7 +27,7 @@ format = '[ $output ](fg:base00 bg:red)'
 when = 'test -z "$SSH_CONNECTION"'
 command = 'true'
 shell = ["sh", "--noprofile", "--norc"]
-format = '[](bg:base03 fg:blue)'
+format = '[](bg:base03 fg:accent)'
 
 [custom.arrow_ssh]
 when = 'test -n "$SSH_CONNECTION"'

@@ -27,7 +27,10 @@
 
     programs.starship = {
       enable = true;
-      settings = builtins.fromTOML (builtins.readFile ./starship.toml);
+      settings = lib.mkMerge [
+        (builtins.fromTOML (builtins.readFile ./starship.toml))
+        (lib.mkIf (config.lib ? stylix) { palettes.base16.accent = lib.mkDefault config.lib.stylix.colors.withHashtag.base0D; })
+      ];
     };
 
     programs.zsh = {

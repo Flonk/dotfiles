@@ -42,6 +42,18 @@ in
       };
     };
 
+    fastfetch.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Use the accent-coloured T3 mark as the fastfetch logo (only applies when fastfetch is enabled)";
+    };
+
+    starship.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Add the accent to the starship palette as `accent` (only applies when starship is enabled)";
+    };
+
     foot = {
       enable = mkOption {
         type = types.bool;
