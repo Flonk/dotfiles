@@ -4,6 +4,7 @@ import QtQuick
 QtObject {
     readonly property int band: 40
     readonly property int border: 4
+    readonly property int gapsOut: 12
     readonly property real turn: 110 * Math.PI / 180
     readonly property int markSize: 26
 

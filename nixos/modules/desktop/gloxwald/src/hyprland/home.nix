@@ -77,7 +77,7 @@ in
           general = {
             layout = "hy3";
             gaps_in = { top = -borderSize; right = 0; bottom = 0; left = -borderSize; };
-            gaps_out = 0;
+            gaps_out = 12;
             border_size = borderSize;
           };
 

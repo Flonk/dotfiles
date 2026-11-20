@@ -22,6 +22,7 @@ layout(std140, binding = 0) uniform buf {
 layout(binding = 1) uniform sampler2D noiseTex;
 layout(binding = 2) uniform sampler2D dotsTex;
 layout(binding = 3) uniform sampler2D markTex;
+layout(binding = 4) uniform sampler2D grainTex;
 
 vec3 toLinear(vec3 c) {
     return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
@@ -95,7 +96,8 @@ void main() {
     vec2 hi = screenSize - vec2(border);
 
     if (all(greaterThanEqual(p, lo)) && all(lessThan(p, hi))) {
-        fragColor = ground * qt_Opacity;
+        vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
+        fragColor = vec4(mix(ground.rgb, grain.rgb, grain.a), 1.0) * qt_Opacity;
         return;
     }
 

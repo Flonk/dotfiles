@@ -18,6 +18,7 @@ ShaderEffect {
     property var noiseTex: noise
     property var dotsTex: dots
     property var markTex: markSource
+    property var grainTex: grain
 
     vertexShader: "chrome/chrome.vert.qsb"
     fragmentShader: "chrome/chrome.frag.qsb"
@@ -31,6 +32,13 @@ ShaderEffect {
     Image {
         id: dots
         source: "chrome/dots.png"
+        visible: false
+    }
+
+    Image {
+        id: grain
+        source: "chrome/grain.png"
+        smooth: false
         visible: false
     }
 
