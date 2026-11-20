@@ -166,8 +166,9 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
 
 vec3 wallpaper(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-    vec3 c = mix(sunkenAmp(p, ground + accent * SPOT_GROUND * spot(p)), grain.rgb, grain.a);
+    vec3 c = mix(ground + accent * SPOT_GROUND * spot(p), grain.rgb, grain.a);
     c = mix(c, vec3(1.0), 0.07 * gridDots(p));
+    c = sunkenAmp(p, c);
     return mix(c, accent, 0.55 * mastheadDots(p));
 }
 
