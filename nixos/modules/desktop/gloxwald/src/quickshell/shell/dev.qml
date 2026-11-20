@@ -130,6 +130,33 @@ FloatingWindow {
     }
 
     Job {
+        id: greeterEnsure
+        name: "greeter"
+        command: ["bash", win.rootDir + "/dev/greeter.sh", "ensure", String(term.cols), String(term.rows)]
+    }
+
+    Job {
+        id: grubEnsure
+        name: "grub"
+        command: ["bash", win.rootDir + "/dev/grub.sh", "ensure", String(win.frameW), String(win.frameH)]
+    }
+
+    IpcHandler {
+        target: "dev"
+        function tab(name: string): void {
+            const i = win.tabNames.indexOf(name);
+            if (i >= 0)
+                win.tab = i;
+        }
+        function reload(): void {
+            win.reloadTab();
+        }
+        function state(): string {
+            return JSON.stringify({ tab: win.tabNames[win.tab], grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
+        }
+    }
+
+    Job {
         id: themeResetJob
         name: "theme"
         command: ["cp", (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/quickshell-theme.json", win.devDir + "/theme.json"]
@@ -203,8 +230,8 @@ FloatingWindow {
         interval: 500
         running: true
         onTriggered: {
-            greeterJob.kick();
-            grubJob.kick();
+            greeterEnsure.kick();
+            grubEnsure.kick();
             win.focusTab();
         }
     }

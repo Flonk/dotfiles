@@ -74,6 +74,7 @@ case "${1:-}" in
 build) build "$2" "$3" ;;
 start) start ;;
 restart) build "$2" "$3" && start ;;
+ensure) if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then echo "qemu already running"; else build "$2" "$3" && start; fi ;;
 stop) stop ;;
 *)
     echo "usage: $0 build W H|start|restart W H|stop" >&2

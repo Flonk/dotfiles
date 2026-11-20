@@ -30,6 +30,7 @@ build) build ;;
 start) start "$2" "$3" ;;
 restart) build && start "$2" "$3" ;;
 resize) "${T[@]}" resize-window -t greeter -x "$2" -y "$3" ;;
+ensure) if "${T[@]}" has-session -t greeter 2>/dev/null; then echo "greeter already running"; else build && start "$2" "$3"; fi ;;
 stop) "${T[@]}" kill-server 2>/dev/null || true ;;
 *)
     echo "usage: $0 build|start C R|restart C R|resize C R|stop" >&2

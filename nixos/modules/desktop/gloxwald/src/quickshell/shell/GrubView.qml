@@ -102,7 +102,12 @@ Item {
         interval: 1000
         running: true
         repeat: true
-        onTriggered: if (!qmp.connected) qmp.connected = true
+        onTriggered: {
+            if (root.ready)
+                return;
+            qmp.connected = false;
+            qmp.connected = true;
+        }
     }
 
     Timer {
