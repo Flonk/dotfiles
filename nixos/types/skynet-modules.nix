@@ -12,6 +12,7 @@
     # core
     ../modules/core/bitwarden/options.nix
     ../modules/core/direnv/options.nix
+    ../modules/core/eventbus/options.nix
     ../modules/core/git/options.nix
     ../modules/core/keyring/options.nix
     ../modules/core/skynet-scripts/options.nix

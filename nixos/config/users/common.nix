@@ -8,6 +8,7 @@
     ../../modules/assorted/autoclicker/home.nix
     ../../modules/core/bitwarden/home.nix
     ../../modules/core/direnv/home.nix
+    ../../modules/core/eventbus/home.nix
     ../../modules/core/git/home.nix
     ../../modules/core/keyring/home.nix
     ../../modules/core/skynet-scripts/home.nix

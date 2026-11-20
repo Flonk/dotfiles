@@ -7,6 +7,10 @@
   config.skynet.module = {
     core = {
       direnv.enable = true;
+      eventbus = {
+        enable = true;
+        calendar.enable = true;
+      };
       git.enable = true;
       bitwarden.enable = true;
       keyring.enable = true;

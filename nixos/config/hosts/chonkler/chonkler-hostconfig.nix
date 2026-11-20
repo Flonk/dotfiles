@@ -18,6 +18,7 @@
         avahi.enable = false;
         autoclicker.enable = true;
       };
+      core.eventbus.enable = true;
       desktop = {
         audio = {
           enable = true;
