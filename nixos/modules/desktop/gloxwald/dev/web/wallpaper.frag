@@ -18,8 +18,6 @@ uniform sampler2D grainTex;
 uniform sampler2D gradientTex;
 uniform sampler2D markTex;
 uniform sampler2D ampTex;
-uniform sampler2D clockTex;
-uniform vec4 clockRect;
 
 out vec4 fragColor;
 
@@ -172,11 +170,7 @@ vec3 wallpaper(vec2 p) {
     vec3 c = mix(ground + accent * SPOT_GROUND * spot(p), grain.rgb, grain.a);
     c = mix(c, vec3(1.0), 0.07 * gridDots(p));
     c = sunkenAmp(p, c);
-    c = mix(c, accent, 0.55 * mastheadDots(p));
-    vec2 m = (p - clockRect.xy) / clockRect.zw;
-    if (all(greaterThanEqual(m, vec2(0.0))) && all(lessThanEqual(m, vec2(1.0))))
-        c = mix(c, vec3(1.0), texture(clockTex, m).a);
-    return c;
+    return mix(c, accent, 0.55 * mastheadDots(p));
 }
 
 void main() {

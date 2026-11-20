@@ -101,6 +101,5 @@ bake-chrome accent="#1d9eb6":
 # Serve the desktop chrome + wallpaper in the browser; edit dev/web/wallpaper.frag and it hot-reloads
 web port="8642" accent=`jq -r '.wm800 // "#1d9eb6"' ${XDG_CONFIG_HOME:-$HOME/.config}/quickshell-theme.json 2>/dev/null || echo "#1d9eb6"`:
     just bake-chrome '{{accent}}'
-    mkdir -p dev/web/fonts && ln -sfn "$(nix-build '<nixpkgs>' -A nerd-fonts.iosevka --no-out-link)/share/fonts/truetype/NerdFonts/Iosevka/IosevkaNerdFont-Light.ttf" dev/web/fonts/Iosevka.ttf
     @echo "http://127.0.0.1:{{port}}/dev/web/   (?screen=1920x1200 for a fixed size)"
     nix-shell -p python3 --run "python3 -m http.server {{port}} --bind 127.0.0.1"

@@ -13,7 +13,6 @@
     font: 12px/1.4 ui-monospace, monospace; color: #ffd7d7; background: #3a0d10e6;
     border: 1px solid #f07178; border-radius: 6px; white-space: pre-wrap; display: none;
   }
-  @font-face { font-family: "Iosevka"; src: url("fonts/Iosevka.ttf"); }
   #hud {
     position: fixed; right: 10px; top: 46px; font: 10px ui-monospace, monospace; color: #ddd6c4aa;
     pointer-events: none; letter-spacing: 0.08em;
@@ -57,26 +56,6 @@ function texture(source, nearest) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   return t;
-}
-
-const CLOCK = { x: 56, y: 28, size: 220, width: 1100, height: 280 };
-const clockCanvas = document.createElement('canvas');
-let clockText = '';
-
-function drawClock() {
-  const now = new Date();
-  const text = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-  if (text === clockText) return false;
-  clockText = text;
-  clockCanvas.width = CLOCK.width;
-  clockCanvas.height = CLOCK.height;
-  const ctx = clockCanvas.getContext('2d');
-  ctx.clearRect(0, 0, CLOCK.width, CLOCK.height);
-  ctx.fillStyle = '#fff';
-  ctx.textBaseline = 'alphabetic';
-  ctx.font = `${CLOCK.size}px "Iosevka"`;
-  ctx.fillText(text, 0, CLOCK.size * 0.95);
-  return true;
 }
 
 function markCanvas() {
@@ -180,14 +159,8 @@ function frame() {
     gl.uniform1f(u('outerRadius'), T3.outerRadius);
     gl.uniform3fv(u('ground'), hex(palette.ground || '#0b0f12'));
     gl.uniform3fv(u('accent'), hex(palette.accent || '#1d9eb6'));
-    gl.uniform4f(u('clockRect'), T3.border + CLOCK.x, T3.band + CLOCK.y, CLOCK.width, CLOCK.height);
-    if (drawClock()) {
-      gl.bindTexture(gl.TEXTURE_2D, textures.clock);
-      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, clockCanvas);
-    }
     gl.uniform4f(u('markRect'), Math.round(w / 2 - T3.markSize / 2), Math.round((T3.band - T3.markSize) / 2), T3.markSize, T3.markSize);
-    [['noiseTex', 'noise'], ['dotsTex', 'dots'], ['grainTex', 'grain'], ['gradientTex', 'gradient'], ['markTex', 'mark'], ['ampTex', 'amp'], ['clockTex', 'clock']]
+    [['noiseTex', 'noise'], ['dotsTex', 'dots'], ['grainTex', 'grain'], ['gradientTex', 'gradient'], ['markTex', 'mark'], ['ampTex', 'amp']]
       .forEach(([name, key], i) => {
         gl.activeTexture(gl.TEXTURE0 + i);
         gl.bindTexture(gl.TEXTURE_2D, textures[key]);
@@ -209,10 +182,7 @@ function frame() {
   textures.dots = texture(await loadImage(CHROME + 'dots.png'), false);
   textures.grain = texture(await loadImage(CHROME + 'grain.png'), true);
   textures.amp = texture(await loadImage('andamp_sdf.png'), false);
-  await document.fonts.load('220px "Iosevka"');
   await document.fonts.ready;
-  drawClock();
-  textures.clock = texture(clockCanvas, false);
   textures.mark = texture(markCanvas(), false);
   size();
   addEventListener('resize', size);
