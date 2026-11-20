@@ -76,7 +76,7 @@ in
 
           general = {
             layout = "hy3";
-            gaps_in = 6;
+            gaps_in = 0;
             gaps_out = 12;
             border_size = borderSize;
           };
@@ -109,7 +109,7 @@ in
           };
 
           decoration = {
-            rounding = 8;
+            rounding = 0;
             blur = {
               enabled = false;
               size = 5;

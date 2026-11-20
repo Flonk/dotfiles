@@ -53,6 +53,11 @@ Scope {
         }
     }
 
+    ChromeCorner { monitor: root.modelData; corner: "tl" }
+    ChromeCorner { monitor: root.modelData; corner: "tr" }
+    ChromeCorner { monitor: root.modelData; corner: "bl" }
+    ChromeCorner { monitor: root.modelData; corner: "br" }
+
     PanelWindow {
         screen: root.modelData
         anchors { top: true; left: true; right: true }
