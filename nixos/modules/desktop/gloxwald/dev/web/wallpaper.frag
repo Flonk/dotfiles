@@ -109,9 +109,9 @@ float gridDots(vec2 p) {
 }
 
 const float AMP_HEIGHT = 340.0;
-const vec3 AMP_GREY = vec3(0.155);
-const float AMP_DEPTH = 7.0;
-const vec2 LIGHT = vec2(0.70710678, 0.70710678);
+const vec3 AMP_DARK = vec3(0.018, 0.02, 0.022);
+const float GLOW_REACH = 22.0;
+const float GLOW_STRENGTH = 0.9;
 
 vec2 ampCenter() {
     return vec2(screenSize.x * 0.5, (bandHeight + screenSize.y - border) * 0.5);
@@ -134,11 +134,15 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     if (d > 2.0)
         return c;
     float inside = clamp(0.5 - d, 0.0, 1.0);
-    float shadow = 0.0;
-    for (int i = 1; i <= 6; i++)
-        shadow += smoothstep(-0.75, 0.75, ampDist(p - LIGHT * AMP_DEPTH * float(i) / 6.0));
-    shadow /= 6.0;
-    vec3 floor_ = AMP_GREY * (1.0 - 0.85 * shadow);
+    float reach = 0.0;
+    for (int i = 0; i < 24; i++) {
+        float step_ = -ampDist(p + vec2(0.0, reach));
+        if (step_ <= 0.05 || reach > GLOW_REACH * 4.0)
+            break;
+        reach += step_;
+    }
+    float glow = exp(-reach / GLOW_REACH);
+    vec3 floor_ = AMP_DARK + accent * GLOW_STRENGTH * glow * glow;
     float ring = clamp(0.5 - d, 0.0, 1.0) - clamp(-0.5 - d, 0.0, 1.0);
     floor_ = mix(floor_, lift(floor_), 0.25 * ring / max(inside, 1e-4));
     return mix(c, floor_, inside);
