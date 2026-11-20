@@ -161,6 +161,9 @@ FloatingWindow {
         function reload(): void {
             win.reloadTab();
         }
+        function dock(mode: string): void {
+            win.dock = mode;
+        }
         function state(): string {
             return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, dock: win.dock, logOpen: win.logOpen, geo: [sidebar, sideScroll, logBox, stage].map(i => [Math.round(i.x), Math.round(i.y), Math.round(i.width), Math.round(i.height)]), grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
         }
@@ -367,12 +370,10 @@ FloatingWindow {
     Rectangle {
         id: sidebar
         readonly property bool atBottom: win.dock === "bottom"
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.top: atBottom ? undefined : parent.top
-        anchors.right: atBottom ? parent.right : undefined
-        width: win.sidebarWidth
-        height: 340
+        x: 0
+        y: atBottom ? parent.height - height : 0
+        width: atBottom ? parent.width : win.sidebarWidth
+        height: atBottom ? 340 : parent.height
         color: "#18181d"
 
         Rectangle {
@@ -384,11 +385,8 @@ FloatingWindow {
 
         Flickable {
             id: sideScroll
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.right: sidebar.atBottom ? undefined : parent.right
-            anchors.bottom: sidebar.atBottom ? parent.bottom : logBox.top
             width: win.sidebarWidth
+            height: sidebar.atBottom ? parent.height : parent.height - logBox.height
             contentHeight: side.implicitHeight + 24
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -561,13 +559,10 @@ FloatingWindow {
 
         Rectangle {
             id: logBox
-            anchors.left: sidebar.atBottom ? sideScroll.right : parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.top: sidebar.atBottom ? parent.top : undefined
-            anchors.rightMargin: sidebar.atBottom ? 0 : 1
-            anchors.topMargin: 1
-            height: win.logOpen ? Math.round(sidebar.height * 0.34) : logHeader.height
+            x: sidebar.atBottom ? win.sidebarWidth : 0
+            y: sidebar.atBottom ? 1 : parent.height - height
+            width: sidebar.atBottom ? parent.width - win.sidebarWidth : parent.width - 1
+            height: sidebar.atBottom ? parent.height - 1 : win.logOpen ? Math.round(parent.height * 0.34) : logHeader.height
             color: "#0f0f13"
 
             Rectangle {
@@ -640,10 +635,9 @@ FloatingWindow {
 
     Item {
         id: stage
-        anchors.left: sidebar.atBottom ? parent.left : sidebar.right
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: sidebar.atBottom ? sidebar.top : parent.bottom
+        x: sidebar.atBottom ? 0 : sidebar.width
+        width: parent.width - x
+        height: sidebar.atBottom ? parent.height - sidebar.height : parent.height
         focus: true
 
         Item {
