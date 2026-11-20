@@ -16,6 +16,7 @@ layout(std140, binding = 0) uniform buf {
     float overlayMode;
     vec4 ground;
     vec4 markRect;
+    vec4 accent;
 };
 
 layout(binding = 1) uniform sampler2D noiseTex;
@@ -77,6 +78,31 @@ vec4 straight(vec4 c) {
     return c.a > 0.0 ? vec4(c.rgb / c.a, c.a) : c;
 }
 
+float mastheadDots(vec2 p) {
+    float depth = p.y - bandHeight;
+    float fade = 1.0 - clamp(depth / (144.0 * 0.7), 0.0, 1.0);
+    if (fade <= 0.0)
+        return 0.0;
+    const float s = 0.29237170472273677;
+    const float k = 0.9563047559630354;
+    float cover = 0.0;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            vec2 q = p + (vec2(float(i), float(j)) + 0.5) / 4.0 - 0.5;
+            q = vec2(k * q.x + s * q.y, -s * q.x + k * q.y);
+            vec2 cell = mod(q, 2.5) - 1.25;
+            cover += step(length(cell), 0.55);
+        }
+    }
+    return cover / 16.0 * fade;
+}
+
+vec3 groundAt(vec2 p) {
+    vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
+    vec3 c = mix(ground.rgb, grain.rgb, grain.a);
+    return mix(c, accent.rgb, 0.55 * mastheadDots(p));
+}
+
 void main() {
     vec2 p = origin + qt_TexCoord0 * itemSize;
     vec2 lo = vec2(border, bandHeight);
@@ -91,8 +117,7 @@ void main() {
             fragColor = vec4(0.0);
             return;
         }
-        vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-        fragColor = vec4(mix(ground.rgb, grain.rgb, grain.a), 1.0) * qt_Opacity;
+        fragColor = vec4(groundAt(p), 1.0) * qt_Opacity;
         return;
     }
 
@@ -106,8 +131,7 @@ void main() {
     if (ring > 0.0)
         c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
     if (inner > 0.0 && overlayMode < 0.5) {
-        vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-        c = mix(c, mix(ground.rgb, grain.rgb, grain.a), inner);
+        c = mix(c, groundAt(p), inner);
     }
 
     if (markRect.z > 0.0) {

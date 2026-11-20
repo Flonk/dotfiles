@@ -13,6 +13,7 @@ ShaderEffect {
     readonly property real radius: T3.radius
     readonly property real outerRadius: T3.outerRadius
     readonly property color ground: T3.ground
+    readonly property color accent: Theme.wm800
 
     property var noiseTex: noise
     property var dotsTex: dots
