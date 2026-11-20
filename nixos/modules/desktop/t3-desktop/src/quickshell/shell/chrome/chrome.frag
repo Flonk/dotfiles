@@ -17,6 +17,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 ground;
     vec4 markRect;
     vec4 accent;
+    float plain;
 };
 
 layout(binding = 1) uniform sampler2D noiseTex;
@@ -172,9 +173,10 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
 
 vec3 groundAt(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-    vec3 c = mix(ground.rgb + accent.rgb * SPOT_GROUND * spot(p), grain.rgb, grain.a);
+    vec3 c = mix(ground.rgb + accent.rgb * SPOT_GROUND * spot(p) * (1.0 - plain), grain.rgb, grain.a);
     c = mix(c, vec3(1.0), 0.07 * gridDots(p));
-    c = sunkenAmp(p, c);
+    if (plain < 0.5)
+        c = sunkenAmp(p, c);
     return mix(c, accent.rgb, 0.55 * mastheadDots(p));
 }
 

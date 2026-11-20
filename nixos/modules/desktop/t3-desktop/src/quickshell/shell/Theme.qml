@@ -53,22 +53,7 @@ QtObject {
     readonly property color error600: _data.error600
     readonly property color success600: _data.success600
     readonly property color ground: _data.ground
-    readonly property int fontSizeSmall: Math.round(_data.fontSize * 0.9)
     readonly property string fontFamily: _data.fontFamily
     readonly property int labelSize: _data.labelSize ?? 10
     readonly property real labelTracking: _data.labelTracking ?? 1.2
-
-    function shade(f: real): color {
-        return Qt.rgba(app600.r * f, app600.g * f, app600.b * f, 1);
-    }
-
-    readonly property color textStrong: shade(0.9)
-    readonly property color text: shade(0.75)
-    readonly property color textDim: shade(0.5)
-    readonly property color segment: Qt.rgba(app200.r, app200.g, app200.b, 0.2)
-    readonly property color warning: "#ffa500"
-    readonly property color launcher: "#5277c3"
-    readonly property color brightness: "#bda551"
-    readonly property color volume: "#7493a3"
-    readonly property color headphones: "#a3746f"
 }

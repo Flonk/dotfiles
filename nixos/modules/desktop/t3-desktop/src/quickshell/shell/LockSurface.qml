@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 
 Item {
     id: root
@@ -94,14 +95,19 @@ Item {
         }
     }
 
-    // ---- Bottom bar (reuses the real bar) ----
-    BarContent {
-        anchors.bottom: parent.bottom
+    ChromeSurface {
+        anchors.fill: parent
+        overlayMode: 1
+    }
+
+    ChromeHeader {
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        lockscreen: true
+        height: T3.band
+        screenSize: Qt.vector2d(root.width, root.height)
+        monitor: Hyprland.focusedMonitor
         interactive: false
-        authorText: root.authorText
     }
 
     // ---- Hidden password input ----

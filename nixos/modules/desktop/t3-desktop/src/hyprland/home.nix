@@ -12,6 +12,18 @@ let
     accent = config.programs.t3-desktop.stylix.accent;
     ground = config.programs.t3-desktop.stylix.ground;
   };
+  ground = (builtins.fromJSON (builtins.readFile "${t3Pkgs.chrome}/palette.json")).ground;
+  loginLock = pkgs.writeShellScript "t3-desktop-login-lock" ''
+    [ -n "''${T3_DESKTOP_LOGIN_LOCK:-}" ] || exit 0
+    marker="$XDG_RUNTIME_DIR/t3-desktop-login-$HYPRLAND_INSTANCE_SIGNATURE"
+    [ -e "$marker" ] && exit 0
+    touch "$marker"
+    for _ in $(seq 40); do
+      ${pkgs.quickshell}/bin/quickshell ipc call lock login && exit 0
+      sleep 0.25
+    done
+    exec ${pkgs.hyprlock}/bin/hyprlock
+  '';
 
   hypr-scale = pkgs.writeShellApplication {
     name = "hypr-scale";
@@ -35,6 +47,8 @@ in
     home.packages = [ hypr-scale ];
 
     xdg.dataFile."t3-desktop/libhy3.so".source = "${t3Pkgs.hy3}/lib/libhy3.so";
+
+    stylix.targets.hyprland.hyprpaper.enable = false;
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -99,6 +113,7 @@ in
           layers.layers_hog_keyboard_focus = true;
 
           misc = {
+            background_color = lib.mkForce "rgba(${lib.removePrefix "#" ground}ff)";
             initial_workspace_tracking = 0;
             mouse_move_enables_dpms = true;
             key_press_enables_dpms = false;
@@ -204,6 +219,7 @@ in
       extraLuaFiles.bindings = ./bindings.lua;
 
       extraConfig = ''
+        hl.exec_cmd("${loginLock}")
         hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("${lockCommand}"))
 
         hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })

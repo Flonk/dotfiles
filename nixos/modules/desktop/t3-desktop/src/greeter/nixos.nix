@@ -66,6 +66,11 @@ let
     then "${pkgs.cage}/bin/cage -s -- ${greeterClient}"
     else "${pkgs.sway}/bin/sway --config ${swayKioskConf}";
 
+  autologinScript = pkgs.writeShellScript "t3-desktop-autologin" ''
+    export T3_DESKTOP_LOGIN_LOCK=1
+    exec ${cfg.settings.exec}
+  '';
+
 in
 {
   config = mkIf cfg.enable {
@@ -81,6 +86,11 @@ in
         default_session = {
           command = greeterCommand;
           user = "greeter";
+        };
+      } // optionalAttrs (cfg.autologin && cfg.settings.user != null) {
+        initial_session = {
+          command = "${autologinScript}";
+          user = cfg.settings.user;
         };
       };
     };

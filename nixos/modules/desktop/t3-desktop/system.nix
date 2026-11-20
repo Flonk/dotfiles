@@ -32,6 +32,7 @@ in
 
     programs.t3-desktop.greeter = {
       enable = true;
+      autologin = true;
       output = "eDP-1";
       settings = {
         exec = "start-hyprland >/dev/null 2>&1";

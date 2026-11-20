@@ -174,6 +174,8 @@ in
     greeter = {
       enable = mkEnableOption "t3greet greeter for greetd";
 
+      autologin = mkEnableOption "logging straight into the session on boot, behind the quickshell login lock (the greeter stays for after a logout)";
+
       output = mkOption {
         type = types.nullOr types.str;
         default = null;

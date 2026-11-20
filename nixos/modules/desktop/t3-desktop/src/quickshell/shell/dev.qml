@@ -14,7 +14,7 @@ FloatingWindow {
     readonly property string rootDir: Quickshell.env("T3_DESKTOP_ROOT")
     readonly property string devDir: Quickshell.env("T3_DESKTOP_DEV")
 
-    readonly property var tabNames: ["desktop", "bar", "lock", "greeter", "grub"]
+    readonly property var tabNames: ["desktop", "login", "lock", "greeter", "grub"]
     readonly property string tabName: tabNames[tab]
     property int tab: Math.max(0, tabNames.indexOf(Quickshell.env("T3_DESKTOP_TAB") || "desktop"))
 
@@ -25,12 +25,11 @@ FloatingWindow {
     property bool fit: true
     property bool logOpen: true
     property bool logAll: false
-    property real barZoom: 2
     property bool mockWindows: true
     property string dock: "left"
     property string lastWheel: ""
     readonly property int sidebarWidth: 330
-    readonly property var tabSources: ({ desktop: ["dev", "theme"], bar: ["dev", "theme"], lock: ["dev", "theme", "shader"], greeter: ["dev", "theme", "greeter"], grub: ["dev", "theme", "grub"] })
+    readonly property var tabSources: ({ desktop: ["dev", "theme"], login: ["dev", "theme"], lock: ["dev", "theme", "shader"], greeter: ["dev", "theme", "greeter"], grub: ["dev", "theme", "grub"] })
     property int sceneRev: 0
 
     property var theme: ({})
@@ -60,8 +59,8 @@ FloatingWindow {
     }
 
     function reloadTab() {
-        if (tabName === "bar") {
-            gallery.reload();
+        if (tabName === "login") {
+            lockCtx.reset();
         } else if (tabName === "lock") {
             sceneRev++;
             lockCtx.reset();
@@ -77,7 +76,6 @@ FloatingWindow {
     }
 
     function reloadAll() {
-        gallery.reload();
         desktopLoader.active = false;
         desktopLoader.active = true;
         shaderJob.kick();
@@ -468,22 +466,9 @@ FloatingWindow {
 
                 Column {
                     width: side.width
-                    spacing: 6
-                    visible: win.tabName === "bar"
-                    Hint { text: "The live bar at the frame width, its lockscreen variant, a zoomed crop of every named section (objectName in BarContent), each reusable component on its own, and the live state of every data singleton." }
-                    Flow {
-                        width: side.width
-                        spacing: 4
-                        Repeater {
-                            model: [1, 2, 3, 4]
-                            DevButton {
-                                required property int modelData
-                                label: "zoom " + modelData + "x"
-                                active: win.barZoom === modelData
-                                onClicked: win.barZoom = modelData
-                            }
-                        }
-                    }
+                    spacing: 10
+                    visible: win.tabName === "login"
+                    Hint { text: "The boot-time login lock: plain frame and a password prompt. Password t3-desktop unlocks, anything else fails. Click the stage to type." }
                 }
 
                 Column {
@@ -821,14 +806,13 @@ FloatingWindow {
 
         Item {
             anchors.fill: parent
-            visible: win.tabName === "bar"
+            visible: win.tabName === "login"
 
-            BarGallery {
-                id: gallery
-                anchors.fill: parent
-                frameW: win.frameW
-                zoom: win.barZoom
-                active: win.tabName === "bar"
+            Frame {
+                LoginSurface {
+                    anchors.fill: parent
+                    context: lockCtx
+                }
             }
         }
 

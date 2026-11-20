@@ -5,13 +5,19 @@ import Quickshell.Wayland
 import Quickshell.Io
 
 ShellRoot {
+    id: root
+    property bool loginMode: false
+
     Chrome {}
 
     LockContext {
         id: lockContext
 
         onUnlocked: {
-            Qt.callLater(() => { lock.locked = false; });
+            Qt.callLater(() => {
+                lock.locked = false;
+                root.loginMode = false;
+            });
         }
     }
 
@@ -32,11 +38,24 @@ ShellRoot {
 
         WlSessionLockSurface {
             id: lockWindow
-            LockSurface {
-                id: lockSurface
+            Loader {
                 anchors.fill: parent
-                context: lockContext
-                renderScene: lockWindow.screen === lock.renderScreen
+                sourceComponent: root.loginMode ? loginComponent : lockComponent
+            }
+
+            Component {
+                id: lockComponent
+                LockSurface {
+                    context: lockContext
+                    renderScene: lockWindow.screen === lock.renderScreen
+                }
+            }
+
+            Component {
+                id: loginComponent
+                LoginSurface {
+                    context: lockContext
+                }
             }
         }
     }
@@ -44,6 +63,11 @@ ShellRoot {
     IpcHandler {
         target: "lock"
         function lock(): void { lockScreen(); }
+        function login(): void {
+            lockContext.reset();
+            root.loginMode = true;
+            lock.locked = true;
+        }
     }
 
     function lockScreen() {
