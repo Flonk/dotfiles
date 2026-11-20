@@ -36,6 +36,7 @@ echo "=== Generating T3_DESKTOP GRUB theme ==="
 echo "[1/5] Background..."
 if [[ -n "${GRUB_BACKGROUND:-}" ]]; then
     $IM "$GRUB_BACKGROUND" -resize "${W}x${H}!" -depth 8 "PNG32:${OUT}/background.png"
+    $IM "${OUT}/background.png" -crop "$(( W - 48 ))x$(( H - 84 ))+24+60" +repage -depth 8 "PNG32:${OUT}/terminal.png"
 else
     $IM -size "${W}x${H}" xc:"$BG_COLOR" -depth 8 "PNG32:${OUT}/background.png"
 fi
@@ -69,16 +70,10 @@ done
 rm "${OUT}/menubox.png"
 
 # Terminal box
-mkslice() { $IM -size "${2}x${3}" "xc:${4}" "PNG32:${OUT}/${1}"; }
-mkslice "terminal_c.png" 8 8 "$BG_COLOR"
-mkslice "terminal_n.png" 8 2 "$BAR_BG"
-mkslice "terminal_s.png" 8 2 "$BAR_BG"
-mkslice "terminal_e.png" 2 8 "$BAR_BG"
-mkslice "terminal_w.png" 2 8 "$BAR_BG"
-mkslice "terminal_nw.png" 2 2 "$BAR_BG"
-mkslice "terminal_ne.png" 2 2 "$BAR_BG"
-mkslice "terminal_sw.png" 2 2 "$BAR_BG"
-mkslice "terminal_se.png" 2 2 "$BAR_BG"
+mkslice() { $IM -size "$2" "xc:$3" "PNG32:${OUT}/$1"; }
+for slice in c:8x8 n:8x2 s:8x2 e:2x8 w:2x8 nw:2x2 ne:2x2 sw:2x2 se:2x2; do
+    mkslice "terminal_${slice%%:*}.png" "${slice#*:}" none
+done
 
 # --- Fonts ---
 echo "[4/5] Fonts..."
@@ -128,6 +123,10 @@ desktop-image: "background.png"
 desktop-color: "${BG_COLOR}"
 terminal-font: "${FONT_FAMILY} Regular 12"
 terminal-box: "terminal_*.png"
+terminal-left: "24"
+terminal-top: "60"
+terminal-width: "100%-48"
+terminal-height: "100%-84"
 ${ASCII_BLOCK}
 
 + boot_menu {

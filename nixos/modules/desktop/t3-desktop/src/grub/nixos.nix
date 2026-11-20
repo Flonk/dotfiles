@@ -45,8 +45,8 @@ in
     boot.loader.grub.enable = true;
     boot.loader.grub.useOSProber = grubCfg.useOSProber;
     boot.loader.grub.theme = t3GrubTheme;
-    boot.loader.grub.splashImage = t3Pkgs.frame;
-    boot.loader.grub.splashMode = "stretch";
+    boot.loader.grub.splashImage = "${t3GrubTheme}/terminal.png";
+    boot.loader.grub.splashMode = "normal";
     boot.loader.grub.backgroundColor = palette.ground;
   };
 }

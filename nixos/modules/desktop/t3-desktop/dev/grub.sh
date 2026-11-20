@@ -38,6 +38,7 @@ build() {
         for f in "$themedir"/*.pf2; do
             echo "loadfont /boot/grub/themes/t3-desktop/$(basename "$f")"
         done
+        echo "background_image /boot/grub/themes/t3-desktop/terminal.png"
         echo "set theme=/boot/grub/themes/t3-desktop/theme.txt"
         echo "set timeout=30"
         echo "set default=0"
