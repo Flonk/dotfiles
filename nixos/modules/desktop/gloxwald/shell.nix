@@ -11,7 +11,7 @@ pkgs.mkShell {
     just
     mtools
     OVMF.fd
-    python3
+    (python3.withPackages (p: [ p.numpy p.pillow ]))
     qemu
     qt6.qtshadertools
     quickshell

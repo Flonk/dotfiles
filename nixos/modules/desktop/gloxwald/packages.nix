@@ -1,6 +1,7 @@
 {
   pkgs,
   rev ? "dev",
+  accent ? "#1d9eb6",
 }:
 let
   quickshellSrc = builtins.path {
@@ -15,13 +16,22 @@ let
     path = ./ascii.txt;
     name = "gloxwald-ascii.txt";
   };
-  chromeTextures = builtins.path {
+  chromeStatic = builtins.path {
     path = ./src/quickshell/shell/chrome;
-    name = "gloxwald-chrome-textures";
-    filter = path: type: pkgs.lib.hasSuffix ".png" path;
+    name = "gloxwald-chrome-static";
+    filter = path: type: builtins.elem (baseNameOf path) [ "dots.png" "noise.png" "grain.png" ];
   };
+  chrome = pkgs.runCommand "gloxwald-chrome" {
+    nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.numpy p.pillow ])) ];
+  } ''
+    mkdir -p $out
+    cp ${chromeStatic}/*.png $out/
+    python3 -I ${./dev/bake-chrome.py} '${accent}' $out/gradient.png $out/palette.json
+  '';
 in
 {
+  inherit chrome;
+
   default = pkgs.writeShellApplication {
     name = "gloxwald";
     runtimeInputs = with pkgs; [
@@ -81,6 +91,6 @@ in
       path = ./src/hy3;
       name = "source";
     };
-    NIX_CFLAGS_COMPILE = "-DHY3_CHROME_DIR=\"${chromeTextures}\"";
+    NIX_CFLAGS_COMPILE = "-DHY3_CHROME_DIR=\"${chrome}\"";
   };
 }

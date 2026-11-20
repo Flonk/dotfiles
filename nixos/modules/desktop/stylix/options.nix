@@ -19,9 +19,14 @@ in
       description = "Window manager accent color (borders, active tabs)";
     };
     accentDark = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Darker accent variant (focused/inactive tab text); derived from accent when null";
+    };
+    ground = mkOption {
       type = types.str;
-      default = "#8e4e1c";
-      description = "Darker accent variant (focused/inactive tab text)";
+      default = "#100e0a";
+      description = "Desktop ground colour behind the windows, inside the chrome frame";
     };
     wallpaper = mkOption {
       type = types.nullOr (types.either types.path types.package);

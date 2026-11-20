@@ -10,6 +10,8 @@ if [[ ! -f "$DEV/theme.json" ]]; then
     cp "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell-theme.json" "$DEV/theme.json" 2>/dev/null || echo '{}' > "$DEV/theme.json"
 fi
 
+python3 -I dev/bake-chrome.py "$(jq -r '.wm800 // "#1d9eb6"' "$DEV/theme.json")" src/quickshell/shell/chrome/gradient.png src/quickshell/shell/chrome/palette.json
+
 pids=()
 cleanup() {
     kill "${pids[@]}" 2>/dev/null || true

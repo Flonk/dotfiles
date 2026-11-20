@@ -19,6 +19,7 @@ QtObject {
         error400: "#f07178",
         error600: "#ff8f40",
         success600: "#aad94c",
+        ground: "#100e0a",
         fontFamily: "DejaVuSansM Nerd Font"
     })
 
@@ -49,6 +50,7 @@ QtObject {
     readonly property color error400: _data.error400
     readonly property color error600: _data.error600
     readonly property color success600: _data.success600
+    readonly property color ground: _data.ground
     readonly property int fontSizeSmall: Math.round(_data.fontSize * 0.9)
     readonly property string fontFamily: _data.fontFamily
 

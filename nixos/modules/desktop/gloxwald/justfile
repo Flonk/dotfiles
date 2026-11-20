@@ -96,4 +96,4 @@ shader-clean:
 
 # Bake the chrome gradient shared by the quickshell frame and hy3 tabs
 bake-chrome accent="#1d9eb6":
-    nix-shell -p "python3.withPackages(p: [p.numpy p.pillow])" --run "python3 -I dev/bake-chrome.py '{{accent}}' src/quickshell/shell/chrome/gradient.png"
+    nix-shell -p "python3.withPackages(p: [p.numpy p.pillow])" --run "python3 -I dev/bake-chrome.py '{{accent}}' src/quickshell/shell/chrome/gradient.png src/quickshell/shell/chrome/palette.json"

@@ -7,7 +7,10 @@
 let
   borderSize = 2;
   lockCommand = config.programs.gloxwald.quickshell.lockCommand;
-  gloxwaldPkgs = import ../../packages.nix { inherit pkgs; };
+  gloxwaldPkgs = import ../../packages.nix {
+    inherit pkgs;
+    accent = config.programs.gloxwald.stylix.accent;
+  };
 
   hypr-scale = pkgs.writeShellApplication {
     name = "hypr-scale";

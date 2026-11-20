@@ -3,10 +3,16 @@ with lib;
 let
   cfg = config.programs.gloxwald.quickshell;
 
-  quickshellConfigDir = builtins.path {
-    path = ./shell;
-    name = "gloxwald-quickshell-shell";
+  gloxwaldPkgs = import ../../packages.nix {
+    inherit pkgs;
+    accent = config.programs.gloxwald.stylix.accent;
   };
+
+  quickshellConfigDir = pkgs.runCommand "gloxwald-quickshell-shell" { } ''
+    cp -r ${builtins.path { path = ./shell; name = "gloxwald-quickshell-src"; }} $out
+    chmod -R u+w $out
+    cp ${gloxwaldPkgs.chrome}/gradient.png ${gloxwaldPkgs.chrome}/palette.json $out/chrome/
+  '';
 
   themeJson =
     let
@@ -23,6 +29,7 @@ let
       app800 = c.base06;
       app900 = c.base07;
       wm800 = config.programs.gloxwald.stylix.accent;
+      ground = config.programs.gloxwald.stylix.ground;
       error400 = c.base08;
       error600 = c.base09;
       success600 = c.base0B;
