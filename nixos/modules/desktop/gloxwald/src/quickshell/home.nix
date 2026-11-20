@@ -64,6 +64,10 @@ in
         Description = "gloxwald quickshell bar";
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
+        X-Restart-Triggers = [
+          "${quickshellConfigDir}"
+          "${builtins.hashString "sha256" themeJson}"
+        ];
       };
       Service = {
         Type = "simple";
