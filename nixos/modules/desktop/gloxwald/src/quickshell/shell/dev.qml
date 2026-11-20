@@ -22,6 +22,9 @@ FloatingWindow {
     readonly property int frameH: resolutions[resIndex][1]
     property bool fit: true
     property bool logOpen: true
+    property bool logAll: false
+    readonly property int sidebarWidth: 330
+    readonly property var tabSources: [["dev", "theme"], ["dev", "theme", "shader"], ["dev", "theme", "greeter"], ["dev", "theme", "grub"]]
     property int sceneRev: 0
 
     property var theme: ({})
@@ -258,37 +261,51 @@ FloatingWindow {
     Shortcut { sequence: "Ctrl+L"; context: Qt.ApplicationShortcut; onActivated: win.logOpen = !win.logOpen }
     Shortcut { sequence: "Ctrl+F"; context: Qt.ApplicationShortcut; onActivated: win.fit = !win.fit }
 
-    component Sep: Rectangle {
-        width: 1
-        height: 22
-        color: "#33ffffff"
+    component SectionTitle: Text {
+        color: "#66ffffff"
+        font.pixelSize: 10
+        font.bold: true
+        font.letterSpacing: 1.5
+        font.capitalization: Font.AllUppercase
+        topPadding: 10
+        bottomPadding: 2
     }
 
-    component ThemeField: Row {
+    component Hint: Text {
+        width: parent ? parent.width : 0
+        wrapMode: Text.WordWrap
+        color: "#88ffffff"
+        font.pixelSize: 11
+    }
+
+    component ThemeField: Item {
         id: tf
         required property var modelData
         readonly property string key: modelData[0]
-        spacing: 6
+        width: parent ? parent.width : 0
+        height: 26
 
         Rectangle {
+            id: swatch
             anchors.verticalCenter: parent.verticalCenter
-            width: 18
-            height: 18
-            radius: 3
+            width: 22
+            height: 22
+            radius: 4
             color: win.theme[tf.key] ?? "#000000"
             border.color: "#55ffffff"
         }
 
         Text {
-            anchors.verticalCenter: parent.verticalCenter
+            anchors { left: swatch.right; leftMargin: 8; verticalCenter: parent.verticalCenter }
+            width: 72
             text: tf.modelData[1]
-            color: "#99ffffff"
-            font.pixelSize: 11
+            color: "#aaffffff"
+            font.pixelSize: 12
         }
 
         Rectangle {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 74
+            anchors { right: parent.right; verticalCenter: parent.verticalCenter }
+            width: 96
             height: 24
             radius: 4
             color: "#1affffff"
@@ -339,83 +356,235 @@ FloatingWindow {
     }
 
     Rectangle {
-        id: toolbar
-        anchors { left: parent.left; right: parent.right; top: parent.top }
-        height: tools.implicitHeight + 16
+        id: sidebar
+        anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+        width: win.sidebarWidth
         color: "#18181d"
 
-        Flow {
-            id: tools
-            anchors { left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter; margins: 10 }
-            spacing: 6
+        Rectangle {
+            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+            width: 1
+            color: "#2affffff"
+        }
 
-            Repeater {
-                model: win.tabNames
+        Flickable {
+            id: sideScroll
+            anchors { left: parent.left; right: parent.right; top: parent.top; bottom: logBox.top }
+            contentHeight: side.implicitHeight + 24
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            Column {
+                id: side
+                x: 14
+                y: 6
+                width: sideScroll.width - 28
+                spacing: 6
+
+                SectionTitle { text: "view" }
+
+                Repeater {
+                    model: win.tabNames
+                    DevButton {
+                        required property string modelData
+                        required property int index
+                        width: side.width
+                        height: 28
+                        label: modelData + "   ctrl+" + (index + 1)
+                        active: win.tab === index
+                        onClicked: win.tab = index
+                    }
+                }
+
+                SectionTitle { text: "frame" }
+
+                Flow {
+                    width: side.width
+                    spacing: 4
+                    Repeater {
+                        model: win.resolutions
+                        DevButton {
+                            required property var modelData
+                            required property int index
+                            label: modelData[0] + "×" + modelData[1]
+                            accent: "#d9a530"
+                            active: win.resIndex === index
+                            onClicked: win.resIndex = index
+                        }
+                    }
+                    DevButton {
+                        label: win.fit ? "fit" : "1:1"
+                        accent: "#d9a530"
+                        active: !win.fit
+                        onClicked: win.fit = !win.fit
+                    }
+                }
+
+                SectionTitle { text: "theme" }
+
+                Repeater {
+                    model: win.themeKeys
+                    ThemeField {}
+                }
+
                 DevButton {
-                    required property string modelData
-                    required property int index
-                    label: (index + 1) + " " + modelData
-                    active: win.tab === index
-                    onClicked: win.tab = index
+                    label: "reset to installed theme"
+                    onClicked: themeResetJob.kick()
+                }
+
+                SectionTitle { text: "actions" }
+
+                Flow {
+                    width: side.width
+                    spacing: 4
+                    DevButton {
+                        label: "reload " + win.tabNames[win.tab] + "  ctrl+r"
+                        onClicked: win.reloadTab()
+                    }
+                    DevButton {
+                        label: "reload all"
+                        onClicked: win.reloadAll()
+                    }
+                }
+
+                SectionTitle { text: win.tabNames[win.tab] }
+
+                Column {
+                    width: side.width
+                    spacing: 6
+                    visible: win.tab === 0
+                    Hint { text: "The real BarContent at the bottom of the frame; workspaces follow the focused Hyprland monitor." }
+                }
+
+                Column {
+                    width: side.width
+                    spacing: 10
+                    visible: win.tab === 1
+                    Hint { text: "Password gloxwald unlocks, anything else fails. Click the stage to type." }
+                    LockSceneTools {
+                        context: lockCtx
+                        showRelock: true
+                        mapColumns: 2
+                        flowWidth: side.width
+                        onRestart: win.sceneRev++
+                    }
+                    LockScenePicker {
+                        context: lockCtx
+                        columns: 2
+                        buttonWidth: (side.width - 2) / 2
+                    }
+                }
+
+                Column {
+                    width: side.width
+                    spacing: 6
+                    visible: win.tab === 2
+                    Hint { text: "gloxwaldgreet --test in tmux. Any password logs in and restarts it; F6/F7 restart it too. Click the stage to type." }
+                    Hint { text: "cells: " + term.cols + "×" + term.rows }
+                    DevButton {
+                        label: "rebuild greeter"
+                        onClicked: greeterJob.kick()
+                    }
+                }
+
+                Column {
+                    width: side.width
+                    spacing: 6
+                    visible: win.tab === 3
+                    Hint { text: "generate-assets.sh on a BIOS ISO in headless QEMU. Click the stage to send arrows, enter, e and c." }
+                    Flow {
+                        width: side.width
+                        spacing: 4
+                        DevButton {
+                            label: "reboot vm"
+                            onClicked: grub.reset()
+                        }
+                        DevButton {
+                            label: "rebuild iso"
+                            onClicked: grubJob.kick()
+                        }
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            id: logBox
+            anchors { left: parent.left; right: parent.right; bottom: parent.bottom; rightMargin: 1 }
+            height: win.logOpen ? Math.round(sidebar.height * 0.34) : logHeader.height
+            color: "#0f0f13"
+
+            Rectangle {
+                anchors { left: parent.left; right: parent.right; top: parent.top }
+                height: 1
+                color: "#2affffff"
+            }
+
+            Item {
+                id: logHeader
+                anchors { left: parent.left; right: parent.right; top: parent.top; leftMargin: 14; rightMargin: 14 }
+                height: 36
+
+                SectionTitle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    topPadding: 0
+                    bottomPadding: 0
+                    text: "log"
+                }
+
+                Row {
+                    anchors { right: parent.right; verticalCenter: parent.verticalCenter }
+                    spacing: 4
+                    DevButton {
+                        label: win.logAll ? "all" : win.tabNames[win.tab]
+                        visible: win.logOpen
+                        onClicked: win.logAll = !win.logAll
+                    }
+                    DevButton {
+                        label: "clear"
+                        visible: win.logOpen
+                        onClicked: logModel.clear()
+                    }
+                    DevButton {
+                        label: win.logOpen ? "hide" : "show"
+                        onClicked: win.logOpen = !win.logOpen
+                    }
                 }
             }
 
-            Sep {}
-
-            Repeater {
-                model: win.resolutions
-                DevButton {
-                    required property var modelData
-                    required property int index
-                    label: modelData[0] + "×" + modelData[1]
-                    accent: "#d9a530"
-                    active: win.resIndex === index
-                    onClicked: win.resIndex = index
+            ListView {
+                id: logView
+                anchors { left: parent.left; right: parent.right; top: logHeader.bottom; bottom: parent.bottom; margins: 10; topMargin: 0 }
+                visible: win.logOpen
+                clip: true
+                model: logModel
+                onCountChanged: Qt.callLater(positionViewAtEnd)
+                Connections {
+                    target: win
+                    function onLogAllChanged() { Qt.callLater(logView.positionViewAtEnd); }
+                    function onTabChanged() { Qt.callLater(logView.positionViewAtEnd); }
                 }
-            }
-
-            DevButton {
-                label: win.fit ? "fit" : "1:1"
-                accent: "#d9a530"
-                active: !win.fit
-                onClicked: win.fit = !win.fit
-            }
-
-            Sep {}
-
-            Repeater {
-                model: win.themeKeys
-                ThemeField {}
-            }
-
-            DevButton {
-                label: "reset theme"
-                onClicked: themeResetJob.kick()
-            }
-
-            Sep {}
-
-            DevButton {
-                label: "reload " + win.tabNames[win.tab]
-                onClicked: win.reloadTab()
-            }
-
-            DevButton {
-                label: "reload all"
-                onClicked: win.reloadAll()
-            }
-
-            DevButton {
-                label: "log"
-                active: win.logOpen
-                onClicked: win.logOpen = !win.logOpen
+                delegate: Text {
+                    required property string src
+                    required property string line
+                    readonly property bool shown: win.logAll || win.tabSources[win.tab].includes(src)
+                    width: logView.width
+                    height: shown ? implicitHeight : 0
+                    visible: shown
+                    wrapMode: Text.WrapAnywhere
+                    textFormat: Text.PlainText
+                    font.family: "monospace"
+                    font.pixelSize: 11
+                    color: ({ shader: "#3aa8b8", greeter: "#aad94c", grub: "#d9a530", theme: "#c792ea", dev: "#888888" })[src] ?? "#cccccc"
+                    text: (win.logAll ? src.padEnd(8) : "") + line
+                }
             }
         }
     }
 
     Item {
         id: stage
-        anchors { left: parent.left; right: parent.right; top: toolbar.bottom; bottom: logPane.top }
+        anchors { left: sidebar.right; right: parent.right; top: parent.top; bottom: parent.bottom }
         focus: true
 
         Item {
@@ -450,13 +619,6 @@ FloatingWindow {
                     sceneRev: win.sceneRev
                 }
             }
-
-            LockDevPanel {
-                anchors.fill: parent
-                context: lockCtx
-                showRelock: true
-                onRestart: win.sceneRev++
-            }
         }
 
         Item {
@@ -488,40 +650,6 @@ FloatingWindow {
                     devDir: win.devDir
                     active: win.tab === 3
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        id: logPane
-        anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-        height: win.logOpen ? 180 : 0
-        visible: win.logOpen
-        color: "#0a0a0d"
-
-        Rectangle {
-            anchors { left: parent.left; right: parent.right; top: parent.top }
-            height: 1
-            color: "#33ffffff"
-        }
-
-        ListView {
-            id: logView
-            anchors.fill: parent
-            anchors.margins: 8
-            clip: true
-            model: logModel
-            onCountChanged: positionViewAtEnd()
-            delegate: Text {
-                required property string src
-                required property string line
-                width: logView.width
-                textFormat: Text.PlainText
-                elide: Text.ElideRight
-                font.family: "monospace"
-                font.pixelSize: 12
-                color: ({ shader: "#3aa8b8", greeter: "#aad94c", grub: "#d9a530", theme: "#c792ea", dev: "#888888" })[src] ?? "#cccccc"
-                text: src.padEnd(8) + line
             }
         }
     }

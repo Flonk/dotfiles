@@ -36,7 +36,7 @@ just shader-dev    # live-iterate a lockscreen shader
 
 ### `just dev`
 
-One window, four tabs, sharing a theme (`.dev/theme.json`, seeded from the installed `quickshell-theme.json`), a resolution and reload controls.
+One window: a sidebar (tabs, frame resolution, theme (`.dev/theme.json`, seeded from the installed `quickshell-theme.json`), reload actions, the current tab's own controls, and the log) next to the stage.
 
 - **bar**: the real `BarContent`
 - **lock**: the real `LockSurface` with the shader dev panel; auth is faked, `gloxwald` unlocks, anything else fails

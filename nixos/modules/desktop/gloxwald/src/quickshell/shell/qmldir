@@ -30,3 +30,5 @@ DevButton 1.0 DevButton.qml
 LockDevPanel 1.0 LockDevPanel.qml
 TermView 1.0 TermView.qml
 GrubView 1.0 GrubView.qml
+LockScenePicker 1.0 LockScenePicker.qml
+LockSceneTools 1.0 LockSceneTools.qml
