@@ -6,16 +6,24 @@
 }:
 let
   cfg = config.skynet.module.core.eventbus;
-  calbusPy = pkgs.writers.writePython3Bin "calbus" {
-    libraries = with pkgs.python3Packages; [
-      requests
-      paho-mqtt
-    ];
-    doCheck = false;
-  } (builtins.readFile ./src/calbus.py);
+  secretNames = [
+    "client_id"
+    "client_secret"
+    "refresh_token"
+  ];
+  sopsKey = n: "google_calendar_${n}";
+  calbusBin = pkgs.rustPlatform.buildRustPackage {
+    pname = "calbus";
+    version = "0.1.0";
+    src = ./calbus;
+    cargoLock.lockFile = ./calbus/Cargo.lock;
+  };
   calbus = pkgs.writeShellScriptBin "calbus" ''
-    export PATH="${pkgs.libsecret}/bin:${pkgs.xdg-utils}/bin:$PATH"
-    exec ${calbusPy}/bin/calbus "$@"
+    export PATH="${pkgs.xdg-utils}/bin:$PATH"
+    ${lib.concatMapStrings (n: ''
+      export CALBUS_${lib.toUpper n}_FILE="''${CALBUS_${lib.toUpper n}_FILE:-${config.sops.secrets.${sopsKey n}.path}}"
+    '') secretNames}
+    exec ${calbusBin}/bin/calbus "$@"
   '';
 in
 {
@@ -43,12 +51,17 @@ in
     (lib.mkIf (cfg.enable && cfg.calendar.enable) {
       home.packages = [ calbus ];
 
+      sops.secrets = lib.genAttrs (map sopsKey secretNames) (key: {
+        inherit key;
+        sopsFile = ../../../assets/secrets/secrets.json;
+      });
+
       systemd.user.services.calbus = {
         Unit = {
           Description = "Google Calendar events onto the MQTT bus";
           After = [
             "graphical-session.target"
-            "gnome-keyring-secrets.service"
+            "sops-nix.service"
           ];
           PartOf = [ "graphical-session.target" ];
         };
@@ -73,12 +86,19 @@ in
           title = "Authorize the calendar reader with Google";
           script = pkgs.writeShellScript "calbus-auth.sh" ''
             set -euo pipefail
+            export SOPS_AGE_KEY_FILE="''${SOPS_AGE_KEY_FILE:-$HOME/.config/sops/age/keys.txt}"
+            repo="$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/repos/personal/dotfiles")"
+            secrets="$repo/nixos/assets/secrets/secrets.json"
             client="''${1:-$(ls -t "$HOME"/Downloads/client_secret_*.json 2>/dev/null | head -1)}"
             [ -n "$client" ] || { echo "usage: skynet calendar auth <client_secret.json>"; exit 1; }
-            ${calbus}/bin/calbus auth "$client"
-            systemctl --user restart calbus
+            creds="$(${calbus}/bin/calbus auth "$client")"
+            for n in ${lib.concatStringsSep " " secretNames}; do
+              ${pkgs.sops}/bin/sops set "$secrets" "[\"google_calendar_$n\"]" "$(echo "$creds" | ${pkgs.jq}/bin/jq -c ".$n")"
+            done
+            echo "Stored the client and refresh token in $secrets, rebuilding."
+            skynet rebuild
           '';
-          usage = "Stores the Google OAuth client (newest ~/Downloads/client_secret_*.json or the given path) and a refresh token in the keyring, then restarts calbus.";
+          usage = "Runs the Google consent flow with the OAuth client (newest ~/Downloads/client_secret_*.json or the given path), writes client and refresh token into sops secrets.json, then rebuilds.";
         }
       ];
     })
