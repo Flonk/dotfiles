@@ -3,6 +3,7 @@
   rev ? "dev",
   accent ? "#1d9eb6",
   ground ? null,
+  scheme ? "ayu-dark",
 }:
 let
   quickshellSrc = builtins.path {
@@ -29,9 +30,15 @@ let
     cp ${chromeStatic}/*.png $out/
     python3 -I ${./dev/bake-chrome.py} '${accent}' $out/gradient.png $out/palette.json '${if ground == null then "" else ground}'
   '';
+  accentScheme = pkgs.runCommand "gloxwald-scheme.yaml" {
+    nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.numpy p.pillow ])) ];
+  } ''
+    python3 -I ${./dev/bake-chrome.py} scheme ${pkgs.base16-schemes}/share/themes/${scheme}.yaml '${accent}' $out
+  '';
 in
 {
   inherit chrome;
+  inherit accentScheme;
 
   default = pkgs.writeShellApplication {
     name = "gloxwald";

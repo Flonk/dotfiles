@@ -6,6 +6,10 @@
 }:
 let
   cfg = config.programs.gloxwald.stylix;
+  gloxwaldPkgs = import ./packages.nix {
+    inherit pkgs;
+    inherit (cfg) accent ground scheme;
+  };
 in
 {
   config = lib.mkIf (config.programs.gloxwald.hyprland.enable && cfg.enable) (
@@ -17,7 +21,7 @@ in
 
         stylix = {
           enable = true;
-          base16Scheme = "${pkgs.base16-schemes}/share/themes/${cfg.scheme}.yaml";
+          base16Scheme = if cfg.accentScheme then "${gloxwaldPkgs.accentScheme}" else "${pkgs.base16-schemes}/share/themes/${cfg.scheme}.yaml";
           cursor = {
             package = pkgs.apple-cursor;
             name = "Apple Cursor";

@@ -60,6 +60,32 @@ def derive_ground(accent):
     return oklab_to_srgb(np.array([0.1647, 0.0087 * np.cos(h), 0.0087 * np.sin(h)]))
 
 
+def to_hex(c):
+    return "#" + "".join(f"{round(float(v) * 255):02x}" for v in np.clip(c, 0, 1))
+
+
+def rehue(rgb, hue, chroma=None):
+    L, a, b = srgb_to_oklab(rgb)
+    c = np.hypot(a, b) if chroma is None else chroma
+    return oklab_to_srgb(np.array([L, c * np.cos(hue), c * np.sin(hue)]))
+
+
+def accent_scheme(scheme_path, accent, out):
+    import re
+    text = open(scheme_path).read()
+    colours = dict(re.findall(r"(base0[0-9A-F]):\s*\"?#?([0-9a-fA-F]{6})", text))
+    _, a, b = srgb_to_oklab(accent)
+    hue = np.arctan2(b, a)
+    for key in ("base00", "base01", "base02", "base03"):
+        colours[key] = to_hex(rehue(parse(colours[key]), hue + np.radians(24.0)))[1:]
+    colours["base0D"] = to_hex(rehue(parse(colours["base0D"]), hue, np.hypot(a, b)))[1:]
+    name = re.search(r"^name:\s*\"?([^\"\n]*)", text, re.M).group(1)
+    with open(out, "w") as f:
+        f.write(f'system: "base16"\nname: "{name} (gloxwald accent)"\nvariant: "dark"\npalette:\n')
+        for key in sorted(colours):
+            f.write(f'  {key}: "#{colours[key]}"\n')
+
+
 def main(accent_hex, out, palette_out, ground_hex=""):
     accent = parse(accent_hex)
     ground = parse(ground_hex) if ground_hex else derive_ground(accent)
@@ -85,10 +111,12 @@ def main(accent_hex, out, palette_out, ground_hex=""):
     color = base + (glow - base) * alpha
 
     Image.fromarray(np.round(np.clip(color, 0, 1) * 255).astype(np.uint8), "RGB").save(out, optimize=True)
-    to_hex = lambda c: "#" + "".join(f"{round(float(v) * 255):02x}" for v in np.clip(c, 0, 1))
     with open(palette_out, "w") as f:
         json.dump({"accent": to_hex(stop1), "accent2": to_hex(stop2), "glow": to_hex(glow), "ground": to_hex(ground)}, f)
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:5])
+    if sys.argv[1] == "scheme":
+        accent_scheme(sys.argv[2], parse(sys.argv[3]), sys.argv[4])
+    else:
+        main(*sys.argv[1:5])

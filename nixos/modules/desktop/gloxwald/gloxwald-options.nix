@@ -84,6 +84,11 @@ in
         default = "ayu-dark";
         description = "Base16 scheme name (filename without .yaml) from base16-schemes";
       };
+      accentScheme = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Tint the base16 scheme towards the accent: backgrounds take the accent hue, base0D becomes the accent at the scheme's lightness";
+      };
       accent = mkOption {
         type = types.str;
         default = "#ff9624";
