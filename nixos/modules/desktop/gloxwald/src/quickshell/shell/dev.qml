@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls as QQC
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
@@ -164,8 +165,14 @@ FloatingWindow {
         function dock(mode: string): void {
             win.dock = mode;
         }
+        function zoom(z: real): void {
+            if (z <= 0)
+                deskView.fit();
+            else
+                deskView.zoomTo(z, deskView.width / 2, deskView.height / 2);
+        }
         function state(): string {
-            return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, dock: win.dock, logOpen: win.logOpen, geo: [sidebar, sideScroll, logBox, stage].map(i => [Math.round(i.x), Math.round(i.y), Math.round(i.width), Math.round(i.height)]), grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
+            return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, dock: win.dock, logOpen: win.logOpen, desk: { zoom: +deskView.zoom.toFixed(3), fit: deskView.fitMode, x: Math.round(deskView.contentX), y: Math.round(deskView.contentY), view: [deskView.width, deskView.height] }, geo: [sidebar, sideScroll, logBox, stage].map(i => [Math.round(i.x), Math.round(i.y), Math.round(i.width), Math.round(i.height)]), grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
         }
     }
 
@@ -272,6 +279,9 @@ FloatingWindow {
     Shortcut { sequence: "Ctrl+L"; context: Qt.ApplicationShortcut; onActivated: win.logOpen = !win.logOpen }
     Shortcut { sequence: "Ctrl+F"; context: Qt.ApplicationShortcut; onActivated: win.fit = !win.fit }
     Shortcut { sequence: "Ctrl+D"; context: Qt.ApplicationShortcut; onActivated: win.dock = win.dock === "left" ? "bottom" : "left" }
+    Shortcut { sequence: "Ctrl+0"; context: Qt.ApplicationShortcut; enabled: win.tabName === "desktop"; onActivated: deskView.fit() }
+    Shortcut { sequences: ["Ctrl+=", "Ctrl++"]; context: Qt.ApplicationShortcut; enabled: win.tabName === "desktop"; onActivated: deskView.zoomTo(deskView.zoom * 1.5, deskView.width / 2, deskView.height / 2) }
+    Shortcut { sequence: "Ctrl+-"; context: Qt.ApplicationShortcut; enabled: win.tabName === "desktop"; onActivated: deskView.zoomTo(deskView.zoom / 1.5, deskView.width / 2, deskView.height / 2) }
 
     component SectionTitle: Text {
         color: "#66ffffff"
@@ -431,6 +441,27 @@ FloatingWindow {
                         label: "mock windows"
                         active: win.mockWindows
                         onClicked: win.mockWindows = !win.mockWindows
+                    }
+                    Hint { text: "Ctrl+scroll or pinch to zoom, scroll or drag to pan, double-click to fit.  zoom " + Math.round(deskView.zoom * 100) + "%" }
+                    Flow {
+                        width: side.width
+                        spacing: 4
+                        DevButton {
+                            label: "fit  ctrl+0"
+                            accent: "#d9a530"
+                            active: deskView.fitMode
+                            onClicked: deskView.fit()
+                        }
+                        Repeater {
+                            model: [1, 2, 4, 8]
+                            DevButton {
+                                required property int modelData
+                                label: modelData + "x"
+                                accent: "#d9a530"
+                                active: !deskView.fitMode && Math.abs(deskView.zoom - modelData) < 0.001
+                                onClicked: deskView.zoomTo(modelData, deskView.width / 2, deskView.height / 2)
+                            }
+                        }
                     }
                 }
 
@@ -644,7 +675,64 @@ FloatingWindow {
             anchors.fill: parent
             visible: win.tabName === "desktop"
 
-            Frame {
+            Flickable {
+                id: deskView
+                anchors.fill: parent
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+                readonly property real fitScale: Math.min(width / win.frameW, height / win.frameH)
+                property real zoom: fitScale
+                property bool fitMode: true
+                property real pinchBase: 1
+                onFitScaleChanged: if (fitMode) zoom = fitScale
+                contentWidth: win.frameW * zoom
+                contentHeight: win.frameH * zoom
+                leftMargin: Math.max(0, (width - contentWidth) / 2)
+                rightMargin: leftMargin
+                topMargin: Math.max(0, (height - contentHeight) / 2)
+                bottomMargin: topMargin
+
+                function fit() {
+                    fitMode = true;
+                    zoom = fitScale;
+                    contentX = -leftMargin;
+                    contentY = -topMargin;
+                }
+
+                function zoomTo(z, px, py) {
+                    z = Math.max(fitScale * 0.5, Math.min(16, z));
+                    const cx = (contentX + px) / zoom;
+                    const cy = (contentY + py) / zoom;
+                    fitMode = false;
+                    zoom = z;
+                    contentX = Math.max(-leftMargin, Math.min(cx * z - px, contentWidth - width + rightMargin));
+                    contentY = Math.max(-topMargin, Math.min(cy * z - py, contentHeight - height + bottomMargin));
+                }
+
+                QQC.ScrollBar.horizontal: QQC.ScrollBar {}
+                QQC.ScrollBar.vertical: QQC.ScrollBar {}
+
+                WheelHandler {
+                    acceptedModifiers: Qt.ControlModifier
+                    onWheel: e => deskView.zoomTo(deskView.zoom * Math.pow(1.0015, e.angleDelta.y), point.position.x, point.position.y)
+                }
+
+                PinchHandler {
+                    target: null
+                    onActiveChanged: if (active) deskView.pinchBase = deskView.zoom
+                    onActiveScaleChanged: if (active) deskView.zoomTo(deskView.pinchBase * activeScale, centroid.position.x, centroid.position.y)
+                }
+
+                TapHandler {
+                    onDoubleTapped: deskView.fit()
+                }
+
+                Item {
+                    width: win.frameW
+                    height: win.frameH
+                    scale: deskView.zoom
+                    transformOrigin: Item.TopLeft
+
                 Loader {
                     id: desktopLoader
                     anchors.fill: parent
@@ -680,6 +768,7 @@ FloatingWindow {
                             monitor: Hyprland.focusedMonitor
                         }
                     }
+                }
                 }
             }
         }
