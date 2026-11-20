@@ -28,6 +28,7 @@ FloatingWindow {
     property real barZoom: 2
     property bool mockWindows: true
     property string dock: "left"
+    property string lastWheel: ""
     readonly property int sidebarWidth: 330
     readonly property var tabSources: ({ desktop: ["dev", "theme"], bar: ["dev", "theme"], lock: ["dev", "theme", "shader"], greeter: ["dev", "theme", "greeter"], grub: ["dev", "theme", "grub"] })
     property int sceneRev: 0
@@ -172,7 +173,7 @@ FloatingWindow {
                 deskView.zoomTo(z, deskView.width / 2, deskView.height / 2);
         }
         function state(): string {
-            return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, dock: win.dock, logOpen: win.logOpen, desk: { zoom: +deskView.zoom.toFixed(3), fit: deskView.fitMode, x: Math.round(deskView.contentX), y: Math.round(deskView.contentY), view: [deskView.width, deskView.height] }, geo: [sidebar, sideScroll, logBox, stage].map(i => [Math.round(i.x), Math.round(i.y), Math.round(i.width), Math.round(i.height)]), grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
+            return JSON.stringify({ tab: win.tabNames[win.tab], tabName: win.tabName, desktopReady: desktopLoader.status === Loader.Ready, dock: win.dock, logOpen: win.logOpen, lastWheel: win.lastWheel, desk: { zoom: +deskView.zoom.toFixed(3), fit: deskView.fitMode, x: Math.round(deskView.contentX), y: Math.round(deskView.contentY), view: [deskView.width, deskView.height] }, geo: [sidebar, sideScroll, logBox, stage].map(i => [Math.round(i.x), Math.round(i.y), Math.round(i.width), Math.round(i.height)]), grubReady: grub.ready, greeterRunning: term.running, cols: term.cols, rows: term.rows });
         }
     }
 
@@ -760,9 +761,19 @@ FloatingWindow {
             Item {
                 anchors.fill: deskView
 
-                WheelHandler {
-                    acceptedModifiers: Qt.ControlModifier
-                    onWheel: event => deskView.zoomTo(deskView.zoom * Math.pow(1.25, event.angleDelta.y / 120), point.position.x, point.position.y)
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.NoButton
+                    onWheel: wheel => {
+                        const d = wheel.angleDelta.y || wheel.pixelDelta.y;
+                        win.lastWheel = "mods=" + wheel.modifiers + " angle=" + wheel.angleDelta.y + " pixel=" + wheel.pixelDelta.y;
+                        win.log("dev", "wheel " + win.lastWheel);
+                        if (!(wheel.modifiers & Qt.ControlModifier) || d === 0) {
+                            wheel.accepted = false;
+                            return;
+                        }
+                        deskView.zoomTo(deskView.zoom * Math.pow(1.25, d / 120), wheel.x, wheel.y);
+                    }
                 }
 
                 PinchHandler {
