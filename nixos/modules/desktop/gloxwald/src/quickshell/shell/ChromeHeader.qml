@@ -1,3 +1,4 @@
+        text: value || "--"
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -65,7 +66,6 @@ Item {
         property string value
         property string title
         text: value || "--"
-        font.weight: Font.Normal
         clickable: value !== ""
         onClicked: Clipboard.copy(value, title)
     }
@@ -216,8 +216,10 @@ Item {
             anchors { left: mediaIcon.right; leftMargin: 8; right: parent.right; verticalCenter: parent.verticalCenter }
             text: [MediaControlWidget.currentArtist, MediaControlWidget.currentTitle].filter(s => s).join(" - ")
             font.family: Theme.fontFamily
-            font.pixelSize: T3.labelSize + 1
+            font.pixelSize: T3.labelSize
             font.weight: Font.Bold
+            font.letterSpacing: T3.labelTracking
+            font.capitalization: Font.AllUppercase
             textColor: T3.ink
             scrolling: MediaControlWidget.isPlaying
         }

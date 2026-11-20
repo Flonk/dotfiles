@@ -29,6 +29,19 @@ in
       };
     };
 
+    label = {
+      size = mkOption {
+        type = types.int;
+        default = 10;
+        description = "Pixel size of the T3 label text used by the chrome header, hy3 tabs and qutebrowser tabs";
+      };
+      tracking = mkOption {
+        type = types.float;
+        default = 1.2;
+        description = "Letter spacing in pixels of the T3 label text";
+      };
+    };
+
     qutebrowser.enable = mkOption {
       type = types.bool;
       default = true;

@@ -52,6 +52,8 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
 	CONF("tabs:text_font", String, "Sans");
 	CONF("tabs:text_height", Int, 8);
 	CONF("tabs:text_padding", Int, 3);
+	CONF("tabs:text_uppercase", Bool, false);
+	CONF("tabs:text_tracking", Float, 0.0);
 	CONF("tabs:opacity", Float, 1.0);
 	CONF("tabs:blur", Bool, true);
 	CONF("tabs:colors:active", Color, 0x4033ccff);

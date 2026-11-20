@@ -33,7 +33,7 @@ QtObject {
     readonly property color ink: "#000000"
     readonly property color cream: "#ddd6c4"
 
-    readonly property int labelSize: 10
-    readonly property real labelTracking: 1.2
+    readonly property int labelSize: Theme.labelSize
+    readonly property real labelTracking: Theme.labelTracking
     readonly property int titleSize: 13
 }

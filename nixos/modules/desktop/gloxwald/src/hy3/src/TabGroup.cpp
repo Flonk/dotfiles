@@ -260,6 +260,8 @@ void Hy3TabBarEntry::renderText(Render::CRenderContext& ctx, float scale, CBox& 
 	static const auto text_font = CConfigValue<Config::STRING>("plugin:hy3:tabs:text_font");
 	static const auto text_height = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:text_height");
 	static const auto text_padding = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:text_padding");
+	static const auto text_uppercase = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:text_uppercase");
+	static const auto text_tracking = CConfigValue<Config::FLOAT>("plugin:hy3:tabs:text_tracking");
 	static const auto col_text_active = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:colors:active_text");
 	static const auto col_text_focused = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:colors:focused_text");
 	static const auto col_text_urgent = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:colors:urgent_text");
@@ -298,10 +300,23 @@ void Hy3TabBarEntry::renderText(Render::CRenderContext& ctx, float scale, CBox& 
 		auto* font_map = pango_cairo_font_map_get_default();
 		auto* context = pango_font_map_create_context(font_map);
 		auto* layout = pango_layout_new(context);
-		pango_layout_set_text(layout, this->window_title.c_str(), -1);
+		if (*text_uppercase) {
+			auto* upper = g_utf8_strup(this->window_title.c_str(), -1);
+			pango_layout_set_text(layout, upper, -1);
+			g_free(upper);
+		} else {
+			pango_layout_set_text(layout, this->window_title.c_str(), -1);
+		}
+
+		if (*text_tracking != 0.0f) {
+			auto* attrs = pango_attr_list_new();
+			pango_attr_list_insert(attrs, pango_attr_letter_spacing_new((int) (*text_tracking * scale * PANGO_SCALE)));
+			pango_layout_set_attributes(layout, attrs);
+			pango_attr_list_unref(attrs);
+		}
 
 		auto* font_desc = pango_font_description_from_string((*text_font).c_str());
-		pango_font_description_set_size(font_desc, *text_height * scale * PANGO_SCALE);
+		pango_font_description_set_absolute_size(font_desc, *text_height * scale * PANGO_SCALE);
 		pango_layout_set_font_description(layout, font_desc);
 		pango_font_description_free(font_desc);
 

@@ -30,6 +30,8 @@ let
       app900 = c.base07;
       wm800 = config.programs.gloxwald.stylix.accent;
       ground = config.programs.gloxwald.stylix.ground;
+      labelSize = config.programs.gloxwald.label.size;
+      labelTracking = config.programs.gloxwald.label.tracking;
       error400 = c.base08;
       error600 = c.base09;
       success600 = c.base0B;

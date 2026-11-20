@@ -43,12 +43,48 @@ in
       c.tabs.indicator.padding = {"top": 0, "bottom": 0, "left": 0, "right": 6}
       c.statusbar.padding = {"top": 4, "bottom": 4, "left": 8, "right": 8}
       c.hints.padding = {"top": 1, "bottom": 1, "left": 4, "right": 4}
+
+      from qutebrowser.mainwindow import tabwidget as _gx_tw
+      from qutebrowser.qt.gui import QFont, QFontMetrics
+      from qutebrowser.qt.widgets import QStyle
+      from qutebrowser.qt.core import Qt
+
+      def _gx_label(font):
+          font = QFont(font)
+          font.setCapitalization(QFont.Capitalization.AllUppercase)
+          font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, ${toString g.label.tracking})
+          return font
+
+      if not getattr(_gx_tw.TabBar, "_gx_label", False):
+          _gx_tw.TabBar._gx_label = True
+          _gx_draw = _gx_tw.TabBarStyle.drawControl
+          _gx_init = _gx_tw.TabBar.initStyleOption
+
+          def _gx_draw_control(self, element, opt, p, widget=None):
+              if element != QStyle.ControlElement.CE_TabBarTabLabel:
+                  return _gx_draw(self, element, opt, p, widget)
+              p.save()
+              p.setFont(_gx_label(p.font()))
+              try:
+                  _gx_draw(self, element, opt, p, widget)
+              finally:
+                  p.restore()
+
+          def _gx_init_style_option(self, opt, idx):
+              _gx_init(self, opt, idx)
+              rect = self._our_style.subElementRect(QStyle.SubElement.SE_TabBarTabText, opt, self)
+              opt.text = QFontMetrics(_gx_label(self.font())).elidedText(
+                  self.tabText(idx), self.elideMode(), rect.width(), Qt.TextFlag.TextShowMnemonic)
+
+          _gx_tw.TabBarStyle.drawControl = _gx_draw_control
+          _gx_tw.TabBar.initStyleOption = _gx_init_style_option
     '';
 
     programs.qutebrowser.settings = {
       fonts = {
+        default_size = lib.mkForce "${toString g.label.size}px";
         tabs.selected = "bold default_size default_family";
-        tabs.unselected = "default_size default_family";
+        tabs.unselected = "bold default_size default_family";
         statusbar = "bold default_size default_family";
         hints = "bold default_size default_family";
         completion.category = "bold default_size default_family";

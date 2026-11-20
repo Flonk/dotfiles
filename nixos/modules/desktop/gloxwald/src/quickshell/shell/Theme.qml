@@ -20,6 +20,8 @@ QtObject {
         error600: "#ff8f40",
         success600: "#aad94c",
         ground: "#100e0a",
+        labelSize: 10,
+        labelTracking: 1.2,
         fontFamily: "DejaVuSansM Nerd Font"
     })
 
@@ -53,6 +55,8 @@ QtObject {
     readonly property color ground: _data.ground
     readonly property int fontSizeSmall: Math.round(_data.fontSize * 0.9)
     readonly property string fontFamily: _data.fontFamily
+    readonly property int labelSize: _data.labelSize ?? 10
+    readonly property real labelTracking: _data.labelTracking ?? 1.2
 
     function shade(f: real): color {
         return Qt.rgba(app600.r * f, app600.g * f, app600.b * f, 1);
