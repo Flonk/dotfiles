@@ -153,10 +153,7 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     vec2 L = normalize(p - spotPos());
     vec2 e = vec2(0.75, 0.0);
     vec2 n = normalize(vec2(ampDist(p + e.xy) - ampDist(p - e.xy), ampDist(p + e.yx) - ampDist(p - e.yx)) + 1e-6);
-    float shadow = 0.0;
-    for (int i = 1; i <= 6; i++)
-        shadow += smoothstep(-0.75, 0.75, ampDist(p - L * AMP_DEPTH * float(i) / 6.0));
-    shadow /= 6.0;
+    float shadow = smoothstep(-0.6, 0.6, ampDist(p - L * AMP_DEPTH));
     float wall = exp(d / 1.5) * max(dot(n, L), 0.0);
     float light = spot(p);
     vec3 floor_ = AMP_DARK + accent * light * (SPOT_FLOOR * (1.0 - shadow) + SPOT_WALL * wall);
