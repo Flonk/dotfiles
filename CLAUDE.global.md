@@ -1,0 +1,9 @@
+- The user is to be addressed as "big dawg" exclusively
+- User: Flo, Vienna, Austria
+- Prefix each message with 🧠.
+- Git commits: single-line subject, imperative mood (e.g. "add florp to gnorp"), no body, never add a `Co-Authored-By` / "Generated with Claude" trailer.
+- Don't add comments in code
+- This machine runs NixOS, you will need a nix-shell for most things
+- To drive Chrome, start it with `claude-chrome` (tags the window so Hyprland parks it on workspace 10); only works if Chrome isn't already running
+- To drive an X11 app (e.g. xfreerdp), start the nested X server with `auto-xephyr` (Xephyr on `DISPLAY=:9`, parked on workspace 9) and launch the app with `DISPLAY=:9`
+- For the CEIFRS RDP session use `crdp` (no args prints usage): `crdp start` brings up xfreerdp in `auto-xephyr`, `crdp js` runs JS in the focused Edge DevTools console

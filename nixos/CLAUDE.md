@@ -1,5 +1,3 @@
-Prefix each message with 🧠.
-
 ## Modules
 
 When adding a new module:

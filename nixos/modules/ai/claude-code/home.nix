@@ -30,6 +30,8 @@ in
 {
   config = lib.mkMerge [
     (lib.mkIf config.skynet.module.ai.claude-code.enable {
+      home.file.".claude/CLAUDE.md".source = ../../../../CLAUDE.global.md;
+
       home.packages = [
         pkgs.gh
         claudeScript
