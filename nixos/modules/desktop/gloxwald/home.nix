@@ -4,6 +4,16 @@
   ...
 }:
 {
+  imports = [
+    ./gloxwald-options.nix
+    ./stylix.nix
+    ./src/hyprland/home.nix
+    ./src/i18n/home.nix
+    ./src/mako/home.nix
+    ./src/quickshell/home.nix
+    ./src/vicinae/home.nix
+  ];
+
   config = lib.mkIf config.skynet.module.desktop.gloxwald.enable {
     programs.gloxwald.quickshell.enable = true;
     programs.gloxwald.hyprland.enable = true;

@@ -12,6 +12,13 @@ let
   fontFamily = config.stylix.fonts.monospace.name;
 in
 {
+  imports = [
+    ./gloxwald-options.nix
+    ./src/greeter/nixos.nix
+    ./src/grub/nixos.nix
+    ./src/hyprland/nixos.nix
+  ];
+
   config = lib.mkIf cfg.enable {
     programs.gloxwald.hyprland.enable = true;
 

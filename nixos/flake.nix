@@ -35,11 +35,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    gloxwald = {
-      url = "path:../gloxwald";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
   };
 
   outputs =
@@ -71,7 +66,7 @@
           modules = [
             inputs.sops-nix.nixosModules.sops
             inputs.stylix.nixosModules.stylix
-            inputs.gloxwald.nixosModules.default
+            ./modules/desktop/gloxwald/system.nix
             ./config/hosts/${name}
           ]
           ++ extraModules;
@@ -92,7 +87,7 @@
             inputs.sops-nix.homeManagerModules.sops
             inputs.vicinae.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            inputs.gloxwald.homeManagerModules.gloxwald
+            ./modules/desktop/gloxwald/home.nix
             ./config/installations/${name}.nix
           ]
           ++ extraModules;
@@ -102,7 +97,10 @@
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
-      packages.x86_64-linux = inputs.gloxwald.packages.x86_64-linux;
+      packages.x86_64-linux = import ./modules/desktop/gloxwald/packages.nix {
+        pkgs = pkgsX86;
+        rev = self.rev or self.dirtyRev or "dev";
+      };
 
       nixosConfigurations = {
         chonkler = mkSystem "chonkler" { };

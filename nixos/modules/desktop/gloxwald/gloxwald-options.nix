@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 with lib;
 let
-  asciiDefault = builtins.readFile ../ascii.txt;
+  asciiDefault = builtins.readFile ./ascii.txt;
 
   lockScript = pkgs.writeShellScript "gloxwald-lock" ''
     for i in $(seq 20); do
