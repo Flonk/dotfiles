@@ -443,7 +443,7 @@ FloatingWindow {
                         active: win.mockWindows
                         onClicked: win.mockWindows = !win.mockWindows
                     }
-                    Hint { text: "Ctrl+scroll or pinch to zoom, scroll or drag to pan, double-click to fit.  zoom " + Math.round(deskView.zoom * 100) + "%" }
+                    Hint { text: "Ctrl+scroll or pinch to zoom; scroll, shift+scroll or drag to pan; double-click to fit.  zoom " + Math.round(deskView.zoom * 100) + "%" }
                     Flow {
                         width: side.width
                         spacing: 4
@@ -680,6 +680,7 @@ FloatingWindow {
                 id: deskView
                 anchors.fill: parent
                 clip: true
+                interactive: false
                 boundsBehavior: Flickable.StopAtBounds
                 readonly property real fitScale: Math.min(width / win.frameW, height / win.frameH)
                 property real zoom: fitScale
@@ -698,6 +699,11 @@ FloatingWindow {
                     zoom = fitScale;
                     contentX = -leftMargin;
                     contentY = -topMargin;
+                }
+
+                function panTo(x, y) {
+                    contentX = Math.max(-leftMargin, Math.min(x, contentWidth - width + rightMargin));
+                    contentY = Math.max(-topMargin, Math.min(y, contentHeight - height + bottomMargin));
                 }
 
                 function zoomTo(z, px, py) {
@@ -765,14 +771,17 @@ FloatingWindow {
                     anchors.fill: parent
                     acceptedButtons: Qt.NoButton
                     onWheel: wheel => {
-                        const d = wheel.angleDelta.y || wheel.pixelDelta.y;
-                        win.lastWheel = "mods=" + wheel.modifiers + " angle=" + wheel.angleDelta.y + " pixel=" + wheel.pixelDelta.y;
-                        win.log("dev", "wheel " + win.lastWheel);
-                        if (!(wheel.modifiers & Qt.ControlModifier) || d === 0) {
-                            wheel.accepted = false;
+                        win.lastWheel = "mods=" + wheel.modifiers + " angle=" + wheel.angleDelta.x + "," + wheel.angleDelta.y + " pixel=" + wheel.pixelDelta.x + "," + wheel.pixelDelta.y;
+                        if (wheel.modifiers & Qt.ControlModifier) {
+                            const d = wheel.angleDelta.y || wheel.pixelDelta.y;
+                            deskView.zoomTo(deskView.zoom * Math.pow(1.25, d / 120), wheel.x, wheel.y);
                             return;
                         }
-                        deskView.zoomTo(deskView.zoom * Math.pow(1.25, d / 120), wheel.x, wheel.y);
+                        let dx = wheel.pixelDelta.x || wheel.angleDelta.x / 2;
+                        let dy = wheel.pixelDelta.y || wheel.angleDelta.y / 2;
+                        if ((wheel.modifiers & Qt.ShiftModifier) && dx === 0)
+                            [dx, dy] = [dy, 0];
+                        deskView.panTo(deskView.contentX - dx, deskView.contentY - dy);
                     }
                 }
 
@@ -784,6 +793,15 @@ FloatingWindow {
 
                 TapHandler {
                     onDoubleTapped: deskView.fit()
+                }
+
+                DragHandler {
+                    target: null
+                    acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                    property point start
+                    cursorShape: active ? Qt.ClosedHandCursor : Qt.ArrowCursor
+                    onActiveChanged: if (active) start = Qt.point(deskView.contentX, deskView.contentY)
+                    onActiveTranslationChanged: if (active) deskView.panTo(start.x - activeTranslation.x, start.y - activeTranslation.y)
                 }
             }
         }

@@ -46,6 +46,6 @@ One window (desktop, bar, lock, greeter and grub tabs): a sidebar (tabs, frame r
 
 Shader, greeter and GRUB sources are watched and rebuilt automatically; build output lands in the log pane. Click a pane to give it keyboard focus.
 
-Keys: `Ctrl+1..5` tabs, `Ctrl+R` reload tab, `Ctrl+Shift+R` reload all, `Ctrl+F` fit/1:1, `Ctrl+L` log, `Ctrl+D` dock left/bottom. Desktop tab: `Ctrl`+scroll or pinch to zoom, scroll or drag to pan, double-click or `Ctrl+0` to fit, `Ctrl+=`/`Ctrl+-` to step.
+Keys: `Ctrl+1..5` tabs, `Ctrl+R` reload tab, `Ctrl+Shift+R` reload all, `Ctrl+F` fit/1:1, `Ctrl+L` log, `Ctrl+D` dock left/bottom. Desktop tab: `Ctrl`+scroll or pinch to zoom, scroll, `Shift`+scroll or left/middle drag to pan, double-click or `Ctrl+0` to fit, `Ctrl+=`/`Ctrl+-` to step.
 
 IPC: `quickshell ipc --path src/quickshell/shell/dev.qml call dev state` (also `tab <name>`, `dock left|bottom`, `zoom <z>` with 0 = fit, `reload`).
