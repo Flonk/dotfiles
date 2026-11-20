@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
-import Quickshell.Wayland
 
 Item {
     id: root
@@ -10,7 +9,7 @@ Item {
     property bool interactive: true
 
     readonly property real center: width / 2
-    readonly property real markGap: T3.markSize / 2 + 16
+    readonly property real markGap: T3.markSize / 2 + 24
     property real markScale: markMouse.containsMouse ? 1.15 : 1
     Behavior on markScale {
         NumberAnimation { duration: 150 }
@@ -23,14 +22,9 @@ Item {
             const x = parseInt(a.name), y = parseInt(b.name);
             return isNaN(x) || isNaN(y) ? a.name.localeCompare(b.name) : x - y;
         })
-    readonly property var active: ToplevelManager.activeToplevel
-    readonly property string meta: [
-        (active?.appId ?? "").split(".").pop(),
-        Hyprland.focusedWorkspace ? "ws " + Hyprland.focusedWorkspace.name : ""
-    ].filter(s => s).join(" · ")
 
     component Label: Text {
-        height: root.height
+        height: T3.band
         verticalAlignment: Text.AlignVCenter
         color: T3.ink
         font.family: Theme.fontFamily
@@ -67,6 +61,15 @@ Item {
         }
     }
 
+    component Copy: Status {
+        property string value
+        property string title
+        text: value || "--"
+        font.weight: Font.Normal
+        clickable: value !== ""
+        onClicked: Clipboard.copy(value, title)
+    }
+
     ChromeSurface {
         anchors.fill: parent
         screenSize: root.screenSize
@@ -85,9 +88,8 @@ Item {
     }
 
     Row {
-        id: left
         x: 16
-        spacing: 14
+        spacing: 16
 
         Row {
             spacing: 2
@@ -95,22 +97,27 @@ Item {
             Repeater {
                 model: root.workspaces
 
-                Rectangle {
+                Item {
+                    id: ws
                     required property var modelData
                     readonly property bool focused: modelData.focused
-                    anchors.verticalCenter: parent.verticalCenter
                     width: wsLabel.implicitWidth + 16
-                    height: 20
-                    radius: 10
-                    color: focused ? T3.ink : "transparent"
+                    height: T3.band
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: parent.width
+                        height: 20
+                        radius: 10
+                        color: ws.focused ? T3.ink : "transparent"
+                    }
 
                     Label {
                         id: wsLabel
-                        anchors.centerIn: parent
-                        height: 20
-                        text: modelData.name
-                        color: focused ? T3.accent2 : T3.ink
-                        opacity: focused || wsMouse.containsMouse ? 1 : 0.6
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: ws.modelData.name
+                        color: ws.focused ? T3.accent2 : T3.ink
+                        opacity: ws.focused || wsMouse.containsMouse ? 1 : 0.6
                     }
 
                     MouseArea {
@@ -119,91 +126,117 @@ Item {
                         hoverEnabled: true
                         enabled: root.interactive
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${modelData.name} })`)
+                        onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${ws.modelData.name} })`)
                     }
                 }
             }
         }
 
-        Item {
-            visible: MediaControlWidget.currentPlayer !== null
-            width: 220
-            height: root.height
-            opacity: mediaMouse.containsMouse ? 1 : 0.8
+        Row {
+            spacing: 10
 
-            Label {
-                id: mediaIcon
-                text: MediaControlWidget.isPlaying ? "" : ""
+            Status {
+                text: (WifiWidget.isConnected ? "" : "") + "  ↑" + WifiWidget.formatRate(WifiWidget.uploadRate) + " ↓" + WifiWidget.formatRate(WifiWidget.downloadRate)
+                clickable: true
+                onClicked: WifiWidget.openCommander()
             }
 
-            MarqueeText {
-                anchors { left: mediaIcon.right; leftMargin: 8; right: parent.right; verticalCenter: parent.verticalCenter }
-                text: [MediaControlWidget.currentArtist, MediaControlWidget.currentTitle].filter(s => s).join(" - ")
-                font.family: Theme.fontFamily
-                font.pixelSize: T3.labelSize + 1
-                font.weight: Font.Bold
-                textColor: T3.ink
-                scrolling: MediaControlWidget.isPlaying
+            Copy {
+                value: WifiWidget.localIp
+                title: "🏠 Local IP copied!"
             }
 
-            MouseArea {
-                id: mediaMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                enabled: root.interactive
-                cursorShape: Qt.PointingHandCursor
-                onClicked: MediaControlWidget.togglePlaying()
-                onWheel: w => w.angleDelta.y > 0 ? MediaControlWidget.previous() : MediaControlWidget.next()
+            Copy {
+                value: WifiWidget.gatewayIp
+                title: "🚪 Gateway IP copied!"
+            }
+
+            Copy {
+                value: WifiWidget.publicIp
+                title: "🌐 Public IP copied!"
             }
         }
-    }
-
-    Label {
-        anchors.right: parent.right
-        anchors.rightMargin: parent.width - root.center + root.markGap
-        width: Math.max(0, Math.min(implicitWidth, root.center - root.markGap - left.x - left.width - 24))
-        horizontalAlignment: Text.AlignRight
-        elide: Text.ElideRight
-        text: root.meta
-    }
-
-    Text {
-        x: root.center + root.markGap
-        width: Math.max(0, Math.min(implicitWidth, right.x - x - 24))
-        height: root.height
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-        text: root.active?.title ?? ""
-        color: T3.ink
-        font.family: Theme.fontFamily
-        font.pixelSize: T3.titleSize
-        font.weight: Font.Bold
     }
 
     Row {
-        id: right
         anchors.right: parent.right
-        anchors.rightMargin: 16
+        anchors.rightMargin: root.width - root.center + root.markGap
         spacing: 16
 
         Status {
-            text: (WifiWidget.isConnected ? "" : "") + "  ↑" + WifiWidget.formatRate(WifiWidget.uploadRate) + " ↓" + WifiWidget.formatRate(WifiWidget.downloadRate)
-            clickable: true
-            buttons: Qt.LeftButton | Qt.RightButton
-            onClicked: m => m.button === Qt.RightButton ? Clipboard.copy(WifiWidget.localIp, "🏠 Local IP copied!") : WifiWidget.openCommander()
-        }
-
-        Status {
-            text: "CPU " + Math.round(SystemMonitor.cpuUsage * 100)
+            text: "DSK " + Math.round(SystemMonitor.diskUsage * 100)
         }
 
         Status {
             text: "MEM " + Math.round(SystemMonitor.memoryUsage * 100)
         }
 
-        Status {
-            text: "DSK " + Math.round(SystemMonitor.diskUsage * 100)
+        Row {
+            spacing: 6
+
+            Status {
+                id: cpuLabel
+                text: "CPU " + Math.round(SystemMonitor.cpuUsage * 100)
+            }
+
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                height: 14
+                spacing: 1
+                opacity: cpuLabel.opacity
+
+                Repeater {
+                    model: SystemMonitor.coreUsages
+
+                    Rectangle {
+                        required property real modelData
+                        anchors.bottom: parent.bottom
+                        width: 2
+                        height: Math.max(1, parent.height * Math.min(1, modelData))
+                        color: T3.ink
+                    }
+                }
+            }
         }
+    }
+
+    Item {
+        visible: MediaControlWidget.currentPlayer !== null
+        x: root.center + root.markGap
+        width: 270
+        height: root.height
+        opacity: mediaMouse.containsMouse ? 1 : 0.8
+
+        Label {
+            id: mediaIcon
+            text: MediaControlWidget.isPlaying ? "" : ""
+        }
+
+        MarqueeText {
+            anchors { left: mediaIcon.right; leftMargin: 8; right: parent.right; verticalCenter: parent.verticalCenter }
+            text: [MediaControlWidget.currentArtist, MediaControlWidget.currentTitle].filter(s => s).join(" - ")
+            font.family: Theme.fontFamily
+            font.pixelSize: T3.labelSize + 1
+            font.weight: Font.Bold
+            textColor: T3.ink
+            scrolling: MediaControlWidget.isPlaying
+        }
+
+        MouseArea {
+            id: mediaMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            enabled: root.interactive
+            cursorShape: Qt.PointingHandCursor
+            onClicked: MediaControlWidget.togglePlaying()
+            onWheel: w => w.angleDelta.y > 0 ? MediaControlWidget.previous() : MediaControlWidget.next()
+        }
+    }
+
+    Row {
+        anchors.right: parent.right
+        anchors.rightMargin: 16
+        spacing: 16
 
         Status {
             text: ({ busy: "HEADPHONES ..", ok: "HEADPHONES ✓", fail: "HEADPHONES ✗" })[HeadphonesWidget.status] ?? "HEADPHONES"
@@ -232,13 +265,6 @@ Item {
         }
 
         Status {
-            visible: LanguageWidget.available
-            text: LanguageWidget.label
-            clickable: true
-            onClicked: LanguageWidget.cycle()
-        }
-
-        Status {
             text: Qt.formatDateTime(clock.now, "dd.MM. hh:mm")
             clickable: true
             onClicked: Clipboard.copy(new Date().toISOString(), "🕒 Timestamp copied!")
@@ -251,6 +277,13 @@ Item {
                 repeat: true
                 onTriggered: now = new Date()
             }
+        }
+
+        Status {
+            visible: LanguageWidget.available
+            text: LanguageWidget.label
+            clickable: true
+            onClicked: LanguageWidget.cycle()
         }
     }
 }

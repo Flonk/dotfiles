@@ -26,6 +26,7 @@ FloatingWindow {
     property bool logAll: false
     property real barZoom: 2
     property bool mockWindows: true
+    property string dock: "left"
     readonly property int sidebarWidth: 330
     readonly property var tabSources: ({ desktop: ["dev", "theme"], bar: ["dev", "theme"], lock: ["dev", "theme", "shader"], greeter: ["dev", "theme", "greeter"], grub: ["dev", "theme", "grub"] })
     property int sceneRev: 0
@@ -267,6 +268,7 @@ FloatingWindow {
     Shortcut { sequence: "Ctrl+Shift+R"; context: Qt.ApplicationShortcut; onActivated: win.reloadAll() }
     Shortcut { sequence: "Ctrl+L"; context: Qt.ApplicationShortcut; onActivated: win.logOpen = !win.logOpen }
     Shortcut { sequence: "Ctrl+F"; context: Qt.ApplicationShortcut; onActivated: win.fit = !win.fit }
+    Shortcut { sequence: "Ctrl+D"; context: Qt.ApplicationShortcut; onActivated: win.dock = win.dock === "left" ? "bottom" : "left" }
 
     component SectionTitle: Text {
         color: "#66ffffff"
@@ -364,19 +366,29 @@ FloatingWindow {
 
     Rectangle {
         id: sidebar
-        anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+        readonly property bool atBottom: win.dock === "bottom"
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.top: atBottom ? undefined : parent.top
+        anchors.right: atBottom ? parent.right : undefined
         width: win.sidebarWidth
+        height: 340
         color: "#18181d"
 
         Rectangle {
-            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
-            width: 1
+            x: sidebar.atBottom ? 0 : parent.width - 1
+            width: sidebar.atBottom ? parent.width : 1
+            height: sidebar.atBottom ? 1 : parent.height
             color: "#2affffff"
         }
 
         Flickable {
             id: sideScroll
-            anchors { left: parent.left; right: parent.right; top: parent.top; bottom: logBox.top }
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.right: sidebar.atBottom ? undefined : parent.right
+            anchors.bottom: sidebar.atBottom ? parent.bottom : logBox.top
+            width: win.sidebarWidth
             contentHeight: side.implicitHeight + 24
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -389,6 +401,13 @@ FloatingWindow {
                 spacing: 6
 
                 SectionTitle { text: "view" }
+
+                DevButton {
+                    width: side.width
+                    label: "dock " + (win.dock === "left" ? "bottom" : "left") + "   ctrl+d"
+                    accent: "#d9a530"
+                    onClicked: win.dock = win.dock === "left" ? "bottom" : "left"
+                }
 
                 Repeater {
                     model: win.tabNames
@@ -542,7 +561,12 @@ FloatingWindow {
 
         Rectangle {
             id: logBox
-            anchors { left: parent.left; right: parent.right; bottom: parent.bottom; rightMargin: 1 }
+            anchors.left: sidebar.atBottom ? sideScroll.right : parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.top: sidebar.atBottom ? parent.top : undefined
+            anchors.rightMargin: sidebar.atBottom ? 0 : 1
+            anchors.topMargin: 1
             height: win.logOpen ? Math.round(sidebar.height * 0.34) : logHeader.height
             color: "#0f0f13"
 
@@ -616,7 +640,10 @@ FloatingWindow {
 
     Item {
         id: stage
-        anchors { left: sidebar.right; right: parent.right; top: parent.top; bottom: parent.bottom }
+        anchors.left: sidebar.atBottom ? parent.left : sidebar.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: sidebar.atBottom ? sidebar.top : parent.bottom
         focus: true
 
         Item {
