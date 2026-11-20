@@ -9,6 +9,7 @@ ShaderEffect {
     readonly property vector2d itemSize: Qt.vector2d(width, height)
     readonly property real bandHeight: T3.band
     readonly property real border: T3.border
+    readonly property real radius: T3.radius
     readonly property real turn: T3.turn
     readonly property color accent: T3.accent
     readonly property color accent2: T3.accent2

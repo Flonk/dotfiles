@@ -11,6 +11,7 @@ layout(std140, binding = 0) uniform buf {
     vec2 screenSize;
     float bandHeight;
     float border;
+    float radius;
     float turn;
     vec4 accent;
     vec4 accent2;
@@ -94,22 +95,29 @@ void main() {
     vec2 p = origin + qt_TexCoord0 * itemSize;
     vec2 lo = vec2(border, bandHeight);
     vec2 hi = screenSize - vec2(border);
+    vec2 extent = (hi - lo) * 0.5;
+    vec2 q = abs(p - (lo + extent)) - (extent - radius);
+    float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+    float inner = clamp(0.5 - d, 0.0, 1.0);
 
-    if (all(greaterThanEqual(p, lo)) && all(lessThan(p, hi))) {
+    if (inner >= 1.0) {
         vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
         fragColor = vec4(mix(ground.rgb, grain.rgb, grain.a), 1.0) * qt_Opacity;
         return;
     }
 
-    vec3 c;
-    if (all(greaterThanEqual(p, lo - 1.0)) && all(lessThan(p, hi + 1.0))) {
-        c = chrome(p, true);
-    } else {
-        c = chrome(p, false);
-        vec4 dots = straight(texture(dotsTex, fract(p / 26.0)));
-        c = mix(c, overlay(c, dots.rgb), dots.a);
-        vec4 noise = straight(texture(noiseTex, fract(p / 128.0)));
-        c = mix(c, softLight(c, noise.rgb), noise.a);
+    vec3 c = chrome(p, false);
+    vec4 dots = straight(texture(dotsTex, fract(p / 26.0)));
+    c = mix(c, overlay(c, dots.rgb), dots.a);
+    vec4 noise = straight(texture(noiseTex, fract(p / 128.0)));
+    c = mix(c, softLight(c, noise.rgb), noise.a);
+
+    float ring = clamp(1.5 - d, 0.0, 1.0) - inner;
+    if (ring > 0.0)
+        c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
+    if (inner > 0.0) {
+        vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
+        c = mix(c, mix(ground.rgb, grain.rgb, grain.a), inner);
     }
 
     if (markRect.z > 0.0) {
