@@ -226,14 +226,14 @@ let
         if [[ ''${#word_matches[@]} -eq 1 ]]; then
           resolved+=("''${word_matches[0]}")
           candidates=("''${next_candidates[@]}")
-          ((pos++))
+          pos=$((pos + 1))
         else
           # No unique prefix match — pass arg through verbatim
           resolved+=("$arg")
         fi
       done
 
-      echo "''${resolved[*]}"
+      _RESOLVED=("''${resolved[@]}")
     }
 
     # --- Dispatch subcommands ---
@@ -304,15 +304,14 @@ let
       _skynet_preview "$*"
     else
       # Resolve prefix-abbreviated args (e.g. "w c" -> "wifi connect")
-      resolved=$(_skynet_resolve "$@")
+      _skynet_resolve "$@"
 
-      # shellcheck disable=SC2086
-      if dispatch $resolved; then
+      if dispatch "''${_RESOLVED[@]}"; then
         exit 0
       fi
 
       # Check if it's a partial match (category)
-      prefix="$resolved"
+      prefix="''${_RESOLVED[*]}"
       matches=()
       ${lib.concatMapStringsSep "\n      " (s: ''
         if [[ "${cmdStr s}" == "$prefix "* || "${cmdStr s}" == "$prefix" ]]; then
