@@ -132,16 +132,16 @@ vec2 ampCenter() {
     return vec2(screenSize.x * 0.5, (bandHeight + screenSize.y - border) * 0.5);
 }
 
+const vec2 LOGO_TEX = vec2(2048.0, 1024.0);
+const float LOGO_TEXELS_HIGH = 814.0;
+const float LOGO_RANGE = 24.0;
+
 float ampDist(vec2 p) {
-    vec2 g = (p - ampCenter()) / AMP_HEIGHT;
-    g.y = -g.y;
-    float far = length(g) - 0.66;
-    if (far > 0.05)
-        return far * AMP_HEIGHT;
-    vec3 t = texture(ampTex, vec2(g.x, -g.y) / 1.5 + 0.5).rgb;
-    float dj = (t.r - 0.5) * 0.25;
-    float dp = (t.g - 0.5) * 0.25;
-    return max(min(dj, max(dp, 0.0464 - dj)), far) * AMP_HEIGHT;
+    float px = AMP_HEIGHT / LOGO_TEXELS_HIGH;
+    vec2 uv = (p - ampCenter()) / (LOGO_TEX * px) + 0.5;
+    vec2 outside = max(abs(uv - 0.5) - 0.5, 0.0) * LOGO_TEX * px;
+    float d = (texture(ampTex, clamp(uv, 0.0, 1.0)).r - 0.5) * 2.0 * LOGO_RANGE * px;
+    return d + length(outside);
 }
 
 vec3 sunkenAmp(vec2 p, vec3 c) {
