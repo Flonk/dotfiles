@@ -14,9 +14,12 @@ build() {
     rm -rf "$G/iso"
     mkdir -p "$themedir"
 
+    python3 -I "$ROOT/dev/render-frame.py" "$ROOT/src/quickshell/shell/chrome" "$w" "$h" "$GLOXWALD_DEJAVU/DejaVuSansMono-Bold.ttf" "$G/frame.png"
+
     GRUB_OUTPUT_DIR="$themedir" \
+    GRUB_BACKGROUND="$G/frame.png" \
     GRUB_WIDTH="$w" GRUB_HEIGHT="$h" \
-    GRUB_BG_COLOR="$(theme app100 '#1a1a1a')" \
+    GRUB_BG_COLOR="$(jq -r '.ground // "#100e0a"' "$ROOT/src/quickshell/shell/chrome/palette.json")" \
     GRUB_BORDER_COLOR="$(theme wm800 '#ff9529')" \
     GRUB_BAR_BG="$(theme app150 '#1C1D24')" \
     GRUB_ASCII_ART="$ROOT/ascii.txt" \

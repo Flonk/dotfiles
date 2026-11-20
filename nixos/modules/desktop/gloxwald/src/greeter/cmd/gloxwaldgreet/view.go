@@ -40,7 +40,9 @@ func (m model) View() tea.View {
 		lipgloss.NewLayer(content).X((w-lipgloss.Width(content))/2).Y((h-lipgloss.Height(content))/2),
 		lipgloss.NewLayer(helpRendered).X(0).Y(h-1),
 	)
-	view.BackgroundColor = lipgloss.Color(bgHex)
+	if !m.conf.Transparent {
+		view.BackgroundColor = lipgloss.Color(bgHex)
+	}
 	return view
 }
 

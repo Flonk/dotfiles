@@ -4,6 +4,8 @@
   accent ? "#1d9eb6",
   ground ? null,
   scheme ? "ayu-dark",
+  frameWidth ? 1920,
+  frameHeight ? 1200,
 }:
 let
   quickshellSrc = builtins.path {
@@ -30,6 +32,11 @@ let
     cp ${chromeStatic}/*.png $out/
     python3 -I ${./dev/bake-chrome.py} '${accent}' $out/gradient.png $out/palette.json '${if ground == null then "" else ground}'
   '';
+  frame = pkgs.runCommand "gloxwald-frame.png" {
+    nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.numpy p.pillow ])) ];
+  } ''
+    python3 -I ${./dev/render-frame.py} ${chrome} ${toString frameWidth} ${toString frameHeight} ${pkgs.nerd-fonts.dejavu-sans-mono}/share/fonts/truetype/NerdFonts/DejaVuSansM/DejaVuSansMNerdFont-Bold.ttf $out
+  '';
   accentScheme = pkgs.runCommand "gloxwald-scheme.yaml" {
     nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.numpy p.pillow ])) ];
   } ''
@@ -39,6 +46,7 @@ in
 {
   inherit chrome;
   inherit accentScheme;
+  inherit frame;
 
   default = pkgs.writeShellApplication {
     name = "gloxwald";

@@ -34,7 +34,11 @@ echo "=== Generating GLOXWALD GRUB theme ==="
 
 # --- Background (solid color, no border) ---
 echo "[1/5] Background..."
-$IM -size "${W}x${H}" xc:"$BG_COLOR" -depth 8 "PNG32:${OUT}/background.png"
+if [[ -n "${GRUB_BACKGROUND:-}" ]]; then
+    $IM "$GRUB_BACKGROUND" -resize "${W}x${H}!" -depth 8 "PNG32:${OUT}/background.png"
+else
+    $IM -size "${W}x${H}" xc:"$BG_COLOR" -depth 8 "PNG32:${OUT}/background.png"
+fi
 
 # --- ASCII art → PNG ---
 echo "[2/5] ASCII art..."

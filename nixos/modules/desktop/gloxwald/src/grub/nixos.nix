@@ -6,11 +6,20 @@ let
 
   asciiDefault = builtins.readFile ../../ascii.txt;
 
+  gloxwaldPkgs = import ../../packages.nix {
+    inherit pkgs;
+    accent = if t != null then t.accent else "#1d9eb6";
+    frameWidth = grubCfg.resolution.width;
+    frameHeight = grubCfg.resolution.height;
+  };
+  palette = builtins.fromJSON (builtins.readFile "${gloxwaldPkgs.chrome}/palette.json");
+
   gloxwaldGrubTheme = pkgs.runCommand "gloxwald-grub-theme"
     {
       nativeBuildInputs = with pkgs; [ imagemagick grub2 ];
 
-      GRUB_BG_COLOR     = if t != null then t.bg_base   else "#1a1a1a";
+      GRUB_BG_COLOR     = palette.ground;
+      GRUB_BACKGROUND   = gloxwaldPkgs.frame;
       GRUB_BORDER_COLOR = if t != null then t.accent    else "#ff9529";
       GRUB_BAR_BG       = if t != null then t.bg_active else "#1C1D24";
 

@@ -4,7 +4,10 @@ let
   cfg = config.programs.gloxwald.greeter;
   t = config.programs.gloxwald.theme;
 
-  gloxwaldPkgs = import ../../packages.nix { inherit pkgs; };
+  gloxwaldPkgs = import ../../packages.nix {
+    inherit pkgs;
+    accent = if t != null then t.accent else "#1d9eb6";
+  };
 
   asciiDefault = builtins.readFile ../../ascii.txt;
 
@@ -14,7 +17,7 @@ let
     (if t != null then t.asciiArt else asciiDefault);
 
   greeterFlags = concatStringsSep " " (
-    [ "--ascii ${asciiFile}" "--exec ${escapeShellArg cfg.settings.exec}" ]
+    [ "--ascii ${asciiFile}" "--exec ${escapeShellArg cfg.settings.exec}" "--transparent" ]
     ++ optional (cfg.settings.user != null) "--user ${escapeShellArg cfg.settings.user}"
     ++ optionals (t != null) [
       "--bg '${t.bg_base}'"
@@ -31,7 +34,9 @@ let
     cursor_shape block
     cursor_blink_interval 0
     enable_audio_bell no
-    window_padding_width 0
+    window_padding_width 33 6 6 6
+    background_image ${gloxwaldPkgs.frame}
+    background_image_layout scaled
     hide_window_decorations yes
     confirm_os_window_close 0
   '' + optionalString (t != null) ''

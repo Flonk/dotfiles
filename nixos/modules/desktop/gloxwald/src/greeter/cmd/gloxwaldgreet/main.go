@@ -50,9 +50,10 @@ func logDebug(format string, args ...interface{}) {
 }
 
 type Config struct {
-	Exec  string
-	User  string
-	ASCII string
+	Transparent bool
+	Exec        string
+	User        string
+	ASCII       string
 }
 
 type FocusState int
@@ -329,6 +330,7 @@ func main() {
 	flag.StringVar(&bg, "bg", "", "Background color (hex)")
 	flag.StringVar(&fg, "fg", "", "Text color (hex)")
 	flag.StringVar(&accent, "accent", "", "Accent color (hex)")
+	flag.BoolVar(&conf.Transparent, "transparent", false, "Leave the background unpainted so the terminal's background image shows")
 	flag.Parse()
 
 	if showVersion {
