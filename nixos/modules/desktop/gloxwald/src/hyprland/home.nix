@@ -5,7 +5,7 @@
   ...
 }:
 let
-  borderSize = 5;
+  borderSize = 2;
   lockCommand = config.programs.gloxwald.quickshell.lockCommand;
 
   hypr-scale = pkgs.writeShellApplication {
@@ -76,7 +76,7 @@ in
 
           general = {
             layout = "hy3";
-            gaps_in = { top = -borderSize; right = 0; bottom = 0; left = -borderSize; };
+            gaps_in = 6;
             gaps_out = 12;
             border_size = borderSize;
           };
@@ -109,7 +109,7 @@ in
           };
 
           decoration = {
-            rounding = 0;
+            rounding = 8;
             blur = {
               enabled = false;
               size = 5;
