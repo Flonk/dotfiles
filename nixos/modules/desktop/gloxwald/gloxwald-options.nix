@@ -45,7 +45,7 @@ in
     fastfetch.enable = mkOption {
       type = types.bool;
       default = true;
-      description = "Use the accent-coloured T3 mark as the fastfetch logo (only applies when fastfetch is enabled)";
+      description = "Use the T3 block logo and accent-coloured keys in fastfetch (only applies when fastfetch is enabled)";
     };
 
     starship.enable = mkOption {
