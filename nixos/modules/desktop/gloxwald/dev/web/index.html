@@ -181,7 +181,7 @@ function frame() {
   textures.noise = texture(await loadImage(CHROME + 'noise.png'), false);
   textures.dots = texture(await loadImage(CHROME + 'dots.png'), false);
   textures.grain = texture(await loadImage(CHROME + 'grain.png'), true);
-  textures.amp = texture(await loadImage('andamp_sdf.png'), false);
+  textures.amp = texture(await loadImage(CHROME + 'andamp_sdf.png'), false);
   await document.fonts.ready;
   textures.mark = texture(markCanvas(), false);
   size();

@@ -24,6 +24,7 @@ layout(binding = 2) uniform sampler2D dotsTex;
 layout(binding = 3) uniform sampler2D markTex;
 layout(binding = 4) uniform sampler2D grainTex;
 layout(binding = 5) uniform sampler2D gradientTex;
+layout(binding = 6) uniform sampler2D logoTex;
 
 vec3 toLinear(vec3 c) {
     return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
@@ -97,9 +98,83 @@ float mastheadDots(vec2 p) {
     return cover / 16.0 * fade;
 }
 
+float gridDots(vec2 p) {
+    const float s = 0.29237170472273677;
+    const float k = 0.9563047559630354;
+    float cover = 0.0;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            vec2 q = p + (vec2(float(i), float(j)) + 0.5) / 4.0 - 0.5;
+            q = vec2(k * q.x + s * q.y, -s * q.x + k * q.y);
+            float r = length(mod(q, 2.5) - 1.25);
+            cover += 1.0 - smoothstep(0.4, 0.7, r);
+        }
+    }
+    return cover / 16.0;
+}
+
+const float AMP_HEIGHT = 120.0;
+const vec3 AMP_DARK = vec3(0.012, 0.013, 0.015);
+const float SPOT_BELOW = 60.0;
+const float SPOT_RANGE = 700.0;
+const float SPOT_CONE = 0.62;
+const float SPOT_GROUND = 0.2;
+const float SPOT_WALL = 1.0;
+const float SPOT_FLOOR = 0.15;
+const float AMP_DEPTH = 8.4;
+
+vec2 spotPos() {
+    return vec2(screenSize.x * 0.5, screenSize.y + SPOT_BELOW);
+}
+
+float spot(vec2 p) {
+    vec2 v = p - spotPos();
+    float r = length(v);
+    float cone = smoothstep(SPOT_CONE, 1.0, -v.y / r);
+    return cone / (1.0 + (r / SPOT_RANGE) * (r / SPOT_RANGE));
+}
+
+vec2 ampCenter() {
+    return vec2(screenSize.x * 0.5, (bandHeight + screenSize.y - border) * 0.5);
+}
+
+const vec2 LOGO_TEX = vec2(2048.0, 1024.0);
+const float LOGO_TEXELS_HIGH = 814.0;
+const float LOGO_RANGE = 24.0;
+
+float ampDist(vec2 p) {
+    float px = AMP_HEIGHT / LOGO_TEXELS_HIGH;
+    vec2 uv = (p - ampCenter()) / (LOGO_TEX * px) + 0.5;
+    vec2 outside = max(abs(uv - 0.5) - 0.5, 0.0) * LOGO_TEX * px;
+    float d = (texture(logoTex, clamp(uv, 0.0, 1.0)).r - 0.5) * 2.0 * LOGO_RANGE * px;
+    return d + length(outside);
+}
+
+vec3 sunkenAmp(vec2 p, vec3 c) {
+    float d = ampDist(p);
+    if (d > 2.0)
+        return c;
+    float inside = clamp(0.5 - d, 0.0, 1.0);
+    vec2 L = normalize(p - spotPos());
+    vec2 e = vec2(0.75, 0.0);
+    vec2 n = normalize(vec2(ampDist(p + e.xy) - ampDist(p - e.xy), ampDist(p + e.yx) - ampDist(p - e.yx)) + 1e-6);
+    float shadow = 0.0;
+    for (int i = 1; i <= 6; i++)
+        shadow += smoothstep(-0.75, 0.75, ampDist(p - L * AMP_DEPTH * float(i) / 6.0));
+    shadow /= 6.0;
+    float wall = exp(d / 1.5) * max(dot(n, L), 0.0);
+    float light = spot(p);
+    vec3 floor_ = AMP_DARK + accent.rgb * light * (SPOT_FLOOR * (1.0 - shadow) + SPOT_WALL * wall);
+    float ring = clamp(0.5 - d, 0.0, 1.0) - clamp(-0.5 - d, 0.0, 1.0);
+    floor_ = mix(floor_, lift(floor_), 0.25 * ring / max(inside, 1e-4));
+    return mix(c, floor_, inside);
+}
+
 vec3 groundAt(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-    vec3 c = mix(ground.rgb, grain.rgb, grain.a);
+    vec3 c = mix(ground.rgb + accent.rgb * SPOT_GROUND * spot(p), grain.rgb, grain.a);
+    c = mix(c, vec3(1.0), 0.07 * gridDots(p));
+    c = sunkenAmp(p, c);
     return mix(c, accent.rgb, 0.55 * mastheadDots(p));
 }
 

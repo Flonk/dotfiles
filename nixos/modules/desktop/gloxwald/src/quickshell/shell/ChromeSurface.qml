@@ -20,6 +20,7 @@ ShaderEffect {
     property var markTex: markSource
     property var grainTex: grain
     property var gradientTex: gradient
+    property var logoTex: logo
 
     vertexShader: "chrome/chrome.vert.qsb"
     fragmentShader: "chrome/chrome.frag.qsb"
@@ -39,6 +40,12 @@ ShaderEffect {
     Image {
         id: gradient
         source: "chrome/gradient.png"
+        visible: false
+    }
+
+    Image {
+        id: logo
+        source: "chrome/andamp_sdf.png"
         visible: false
     }
 
