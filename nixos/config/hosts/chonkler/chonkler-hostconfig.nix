@@ -30,7 +30,11 @@
         };
         gloxwald.enable = true;
         hyprland.enable = true;
-        stylix.enable = true;
+        stylix = {
+          enable = true;
+          accent = "#1d9eb6";
+          accentDark = "#0e5462";
+        };
       };
       development = {
         dnsmasq.enable = true;

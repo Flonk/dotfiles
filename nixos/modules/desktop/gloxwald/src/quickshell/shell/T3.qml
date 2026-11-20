@@ -12,9 +12,9 @@ QtObject {
     readonly property real turn: 110 * Math.PI / 180
     readonly property int markSize: 26
 
-    readonly property color accent: "#f6722b"
-    readonly property color accent2: "#ffa203"
-    readonly property color accent3: "#facb4c"
+    readonly property color accent: "#1d9eb6"
+    readonly property color accent2: "#69b1e0"
+    readonly property color accent3: "#a0c2f1"
     readonly property color ground: "#100e0a"
     readonly property color ink: "#000000"
     readonly property color cream: "#ddd6c4"
