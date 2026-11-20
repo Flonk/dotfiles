@@ -26,3 +26,7 @@ singleton LockWidget 1.0 LockWidget.qml
 LockContext 1.0 LockContext.qml
 LockShaderPass 1.0 LockShaderPass.qml
 LockSurface 1.0 LockSurface.qml
+DevButton 1.0 DevButton.qml
+LockDevPanel 1.0 LockDevPanel.qml
+TermView 1.0 TermView.qml
+GrubView 1.0 GrubView.qml

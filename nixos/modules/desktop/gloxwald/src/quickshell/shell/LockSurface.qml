@@ -43,7 +43,9 @@ Item {
         color: "black"
     }
 
+    property int sceneRev: 0
     onRenderSceneChanged: _reloadShader()
+    onSceneRevChanged: _reloadShader()
 
     function _reloadShader() {
         if (!_presented)
@@ -52,7 +54,7 @@ Item {
             shaderLoader.setSource("");
             return;
         }
-        shaderLoader.setSource("shaders/scenes/yamp.qml", {
+        shaderLoader.setSource("shaders/scenes/yamp.qml" + (sceneRev ? "?r=" + sceneRev : ""), {
             "context": Qt.binding(() => root.context),
             "frameCount": Qt.binding(() => root._iFrame),
             "dummyTexture": dummyTexture,

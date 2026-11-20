@@ -26,12 +26,9 @@ QtObject {
     property var _data: _fallback
 
     property FileView _themeFile: FileView {
-        path: {
-            const p = Quickshell.configPath();
-            console.log("[Theme] configPath:", p);
-            return p + "/../quickshell-theme.json";
-        }
+        path: Quickshell.env("GLOXWALD_THEME") || (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/quickshell-theme.json"
         watchChanges: true
+        onFileChanged: reload()
         onLoaded: {
             try {
                 root._data = Object.assign({}, root._fallback, JSON.parse(text()));

@@ -4,6 +4,10 @@ default:
 fmt:
     nix fmt
 
+# Unified dev window: bar, lockscreen, greeter and GRUB in tabs with shared theme controls
+dev tab="lock":
+    nix-shell --run "bash dev/run.sh {{tab}}"
+
 # Run the quickshell bar from the repo
 qs-run:
     quickshell --path ./src/quickshell/shell

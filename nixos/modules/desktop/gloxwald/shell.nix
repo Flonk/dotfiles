@@ -7,6 +7,7 @@ pkgs.mkShell {
     go
     grub2
     imagemagick
+    jq
     just
     mtools
     OVMF.fd
@@ -14,7 +15,10 @@ pkgs.mkShell {
     qemu
     qt6.qtshadertools
     quickshell
+    tmux
     watchexec
     xorriso
   ];
+
+  GLOXWALD_DEJAVU = "${pkgs.dejavu_fonts}/share/fonts/truetype";
 }

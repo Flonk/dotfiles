@@ -53,17 +53,7 @@ ShellRoot {
     }
 
     function lockScreen() {
-        lockContext.elapsedTime = 0;
-        lockContext.clockStart = Date.now();
-        lockContext._clockOwner = null;
-        lockContext.lastKeyTime = -1000.0;
-        lockContext.lastFailedUnlockTime = -1000.0;
-        lockContext.authStartedTime = -1000.0;
-        lockContext.keypulseBase = 0.0;
-        lockContext.keyBase = 0.0;
-        lockContext.currentText = "";
-        lockContext.showFailure = false;
-        lockContext.shuffleModes();
+        lockContext.reset();
         lock.locked = true;
     }
 }

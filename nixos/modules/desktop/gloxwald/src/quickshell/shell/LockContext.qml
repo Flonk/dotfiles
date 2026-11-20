@@ -219,11 +219,46 @@ Scope {
         lastKeyTime = elapsedTime;
     }
 
+    property bool fakeAuth: false
+
     function tryUnlock() {
         if (currentText === "") return;
         unlockInProgress = true;
         authStartedTime = elapsedTime;
-        pam.start();
+        if (fakeAuth) fakeAuthTimer.restart();
+        else pam.start();
+    }
+
+    Timer {
+        id: fakeAuthTimer
+        interval: 700
+        onTriggered: root._authDone(root.currentText === "gloxwald")
+    }
+
+    function _authDone(ok) {
+        if (ok) {
+            Qt.callLater(() => root.unlocked());
+        } else {
+            root.lastFailedUnlockTime = root.elapsedTime;
+            root.currentText = "";
+            root.showFailure = true;
+        }
+        root.authStartedTime = -1000.0;
+        root.unlockInProgress = false;
+    }
+
+    function reset() {
+        elapsedTime = 0;
+        clockStart = Date.now();
+        _clockOwner = null;
+        lastKeyTime = -1000.0;
+        lastFailedUnlockTime = -1000.0;
+        authStartedTime = -1000.0;
+        keypulseBase = 0.0;
+        keyBase = 0.0;
+        currentText = "";
+        showFailure = false;
+        shuffleModes();
     }
 
     PamContext {
@@ -237,16 +272,6 @@ Scope {
             }
         }
 
-        onCompleted: result => {
-            if (result === PamResult.Success) {
-                Qt.callLater(() => root.unlocked());
-            } else {
-                root.lastFailedUnlockTime = root.elapsedTime;
-                root.currentText = "";
-                root.showFailure = true;
-            }
-            root.authStartedTime = -1000.0;
-            root.unlockInProgress = false;
-        }
+        onCompleted: result => root._authDone(result === PamResult.Success)
     }
 }
