@@ -16,6 +16,7 @@ in
     ./t3-desktop-options.nix
     ./src/greeter/nixos.nix
     ./src/grub/nixos.nix
+    ./src/plymouth/nixos.nix
     ./src/hyprland/nixos.nix
   ];
 
@@ -42,6 +43,8 @@ in
         package = config.stylix.fonts.monospace.package;
       };
     };
+
+    programs.t3-desktop.plymouth.enable = true;
 
     programs.t3-desktop.grub = {
       enable = true;

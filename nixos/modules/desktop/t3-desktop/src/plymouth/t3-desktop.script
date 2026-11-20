@@ -1,0 +1,29 @@
+w = Window.GetWidth();
+h = Window.GetHeight();
+
+backdrop = Sprite(Image("frame.png").Scale(w, h));
+backdrop.SetPosition(0, 0, -10);
+
+dot = Image("dot.png");
+gap = dot.GetWidth() * 2.4;
+cx = w / 2 - dot.GetWidth() / 2;
+cy = (40 + h - 4) / 2 - dot.GetHeight() / 2;
+
+for (i = 0; i < 3; i++) {
+    dots[i] = Sprite(dot);
+    dots[i].SetPosition(cx + (i - 1) * gap, cy, 10);
+    dots[i].SetOpacity(0.2);
+}
+
+tick = 0;
+
+fun refresh() {
+    tick++;
+    for (i = 0; i < 3; i++) {
+        wave = Math.Sin((tick / 50 - i * 0.18) * 2 * Math.Pi);
+        if (wave < 0) wave = 0;
+        dots[i].SetOpacity(0.2 + 0.8 * wave * wave);
+    }
+}
+
+Plymouth.SetRefreshFunction(refresh);

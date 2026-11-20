@@ -37,6 +37,25 @@ let
   } ''
     python3 -I ${./dev/render-frame.py} ${chrome} ${toString frameWidth} ${toString frameHeight} ${pkgs.nerd-fonts.dejavu-sans-mono}/share/fonts/truetype/NerdFonts/DejaVuSansM/DejaVuSansMNerdFont-Bold.ttf $out
   '';
+  plymouthTheme = pkgs.runCommand "t3-desktop-plymouth" {
+    nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.pillow ])) ];
+  } ''
+    dir=$out/share/plymouth/themes/t3-desktop
+    mkdir -p $dir
+    cp ${frame} $dir/frame.png
+    cp ${./src/plymouth/t3-desktop.script} $dir/t3-desktop.script
+    python3 -I -c "from PIL import Image, ImageDraw; s=8; n=10; im=Image.new('RGBA',(n*s,n*s)); ImageDraw.Draw(im).ellipse((0,0,n*s-1,n*s-1), fill='${accent}'); im.resize((n,n), Image.LANCZOS).save('$dir/dot.png')"
+    cat > $dir/t3-desktop.plymouth <<EOF
+    [Plymouth Theme]
+    Name=t3-desktop
+    Description=T3 desktop loading screen
+    ModuleName=script
+
+    [script]
+    ImageDir=$dir
+    ScriptFile=$dir/t3-desktop.script
+    EOF
+  '';
   accentScheme = pkgs.runCommand "t3-desktop-scheme.yaml" {
     nativeBuildInputs = [ (pkgs.python3.withPackages (p: [ p.numpy p.pillow ])) ];
   } ''
@@ -47,6 +66,7 @@ in
   inherit chrome;
   inherit accentScheme;
   inherit frame;
+  inherit plymouthTheme;
 
   default = pkgs.writeShellApplication {
     name = "t3-desktop";

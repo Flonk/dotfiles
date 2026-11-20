@@ -43,6 +43,7 @@ in
 {
   config = mkIf grubCfg.enable {
     boot.loader.grub.enable = true;
+    boot.loader.timeout = lib.mkDefault 1;
     boot.loader.grub.useOSProber = grubCfg.useOSProber;
     boot.loader.grub.theme = t3GrubTheme;
     boot.loader.grub.splashImage = "${t3GrubTheme}/terminal.png";

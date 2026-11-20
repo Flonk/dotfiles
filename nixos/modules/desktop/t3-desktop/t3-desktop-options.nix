@@ -217,6 +217,8 @@ in
       };
     };
 
+    plymouth.enable = mkEnableOption "t3-desktop Plymouth loading screen (quiet boot)";
+
     grub = {
       enable = mkEnableOption "t3-desktop GRUB theme";
 
