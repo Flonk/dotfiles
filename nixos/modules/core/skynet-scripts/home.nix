@@ -348,7 +348,7 @@ in
           ${pkgs.toilet}/bin/toilet -f future "upgrade" | cat
           echo ""
           echo "Updating flake inputs..."
-          nix flake update ~/repos/personal/dotfiles
+          nix flake update --flake ~/repos/personal/dotfiles/nixos
           export SKYNET_REPO=~/repos/personal/dotfiles
           failed=()
           ${lib.concatMapStringsSep "\n" (u: ''
