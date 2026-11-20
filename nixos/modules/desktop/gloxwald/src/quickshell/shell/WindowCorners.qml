@@ -8,7 +8,7 @@ Singleton {
     id: root
     property var clients: []
     property var monitors: []
-    property string activeAddress: ""
+    readonly property string focused: String(Hyprland.activeToplevel?.address ?? "").replace(/^0x/, "")
     property int tabHeight: 22
     property bool pending: false
 
@@ -31,7 +31,7 @@ Singleton {
                 y0: c.at[1] - bw - mon.y,
                 x1: c.at[0] + c.size[0] + bw - mon.x,
                 y1: c.at[1] + c.size[1] + bw - mon.y,
-                active: c.address === activeAddress,
+                active: focused !== "" && String(c.address).replace(/^0x/, "") === focused,
                 fullscreen: c.fullscreen > 0
             }));
         if (boxes.length === 0 || boxes.some(b => b.fullscreen))
@@ -58,7 +58,6 @@ Singleton {
                     const j = JSON.parse(text);
                     root.clients = j.clients;
                     root.monitors = j.monitors;
-                    root.activeAddress = j.active?.address ?? "";
                     root.tabHeight = j.tab?.int ?? 22;
                 } catch (e) {
                     console.warn("[WindowCorners]", e);
