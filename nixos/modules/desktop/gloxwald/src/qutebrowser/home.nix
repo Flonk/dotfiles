@@ -24,7 +24,7 @@ let
   accent2 = palette.accent2;
   glow = palette.glow;
   deep = mix ink accent 0.14;
-  dimAccent = mix ground accent 0.75;
+  dimAccent = mix ink accent 0.78;
   dimCream = mix ground cream 0.5;
   danger = s.base08;
   warn = s.base0A;

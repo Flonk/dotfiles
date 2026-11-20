@@ -1,4 +1,5 @@
 #include "render.hpp"
+#include "globals.hpp"
 
 #include <cairo/cairo.h>
 #include <string>
@@ -110,7 +111,8 @@ void Hy3Render::renderTab(
 	static auto noiseTexture = loadChromeTexture("noise.png");
 	static auto dotsTexture = loadChromeTexture("dots.png");
 	static auto gradientTexture = loadChromeTexture("gradient.png");
-	const bool chromeTextures = noiseTexture && dotsTexture && gradientTexture;
+	static const auto chrome_texture = CConfigValue<Config::INTEGER>("plugin:hy3:tabs:chrome_texture");
+	const bool chromeTextures = *chrome_texture && noiseTexture && dotsTexture && gradientTexture;
 	GLCALL(glUniform1f(shader.chromeTextures, chromeTextures ? 1.0f : 0.0f));
 	if (chromeTextures) {
 		GLCALL(glActiveTexture(GL_TEXTURE1));

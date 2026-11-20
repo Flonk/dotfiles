@@ -10,6 +10,9 @@ let
   accentDark = if config.programs.gloxwald.stylix.accentDark != null then config.programs.gloxwald.stylix.accentDark else darken accent 0.53;
   borderColor = "rgba(${builtins.substring 1 6 accent}ff)";
   inactiveBorderColor = "rgba(000000ff)";
+  rgba = hex: "rgba(${builtins.substring 1 6 hex}ff)";
+  tabInactive = rgba (darken accent 0.14);
+  tabInactiveText = rgba (darken accent 0.78);
 in
 {
   config = lib.mkIf config.programs.gloxwald.hyprland.enable {
@@ -41,13 +44,13 @@ in
         active_border = borderColor;
         active_text = inactiveBorderColor;
 
-        focused = inactiveBorderColor;
-        focused_border = inactiveBorderColor;
-        focused_text = "rgba(${builtins.substring 1 6 accentDark}ff)";
+        focused = tabInactive;
+        focused_border = tabInactive;
+        focused_text = tabInactiveText;
 
-        inactive = inactiveBorderColor;
-        inactive_border = inactiveBorderColor;
-        inactive_text = "rgba(${builtins.substring 1 6 accentDark}ff)";
+        inactive = tabInactive;
+        inactive_border = tabInactive;
+        inactive_text = tabInactiveText;
 
         urgent = "rgba(${builtins.substring 1 6 s.base08}ff)";
         urgent_border = "rgba(${builtins.substring 1 6 s.base08}ff)";

@@ -161,6 +161,7 @@ in
                 text_height = config.programs.gloxwald.label.size;
                 text_uppercase = true;
                 text_tracking = config.programs.gloxwald.label.tracking;
+                chrome_texture = false;
               };
             };
           };
