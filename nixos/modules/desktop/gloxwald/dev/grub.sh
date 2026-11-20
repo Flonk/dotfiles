@@ -57,7 +57,8 @@ stop() {
 
 start() {
     stop
-    qemu-system-x86_64 \
+    systemd-run --user --scope --quiet -p CPUQuota=20% \
+        qemu-system-x86_64 \
         -accel kvm -accel tcg \
         -m 256 \
         -vga std \

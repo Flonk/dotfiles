@@ -6,6 +6,12 @@ Item {
     id: root
     required property string devDir
     property bool active: true
+    onActiveChanged: syncRunState()
+
+    function syncRunState() {
+        if (ready)
+            send({ execute: active ? "cont" : "stop" });
+    }
 
     property bool ready: false
     property bool waiting: false
@@ -75,6 +81,7 @@ Item {
         }
         if (m.id === "caps") {
             ready = true;
+            syncRunState();
         } else if (typeof m.id === "string" && m.id.startsWith("shot")) {
             waiting = false;
             if (m.return !== undefined) {
