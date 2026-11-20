@@ -108,13 +108,14 @@ float gridDots(vec2 p) {
     return cover / 16.0;
 }
 
-const float AMP_HEIGHT = 238.0;
-const vec3 AMP_DARK = vec3(0.018, 0.02, 0.022);
+const float AMP_HEIGHT = 143.0;
+const vec3 AMP_DARK = vec3(0.006, 0.007, 0.008);
 const float SPOT_BELOW = 60.0;
 const float SPOT_RANGE = 700.0;
 const float SPOT_CONE = 0.62;
 const float SPOT_GROUND = 0.2;
 const float SPOT_WALL = 1.0;
+const float SPOT_FLOOR = 0.06;
 const float AMP_DEPTH = 10.0;
 
 vec2 spotPos() {
@@ -158,7 +159,7 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     shadow /= 6.0;
     float wall = exp(d / 1.5) * max(dot(n, L), 0.0);
     float light = spot(p);
-    vec3 floor_ = AMP_DARK + accent * light * (SPOT_GROUND * (1.0 - shadow) + SPOT_WALL * wall);
+    vec3 floor_ = AMP_DARK + accent * light * (SPOT_FLOOR * (1.0 - shadow) + SPOT_WALL * wall);
     float ring = clamp(0.5 - d, 0.0, 1.0) - clamp(-0.5 - d, 0.0, 1.0);
     floor_ = mix(floor_, lift(floor_), 0.25 * ring / max(inside, 1e-4));
     return mix(c, floor_, inside);
