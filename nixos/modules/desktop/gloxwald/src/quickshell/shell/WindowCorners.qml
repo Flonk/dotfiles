@@ -43,7 +43,8 @@ Singleton {
         const reach = tabHeight + 4;
         const pick = (x, y) => {
             const hits = boxes.filter(b => x >= b.x0 - 1 && x <= b.x1 + 1 && y >= b.y0 - reach && y <= b.y1 + 1);
-            return { x, y, on: hits.length > 0, active: hits.some(b => b.active) };
+            const tab = y === top && hits.length > 0 && hits.every(b => b.y0 > top + 1);
+            return { x, y, on: hits.length > 0, active: hits.some(b => b.active), tab };
         };
         return { tl: pick(left, top), tr: pick(right, top), bl: pick(left, bottom), br: pick(right, bottom) };
     }
