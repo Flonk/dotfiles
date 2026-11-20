@@ -10,6 +10,7 @@ ShaderEffect {
     readonly property real bandHeight: T3.band
     readonly property real border: T3.border
     readonly property real radius: T3.radius
+    readonly property real outerRadius: T3.outerRadius
     readonly property real turn: T3.turn
     readonly property color accent: T3.accent
     readonly property color accent2: T3.accent2

@@ -12,6 +12,7 @@ layout(std140, binding = 0) uniform buf {
     float bandHeight;
     float border;
     float radius;
+    float outerRadius;
     float turn;
     vec4 accent;
     vec4 accent2;
@@ -129,6 +130,11 @@ void main() {
             c = mix(c, vec3(0.0), disc * (1.0 - knock));
         }
     }
+
+    vec2 screenHalf = screenSize * 0.5;
+    vec2 so = abs(p - screenHalf) - (screenHalf - outerRadius);
+    float outer = length(max(so, 0.0)) + min(max(so.x, so.y), 0.0) - outerRadius;
+    c *= clamp(0.5 - outer, 0.0, 1.0);
 
     fragColor = vec4(c, 1.0) * qt_Opacity;
 }
