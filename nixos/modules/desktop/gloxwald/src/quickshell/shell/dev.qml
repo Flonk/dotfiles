@@ -13,8 +13,9 @@ FloatingWindow {
     readonly property string rootDir: Quickshell.env("GLOXWALD_ROOT")
     readonly property string devDir: Quickshell.env("GLOXWALD_DEV")
 
-    readonly property var tabNames: ["bar", "lock", "greeter", "grub"]
-    property int tab: Math.max(0, tabNames.indexOf(Quickshell.env("GLOXWALD_TAB") || "lock"))
+    readonly property var tabNames: ["desktop", "bar", "lock", "greeter", "grub"]
+    readonly property string tabName: tabNames[tab]
+    property int tab: Math.max(0, tabNames.indexOf(Quickshell.env("GLOXWALD_TAB") || "desktop"))
 
     readonly property var resolutions: [[1920, 1200], [1920, 1080], [2560, 1440], [1280, 800]]
     property int resIndex: 0
@@ -24,8 +25,9 @@ FloatingWindow {
     property bool logOpen: true
     property bool logAll: false
     property real barZoom: 2
+    property bool mockWindows: true
     readonly property int sidebarWidth: 330
-    readonly property var tabSources: [["dev", "theme"], ["dev", "theme", "shader"], ["dev", "theme", "greeter"], ["dev", "theme", "grub"]]
+    readonly property var tabSources: ({ desktop: ["dev", "theme"], bar: ["dev", "theme"], lock: ["dev", "theme", "shader"], greeter: ["dev", "theme", "greeter"], grub: ["dev", "theme", "grub"] })
     property int sceneRev: 0
 
     property var theme: ({})
@@ -35,8 +37,8 @@ FloatingWindow {
     onResIndexChanged: grubJob.kick()
 
     function focusTab() {
-        if (tab === 2) term.forceActiveFocus();
-        else if (tab === 3) grub.forceActiveFocus();
+        if (tabName === "greeter") term.forceActiveFocus();
+        else if (tabName === "grub") grub.forceActiveFocus();
         else stage.forceActiveFocus();
     }
 
@@ -55,21 +57,26 @@ FloatingWindow {
     }
 
     function reloadTab() {
-        if (tab === 0) {
+        if (tabName === "bar") {
             gallery.reload();
-        } else if (tab === 1) {
+        } else if (tabName === "lock") {
             sceneRev++;
             lockCtx.reset();
-        } else if (tab === 2) {
+        } else if (tabName === "greeter") {
             greeterJob.kick();
-        } else {
+        } else if (tabName === "grub") {
             grubJob.kick();
+        } else {
+            desktopLoader.active = false;
+            desktopLoader.active = true;
         }
         log("dev", "reload " + tabNames[tab]);
     }
 
     function reloadAll() {
         gallery.reload();
+        desktopLoader.active = false;
+        desktopLoader.active = true;
         shaderJob.kick();
         lockCtx.reset();
         greeterJob.kick();
@@ -255,6 +262,7 @@ FloatingWindow {
     Shortcut { sequence: "Ctrl+2"; context: Qt.ApplicationShortcut; onActivated: win.tab = 1 }
     Shortcut { sequence: "Ctrl+3"; context: Qt.ApplicationShortcut; onActivated: win.tab = 2 }
     Shortcut { sequence: "Ctrl+4"; context: Qt.ApplicationShortcut; onActivated: win.tab = 3 }
+    Shortcut { sequence: "Ctrl+5"; context: Qt.ApplicationShortcut; onActivated: win.tab = 4 }
     Shortcut { sequence: "Ctrl+R"; context: Qt.ApplicationShortcut; onActivated: win.reloadTab() }
     Shortcut { sequence: "Ctrl+Shift+R"; context: Qt.ApplicationShortcut; onActivated: win.reloadAll() }
     Shortcut { sequence: "Ctrl+L"; context: Qt.ApplicationShortcut; onActivated: win.logOpen = !win.logOpen }
@@ -400,7 +408,19 @@ FloatingWindow {
                 Column {
                     width: side.width
                     spacing: 6
-                    visible: win.tab === 0
+                    visible: win.tabName === "desktop"
+                    Hint { text: "The whole screen at the frame resolution: the static T3 chrome and ground, the live header, and two mock tiled windows. Sizes and colours live in T3.qml." }
+                    DevButton {
+                        label: "mock windows"
+                        active: win.mockWindows
+                        onClicked: win.mockWindows = !win.mockWindows
+                    }
+                }
+
+                Column {
+                    width: side.width
+                    spacing: 6
+                    visible: win.tabName === "bar"
                     Hint { text: "The live bar at the frame width, its lockscreen variant, a zoomed crop of every named section (objectName in BarContent), each reusable component on its own, and the live state of every data singleton." }
                     Flow {
                         width: side.width
@@ -420,7 +440,7 @@ FloatingWindow {
                 Column {
                     width: side.width
                     spacing: 10
-                    visible: win.tab === 1
+                    visible: win.tabName === "lock"
                     Hint { text: "Password gloxwald unlocks, anything else fails. Click the stage to type." }
                     LockSceneTools {
                         context: lockCtx
@@ -439,7 +459,7 @@ FloatingWindow {
                 Column {
                     width: side.width
                     spacing: 6
-                    visible: win.tab === 2
+                    visible: win.tabName === "greeter"
                     Hint { text: "gloxwaldgreet --test in tmux. Any password logs in and restarts it; F6/F7 restart it too. Click the stage to type." }
                     Hint { text: "cells: " + term.cols + "×" + term.rows }
                     DevButton {
@@ -451,7 +471,7 @@ FloatingWindow {
                 Column {
                     width: side.width
                     spacing: 6
-                    visible: win.tab === 3
+                    visible: win.tabName === "grub"
                     Hint { text: "generate-assets.sh on a BIOS ISO in headless QEMU. Click the stage to send arrows, enter, e and c." }
                     Flow {
                         width: side.width
@@ -579,7 +599,7 @@ FloatingWindow {
                 delegate: Text {
                     required property string src
                     required property string line
-                    readonly property bool shown: win.logAll || win.tabSources[win.tab].includes(src)
+                    readonly property bool shown: win.logAll || win.tabSources[win.tabName].includes(src)
                     width: logView.width
                     height: shown ? implicitHeight : 0
                     visible: shown
@@ -601,20 +621,64 @@ FloatingWindow {
 
         Item {
             anchors.fill: parent
-            visible: win.tab === 0
+            visible: win.tabName === "desktop"
+
+            Frame {
+                Loader {
+                    id: desktopLoader
+                    anchors.fill: parent
+                    sourceComponent: Item {
+                        readonly property vector2d screenSize: Qt.vector2d(win.frameW, win.frameH)
+                        readonly property rect content: Qt.rect(T3.border, T3.band, win.frameW - 2 * T3.border, win.frameH - T3.band - T3.border)
+                        readonly property int gap: 8
+
+                        ChromeSurface {
+                            anchors.fill: parent
+                            screenSize: parent.screenSize
+                        }
+
+                        Repeater {
+                            model: win.mockWindows ? 2 : 0
+                            Rectangle {
+                                required property int index
+                                readonly property rect c: parent.content
+                                readonly property real w: (c.width - 3 * parent.gap) / 2
+                                x: c.x + parent.gap + index * (w + parent.gap)
+                                y: c.y + parent.gap
+                                width: w
+                                height: c.height - 2 * parent.gap
+                                color: "#1c1a16"
+                                border.color: "#43413d"
+                            }
+                        }
+
+                        ChromeHeader {
+                            anchors { left: parent.left; right: parent.right; top: parent.top }
+                            height: T3.band
+                            screenSize: parent.screenSize
+                            monitor: Hyprland.focusedMonitor
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            anchors.fill: parent
+            visible: win.tabName === "bar"
 
             BarGallery {
                 id: gallery
                 anchors.fill: parent
                 frameW: win.frameW
                 zoom: win.barZoom
-                active: win.tab === 0
+                active: win.tabName === "bar"
             }
         }
 
         Item {
             anchors.fill: parent
-            visible: win.tab === 1
+            visible: win.tabName === "lock"
 
             Frame {
                 LockSurface {
@@ -627,13 +691,13 @@ FloatingWindow {
 
         Item {
             anchors.fill: parent
-            visible: win.tab === 2
+            visible: win.tabName === "greeter"
 
             Frame {
                 TermView {
                     id: term
                     anchors.fill: parent
-                    active: win.tab === 2
+                    active: win.tabName === "greeter"
                     fg: Theme.app600
                     bg: Theme.app100
                     fontFamily: win.theme.fontFamily ?? "monospace"
@@ -645,14 +709,14 @@ FloatingWindow {
 
         Item {
             anchors.fill: parent
-            visible: win.tab === 3
+            visible: win.tabName === "grub"
 
             Frame {
                 GrubView {
                     id: grub
                     anchors.fill: parent
                     devDir: win.devDir
-                    active: win.tab === 3
+                    active: win.tabName === "grub"
                 }
             }
         }

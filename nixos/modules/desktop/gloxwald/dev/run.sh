@@ -30,5 +30,5 @@ watch shader -w src/quickshell/lockscreen/shaders/scenes -w src/quickshell/locks
 watch greeter -w src/greeter -w ascii.txt -e go,mod,sum,txt
 watch grub -w src/grub/generate-assets.sh -w dev/grub.sh -w ascii.txt
 
-GLOXWALD_ROOT="$ROOT" GLOXWALD_DEV="$DEV" GLOXWALD_THEME="$DEV/theme.json" GLOXWALD_TAB="${1:-lock}" \
+GLOXWALD_ROOT="$ROOT" GLOXWALD_DEV="$DEV" GLOXWALD_THEME="$DEV/theme.json" GLOXWALD_TAB="${1:-desktop}" \
     quickshell --path "$ROOT/src/quickshell/shell/dev.qml"

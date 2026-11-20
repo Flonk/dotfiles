@@ -5,7 +5,7 @@ fmt:
     nix fmt
 
 # Unified dev window: bar, lockscreen, greeter and GRUB in tabs with shared theme controls
-dev tab="lock":
+dev tab="desktop":
     nix-shell --run "bash dev/run.sh {{tab}}"
 
 # Run the quickshell bar from the repo

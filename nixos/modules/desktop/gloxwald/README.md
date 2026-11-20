@@ -25,7 +25,7 @@ All options live in `gloxwald-options.nix`; vicinae, mako, and stylix theming de
 ## Development
 
 ```bash
-just dev [tab]     # unified dev window: bar, lock, greeter, grub tabs (tab = bar|lock|greeter|grub)
+just dev [tab]     # unified dev window: bar, lock, greeter, grub tabs (tab = desktop|bar|lock|greeter|grub)
 nix-shell          # dev shell with quickshell, go, grub tooling (or direnv)
 just qs-run        # run the quickshell bar from the repo
 just qs-dev        # hot-reload QML on save
@@ -36,8 +36,9 @@ just shader-dev    # live-iterate a lockscreen shader
 
 ### `just dev`
 
-One window: a sidebar (tabs, frame resolution, theme (`.dev/theme.json`, seeded from the installed `quickshell-theme.json`), reload actions, the current tab's own controls, and the log) next to the stage.
+One window (desktop, bar, lock, greeter and grub tabs): a sidebar (tabs, frame resolution, theme (`.dev/theme.json`, seeded from the installed `quickshell-theme.json`), reload actions, the current tab's own controls, and the log) next to the stage.
 
+- **desktop**: the whole screen at the frame resolution, chrome, live header and mock windows
 - **bar**: the real `BarContent`
 - **lock**: the real `LockSurface` with the shader dev panel; auth is faked, `gloxwald` unlocks, anything else fails
 - **greeter**: `gloxwaldgreet --test` in a hidden tmux (`dev/greeter.sh`), mirrored and fed keys
@@ -45,4 +46,4 @@ One window: a sidebar (tabs, frame resolution, theme (`.dev/theme.json`, seeded 
 
 Shader, greeter and GRUB sources are watched and rebuilt automatically; build output lands in the log pane. Click a pane to give it keyboard focus.
 
-Keys: `Ctrl+1..4` tabs, `Ctrl+R` reload tab, `Ctrl+Shift+R` reload all, `Ctrl+F` fit/1:1, `Ctrl+L` log.
+Keys: `Ctrl+1..5` tabs, `Ctrl+R` reload tab, `Ctrl+Shift+R` reload all, `Ctrl+F` fit/1:1, `Ctrl+L` log.
