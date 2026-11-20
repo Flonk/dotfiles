@@ -21,7 +21,6 @@ in
       programs.gloxwald.stylix = {
         scheme = cfg.scheme;
         accent = cfg.accent;
-        accentDark = cfg.accentDark;
         ground = cfg.ground;
       };
     })

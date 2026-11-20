@@ -18,11 +18,6 @@ in
       default = "#ff9624";
       description = "Window manager accent color (borders, active tabs)";
     };
-    accentDark = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Darker accent variant (focused/inactive tab text); derived from accent when null";
-    };
     ground = mkOption {
       type = types.str;
       default = "#100e0a";

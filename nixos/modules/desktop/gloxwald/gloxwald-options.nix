@@ -33,7 +33,7 @@ in
       size = mkOption {
         type = types.int;
         default = 10;
-        description = "Pixel size of the T3 label text used by the chrome header, hy3 tabs and qutebrowser tabs";
+        description = "Pixel size of the T3 label text used by the chrome header and qutebrowser tabs";
       };
       tracking = mkOption {
         type = types.float;
@@ -63,11 +63,6 @@ in
         type = types.str;
         default = "#ff9624";
         description = "Accent color (borders, active tabs, bar highlights)";
-      };
-      accentDark = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "Darker accent variant (focused/inactive tab text); derived from accent when null";
       };
       ground = mkOption {
         type = types.str;

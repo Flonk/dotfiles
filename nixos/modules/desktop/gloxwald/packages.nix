@@ -86,11 +86,5 @@ in
     };
   };
 
-  hy3 = pkgs.hyprlandPlugins.hy3.overrideAttrs {
-    src = builtins.path {
-      path = ./src/hy3;
-      name = "source";
-    };
-    NIX_CFLAGS_COMPILE = "-DHY3_CHROME_DIR=\"${chrome}\"";
-  };
+  hy3 = pkgs.hyprlandPlugins.hy3;
 }

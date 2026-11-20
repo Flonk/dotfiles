@@ -7,7 +7,6 @@ let
   s = config.lib.stylix.colors.withHashtag;
   accent = config.programs.gloxwald.stylix.accent;
   darken = hex: f: "#" + lib.concatMapStrings (i: lib.fixedWidthString 2 "0" (lib.toLower (lib.toHexString (builtins.floor (lib.fromHexString (builtins.substring i 2 (lib.removePrefix "#" hex)) * f))))) [ 0 2 4 ];
-  accentDark = if config.programs.gloxwald.stylix.accentDark != null then config.programs.gloxwald.stylix.accentDark else darken accent 0.53;
   borderColor = "rgba(${builtins.substring 1 6 accent}ff)";
   inactiveBorderColor = "rgba(000000ff)";
   rgba = hex: "rgba(${builtins.substring 1 6 hex}ff)";
