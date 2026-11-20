@@ -110,7 +110,7 @@ void Hy3Render::renderTab(
 	static auto noiseTexture = loadChromeTexture("noise.png");
 	static auto dotsTexture = loadChromeTexture("dots.png");
 	static auto gradientTexture = loadChromeTexture("gradient.png");
-	const bool chromeTextures = chrome > 0.0f && noiseTexture && dotsTexture && gradientTexture;
+	const bool chromeTextures = noiseTexture && dotsTexture && gradientTexture;
 	GLCALL(glUniform1f(shader.chromeTextures, chromeTextures ? 1.0f : 0.0f));
 	if (chromeTextures) {
 		GLCALL(glActiveTexture(GL_TEXTURE1));

@@ -58,10 +58,6 @@ in
     xdg.configFile."quickshell".source = quickshellConfigDir;
     xdg.configFile."quickshell-theme.json".text = themeJson;
 
-    wayland.windowManager.hyprland.settings.layer_rule = [
-      { match.namespace = "gloxwald-corner"; no_anim = true; }
-    ];
-
     home.packages = with pkgs; [
       brightnessctl
       inotify-tools

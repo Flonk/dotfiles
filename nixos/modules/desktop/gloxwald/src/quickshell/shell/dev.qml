@@ -737,7 +737,7 @@ FloatingWindow {
                     sourceComponent: Item {
                         readonly property vector2d screenSize: Qt.vector2d(win.frameW, win.frameH)
                         readonly property rect content: Qt.rect(T3.border, T3.band, win.frameW - 2 * T3.border, win.frameH - T3.band - T3.border)
-                        readonly property int gap: T3.gapsOut
+                        readonly property int bleed: T3.windowBorder
 
                         ChromeSurface {
                             anchors.fill: parent
@@ -749,14 +749,21 @@ FloatingWindow {
                             Rectangle {
                                 required property int index
                                 readonly property rect c: parent.content
-                                readonly property real w: (c.width - 2 * parent.gap) / 2
-                                x: c.x + parent.gap + index * w
-                                y: c.y + parent.gap
+                                readonly property real w: (c.width + 2 * parent.bleed) / 2
+                                x: c.x - parent.bleed + index * w
+                                y: c.y - parent.bleed
                                 width: w
-                                height: c.height - 2 * parent.gap
+                                height: c.height + 2 * parent.bleed
                                 color: "#1c1a16"
                                 border.color: "#43413d"
+                                border.width: parent.bleed
                             }
+                        }
+
+                        ChromeSurface {
+                            anchors.fill: parent
+                            screenSize: parent.screenSize
+                            overlayMode: 1
                         }
 
                         ChromeHeader {

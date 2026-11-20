@@ -13,6 +13,7 @@ layout(std140, binding = 0) uniform buf {
     float border;
     float radius;
     float outerRadius;
+    float overlayMode;
     vec4 ground;
     vec4 markRect;
 };
@@ -86,6 +87,10 @@ void main() {
     float inner = clamp(0.5 - d, 0.0, 1.0);
 
     if (inner >= 1.0) {
+        if (overlayMode > 0.5) {
+            fragColor = vec4(0.0);
+            return;
+        }
         vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
         fragColor = vec4(mix(ground.rgb, grain.rgb, grain.a), 1.0) * qt_Opacity;
         return;
@@ -100,7 +105,7 @@ void main() {
     float ring = clamp(1.5 - d, 0.0, 1.0) - inner;
     if (ring > 0.0)
         c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
-    if (inner > 0.0) {
+    if (inner > 0.0 && overlayMode < 0.5) {
         vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
         c = mix(c, mix(ground.rgb, grain.rgb, grain.a), inner);
     }
@@ -120,5 +125,6 @@ void main() {
     float outer = length(max(so, 0.0)) + min(max(so.x, so.y), 0.0) - outerRadius;
     c *= clamp(0.5 - outer, 0.0, 1.0);
 
-    fragColor = vec4(c, 1.0) * qt_Opacity;
+    float alpha = overlayMode > 0.5 ? 1.0 - inner : 1.0;
+    fragColor = vec4(c * alpha, alpha) * qt_Opacity;
 }

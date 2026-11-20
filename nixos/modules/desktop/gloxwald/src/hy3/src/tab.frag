@@ -34,6 +34,11 @@ highp vec3 chromeSoftLight(highp vec3 b, highp vec3 s) {
 	return mix(b - (1.0 - 2.0 * s) * b * (1.0 - b), b + (2.0 * s - 1.0) * (d - b), step(0.5, s));
 }
 
+highp vec3 chromeShade(highp vec3 c, float k) {
+	highp vec3 lin = mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c)) * k;
+	return mix(lin * 12.92, 1.055 * pow(lin, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, lin));
+}
+
 highp vec3 chromeColor(highp vec2 p) {
 	highp vec3 c = texture2D(gradientTex, (p - monitorSize * 0.5) / vec2(3840.0, 2160.0) + 0.5).rgb;
 	highp vec4 dots = chromeStraight(texture2D(dotsTex, fract(p / 26.0)));
@@ -86,8 +91,8 @@ void main() {
 		gl_FragColor = borderColor;
 	}
 
-	if (chrome > 0.0 && chromeTextures > 0.5 && gl_FragColor.a > 0.0) {
-		gl_FragColor.rgb = mix(gl_FragColor.rgb, chromeColor(monitorPix) * gl_FragColor.a, chrome);
+	if (chromeTextures > 0.5 && gl_FragColor.a > 0.0) {
+		gl_FragColor.rgb = chromeShade(chromeColor(monitorPix), mix(0.1, 0.8, chrome)) * gl_FragColor.a;
 	}
 
 	if (applyBlur && gl_FragColor.a != 1.0) {

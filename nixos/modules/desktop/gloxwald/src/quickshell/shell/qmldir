@@ -29,6 +29,3 @@ Chrome 1.0 Chrome.qml
 ChromeScreen 1.0 ChromeScreen.qml
 ChromeHeader 1.0 ChromeHeader.qml
 ChromeSurface 1.0 ChromeSurface.qml
-singleton WindowCorners WindowCorners.qml
-CornerWedge 1.0 CornerWedge.qml
-ChromeCorner 1.0 ChromeCorner.qml
