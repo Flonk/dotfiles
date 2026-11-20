@@ -33,11 +33,13 @@ in
   config = lib.mkIf config.programs.gloxwald.hyprland.enable {
     home.packages = [ hypr-scale ];
 
+    xdg.dataFile."gloxwald/libhy3.so".source = "${gloxwaldPkgs.hy3}/lib/libhy3.so";
+
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland;
       configType = "lua";
-      plugins = [ gloxwaldPkgs.hy3 ];
+      plugins = [ "${config.xdg.dataHome}/gloxwald/libhy3.so" ];
 
       systemd = {
         enable = true;
