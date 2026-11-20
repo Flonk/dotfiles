@@ -1,5 +1,7 @@
 #include "render.hpp"
 
+#include <cairo/cairo.h>
+#include <string>
 #include <GLES2/gl2.h>
 #include <hyprland/src/render/OpenGL.hpp>
 #include <hyprland/src/render/gl/GLTexture.hpp>
@@ -15,6 +17,21 @@
 
 using Render::GL::g_pHyprOpenGL;
 using Hyprutils::Math::CBox;
+
+static SP<Render::ITexture> loadChromeTexture(const char* name) {
+#ifdef HY3_CHROME_DIR
+	auto* surface = cairo_image_surface_create_from_png((std::string(HY3_CHROME_DIR) + "/" + name).c_str());
+	if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
+		cairo_surface_destroy(surface);
+		return nullptr;
+	}
+	auto texture = g_pHyprRenderer->createTexture(surface);
+	cairo_surface_destroy(surface);
+	return texture;
+#else
+	return nullptr;
+#endif
+}
 
 void Hy3Render::renderTab(
     Render::CRenderContext& ctx,
@@ -89,6 +106,24 @@ void Hy3Render::renderTab(
 	GLCALL(glUniform1f(shader.outerRadius, radius));
 	GLCALL(glUniform1f(shader.borderWidth, borderWidth));
 	GLCALL(glUniform1f(shader.chrome, chrome));
+
+	static auto noiseTexture = loadChromeTexture("noise.png");
+	static auto dotsTexture = loadChromeTexture("dots.png");
+	static auto gradientTexture = loadChromeTexture("gradient.png");
+	const bool chromeTextures = chrome > 0.0f && noiseTexture && dotsTexture && gradientTexture;
+	GLCALL(glUniform1f(shader.chromeTextures, chromeTextures ? 1.0f : 0.0f));
+	if (chromeTextures) {
+		GLCALL(glActiveTexture(GL_TEXTURE1));
+		GLCALL(glBindTexture(GL_TEXTURE_2D, noiseTexture->m_texID));
+		GLCALL(glUniform1i(shader.noiseTex, 1));
+		GLCALL(glActiveTexture(GL_TEXTURE2));
+		GLCALL(glBindTexture(GL_TEXTURE_2D, dotsTexture->m_texID));
+		GLCALL(glUniform1i(shader.dotsTex, 2));
+		GLCALL(glActiveTexture(GL_TEXTURE3));
+		GLCALL(glBindTexture(GL_TEXTURE_2D, gradientTexture->m_texID));
+		GLCALL(glUniform1i(shader.gradientTex, 3));
+		GLCALL(glActiveTexture(GL_TEXTURE0));
+	}
 
 	GLCALL(glBindVertexArray(shader.program->getUniformLocation(SHADER_SHADER_VAO)));
 	GLCALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));

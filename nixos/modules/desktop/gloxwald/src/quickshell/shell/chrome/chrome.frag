@@ -13,10 +13,6 @@ layout(std140, binding = 0) uniform buf {
     float border;
     float radius;
     float outerRadius;
-    float turn;
-    vec4 accent;
-    vec4 accent2;
-    vec4 accent3;
     vec4 ground;
     vec4 markRect;
 };
@@ -25,6 +21,7 @@ layout(binding = 1) uniform sampler2D noiseTex;
 layout(binding = 2) uniform sampler2D dotsTex;
 layout(binding = 3) uniform sampler2D markTex;
 layout(binding = 4) uniform sampler2D grainTex;
+layout(binding = 5) uniform sampler2D gradientTex;
 
 vec3 toLinear(vec3 c) {
     return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
@@ -59,22 +56,9 @@ vec3 lift(vec3 srgb) {
 }
 
 vec3 chrome(vec2 p, bool lifted) {
-    vec3 a = accent.rgb;
-    vec3 b = accent2.rgb;
-    vec3 g = accent3.rgb;
-    if (lifted) {
-        a = lift(a);
-        b = lift(b);
-        g = lift(g);
-    }
-    vec2 dir = vec2(sin(turn), -cos(turn));
-    float len = abs(screenSize.x * dir.x) + abs(screenSize.y * dir.y);
-    float t = clamp(dot(p - screenSize * 0.5, dir) / len + 0.5, 0.0, 1.0);
-    vec3 base = t < 0.5 ? mix(a, b, t * 2.0) : mix(b, a, t * 2.0 - 1.0);
-    vec2 orbit = vec2(0.5 + cos(turn) * 0.4, 0.2 + sin(turn) * 0.3) * screenSize;
-    float vmax = max(screenSize.x, screenSize.y);
-    float d = length((p - orbit) / (vec2(0.42, 0.28) * vmax));
-    return mix(base, g, clamp(1.0 - d / 0.7, 0.0, 1.0));
+    vec2 uv = (p - screenSize * 0.5) / vec2(3840.0, 2160.0) + 0.5;
+    vec3 c = texture(gradientTex, uv).rgb;
+    return lifted ? lift(c) : c;
 }
 
 vec3 overlay(vec3 b, vec3 s) {

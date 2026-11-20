@@ -27,6 +27,10 @@ Hy3Shaders::Hy3Shaders() {
 		s.borderWidth = glGetUniformLocation(program, "borderWidth");
 		s.outerRadius = glGetUniformLocation(program, "outerRadius");
 		s.chrome = glGetUniformLocation(program, "chrome");
+		s.chromeTextures = glGetUniformLocation(program, "chromeTextures");
+		s.noiseTex = glGetUniformLocation(program, "noiseTex");
+		s.dotsTex = glGetUniformLocation(program, "dotsTex");
+		s.gradientTex = glGetUniformLocation(program, "gradientTex");
 	}
 }
 

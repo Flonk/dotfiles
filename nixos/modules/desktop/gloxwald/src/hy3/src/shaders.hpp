@@ -20,6 +20,10 @@ public:
 		GLint borderWidth;
 		GLint outerRadius;
 		GLint chrome;
+		GLint chromeTextures;
+		GLint noiseTex;
+		GLint dotsTex;
+		GLint gradientTex;
 	} tab;
 
 	static Hy3Shaders* instance();

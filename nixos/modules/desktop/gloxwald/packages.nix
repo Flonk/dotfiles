@@ -15,6 +15,11 @@ let
     path = ./ascii.txt;
     name = "gloxwald-ascii.txt";
   };
+  chromeTextures = builtins.path {
+    path = ./src/quickshell/shell/chrome;
+    name = "gloxwald-chrome-textures";
+    filter = path: type: pkgs.lib.hasSuffix ".png" path;
+  };
 in
 {
   default = pkgs.writeShellApplication {
@@ -76,5 +81,6 @@ in
       path = ./src/hy3;
       name = "source";
     };
+    NIX_CFLAGS_COMPILE = "-DHY3_CHROME_DIR=\"${chromeTextures}\"";
   };
 }

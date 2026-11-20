@@ -11,16 +11,13 @@ ShaderEffect {
     readonly property real border: T3.border
     readonly property real radius: T3.radius
     readonly property real outerRadius: T3.outerRadius
-    readonly property real turn: T3.turn
-    readonly property color accent: T3.accent
-    readonly property color accent2: T3.accent2
-    readonly property color accent3: T3.accent3
     readonly property color ground: T3.ground
 
     property var noiseTex: noise
     property var dotsTex: dots
     property var markTex: markSource
     property var grainTex: grain
+    property var gradientTex: gradient
 
     vertexShader: "chrome/chrome.vert.qsb"
     fragmentShader: "chrome/chrome.frag.qsb"
@@ -34,6 +31,12 @@ ShaderEffect {
     Image {
         id: dots
         source: "chrome/dots.png"
+        visible: false
+    }
+
+    Image {
+        id: gradient
+        source: "chrome/gradient.png"
         visible: false
     }
 
