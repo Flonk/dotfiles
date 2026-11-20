@@ -111,6 +111,10 @@ def auth(client_path):
     log("Stored the client and refresh token in the keyring.")
 
 
+class Unauthorized(RuntimeError):
+    pass
+
+
 class Google:
     def __init__(self):
         self.token = None
@@ -122,7 +126,7 @@ class Google:
         client = keyring_get("client")
         refresh = keyring_get("refresh_token")
         if not client or not refresh:
-            raise RuntimeError("not authorized, run `skynet calendar auth`")
+            raise Unauthorized("not authorized, run `skynet calendar auth`")
         client = json.loads(client)
         r = requests.post(TOKEN_URL, data={
             "client_id": client["client_id"],
@@ -131,7 +135,7 @@ class Google:
             "grant_type": "refresh_token",
         }, timeout=30)
         if r.status_code == 400 and r.json().get("error") == "invalid_grant":
-            raise RuntimeError("refresh token revoked or expired, run `skynet calendar auth`")
+            raise Unauthorized("refresh token revoked or expired, run `skynet calendar auth`")
         r.raise_for_status()
         d = r.json()
         self.token = d["access_token"]
@@ -194,6 +198,7 @@ def triggers(ev):
 
 class Bus:
     def __init__(self):
+        self.status = "starting"
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="calbus")
         self.client.will_set("calendar/status", "offline", qos=1, retain=True)
         self.client.on_connect = self.on_connect
@@ -203,7 +208,12 @@ class Bus:
 
     def on_connect(self, client, userdata, flags, reason, properties):
         log(f"connected to mqtt://{BROKER}:{PORT} ({reason})")
-        client.publish("calendar/status", "online", qos=1, retain=True)
+        client.publish("calendar/status", self.status, qos=1, retain=True)
+
+    def set_status(self, status):
+        if status != self.status:
+            self.status = status
+            self.client.publish("calendar/status", status, qos=1, retain=True)
 
     def publish(self, topic, payload, retain=False):
         self.client.publish(topic, json.dumps(payload), qos=1, retain=retain)
@@ -245,8 +255,13 @@ def run():
                 if fresh != events:
                     log(f"{len(fresh)} events in the next {HORIZON.days} days")
                 events = fresh
+                bus.set_status("online")
+            except Unauthorized as ex:
+                log(f"poll failed: {ex}")
+                bus.set_status("unauthorized")
             except Exception as ex:
                 log(f"poll failed: {ex}")
+                bus.set_status("error")
 
         dirty = False
         for ev in events:
