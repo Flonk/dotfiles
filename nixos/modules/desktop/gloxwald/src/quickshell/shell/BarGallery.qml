@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Hyprland
 
@@ -162,7 +163,8 @@ Flickable {
         id: strip
         property alias loader: ld
         property Component bar
-        readonly property real s: width / root.frameW
+        property real s: 1
+        width: root.frameW * s
         height: 20 * s
 
         Item {
@@ -194,30 +196,87 @@ Flickable {
         width: root.width - 48
         spacing: 6
 
-        GroupTitle { text: "bar  " + root.frameW + "px" }
+        GroupTitle { text: "bar  " + root.frameW + "px  @ " + root.zoom + "x" }
 
-        BarStrip {
+        Item {
+            id: overview
             width: col.width
-            bar: Component {
-                BarContent {
-                    monitor: Hyprland.focusedMonitor
-                }
+            height: Math.max(8, 20 * width / root.frameW)
+
+            ShaderEffectSource {
+                anchors.fill: parent
+                sourceItem: root.liveBar ? root.liveBar.item : null
+                live: true
             }
-            Component.onCompleted: root.liveBar = loader
+
+            Rectangle {
+                x: barScroll.contentWidth > 0 ? barScroll.contentX / barScroll.contentWidth * overview.width : 0
+                width: barScroll.contentWidth > 0 ? Math.min(1, barScroll.width / barScroll.contentWidth) * overview.width : overview.width
+                height: parent.height
+                color: "#223aa8b8"
+                border.color: "#3aa8b8"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                function jump(mx) {
+                    const max = Math.max(0, barScroll.contentWidth - barScroll.width);
+                    barScroll.contentX = Math.max(0, Math.min(max, mx / overview.width * barScroll.contentWidth - barScroll.width / 2));
+                }
+                onPressed: m => jump(m.x)
+                onPositionChanged: m => jump(m.x)
+            }
         }
 
-        GroupTitle { text: "lockscreen variant" }
-
-        BarStrip {
+        Flickable {
+            id: barScroll
             width: col.width
-            bar: Component {
-                BarContent {
-                    lockscreen: true
-                    interactive: false
-                    authorText: "author credit"
+            height: stripCol.height + 16
+            contentWidth: stripCol.width
+            contentHeight: stripCol.height
+            flickableDirection: Flickable.HorizontalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+
+            ScrollBar.horizontal: ScrollBar {
+                policy: ScrollBar.AlwaysOn
+            }
+
+            Column {
+                id: stripCol
+                spacing: 8
+                topPadding: 6
+
+                BarStrip {
+                    s: root.zoom
+                    bar: Component {
+                        BarContent {
+                            monitor: Hyprland.focusedMonitor
+                        }
+                    }
+                    Component.onCompleted: root.liveBar = loader
+                }
+
+                Text {
+                    x: barScroll.contentX
+                    text: "lockscreen variant"
+                    color: "#66ffffff"
+                    font.pixelSize: 11
+                }
+
+                BarStrip {
+                    s: root.zoom
+                    bar: Component {
+                        BarContent {
+                            lockscreen: true
+                            interactive: false
+                            authorText: "author credit"
+                        }
+                    }
+                    Component.onCompleted: root.lockBar = loader
                 }
             }
-            Component.onCompleted: root.lockBar = loader
         }
 
         GroupTitle { text: "sections  " + root.sectionItems.length }
