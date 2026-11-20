@@ -712,21 +712,6 @@ FloatingWindow {
                 QQC.ScrollBar.horizontal: QQC.ScrollBar {}
                 QQC.ScrollBar.vertical: QQC.ScrollBar {}
 
-                WheelHandler {
-                    acceptedModifiers: Qt.ControlModifier
-                    onWheel: e => deskView.zoomTo(deskView.zoom * Math.pow(1.0015, e.angleDelta.y), point.position.x, point.position.y)
-                }
-
-                PinchHandler {
-                    target: null
-                    onActiveChanged: if (active) deskView.pinchBase = deskView.zoom
-                    onActiveScaleChanged: if (active) deskView.zoomTo(deskView.pinchBase * activeScale, centroid.position.x, centroid.position.y)
-                }
-
-                TapHandler {
-                    onDoubleTapped: deskView.fit()
-                }
-
                 Item {
                     width: win.frameW
                     height: win.frameH
@@ -769,6 +754,25 @@ FloatingWindow {
                         }
                     }
                 }
+                }
+            }
+
+            Item {
+                anchors.fill: deskView
+
+                WheelHandler {
+                    acceptedModifiers: Qt.ControlModifier
+                    onWheel: event => deskView.zoomTo(deskView.zoom * Math.pow(1.25, event.angleDelta.y / 120), point.position.x, point.position.y)
+                }
+
+                PinchHandler {
+                    target: null
+                    onActiveChanged: if (active) deskView.pinchBase = deskView.zoom
+                    onActiveScaleChanged: if (active) deskView.zoomTo(deskView.pinchBase * activeScale, centroid.position.x, centroid.position.y)
+                }
+
+                TapHandler {
+                    onDoubleTapped: deskView.fit()
                 }
             }
         }
