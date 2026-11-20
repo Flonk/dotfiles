@@ -1,4 +1,3 @@
-// MediaControlWidget.qml - Media control state management singleton
 pragma Singleton
 
 import Quickshell
@@ -8,56 +7,39 @@ import QtQuick
 Singleton {
     id: root
 
-    // Mirror Mpris service directly now that MprisWidget is gone
-    property var currentPlayer: {
-        if (!Mpris.players || !Mpris.players.values || Mpris.players.values.length === 0) {
-            return null;
-        }
-
-        const players = Mpris.players.values;
-
-        for (let i = 0; i < players.length; i++) {
-            const player = players[i];
-            if (player && player.isPlaying) {
-                return player;
-            }
-        }
-
-        return players[0];
+    readonly property var currentPlayer: {
+        const players = Mpris.players?.values ?? [];
+        return players.find(p => p?.isPlaying) ?? players[0] ?? null;
     }
 
-    property bool isPlaying: currentPlayer?.isPlaying || false
-    property string currentTitle: currentPlayer?.trackTitle || ""
-    property string currentArtist: currentPlayer?.trackArtist || ""
-    property string albumArtUrl: currentPlayer?.trackArtUrl || ""
+    readonly property bool isPlaying: currentPlayer?.isPlaying ?? false
+    readonly property string currentTitle: currentPlayer?.trackTitle ?? ""
+    readonly property string currentArtist: currentPlayer?.trackArtist ?? ""
 
-    function canGoPrevious() {
-        return currentPlayer && currentPlayer.canGoPrevious;
+    function canGoPrevious(): bool {
+        return currentPlayer?.canGoPrevious ?? false;
     }
 
-    function canGoNext() {
-        return currentPlayer && currentPlayer.canGoNext;
+    function canGoNext(): bool {
+        return currentPlayer?.canGoNext ?? false;
     }
 
-    function canTogglePlaying() {
-        return currentPlayer && currentPlayer.canTogglePlaying;
+    function canTogglePlaying(): bool {
+        return currentPlayer?.canTogglePlaying ?? false;
     }
 
-    function previous() {
-        if (canGoPrevious()) {
+    function previous(): void {
+        if (canGoPrevious())
             currentPlayer.previous();
-        }
     }
 
-    function next() {
-        if (canGoNext()) {
+    function next(): void {
+        if (canGoNext())
             currentPlayer.next();
-        }
     }
 
-    function togglePlaying() {
-        if (canTogglePlaying()) {
+    function togglePlaying(): void {
+        if (canTogglePlaying())
             currentPlayer.togglePlaying();
-        }
     }
 }

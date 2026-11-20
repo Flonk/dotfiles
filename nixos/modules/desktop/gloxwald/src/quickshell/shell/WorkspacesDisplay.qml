@@ -1,52 +1,28 @@
-// WorkspacesDisplay.qml
 import QtQuick
-import QtQuick.Controls
 import Quickshell.Hyprland
 
 Row {
     id: root
-    
-    // This will be set by the Bar to the current screen's monitor
     required property var monitor
-    property int textVerticalOffset: 0
-    
-    spacing: 0
-    height: 20
 
-    WorkspacesWidget {
-        id: workspacesWidget
-        monitor: root.monitor
-    }
-
-    property var filteredWorkspaces: workspacesWidget.workspaces
+    readonly property var workspaces: (Hyprland.workspaces?.values ?? [])
+        .filter(w => w?.monitor && root.monitor && w.monitor.name === root.monitor.name)
+        .sort((a, b) => {
+            const x = parseInt(a.name), y = parseInt(b.name);
+            return isNaN(x) || isNaN(y) ? a.name.localeCompare(b.name) : x - y;
+        })
 
     Repeater {
-        model: root.filteredWorkspaces
+        model: root.workspaces
 
-        delegate: Rectangle {
+        BarSegment {
             required property var modelData
-
-            width: wsText.implicitWidth + 24
-            height: 20
-            radius: 0
+            padding: 12
+            text: modelData.name
             color: modelData.focused ? Theme.wm800 : "transparent"
-
-            Text {
-                id: wsText
-                anchors.centerIn: parent; anchors.verticalCenterOffset: root.textVerticalOffset
-                text: modelData.name
-                font.pointSize: Theme.fontSizeSmall
-                font.family: Theme.fontFamily
-                font.weight: Font.Bold
-                color: modelData.focused ? Theme.app150 : Theme.app600
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: workspacesWidget.switchToWorkspace(modelData.name)
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-            }
+            textColor: modelData.focused ? Theme.app150 : Theme.app600
+            clickable: true
+            onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${modelData.name} })`)
         }
     }
 }

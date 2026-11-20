@@ -6,7 +6,6 @@ import Quickshell.Io
 QtObject {
     id: root
 
-    // Fallback values (used during dev without a theme.json)
     readonly property var _fallback: ({
         fontSize: 9,
         app100: "#0b0e14",
@@ -39,7 +38,6 @@ QtObject {
         }
     }
 
-    readonly property int barSize: Math.round(_data.fontSize * 5.5)
     readonly property color app100: _data.app100
     readonly property color app150: _data.app150
     readonly property color app200: _data.app200
@@ -51,16 +49,20 @@ QtObject {
     readonly property color error400: _data.error400
     readonly property color error600: _data.error600
     readonly property color success600: _data.success600
-    readonly property int fontSizeTiny: Math.round(_data.fontSize * 0.8)
     readonly property int fontSizeSmall: Math.round(_data.fontSize * 0.9)
-    readonly property int fontSizeNormal: _data.fontSize
-    readonly property int fontSizeBig: Math.round(_data.fontSize * 1.1)
-    readonly property int fontSizeBigger: Math.round(_data.fontSize * 1.3)
-    readonly property int fontSizeHuge: Math.round(_data.fontSize * 1.6)
     readonly property string fontFamily: _data.fontFamily
 
-    // Asset URLs are always resolved from the QML bundle
-    readonly property url logoAndampAmpBlue: Qt.resolvedUrl("assets/logos/andamp-amp-blue.png")
-    readonly property url logoTileGrey: Qt.resolvedUrl("assets/logos/tile-grey.png")
-}
+    function shade(f: real): color {
+        return Qt.rgba(app600.r * f, app600.g * f, app600.b * f, 1);
+    }
 
+    readonly property color textStrong: shade(0.9)
+    readonly property color text: shade(0.75)
+    readonly property color textDim: shade(0.5)
+    readonly property color segment: Qt.rgba(app200.r, app200.g, app200.b, 0.2)
+    readonly property color warning: "#ffa500"
+    readonly property color launcher: "#5277c3"
+    readonly property color brightness: "#bda551"
+    readonly property color volume: "#7493a3"
+    readonly property color headphones: "#a3746f"
+}

@@ -1,4 +1,3 @@
-// BrightnessWidget.qml  
 pragma Singleton
 
 import Quickshell
@@ -8,67 +7,30 @@ import QtQuick
 Singleton {
     id: root
 
-    property real brightness: 0.5
-    property real brightnessIncrement: 0.005
-    
-    // Detect if we have ddcutil for external monitors or just use brightnessctl
-    property bool useSystemBrightness: true
-    
+    property real brightness: 0
+
     function setBrightness(value: real): void {
-        const clampedValue = Math.max(0, Math.min(1, value));
-        const percentage = Math.round(clampedValue * 100);
-        
-        brightness = clampedValue;
-        
-        // Use brightnessctl for built-in displays
-        Quickshell.execDetached(["brightnessctl", "s", `${percentage}%`]);
+        brightness = Math.max(0, Math.min(1, value));
+        Quickshell.execDetached(["brightnessctl", "s", `${Math.round(brightness * 100)}%`]);
     }
 
-    function increaseBrightness(): void {
-        setBrightness(brightness + brightnessIncrement);
-    }
-
-    function decreaseBrightness(): void {
-        setBrightness(brightness - brightnessIncrement);
-    }
-
-    // Initialize brightness on startup
-    Component.onCompleted: {
-        initProc.running = true;
-    }
-
-    // Process to get current brightness
     Process {
-        id: initProc
-        
-        command: ["sh", "-c", "echo a b c $(brightnessctl g) $(brightnessctl m)"]
+        id: poll
+        command: ["brightnessctl", "-m"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const parts = text.trim().split(" ");
-                if (parts.length >= 5) {
-                    const current = parseInt(parts[3], 10) || 0;
-                    const max = parseInt(parts[4], 10) || 1;
-                    root.brightness = current / max;
-                }
-            }
-        }
-        
-        onExited: (code) => {
-            if (code !== 0) {
-                console.log("Failed to get brightness, using default");
-                root.brightness = 0.5;
+                const f = text.trim().split(",");
+                if (f.length >= 5 && parseInt(f[4]) > 0)
+                    root.brightness = parseInt(f[2]) / parseInt(f[4]);
             }
         }
     }
 
-    // Helper for brightness icon
-    property string brightnessIcon: {
-        if (brightness > 0.75) return "☀️";
-        if (brightness > 0.5) return "🌤️";  
-        if (brightness > 0.25) return "⛅";
-        return "🌙";
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: if (!poll.running) poll.running = true
     }
-
-    // Helper for brightness text
-    property string brightnessText: `${Math.round(brightness * 100)}%`
 }

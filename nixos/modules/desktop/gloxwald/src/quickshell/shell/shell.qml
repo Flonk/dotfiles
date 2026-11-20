@@ -6,7 +6,6 @@ import Quickshell.Io
 
 ShellRoot {
     Bar {}
-    Shortcuts {}
 
     LockContext {
         id: lockContext
@@ -40,11 +39,6 @@ ShellRoot {
                 renderScene: lockWindow.screen === lock.renderScreen
             }
         }
-    }
-
-    Connections {
-        target: LockWidget
-        function onLockRequested() { lockScreen(); }
     }
 
     IpcHandler {

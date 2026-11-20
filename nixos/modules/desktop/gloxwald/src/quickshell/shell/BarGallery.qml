@@ -45,14 +45,12 @@ Flickable {
     }
 
     readonly property var specs: [
-        { name: "Section", file: "Section.qml", props: { width: 120, height: 20, backgroundColor: Theme.app150 } },
-        { name: "AppLauncherDisplay", file: "AppLauncherDisplay.qml", props: { height: 20, interactive: false } },
-        { name: "WorkspacesDisplay", file: "WorkspacesDisplay.qml", props: { monitor: Hyprland.focusedMonitor, height: 20 } },
-        { name: "WifiDisplay", file: "WifiDisplay.qml", props: { height: 20, wifiIconColor: Theme.app600, arrowIconColor: Theme.app600, speedColor: Theme.app600, ipColor: Theme.app700, ipHoverColor: Theme.app900 } },
-        { name: "MediaControlDisplay", file: "MediaControlDisplay.qml", props: { width: 360, height: 20, textColor: Theme.app600 } },
-        { name: "MarqueeText", file: "MarqueeText.qml", props: { width: 160, height: 20, text: "a very long scrolling title that does not fit into its lane", textColor: Theme.app600 } },
-        { name: "KeyValuePair", file: "KeyValuePair.qml", props: { label: "CPU", value: "42%" } },
-        { name: "DropDown", file: "DropDown.qml", props: { label: "dropdown", width: 160 } }
+        { name: "BarSegment", file: "BarSegment.qml", props: { text: "SEGMENT 42", clickable: true } },
+        { name: "BarText", file: "BarText.qml", props: { text: "bar text" } },
+        { name: "WorkspacesDisplay", file: "WorkspacesDisplay.qml", props: { monitor: Hyprland.focusedMonitor } },
+        { name: "WifiDisplay", file: "WifiDisplay.qml", props: {} },
+        { name: "MediaControlDisplay", file: "MediaControlDisplay.qml", props: { width: 360 } },
+        { name: "MarqueeText", file: "MarqueeText.qml", props: { width: 160, height: 20, text: "a very long scrolling title that does not fit into its lane", textColor: Theme.app600, scrolling: true } }
     ]
 
     readonly property var dataSources: ({
@@ -61,10 +59,8 @@ Flickable {
         BrightnessWidget: BrightnessWidget,
         HeadphonesWidget: HeadphonesWidget,
         MediaControlWidget: MediaControlWidget,
-        MprisWidget: MprisWidget,
         WifiWidget: WifiWidget,
         LanguageWidget: LanguageWidget,
-        LockWidget: LockWidget,
         Theme: Theme
     })
 
