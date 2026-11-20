@@ -15,7 +15,7 @@ let
   };
 in
 {
-  config = lib.mkIf (cfg.enable && config.programs.gloxwald.vicinae.enable) {
+  config = lib.mkIf (cfg.enable && config.programs.t3-desktop.vicinae.enable) {
     programs.vicinae.extensions = [ extension ];
   };
 }

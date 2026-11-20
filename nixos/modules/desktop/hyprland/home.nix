@@ -8,7 +8,7 @@ let
   mon = config.skynet.host.primaryMonitor;
 in
 {
-  config = lib.mkIf (cfg.enable && config.programs.gloxwald.hyprland.enable) {
+  config = lib.mkIf (cfg.enable && config.programs.t3-desktop.hyprland.enable) {
     wayland.windowManager.hyprland.settings = {
       config.input.kb_layout = "de";
 

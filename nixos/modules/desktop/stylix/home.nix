@@ -10,7 +10,7 @@ in
 {
   config = lib.mkMerge [
     {
-      programs.gloxwald.stylix.enable = cfg.enable;
+      programs.t3-desktop.stylix.enable = cfg.enable;
       stylix = {
         enable = lib.mkDefault true;
         base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${cfg.scheme}.yaml";
@@ -18,14 +18,14 @@ in
       };
     }
     (lib.mkIf cfg.enable {
-      programs.gloxwald.stylix = {
+      programs.t3-desktop.stylix = {
         scheme = cfg.scheme;
         accent = cfg.accent;
         ground = cfg.ground;
       };
     })
     (lib.mkIf (cfg.wallpaper != null) {
-      programs.gloxwald.wallpaper = cfg.wallpaper;
+      programs.t3-desktop.wallpaper = cfg.wallpaper;
     })
   ];
 }

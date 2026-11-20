@@ -35,7 +35,7 @@
       i18n.enable = true;
       mazama.enable = true;
       qutebrowser.enable = true;
-      gloxwald.enable = true;
+      t3-desktop.enable = true;
       stylix = {
         enable = true;
         wallpaper = ../../../assets/wallpapers/abstract1.jpg;

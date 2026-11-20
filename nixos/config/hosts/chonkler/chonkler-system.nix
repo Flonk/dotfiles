@@ -38,7 +38,7 @@
     LC_TIME = "de_AT.UTF-8";
   };
 
-  # Enable the X11 windowing system (XWayland support; lightdm disabled — using greetd via gloxwald).
+  # Enable the X11 windowing system (XWayland support; lightdm disabled — using greetd via t3-desktop).
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = false;
 
@@ -101,7 +101,7 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = false;
 
-  # greetd (via gloxwald) handles login — no autologin needed.
+  # greetd (via t3-desktop) handles login — no autologin needed.
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
   systemd.services.bluetooth = {

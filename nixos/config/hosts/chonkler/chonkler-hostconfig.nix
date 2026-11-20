@@ -28,7 +28,7 @@
             db = ./cache/easyeffects/db;
           };
         };
-        gloxwald.enable = true;
+        t3-desktop.enable = true;
         hyprland.enable = true;
         stylix = {
           enable = true;

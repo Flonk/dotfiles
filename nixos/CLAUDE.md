@@ -10,7 +10,7 @@ When adding a new module:
 2. Add the `options.nix` import to `nixos/types/skynet-modules.nix`
 3. Add a guard to the module like `lib.mkIf config.skynet.module.$MODULE.enable`
 4. Add `home.nix` import to `nixos/config/users/common.nix` and/or `system.nix` import to `nixos/config/hosts/common.nix`
-   - Exception: `desktop/gloxwald` is imported from `nixos/flake.nix` right after stylix, to keep hyprland settings/window-rule merge order stable
+   - Exception: `desktop/t3-desktop` is imported from `nixos/flake.nix` right after stylix, to keep hyprland settings/window-rule merge order stable
 5. Enable the module in `$USER-userconfig.nix` or `$HOST-hostconfig.nix`
 6. If the module handles specific file types/URI schemes, set `xdg.mimeApps.defaultApplications` in its `home.nix`
 

@@ -38,7 +38,7 @@ in
       ];
 
       wayland.windowManager.hyprland.settings.window_rule =
-        lib.optionals config.programs.gloxwald.hyprland.enable [
+        lib.optionals config.programs.t3-desktop.hyprland.enable [
           { match.class = "^claude-chrome$"; workspace = "10 silent"; }
           { match.class = "^claude-chrome$"; suppress_event = "activatefocus"; }
           { match = { class = "^Xephyr$"; title = "^auto-xephyr$"; }; workspace = "9 silent"; }

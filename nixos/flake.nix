@@ -66,7 +66,7 @@
           modules = [
             inputs.sops-nix.nixosModules.sops
             inputs.stylix.nixosModules.stylix
-            ./modules/desktop/gloxwald/system.nix
+            ./modules/desktop/t3-desktop/system.nix
             ./config/hosts/${name}
           ]
           ++ extraModules;
@@ -88,7 +88,7 @@
             inputs.vicinae.homeManagerModules.default
             inputs.mazama.homeManagerModules.default
             inputs.stylix.homeModules.stylix
-            ./modules/desktop/gloxwald/home.nix
+            ./modules/desktop/t3-desktop/home.nix
             ./config/installations/${name}.nix
           ]
           ++ extraModules;
@@ -98,7 +98,7 @@
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
-      packages.x86_64-linux = import ./modules/desktop/gloxwald/packages.nix {
+      packages.x86_64-linux = import ./modules/desktop/t3-desktop/packages.nix {
         pkgs = pkgsX86;
         rev = self.rev or self.dirtyRev or "dev";
       };

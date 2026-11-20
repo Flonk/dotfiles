@@ -31,7 +31,7 @@
     ../modules/desktop/i18n/options.nix
     ../modules/desktop/mazama/options.nix
     ../modules/desktop/qutebrowser/options.nix
-    ../modules/desktop/gloxwald/options.nix
+    ../modules/desktop/t3-desktop/options.nix
     ../modules/desktop/stylix/options.nix
     ../modules/desktop/vicinae/options.nix
     ../modules/desktop/vicinae-askpass/options.nix
