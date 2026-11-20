@@ -108,7 +108,7 @@ float gridDots(vec2 p) {
     return cover / 16.0;
 }
 
-const float AMP_HEIGHT = 100.0;
+const float AMP_HEIGHT = 120.0;
 const vec3 AMP_DARK = vec3(0.012, 0.013, 0.015);
 const float SPOT_BELOW = 60.0;
 const float SPOT_RANGE = 700.0;
@@ -116,7 +116,7 @@ const float SPOT_CONE = 0.62;
 const float SPOT_GROUND = 0.2;
 const float SPOT_WALL = 1.0;
 const float SPOT_FLOOR = 0.15;
-const float AMP_DEPTH = 7.0;
+const float AMP_DEPTH = 8.4;
 
 vec2 spotPos() {
     return vec2(screenSize.x * 0.5, screenSize.y + SPOT_BELOW);
@@ -153,7 +153,10 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     vec2 L = normalize(p - spotPos());
     vec2 e = vec2(0.75, 0.0);
     vec2 n = normalize(vec2(ampDist(p + e.xy) - ampDist(p - e.xy), ampDist(p + e.yx) - ampDist(p - e.yx)) + 1e-6);
-    float shadow = smoothstep(-0.6, 0.6, ampDist(p - L * AMP_DEPTH));
+    float shadow = 0.0;
+    for (int i = 1; i <= 6; i++)
+        shadow += smoothstep(-0.75, 0.75, ampDist(p - L * AMP_DEPTH * float(i) / 6.0));
+    shadow /= 6.0;
     float wall = exp(d / 1.5) * max(dot(n, L), 0.0);
     float light = spot(p);
     vec3 floor_ = AMP_DARK + accent * light * (SPOT_FLOOR * (1.0 - shadow) + SPOT_WALL * wall);
