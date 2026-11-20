@@ -69,7 +69,7 @@ Item {
     }
 
     function shotPath(n) {
-        return devDir + "/grub-" + (n % 2) + ".png";
+        return devDir + "/grub-" + (n % 2) + ".ppm";
     }
 
     function onMessage(line) {
@@ -126,7 +126,7 @@ Item {
                 return;
             root.shot++;
             root.waiting = true;
-            root.send({ execute: "screendump", id: "shot" + root.shot, arguments: { filename: root.shotPath(root.shot), format: "png" } });
+            root.send({ execute: "screendump", id: "shot" + root.shot, arguments: { filename: root.shotPath(root.shot), format: "ppm" } });
         }
     }
 

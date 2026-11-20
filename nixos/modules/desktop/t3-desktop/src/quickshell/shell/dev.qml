@@ -850,8 +850,11 @@ FloatingWindow {
             visible: win.tabName === "greeter"
 
             Frame {
-                ChromeSurface {
+                Image {
                     anchors.fill: parent
+                    source: "file://" + win.devDir + "/frame.png"
+                    cache: false
+                    fillMode: Image.Stretch
                 }
 
                 TermView {

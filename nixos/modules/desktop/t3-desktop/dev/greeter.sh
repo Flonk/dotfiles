@@ -9,6 +9,7 @@ theme() { jq -r --arg k "$1" --arg d "$2" '.[$k] // $d' "$DEV/theme.json"; }
 
 build() {
     echo "building t3greet"
+    python3 -I "$ROOT/dev/render-frame.py" "$ROOT/src/quickshell/shell/chrome" 1920 1200 "$T3_DESKTOP_DEJAVU/DejaVuSansMono-Bold.ttf" "$DEV/frame.png"
     cd "$ROOT/src/greeter"
     go build -o "$DEV/t3greet" ./cmd/t3greet
 }

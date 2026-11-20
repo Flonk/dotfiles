@@ -6,7 +6,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 BAND, BORDER, RADIUS, OUTER = 40.0, 4.0, 13.0, 17.0
 MARK = 26
-SPOT_BELOW, SPOT_RANGE, SPOT_CONE, SPOT_GROUND = 60.0, 700.0, 0.62, 0.2
 SIN17, COS17 = 0.29237170472273677, 0.9563047559630354
 
 
@@ -130,12 +129,7 @@ def main(chrome_dir, width, height, font_path, out):
     inner = np.clip(0.5 - d, 0, 1)[..., None]
 
     grain = straight(bilinear(load(f"{chrome_dir}/grain.png"), np.floor(px % 128) / 128 + 0.5 / 128, np.floor(py % 128) / 128 + 0.5 / 128, True))
-    vx, vy = px - W / 2, py - (H + SPOT_BELOW)
-    r = np.hypot(vx, vy)
-    t = np.clip((-vy / r - SPOT_CONE) / (1 - SPOT_CONE), 0, 1)
-    spot = (t * t * (3 - 2 * t)) / (1 + (r / SPOT_RANGE) ** 2)
-    g = ground + accent * SPOT_GROUND * spot[..., None]
-    g = g * (1 - grain[..., 3:]) + grain[..., :3] * grain[..., 3:]
+    g = ground * (1 - grain[..., 3:]) + grain[..., :3] * grain[..., 3:]
     g = g + (1 - g) * (0.07 * rotated_dots(px, py, 0.4, 0.7))[..., None]
     fade = 1 - np.clip((py - BAND) / (144 * 0.7), 0, 1)
     g = g + (accent - g) * (0.55 * rotated_dots(px, py, 0.55, 0.55) * fade)[..., None]

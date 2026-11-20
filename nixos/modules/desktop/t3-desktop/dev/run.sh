@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+rm -f "$DEV/theme.json"
+cat "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell-theme.json" > "$DEV/theme.json" 2>/dev/null || echo '{}' > "$DEV/theme.json"#!/usr/bin/env bash
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -6,11 +7,10 @@ DEV="$ROOT/.dev"
 mkdir -p "$DEV/events"
 cd "$ROOT"
 
-if [[ ! -f "$DEV/theme.json" ]]; then
-    cp "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell-theme.json" "$DEV/theme.json" 2>/dev/null || echo '{}' > "$DEV/theme.json"
-fi
+rm -f "$DEV/theme.json"
+cat "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell-theme.json" > "$DEV/theme.json" 2>/dev/null || echo '{}' > "$DEV/theme.json"
 
-python3 -I dev/bake-chrome.py "$(jq -r '.wm800 // "#1d9eb6"' "$DEV/theme.json")" src/quickshell/shell/chrome/gradient.png src/quickshell/shell/chrome/palette.json
+python3 -I dev/bake-chrome.py "$(jq -r '.wm800 // "#1d9eb6"' "$DEV/theme.json")" src/quickshell/shell/chrome/gradient.png src/quickshell/shell/chrome/palette.json "$(jq -r '.ground // ""' "$DEV/theme.json")"
 
 pids=()
 cleanup() {
