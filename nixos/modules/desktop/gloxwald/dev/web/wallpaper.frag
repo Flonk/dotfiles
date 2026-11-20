@@ -110,8 +110,23 @@ float gridDots(vec2 p) {
 
 const float AMP_HEIGHT = 340.0;
 const vec3 AMP_DARK = vec3(0.018, 0.02, 0.022);
-const float GLOW_REACH = 22.0;
-const float GLOW_STRENGTH = 0.9;
+const float SPOT_BELOW = 60.0;
+const float SPOT_RANGE = 700.0;
+const float SPOT_CONE = 0.62;
+const float SPOT_GROUND = 0.28;
+const float SPOT_WALL = 1.4;
+const float AMP_DEPTH = 10.0;
+
+vec2 spotPos() {
+    return vec2(screenSize.x * 0.5, screenSize.y + SPOT_BELOW);
+}
+
+float spot(vec2 p) {
+    vec2 v = p - spotPos();
+    float r = length(v);
+    float cone = smoothstep(SPOT_CONE, 1.0, -v.y / r);
+    return cone / (1.0 + (r / SPOT_RANGE) * (r / SPOT_RANGE));
+}
 
 vec2 ampCenter() {
     return vec2(screenSize.x * 0.5, (bandHeight + screenSize.y - border) * 0.5);
@@ -134,15 +149,16 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     if (d > 2.0)
         return c;
     float inside = clamp(0.5 - d, 0.0, 1.0);
-    float reach = 0.0;
-    for (int i = 0; i < 24; i++) {
-        float step_ = -ampDist(p + vec2(0.0, reach));
-        if (step_ <= 0.05 || reach > GLOW_REACH * 4.0)
-            break;
-        reach += step_;
-    }
-    float glow = exp(-reach / GLOW_REACH);
-    vec3 floor_ = AMP_DARK + accent * GLOW_STRENGTH * glow * glow;
+    vec2 L = normalize(p - spotPos());
+    vec2 e = vec2(0.75, 0.0);
+    vec2 n = normalize(vec2(ampDist(p + e.xy) - ampDist(p - e.xy), ampDist(p + e.yx) - ampDist(p - e.yx)) + 1e-6);
+    float shadow = 0.0;
+    for (int i = 1; i <= 6; i++)
+        shadow += smoothstep(-0.75, 0.75, ampDist(p - L * AMP_DEPTH * float(i) / 6.0));
+    shadow /= 6.0;
+    float wall = exp(d / 1.5) * max(dot(n, L), 0.0);
+    float light = spot(p);
+    vec3 floor_ = AMP_DARK + accent * light * (SPOT_GROUND * (1.0 - shadow) + SPOT_WALL * wall);
     float ring = clamp(0.5 - d, 0.0, 1.0) - clamp(-0.5 - d, 0.0, 1.0);
     floor_ = mix(floor_, lift(floor_), 0.25 * ring / max(inside, 1e-4));
     return mix(c, floor_, inside);
@@ -150,7 +166,7 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
 
 vec3 wallpaper(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
-    vec3 c = mix(sunkenAmp(p, ground), grain.rgb, grain.a);
+    vec3 c = mix(sunkenAmp(p, ground + accent * SPOT_GROUND * spot(p)), grain.rgb, grain.a);
     c = mix(c, vec3(1.0), 0.07 * gridDots(p));
     return mix(c, accent, 0.55 * mastheadDots(p));
 }
