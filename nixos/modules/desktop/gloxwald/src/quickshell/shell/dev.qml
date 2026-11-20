@@ -647,19 +647,25 @@ FloatingWindow {
                     function onLogAllChanged() { Qt.callLater(logView.positionViewAtEnd); }
                     function onTabChanged() { Qt.callLater(logView.positionViewAtEnd); }
                 }
-                delegate: Text {
+                delegate: Item {
+                    id: entry
                     required property string src
                     required property string line
                     readonly property bool shown: win.logAll || win.tabSources[win.tabName].includes(src)
                     width: logView.width
-                    height: shown ? implicitHeight : 0
+                    height: shown ? entryText.implicitHeight : 0
                     visible: shown
-                    wrapMode: Text.WrapAnywhere
-                    textFormat: Text.PlainText
-                    font.family: "monospace"
-                    font.pixelSize: 11
-                    color: ({ shader: "#3aa8b8", greeter: "#aad94c", grub: "#d9a530", theme: "#c792ea", dev: "#888888" })[src] ?? "#cccccc"
-                    text: (win.logAll ? src.padEnd(8) : "") + line
+
+                    Text {
+                        id: entryText
+                        width: parent.width
+                        wrapMode: Text.WrapAnywhere
+                        textFormat: Text.PlainText
+                        font.family: "monospace"
+                        font.pixelSize: 11
+                        color: ({ shader: "#3aa8b8", greeter: "#aad94c", grub: "#d9a530", theme: "#c792ea", dev: "#888888" })[entry.src] ?? "#cccccc"
+                        text: (win.logAll ? entry.src.padEnd(8) : "") + entry.line
+                    }
                 }
             }
         }

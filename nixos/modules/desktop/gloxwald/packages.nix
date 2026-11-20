@@ -70,4 +70,11 @@ in
       mainProgram = "gloxwaldgreet";
     };
   };
+
+  hy3 = pkgs.hyprlandPlugins.hy3.overrideAttrs {
+    src = builtins.path {
+      path = ./src/hy3;
+      name = "source";
+    };
+  };
 }

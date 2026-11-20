@@ -7,6 +7,7 @@
 let
   borderSize = 2;
   lockCommand = config.programs.gloxwald.quickshell.lockCommand;
+  gloxwaldPkgs = import ../../packages.nix { inherit pkgs; };
 
   hypr-scale = pkgs.writeShellApplication {
     name = "hypr-scale";
@@ -33,7 +34,7 @@ in
       enable = true;
       package = pkgs.hyprland;
       configType = "lua";
-      plugins = [ pkgs.hyprlandPlugins.hy3 ];
+      plugins = [ gloxwaldPkgs.hy3 ];
 
       systemd = {
         enable = true;
