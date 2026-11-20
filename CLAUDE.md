@@ -1,2 +1,4 @@
 - This repo does not do feature branches: commit straight to `main` and push there. Never branch off for a change, and never leave work stranded on a side branch.
 - When working on the nixos system / home manager configuration, refer to nixos/CLAUDE.md
+- Git commits: single-line subject, imperative mood (e.g. "add florp to gnorp"), no body, never add a `Co-Authored-By` / "Generated with Claude" trailer.
+- Don't add comments in code
