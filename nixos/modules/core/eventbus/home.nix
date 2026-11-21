@@ -15,9 +15,9 @@ let
   };
   cfg = config.skynet.module.core.eventbus;
   t3bus = pkgs.writeShellScriptBin "t3bus" ''
-    case "${1:-}" in
+    case "''${1:-}" in
       emit) shift; exec ${t3cron}/bin/t3cron emit "$@" ;;
-      watch) shift; exec ${pkgs.mosquitto}/bin/mosquitto_sub -h 127.0.0.1 -v -t "${1:-#}" ;;
+      watch) shift; exec ${pkgs.mosquitto}/bin/mosquitto_sub -h 127.0.0.1 -v -t "''${1:-#}" ;;
       *) echo "usage: t3bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>] | t3bus watch [filter]" >&2; exit 2 ;;
     esac
   '';
