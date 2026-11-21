@@ -38,7 +38,26 @@ let
   agentState = pkgs.writeShellScript "t3-agent-state" ''
     cat >/dev/null
     [ -n "''${T3_AGENT:-}" ] || exit 0
-    exec ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -r -q 1 -t "agent/$T3_AGENT/state" -m "$1" 2>/dev/null
+    dir="''${XDG_RUNTIME_DIR:-/tmp}/t3-agent/$T3_AGENT"
+    mkdir -p "$dir"
+    exec 9>"$dir/lock"
+    ${pkgs.util-linux}/bin/flock 9
+    subs=$(cat "$dir/subs" 2>/dev/null || echo 0)
+    main=$(cat "$dir/main" 2>/dev/null || echo online)
+    case "$1" in
+      start) subs=0; main=online ;;
+      prompt) main=thinking ;;
+      idle) main=online ;;
+      sub+) subs=$((subs + 1)) ;;
+      sub-) subs=$((subs > 0 ? subs - 1 : 0)) ;;
+      waiting) main=waiting ;;
+      offline) subs=0; main=offline ;;
+    esac
+    echo "$subs" > "$dir/subs"
+    echo "$main" > "$dir/main"
+    state=$main
+    [ "$main" != offline ] && [ "$subs" -gt 0 ] && state=heavy
+    exec ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -r -q 1 -t "agent/$T3_AGENT/state" -m "$state" 2>/dev/null
   '';
   subagentGuard = pkgs.writeShellScript "t3-subagent-guard" ''
     input=$(cat)
@@ -61,9 +80,11 @@ let
   remoteSettings = pkgs.writeText "claude-remote-control-settings.json" (
     builtins.toJSON {
       hooks = {
-        SessionStart = stateHook "online";
-        UserPromptSubmit = stateHook "thinking";
-        Stop = stateHook "online";
+        SessionStart = stateHook "start";
+        UserPromptSubmit = stateHook "prompt";
+        Stop = stateHook "idle";
+        SubagentStart = stateHook "sub+";
+        SubagentStop = stateHook "sub-";
         SessionEnd = stateHook "offline";
         Notification = [
           {
