@@ -54,6 +54,20 @@
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.package = lib.mkIf (lib.versionOlder pkgs.bluez.version "5.88") (pkgs.bluez.overrideAttrs (old: rec {
+    version = "5.88";
+    src = pkgs.fetchurl {
+      url = "mirror://kernel/linux/bluetooth/bluez-${version}.tar.xz";
+      hash = "sha256-aVLDnrX4sO5xLMUKs7z/A74XxBDdl8pkD0hJ2aFlO6M=";
+    };
+    patches = [ ];
+    postInstall = builtins.replaceStrings [ "install -Dm755 attrib/gatttool $out/bin/gatttool" ] [ "" ] old.postInstall;
+    postPatch = old.postPatch + ''
+      sed -i 's/-lreadline/$(READLINE_LIBS)/' Makefile.tools
+      sed -i -e '/AC_MSG_ERROR(readline header files are required))/d' \
+        -e 's|AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,|PKG_CHECK_MODULES([READLINE], [readline], enable_readline=yes)|' configure.ac
+    '';
+  }));
   hardware.bluetooth.settings = {
     General = {
       Experimental = "true";
