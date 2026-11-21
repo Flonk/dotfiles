@@ -98,6 +98,7 @@ let
   stateHook = state: [ { hooks = [ { type = "command"; command = "${agentState} ${state}"; } ]; } ];
   remoteSettings = pkgs.writeText "claude-remote-control-settings.json" (
     builtins.toJSON {
+      idleCompaction = true;
       hooks = {
         SessionStart = stateHook "start";
         UserPromptSubmit = stateHook "prompt";
