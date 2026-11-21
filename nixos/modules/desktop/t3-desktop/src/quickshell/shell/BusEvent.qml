@@ -18,6 +18,7 @@ Item {
     property bool showTopic: false
     property bool showDetail: true
     property bool inline: false
+    property bool columns: false
 
     readonly property var levelColor: ({ error: Theme.error400, warn: "#d6b13c", info: T3.cream })
     readonly property string flag: conforming ? "" : "? "
@@ -30,7 +31,7 @@ Item {
             { text: showDetail ? detail : "", dim: true, small: true }
         ].filter(r => r.text !== "")
 
-    implicitHeight: lines.implicitHeight
+    implicitHeight: columns ? Math.max(message.implicitHeight, meta.implicitHeight) : lines.implicitHeight
 
     Rectangle {
         width: 3
@@ -42,6 +43,7 @@ Item {
 
     Column {
         id: lines
+        visible: !ev.columns
         x: 9
         width: parent.width - x
         spacing: 1
@@ -62,6 +64,50 @@ Item {
                 font.family: Theme.fontFamily
                 font.pixelSize: modelData.small ? T3.labelSize - 1 : T3.labelSize
                 font.weight: modelData.small ? Font.Normal : Font.Medium
+            }
+        }
+    }
+
+    Text {
+        id: message
+        visible: ev.columns
+        x: 9
+        width: parent.width - x - meta.width - 16
+        anchors.verticalCenter: parent.verticalCenter
+        text: ev.flag + ev.text
+        wrapMode: Text.Wrap
+        maximumLineCount: 3
+        elide: Text.ElideRight
+        lineHeight: 0.95
+        color: ev.ink
+        opacity: ev.conforming ? 1 : 0.55
+        font.family: Theme.fontFamily
+        font.pixelSize: T3.labelSize
+        font.weight: Font.Medium
+    }
+
+    Column {
+        id: meta
+        visible: ev.columns
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: Math.min(implicitWidth, parent.width * 0.45)
+        spacing: 1
+
+        Repeater {
+            model: [ev.showTime ? ev.time : "", ev.showSource ? ev.source : "", ev.showTopic ? ev.topic : "", ev.showDetail ? ev.detail : ""].filter(s => s)
+
+            Text {
+                required property string modelData
+                anchors.right: parent.right
+                width: Math.min(implicitWidth, meta.parent.width * 0.45)
+                horizontalAlignment: Text.AlignRight
+                text: modelData
+                elide: Text.ElideLeft
+                color: ev.ink
+                opacity: 0.55
+                font.family: Theme.fontFamily
+                font.pixelSize: T3.labelSize - 1
             }
         }
     }

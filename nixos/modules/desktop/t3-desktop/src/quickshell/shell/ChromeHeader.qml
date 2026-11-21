@@ -319,7 +319,7 @@ Item {
         }
     }
 
-    BusTicker {
+    Bbc {
         id: ticker
         frame: root
         join: agents
@@ -334,7 +334,7 @@ Item {
         anchors.rightMargin: 16
         spacing: 16
 
-        AgentHole {
+        BbcHole {
             id: agents
             frame: root
         }

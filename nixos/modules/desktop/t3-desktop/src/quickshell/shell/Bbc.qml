@@ -4,7 +4,7 @@ import Quickshell.Io
 Item {
     id: ticker
 
-    property var ignore: ["cron/jobs", "cron/status", "agent/+/state", "agent/+/subagents"]
+    property var ignore: ["cron/jobs", "+/status", "+/+/state", "+/+/subagents", "+/+/waiting"]
     readonly property var levels: ["error", "warn", "info", "http", "verbose", "debug", "silly"]
     readonly property var levelColor: ({ error: Theme.error400, warn: "#d6b13c", info: T3.accent2 })
     property int hold: 30000
@@ -145,6 +145,8 @@ Item {
                 id: view
                 width: parent.width
                 ink: T3.cream
+                columns: true
+                showSource: true
                 time: entry.time
                 source: entry.source
                 topic: entry.topic

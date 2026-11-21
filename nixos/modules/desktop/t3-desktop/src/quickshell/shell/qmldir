@@ -24,9 +24,9 @@ ChromeScreen 1.0 ChromeScreen.qml
 ChromeHeader 1.0 ChromeHeader.qml
 ChromeSurface 1.0 ChromeSurface.qml
 Meter 1.0 Meter.qml
-AgentHole 1.0 AgentHole.qml
+BbcHole 1.0 BbcHole.qml
 HoleSquare 1.0 HoleSquare.qml
-BusTicker 1.0 BusTicker.qml
+Bbc 1.0 Bbc.qml
 BusEvent 1.0 BusEvent.qml
 BusEventGallery 1.0 BusEventGallery.qml
 SysmonHole 1.0 SysmonHole.qml
