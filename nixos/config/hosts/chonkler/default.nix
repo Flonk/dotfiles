@@ -45,6 +45,17 @@
     "kernel.softlockup_panic" = 1;
     "kernel.hardlockup_panic" = 1;
   };
+  systemd.tmpfiles.rules = [ "w /sys/power/pm_debug_messages - - - - 1" ];
+  powerManagement.powerDownCommands = ''
+    export PATH=${lib.makeBinPath [ pkgs.coreutils pkgs.gnugrep ]}:$PATH
+    dgpu=$(cat /sys/bus/pci/devices/0000:01:00.0/power/runtime_status 2>/dev/null)
+    ac=$(cat /sys/class/power_supply/AC/online 2>/dev/null)
+    bat=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null)
+    outs=$(grep -l '^connected' /sys/class/drm/card*-*/status 2>/dev/null | cut -d/ -f5 | tr '\n' ' ')
+    ${pkgs.util-linux}/bin/logger -t suspend-forensics "dgpu=$dgpu ac=$ac bat=$bat outputs=$outs"
+    ${config.systemd.package}/bin/journalctl --sync
+    sync
+  '';
   # Disabled: forced a from-source kernel rebuild on every switch. The patch only
   # silences buggy-firmware UCSI duplicate-altmode errors (USB-C dock/Thunderbolt
   # altmode setup) — cosmetic enough to not be worth daily kernel compiles.
