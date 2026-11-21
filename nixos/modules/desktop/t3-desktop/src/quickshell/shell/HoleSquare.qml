@@ -6,6 +6,8 @@ Rectangle {
     property string label
     property color ink
     property bool dark: true
+    property bool clickable: false
+    signal clicked
     readonly property var nudge: ({ R: 0.8 })
 
     width: 16
@@ -23,5 +25,12 @@ Rectangle {
         font.family: Theme.fontFamily
         font.pixelSize: T3.labelSize
         font.weight: Font.Bold
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        enabled: square.clickable
+        cursorShape: Qt.PointingHandCursor
+        onClicked: square.clicked()
     }
 }

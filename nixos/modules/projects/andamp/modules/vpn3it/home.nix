@@ -56,6 +56,30 @@ let
     exec ${./vpn3it.sh} "$@"
   '';
 
+  vpn3itToggle = pkgs.writeShellScriptBin "vpn3it-toggle" ''
+    export PATH="${
+      lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.procps
+        pkgs.systemd
+      ]
+    }:$PATH"
+    emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source vpn3it-toggle >/dev/null 2>&1 || true; }
+    if systemctl --user is-active -q vpn3it-click || pgrep -x openconnect >/dev/null; then
+      emit vpn3it/disconnecting info "disconnecting the 3it vpn"
+      systemctl --user stop vpn3it-click 2>/dev/null || sudo pkill -SIGINT openconnect
+      exit 0
+    fi
+    token=$(vicinae-askpass "Authy token for 3it") || exit 0
+    [ -n "$token" ] || exit 0
+    file="''${XDG_RUNTIME_DIR:-/tmp}/vpn3it-token"
+    (umask 077; printf '%s\n' "$token" > "$file")
+    emit vpn3it/connecting info "connecting the 3it vpn"
+    systemctl --user reset-failed vpn3it-click 2>/dev/null || true
+    systemd-run --user --unit=vpn3it-click --collect --setenv=PATH="$PATH" \
+      sh -c 'tok=$(cat "$0"); rm -f "$0"; printf "%s\n" "$tok" | exec ${vpn3it}/bin/vpn3it' "$file" >/dev/null
+  '';
+
   doubletunnel = pkgs.writeShellScriptBin "doubletunnel" ''
     export AWK="${pkgs.gawk}/bin/awk"
     export OPENVPN="${pkgs.openvpn}/bin/openvpn"
@@ -88,6 +112,8 @@ in
       };
     })
     (lib.mkIf (cfg.CEFKM || cfg.CEIFRS) {
+      home.packages = [ vpn3itToggle ];
+
       skynet.cli.scripts = [
         {
           command = [
