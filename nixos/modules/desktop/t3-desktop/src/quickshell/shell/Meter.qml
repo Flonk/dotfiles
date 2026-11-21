@@ -12,7 +12,6 @@ Item {
     property int buttons: Qt.NoButton
     property int barWidth: 20
     property int inset: 0
-    property int topInset: T3.border
     property int radius: 0
     property real lift: 0.2
     property bool topEdge: true
@@ -32,9 +31,9 @@ Item {
 
     Item {
         id: bar
-        y: meter.topInset + meter.inset
+        y: meter.inset
         width: meter.barWidth
-        height: meter.height - meter.topInset - 2 * meter.inset
+        height: meter.height - 2 * meter.inset
 
         readonly property real filled: meter.muted ? 0 : meter.level
         readonly property int fillHeight: Math.round((height - (meter.topEdge ? 2 : 1)) * filled)

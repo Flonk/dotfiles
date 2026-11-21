@@ -185,8 +185,7 @@ float carve(float d, vec2 p, vec4 c) {
     vec2 hc = vec2(c.x + c.z * 0.5, (c.y + c.w) * 0.5);
     vec2 hh = vec2(c.z * 0.5, (c.y + c.w) * 0.5 + reach);
     vec2 hq = abs(p - hc) - hh;
-    d = roundUnion(d, length(max(hq, 0.0)) + min(max(hq.x, hq.y), 0.0), radius);
-    return roundUnion(d, p.y, radius);
+    return roundUnion(d, length(max(hq, 0.0)) + min(max(hq.x, hq.y), 0.0), radius);
 }
 
 vec3 groundAt(vec2 p) {
@@ -207,6 +206,8 @@ void main() {
     float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
     d = carve(d, p, cutout);
     d = carve(d, p, cutout2);
+    if (cutout.z > 0.0 || cutout2.z > 0.0)
+        d = roundUnion(d, p.y, radius);
     float inner = clamp(0.5 - d, 0.0, 1.0);
 
     if (inner >= 1.0) {
