@@ -50,7 +50,7 @@
     ai = {
       "claude-code" = {
         enable = true;
-        service.enable = false;
+        service.enable = true;
       };
       "copilot-cli".enable = true;
       pi.enable = true;

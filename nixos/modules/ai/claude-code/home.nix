@@ -22,9 +22,9 @@ let
     done
     wait $pid
   '';
-  claudeRemoteControlScript = pkgs.writeShellScriptBin "claude-remote-control-start" ''
+  remoteControlScript = model: pkgs.writeShellScript "claude-remote-control-${model}" ''
     cd ${config.home.homeDirectory}/repos/personal/dotfiles
-    exec ${pkgs.util-linux}/bin/script -q -c '${claudeScript}/bin/claude --dangerously-skip-permissions --remote-control ${config.skynet.whoami.installation}' /dev/null
+    exec ${pkgs.util-linux}/bin/script -q -c '${claudeScript}/bin/claude --dangerously-skip-permissions --model ${model} --remote-control ${config.skynet.whoami.installation}-${model}' /dev/null
   '';
 in
 {
@@ -48,22 +48,26 @@ in
         ];
     })
     (lib.mkIf config.skynet.module.ai.claude-code.service.enable {
-      systemd.user.services.claude-remote-control = {
-        Unit = {
-          Description = "Claude Code Remote Control";
-          After = [ "network-online.target" ];
-          Wants = [ "network-online.target" ];
-        };
-        Service = {
-          Type = "idle";
-          ExecStart = "${claudeRemoteControlScript}/bin/claude-remote-control-start";
-          Restart = "on-failure";
-          RestartSec = "5s";
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
+      systemd.user.services = lib.listToAttrs (
+        lib.imap0 (i: model: {
+          name = "claude-remote-control-${model}";
+          value = {
+            Unit = {
+              Description = "Claude Code Remote Control (${model})";
+              After = [ "network-online.target" ];
+              Wants = [ "network-online.target" ];
+            };
+            Service = {
+              Type = "idle";
+              ExecStartPre = "${pkgs.coreutils}/bin/sleep ${toString (i * 15)}";
+              ExecStart = remoteControlScript model;
+              Restart = "on-failure";
+              RestartSec = "5s";
+            };
+            Install.WantedBy = [ "default.target" ];
+          };
+        }) config.skynet.module.ai.claude-code.service.models
+      );
     })
   ];
 }
