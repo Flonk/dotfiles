@@ -11,6 +11,7 @@ Item {
     property string level
     property bool attention
     property bool conforming: true
+    property color ink: T3.ink
 
     property bool showTime: true
     property bool showSource: false
@@ -35,7 +36,7 @@ Item {
         width: 3
         height: parent.height
         radius: 1
-        color: ev.attention ? Theme.error400 : ev.levelColor[ev.level] ?? T3.ink
+        color: ev.attention ? Theme.error400 : ev.levelColor[ev.level] ?? ev.ink
         opacity: ev.attention || ev.level in ev.levelColor ? 1 : 0.35
     }
 
@@ -56,7 +57,7 @@ Item {
                 wrapMode: modelData.small ? Text.NoWrap : Text.Wrap
                 maximumLineCount: modelData.small ? 1 : 2
                 lineHeight: 0.95
-                color: T3.ink
+                color: ev.ink
                 opacity: modelData.dim ? 0.55 : 1
                 font.family: Theme.fontFamily
                 font.pixelSize: modelData.small ? T3.labelSize - 1 : T3.labelSize

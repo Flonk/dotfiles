@@ -7,6 +7,8 @@ Item {
     property Item frame: null
     property var states: ({})
     property var subagents: ({})
+    property var mutexStates: ({})
+    property var mutexWaiting: ({})
     property int dot: 16
     property int gap: 4
     property int padding: 9
@@ -14,6 +16,9 @@ Item {
     readonly property var modelRank: ["opus", "sonnet", "haiku"]
     readonly property var modelLetter: ({ opus: "O", sonnet: "S", haiku: "H" })
     readonly property var stateColor: ({ online: T3.accent2, thinking: "#d6b13c", heavy: Theme.error400, waiting: "#948fe8", offline: "#6b7078" })
+    readonly property var mutexColor: ({ free: T3.accent2, busy: "#d6b13c", held: "#d6b13c" })
+    readonly property var mutexLabel: ({ crdp: "RD", vpn3it: "3i" })
+    readonly property var mutexes: Object.keys(mutexStates).sort()
     readonly property var hosts: {
         const seen = {};
         for (const name of Object.keys(states))
@@ -41,23 +46,23 @@ Item {
         return Qt.vector4d(Math.round(p.x) + 1, Math.round(p.y), width - 2, height);
     }
 
-    visible: hosts.length > 0
-    implicitWidth: 2 + 2 * padding + 3 * dot + 2 * gap
+    visible: hosts.length > 0 || mutexes.length > 0
+    implicitWidth: 2 + 2 * padding + content.implicitWidth
     implicitHeight: T3.band
 
     Process {
         id: feed
         running: true
-        command: ["mosquitto_sub", "-h", "127.0.0.1", "-F", "%t %p", "-t", "agent/+/state", "-t", "agent/+/subagents"]
+        command: ["mosquitto_sub", "-h", "127.0.0.1", "-F", "%t %p", "-t", "agent/+/state", "-t", "agent/+/subagents", "-t", "mutex/+/state", "-t", "mutex/+/waiting"]
         stdout: SplitParser {
             onRead: line => {
                 const cut = line.indexOf(" ");
                 const topic = cut < 0 ? line : line.slice(0, cut);
                 const payload = cut < 0 ? "" : line.slice(cut + 1).trim();
-                const [, name, kind] = topic.split("/");
+                const [root, name, kind] = topic.split("/");
                 if (!name)
                     return;
-                const key = kind === "subagents" ? "subagents" : "states";
+                const key = root === "mutex" ? (kind === "waiting" ? "mutexWaiting" : "mutexStates") : kind === "subagents" ? "subagents" : "states";
                 const next = Object.assign({}, hole[key]);
                 if (payload)
                     next[name] = payload;
@@ -75,9 +80,14 @@ Item {
         onTriggered: feed.running = true
     }
 
-    Grid {
+    Row {
+        id: content
         x: 1 + hole.padding
         anchors.verticalCenter: parent.verticalCenter
+        spacing: 10
+
+    Grid {
+        visible: hole.hosts.length > 0
         columns: 3
         rowSpacing: hole.gap
         columnSpacing: hole.gap
@@ -85,30 +95,36 @@ Item {
         Repeater {
             model: hole.cells
 
-            Rectangle {
+            HoleSquare {
                 id: cell
                 required property var modelData
                 readonly property string state: hole.states[modelData.name] ?? "offline"
                 readonly property int subs: state === "offline" ? 0 : parseInt(hole.subagents[modelData.name] ?? "0") || 0
-                readonly property color ink: hole.stateColor[state] ?? hole.stateColor.offline
-
-                width: hole.dot
-                height: hole.dot
-                radius: 4
-                color: ink
-                border.width: 1
-                border.color: T3.lighten(ink, 0.2)
-
-                Text {
-                    anchors.centerIn: parent
-                    text: cell.subs > 0 ? String(cell.subs) : hole.modelLetter[cell.modelData.model] ?? "?"
-                    color: cell.state === "offline" ? T3.cream : T3.ground
-                    font.family: Theme.fontFamily
-                    font.pixelSize: T3.labelSize
-                    font.weight: Font.Bold
-                    font.capitalization: Font.AllUppercase
-                }
+                ink: hole.stateColor[state] ?? hole.stateColor.offline
+                dark: state !== "offline"
+                label: subs > 0 ? String(subs) : hole.modelLetter[modelData.model] ?? "?"
             }
         }
+    }
+
+    Grid {
+        visible: hole.mutexes.length > 0
+        flow: Grid.TopToBottom
+        rows: 2
+        rowSpacing: hole.gap
+        columnSpacing: hole.gap
+
+        Repeater {
+            model: hole.mutexes
+
+            HoleSquare {
+                required property string modelData
+                readonly property string state: hole.mutexStates[modelData] ?? "free"
+                readonly property int waiting: parseInt(hole.mutexWaiting[modelData] ?? "0") || 0
+                ink: waiting > 0 ? Theme.error400 : hole.mutexColor[state] ?? hole.stateColor.offline
+                label: waiting > 0 ? String(waiting) : hole.mutexLabel[modelData] ?? modelData.slice(0, 2)
+            }
+        }
+    }
     }
 }

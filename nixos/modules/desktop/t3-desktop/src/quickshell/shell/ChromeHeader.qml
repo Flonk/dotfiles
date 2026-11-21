@@ -11,6 +11,7 @@ Item {
     readonly property real center: width / 2
     readonly property vector4d cutout: sysmon.cutout
     readonly property vector4d cutout2: agents.cutout
+    readonly property vector4d cutout4: ticker.cutout
     readonly property vector4d cutout3: {
         meters.x; meters.y; meters.width; meters.height; meters.parent?.x; meters.parent?.y; width;
         const p = meters.mapToItem(root, 0, 0);
@@ -82,6 +83,7 @@ Item {
         cutout: root.cutout
         cutout2: root.cutout2
         cutout3: root.cutout3
+        cutout4: root.cutout4
         markRect: Qt.vector4d(root.center - root.markSize / 2, (root.height - root.markSize) / 2, root.markSize, root.markSize)
     }
 
@@ -318,8 +320,11 @@ Item {
     }
 
     BusTicker {
+        id: ticker
+        frame: root
+        join: agents
         x: root.center + root.markGap
-        width: Math.max(0, rightRow.x - 16 - x)
+        width: Math.max(0, rightRow.x - x)
         height: root.height
     }
 

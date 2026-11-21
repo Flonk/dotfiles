@@ -21,6 +21,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 cutout;
     vec4 cutout2;
     vec4 cutout3;
+    vec4 cutout4;
 };
 
 layout(binding = 1) uniform sampler2D noiseTex;
@@ -198,6 +199,15 @@ vec3 groundAt(vec2 p) {
     return mix(c, accent.rgb, 0.55 * mastheadDots(p));
 }
 
+vec3 holeGround(vec2 p, float content) {
+    vec3 g = groundAt(p);
+    if (cutout4.z <= 0.0)
+        return g;
+    float hx = abs(p.x - (cutout4.x + cutout4.z * 0.5)) - cutout4.z * 0.5 - radius;
+    float calm = (1.0 - smoothstep(0.0, 6.0, hx)) * smoothstep(-6.0, 0.0, content);
+    return mix(g, mix(ground.rgb, g, 0.2), calm);
+}
+
 void main() {
     vec2 p = origin + qt_TexCoord0 * itemSize;
     vec2 lo = vec2(border, bandHeight);
@@ -205,9 +215,11 @@ void main() {
     vec2 extent = (hi - lo) * 0.5;
     vec2 q = abs(p - (lo + extent)) - (extent - radius);
     float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+    float content = d;
     d = carve(d, p, cutout);
     d = carve(d, p, cutout2);
-    if (cutout.z > 0.0 || cutout2.z > 0.0)
+    d = carve(d, p, cutout4);
+    if (cutout.z > 0.0 || cutout2.z > 0.0 || cutout4.z > 0.0)
         d = roundUnion(d, p.y, radius);
     if (cutout3.z > 0.0) {
         vec2 sq = abs(p - vec2(cutout3.x + cutout3.z * 0.5, (cutout3.y + cutout3.w) * 0.5)) - vec2(cutout3.z * 0.5, (cutout3.y + cutout3.w) * 0.5 + radius + 8.0);
@@ -220,7 +232,7 @@ void main() {
             fragColor = vec4(0.0);
             return;
         }
-        fragColor = vec4(groundAt(p), 1.0) * qt_Opacity;
+        fragColor = vec4(holeGround(p, content), 1.0) * qt_Opacity;
         return;
     }
 
@@ -234,7 +246,7 @@ void main() {
     if (ring > 0.0)
         c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
     if (inner > 0.0 && overlayMode < 0.5) {
-        c = mix(c, groundAt(p), inner);
+        c = mix(c, holeGround(p, content), inner);
     }
 
     if (markRect.z > 0.0) {

@@ -101,6 +101,7 @@ Item {
         cutout: lockHeader.cutout
         cutout2: lockHeader.cutout2
         cutout3: lockHeader.cutout3
+        cutout4: lockHeader.cutout4
     }
 
     ChromeHeader {

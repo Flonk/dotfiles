@@ -775,6 +775,7 @@ FloatingWindow {
                             cutout: deskHeader.cutout
                             cutout2: deskHeader.cutout2
                             cutout3: deskHeader.cutout3
+                            cutout4: deskHeader.cutout4
                         }
 
                         BusEventGallery {
@@ -804,6 +805,7 @@ FloatingWindow {
                             cutout: deskHeader.cutout
                             cutout2: deskHeader.cutout2
                             cutout3: deskHeader.cutout3
+                            cutout4: deskHeader.cutout4
                             overlayMode: 1
                         }
 

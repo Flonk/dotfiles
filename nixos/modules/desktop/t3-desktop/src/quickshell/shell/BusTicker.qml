@@ -10,6 +10,18 @@ Item {
     property int hold: 30000
     property int duration: 220
     property Item current: null
+    property Item frame: null
+    property Item join: null
+    property int padding: 12
+
+    readonly property vector4d cutout: {
+        x; y; width; height; visible; parent?.x; parent?.y; frame?.width; join?.x; join?.width; join?.visible; join?.parent?.x;
+        if (!frame || !visible || width <= 0)
+            return Qt.vector4d(0, 0, 0, 0);
+        const p = mapToItem(frame, 0, 0);
+        const right = join && join.visible ? join.mapToItem(frame, join.width, 0).x - 1 : p.x + width - 1;
+        return Qt.vector4d(Math.round(p.x) + 1, Math.round(p.y), Math.round(right - p.x - 1), height);
+    }
 
     function matches(filter, topic) {
         const f = filter.split("/"), t = topic.split("/");
@@ -97,7 +109,8 @@ Item {
                 exit.start();
             }
 
-            width: ticker.width
+            x: ticker.padding
+            width: ticker.width - 2 * ticker.padding
             height: view.implicitHeight
             y: ticker.height
 
@@ -131,6 +144,7 @@ Item {
             BusEvent {
                 id: view
                 width: parent.width
+                ink: T3.cream
                 time: entry.time
                 source: entry.source
                 topic: entry.topic

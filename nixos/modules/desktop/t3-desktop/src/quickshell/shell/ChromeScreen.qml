@@ -72,6 +72,7 @@ Scope {
             cutout: header.cutout
             cutout2: header.cutout2
             cutout3: header.cutout3
+            cutout4: header.cutout4
         }
     }
 
