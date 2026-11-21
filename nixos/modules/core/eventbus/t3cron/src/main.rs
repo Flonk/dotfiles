@@ -609,7 +609,7 @@ fn usage() -> ! {
        skynet cron rm <key>
        skynet cron run <key>
        skynet cron watch
-       t3bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]
+       skynet bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]
 
 schedule: a cron expression (\"0 9 * * 1-5\", \"*/15 * * * *\", @daily, @hourly)
           or a one-shot: \"in 10m\", \"in 1h30m\", \"at 18:00\", \"at 2026-12-24 18:00\"
