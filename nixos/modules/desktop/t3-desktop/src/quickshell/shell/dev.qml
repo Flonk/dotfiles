@@ -774,6 +774,7 @@ FloatingWindow {
                             screenSize: parent.screenSize
                             cutout: deskHeader.cutout
                             cutout2: deskHeader.cutout2
+                            cutout3: deskHeader.cutout3
                         }
 
                         Repeater {
@@ -797,6 +798,7 @@ FloatingWindow {
                             screenSize: parent.screenSize
                             cutout: deskHeader.cutout
                             cutout2: deskHeader.cutout2
+                            cutout3: deskHeader.cutout3
                             overlayMode: 1
                         }
 

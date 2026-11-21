@@ -20,6 +20,7 @@ layout(std140, binding = 0) uniform buf {
     float plain;
     vec4 cutout;
     vec4 cutout2;
+    vec4 cutout3;
 };
 
 layout(binding = 1) uniform sampler2D noiseTex;
@@ -208,6 +209,10 @@ void main() {
     d = carve(d, p, cutout2);
     if (cutout.z > 0.0 || cutout2.z > 0.0)
         d = roundUnion(d, p.y, radius);
+    if (cutout3.z > 0.0) {
+        vec2 sq = abs(p - vec2(cutout3.x + cutout3.z * 0.5, (cutout3.y + cutout3.w) * 0.5)) - vec2(cutout3.z * 0.5, (cutout3.y + cutout3.w) * 0.5 + radius + 8.0);
+        d = min(d, length(max(sq, 0.0)) + min(max(sq.x, sq.y), 0.0));
+    }
     float inner = clamp(0.5 - d, 0.0, 1.0);
 
     if (inner >= 1.0) {

@@ -100,6 +100,7 @@ Item {
         overlayMode: 1
         cutout: lockHeader.cutout
         cutout2: lockHeader.cutout2
+        cutout3: lockHeader.cutout3
     }
 
     ChromeHeader {

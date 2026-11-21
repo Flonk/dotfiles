@@ -13,7 +13,7 @@ Item {
 
     readonly property var modelRank: ["opus", "sonnet", "haiku"]
     readonly property var modelLetter: ({ opus: "O", sonnet: "S", haiku: "H" })
-    readonly property var stateColor: ({ online: Theme.wm800, thinking: "#d6b13c", heavy: Theme.error400, waiting: "#948fe8", offline: "#6b7078" })
+    readonly property var stateColor: ({ online: T3.accent2, thinking: "#d6b13c", heavy: Theme.error400, waiting: "#948fe8", offline: "#6b7078" })
     readonly property var hosts: {
         const seen = {};
         for (const name of Object.keys(states))

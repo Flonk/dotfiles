@@ -11,6 +11,11 @@ Item {
     readonly property real center: width / 2
     readonly property vector4d cutout: sysmon.cutout
     readonly property vector4d cutout2: agents.cutout
+    readonly property vector4d cutout3: {
+        meters.x; meters.y; meters.width; meters.height; meters.parent?.x; meters.parent?.y; width;
+        const p = meters.mapToItem(root, 0, 0);
+        return Qt.vector4d(Math.round(p.x), Math.round(p.y), meters.width, meters.height);
+    }
     readonly property real markGap: T3.markSize / 2 + 24
     property real markScale: markMouse.containsMouse ? 1.15 : 1
     Behavior on markScale {
@@ -76,6 +81,7 @@ Item {
         screenSize: root.screenSize
         cutout: root.cutout
         cutout2: root.cutout2
+        cutout3: root.cutout3
         markRect: Qt.vector4d(root.center - root.markSize / 2, (root.height - root.markSize) / 2, root.markSize, root.markSize)
     }
 
@@ -337,7 +343,10 @@ Item {
         }
 
         Row {
-            spacing: 0
+            id: meters
+            spacing: 1
+            leftPadding: 1
+            rightPadding: 1
 
             Meter {
                 icon: "\u{f00df}"
@@ -368,26 +377,35 @@ Item {
             }
         }
 
-        Status {
-            text: Qt.formatDateTime(clock.now, "dd.MM. hh:mm")
-            clickable: true
-            onClicked: Clipboard.copy(new Date().toISOString(), "🕒 Timestamp copied!")
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
 
-            Timer {
-                id: clock
-                property date now: new Date()
-                interval: 1000
-                running: true
-                repeat: true
-                onTriggered: now = new Date()
+            Status {
+                anchors.right: parent.right
+                height: 16
+                font.pixelSize: Math.round(T3.labelSize * 1.3)
+                text: Qt.formatDateTime(clock.now, "dd.MM. hh:mm")
+                clickable: true
+                onClicked: Clipboard.copy(new Date().toISOString(), "🕒 Timestamp copied!")
+
+                Timer {
+                    id: clock
+                    property date now: new Date()
+                    interval: 1000
+                    running: true
+                    repeat: true
+                    onTriggered: now = new Date()
+                }
             }
-        }
 
-        Status {
-            visible: LanguageWidget.available
-            text: LanguageWidget.label
-            clickable: true
-            onClicked: LanguageWidget.cycle()
+            Status {
+                anchors.right: parent.right
+                height: 12
+                visible: LanguageWidget.available
+                text: LanguageWidget.label
+                clickable: true
+                onClicked: LanguageWidget.cycle()
+            }
         }
     }
 }

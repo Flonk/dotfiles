@@ -71,6 +71,7 @@ Scope {
             screenSize: root.screenSize
             cutout: header.cutout
             cutout2: header.cutout2
+            cutout3: header.cutout3
         }
     }
 
