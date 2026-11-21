@@ -98,6 +98,8 @@ let
 in
 {
   config = lib.mkIf config.skynet.module.core.ssh.enable {
+    skynet.module.core.ssh.knockScript = knock;
+
     sops.secrets = lib.mkIf sops {
       fwknop-key.sopsFile = ./secrets/fwknop.json;
       fwknop-hmac.sopsFile = ./secrets/fwknop.json;

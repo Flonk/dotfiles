@@ -7,7 +7,10 @@
   config.skynet.module = {
     core = {
       direnv.enable = true;
-      eventbus.enable = true;
+      eventbus = {
+        enable = true;
+        bridges = [ "claude-hetzner" ];
+      };
       git.enable = true;
       bitwarden.enable = true;
       keyring.enable = true;
