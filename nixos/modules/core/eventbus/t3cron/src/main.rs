@@ -299,6 +299,39 @@ fn key_from(payload: &[u8]) -> Option<String> {
     }
 }
 
+const LEVELS: [&str; 7] = ["error", "warn", "info", "http", "verbose", "debug", "silly"];
+
+fn event(source: &str, level: &str, attention: bool, description: &str, data: Value) -> Value {
+    json!({
+        "timestamp": Local::now().to_rfc3339_opts(SecondsFormat::Millis, false),
+        "source": source,
+        "level": level,
+        "attention": attention,
+        "description": description,
+        "data": data,
+    })
+}
+
+fn is_event(v: &Value) -> bool {
+    v["timestamp"].is_string()
+        && v["source"].is_string()
+        && v["level"].as_str().is_some_and(|l| LEVELS.contains(&l))
+        && v["attention"].is_boolean()
+        && v["description"].is_string()
+}
+
+fn job_event(key: &str, payload: &str) -> Value {
+    match serde_json::from_str::<Value>(payload) {
+        Ok(mut v) if is_event(&v) => {
+            v["timestamp"] = json!(Local::now().to_rfc3339_opts(SecondsFormat::Millis, false));
+            v
+        }
+        Ok(v) => event("t3cron", "info", false, key, v),
+        Err(_) if payload.trim().is_empty() => event("t3cron", "info", false, key, json!({})),
+        Err(_) => event("t3cron", "info", false, payload.trim(), json!({ "key": key })),
+    }
+}
+
 struct Daemon {
     db: Connection,
     bus: Option<Mqtt>,
@@ -321,14 +354,15 @@ impl Daemon {
 
     fn error(&mut self, key: Option<&str>, msg: String) {
         eprintln!("{msg}");
-        let payload = json!({ "key": key, "error": msg }).to_string();
+        let payload = event("t3cron", "error", false, &msg, json!({ "key": key })).to_string();
         self.publish("cron/error", payload.as_bytes(), false);
     }
 
     fn fire(&mut self, key: &str, topic: &str, payload: &str) {
         eprintln!("fire {key} -> {topic}");
-        self.publish(topic, payload.as_bytes(), false);
-        let fired = json!({ "key": key, "topic": topic, "at": Local::now().to_rfc3339() }).to_string();
+        let body = job_event(key, payload).to_string();
+        self.publish(topic, body.as_bytes(), false);
+        let fired = event("t3cron", "verbose", false, &format!("fired {key} -> {topic}"), json!({ "key": key, "topic": topic })).to_string();
         self.publish("cron/fired", fired.as_bytes(), false);
     }
 
@@ -575,9 +609,11 @@ fn usage() -> ! {
        skynet cron rm <key>
        skynet cron run <key>
        skynet cron watch
+       t3bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]
 
 schedule: a cron expression (\"0 9 * * 1-5\", \"*/15 * * * *\", @daily, @hourly)
           or a one-shot: \"in 10m\", \"in 1h30m\", \"at 18:00\", \"at 2026-12-24 18:00\"
+levels:   error warn info http verbose debug silly
 topics:   cron/set cron/delete cron/run (in), cron/jobs cron/fired cron/error cron/status (out)"
     );
     exit(2)
@@ -600,7 +636,7 @@ fn cli_add(args: &[String]) {
     let result = wait_for(&mut bus, |m| {
         if m.topic == "cron/error" {
             let v: Value = serde_json::from_slice(&m.payload).ok()?;
-            return (v["key"].as_str() == Some(key.as_str())).then(|| Err(v["error"].as_str().unwrap_or("").to_string()));
+            return (v["data"]["key"].as_str() == Some(key.as_str())).then(|| Err(v["description"].as_str().unwrap_or("").to_string()));
         }
         let jobs = jobs_from(m)?;
         jobs.iter().any(|j| j["key"].as_str() == Some(key.as_str()) && j["schedule"].as_str() == Some(schedule.as_str())).then_some(Ok(()))
@@ -647,10 +683,10 @@ fn cli_run(args: &[String]) {
     bus.publish("cron/run", key.as_bytes(), false).expect("publish");
     let result = wait_for(&mut bus, |m| {
         let v: Value = serde_json::from_slice(&m.payload).ok()?;
-        if v["key"].as_str() != Some(key.as_str()) {
+        if v["data"]["key"].as_str() != Some(key.as_str()) {
             return None;
         }
-        Some(if m.topic == "cron/fired" { Ok(v["topic"].as_str().unwrap_or("").to_string()) } else { Err(v["error"].as_str().unwrap_or("").to_string()) })
+        Some(if m.topic == "cron/fired" { Ok(v["data"]["topic"].as_str().unwrap_or("").to_string()) } else { Err(v["description"].as_str().unwrap_or("").to_string()) })
     });
     match result {
         Some(Ok(topic)) => println!("fired {key} -> {topic}"),
@@ -675,9 +711,9 @@ fn cli_watch() {
                 let v: Value = serde_json::from_slice(&m.payload).unwrap_or_default();
                 let when = Local::now().format("%H:%M:%S");
                 if m.topic == "cron/fired" {
-                    println!("{when}  fired  {}  -> {}", v["key"].as_str().unwrap_or("?"), v["topic"].as_str().unwrap_or("?"));
+                    println!("{when}  fired  {}  -> {}", v["data"]["key"].as_str().unwrap_or("?"), v["data"]["topic"].as_str().unwrap_or("?"));
                 } else {
-                    println!("{when}  error  {}  {}", v["key"].as_str().unwrap_or("-"), v["error"].as_str().unwrap_or("?"));
+                    println!("{when}  error  {}  {}", v["data"]["key"].as_str().unwrap_or("-"), v["description"].as_str().unwrap_or("?"));
                 }
             }
             Ok(None) => {}
@@ -687,6 +723,44 @@ fn cli_watch() {
             }
         }
     }
+}
+
+fn cli_emit(args: &[String]) {
+    let mut attention = false;
+    let mut data = json!({});
+    let mut source = env::var("T3_BUS_SOURCE")
+        .ok()
+        .filter(|s| !s.is_empty())
+        .or_else(|| env::var("T3_AGENT").ok().filter(|s| !s.is_empty()).map(|a| format!("claude/{a}")))
+        .unwrap_or_else(|| "cli".into());
+    let mut positional = Vec::new();
+    let mut it = args.iter();
+    while let Some(a) = it.next() {
+        match a.as_str() {
+            "--attention" | "-a" => attention = true,
+            "--data" | "-d" => {
+                let raw = it.next().unwrap_or_else(|| usage());
+                data = serde_json::from_str(raw).unwrap_or_else(|e| {
+                    eprintln!("--data is not json: {e}");
+                    exit(1)
+                });
+            }
+            "--source" | "-s" => source = it.next().unwrap_or_else(|| usage()).clone(),
+            _ => positional.push(a.clone()),
+        }
+    }
+    if positional.len() < 3 {
+        usage();
+    }
+    let (topic, level) = (&positional[0], positional[1].as_str());
+    if !LEVELS.contains(&level) {
+        eprintln!("level must be one of: {}", LEVELS.join(" "));
+        exit(1)
+    }
+    let description = positional[2..].join(" ");
+    let body = event(&source, level, attention, &description, data).to_string();
+    let mut bus = cli_bus();
+    bus.publish(topic, body.as_bytes(), false).expect("publish");
 }
 
 fn main() {
@@ -703,6 +777,7 @@ fn main() {
         Some("rm") | Some("remove") | Some("delete") => cli_rm(rest),
         Some("run") => cli_run(rest),
         Some("watch") => cli_watch(),
+        Some("emit") => cli_emit(rest),
         _ => usage(),
     }
 }

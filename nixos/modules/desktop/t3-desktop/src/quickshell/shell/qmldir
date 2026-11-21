@@ -25,5 +25,6 @@ ChromeHeader 1.0 ChromeHeader.qml
 ChromeSurface 1.0 ChromeSurface.qml
 Meter 1.0 Meter.qml
 AgentHole 1.0 AgentHole.qml
+BusTicker 1.0 BusTicker.qml
 SysmonHole 1.0 SysmonHole.qml
 AudioSwitcher 1.0 AudioSwitcher.qml

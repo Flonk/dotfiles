@@ -317,7 +317,14 @@ Item {
         }
     }
 
+    BusTicker {
+        x: root.center + root.markGap
+        width: Math.max(0, rightRow.x - 16 - x)
+        height: root.height
+    }
+
     Row {
+        id: rightRow
         anchors.right: parent.right
         anchors.rightMargin: 16
         spacing: 16

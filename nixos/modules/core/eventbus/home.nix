@@ -14,6 +14,13 @@ let
     buildInputs = [ pkgs.sqlite ];
   };
   cfg = config.skynet.module.core.eventbus;
+  t3bus = pkgs.writeShellScriptBin "t3bus" ''
+    case "${1:-}" in
+      emit) shift; exec ${t3cron}/bin/t3cron emit "$@" ;;
+      watch) shift; exec ${pkgs.mosquitto}/bin/mosquitto_sub -h 127.0.0.1 -v -t "${1:-#}" ;;
+      *) echo "usage: t3bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>] | t3bus watch [filter]" >&2; exit 2 ;;
+    esac
+  '';
   registry = lib.importJSON ../../../.registry.json;
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
     listener 1883 127.0.0.1
@@ -49,6 +56,7 @@ in
     home.packages = [
       pkgs.mosquitto
       t3cron
+      t3bus
     ]
     ++ lib.optional cfg.ui pkgs.mqtt-explorer;
 
@@ -115,6 +123,17 @@ in
           exec ${pkgs.mosquitto}/bin/mosquitto_sub -h 127.0.0.1 -v -t '#' "$@"
         '';
         usage = "Prints every message on the local mosquitto bus with its topic.";
+      }
+      {
+        command = [
+          "bus"
+          "emit"
+        ];
+        title = "Emit a schema event onto the bus";
+        script = pkgs.writeShellScript "bus-emit.sh" ''
+          exec ${t3bus}/bin/t3bus emit "$@"
+        '';
+        usage = "t3bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]. Levels: error warn info http verbose debug silly. See nixos/modules/core/eventbus/event.schema.json.";
       }
     ];
   };

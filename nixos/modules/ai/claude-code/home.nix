@@ -57,8 +57,26 @@ let
     echo "$main" > "$dir/main"
     state=$main
     [ "$main" != offline ] && [ "$subs" -gt 0 ] && state=heavy
-    ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -r -q 1 -t "agent/$T3_AGENT/subagents" -m "$subs" 2>/dev/null
-    exec ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -r -q 1 -t "agent/$T3_AGENT/state" -m "$state" 2>/dev/null
+    pub() { ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -q 1 "$@" 2>/dev/null; }
+    pub -r -t "agent/$T3_AGENT/subagents" -m "$subs"
+    pub -r -t "agent/$T3_AGENT/state" -m "$state"
+    last=$(cat "$dir/last" 2>/dev/null || true)
+    [ "$last" = "$state $subs" ] && exit 0
+    echo "$state $subs" > "$dir/last"
+    level=info attention=false
+    case "$state" in
+      online) what="is idle" ;;
+      thinking) what="is working" ;;
+      heavy) what="is running $subs subagent$([ "$subs" = 1 ] || echo s)" ;;
+      waiting) what="needs your input"; level=warn; attention=true ;;
+      offline) what="went offline"; level=warn ;;
+      *) what="is $state" ;;
+    esac
+    body=$(${pkgs.jq}/bin/jq -nc \
+      --arg ts "$(${pkgs.coreutils}/bin/date +%Y-%m-%dT%H:%M:%S.%3N%:z)" --arg src "claude/$T3_AGENT" --arg level "$level" \
+      --argjson attention "$attention" --arg desc "$T3_AGENT $what" --arg state "$state" --argjson subs "$subs" \
+      '{timestamp: $ts, source: $src, level: $level, attention: $attention, description: $desc, data: {state: $state, subagents: $subs}}')
+    pub -t "agent/$T3_AGENT/event" -m "$body"
   '';
   subagentGuard = pkgs.writeShellScript "t3-subagent-guard" ''
     input=$(cat)

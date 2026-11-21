@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "t3bus/event",
+  "title": "t3bus event",
+  "description": "Every live (non-retained) message on the t3bus is one of these. Retained state topics (agent/+/state, agent/+/subagents, cron/status, cron/jobs) carry bare values instead.",
+  "type": "object",
+  "required": ["timestamp", "source", "level", "attention", "description"],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time", "description": "RFC 3339 with offset, when it happened" },
+    "source": { "type": "string", "description": "who emitted it, e.g. t3cron, claude/flo-chonkler-opus, cli" },
+    "level": { "enum": ["error", "warn", "info", "http", "verbose", "debug", "silly"], "description": "npm log level" },
+    "attention": { "type": "boolean", "description": "a human should look at this" },
+    "description": { "type": "string", "description": "one human-readable line" },
+    "data": { "type": "object", "description": "anything the event carries" }
+  },
+  "additionalProperties": false
+}
