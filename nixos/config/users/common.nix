@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+  news.display = "silent";
+
   home.packages = with pkgs; [
     nixfmt
   ];

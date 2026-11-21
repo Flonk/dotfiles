@@ -18,6 +18,7 @@ Item {
     readonly property var modelLetter: ({ opus: "O", sonnet: "S", haiku: "H" })
     readonly property var stateColor: ({ online: T3.accent2, thinking: "#d6b13c", heavy: Theme.error400, waiting: "#948fe8", offline: "#6b7078" })
     readonly property var mutexColor: ({ free: T3.accent2, busy: "#d6b13c", held: "#d6b13c" })
+    readonly property var mutexColorFor: ({ vpn3it: { free: "#6b7078", held: T3.accent2 } })
     readonly property var mutexLabel: ({ crdp: "R", vpn3it: "3" })
     readonly property var mutexAction: ({ vpn3it: ["vpn3it-toggle"] })
     readonly property var mutexes: Object.keys(mutexStates).sort()
@@ -123,7 +124,8 @@ Item {
                 required property string modelData
                 readonly property string state: hole.mutexStates[modelData] ?? "free"
                 readonly property int waiting: parseInt(hole.mutexWaiting[modelData] ?? "0") || 0
-                ink: waiting > 0 ? Theme.error400 : hole.mutexColor[state] ?? hole.stateColor.offline
+                ink: waiting > 0 ? Theme.error400 : (hole.mutexColorFor[modelData] ?? hole.mutexColor)[state] ?? hole.stateColor.offline
+                dark: !(modelData in hole.mutexColorFor && state === "free")
                 label: waiting > 0 ? String(waiting) : hole.mutexLabel[modelData] ?? modelData.slice(0, 2)
                 clickable: modelData in hole.mutexAction
                 onClicked: Quickshell.execDetached(hole.mutexAction[modelData])
