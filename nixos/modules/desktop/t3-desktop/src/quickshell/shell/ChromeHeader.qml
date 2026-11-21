@@ -321,10 +321,19 @@ Item {
             frame: root
         }
 
-        Status {
-            text: ({ busy: "HEADPHONES ..", ok: "HEADPHONES ✓", fail: "HEADPHONES ✗" })[HeadphonesWidget.status] ?? "HEADPHONES"
-            clickable: !HeadphonesWidget.busy
-            onClicked: HeadphonesWidget.reconnect()
+        Row {
+            spacing: 10
+
+            Label {
+                text: "\u{f025}"
+                opacity: 0.8
+                font.pixelSize: Math.round(T3.labelSize * 1.2)
+            }
+
+            AudioSwitcher {
+                anchors.verticalCenter: parent.verticalCenter
+                interactive: root.interactive
+            }
         }
 
         Row {

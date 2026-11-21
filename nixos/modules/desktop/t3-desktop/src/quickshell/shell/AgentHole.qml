@@ -13,7 +13,7 @@ Item {
 
     readonly property var modelRank: ["opus", "sonnet", "haiku"]
     readonly property var modelLetter: ({ opus: "O", sonnet: "S", haiku: "H" })
-    readonly property var stateColor: ({ online: "#66b16a", thinking: "#d6b13c", heavy: Theme.error400, waiting: Theme.wm800, offline: "#6b7078" })
+    readonly property var stateColor: ({ online: Theme.wm800, thinking: "#d6b13c", heavy: Theme.error400, waiting: "#948fe8", offline: "#6b7078" })
     readonly property var hosts: {
         const seen = {};
         for (const name of Object.keys(states))
@@ -89,7 +89,7 @@ Item {
 
                 width: hole.dot
                 height: hole.dot
-                radius: hole.dot / 2
+                radius: 4
                 color: ink
                 border.width: 1
                 border.color: T3.lighten(ink, 0.2)
