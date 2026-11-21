@@ -69,6 +69,7 @@ Scope {
         ChromeSurface {
             anchors.fill: parent
             screenSize: root.screenSize
+            cutout: header.cutout
         }
     }
 
@@ -107,6 +108,7 @@ Scope {
         WlrLayershell.namespace: "t3-desktop-header"
 
         ChromeHeader {
+            id: header
             anchors.fill: parent
             screenSize: root.screenSize
             monitor: Hyprland.monitorFor(root.modelData)

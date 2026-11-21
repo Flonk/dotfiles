@@ -9,6 +9,7 @@ Item {
     property bool interactive: true
 
     readonly property real center: width / 2
+    readonly property vector4d cutout: coreMeter.cutout
     readonly property real markGap: T3.markSize / 2 + 24
     property real markScale: markMouse.containsMouse ? 1.15 : 1
     Behavior on markScale {
@@ -72,6 +73,7 @@ Item {
     ChromeSurface {
         anchors.fill: parent
         screenSize: root.screenSize
+        cutout: root.cutout
         markRect: Qt.vector4d(root.center - root.markSize / 2, (root.height - root.markSize) / 2, root.markSize, root.markSize)
     }
 
@@ -171,30 +173,17 @@ Item {
         }
 
         Row {
-            spacing: 6
+            spacing: 8
 
             Status {
                 id: cpuLabel
                 text: "CPU " + Math.round(SystemMonitor.cpuUsage * 100)
             }
 
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                height: 14
-                spacing: 1
-                opacity: cpuLabel.opacity
-
-                Repeater {
-                    model: SystemMonitor.coreUsages
-
-                    Rectangle {
-                        required property real modelData
-                        anchors.bottom: parent.bottom
-                        width: 2
-                        height: Math.max(1, parent.height * Math.min(1, modelData))
-                        color: T3.ink
-                    }
-                }
+            CoreMeter {
+                id: coreMeter
+                frame: root
+                values: SystemMonitor.coreUsages
             }
         }
     }
@@ -239,30 +228,44 @@ Item {
         anchors.rightMargin: 16
         spacing: 16
 
+        AgentBars {}
+
         Status {
             text: ({ busy: "HEADPHONES ..", ok: "HEADPHONES ✓", fail: "HEADPHONES ✗" })[HeadphonesWidget.status] ?? "HEADPHONES"
             clickable: !HeadphonesWidget.busy
             onClicked: HeadphonesWidget.reconnect()
         }
 
-        Status {
-            text: "BRT " + Math.round(BrightnessWidget.brightness * 100)
-            clickable: true
-            buttons: Qt.NoButton
-            onScrolled: d => BrightnessWidget.setBrightness(BrightnessWidget.brightness + d * 0.01)
-        }
+        Row {
+            spacing: 0
 
-        Status {
-            text: VolumeWidget.muted ? "MUTE" : "VOL " + Math.round(VolumeWidget.volume * 100)
-            clickable: true
-            buttons: Qt.RightButton
-            onClicked: VolumeWidget.toggleMute()
-            onScrolled: d => VolumeWidget.setVolume(VolumeWidget.volume + d * 0.01)
-        }
+            Meter {
+                icon: "\u{f00df}"
+                color: "#c6932e"
+                value: BrightnessWidget.brightness
+                interactive: root.interactive
+                onScrolled: d => BrightnessWidget.setBrightness(BrightnessWidget.brightness + d * 0.01)
+            }
 
-        Status {
-            visible: SystemMonitor.hasBattery
-            text: "BAT " + Math.round(SystemMonitor.batteryLevel * 100) + (SystemMonitor.isCharging ? "+" : SystemMonitor.batteryState === "critical" ? "!" : "")
+            Meter {
+                icon: VolumeWidget.muted ? "\u{f0581}" : "\u{f057e}"
+                color: Theme.wm800
+                value: VolumeWidget.volume
+                muted: VolumeWidget.muted
+                interactive: root.interactive
+                buttons: Qt.RightButton
+                onClicked: VolumeWidget.toggleMute()
+                onScrolled: d => VolumeWidget.setVolume(VolumeWidget.volume + d * 0.01)
+            }
+
+            Meter {
+                visible: SystemMonitor.hasBattery
+                icon: SystemMonitor.isCharging ? "\u{f0084}" : SystemMonitor.batteryState === "critical" ? "\u{f0083}" : "\u{f0079}"
+                color: "#66b16a"
+                value: SystemMonitor.batteryLevel
+                critical: !SystemMonitor.isCharging && SystemMonitor.batteryState === "critical"
+                interactive: root.interactive
+            }
         }
 
         Status {

@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 
 ShaderEffect {
     id: root
@@ -7,6 +8,7 @@ ShaderEffect {
     property vector4d markRect: Qt.vector4d(0, 0, 0, 0)
     property real overlayMode: 0
     property real plain: 0
+    property vector4d cutout: Qt.vector4d(0, 0, 0, 0)
 
     readonly property vector2d itemSize: Qt.vector2d(width, height)
     readonly property real bandHeight: T3.band
@@ -24,7 +26,8 @@ ShaderEffect {
     property var logoTex: logo
 
     vertexShader: "chrome/chrome.vert.qsb"
-    fragmentShader: "chrome/chrome.frag.qsb"
+    fragmentShader: "chrome/chrome.frag.qsb" + (Quickshell.env("T3_DESKTOP_DEV") ? "?b=" + _boot : "")
+    readonly property double _boot: Date.now()
 
     Image {
         id: noise

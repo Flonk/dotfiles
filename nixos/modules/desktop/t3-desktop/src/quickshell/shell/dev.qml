@@ -16,17 +16,35 @@ FloatingWindow {
 
     readonly property var tabNames: ["desktop", "login", "lock", "greeter", "grub"]
     readonly property string tabName: tabNames[tab]
-    property int tab: Math.max(0, tabNames.indexOf(Quickshell.env("T3_DESKTOP_TAB") || "desktop"))
+    property alias tab: kept.tab
+    property bool keptReady: false
+
+    PersistentProperties {
+        id: kept
+        reloadableId: "t3-desktop-dev"
+        onLoaded: { win.keptReady = true; deskView.tryRestore(); }
+        property int tab: Math.max(0, win.tabNames.indexOf(Quickshell.env("T3_DESKTOP_TAB") || "desktop"))
+        property int resIndex: 0
+        property bool fit: true
+        property bool logOpen: true
+        property bool logAll: false
+        property bool mockWindows: false
+        property string dock: "left"
+        property real deskZoom: 0
+        property bool deskFit: true
+        property real deskX: 0
+        property real deskY: 0
+    }
 
     readonly property var resolutions: [[1920, 1200], [1920, 1080], [2560, 1440], [1280, 800]]
-    property int resIndex: 0
+    property alias resIndex: kept.resIndex
     readonly property int frameW: resolutions[resIndex][0]
     readonly property int frameH: resolutions[resIndex][1]
-    property bool fit: true
-    property bool logOpen: true
-    property bool logAll: false
-    property bool mockWindows: true
-    property string dock: "left"
+    property alias fit: kept.fit
+    property alias logOpen: kept.logOpen
+    property alias logAll: kept.logAll
+    property alias mockWindows: kept.mockWindows
+    property alias dock: kept.dock
     property string lastWheel: ""
     readonly property int sidebarWidth: 330
     readonly property var tabSources: ({ desktop: ["dev", "theme"], login: ["dev", "theme"], lock: ["dev", "theme", "shader"], greeter: ["dev", "theme", "greeter"], grub: ["dev", "theme", "grub"] })
@@ -160,6 +178,9 @@ FloatingWindow {
         }
         function reload(): void {
             win.reloadTab();
+        }
+        function mock(on: bool): void {
+            win.mockWindows = on;
         }
         function dock(mode: string): void {
             win.dock = mode;
@@ -677,7 +698,31 @@ FloatingWindow {
                 property real zoom: fitScale
                 property bool fitMode: true
                 property real pinchBase: 1
+                property bool restored: false
                 onFitScaleChanged: if (fitMode) zoom = fitScale
+                onZoomChanged: if (restored) kept.deskZoom = zoom
+                onFitModeChanged: if (restored) kept.deskFit = fitMode
+                onContentXChanged: if (restored) kept.deskX = contentX
+                onContentYChanged: if (restored) kept.deskY = contentY
+                onWidthChanged: tryRestore()
+                onHeightChanged: tryRestore()
+
+                function tryRestore() {
+                    if (!restored && win.keptReady && width > 0 && height > 0)
+                        Qt.callLater(restore);
+                }
+
+                function restore() {
+                    if (restored)
+                        return;
+                    if (!kept.deskFit && kept.deskZoom > 0) {
+                        fitMode = false;
+                        zoom = kept.deskZoom;
+                        contentX = kept.deskX;
+                        contentY = kept.deskY;
+                    }
+                    restored = true;
+                }
                 contentWidth: win.frameW * zoom
                 contentHeight: win.frameH * zoom
                 leftMargin: Math.max(0, (width - contentWidth) / 2)
@@ -727,6 +772,7 @@ FloatingWindow {
                         ChromeSurface {
                             anchors.fill: parent
                             screenSize: parent.screenSize
+                            cutout: deskHeader.cutout
                         }
 
                         Repeater {
@@ -748,10 +794,12 @@ FloatingWindow {
                         ChromeSurface {
                             anchors.fill: parent
                             screenSize: parent.screenSize
+                            cutout: deskHeader.cutout
                             overlayMode: 1
                         }
 
                         ChromeHeader {
+                            id: deskHeader
                             anchors { left: parent.left; right: parent.right; top: parent.top }
                             height: T3.band
                             screenSize: parent.screenSize

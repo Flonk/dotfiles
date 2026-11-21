@@ -18,6 +18,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 markRect;
     vec4 accent;
     float plain;
+    vec4 cutout;
 };
 
 layout(binding = 1) uniform sampler2D noiseTex;
@@ -182,6 +183,11 @@ vec3 groundAt(vec2 p) {
 
 void main() {
     vec2 p = origin + qt_TexCoord0 * itemSize;
+    vec2 cq = p - cutout.xy;
+    if (cutout.z > 0.0 && all(greaterThanEqual(cq, vec2(0.0))) && all(lessThan(cq, cutout.zw))) {
+        fragColor = vec4(cq.x < 1.0 || cq.x >= cutout.z - 1.0 ? chrome(p, true) : groundAt(p), 1.0) * qt_Opacity;
+        return;
+    }
     vec2 lo = vec2(border, bandHeight);
     vec2 hi = screenSize - vec2(border);
     vec2 extent = (hi - lo) * 0.5;
@@ -198,15 +204,21 @@ void main() {
         return;
     }
 
-    vec3 c = chrome(p, false);
-    vec4 dots = straight(texture(dotsTex, fract(p / 26.0)));
-    c = mix(c, overlay(c, dots.rgb), dots.a);
-    vec4 noise = straight(texture(noiseTex, fract(p / 128.0)));
-    c = mix(c, softLight(c, noise.rgb), noise.a);
+    bool underHole = cutout.z > 0.0 && cq.x >= 0.0 && cq.x < cutout.z && cq.y >= 0.0 && cq.y < cutout.w + 2.0;
+    vec3 c;
+    if (underHole) {
+        c = groundAt(p);
+    } else {
+        c = chrome(p, false);
+        vec4 dots = straight(texture(dotsTex, fract(p / 26.0)));
+        c = mix(c, overlay(c, dots.rgb), dots.a);
+        vec4 noise = straight(texture(noiseTex, fract(p / 128.0)));
+        c = mix(c, softLight(c, noise.rgb), noise.a);
 
-    float ring = clamp(1.5 - d, 0.0, 1.0) - inner;
-    if (ring > 0.0)
-        c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
+        float ring = clamp(1.5 - d, 0.0, 1.0) - inner;
+        if (ring > 0.0)
+            c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
+    }
     if (inner > 0.0 && overlayMode < 0.5) {
         c = mix(c, groundAt(p), inner);
     }

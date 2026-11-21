@@ -98,9 +98,11 @@ Item {
     ChromeSurface {
         anchors.fill: parent
         overlayMode: 1
+        cutout: lockHeader.cutout
     }
 
     ChromeHeader {
+        id: lockHeader
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
