@@ -104,6 +104,19 @@
           wireplumber.settings = { bluetooth.autoswitch-to-headset-profile = false }
           monitor.bluez.properties = { bluez5.roles = [ a2dp_sink a2dp_source ] }
         '')
+        (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/52-earbuds-priority.conf" ''
+          monitor.bluez.rules = [
+            {
+              matches = [{ node.name = "bluez_output.80_C3_BA_53_78_8B.1" }]
+              actions = {
+                update-props = {
+                  "priority.driver" = 2200
+                  "priority.session" = 2200
+                }
+              }
+            }
+          ]
+        '')
       ];
     };
   };
