@@ -1,9 +1,12 @@
 import QtQuick
 
 Rectangle {
+    id: square
+
     property string label
     property color ink
     property bool dark: true
+    readonly property var nudge: ({ R: 0.8 })
 
     width: 16
     height: 16
@@ -14,8 +17,9 @@ Rectangle {
 
     Text {
         anchors.centerIn: parent
-        text: parent.label
-        color: parent.dark ? T3.ground : T3.cream
+        anchors.horizontalCenterOffset: square.nudge[square.label] ?? 0
+        text: square.label
+        color: square.dark ? T3.ground : T3.cream
         font.family: Theme.fontFamily
         font.pixelSize: T3.labelSize
         font.weight: Font.Bold

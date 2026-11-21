@@ -43,6 +43,68 @@ let
         sleep 15
       done
     '';
+  failWatch = pkgs.writeShellScript "t3bus-failwatch" ''
+    export PATH=${
+      lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.gawk
+        pkgs.jq
+        pkgs.systemd
+        t3cron
+      ]
+    }
+    failed() {
+      systemctl list-units --state=failed --plain --no-legend --no-pager | awk '{print "system:" $1}'
+      systemctl --user list-units --state=failed --plain --no-legend --no-pager | awk '{print "user:" $1}'
+    }
+    declare -A seen
+    for k in $(failed); do seen[$k]=1; done
+    while true; do
+      sleep 10
+      unset now
+      declare -A now
+      for k in $(failed); do now[$k]=1; done
+      for k in "''${!now[@]}"; do
+        [ -n "''${seen[$k]:-}" ] && continue
+        scope=''${k%%:*}
+        unit=''${k#*:}
+        if [ "$scope" = user ]; then line=$(journalctl --user -u "$unit" -n 1 -o cat --no-pager 2>/dev/null); else line=$(journalctl -u "$unit" -n 1 -o cat --no-pager 2>/dev/null); fi
+        t3cron emit "systemd/''${unit%.*}/failed" error "$unit failed" --attention --source systemd \
+          --data "$(jq -nc --arg detail "$line" --arg scope "$scope" '{detail: $detail, scope: $scope}')"
+      done
+      for k in "''${!seen[@]}"; do
+        [ -n "''${now[$k]:-}" ] && continue
+        unit=''${k#*:}
+        t3cron emit "systemd/''${unit%.*}/recovered" info "$unit is no longer failed" --source systemd
+      done
+      unset seen
+      declare -A seen
+      for k in "''${!now[@]}"; do seen[$k]=1; done
+    done
+  '';
+  notifyBridge = pkgs.writeShellScript "t3bus-notify-bridge" ''
+    export PATH=${
+      lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.jq
+        pkgs.systemd
+        t3cron
+      ]
+    }
+    busctl --user monitor --json=short --match="type='method_call',interface='org.freedesktop.Notifications',member='Notify'" \
+      | jq --unbuffered -c 'select(.member == "Notify") | .payload.data | {app: (.[0] // ""), summary: (.[3] // ""), body: (.[4] // ""), urgency: (.[6].urgency.data // 1)}' \
+      | while read -r n; do
+          app=$(jq -r '.app | if . == "" then "unknown" else . end' <<<"$n")
+          slug=$(tr -c 'a-zA-Z0-9\n' '-' <<<"$app" | tr 'A-Z' 'a-z')
+          summary=$(jq -r .summary <<<"$n")
+          set -- --source "$app" --data "$(jq -c '{detail: (.body | split("\n")[0]), app: .app}' <<<"$n")"
+          if [ "$(jq -r .urgency <<<"$n")" = 2 ]; then
+            t3cron emit "notify/$slug" warn "$summary" --attention "$@"
+          else
+            t3cron emit "notify/$slug" info "$summary" "$@"
+          fi
+        done
+  '';
 in
 {
   config = lib.mkIf cfg.enable {
@@ -93,7 +155,31 @@ in
           };
           Install.WantedBy = [ "default.target" ];
         };
+        t3bus-failwatch = {
+          Unit.Description = "Emit failed systemd units onto the bus";
+          Service = {
+            ExecStart = "${failWatch}";
+            Restart = "always";
+            RestartSec = "10s";
+          };
+          Install.WantedBy = [ "default.target" ];
+        };
       }
+      (lib.mkIf cfg.ui {
+        t3bus-notify-bridge = {
+          Unit = {
+            Description = "Mirror desktop notifications onto the bus";
+            PartOf = [ "graphical-session.target" ];
+            After = [ "graphical-session.target" ];
+          };
+          Service = {
+            ExecStart = "${notifyBridge}";
+            Restart = "always";
+            RestartSec = "5s";
+          };
+          Install.WantedBy = [ "graphical-session.target" ];
+        };
+      })
     ];
 
     skynet.cli.scripts = [

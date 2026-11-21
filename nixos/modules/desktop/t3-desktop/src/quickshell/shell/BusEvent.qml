@@ -31,7 +31,14 @@ Item {
             { text: showDetail ? detail : "", dim: true, small: true }
         ].filter(r => r.text !== "")
 
-    implicitHeight: columns ? Math.max(message.implicitHeight, meta.implicitHeight) : lines.implicitHeight
+    implicitHeight: columns ? Math.max(Math.ceil(lineMetrics.height * 0.95 * 3), message.implicitHeight, meta.implicitHeight) : lines.implicitHeight
+
+    FontMetrics {
+        id: lineMetrics
+        font.family: Theme.fontFamily
+        font.pixelSize: T3.labelSize
+        font.weight: Font.Medium
+    }
 
     Rectangle {
         width: 3

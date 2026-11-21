@@ -368,11 +368,19 @@ in
         title = "Rebuild home-manager and NixOS config";
         script = pkgs.writeShellScript "rebuild.sh" ''
           set -euo pipefail
+          emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source skynet >/dev/null 2>&1 || true; }
+          start=$(date +%s)
+          stage=home-manager
+          emit rebuild/started info "rebuild started" --data "{\"detail\":\"${config.skynet.whoami.installation}\"}"
+          trap 'emit rebuild/failed error "rebuild failed in $stage after $(( $(date +%s) - start ))s" --attention' ERR
           echo "Rebuilding home-manager configuration..."
           home-manager switch --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.installation}
           echo ""
           echo "Rebuilding NixOS system configuration..."
+          stage=nixos
           sudo /run/current-system/sw/bin/nixos-rebuild switch --no-reexec --flake $HOME/repos/personal/dotfiles/nixos
+          gen=$(readlink /nix/var/nix/profiles/system | tr -dc '0-9' || true)
+          emit rebuild/done info "rebuild finished in $(( $(date +%s) - start ))s" --data "{\"detail\":\"system generation $gen\"}"
         '';
         usage = "Runs home-manager switch for ${config.skynet.whoami.installation}, then nixos-rebuild switch for ${config.skynet.whoami.host}.";
       }
