@@ -117,6 +117,22 @@ in
         usage = "Prints every message on the local mosquitto bus with its topic.";
       }
       {
+        command = [ "screenshot" ];
+        title = "Screenshot the active monitor and announce it on the bus";
+        script = pkgs.writeShellScript "screenshot.sh" ''
+          set -euo pipefail
+          dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+          mkdir -p "$dir"
+          file="$dir/$(date +%Y-%m-%d-%H%M%S)_skynet.png"
+          ${t3cron}/bin/t3cron emit screenshot/taken info "screenshot $(basename "$file")" --source skynet --data "$(${pkgs.jq}/bin/jq -nc --arg path "$file" '{path: $path}')"
+          sleep 0.5
+          ${pkgs.hyprshot}/bin/hyprshot -m output -m active -r png > "$file" || true
+          [ -s "$file" ] || { echo "screenshot failed" >&2; exit 1; }
+          echo "$file"
+        '';
+        usage = "Emits screenshot/taken on the bus, waits for the header bus monitor to show it, then saves a screenshot of the active monitor to ~/Pictures/Screenshots and prints the path.";
+      }
+      {
         command = [
           "bus"
           "emit"

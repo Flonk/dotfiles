@@ -17,9 +17,14 @@ Item {
     readonly property var hosts: {
         const seen = {};
         for (const name of Object.keys(states))
-            seen[name.slice(0, name.lastIndexOf("-"))] = true;
+            if (modelRank.includes(modelOf(name)))
+                seen[name.slice(0, name.lastIndexOf("-"))] = true;
         return Object.keys(seen).sort().reverse();
     }
+    function modelOf(name) {
+        return name.slice(name.lastIndexOf("-") + 1);
+    }
+
     readonly property var cells: {
         const out = [];
         for (const host of hosts)
@@ -43,7 +48,7 @@ Item {
     Process {
         id: feed
         running: true
-        command: ["mosquitto_sub", "-h", "127.0.0.1", "-v", "-t", "agent/+/state", "-t", "agent/+/subagents"]
+        command: ["mosquitto_sub", "-h", "127.0.0.1", "-F", "%t %p", "-t", "agent/+/state", "-t", "agent/+/subagents"]
         stdout: SplitParser {
             onRead: line => {
                 const cut = line.indexOf(" ");

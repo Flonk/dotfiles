@@ -51,7 +51,7 @@ Item {
     Process {
         id: feed
         running: true
-        command: ["mosquitto_sub", "-h", "127.0.0.1", "-v", "-R", "-t", "#"]
+        command: ["mosquitto_sub", "-h", "127.0.0.1", "-F", "%t %p", "-R", "-t", "#"]
         stdout: SplitParser {
             onRead: data => {
                 const cut = data.indexOf(" ");
