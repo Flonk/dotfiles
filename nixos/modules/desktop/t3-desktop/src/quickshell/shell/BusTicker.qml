@@ -31,15 +31,23 @@ Item {
         return null;
     }
 
+    function details(data) {
+        return data && typeof data.detail === "string" ? data.detail : "";
+    }
+
     function show(topic, payload) {
         if (ignore.some(f => matches(f, topic)))
             return;
         const ev = parse(payload);
+        const at = ev ? new Date(ev.timestamp) : new Date();
         if (current)
             current.leave();
         current = line.createObject(ticker, {
+            time: Qt.formatTime(isNaN(at) ? new Date() : at, "HH:mm:ss"),
+            source: ev ? ev.source : "",
             topic: topic,
             text: ev ? ev.description : payload,
+            detail: ev ? details(ev.data) : "",
             level: ev ? ev.level : "",
             attention: ev ? ev.attention : false,
             conforming: ev !== null
@@ -72,8 +80,11 @@ Item {
 
         Item {
             id: entry
+            property string time
+            property string source
             property string topic
             property string text
+            property string detail
             property string level
             property bool attention
             property bool conforming
@@ -87,7 +98,7 @@ Item {
             }
 
             width: ticker.width
-            height: topicText.implicitHeight
+            height: view.implicitHeight
             y: ticker.height
 
             Component.onCompleted: enter.start()
@@ -117,27 +128,17 @@ Item {
                 onTriggered: entry.leave()
             }
 
-            Text {
-                id: topicText
-                text: (entry.attention ? "! " : entry.conforming ? "" : "? ") + entry.topic
-                color: entry.attention ? Theme.error400 : ticker.levelColor[entry.level] ?? T3.accent2
-                opacity: entry.conforming && !(entry.level in ticker.levelColor) ? 0.6 : 1
-                font.family: Theme.fontFamily
-                font.pixelSize: T3.labelSize
-                font.weight: Font.Bold
-                font.letterSpacing: T3.labelTracking
-                font.capitalization: Font.AllUppercase
-            }
-
-            Text {
-                anchors.left: topicText.right
-                anchors.leftMargin: 10
-                anchors.right: parent.right
+            BusEvent {
+                id: view
+                width: parent.width
+                time: entry.time
+                source: entry.source
+                topic: entry.topic
                 text: entry.text
-                elide: Text.ElideRight
-                color: T3.ink
-                opacity: entry.conforming ? 1 : 0.5
-                font: topicText.font
+                detail: entry.detail
+                level: entry.level
+                attention: entry.attention
+                conforming: entry.conforming
             }
         }
     }

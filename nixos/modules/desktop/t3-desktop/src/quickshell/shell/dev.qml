@@ -777,6 +777,11 @@ FloatingWindow {
                             cutout3: deskHeader.cutout3
                         }
 
+                        BusEventGallery {
+                            x: parent.content.x + 24
+                            y: parent.content.y + 24
+                        }
+
                         Repeater {
                             model: win.mockWindows ? 2 : 0
                             Rectangle {

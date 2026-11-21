@@ -124,13 +124,12 @@ in
           dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
           mkdir -p "$dir"
           file="$dir/$(date +%Y-%m-%d-%H%M%S)_skynet.png"
-          ${t3cron}/bin/t3cron emit screenshot/taken info "screenshot $(basename "$file")" --source skynet --data "$(${pkgs.jq}/bin/jq -nc --arg path "$file" '{path: $path}')"
-          sleep 0.5
+          ${t3cron}/bin/t3cron emit screenshot/taken info "somebody has taken a screenshot" --source skynet --data "$(${pkgs.jq}/bin/jq -nc --arg path "$file" '{path: $path, detail: ($path | split("/") | last)}')"
           ${pkgs.hyprshot}/bin/hyprshot -m output -m active -r png > "$file" || true
           [ -s "$file" ] || { echo "screenshot failed" >&2; exit 1; }
           echo "$file"
         '';
-        usage = "Emits screenshot/taken on the bus, waits for the header bus monitor to show it, then saves a screenshot of the active monitor to ~/Pictures/Screenshots and prints the path.";
+        usage = "Emits screenshot/taken on the bus (fire and forget) and saves a screenshot of the active monitor to ~/Pictures/Screenshots and prints the path.";
       }
       {
         command = [
