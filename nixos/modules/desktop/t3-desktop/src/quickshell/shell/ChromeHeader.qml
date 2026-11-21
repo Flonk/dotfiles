@@ -136,33 +136,102 @@ Item {
         Row {
             spacing: 10
 
+            TextMetrics {
+                id: rateMetrics
+                font: ipProbe.font
+                text: "0000K"
+            }
+
+            TextMetrics {
+                id: ipMetrics
+                font: ipProbe.font
+                text: "000.000.000.000"
+            }
+
+            Label {
+                id: ipProbe
+                visible: false
+                width: 0
+            }
+
             Status {
-                text: (WifiWidget.isConnected ? "" : "") + "  ↑" + WifiWidget.formatRate(WifiWidget.uploadRate) + " ↓" + WifiWidget.formatRate(WifiWidget.downloadRate)
+                text: (WifiWidget.isConnected ? "" : "")
                 clickable: true
                 onClicked: WifiWidget.openCommander()
             }
 
-            Copy {
-                value: WifiWidget.localIp
-                title: "🏠 Local IP copied!"
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: rateMetrics.advanceWidth + 13
+
+                Repeater {
+                    model: [[true, WifiWidget.uploadRate], [false, WifiWidget.downloadRate]]
+
+                    Row {
+                        required property var modelData
+                        spacing: 3
+                        anchors.right: parent.right
+                        LayoutMirroring.enabled: true
+
+                        Canvas {
+                            readonly property bool up: parent.modelData[0]
+                            width: 10
+                            height: 12
+                            opacity: 0.8
+                            onPaint: {
+                                const ctx = getContext("2d");
+                                ctx.reset();
+                                const tip = up ? 4 : 8, base = up ? 8 : 4;
+                                ctx.strokeStyle = T3.ink;
+                                ctx.lineWidth = 1.5;
+                                ctx.lineCap = "square";
+                                ctx.beginPath();
+                                ctx.moveTo(1, base);
+                                ctx.lineTo(5, tip);
+                                ctx.lineTo(9, base);
+                                ctx.stroke();
+                            }
+                        }
+
+                        Status {
+                            height: 12
+                            text: WifiWidget.formatRate(parent.modelData[1])
+                            clickable: true
+                            onClicked: WifiWidget.openCommander()
+                        }
+                    }
+                }
             }
 
-            Copy {
-                value: WifiWidget.gatewayIp
-                title: "🚪 Gateway IP copied!"
-            }
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: ipMetrics.advanceWidth
 
-            Copy {
-                value: WifiWidget.publicIp
-                title: "🌐 Public IP copied!"
+                Copy {
+                    height: 12
+                    width: parent.width
+                    elide: Text.ElideRight
+                    value: WifiWidget.localIp
+                    title: "🏠 Local IP copied!"
+                }
+
+                Copy {
+                    height: 12
+                    width: parent.width
+                    elide: Text.ElideRight
+                    value: WifiWidget.gatewayIp
+                    title: "🚪 Gateway IP copied!"
+                }
+
+                Copy {
+                    height: 12
+                    width: parent.width
+                    elide: Text.ElideRight
+                    value: WifiWidget.publicIp
+                    title: "🌐 Public IP copied!"
+                }
             }
         }
-    }
-
-    Row {
-        anchors.right: parent.right
-        anchors.rightMargin: root.width - root.center + root.markGap
-        spacing: 16
 
         SysmonHole {
             id: sysmon
