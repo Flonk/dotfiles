@@ -9,6 +9,7 @@ ShaderEffect {
     property real overlayMode: 0
     property real plain: 0
     property vector4d cutout: Qt.vector4d(0, 0, 0, 0)
+    property vector4d cutout2: Qt.vector4d(0, 0, 0, 0)
 
     readonly property vector2d itemSize: Qt.vector2d(width, height)
     readonly property real bandHeight: T3.band

@@ -99,6 +99,7 @@ Item {
         anchors.fill: parent
         overlayMode: 1
         cutout: lockHeader.cutout
+        cutout2: lockHeader.cutout2
     }
 
     ChromeHeader {

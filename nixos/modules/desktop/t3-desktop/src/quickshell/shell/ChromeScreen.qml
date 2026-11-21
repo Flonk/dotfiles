@@ -70,6 +70,7 @@ Scope {
             anchors.fill: parent
             screenSize: root.screenSize
             cutout: header.cutout
+            cutout2: header.cutout2
         }
     }
 

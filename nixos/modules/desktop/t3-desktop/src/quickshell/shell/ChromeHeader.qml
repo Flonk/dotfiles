@@ -10,6 +10,7 @@ Item {
 
     readonly property real center: width / 2
     readonly property vector4d cutout: sysmon.cutout
+    readonly property vector4d cutout2: agents.cutout
     readonly property real markGap: T3.markSize / 2 + 24
     property real markScale: markMouse.containsMouse ? 1.15 : 1
     Behavior on markScale {
@@ -74,6 +75,7 @@ Item {
         anchors.fill: parent
         screenSize: root.screenSize
         cutout: root.cutout
+        cutout2: root.cutout2
         markRect: Qt.vector4d(root.center - root.markSize / 2, (root.height - root.markSize) / 2, root.markSize, root.markSize)
     }
 
@@ -107,7 +109,7 @@ Item {
 
                     Rectangle {
                         anchors.centerIn: parent
-                        width: parent.width
+                    width: parent.width
                         height: 20
                         radius: 10
                         color: ws.focused ? T3.ink : "transparent"
@@ -156,6 +158,7 @@ Item {
 
             Status {
                 text: (WifiWidget.isConnected ? "" : "")
+                font.pixelSize: Math.round(T3.labelSize * 1.2)
                 clickable: true
                 onClicked: WifiWidget.openCommander()
             }
@@ -243,40 +246,68 @@ Item {
                 { label: "DSK", value: SystemMonitor.diskUsage }
             ]
         }
-    }
 
-    Item {
-        visible: MediaControlWidget.currentPlayer !== null
-        x: root.center + root.markGap
-        width: 270
-        height: root.height
-        opacity: mediaMouse.containsMouse ? 1 : 0.8
+        Item {
+            visible: MediaControlWidget.currentPlayer !== null
+            width: 270
+            height: root.height
+            opacity: mediaMouse.containsMouse ? 1 : 0.8
 
-        Label {
-            id: mediaIcon
-            text: MediaControlWidget.isPlaying ? "" : ""
-        }
+            Label {
+                id: mediaIcon
+                text: "\u{f001}"
+                font.pixelSize: Math.round(T3.labelSize * 1.2)
+            }
 
-        MarqueeText {
-            anchors { left: mediaIcon.right; leftMargin: 8; right: parent.right; verticalCenter: parent.verticalCenter }
-            text: [MediaControlWidget.currentArtist, MediaControlWidget.currentTitle].filter(s => s).join(" - ")
-            font.family: Theme.fontFamily
-            font.pixelSize: T3.labelSize
-            font.weight: Font.Bold
-            font.letterSpacing: T3.labelTracking
-            font.capitalization: Font.AllUppercase
-            textColor: T3.ink
-            scrolling: MediaControlWidget.isPlaying
-        }
+            Column {
+                anchors { left: mediaIcon.right; leftMargin: 8; right: parent.right; verticalCenter: parent.verticalCenter; verticalCenterOffset: -1 }
 
-        MouseArea {
-            id: mediaMouse
-            anchors.fill: parent
-            hoverEnabled: true
-            enabled: root.interactive
-            cursorShape: Qt.PointingHandCursor
-            onClicked: MediaControlWidget.togglePlaying()
-            onWheel: w => w.angleDelta.y > 0 ? MediaControlWidget.previous() : MediaControlWidget.next()
+                MarqueeText {
+                    text: MediaControlWidget.currentArtist
+                    width: parent.width
+                    height: 12
+                    font.family: Theme.fontFamily
+                    font.pixelSize: T3.labelSize
+                    font.weight: Font.Bold
+                    font.letterSpacing: T3.labelTracking
+                    font.capitalization: Font.AllUppercase
+                    textColor: T3.ink
+                    scrolling: MediaControlWidget.isPlaying
+                }
+
+                MarqueeText {
+                    text: MediaControlWidget.currentTitle
+                    width: parent.width
+                    height: 12
+                    font.family: Theme.fontFamily
+                    font.pixelSize: T3.labelSize
+                    font.weight: Font.Bold
+                    font.letterSpacing: T3.labelTracking
+                    font.capitalization: Font.AllUppercase
+                    textColor: T3.ink
+                    scrolling: MediaControlWidget.isPlaying
+                }
+            }
+
+            MouseArea {
+                id: mediaMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                enabled: root.interactive
+                cursorShape: Qt.PointingHandCursor
+                onClicked: MediaControlWidget.togglePlaying()
+                onWheel: w => {
+                    mediaSkip.direction = w.angleDelta.y;
+                    mediaSkip.restart();
+                }
+            }
+
+            Timer {
+                id: mediaSkip
+                property int direction: 0
+                interval: 150
+                onTriggered: direction > 0 ? MediaControlWidget.previous() : MediaControlWidget.next()
+            }
         }
     }
 
@@ -285,7 +316,10 @@ Item {
         anchors.rightMargin: 16
         spacing: 16
 
-        AgentBars {}
+        AgentHole {
+            id: agents
+            frame: root
+        }
 
         Status {
             text: ({ busy: "HEADPHONES ..", ok: "HEADPHONES ✓", fail: "HEADPHONES ✗" })[HeadphonesWidget.status] ?? "HEADPHONES"

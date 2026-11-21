@@ -19,6 +19,7 @@ layout(std140, binding = 0) uniform buf {
     vec4 accent;
     float plain;
     vec4 cutout;
+    vec4 cutout2;
 };
 
 layout(binding = 1) uniform sampler2D noiseTex;
@@ -177,6 +178,17 @@ float roundUnion(float a, float b, float r) {
     return max(r, min(a, b)) - length(u);
 }
 
+float carve(float d, vec2 p, vec4 c) {
+    if (c.z <= 0.0)
+        return d;
+    float reach = radius + 8.0;
+    vec2 hc = vec2(c.x + c.z * 0.5, (c.y + c.w) * 0.5);
+    vec2 hh = vec2(c.z * 0.5, (c.y + c.w) * 0.5 + reach);
+    vec2 hq = abs(p - hc) - hh;
+    d = roundUnion(d, length(max(hq, 0.0)) + min(max(hq.x, hq.y), 0.0), radius);
+    return roundUnion(d, p.y, radius);
+}
+
 vec3 groundAt(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
     vec3 c = mix(ground.rgb + accent.rgb * SPOT_GROUND * spot(p) * (1.0 - plain), grain.rgb, grain.a);
@@ -193,14 +205,8 @@ void main() {
     vec2 extent = (hi - lo) * 0.5;
     vec2 q = abs(p - (lo + extent)) - (extent - radius);
     float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
-    if (cutout.z > 0.0) {
-        float reach = radius + 8.0;
-        vec2 hc = vec2(cutout.x + cutout.z * 0.5, (cutout.y + cutout.w) * 0.5);
-        vec2 hh = vec2(cutout.z * 0.5, (cutout.y + cutout.w) * 0.5 + reach);
-        vec2 hq = abs(p - hc) - hh;
-        d = roundUnion(d, length(max(hq, 0.0)) + min(max(hq.x, hq.y), 0.0), radius);
-        d = roundUnion(d, p.y, radius);
-    }
+    d = carve(d, p, cutout);
+    d = carve(d, p, cutout2);
     float inner = clamp(0.5 - d, 0.0, 1.0);
 
     if (inner >= 1.0) {
