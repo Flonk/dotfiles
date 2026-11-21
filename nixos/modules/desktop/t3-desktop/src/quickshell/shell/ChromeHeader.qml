@@ -9,7 +9,7 @@ Item {
     property bool interactive: true
 
     readonly property real center: width / 2
-    readonly property vector4d cutout: coreMeter.cutout
+    readonly property vector4d cutout: sysmon.cutout
     readonly property real markGap: T3.markSize / 2 + 24
     property real markScale: markMouse.containsMouse ? 1.15 : 1
     Behavior on markScale {
@@ -164,27 +164,15 @@ Item {
         anchors.rightMargin: root.width - root.center + root.markGap
         spacing: 16
 
-        Status {
-            text: "DSK " + Math.round(SystemMonitor.diskUsage * 100)
-        }
-
-        Status {
-            text: "MEM " + Math.round(SystemMonitor.memoryUsage * 100)
-        }
-
-        Row {
-            spacing: 8
-
-            Status {
-                id: cpuLabel
-                text: "CPU " + Math.round(SystemMonitor.cpuUsage * 100)
-            }
-
-            CoreMeter {
-                id: coreMeter
-                frame: root
-                values: SystemMonitor.coreUsages
-            }
+        SysmonHole {
+            id: sysmon
+            frame: root
+            values: SystemMonitor.coreUsages
+            label: "CPU " + Math.round(SystemMonitor.cpuUsage * 100)
+            rings: [
+                { label: "MEM", value: SystemMonitor.memoryUsage },
+                { label: "DSK", value: SystemMonitor.diskUsage }
+            ]
         }
     }
 

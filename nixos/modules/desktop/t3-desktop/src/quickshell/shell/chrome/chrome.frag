@@ -172,6 +172,11 @@ vec3 sunkenAmp(vec2 p, vec3 c) {
     return mix(c, floor_, inside);
 }
 
+float roundUnion(float a, float b, float r) {
+    vec2 u = max(vec2(r - a, r - b), vec2(0.0));
+    return max(r, min(a, b)) - length(u);
+}
+
 vec3 groundAt(vec2 p) {
     vec4 grain = straight(texture(grainTex, fract(p / 128.0)));
     vec3 c = mix(ground.rgb + accent.rgb * SPOT_GROUND * spot(p) * (1.0 - plain), grain.rgb, grain.a);
@@ -183,16 +188,19 @@ vec3 groundAt(vec2 p) {
 
 void main() {
     vec2 p = origin + qt_TexCoord0 * itemSize;
-    vec2 cq = p - cutout.xy;
-    if (cutout.z > 0.0 && all(greaterThanEqual(cq, vec2(0.0))) && all(lessThan(cq, cutout.zw))) {
-        fragColor = vec4(cq.x < 1.0 || cq.x >= cutout.z - 1.0 ? chrome(p, true) : groundAt(p), 1.0) * qt_Opacity;
-        return;
-    }
     vec2 lo = vec2(border, bandHeight);
     vec2 hi = screenSize - vec2(border);
     vec2 extent = (hi - lo) * 0.5;
     vec2 q = abs(p - (lo + extent)) - (extent - radius);
     float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+    if (cutout.z > 0.0) {
+        float reach = radius + 8.0;
+        vec2 hc = vec2(cutout.x + cutout.z * 0.5, (cutout.y + cutout.w) * 0.5);
+        vec2 hh = vec2(cutout.z * 0.5, (cutout.y + cutout.w) * 0.5 + reach);
+        vec2 hq = abs(p - hc) - hh;
+        d = roundUnion(d, length(max(hq, 0.0)) + min(max(hq.x, hq.y), 0.0), radius);
+        d = roundUnion(d, p.y, radius);
+    }
     float inner = clamp(0.5 - d, 0.0, 1.0);
 
     if (inner >= 1.0) {
@@ -204,21 +212,15 @@ void main() {
         return;
     }
 
-    bool underHole = cutout.z > 0.0 && cq.x >= 0.0 && cq.x < cutout.z && cq.y >= 0.0 && cq.y < cutout.w + 2.0;
-    vec3 c;
-    if (underHole) {
-        c = groundAt(p);
-    } else {
-        c = chrome(p, false);
-        vec4 dots = straight(texture(dotsTex, fract(p / 26.0)));
-        c = mix(c, overlay(c, dots.rgb), dots.a);
-        vec4 noise = straight(texture(noiseTex, fract(p / 128.0)));
-        c = mix(c, softLight(c, noise.rgb), noise.a);
+    vec3 c = chrome(p, false);
+    vec4 dots = straight(texture(dotsTex, fract(p / 26.0)));
+    c = mix(c, overlay(c, dots.rgb), dots.a);
+    vec4 noise = straight(texture(noiseTex, fract(p / 128.0)));
+    c = mix(c, softLight(c, noise.rgb), noise.a);
 
-        float ring = clamp(1.5 - d, 0.0, 1.0) - inner;
-        if (ring > 0.0)
-            c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
-    }
+    float ring = clamp(1.5 - d, 0.0, 1.0) - inner;
+    if (ring > 0.0)
+        c = mix(c, chrome(p, true), ring / max(1.0 - inner, 1e-4));
     if (inner > 0.0 && overlayMode < 0.5) {
         c = mix(c, groundAt(p), inner);
     }

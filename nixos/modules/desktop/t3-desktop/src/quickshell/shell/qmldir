@@ -25,4 +25,4 @@ ChromeHeader 1.0 ChromeHeader.qml
 ChromeSurface 1.0 ChromeSurface.qml
 Meter 1.0 Meter.qml
 AgentBars 1.0 AgentBars.qml
-CoreMeter 1.0 CoreMeter.qml
+SysmonHole 1.0 SysmonHole.qml
