@@ -57,6 +57,7 @@ let
     echo "$main" > "$dir/main"
     state=$main
     [ "$main" != offline ] && [ "$subs" -gt 0 ] && state=heavy
+    ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -r -q 1 -t "agent/$T3_AGENT/subagents" -m "$subs" 2>/dev/null
     exec ${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1 -r -q 1 -t "agent/$T3_AGENT/state" -m "$state" 2>/dev/null
   '';
   subagentGuard = pkgs.writeShellScript "t3-subagent-guard" ''
