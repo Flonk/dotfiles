@@ -66,6 +66,40 @@ Scope {
         model: Quickshell.screens
 
         PanelWindow {
+            id: frame
+            required property var modelData
+            readonly property var s: root.session
+            readonly property int edge: 3
+
+            screen: modelData
+            visible: s !== null && s.output === modelData.name && (s.mode === "region" || s.mode === "window")
+            anchors { top: true; left: true }
+            margins {
+                top: s ? Math.round(s.y - modelData.y - edge) : 0
+                left: s ? Math.round(s.x - modelData.x - edge) : 0
+            }
+            exclusionMode: ExclusionMode.Ignore
+            implicitWidth: s ? s.w + 2 * edge : 1
+            implicitHeight: s ? s.h + 2 * edge : 1
+            color: "transparent"
+            mask: Region {}
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.namespace: "t3-desktop-recorder-frame"
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border.width: frame.edge
+                border.color: Theme.error400
+            }
+        }
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        PanelWindow {
             id: win
             required property var modelData
             readonly property var s: root.session
