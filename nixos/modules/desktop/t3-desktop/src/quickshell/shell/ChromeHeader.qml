@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 
 Item {
     id: root
@@ -315,6 +316,48 @@ Item {
                 property int direction: 0
                 interval: 150
                 onTriggered: direction > 0 ? MediaControlWidget.previous() : MediaControlWidget.next()
+            }
+        }
+    }
+
+    Process {
+        id: recordFeed
+        running: true
+        command: ["mosquitto_sub", "-h", "127.0.0.1", "-t", "screen/record/state"]
+        stdout: SplitParser {
+            onRead: data => root.recording = data.trim().startsWith("{")
+        }
+        onExited: recordRetry.start()
+    }
+
+    Timer {
+        id: recordRetry
+        interval: 5000
+        onTriggered: recordFeed.running = true
+    }
+
+    property bool recording: false
+
+    Row {
+        id: tools
+        x: root.center - root.markGap - width
+        spacing: 12
+
+        Repeater {
+            model: [
+                { icon: "\u{f019e}", cmd: ["t3os", "screen", "shot", "region", "-c", "-n"] },
+                { icon: root.recording ? "\u{f04db}" : "\u{f044a}", cmd: root.recording ? ["t3os", "screen", "record", "stop"] : ["t3os", "screen", "record", "region", "-n"], hot: root.recording },
+                { icon: "\u{f113a}", cmd: ["t3os", "screen", "ocr", "-n"] },
+                { icon: "\u{f020a}", cmd: ["t3os", "screen", "color-pick", "-c", "-n"] }
+            ]
+
+            Status {
+                required property var modelData
+                text: modelData.icon
+                color: modelData.hot ? Theme.error400 : T3.ink
+                font.pixelSize: Math.round(T3.labelSize * 1.4)
+                clickable: true
+                onClicked: Quickshell.execDetached(modelData.cmd)
             }
         }
     }
