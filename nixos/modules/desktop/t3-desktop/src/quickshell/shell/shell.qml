@@ -9,6 +9,8 @@ ShellRoot {
 
     Chrome {}
 
+    RecordBar {}
+
     LockContext {
         id: lockContext
 

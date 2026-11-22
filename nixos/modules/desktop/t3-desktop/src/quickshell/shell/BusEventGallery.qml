@@ -7,7 +7,7 @@ Column {
     property color band: "#4ea8c9"
 
     readonly property var kinds: [
-        { name: "info", time: "12:47:29", source: "t3os", topic: "screenshot/taken", text: "somebody has taken a screenshot", detail: "2026-11-21-124346_t3os.png", level: "info" },
+        { name: "info", time: "12:47:29", source: "t3os", topic: "screen/shot", text: "screenshot of the active monitor", detail: "2026-11-21-124346_monitor.png", level: "info" },
         { name: "attention", time: "12:48:02", source: "claude/flo-chonkler-opus", topic: "agent/flo-chonkler-opus/event", text: "flo-chonkler-opus needs your input", detail: "", level: "warn", attention: true },
         { name: "warn", time: "12:49:13", source: "claude/claude-hetzner-haiku", topic: "agent/claude-hetzner-haiku/event", text: "claude-hetzner-haiku went offline", detail: "", level: "warn" },
         { name: "error", time: "12:50:40", source: "t3cron", topic: "cron/error", text: "bad schedule 'nonsense': invalid pattern", detail: "nightly-backup", level: "error" },

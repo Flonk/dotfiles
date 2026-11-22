@@ -11,7 +11,7 @@
     ];
 
     wayland.windowManager.hyprland.extraConfig = ''
-      hl.bind(mainMod .. " + C", hl.dsp.exec_cmd([[bash -lc 'color="$(hyprpicker -a)"; [ -n "$color" ] && notify-send "🎨 Color copied" "$color"']]))
+      hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("t3os screen color-pick -c -n"))
     '';
   };
 }

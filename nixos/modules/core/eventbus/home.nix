@@ -14,8 +14,8 @@ let
     buildInputs = [ pkgs.sqlite ];
   };
   cfg = config.t3os.module.core.eventbus;
-  screenshot = pkgs.writeShellApplication {
-    name = "t3os-screenshot";
+  screen = pkgs.writeShellApplication {
+    name = "t3os-screen";
     runtimeInputs = [
       t3cron
       pkgs.hyprshot
@@ -23,9 +23,15 @@ let
       pkgs.wl-clipboard
       pkgs.libnotify
       pkgs.tesseract
+      pkgs.hyprpicker
+      pkgs.wf-recorder
+      pkgs.slurp
+      pkgs.mosquitto
+      pkgs.util-linux
       pkgs.coreutils
     ];
-    text = builtins.readFile ./screenshot.sh;
+    runtimeEnv.T3OS_ACCENT = config.t3os.module.desktop.stylix.accent;
+    text = builtins.readFile ./screen.sh;
   };
   registry = lib.importJSON ../../../.registry.json;
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
@@ -218,47 +224,116 @@ in
     ]
     ++ map
       (s: {
-        command = [
-          "screen"
-          "shot"
-        ]
-        ++ lib.optional (s.mode != "monitor") s.mode;
-        inherit (s) title;
-        usage = s.usage + " Add -c to copy it to the clipboard and -n for a desktop notification.";
-        script = pkgs.writeShellScript "screenshot-${s.mode}.sh" ''
-          exec ${screenshot}/bin/t3os-screenshot ${s.mode} "$@"
+        inherit (s) command title;
+        usage = s.usage;
+        script = pkgs.writeShellScript "screen-${lib.concatStringsSep "-" (lib.tail s.command)}.sh" ''
+          exec ${screen}/bin/t3os-screen ${lib.escapeShellArgs (lib.tail s.command)} "$@"
         '';
       })
       [
         {
-          mode = "monitor";
-          title = "Screenshot a monitor and announce it on the bus";
-          usage = "Saves the active monitor, or the one named as an argument (e.g. `t3os screen shot DP-2`), to ~/Pictures/Screenshots, prints the path and emits screenshot/taken with the path and mode. Bound to SUPER + SHIFT + PRINT.";
+          command = [
+            "screen"
+            "shot"
+          ];
+          title = "Screenshot the active monitor and announce it on the bus";
+          usage = "Saves the active monitor, or the one named as an argument (e.g. `t3os screen shot DP-2`), to ~/Pictures/Screenshots, prints the path and emits screen/shot with the path and mode. Takes `monitor`, `window` or `region` as a mode, -c to also copy it and -n for a desktop notification.";
         }
         {
-          mode = "window";
-          title = "Screenshot the active window";
-          usage = "Saves the focused window, prints the path and emits screenshot/taken. Bound to SUPER + PRINT.";
+          command = [
+            "screen"
+            "shot"
+            "monitor"
+          ];
+          title = "Screenshot a monitor";
+          usage = "Click a monitor to save it, or pass `--active` for the focused one or a name like `DP-2`. Prints the path and emits screen/shot. -c copies it, -n notifies. SUPER + SHIFT + PRINT runs `monitor --active -c -n`.";
         }
         {
-          mode = "region";
+          command = [
+            "screen"
+            "shot"
+            "window"
+          ];
+          title = "Screenshot a window";
+          usage = "Click a window to save it, or pass `--active` for the focused one. Prints the path and emits screen/shot. -c copies it, -n notifies. SUPER + PRINT runs `window --active -c -n`.";
+        }
+        {
+          command = [
+            "screen"
+            "shot"
+            "region"
+          ];
           title = "Drag a region to screenshot";
-          usage = "Lets you drag a rectangle with the mouse, then saves it, prints the path and emits screenshot/taken. Cancelling exits without a file or event. Bound to PRINT.";
+          usage = "Drag a rectangle with the mouse to save it. Prints the path and emits screen/shot; cancelling exits without a file or event. -c copies it, -n notifies. PRINT runs `region -c -n`.";
         }
         {
-          mode = "pick-window";
-          title = "Click a window to screenshot";
-          usage = "Lets you click any visible window, then saves it, prints the path and emits screenshot/taken.";
+          command = [
+            "screen"
+            "record"
+          ];
+          title = "Record the active monitor";
+          usage = "Starts recording the active monitor, or the one named as an argument, to ~/Videos/Recordings and returns at once with the file path. Takes `monitor`, `window` or `region` as a mode like `screen shot`, `--audio` for the default microphone, -c to copy the file when it stops and -n for notifications. Emits screen/record/started, then screen/record/stopped with the path and length; a timer and stop button sit under the recorded area while it runs.";
         }
         {
-          mode = "pick-monitor";
-          title = "Click a monitor to screenshot";
-          usage = "Lets you click a monitor, then saves it, prints the path and emits screenshot/taken. Not bound to a key.";
+          command = [
+            "screen"
+            "record"
+            "monitor"
+          ];
+          title = "Record a monitor";
+          usage = "Click a monitor to record it, or pass `--active` or a name like `DP-2`. Stop with the bar's stop button or `t3os screen record stop`.";
         }
         {
-          mode = "ocr";
+          command = [
+            "screen"
+            "record"
+            "window"
+          ];
+          title = "Record a window's area";
+          usage = "Click a window, or pass `--active` for the focused one; its current rectangle on screen is recorded, so moving the window doesn't follow it. Stop with the bar or `t3os screen record stop`.";
+        }
+        {
+          command = [
+            "screen"
+            "record"
+            "region"
+          ];
+          title = "Drag a region to record";
+          usage = "A white veil covers the screen; drag a rectangle to record it. A timer and stop button appear below the rectangle. Stop with the bar or `t3os screen record stop`.";
+        }
+        {
+          command = [
+            "screen"
+            "record"
+            "stop"
+          ];
+          title = "Stop the running recording";
+          usage = "Stops wf-recorder, waits for the file to be finished and prints its path.";
+        }
+        {
+          command = [
+            "screen"
+            "record"
+            "status"
+          ];
+          title = "Show whether a recording is running";
+          usage = "Prints `idle`, or what is being recorded, since when and where it is going.";
+        }
+        {
+          command = [
+            "screen"
+            "ocr"
+          ];
           title = "Drag a region and copy its text";
-          usage = "Lets you drag a rectangle, reads the German/English text in it with tesseract, copies it to the clipboard, prints it and emits screenshot/ocr with the text. No image is saved. Bound to SUPER + O.";
+          usage = "Drag a rectangle; its German/English text is read with tesseract, copied to the clipboard, printed and emitted as screen/ocr. No image is saved. -n notifies. Bound to SUPER + O.";
+        }
+        {
+          command = [
+            "screen"
+            "color-pick"
+          ];
+          title = "Pick a colour from the screen";
+          usage = "Opens hyprpicker's zoom lens; click a pixel to print its hex colour and emit screen/color. -c copies it, -n notifies. SUPER + C runs it with -c -n.";
         }
       ]
     ++ [
