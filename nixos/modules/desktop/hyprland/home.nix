@@ -7,10 +7,51 @@
 let
   cfg = config.t3os.module.desktop.hyprland;
   mon = config.t3os.host.primaryMonitor;
+  display = pkgs.writeShellApplication {
+    name = "t3os-display";
+    runtimeInputs = with pkgs; [ config.wayland.windowManager.hyprland.finalPackage jq socat libnotify util-linux coreutils gnugrep ];
+    runtimeEnv.T3OS_BIN = "${config.home.profileDirectory}/bin/t3os";
+    text = builtins.readFile ./display.sh;
+  };
+  displayCommands = [
+    { name = "status"; title = "Show connected displays and how they are arranged"; usage = "Lists every connected display (also switched-off ones) with mode, position and scale, the current mode (extend, mirror, internal, external) and whether a saved layout exists for this set of displays."; }
+    { name = "extend"; title = "Extend the desktop onto external displays"; usage = "Turns every display on and places the external ones next to the laptop panel. Optional side: right (default), left, above, below. Example: t3os settings display extend left"; }
+    { name = "mirror"; title = "Mirror one display onto all others"; usage = "Shows the same picture on every display. Mirrors the laptop panel by default, or pass a display name: t3os settings display mirror DP-2"; }
+    { name = "internal"; title = "Use only the laptop panel"; usage = "Switches every external display off and keeps the laptop panel on."; }
+    { name = "external"; title = "Use only the external displays"; usage = "Switches the laptop panel off and keeps every external display on, side by side."; }
+    { name = "only"; title = "Use only one named display"; usage = "Keeps one display on and switches the rest off: t3os settings display only DP-2 (also accepts internal or external)."; }
+    { name = "cycle"; title = "Cycle extend, mirror, external only, internal only"; usage = "Steps to the next arrangement, like Win+P. Same as SUPER + P."; }
+    { name = "save"; title = "Remember the current arrangement for these displays"; usage = "Saves modes, positions, scale, rotation, mirroring and which displays are off, keyed by the set of connected displays (by name and model, not port). It is restored automatically whenever exactly these displays are plugged in again and after Hyprland reloads. Stored in ~/.config/t3os/displays.json."; }
+    { name = "restore"; title = "Apply the saved arrangement for these displays"; usage = "Re-applies the layout saved with t3os settings display save for the displays currently connected."; }
+    { name = "forget"; title = "Forget the saved arrangement for these displays"; usage = "Deletes the saved layout for the current set of displays, so plugging them in falls back to Hyprland's defaults."; }
+    { name = "profiles"; title = "List every saved display arrangement"; usage = "Shows each saved set of displays with when it was saved and how each display was set up."; }
+  ];
 in
 {
   config = lib.mkIf (cfg.enable && config.programs.t3-desktop.hyprland.enable) {
+    home.packages = [ display ];
+
+    systemd.user.services.t3os-display = {
+      Unit = {
+        Description = "t3os display hotplug: restore saved monitor layouts";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = "${display}/bin/t3os-display _watch";
+        Restart = "always";
+        RestartSec = "3s";
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
+
     t3os.cli.scripts = map (d: {
+      command = [ "settings" "display" d.name ];
+      inherit (d) title usage;
+      script = pkgs.writeShellScript "display-${d.name}.sh" ''
+        exec ${display}/bin/t3os-display ${d.name} "$@"
+      '';
+    }) displayCommands ++ map (d: {
       command = [
         "settings"
         "display"
@@ -66,6 +107,7 @@ in
     };
 
     wayland.windowManager.hyprland.extraConfig = ''
+      hl.bind("SUPER + P", hl.dsp.exec_cmd("t3os settings display cycle -n"))
       hl.monitor({ output = "eDP-1", mode = "${toString mon.width}x${toString mon.height}@${toString mon.hz}", position = "0x0", scale = 1.00 })
       hl.monitor({ output = "DP-2", mode = "5120x1440@120", position = "${toString mon.width}x0", scale = 1.00 })
     '';
