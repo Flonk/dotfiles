@@ -1,6 +1,4 @@
-// --- generic helpers ---------------------------------------------------------
-float gZoom = 1.;   // global zoom factor, set in mainImage — part of the
-                    // screen->tile-local distance scale
+float gZoom = 1.;
 
 #define Rot(a) mat2(cos(a),-sin(a),sin(a),cos(a))
 #define S(d) (1.-smoothstep(-1.3,1.3, (d)*iResolution.y ))
@@ -11,9 +9,7 @@ float gZoom = 1.;   // global zoom factor, set in mainImage — part of the
 
 const vec3 LUMA = vec3(0.299, 0.587, 0.114);
 
-vec2 gSeed = vec2(0.);   // session hash offset (sk_seed), set in mainImage —
-                         // reshuffles every random() draw, so the quadtree
-                         // pattern differs each session
+vec2 gSeed = vec2(0.);
 
 float random (vec2 p) {
     return fract(sin(dot(p.xy + gSeed, vec2(12.9898,78.233)))* 43758.5453123);
@@ -35,8 +31,6 @@ float cubicInOut(float t) {
     : 0.5 * pow(2.0 * t - 2.0, 3.0) + 1.0;
 }
 
-// alternates 0/1 every `period`, easing over TRANS_DUR at each flip;
-// block 0 (and anything before it) is 0
 float flipflop(float t, float period){
     float k = floor(t/period);
     float s = mod(k, 2.);

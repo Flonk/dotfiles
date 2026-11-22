@@ -1,10 +1,3 @@
-// --- peel: the old scene peeled off like a sticker ---------------------------
-// A transition, T_PEEL long, in three layers: the old scene on top, the amp
-// with the tagline under it, the new scene at the bottom. From PE_AT.x the
-// top layer is peeled from the bottom right corner, folding back flat along
-// a line sweeping to the far corner over PE_DUR, its pale back showing and
-// a soft shadow along the fold; from PE_AT.y the card is peeled the same
-// way from the bottom left.
 const vec2  PE_AT  = vec2(0.2, 4.6);
 const float PE_DUR = 1.7;
 const vec3  PE_BACK = vec3(0.80, 0.85, 0.86);

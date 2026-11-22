@@ -36,7 +36,6 @@
     programs.zsh = {
       enable = true;
 
-      # relative to ~
       dotDir = "${config.home.homeDirectory}/.config/zsh";
       enableCompletion = true;
       history.size = 10000;
@@ -103,9 +102,6 @@
 
       oh-my-zsh = {
         enable = true;
-        # Standard OMZ plugins pre-installed to $ZSH/plugins/
-        # Custom OMZ plugins are added to $ZSH_CUSTOM/plugins/
-        # Enabling too many plugins will slowdown shell startup
         plugins = [
           "aliases"
           "git"
@@ -116,7 +112,6 @@
           "z"
         ];
         extraConfig = ''
-          # Display red dots whilst waiting for completion.
           COMPLETION_WAITING_DOTS="true"
         '';
       };
@@ -126,17 +121,13 @@
       };
 
       shellAliases = {
-        # Overrides those provided by OMZ libs, plugins, and themes.
-        # For a full list of active aliases, run `alias`.
 
-        ##### Navigation
         bat = "command bat -P -p --color always --theme 'Visual Studio Dark+'";
         t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
         l = "eza -l --group --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --color=always";
         c = "cd_fzf";
         o = "open_fzf";
 
-        ##### Nix
         ne = "nix-instantiate --eval";
         nb = "nix-build";
         ns = "nix-shell";
@@ -145,9 +136,8 @@
         p = "nix-shell -p";
         run = "_nix-shell-run";
         appimage = "nix run nixpkgs#appimage-run --";
-        nh = "nix-prefetch-url --unpack"; # url is ref like https://github.com/normen/whatscli/archive/refs/tags/v1.0.11.tar.gz
+        nh = "nix-prefetch-url --unpack";
 
-        ##### Git
         gprune = "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -d \"{}\"";
         "gprune!" =
           "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs -I {} git branch -D \"{}\"";
@@ -156,38 +146,22 @@
         squash = "squash_wip";
         gc = "git commit --all --message";
 
-        ##### Docker
         dka = "docker ps -q | xargs docker stop | xargs docker rm";
         "dka!" = "docker ps -aq | xargs docker stop | xargs docker rm";
         "dkav!" = "docker volume ls | xargs docker volume rm";
         "dk!" = "dka! && dkav!";
 
-        ##### Claude
         cc = "cc_fn";
         ticket = "ticket_fn";
 
-        ##### Kubernetes
         k = "kubectl";
 
-        ##### Assorted
         future = "toilet -f future";
         x = "sudo env \"PATH=$PATH\"";
         n = "npmrun_fzf";
 
-        ##### Musescore -- the nix package does not work
         musescore = "nix run nixpkgs#appimage-run -- ~/Downloads/MuseScore-Studio-4.5.2.251141401-x86_64.AppImage &";
       };
     };
   };
 }
-/*
-  old stuff.. evalulate if still needed
-
-  # ansible
-  export ANSIBLE_NOCOWS=1
-
-  # azure
-  az-select-subscription() {
-    az account list --output table | tail -n +3 | fzf --layout reverse --height 10 --header "Select Azure subscription" | awk '{print $(NF-3)}' | xargs -I {} az account set --subscription {}
-  }
-*/

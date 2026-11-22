@@ -1,13 +1,3 @@
-// --- fluid: a stirred incompressible fluid, amps tinted by its shear stress ----
-// bufferFluid is a W x H grid over the screen (row 0 at the top, cell units)
-// plus one extra row holding the time of the last step, run over its own
-// previous output in iChannel9: xy velocity (cells/s), z pressure, w the
-// strain rate, low-passed and carried with the flow. Each step advects
-// (semi-Lagrangian), relaxes the pressure one Jacobi sweep (warm-started from
-// the last frame) and projects, adds vorticity confinement, and drags the
-// fluid along with FLUID_STIRS invisible spoons and the odd jet kick.
-// The main pass reads it from iChannel12: amps sit on a lattice, pushed off
-// their spot and twisted by the local flow, and turn blue with the stress.
 const int   FLUID_STIRS     = 3;
 const float FLUID_STIR_R    = 14.;
 const float FLUID_STIR_GRIP = 10.;

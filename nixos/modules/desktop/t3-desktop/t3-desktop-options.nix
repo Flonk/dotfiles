@@ -14,8 +14,6 @@ in
 {
   options.programs.t3-desktop = {
 
-    # --- home-manager ---
-
     hyprland.enable = mkEnableOption "t3-desktop hyprland session";
 
     quickshell = {
@@ -148,8 +146,6 @@ in
         ];
       };
     };
-
-    # --- nixos ---
 
     theme = mkOption {
       type = types.nullOr (

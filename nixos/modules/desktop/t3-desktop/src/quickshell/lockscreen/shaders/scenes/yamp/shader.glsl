@@ -1,18 +1,13 @@
-// --- key indicator -----------------------------------------------------------
 vec3 keyIndicator(vec3 col, vec2 q){
-    // the circle leads the amp by IND_LAG both ways: max of the live and the
-    // delayed envelope rises first and falls last, min does the opposite
     float e0 = sk_attention_envelope();
     float e1 = sk_attention_envelope_at(iTime - IND_LAG);
     float cpres = max(e0, e1);
     float pres = min(e0, e1);
     if(cpres < 0.001) return col;
 
-    // black circle growing from the center to past the corners
     float maxR = length(iResolution.xy) / iResolution.y * 0.51;
     col = mix(col, vec3(0.), S(length(q) - maxR * cubicInOut(cpres)));
 
-    // the amp zooms in behind the circle; each key bumps size and brightness
     float pulse = sk_keypulse_envelope();
     float fail = sk_fail_envelope();
     float sc = IND_AMP * cubicInOut(pres) * (1. + pulse * IND_BUMP);
@@ -44,8 +39,6 @@ vec3 renderMode(int m, vec2 p, vec2 q, vec2 tp){
     return stars(q, tp);
 }
 
-// how long into transition m it still shows the old scene, and from when
-// it shows the new one
 vec2 transWindow(int m){
     if(m == MODE_FLAP) return vec2(FLAP_PREV_END, FLAP_OUT_AT);
     if(m == MODE_SHATTER) return vec2(SH_DIM, SH_PERIOD - SH_TEXT_OUT);
@@ -79,18 +72,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 q = p;
     sequenceModes(q);
 
-    // global zoom-out (offset half a period), centered on a target orbiting
-    // off-screen so each zoom lands somewhere new
     float zo = flipflop(iTime + ZOOM_PERIOD*0.5, ZOOM_PERIOD);
     float ang = 6.2831853 * iTime / ZOOM_DRIFT;
     vec2 zc = ZOOM_ECC * vec2(cos(ang), sin(ang));
     gZoom = 1. + ZOOM_OUT*zo;
     p = zc + (p - zc) * gZoom;
 
-    // noise coords, counter-scrolling slowly against the grid
     vec2 tp = vec2(p.x, p.y + iTime*SCROLL*BG_SPEED) * NOISE_SCALE;
 
-    // the scene, or the transition's two neighbours as far as it shows them
     bool tr = gTrans >= 0;
     float lt = tr ? gModeT[gTrans] : 0.;
     int ms[2] = int[2](tr ? gPrev : gScene, gNext);

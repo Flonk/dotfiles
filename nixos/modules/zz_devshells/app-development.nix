@@ -40,15 +40,12 @@ let
     DRIVER="''${INSTALL_BASE}/itms_installer_expect.exp"
     mkdir -p "''${INSTALL_BASE}"
 
-    # Already installed? Bail quietly.
     if [ -e "''${INSTALL_DIR}/bin/iTMSTransporter" ] || [ -e "''${INSTALL_DIR}/lib/itmstransporter.jar" ] || [ -e "''${INSTALL_DIR}/lib/osgibootstrapper.jar" ]; then
       exit 0
     fi
 
-    # Reuse existing installer unless forced
     if [ ! -s "''${INSTALLER}" ] || [ "''${TRANSPORTER_FORCE:-0}" = "1" ]; then
       : "''${TRANSPORTER_URL:=https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/resources/download/public/Transporter__Linux/bin}"
-      # Quiet download; still fail if it breaks
       ${pkgs.curl}/bin/curl -sS -fL --retry 3 --connect-timeout 15 \
         -o "''${INSTALLER}.tmp" "''${TRANSPORTER_URL}"
       mv -f "''${INSTALLER}.tmp" "''${INSTALLER}" || true
@@ -56,7 +53,6 @@ let
     fi
     [ -s "''${INSTALLER}" ] || { echo "Transporter installer missing/empty at ''${INSTALLER}" >&2; exit 1; }
 
-    # Expect driver (no output)
     cat > "''${DRIVER}" <<'EOF'
       log_user 0
       set timeout -1
@@ -70,7 +66,6 @@ let
       }
     EOF
 
-    # Run installer inside sandbox, completely silent; preserve exit code
     ${pkgs.bubblewrap}/bin/bwrap \
       --ro-bind /nix /nix \
       --dev-bind /dev /dev \
@@ -96,7 +91,6 @@ let
       ${pkgs.bash}/bin/bash -c 'export HOME=/tmp; exec '"${pkgs.expect}/bin/expect"' "$1"' _ "''${DRIVER}" \
       >/dev/null 2>&1
 
-    # Verify result; print nothing on success, error on failure
     if [ ! -x "''${INSTALL_DIR}/bin/iTMSTransporter" ] && [ ! -e "''${INSTALL_DIR}/lib/osgibootstrapper.jar" ] && [ ! -e "''${INSTALL_DIR}/lib/itmstransporter.jar" ]; then
       echo "Transporter install failed (no itms/ under ''${INSTALL_BASE})" >&2
       exit 1
@@ -116,7 +110,6 @@ let
     export JAVA_HOME=${pkgs.openjdk17}
     export PATH="''${JAVA_HOME}/bin:''${PATH}"
 
-    # Force no logging unless user provided -v
     args=("$@")
     if ! printf '%s\n' "''${args[@]}" | grep -q -- '^-v\>'; then
       args=(-v off "''${args[@]}")

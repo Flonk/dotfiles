@@ -24,7 +24,6 @@ let
     }:$PATH
 
     label="''${1:-snapshot}"
-    # sanitize label for filename
     safe_label=$(printf '%s' "$label" | tr -c 'A-Za-z0-9._-' '_')
     out="/tmp/skynet-mem-''${safe_label}.txt"
     ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -99,20 +98,14 @@ let
       echo ""
 
       echo "## key user processes (sorted by command then pid; RSS_kB)"
-      # Pick processes that matter: chromium/electron/teams/meet, pipewire/wireplumber,
-      # portal helpers, claude/node, the gopro stack, plus a few biggest unknowns.
-      # Output format: %-32s %8s %8d %s   (command, pid, rss_kb, short-cmdline)
       ps -eo pid=,user=,rss=,comm=,cmd= --no-headers |
         awk '
           {
             pid=$1; user=$2; rss=$3; comm=$4;
             cmd=""; for(i=5;i<=NF;i++) cmd=cmd" "$i;
-            # truncate cmdline so chrome flags do not blow up the diff
             if (length(cmd) > 140) cmd = substr(cmd,1,140) "...";
-            # keep only processes likely involved
             if (comm ~ /^(chromium|chrome|google-chrome|teams-jail|electron|QtWebEngineProc|pipewire|pipewire-pulse|wireplumber|xdg-desktop|xdg-dbus-proxy|portal|ffmpeg|gopro-webcam|v4l2-relayd|gst-launch|node|claude|hyprland|Xwayland|firefox)/ ||
                 rss > 200000) {
-              # 7-digit RSS gives stable column width up to ~10 GB
               printf "%-28s pid=%-8s rss=%9d kB cmd=%s\n", comm, pid, rss, cmd;
             }
           }
@@ -146,7 +139,6 @@ let
 
       echo "## ffmpeg log tail (gopro, last 2 KB)"
       if [ -r /tmp/gopro-webcam-ffmpeg.log ]; then
-        # cap by bytes — ffmpeg can write very long single lines
         tail -c 2048 /tmp/gopro-webcam-ffmpeg.log | sed 's/^/  /'
       else
         echo "  (no log)"
@@ -154,15 +146,11 @@ let
     } > "$out"
 
     echo "wrote $out"
-    # quick eyeball of memory state for the user
     awk '/^Mem/ { used=$3; total=$2; gsub(/[^0-9.]/,"",used); gsub(/[^0-9.]/,"",total); if (total>0) printf "memory: %.0f%% used\n", used/total*100 }' < <(free)
 
-    # list other snapshots so the user remembers what they have
     ls -1t /tmp/skynet-mem-*.txt 2>/dev/null | head -5 | sed 's/^/  /'
   '';
 
-  # Reader for the skynet-memwatch daemon's TSV. Shows a curated subset of
-  # columns (the full file has 41) as the last N aligned rows.
   logScript = pkgs.writeShellScript "skynet-mem-log.sh" ''
     set -u
     PATH=${

@@ -25,9 +25,6 @@ export function getHosts(repoRoot: string): string[] {
     .sort();
 }
 
-/**
- * Parse an installation nix file to extract the host and user it references.
- */
 export function parseInstallation(
   repoRoot: string,
   installationName: string,
@@ -44,10 +41,6 @@ export function parseInstallation(
   return { host: hostMatch[1], user: userMatch[1] };
 }
 
-/**
- * Clone the _template host directory, replacing __HOST__ and __USER__ placeholders.
- * Also adds the host to nixosConfigurations in flake.nix.
- */
 export function createHostFromTemplate(
   repoRoot: string,
   host: string,
@@ -78,16 +71,12 @@ export function createHostFromTemplate(
   addHostToFlake(repoRoot, host);
 }
 
-/**
- * Add a nixosConfigurations entry for a new host in flake.nix.
- */
 function addHostToFlake(repoRoot: string, host: string): void {
   const flakePath = join(repoRoot, "flake.nix");
   const lines = readFileSync(flakePath, "utf-8").split("\n");
 
   if (lines.some((l) => l.includes(`${host} = mkSystem`))) return;
 
-  // Find nixosConfigurations block and its closing };
   let inBlock = false;
   let insertIdx = -1;
   for (let i = 0; i < lines.length; i++) {
@@ -108,9 +97,6 @@ function addHostToFlake(repoRoot: string, host: string): void {
   writeFileSync(flakePath, lines.join("\n"));
 }
 
-/**
- * Clone the _template user directory, replacing __USER__ placeholders.
- */
 export function createUserFromTemplate(repoRoot: string, user: string): void {
   const templateDir = join(repoRoot, "config", "users", "_template");
   const userDir = join(repoRoot, "config", "users", user);
@@ -124,9 +110,6 @@ export function createUserFromTemplate(repoRoot: string, user: string): void {
   }
 }
 
-/**
- * Generate the installation nix file. Name is always user-host.
- */
 export function createInstallation(repoRoot: string, user: string, host: string): string {
   const name = `${user}-${host}`;
   const content = `{ ... }:

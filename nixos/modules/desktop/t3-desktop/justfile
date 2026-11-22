@@ -4,29 +4,21 @@ default:
 fmt:
     nix fmt
 
-# Unified dev window: bar, lockscreen, greeter and GRUB in tabs with shared theme controls
 dev tab="desktop":
     nix-shell --run "bash dev/run.sh {{tab}}"
 
-# Run the quickshell bar from the repo
 qs-run:
     quickshell --path ./src/quickshell/shell
 
-# Hot-reload the quickshell bar on QML changes
 qs-dev:
     watchexec -r -w ./src/quickshell/shell -e qml,js,ts,css,json,yaml,yml -- quickshell --path ./src/quickshell/shell
 
-# Run greeter in test mode
 greet-dev:
     cd src/greeter && go run ./cmd/t3greet --test --ascii ../../ascii.txt
 
-# Preview GRUB theme in QEMU
 grub-dev resolution="1920x1080":
     cd src/grub && bash preview.sh {{resolution}}
 
-# Live-iterate the lockscreen shader: recompile on save; the preview window
-# hot-swaps the shader in place (LockShaderPass watches the .qsb when SHADER_DEV=1).
-# Keys 1-9 jump to that playlist mode, 0 returns to the normal sequence
 shader-dev:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -36,16 +28,13 @@ shader-dev:
     trap 'kill $! 2>/dev/null' EXIT
     SHADER_DEV=1 quickshell --path ./src/quickshell/shell/preview.qml
 
-# Preview the lockscreen shader in a floating window (no lock, no bar)
 shader-preview:
     just shader-build
     quickshell --path ./src/quickshell/shell/preview.qml
 
-# Build the lockscreen shader (.glsl → .frag.qsb)
 shader-build:
     ./src/quickshell/lockscreen/convert-shaders.sh
 
-# Bake the penrose label SDF atlas (shaders/assets/penrose_labels.png)
 gen-sky:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -58,8 +47,6 @@ gen-sky:
     cd ./src/quickshell/lockscreen/shaders/scenes/yamp
     nix-shell -p "python3.withPackages(p: [p.pillow p.numpy])" --run "python3 gen_sky.py $data $font $emoji"
 
-# Bake the traffic scene's road maps from OpenStreetMap (shaders/assets/maps.png);
-# name words (comma separated) to rebuild just the maps whose names hold them
 gen-maps *only:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -82,23 +69,18 @@ gen-labels:
     cd ./src/quickshell/lockscreen/shaders/scenes/yamp
     nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy])" --run "python3 gen_labels.py $rsfs $lmmath"
 
-# Bake the conveyor's settled start state into bufferConveyor.glsl
 gen-conveyor:
     cd ./src/quickshell/lockscreen/shaders/scenes/yamp && nix-shell -p "python3.withPackages(p: [p.moderngl p.numpy])" --run "python3 gen_conveyor.py"
 
-# Bake the scope beam path (shaders/assets/scope_path.png) from yamp_sdf.png
 gen-scope:
     cd ./src/quickshell/lockscreen/shaders/scenes/yamp && nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scikit-image])" --run "python3 gen_scope.py"
 
-# Clean compiled shaders
 shader-clean:
     rm -rf ./src/quickshell/shell/shaders/
 
-# Bake the chrome gradient shared by the quickshell frame and hy3 tabs
 bake-chrome accent="#1d9eb6":
     nix-shell -p "python3.withPackages(p: [p.numpy p.pillow])" --run "python3 -I dev/bake-chrome.py '{{accent}}' src/quickshell/shell/chrome/gradient.png src/quickshell/shell/chrome/palette.json"
 
-# Serve the desktop chrome + wallpaper in the browser; edit dev/web/wallpaper.frag and it hot-reloads
 web port="8642" accent=`jq -r '.wm800 // "#1d9eb6"' ${XDG_CONFIG_HOME:-$HOME/.config}/quickshell-theme.json 2>/dev/null || echo "#1d9eb6"`:
     just bake-chrome '{{accent}}'
     @echo "http://127.0.0.1:{{port}}/dev/web/   (?screen=1920x1200 for a fixed size)"

@@ -35,7 +35,6 @@ in
     terminal = false;
     type = "Application";
     mimeType = [
-      # Images
       "image/jpeg"
       "image/png"
       "image/gif"
@@ -46,7 +45,6 @@ in
       "image/bmp"
       "image/x-icon"
 
-      # Audio / Video
       "audio/mpeg"
       "audio/mp3"
       "audio/ogg"
@@ -60,7 +58,6 @@ in
       "audio/x-wav"
       "audio/flac"
 
-      # Docs
       "application/pdf"
     ];
     noDisplay = true;

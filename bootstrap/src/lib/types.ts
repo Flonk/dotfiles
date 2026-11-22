@@ -6,9 +6,9 @@ export interface StepInfo {
 }
 
 export interface Installation {
-  name: string; // e.g. "flo-chonkler"
-  user: string; // e.g. "flo"
-  host: string; // e.g. "chonkler"
+  name: string;
+  user: string;
+  host: string;
   isNew: boolean;
 }
 

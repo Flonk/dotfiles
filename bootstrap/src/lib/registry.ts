@@ -29,10 +29,8 @@ export async function updateRegistry(
 
   const hostname = await sshRun(target, "hostname");
 
-  // Extract user and host from target (user@host -> user, host)
   const user = target.includes("@") ? target.split("@")[0] : "";
   const host = target.includes("@") ? target.split("@")[1] : target;
-  // Resolve IP — could be an IP already or a hostname
   const ip = await sshRun(target, `dig +short ${host} | head -1`).catch(
     () => host,
   );

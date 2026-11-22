@@ -1,10 +1,3 @@
-// --- fish: a school of small amps and a shark hunting it ---------------------
-// FI_N - 1 small amps school as boids (bufferFish) and scatter from the
-// predator, agent 0: a shark emoji (FI_BIG across, from sky.png, facing the
-// way it swims and pitching with it) that cruises toward the school and
-// lunges at the nearest fish it sees within FI_HUNT. Fish within FI_FEAR of
-// it flee at a burst of speed, through deep water lit from the surface
-// (fiWater).
 const int   FI_N     = 160;
 const float FI_SIZE  = 0.013;
 const float FI_BIG   = 0.1;
@@ -69,8 +62,6 @@ void fiStep(sampler2D ch, int i, float dt, bool fresh, float asp, out vec4 r0, o
     r0 = vec4(p + v * dt, v);
 }
 
-// deep water: brighter towards the surface, shafts of light slanting down
-// from it (FI_RAY_TILT) and swaying, and motes drifting in the light
 vec3 fiWater(vec2 q, vec2 tp){
     float depth = 0.5 - q.y;
     vec3 col = mix(GRAD_BOT * 0.32, GRAD_BOT * 0.025, smoothstep(0., 1., depth)) * (0.85 + 0.3 * tcFbm(q * 3. + iTime * 0.02));

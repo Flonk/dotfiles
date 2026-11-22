@@ -12,9 +12,7 @@ let
       command="''${1:-search}"
       link="vicinae://launch/@flo/vicinae-bitwarden/$command"
 
-      # Only prefill from the active tab if qutebrowser is the focused window
       if hyprctl activewindow -j | grep -qE '"class"[[:space:]]*:[[:space:]]*"org\.qutebrowser\.qutebrowser"'; then
-        # Yank current URL from qutebrowser and extract hostname for prefill
         old_clip=$(wl-paste 2>/dev/null || true)
         qutebrowser ':yank'
         url=$(wl-paste 2>/dev/null || true)

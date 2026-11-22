@@ -1,14 +1,10 @@
-# lol / rlol — pretty git log, sourced from zshrc.sh
-
 export LOL_FULL_NAME=${LOL_FULL_NAME:-0}
 
-# own path, so fzf's resize binding can re-source us in a child shell
 _LOL_FILE=${${(%):-%x}:A}
 
 _lol_scan() {
   local dir="$1" want_tips="$2" nm="${1##*/}"
 
-  # branch tips replace the hash, but only when logging a single repo
   [[ -n $want_tips ]] && git -C "$dir" show-ref 2>/dev/null | awk -v r="$nm" '
     $2 ~ /^refs\/(heads|remotes\/origin)\/(main|master|develop)$/ {
       n = split($2, p, "/")
@@ -19,13 +15,10 @@ _lol_scan() {
   echo
 }
 
-# lol — pretty git log. inside a repo: every commit, author column, no repo
-# column. outside one: every repo below <dir>, repo column, only my commits.
 lol() {
   local root me mail ticket all branch label header top data rc render
   local after before span
   local repo_mode=0 filter=1 gitdir
-  # read back by _lol_render, which fzf re-runs on resize
   local -x _LOL_TICKET _LOL_COLS _LOL_SHOW_REPO=1 _LOL_SHOW_AUTHOR=0
 
   usage() {
@@ -150,12 +143,10 @@ EOF
       if (NF < 6) next
       date_raw=$1; repo=$2; hash=$3; author=$4; email=$5
 
-      # yyyy-MM-dd window, both ends inclusive
       day = substr(date_raw, 1, 10)
       if (after != "" && day < after) next
       if (before != "" && day > before) next
 
-      # subject may contain "|" — rejoin fields 6..NF
       subj=$6
       for (i=7; i<=NF; i++) subj = subj "|" $i
 
@@ -169,15 +160,12 @@ EOF
       }
       if (filter && !is_me) next
 
-      # trim seconds + timezone: "2024-01-13 14:30:45 +0100" -> "2024-01-13 14:30"
       sub(/:[0-9][0-9] [+-][0-9]+$/, "", date_raw)
 
       print "C\t" date_raw "\t" repo "\t" hash "\t" author "\t" is_me "\t" subj
     }
   ' | sort -r > "$data"
 
-  # fzf owns the list: it renders it at start and again on every resize, so the
-  # breakpoints follow the window instead of freezing at launch width
   render="zsh -c 'source ${(q)_LOL_FILE}; _lol_render ${(q)data}'"
   {
     fzf --ansi --reverse --header "$header" </dev/null \
@@ -190,8 +178,6 @@ EOF
   return $rc
 }
 
-# render the collected data at the current width; fzf sets FZF_COLUMNS on
-# resize, _LOL_COLS carries the launch width for the first pass
 _lol_render() {
   local cols=$FZF_COLUMNS
   [[ $cols == <20-> ]] || cols=$_LOL_COLS
@@ -240,7 +226,6 @@ _lol_render() {
       return sprintf("\033[38;2;%d;%d;%dm", \
         int(gam(r) * 255 + 0.5), int(gam(g) * 255 + 0.5), int(gam(bb) * 255 + 0.5))
     }
-    # ticket keys, only when followed by a space, a colon or the end of the line
     function hl(s, restore,   out, nxt) {
       out = ""
       while (match(s, /[A-Z0-9]+-[0-9]+/)) {
@@ -253,7 +238,6 @@ _lol_render() {
       }
       return out s
     }
-    # conventional-commit prefix; leaves the rest of the subject in label_rest
     function labelfmt(s, restore,   m, type, scope, lc, color) {
       label_rest = s
       if (!match(s, /^[A-Za-z]+(\([^)]*\))?:/)) return ""
@@ -273,12 +257,6 @@ _lol_render() {
       return color m "\033[0m" restore
     }
     function trunc(s, w) { return length(s) > w ? substr(s, 1, w - 1) "…" : s }
-    # breakpoints: pick the first row the terminal is wide enough for.
-    # every size-dependent number lives in this table — add a field here
-    # (and read it out below) to make something else shrink with the window.
-    #
-    #   min cols | date width | repo cap | author cap
-    # date width doubles as the format: 16 full, 10 date only, 5 month-day
     function datefmt(s, w) {
       if (w >= 16) return substr(s, 1, 16)
       if (w >= 10) return substr(s, 1, 10)
@@ -317,7 +295,6 @@ _lol_render() {
     {
       n++
       date[n]=$2; repo[n]=$3; hash[n]=$4; mine[n]=$6; subj[n]=$7
-      # subject may contain a tab — rejoin fields 7..NF
       for (i = 8; i <= NF; i++) subj[n] = subj[n] "\t" $i
       auth[n] = show_author ? namefmt($5, full_name) : ""
       if (length($3) > rw) rw = length($3)
@@ -327,14 +304,11 @@ _lol_render() {
 
     END {
       breakpoint(cols)
-      # columns size to their content, then get clamped by the breakpoint
       if (aw > aw_max) aw = aw_max
       if (aw > bp_auth) aw = bp_auth
       if (rw > bp_repo) rw = bp_repo
       datew = bp_date
-      # chrome: hash + date + 3 spaces + border + fzf pointer gutter
       room = cols - hw - datew - 7 - (show_repo ? rw + 1 : 0) - (show_author ? aw + 1 : 0)
-      # still cramped (long hashes, tiny window): claw back from the repo column
       if (room < 24 && show_repo) {
         grab = 24 - room
         if (grab > rw - 6) grab = rw - 6
@@ -346,7 +320,6 @@ _lol_render() {
         is_me = (mine[i] == 1)
         bold = (tk != "" && index(subj[i], tk)) ? "\033[1m" : ""
 
-        # a commit sitting on main/master/develop shows the branch instead of the hash
         hash_out = hash[i]
         hash_color = hash_base
         ntips = split(tipmap[repo[i]], tp, ";")
@@ -367,7 +340,6 @@ _lol_render() {
         line = line sprintf("%s%s%s\033[0m%s ", bold, date_color, datefmt(date[i], datew), bold)
         if (show_author)
           line = line sprintf("%s%s%" aw "s\033[0m%s ", bold, (is_me ? me_color : white), trunc(auth[i], aw), bold)
-        # full subject: fzf trims it to the live width too
         msg = bold white
         pre = labelfmt(subj[i], msg)
         line = line border " " msg pre hl(label_rest, msg) "\033[0m"
@@ -376,5 +348,4 @@ _lol_render() {
     }' "$1"
 }
 
-# rlol — same thing; lol already picks the recursive layout when you are not in a repo
 rlol() { lol "$@" }

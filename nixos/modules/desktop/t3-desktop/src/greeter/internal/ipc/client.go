@@ -9,7 +9,6 @@ import (
 	"os"
 )
 
-// Message types for requests and responses
 type RequestType string
 type ResponseType string
 
@@ -24,7 +23,6 @@ const (
 	AuthMessageResponse ResponseType = "auth_message"
 )
 
-// Request structures
 type CreateSession struct {
 	Type     RequestType `json:"type"`
 	Username string      `json:"username"`
@@ -45,7 +43,6 @@ type CancelSession struct {
 	Type RequestType `json:"type"`
 }
 
-// Response structures
 type Success struct {
 	Type ResponseType `json:"type"`
 }
@@ -62,13 +59,10 @@ type AuthMessage struct {
 	AuthMessage     string       `json:"auth_message"`
 }
 
-// Client for communicating with greetd
 type Client struct {
 	conn net.Conn
 }
 
-// NewClient creates a new IPC client connected to greetd
-// Use GREETD_SOCK environment variable
 func NewClient() (*Client, error) {
 	socketPath := os.Getenv("GREETD_SOCK")
 	if socketPath == "" {
@@ -83,12 +77,10 @@ func NewClient() (*Client, error) {
 	return &Client{conn: conn}, nil
 }
 
-// Close closes the connection
 func (c *Client) Close() error {
 	return c.conn.Close()
 }
 
-// SendRequest sends a request to greetd
 func (c *Client) SendRequest(req interface{}) error {
 	data, err := json.Marshal(req)
 	if err != nil {
@@ -112,7 +104,6 @@ func (c *Client) SendRequest(req interface{}) error {
 	return nil
 }
 
-// ReceiveResponse receives a response from greetd
 func (c *Client) ReceiveResponse() (interface{}, error) {
 	lengthBytes := make([]byte, 4)
 	_, err := io.ReadFull(c.conn, lengthBytes)
@@ -127,7 +118,6 @@ func (c *Client) ReceiveResponse() (interface{}, error) {
 		return nil, fmt.Errorf("failed to read data: %v", err)
 	}
 
-	// Determine response type from JSON
 	var raw map[string]interface{}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %v", err)
@@ -162,7 +152,6 @@ func (c *Client) ReceiveResponse() (interface{}, error) {
 	}
 }
 
-// CreateSession creates a new session for the given username
 func (c *Client) CreateSession(username string) error {
 	req := CreateSession{
 		Type:     CreateSessionRequest,
@@ -171,7 +160,6 @@ func (c *Client) CreateSession(username string) error {
 	return c.SendRequest(req)
 }
 
-// PostAuthMessageResponse sends a response to an auth message
 func (c *Client) PostAuthMessageResponse(response *string) error {
 	req := PostAuthMessageResponse{
 		Type:     PostAuthMessageResponseRequest,
@@ -180,9 +168,6 @@ func (c *Client) PostAuthMessageResponse(response *string) error {
 	return c.SendRequest(req)
 }
 
-// StartSession starts the session with the given command and environment
-// Wait for greetd's response to StartSession
-// According to greetd protocol, we must wait for greetd to confirm session start before greeter exits
 func (c *Client) StartSession(cmd []string, env []string) error {
 	req := StartSession{
 		Type: StartSessionRequest,
@@ -190,22 +175,17 @@ func (c *Client) StartSession(cmd []string, env []string) error {
 		Env:  env,
 	}
 
-	// Send the start session request
 	if err := c.SendRequest(req); err != nil {
 		return err
 	}
 
-	// CRITICAL: Wait for greetd to respond with success or error
-	// This ensures greetd has properly initialized the session before greeter exits
-	// Without this, on slow hardware, greeter exits before greetd finishes setup -> infinite loop
 	resp, err := c.ReceiveResponse()
 	if err != nil {
 		return fmt.Errorf("failed to receive start session response: %v", err)
 	}
 
-	// Check if session started successfully
 	if _, ok := resp.(Success); ok {
-		return nil // Session successfully started
+		return nil
 	}
 
 	if errResp, ok := resp.(Error); ok {
@@ -215,28 +195,22 @@ func (c *Client) StartSession(cmd []string, env []string) error {
 	return fmt.Errorf("unexpected response to start_session: %T", resp)
 }
 
-// CancelSession cancels the current session and waits for greetd's acknowledgment
 func (c *Client) CancelSession() error {
 	req := CancelSession{
 		Type: CancelSessionRequest,
 	}
 
-	// Send the cancel request
 	if err := c.SendRequest(req); err != nil {
 		return err
 	}
 
-	// Wait for Success response from greetd
 	resp, err := c.ReceiveResponse()
 	if err != nil {
 		return fmt.Errorf("failed to receive CancelSession response: %v", err)
 	}
 
-	// Check if we got Success
 	if _, ok := resp.(Success); !ok {
-		// If we got an Error, that's still acceptable (session might already be cancelled)
 		if _, ok := resp.(Error); ok {
-			// Session is cancelled either way
 			return nil
 		}
 		return fmt.Errorf("unexpected response to CancelSession: %T", resp)

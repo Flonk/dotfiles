@@ -1,5 +1,4 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3Packages.numpy python3Packages.pillow
 
 """Generate the two procedural noise textures as PNG files.
 
@@ -19,12 +18,10 @@ SIZE = 512
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "shaders", "assets")
 
 
-# ---------- random.png ----------
-
 def mix(x: np.ndarray) -> np.ndarray:
     """Integer hash matching the Rust version (wrapping u32 arithmetic)."""
     M = np.uint32(0xFFFFFFFF)
-    x = x.astype(np.uint64)  # avoid overflow during multiply
+    x = x.astype(np.uint64)
     x ^= x >> np.uint64(16)
     x = (x * np.uint64(0x7FEB352D)) & np.uint64(M)
     x ^= x >> np.uint64(15)
@@ -47,14 +44,9 @@ def gen_random(seed: int) -> np.ndarray:
     return img
 
 
-# ---------- fractalnoise.png ----------
-# Tileable via 4D torus mapping, matching the Rust noise crate's Perlin impl.
-
 def perlin_grad4(hash_val, x, y, z, w):
     """4D Perlin gradient function (matches noise crate)."""
-    # Use lower 5 bits to select gradient
     h = hash_val & 31
-    # 4D gradient vectors: pick 3 of 4 coords
     u = np.where(h < 24, x, y)
     v = np.where(h < 16, y, z)
     w2 = np.where(h < 8, z, w)
@@ -76,7 +68,7 @@ class Perlin4D:
         rng = np.random.RandomState(seed)
         self.perm = np.arange(256, dtype=np.int32)
         rng.shuffle(self.perm)
-        self.perm = np.tile(self.perm, 4)  # extend for wrapping
+        self.perm = np.tile(self.perm, 4)
 
     def __call__(self, x, y, z, w):
         xi = np.floor(x).astype(np.int32) & 255
@@ -100,7 +92,6 @@ class Perlin4D:
             h = p[p[p[p[ix] + iy] + iz] + iw]
             return perlin_grad4(h, fx, fy, fz, fw)
 
-        # 16 gradient lookups for 4D
         g0000 = grad(xi, yi, zi, wi, xf, yf, zf, wf)
         g1000 = grad(xi+1, yi, zi, wi, xf-1, yf, zf, wf)
         g0100 = grad(xi, yi+1, zi, wi, xf, yf-1, zf, wf)
@@ -143,7 +134,6 @@ def fbm(perlin, x, y, z, w, octaves):
     value = np.zeros_like(x)
     amplitude = 1.0
     frequency = 1.0
-    # noise crate defaults: lacunarity=2.0, persistence=0.5
     for _ in range(octaves):
         value += amplitude * perlin(x * frequency, y * frequency,
                                      z * frequency, w * frequency)
@@ -176,8 +166,6 @@ def gen_fractal_noise(seed: int) -> np.ndarray:
 
     return np.stack([r, g, b, a], axis=-1)
 
-
-# ---------- main ----------
 
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)

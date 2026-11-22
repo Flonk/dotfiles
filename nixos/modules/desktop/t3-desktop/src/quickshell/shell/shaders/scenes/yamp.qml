@@ -21,8 +21,6 @@ Item {
     Image { id: flapFont; source: "../assets/flap_font.png"; visible: false }
     ShaderEffectSource { id: flapFontSrc; sourceItem: flapFont; hideSource: true }
     Image { id: sky; source: "../assets/sky.png"; visible: false; smooth: false }
-    // the map data reloads when gen-maps rewrites it: images are cached by
-    // url, so a bumped query (dropped when resolved to a file) forces a read
     property int mapsRev: Date.now() % 100000
     Image { id: maps; source: "../assets/maps.png?r=" + scene.mapsRev; visible: false; smooth: false; cache: false; onStatusChanged: if (status === Image.Ready) mapStaticSrc.scheduleUpdate() }
     FileView {
@@ -67,8 +65,6 @@ Item {
         || (context.elapsedTime - context.devSwitchAt < 1 && modeLive(context.devSwitchAt, context.devPrevMode, context.devPrevAt, 27)) : false
     readonly property bool fluidLive: context ? modeLive(context.elapsedTime, context.devMode, context.devModeAt, 12)
         || (context.elapsedTime - context.devSwitchAt < 1 && modeLive(context.devSwitchAt, context.devPrevMode, context.devPrevAt, 12)) : false
-    // the post pass (FXAA) only runs for the modes that ask for it (MODE_AA,
-    // the 3d ones); otherwise the main pass draws straight to the screen
     readonly property bool aaLive: context ? [3, 4, 5].some(m => modeLive(context.elapsedTime, context.devMode, context.devModeAt, m)) : true
     readonly property bool starsLive: context ? modeLive(context.elapsedTime, context.devMode, context.devModeAt, 15)
         || (context.elapsedTime - context.devSwitchAt < 1 && modeLive(context.devSwitchAt, context.devPrevMode, context.devPrevAt, 15)) : false
@@ -510,7 +506,6 @@ Item {
         live: scene.trafficLive; recursive: true; smooth: false; format: ShaderEffectSource.RGBA32F
     }
 
-    // the traffic map's roads, bridges and buildings, baked when the map changes
     LockShaderPass {
         id: mapStatic
         anchors.fill: parent

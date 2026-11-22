@@ -17,8 +17,6 @@ let
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
-    # buildNpmPackage places output in lib/node_modules/gopro-webcam/.
-    # Create a wrapper that calls tsx with the right PATH for runtime tools.
     postInstall = ''
       mkdir -p $out/bin
       local pkg="$out/lib/node_modules/gopro-webcam"
@@ -40,24 +38,18 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    # Make v4l2loopback available (loaded on demand, not at boot).
     boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
-    # The gopro-webcam script and tools it calls via sudo must be on the system PATH.
     environment.systemPackages = [
       gopro-webcam
       pkgs.ffmpeg
       config.boot.kernelPackages.v4l2loopback.bin
     ];
 
-    # Give the admin user access to the virtual video device.
     users.users.${adminUser}.extraGroups = lib.mkIf (adminUser != null) [ "video" ];
 
-    # Open UDP port for the GoPro stream.
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 8554 ];
 
-    # Set video group ownership and rw permissions on any v4l2loopback device.
-    # Auto-start/stop when GoPro is plugged/unplugged (Hero 11 Black: 2672:0059).
     services.udev.extraRules = ''
       SUBSYSTEM=="video4linux", ATTR{name}=="*GoPro*", GROUP="video", MODE="0660"
     '' + lib.optionalString cfg.autoStart ''
@@ -65,13 +57,11 @@ in
       ACTION=="remove", SUBSYSTEM=="usb", ENV{PRODUCT}=="2672/59/*", RUN+="${pkgs.systemd}/bin/systemctl start --no-block gopro-webcam-stop.service"
     '';
 
-    # Systemd services for udev-triggered auto start/stop.
     systemd.services.gopro-webcam-start = lib.mkIf cfg.autoStart {
       description = "Start GoPro webcam";
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${gopro-webcam}/bin/gopro-webcam start";
-        # ffmpeg is backgrounded by the script and must outlive the oneshot.
         KillMode = "process";
         Environment = [
           "GOPRO_USER=${adminUser}"
@@ -82,7 +72,7 @@ in
         pkgs.bashInteractive
         pkgs.ffmpeg
         pkgs.systemd
-        pkgs.util-linux # runuser
+        pkgs.util-linux
         config.boot.kernelPackages.v4l2loopback.bin
       ];
     };

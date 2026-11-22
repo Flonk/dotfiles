@@ -13,7 +13,6 @@
 let
   cfg = config.skynet.module.desktop.audio;
 
-  # --- Auto-trust configured Bluetooth headsets ---
   trustScript = pkgs.writeShellScript "bluetooth-trust-headsets" (
     lib.concatMapStrings (p: ''
       echo "Trusting ${p.description} (${p.mac})"
@@ -21,7 +20,6 @@ let
     '') cfg.trustedBluetoothHeadsets
   );
 
-  # --- EasyEffects: startup wrapper with diagnostics ---
   eeStartScript = pkgs.writeShellScript "easyeffects-start.sh" ''
     log() { echo "[ee-start] $(${pkgs.coreutils}/bin/date '+%F %H:%M:%S') $*"; }
 
@@ -40,7 +38,6 @@ let
     exec ${config.home.profileDirectory}/bin/easyeffects --hide-window --gapplication-service
   '';
 
-  # --- EasyEffects: switch preset based on active sink ---
   autoPresetScript = pkgs.writeShellScript "easyeffects-auto-preset.sh" ''
     set -euo pipefail
 
@@ -52,9 +49,6 @@ let
 
     log() { echo "[auto-preset] $(${pkgs.coreutils}/bin/date +%H:%M:%S) $*"; }
 
-    # Any easyeffects CLI call becomes the primary instance itself when the
-    # daemon is down, stealing the single-instance socket and crash-looping
-    # easyeffects.service. Never invoke without a live daemon.
     ee_ready() {
       [[ -S "$XDG_RUNTIME_DIR/EasyEffectsServer" ]] || return 1
       [[ "$(systemctl --user show -p SubState --value easyeffects.service 2>/dev/null)" == "running" ]]
@@ -83,10 +77,8 @@ let
     headphone_jack_plugged() {
       local cards
       cards=$(${pkgs.pulseaudio}/bin/pactl list cards 2>/dev/null)
-      # Traditional HDA: "Headphone Jack" control with availability on next line
       echo "$cards" | ${pkgs.gnugrep}/bin/grep -A1 "Headphone Jack" \
         | ${pkgs.gnugrep}/bin/grep -q "availability = available" && return 0
-      # SoundWire/UCM: availability is inline on the port line
       echo "$cards" | ${pkgs.gnugrep}/bin/grep "\[Out\] Headphones:" \
         | ${pkgs.gnugrep}/bin/grep -v "not available" \
         | ${pkgs.gnugrep}/bin/grep -q "available" && return 0
@@ -98,7 +90,6 @@ let
 
       log "apply_preset called"
 
-      # Get default sink, retrying briefly if PipeWire is mid-transition
       default_sink=$(get_default_sink)
       if [[ -z "$default_sink" ]]; then
         log "default sink empty, retrying in 1s…"
@@ -113,9 +104,6 @@ let
       log "SPEAKER_SINK=$SPEAKER_SINK"
       log "HEADPHONE_SINK=$HEADPHONE_SINK"
 
-      # When we know the headphone sink, actively switch the default sink
-      # based on jack state — WirePlumber won't do this automatically when
-      # both sinks coexist (api.acp.auto-profile = false).
       if [[ -n "$HEADPHONE_SINK" ]]; then
         if headphone_jack_plugged; then
           jack_status="plugged"
@@ -135,7 +123,6 @@ let
             ${pkgs.pulseaudio}/bin/pactl set-default-sink "$SPEAKER_SINK" 2>/dev/null || true
           fi
         fi
-        # Re-read after potential switch
         default_sink=$(get_default_sink)
         log "default_sink after jack logic: $default_sink"
         if [[ -z "$default_sink" ]]; then
@@ -197,8 +184,6 @@ let
     echo "Restarting easyeffects-auto-preset…"
     systemctl --user restart easyeffects-auto-preset.service
     echo "Waiting for EasyEffects to come up…"
-    # Probing with the easyeffects CLI while the daemon is down would spawn a
-    # primary instance and crash-loop the service — wait on the socket instead.
     for _ in $(seq 1 15); do
       [[ -S "$XDG_RUNTIME_DIR/EasyEffectsServer" ]] \
         && [[ "$(systemctl --user show -p SubState --value easyeffects.service 2>/dev/null)" == "running" ]] \
@@ -235,7 +220,6 @@ in
       home.packages = [ inputs.balaclava.packages.${pkgs.stdenv.hostPlatform.system}.default ];
     }
 
-    # --- Bluetooth headset auto-trust ---
     (lib.mkIf (cfg.trustedBluetoothHeadsets != [ ]) {
       systemd.user.services.bluetooth-trust-headsets = {
         Unit = {
@@ -253,16 +237,9 @@ in
       };
     })
 
-    # --- EasyEffects ---
     (lib.mkIf cfg.easyeffects.enable {
       services.easyeffects.enable = true;
 
-      # ExecStart uses a diagnostic wrapper that logs session state then
-      # exec's easyeffects. ExecStop uses a profile-stable path.
-      # X-SwitchMethod=keep-old prevents sd-switch from restarting on rebuild.
-      # Restart=always because both --gapplication-service and --service-mode
-      # exit with code 0 when the graphical session isn't ready yet;
-      # on-failure won't retry a clean exit, so the service stays dead.
       systemd.user.services.easyeffects.Service = {
         ExecStartPre = "${pkgs.coreutils}/bin/sleep 10";
         ExecStart = lib.mkForce "${eeStartScript}";
@@ -270,13 +247,8 @@ in
         Restart = lib.mkForce "always";
       };
 
-      # Tell sd-switch to never restart easyeffects on rebuild — the unit
-      # content is stable (profile paths), but sd-switch still triggers a
-      # restart because the home-manager-files store path changes.
       systemd.user.services.easyeffects.Unit.X-SwitchMethod = "keep-old";
 
-      # Passthrough preset: empty plugin chain so EasyEffects stays linked but
-      # applies no processing.
       home.file.".local/share/easyeffects/output/${cfg.easyeffects.passthroughPreset}.json".text =
         builtins.toJSON {
           output = {

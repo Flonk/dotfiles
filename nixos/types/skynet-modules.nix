@@ -1,15 +1,12 @@
 {
   imports = [
-    # ai
     ../modules/ai/claude-code/options.nix
     ../modules/ai/copilot-cli/options.nix
     ../modules/ai/pi/options.nix
 
-    # assorted
     ../modules/assorted/avahi/options.nix
     ../modules/assorted/autoclicker/options.nix
 
-    # core
     ../modules/core/bitwarden/options.nix
     ../modules/core/direnv/options.nix
     ../modules/core/eventbus/options.nix
@@ -20,7 +17,6 @@
     ../modules/core/ssh/options.nix
     ../modules/core/zsh/options.nix
 
-    # desktop
     ../modules/desktop/alacritty/options.nix
     ../modules/desktop/audio/options.nix
     ../modules/desktop/chinese/options.nix
@@ -38,14 +34,12 @@
     ../modules/desktop/vicinae-askpass/options.nix
     ../modules/desktop/vicinae-bitwarden/options.nix
 
-    # development
     ../modules/development/dnsmasq/options.nix
     ../modules/development/obsidian/options.nix
     ../modules/development/qemu/options.nix
     ../modules/development/vscode/options.nix
     ../modules/development/zed-editor/options.nix
 
-    # leisure
     ../modules/leisure/gopro-webcam/options.nix
     ../modules/leisure/minecraft/options.nix
     ../modules/leisure/lutris/options.nix
@@ -53,13 +47,11 @@
     ../modules/leisure/artcraft/options.nix
     ../modules/leisure/spotify/options.nix
 
-    # os
     ../modules/os/ipu6/options.nix
     ../modules/os/memory-pressure/options.nix
     ../modules/os/network-scripts/options.nix
     ../modules/os/powersaver/options.nix
 
-    # projects
     ../modules/projects/andamp/options.nix
     ../modules/projects/personal/options.nix
   ];

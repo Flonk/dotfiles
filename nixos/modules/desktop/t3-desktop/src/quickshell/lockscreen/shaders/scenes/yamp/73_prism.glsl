@@ -1,21 +1,8 @@
-// --- prism: white light dispersed through an amp-shaped glass prism -----------
-// the beam is rolled per session by scene.qml (u_prism_ray: glyph-space start
-// xy, angle z), from the left half of the screen through the centre with some
-// jitter; u_prism_beam (x = height, y = tilt) offsets it from the preview panel.
-// bufferPrismState traces PRISM_RAYS wavelengths through the
-// glyph SDF (Snell at every edge, total internal reflection where it happens)
-// into iChannel8 (prismTexel(ray, j) = j-th path point in glyph space, xy),
-// w = 1 while the path goes on. bufferPrismLight sums the spectral rays
-// additively (where they overlap they add back up to white) into a linear
-// light buffer, PRISM_CHUNK rays per update (u_prism_chunk, driven by
-// scene.qml) accumulated over its own previous output in iChannel9, only
-// when the beam moves; the main pass tonemaps it from iChannel8.
 const int   PRISM_RAYS     = 4000;
 const int   PRISM_ROW      = 125;
 const int   PRISM_CHUNK    = 10;
 const int   PRISM_PTS      = 10;
 
-// state texel of path point j of ray i: PRISM_ROW rays side by side per row
 ivec2 prismTexel(int i, int j){ return ivec2((i % PRISM_ROW) * PRISM_PTS + j, i / PRISM_ROW); }
 const float PRISM_SCALE    = 0.5;
 const vec2  PRISM_CENTER   = vec2(0.05, 0.);
@@ -34,7 +21,6 @@ float prismLambda(int i){ return mix(400., 700., (float(i) + 0.5) / float(PRISM_
 
 vec3 prismBump(vec3 x, vec3 y){ return clamp(1. - x * x - y, 0., 1.); }
 
-// Zucconi's 6-bump fit of the visible spectrum
 vec3 prismSpectral(float w){
     float x = clamp((w - 400.) / 300., 0., 1.);
     return prismBump(vec3(3.54585104, 2.93225262, 2.41593945) * (x - vec3(0.69549072, 0.49228336, 0.27699880)), vec3(0.02312639, 0.15225084, 0.52607955))
@@ -75,8 +61,6 @@ vec4 prismState(int i, int j){
     return vec4(0.);
 }
 
-// a single ray's line profile at signed distance s (beam width w), and its
-// antiderivative in s
 float prismProfile(float s, float w){
     float x = s / w;
     return sqrt(PRISM_BEAM_W / w) * (exp(-x * x) + PRISM_GLOW * exp(-abs(s) / (6. * w)));
@@ -94,10 +78,6 @@ float prismCum(float s, float w){
 
 vec2 prismPt(vec4 p){ return p.xy * PRISM_SCALE + PRISM_CENTER; }
 
-// linear light of rays [i0, i0 + PRISM_CHUNK). Each neighbouring pair of rays
-// that takes the same route is a ribbon: the continuum of rays between them,
-// i.e. the line profile averaged across the ribbon. Pairs that part ways
-// (different bounces, far apart) fall back to drawing the ray as a line.
 vec3 prismLight(vec2 q, int i0){
     vec3 norm = vec3(0.);
     for(int i = 0; i < 96; i++) norm += prismSpectral(mix(400., 700., (float(i) + 0.5) / 96.));

@@ -16,7 +16,6 @@
 
     xdg.mimeApps.defaultApplications = {
 
-      # File viewer (chrome-app-tabbed)
       "image/jpeg" = [ "chrome-app-tabbed.desktop" ];
       "image/png" = [ "chrome-app-tabbed.desktop" ];
       "image/gif" = [ "chrome-app-tabbed.desktop" ];

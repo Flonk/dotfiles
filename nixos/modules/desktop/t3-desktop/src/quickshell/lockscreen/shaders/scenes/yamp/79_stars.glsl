@@ -1,43 +1,3 @@
-// --- stars: the real night sky over Vienna, every star an amp -----------------
-// The sky comes from sky.png in iChannel14 (gen_sky.py: Hipparcos stars to
-// mag 5 with a sky-cell index, and the tour targets: constellations,
-// asterisms, deep-sky objects, named stars and planets, with figures and
-// names). u_lst is the local sidereal time when the pass was created; the sky
-// turns from there at SKY_RATE, the real sidereal rate. u_planets holds Venus,
-// Mars, Jupiter and Saturn for the day (unit vector, magnitude), worked out
-// in scene.qml from orbital elements; u_algol is Algol's magnitude now,
-// from its eclipse ephemeris. u_bodies (scene.qml, updated live) holds the
-// Moon (direction, illuminated fraction), the Sun, and the ISS now and a few
-// seconds ago (direction; 0 not up or no orbit, 1 in Earth's shadow, 2
-// sunlit), propagated from its Celestrak TLE. The sky turns at the real
-// sidereal rate, so all of it matches the real sky. The ecliptic (gold) and
-// celestial equator (teal) are drawn as faint great circles, with a small
-// ring round the north celestial pole; the Moon is a disc lit on the
-// side facing the Sun (a real crescent or gibbous), mottled from the noise
-// texture, the ISS the satellite emoji (baked into
-// sky.png) with its trail.
-// Every SKY_PERIOD a target that is well up is picked and the camera swings
-// over to it (ease in-out over SKY_MOVE), holds it SKY_HOLD, takes it down
-// again over SKY_OFF (lines retracting, stars shrinking) and rests until the
-// next; its figure draws itself in line
-// by line over SKY_DRAW (teal for constellations, gold for asterisms,
-// dashed for star-hopping guides) or a
-// marker ring opens round it, its stars swell (SKY_GROW) and glow in their
-// own colour, and its name is set under it in the flap font (iChannel13). bufferStars works the
-// target and camera out once per frame (SKY_FIG_W texels, iChannel15 in the
-// main pass): x = 0 (target, envelope, label position), x = 1 the figure's
-// screen bounding box, x = 2 (segments, name length, name width, type),
-// x = 3 the camera axis, x = 4 (marker radius, draw-in progress, fade
-// out), x = 5.. the deep-sky
-// objects' screen circles (centre, radius, in front), then one texel per
-// segment.
-// Each pixel's ray is turned into RA/Dec and only the stars listed in its sky
-// cell are drawn: an upright amp sized and brightened by magnitude, tinted by
-// B-V, twinkling. Under them lie the Milky Way (a band about the galactic
-// plane, a bulge towards the centre, the Great Rift, mottled by noise) and
-// the deep-sky objects' glows; over them the planets, the odd meteor and a
-// satellite now and then, all moving on great circles; a dark ridge cuts the
-// horizon, and a horizon gizmo (skyGizmo) is drawn over everything.
 const float SKY_LAT     = 0.84142;
 const float SKY_RATE    = 7.2921159e-5;
 const float SKY_FOCAL   = 1.;
@@ -121,7 +81,6 @@ float skyNoise3(vec3 p){
     return mix(mix(m.x, m.y, f.x), mix(m.z, m.w, f.x), f.y);
 }
 
-// equatorial frame of the local horizon at time t: columns E, N, U
 mat3 skyHorizon(float t){
     float lst = u_lst + t * SKY_RATE;
     vec3 U = vec3(cos(SKY_LAT) * cos(lst), cos(SKY_LAT) * sin(lst), sin(SKY_LAT));
@@ -134,7 +93,6 @@ void skyCamera(vec3 fw, out vec3 rt, out vec3 up){
     up = cross(rt, fw);
 }
 
-// screen position of a local (E, N, U) direction
 vec2 skyScreen(vec3 l, vec3 fw, vec3 rt, vec3 up, out float z){
     z = dot(l, fw);
     return SKY_FOCAL * vec2(dot(l, rt), dot(l, up)) / max(z, 1e-4);
@@ -146,15 +104,11 @@ vec2 skyProject(vec3 s, mat3 H, vec3 fw, vec3 rt, vec3 up, out float z){
 
 int skyRec(int c){ return 36 * 1024 + 32 * c; }
 
-// the ISS now: its position at the last update moved on along its motion over
-// the SKY_ISS_DT before it, so it glides between updates
 vec3 skyIss(out vec3 vel){
     vel = (u_bodies[2].xyz - u_bodies[3].xyz) / SKY_ISS_DT;
     return normalize(u_bodies[2].xyz + vel * (iTime - u_bodies[3].w));
 }
 
-// the emoji at x0 of sky.png's emoji rows (0 the satellite, 128 the shark)
-// at uv (0..1, y down), premultiplied, bilinear
 vec4 skyEmojiAt(vec2 uv, int x0){
     vec2 f = clamp(uv * 64. - 0.5, 0., 63.);
     ivec2 i = ivec2(floor(f));
@@ -178,8 +132,6 @@ vec3 skyTarget(int c){
     return skyVec(skyRec(c) + 2);
 }
 
-// the target of period k: the first, from a hashed start, that is well up
-// at the period's start
 int skyPick(float k){
     mat3 H = skyHorizon(k * SKY_PERIOD);
     int base = int(random(vec2(k, 0.37)) * float(SKY_TARGETS));
@@ -190,7 +142,6 @@ int skyPick(float k){
     return base;
 }
 
-// camera axis looking at target c, kept within SKY_ALT_RANGE of altitude
 vec3 skyAim(int c, mat3 H){
     vec3 l = skyTarget(c) * H;
     float az = atan(l.x, l.y), alt = clamp(asin(clamp(l.z, -1., 1.)) - SKY_AIM_DROP, SKY_ALT_RANGE.x, SKY_ALT_RANGE.y);
@@ -293,8 +244,6 @@ vec3 skyDeep(vec3 d, vec2 q, int act){
     return col;
 }
 
-// distance to a label of up to two characters (flap font indices, -1 none)
-// centred at p, h tall
 float skyLabel(vec2 q, vec2 p, int c0, int c1, float h){
     vec2 t = (q - p) / h;
     float n = c1 < 0 ? 1. : 2.;
@@ -304,12 +253,6 @@ float skyLabel(vec2 q, vec2 p, int c0, int c1, float h){
     return d * h;
 }
 
-// the horizon gizmo: altitude rings and meridians every SKY_GIZMO_STEP (the
-// horizon and every third meridian stronger, meridians fading out at the
-// zenith), compass points on the horizon (slid up their meridian to stay
-// SKY_COMPASS_EDGE above the bottom of the screen) and altitudes up the meridian
-// nearest the view; the compass points come back in over, to go on top of
-// the ridge, the rest lies behind it
 vec3 skyGizmo(vec2 q, vec3 rl, vec3 fw, vec3 rt, vec3 up, out vec3 over){
     float px = 1. / (SKY_FOCAL * iResolution.y);
     float alt = asin(clamp(rl.z, -1., 1.)), az = atan(rl.x, rl.y);
@@ -351,14 +294,10 @@ vec3 skyGizmo(vec2 q, vec3 rl, vec3 fw, vec3 rt, vec3 up, out vec3 over){
     return SKY_GIZMO * (g + SKY_GIZMO_A.y * 4. * S(dt));
 }
 
-// how far segment i of n has drawn in at progress p (segments start one
-// after another, each growing from its first star)
 float skyReveal(float p, int i, int n){
     return clamp(p * (1. + SKY_STAGGER) - SKY_STAGGER * float(i) / float(max(n, 1)), 0., 1.);
 }
 
-// how much the star at screen position sp is highlighted as a point target
-// (figure stars are drawn over by the figure pass)
 float skyLit(vec2 sp, vec4 f0, vec4 f2, vec4 f4){
     if(f0.y <= 0. && f4.y <= 0.) return 0.;
     float g = 0.;
@@ -367,7 +306,6 @@ float skyLit(vec2 sp, vec4 f0, vec4 f2, vec4 f4){
     return 0.;
 }
 
-// a point moving on a great circle in local (E, N, U), seeded by h
 vec3 skyTrack(float h, float ang){
     float az = 6.2831853 * random(vec2(h, 1.1)), alt = 0.35 + 0.6 * random(vec2(h, 2.3));
     vec3 s = vec3(sin(az) * cos(alt), cos(az) * cos(alt), sin(alt));

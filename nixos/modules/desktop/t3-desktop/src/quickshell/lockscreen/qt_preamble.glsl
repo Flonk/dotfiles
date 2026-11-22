@@ -3,15 +3,10 @@
 layout(location = 0) in vec2 qt_TexCoord0;
 layout(location = 0) out vec4 fragColor;
 
-// ---------------------------------------------------------------------------
-// Uniform block — Qt maps QML properties to these by name
-// ---------------------------------------------------------------------------
-
 layout(std140, binding = 0) uniform buf {
     mat4 qt_Matrix;
     float qt_Opacity;
 
-    // Shadertoy-compatible inputs
     float iTime;
     int iFrame;
     int u_indicator_type;
@@ -49,13 +44,10 @@ layout(std140, binding = 0) uniform buf {
     vec4 iMouse;
     vec4 iClock;
 
-    // 32 random floats in [0,1), rerolled by the host each time the shader
-    // pass is created — read them via sk_seed(i) to vary scenes per session
     mat4 iSeed0;
     mat4 iSeed1;
 };
 
-// Up to sixteen input textures, resolved from QML properties.
 layout(binding = 1) uniform sampler2D iChannel0;
 layout(binding = 2) uniform sampler2D iChannel1;
 layout(binding = 3) uniform sampler2D iChannel2;
@@ -80,18 +72,8 @@ layout(binding = 21) uniform sampler2D iChannel20;
 layout(binding = 22) uniform sampler2D iChannel21;
 layout(binding = 23) uniform sampler2D iChannel22;
 
-// ---------------------------------------------------------------------------
-// Shared constants
-// ---------------------------------------------------------------------------
-
-/// Canonical fail colour (227, 85, 50) in linear [0, 1] range.
 const vec3 sk_fail_color = vec3(227.0 / 255.0, 85.0 / 255.0, 50.0 / 255.0);
 
-// ---------------------------------------------------------------------------
-// sk_ — t3lock standard library
-// ---------------------------------------------------------------------------
-
-/// Random float in [0,1) for i in 0..31, fixed for the session.
 float sk_seed(int i) {
     mat4 m = i < 16 ? iSeed0 : iSeed1;
     return m[(i >> 2) & 3][i & 3];
@@ -103,9 +85,6 @@ float sk_ease_out_back(float t) {
     float x = t - 1.0;
     return 1.0 + c3 * x * x * x + c1 * x * x;
 }
-
-// _at variants evaluate the envelope at an arbitrary time t (<= iTime;
-// there is no future to sample) — for phase-shifted copies of an envelope
 
 float sk_keypulse_envelope_at(float t) {
     float age = t - u_last_key_time;
@@ -150,7 +129,3 @@ float sk_attention_envelope_at(float t) {
     return min(kf + load, 1.0);
 }
 float sk_attention_envelope() { return sk_attention_envelope_at(iTime); }
-
-// ---------------------------------------------------------------------------
-// Shader body follows (injected by convert-shaders.sh)
-// ---------------------------------------------------------------------------

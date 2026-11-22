@@ -12,17 +12,11 @@ ShaderEffect {
     property string shaderName: ""
     property string authorText: ""
 
-    // Paths resolve relative to the instantiating file (shell/shaders/scenes/),
-    // not this component file, so we go up one level to shell/shaders/
     vertexShader: shaderName ? "../default.vert.qsb" : ""
     fragmentShader: shaderName
         ? "../" + shaderName + ".frag.qsb" + (_dev ? "?b=" + _boot + "&r=" + _rev : "")
         : ""
 
-    // dev hot-reload (preview only): with $SHADER_DEV set, watch the compiled
-    // .qsb and bump the url query on change — Qt keys shader loads by full
-    // url, so the effect reloads in place; the query is dropped again when
-    // the url is resolved to a file path
     property bool _dev: Quickshell.env("SHADER_DEV") === "1"
     property int _rev: 0
     readonly property double _boot: Date.now()
@@ -79,8 +73,6 @@ ShaderEffect {
         }
     }
 
-    // 32 random floats, rolled once when the pass is created — shaders read
-    // them via sk_seed(i) to vary per session
     readonly property matrix4x4 iSeed0: _randMat()
     readonly property matrix4x4 iSeed1: _randMat()
     function _randMat() {

@@ -1,22 +1,17 @@
-# autoSuggestions config
-setopt hist_reduce_blanks # remove superfluous blanks from history items
-setopt inc_append_history # save history entries as soon as they are entered
+setopt hist_reduce_blanks
+setopt inc_append_history
 
-# auto complete options
-setopt auto_list # automatically list choices on ambiguous completion
-setopt auto_menu # automatically use menu completion
-zstyle ':completion:*' menu select # select completions with arrow keys
-zstyle ':completion:*' group-name "" # group results by category
-zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
+setopt auto_list
+setopt auto_menu
+zstyle ':completion:*' menu select
+zstyle ':completion:*' group-name ""
+zstyle ':completion:::::' completer _expand _complete _ignored _approximate
 
 cd_fzf() {
-  # Get all directories in the current folder
   local dirs=$(find . -maxdepth 1 -type d -printf "%f\n")
 
-  # Use fzf to pick the closest match to $1
   local selected=$(echo "$dirs" | fzf --layout reverse --height 8 --query="$1" --select-1 --exit-0)
 
-  # If a directory was selected, cd into it
   if [[ -n "$selected" ]]; then
     cd "$selected" || return
   else
@@ -32,7 +27,6 @@ npmrun_fzf() {
     root=$(npm prefix 2>/dev/null) || { echo "Not inside an npm project." >&2; exit 1; }
     cd "$root" || exit 1
 
-    # List script names (safe if no scripts)
     local scripts
     scripts=$(jq -r '.scripts | keys[]?' package.json) || { echo "Failed to read package.json" >&2; exit 1; }
 
@@ -62,18 +56,14 @@ open_fzf () {
 
 gcob () {
   if [ -n "$1" ]; then
-    # Use the provided argument as a filter for fzf
     git checkout $(git branch | fzf --query="$1" --select-1 --exit-0)
   else
-    # No argument provided, just show the branches for selection
     git checkout $(git branch | fzf --height 8 --layout=reverse)
   fi
 }
 
 gcobr () {
   git fetch --prune >/dev/null 2>&1
-  # Strip just the first path segment (the remote name) so multi-segment
-  # branch names like feature/foo survive intact.
   local branches
   branches=$(git branch -r | grep -v ' -> ' | awk '{sub(/^[ \t]*[^/]+\//,""); print}' | sort -u)
   local branch
@@ -148,13 +138,11 @@ squash_wip() {
   local WIP_MSG="--wip-- [skip ci]"
   local count=0
 
-  # ensure we're in a git repo
   git rev-parse --git-dir >/dev/null 2>&1 || {
     echo "❌ Not a git repository."
     return 1
   }
 
-  # count consecutive WIP commits from HEAD
   while read -r sha; do
     local subj
     subj="$(git show -s --format=%s "$sha")"
@@ -192,8 +180,6 @@ hex() {
 
 export GIT_SSL_NO_VERIFY=1
 
-# walk from $1 down at most $2 levels, calling $3 on every repo found; a repo is
-# never descended into
 _rglr_walk() {
   local dir="$1" depth="$2" action="$3" sub
   if [[ -d "$dir/.git" ]]; then
@@ -245,12 +231,10 @@ _rglr_pull_default_branch() {
   )
 }
 
-# rglr [depth] — for every repo up to $depth levels down: stash WIP, fetch, pull, restore WIP
 rglr() {
   _rglr_walk . "${1:-3}" _rglr_pull
 }
 
-# rglr! [depth] — same, but checkout develop (or main) before pulling
 rglr!() {
   _rglr_walk . "${1:-3}" _rglr_pull_default_branch
 }

@@ -26,10 +26,6 @@ export async function sshCheck(target: string): Promise<boolean> {
   }
 }
 
-/**
- * Poll sshCheck until it succeeds. Throws if the deadline is hit. Used after
- * activation steps that may briefly disrupt sshd or networking.
- */
 export async function waitForSsh(
   target: string,
   attempts: number = 60,

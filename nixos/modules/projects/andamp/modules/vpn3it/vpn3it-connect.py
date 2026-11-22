@@ -1,4 +1,3 @@
-# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportMissingParameterType=false, reportUnknownParameterType=false, reportUnusedVariable=false, reportUnknownVariableType=false, reportUnusedCallResult=false, reportUnknownArgumentType=false, reportUnknownLambdaType=false, reportReturnType=false, reportUninitializedInstanceVariable=false, reportUnusedImport=false, reportUnannotatedClassAttribute=false
 import os
 import shutil
 import signal
@@ -30,9 +29,6 @@ class VPN3ITConnect:
         self.driver = None
 
     def _handle_open_sessions_page(self):
-        # Ivanti intermittently shows a "maximum number of open user sessions"
-        # confirmation page (welcome.cgi?p=user-confirm) after auth. Tick every
-        # listed session and click continue so the login can complete.
         try:
             buttons = self.driver.find_elements(By.CSS_SELECTOR, "#btnContinue")
             if not buttons:
@@ -48,7 +44,6 @@ class VPN3ITConnect:
             _log("Open sessions page detected; closing existing sessions...")
             buttons[0].click()
         except Exception:
-            # Page may transition mid-inspection; the next poll retries.
             pass
 
     def _login_form_present(self):

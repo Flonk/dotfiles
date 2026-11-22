@@ -1,12 +1,4 @@
 #!/usr/bin/env python3
-# Bakes the penrose diagram labels into penrose_labels.png: a 4x2 atlas of
-# signed distance fields (cell height = 1 label unit, distances clamped to
-# +-RANGE/2 and mapped to [0, 255], inside < 0.5). Script I from rsfs (the
-# \mathscr of LaTeX), everything else from Latin Modern Math.
-#
-# Run: just gen-labels  (fetches the fonts via nix), or by hand:
-#      nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy])" \
-#        --run "python3 gen_labels.py <rsfs10.pfb> <latinmodern-math.otf>"
 
 import sys
 import numpy as np

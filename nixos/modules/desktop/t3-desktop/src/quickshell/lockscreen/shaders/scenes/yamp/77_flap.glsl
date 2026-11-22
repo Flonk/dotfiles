@@ -1,23 +1,3 @@
-// --- flap: a split-flap board (transition) -----------------------------------
-// FLAP_ROWS rows of tiles, each split at a hinge. On its own clock the board
-// flips over the old scene to the amp (TRANS_AMP tall) from FLAP_IN_AT, the
-// tagline flaps in along the bottom, and from FLAP_OUT_AT it flips on to
-// the new scene; a tile showing a scene and not flipping is just the scene.
-// A change of picture: a sweep from a random direction sets each tile off, which
-// clatters through a few random cards (FLAP_T per flip) before landing on its
-// piece of the new picture. A flip drops the top half of the old card over
-// the hinge: on the way down it shows the old card's top, past vertical the
-// new card's bottom (its back), foreshortened and widened towards the free
-// edge. Pictures are sampled in screen space, so big ones run across tiles.
-// Some tiles carry characters (black card, white
-// Montserrat from the flap_font.png atlas in iChannel13, gen_flapfont.py):
-// the small-amp picture shows the clock top right, whose digits roll forward when
-// iClock changes (u_clock_prev, u_clock_at), and FLAP_TEXT_AT into the blue
-// amp picture FLAP_TEXT flaps in below it on two lines, letter by letter,
-// and into the inverted one FLAP_URL along the top right. Text slots are
-// j < 32 for FLAP_TEXT, 32 + i for FLAP_URL.
-// A card is ivec2(kind, value): 0 picture, 1 scramble, 2 character (-1
-// blank) on black, 3 character + 1 + 128 * picture over that picture.
 const float FLAP_ROWS   = 12.;
 const float FLAP_ASPECT = 0.72;
 const float FLAP_IN_AT  = 0.;
@@ -70,9 +50,6 @@ float flapGlyph(int ch, vec2 l){
     return (texture(iChannel13, (cell + uv) / FLAP_FONT_GRID).r - 0.5) * FLAP_FONT_RANGE;
 }
 
-// board states come in threes: the old scene, the amp with the tagline, the
-// new scene; the board flips old -> amp at FLAP_IN_AT and amp -> new at
-// FLAP_OUT_AT
 int flapState(float n){ return int(mod(n, 3.) + .5); }
 
 int flapPic(float n){ int s = flapState(n); return s == 0 ? FLAP_PREV : s == 1 ? 0 : FLAP_NEXT; }
@@ -160,7 +137,6 @@ vec3 flapRender(ivec2 c, float n, vec2 id, vec2 g, vec2 l, float th){
     return mix(FLAP_BLACK, FLAP_WHITE, S(flapGlyph(c.y, l) * th));
 }
 
-// card k of a flip run: ev 0 board change, 1 text, 2 clock digit
 ivec2 flapCard(int ev, int k, int m, float n, vec2 id, float st, int j, int prv, int base){
     if(ev == 0){
         if(k <= 0) return flapFace(n - 1., id, 1e4);

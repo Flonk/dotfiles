@@ -34,9 +34,6 @@ let
       mkfifo -m 600 "$channel"
       trap 'rm -f "$channel"' EXIT
 
-      # Hold the fifo open read-write so the open() doesn't block waiting for a
-      # writer -- that way the read timeout below is what bounds the wait, and
-      # doubles as the cancel path (vicinae can't tell us the form was dismissed).
       exec 3<> "$channel"
 
       args=$(jq -cn --arg prompt "$prompt" --arg channel "$channel" \

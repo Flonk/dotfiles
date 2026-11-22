@@ -1,4 +1,3 @@
-// HeadphonesWidget.qml
 pragma Singleton
 
 import Quickshell

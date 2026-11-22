@@ -1,23 +1,3 @@
-// --- gravity: amps fired into a sun and three planets -------------------------
-// the planets run on exact circular Kepler orbits (pure functions of time);
-// the amps are test particles. bufferGravState integrates them (leapfrog,
-// adaptive substeps) over its own previous output in iChannel9, one row per
-// amp: x=0 pos.xy vel.xy, x=1 status (0 dead, 1 flying, 2 crashed,
-// 3 parked round a planet), time of the last launch/release/crash/capture,
-// position before the last step, x=2 last integration time, x=3 this
-// frame's path segment for the trail pass, x=4 parking orbit (planet,
-// radius, phase at capture, angular velocity), x=5 the capture's start
-// radius and angular velocity, eased into the parking orbit over GRAV_RETRO. Texels from x=GRAV_GRID_X on are a coarse screen grid, one
-// GRAV_CELL square per texel, each a 96-bit mask (24 per channel) of the
-// amps near it, so the full-screen passes only look at those.
-// bufferGravTrail is a decaying phosphor of the segments.
-// Each amp relaunches every GRAV_CYCLE, the slots evenly staggered, from a
-// fresh random spot just off screen with its own aim and speed.
-// Planets can't capture on gravity alone (nothing sheds the energy, and the
-// rails aren't Kepler), so amps do it with their rockets: swinging through
-// periapsis of a planet close and slow enough, some fire a retro burn into a
-// circular parking orbit, ride along for a while, then burn out again.
-// Some do the same round the sun at their first periapsis.
 const float GRAV_GM      = 1.35e-3;
 const vec2  GRAV_ORBIT[3] = vec2[3](vec2(0.14, 0.3), vec2(0.26, 2.4), vec2(0.40, 4.4));
 const float GRAV_RAD[4]  = float[4](0.06, 0.018, 0.03, 0.024);

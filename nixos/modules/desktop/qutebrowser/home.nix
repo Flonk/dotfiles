@@ -29,8 +29,6 @@ let
       export __GLX_VENDOR_LIBRARY_NAME=mesa
       export LIBVA_DRIVER_NAME=iHD
     ''}
-    # _autosave.yml survives an unclean kill (system shutdown) and is then
-    # restored on startup; no config option disables that.
     rm -f "''${XDG_DATA_HOME:-$HOME/.local/share}/qutebrowser/sessions/_autosave.yml"
     exec ${pkgs.systemd}/bin/systemd-run --user --scope --quiet --collect \
       --unit="qutebrowser-$$" \
@@ -52,9 +50,6 @@ let
       ln -s ${cappedLauncher} $out/bin/qutebrowser
     '';
 
-  # direction: "left" | "right" | "up" | "down"
-  # left/right: move within tab bar first, give to neighbor qutebrowser at edge
-  # up/down: always give to nearest qutebrowser in that direction (or new window)
   mkTabMoveScript = direction:
     let
       isLeft = direction == "left";
@@ -62,7 +57,7 @@ let
       isUp = direction == "up";
       isHorizontal = isLeft || isRight;
       coordIdx = if isHorizontal then "0" else "1";
-      filterLess = isLeft || isUp;  # smaller coord = left or up
+      filterLess = isLeft || isUp;
       edgeCheck = if isLeft then "_idx <= 0"
                   else if isRight then "_idx >= _cnt - 1"
                   else "True";
@@ -233,9 +228,6 @@ in
       enable = true;
       package = cappedQutebrowser;
 
-      # Load autoconfig.yml, where qutebrowser persists "always allow"
-      # permission answers (mic, webcam, …). Without this the answers are
-      # saved but never read back, so every site re-prompts each visit.
       loadAutoconfig = true;
 
       searchEngines = {
@@ -261,50 +253,37 @@ in
       };
 
       extraConfig = ''
-        # Nuke normal-mode defaults only — our config.bind() calls live in
-        # c.bindings.commands which is a separate layer and unaffected.
         c.bindings.default['normal'] = {}
       '';
 
       keyBindings = {
         normal = {
-          # Essentials
           "<Escape>" = "clear-keychain ;; search ;; fullscreen --leave";
           ":" = "cmd-set-text :";
           "i" = "mode-enter passthrough";
-          # Open URL
           "o" = "cmd-set-text -s :open";
           "<F6>" = "cmd-set-text -s :open";
-          # Passthrough / undo
           "<Ctrl+Shift+t>" = "undo";
-          # New tab / close
           "<Ctrl+t>" = "cmd-set-text -s :open -t";
           "O" = "cmd-set-text -s :open -t";
           "<Ctrl+w>" = "tab-close";
           "<Ctrl+Shift+n>" = "open -p";
-          # Tab navigation
           "<Ctrl+Tab>" = "tab-next";
           "<Ctrl+Shift+Tab>" = "tab-prev";
-          # History navigation
           "<Ctrl+Left>" = "back";
           "<Ctrl+Right>" = "forward";
-          # Search
           "<Ctrl+f>" = "cmd-set-text /";
           "n" = "search-next";
           "N" = "search-prev";
-          # DevTools
           "<F12>" = "devtools";
-          # Scroll / tab navigation
           "<Alt+Up>"    = "scroll-px 0 -300";
           "<Alt+Down>"  = "scroll-px 0 300";
           "<Alt+Left>"  = "tab-prev";
           "<Alt+Right>" = "tab-next";
-          # Tab rearrange / give to nearest qutebrowser
           "<Alt+Shift+Left>"  = "debug-pyeval -q exec(open('${tabMoveLeft}').read())";
           "<Alt+Shift+Right>" = "debug-pyeval -q exec(open('${tabMoveRight}').read())";
           "<Alt+Shift+Up>"    = "debug-pyeval -q exec(open('${tabMoveUp}').read())";
           "<Alt+Shift+Down>"  = "debug-pyeval -q exec(open('${tabMoveDown}').read())";
-          # Tab by number (Alt+1..9 → tab 1..9, Alt+0 → tab 10)
           "<Alt+1>" = "tab-focus 1";
           "<Alt+2>" = "tab-focus 2";
           "<Alt+3>" = "tab-focus 3";
@@ -315,15 +294,11 @@ in
           "<Alt+8>" = "tab-focus 8";
           "<Alt+9>" = "tab-focus 9";
           "<Alt+0>" = "tab-focus 10";
-          # Yank URL
           "yy" = "yank";
-          # Zoom
           "<Ctrl+0>" = "zoom";
           "<Ctrl++>" = "zoom-in";
           "<Ctrl+->" = "zoom-out";
-          # Reload
           "<Ctrl+r>" = "reload";
-          # Merge
           "<Alt+m>"         = "debug-pyeval -q exec(open('${mergeWorkspace}').read())";
           "<Alt+Shift+m>"   = "debug-pyeval -q exec(open('${mergeAll}').read())";
         };

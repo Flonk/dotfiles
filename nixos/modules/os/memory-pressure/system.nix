@@ -19,9 +19,6 @@ in
       memoryPercent = cfg.zramPercent;
     };
 
-    # systemd-oomd: kill the worst memory hog before swap thrashing freezes
-    # the system. enableUserSlices wires ManagedOOMMemoryPressure=kill onto
-    # the per-user slice so chromium/electron leaks get caught proactively.
     systemd.oomd = {
       enable = true;
       enableRootSlice = true;
@@ -33,10 +30,6 @@ in
       };
     };
 
-    # Kernel VM tunables. Values match Fedora's zram defaults — high
-    # swappiness because zram is fast, page-cluster=0 because zram doesn't
-    # benefit from readahead, higher watermark_scale_factor so reclaim
-    # starts earlier (giving oomd time to react before pages hit disk swap).
     boot.kernel.sysctl = {
       "vm.swappiness" = lib.mkDefault 180;
       "vm.watermark_boost_factor" = lib.mkDefault 0;
@@ -60,7 +53,6 @@ in
         OOMScoreAdjust = -1000;
         LogsDirectory = "skynet-memwatch";
         Environment = [ "MEMWATCH_INTERVAL=${toString cfg.memwatchInterval}" ];
-        # Cap stop time so the sampler can't ever wedge shutdown.
         TimeoutStopSec = "3s";
         KillMode = "mixed";
       };

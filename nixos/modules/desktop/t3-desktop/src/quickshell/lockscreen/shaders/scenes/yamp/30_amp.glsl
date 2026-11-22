@@ -1,22 +1,17 @@
-// --- and& ampersand: baked SDF texture (gen_sdf.py) -------------------------
-// iChannel0: R = J piece, G = P piece, glyph space [-SDF_BOX,SDF_BOX]^2
-// (v flipped), distances clamped to +-SDF_RANGE/2
-const float PAD = 0.0464;      // design gap, measured from the artwork
+const float PAD = 0.0464;
 const float SDF_BOX   = 0.75;
 const float SDF_RANGE = 0.25;
 float gFarPad = SDF_RANGE;
 
 vec2 glyphUV(vec2 p){ return vec2(p.x, -p.y) / (2.0 * SDF_BOX) + 0.5; }
 
-// the early-out branches return far + SDF_RANGE in 2d; the max() keeps the
-// field growing past the texture's clamp plateau
 float sdJ(vec2 p) {
-    float far = length(p) - 0.57;   // J fits in radius 0.554
+    float far = length(p) - 0.57;
     if (far > (gFarPad > 0. ? 0.05 : SDF_RANGE * 0.5)) return far + gFarPad;
     return max((texture(iChannel0, glyphUV(p)).r - 0.5) * SDF_RANGE, far);
 }
 float sdP(vec2 p) {
-    float far = length(p) - 0.66;   // P fits in radius 0.646
+    float far = length(p) - 0.66;
     if (far > (gFarPad > 0. ? 0.09 : SDF_RANGE * 0.5)) return far + gFarPad;
     return max((texture(iChannel0, glyphUV(p)).g - 0.5) * SDF_RANGE, far);
 }
@@ -31,17 +26,15 @@ float glyphDist(vec2 p){
     return min(d.x, d.y);
 }
 
-// brand gradient across the glyph (glyph space spans y in [-0.5,0.5])
 vec3 ampGradient(vec2 p){
     return mix(GRAD_BOT, GRAD_TOP, clamp(p.y + 0.5, 0., 1.));
 }
 
-// --- ampersand animation ------------------------------------------------------
-const vec2  CJ = vec2(-0.0644,-0.2581);   // J centroid (spin pivot)
-const vec2  CP = vec2( 0.0148, 0.0562);   // P centroid
-const vec2  SEED_J = vec2(-0.2871, 0.0267);  // wedge tip
-const vec2  SEED_P = vec2(-0.0192, 0.4142);  // top of the loop
-const float RJ = 0.76;                    // wipe radii covering each piece
+const vec2  CJ = vec2(-0.0644,-0.2581);
+const vec2  CP = vec2( 0.0148, 0.0562);
+const vec2  SEED_J = vec2(-0.2871, 0.0267);
+const vec2  SEED_P = vec2(-0.0192, 0.4142);
+const float RJ = 0.76;
 const float RP = 1.04;
 
 float fillAnim(float frame, float start){
@@ -52,7 +45,6 @@ float fillAnim(float frame, float start){
     return 0.;
 }
 
-// rotate state: J and P counter-spin a full turn
 void ampSpin(vec2 p, float frame, float dir, out vec2 pJ, out vec2 pP){
     pJ = p;
     pP = p;
@@ -63,7 +55,6 @@ void ampSpin(vec2 p, float frame, float dir, out vec2 pJ, out vec2 pP){
     }
 }
 
-// fill states: brand-gradient wipes clipped inside each piece
 float ampFill(vec2 pJ, vec2 pP, vec2 d, float frame){
     float fj = fillAnim(frame, FILLJ_START);
     float fp = fillAnim(frame, FILLP_START);

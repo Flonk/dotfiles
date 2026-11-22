@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-# Bakes the oscilloscope beam path into scope_path.png: the visible and&
-# outline (J, and P minus the padded J, as drawn by sdJ/sdP) traced from
-# yamp_sdf.png, resampled by arc length into N points. Column i is point i:
-# row 0 = x, row 1 = y, as 16 bit (R hi, G lo) over [-BOX, BOX]; B = 255
-# where the beam is lit on the way to the next point, 0 on a retrace jump.
-#
-# Run: just gen-scope, or by hand:
-#      nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scikit-image])" \
-#        --run "python3 gen_scope.py"
 
 import numpy as np
 from PIL import Image

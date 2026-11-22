@@ -237,10 +237,6 @@ void cvFree(out vec4 r0, out vec4 r1){
     r1 = vec4(-1., 0., 0., 0.);
 }
 
-// a fresh factory as if it had been running a while: the first CV_NFRAME
-// items are empty flasks spread round the return loop; then amps spread along
-// every track after the weld, carrying every station they would have passed;
-// then knocked-out pieces between each line's hammer and the weld room
 void cvInit(int i, out vec4 r0, out vec4 r1){
     if(i < CV_NFRAME){
         float s = (float(i) + 0.5) / float(CV_NFRAME) * cvLen(CT_FRAME);
@@ -602,7 +598,6 @@ vec4 cvFeedStep(int li, float clk, float dt){
     return vec4(c - (landed && cvSt(CX_PUSH + li).x > 0. ? 1. : 0.), 0., 0., 0.);
 }
 
-// seconds since the paternoster last pushed a flask into line li
 vec4 cvPushStep(int li, float dt){
     int lt = li == 0 ? CT_P : li == 1 ? CT_J : CT_D;
     for(int j = 0; j < CV_N; j++){
@@ -628,8 +623,6 @@ vec4 cvJamStep(float dt){
     return p;
 }
 
-// a QC step's boot: seconds since it last kicked, the amp it is watching and
-// whether that amp failed
 vec4 cvQKickStep(int j, float dt){
     vec4 p = cvSt(CX_QK + j), st = cvSt(CV_QC_K[j]);
     int h = st.x >= 0. ? cvI(st.y) : -1;
@@ -641,7 +634,6 @@ vec4 cvQKickStep(int j, float dt){
     return vec4(min(p.x + dt, 10.), p.y, p.z, 0.);
 }
 
-// seconds since the bounce pad last knocked a cap off
 vec4 cvHatFlyStep(float dt){
     float best = min(cvSt(CX_HATFLY).x + dt, 10.), sb = cvBounceS(), L = CVG(4.4721);
     for(int j = 0; j < CV_N; j++){

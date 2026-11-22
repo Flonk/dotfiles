@@ -1,20 +1,3 @@
-// --- shatter: a glass amp shot three times, bursting and rewinding ----------
-// A transition, SH_PERIOD long on its own clock: the old scene dims away
-// (SH_DIM) as a glass amp (SH_SCALE tall) takes bullets at SH_HITS
-// times, each at one of the SH_SPOTS points inside the glyph: a flash, a hole,
-// and a web of cracks round it. The cracks and shards come from a Voronoi
-// in log-polar space round the impact (SH_SECTORS round, rings growing
-// outwards), so pieces are small at the hole and large far from it. The
-// last hit bursts it along that impact's pattern: every piece flies off away
-// from the hole (faster the closer it was), tumbling and falling out of the
-// frame. SH_TEXT_AT after the burst FLAP_TEXT pops in on an ease-out-back
-// in Montserrat (the flap font atlas, SH_ADV advances in cell heights) and
-// holds until it shrinks away as the period ends, when a new amp flies in, growing out
-// of the distance on a fast ease-out-back (SH_IN). A
-// pixel finds its piece by undoing each nearby piece's motion and checking
-// that the point it lands on belongs to that piece; as every piece flies
-// straight out from the hole (plus the shared lift and fall), only the
-// SH_REACH sectors either side of the pixel's own direction are tried.
 const float SH_PERIOD   = T_SHATTER;
 const float SH_SCALE    = TRANS_AMP;
 const vec3  SH_HITS     = vec3(2.2, 3., 3.8);
@@ -50,13 +33,11 @@ vec2 shSeed(vec2 cell, float key){
     return cell + 0.15 + 0.7 * vec2(random(cell + key), random(cell.yx + key + 7.3));
 }
 
-// log-polar coordinates of glyph point g round impact c
 vec2 shPolar(vec2 g, vec2 c){
     vec2 v = g - c;
     return vec2(atan(v.y, v.x) / 6.2831853 * SH_SECTORS, log(length(v) + 0.02) * SH_RING);
 }
 
-// nearest Voronoi seed's cell (x) and F2 - F1 (y, crack distance) at log-polar u
 vec3 shVoronoi(vec2 u, float key, out vec2 nrm){
     vec2 iu = floor(u);
     float d1 = 1e9, d2 = 1e9;
@@ -72,10 +53,6 @@ vec3 shVoronoi(vec2 u, float key, out vec2 nrm){
     return vec3(best, d2 - d1);
 }
 
-// colour of a crack through glyph point g round impact c whose Voronoi edge
-// has log-polar normal n: the edge's direction on the glass, carried back
-// from log-polar space, decides how much of the light it catches, from deep
-// amp blue to a bright teal glint
 vec3 shCrackColour(vec2 g, vec2 c, vec2 n){
     vec2 er = normalize(g - c + 1e-6), et = vec2(-er.y, er.x);
     vec2 en = normalize(et * n.x * SH_SECTORS / 6.2831853 + er * n.y * SH_RING);
@@ -83,7 +60,6 @@ vec3 shCrackColour(vec2 g, vec2 c, vec2 n){
     return mix(GRAD_BOT * 0.45, mix(GRAD_TOP, vec3(1.), 0.45) * 1.25, lit * lit);
 }
 
-// a piece's centre in glyph space
 vec2 shCentre(vec2 cell, vec2 c, float key){
     vec2 s = shSeed(cell, key);
     float a = s.x / SH_SECTORS * 6.2831853, r = exp(s.y / SH_RING) - 0.02;

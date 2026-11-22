@@ -1,10 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
 import { parseDocument, YAMLSeq } from "yaml";
 
-/**
- * Adds key definitions to the `keys:` section of .sops.yaml ONLY.
- * Does NOT touch creation_rules — the user does that manually.
- */
 export function addKeysToSopsYaml(
   filePath: string,
   entries: { anchor: string; ageKey: string }[],

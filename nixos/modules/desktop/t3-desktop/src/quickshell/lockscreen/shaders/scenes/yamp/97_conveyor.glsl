@@ -1,17 +1,3 @@
-// --- conveyor: a rube goldberg amp factory cut into a slab ---------------------
-// bufferConveyor runs CV_N items through tunnels cut into one grey slab. The
-// amp is cast in three pieces (J, the P bowl and the P's detached tail "."),
-// each on its own line: poured four at a time from lava veins in the slab,
-// cooled in a wind tunnel, knocked out of its mould by a drop hammer. A floor
-// arm welds the "." onto the J, a ceiling arm then the P. The amp drops down
-// the right edge into a water basin, rides a conveyor and a bucket elevator up
-// to the heater, spirals down to four airbrush passes, tumbles down to
-// quality control (stamp, scale, scanner; rejects melt), slides down to be
-// boxed, taped and labelled, and falls off screen through a chute. Item rows:
-// row 0 pos.xy, spin; row 1 track, arc length, timer, mask (bit k station k,
-// and row 0 w the piece plus 4 if rejected). Row CV_ROW holds the stations
-// (progress, holder, since done, extra), the jam, the sorter, the sim clock
-// and the splash.
 const int   CV_N       = 400;
 const int   CV_NFRAME  = 46;
 const float CV_K       = 0.8;
@@ -33,10 +19,6 @@ const float CV_WARP    = 6.;
 const float CV_HIT     = 0.3;
 const int   CV_ROW     = AG_FIELD0;
 
-// the layout is a grid of CV_CELL squares, one mould slot each: cell (i, j)
-// spans [i, i + 1] x [j, j + 1] cells. Things sit centred in a cell (CVX),
-// a row's tunnel is two cells tall from floor line j (CVR is where a piece
-// standing on its belt is centred), rooms have their walls on grid lines
 const float CV_CELL    = CV_GAP;
 const float CV_ROWOFF  = 0.0227;
 #define CVX(i) (((i) + 0.5) * CV_CELL)
@@ -105,19 +87,12 @@ const float CV_ST_DW[31] = float[](3.5, 3.5, 1., 1., 1., 1., 1.25, 1.25, 1.1, 1.
 const float CV_TAKT = 2.;
 const float CV_BEAT = 0.25;
 const float CV_WAITCAP[3] = float[](5., 99., 4.);
-// pieces, in glyph units: kind 0 J, 1 the P bowl, 2 the "." tail. A lone
-// piece on its line is drawn at g = gp + CV_PO[kind] so it sits bottom-centred
-// on the belt; every line casts in the same standard flask (CV_MCEN, CV_MHALF,
-// in gp), only the pattern pressed into its sand differs; an arm
-// grips it at CV_GRIP from its glyph origin
 const vec2 CV_PO[3]    = vec2[](vec2(0.), vec2(-0.0185, 0.284), vec2(0.294, 0.02));
 const vec2 CV_MCEN[3]  = vec2[](vec2(0., -0.02), vec2(0., -0.02), vec2(0., -0.02));
 const vec2 CV_MHALF[3] = vec2[](vec2(0.42, 0.56), vec2(0.42, 0.56), vec2(0.42, 0.56));
 const vec2 CV_GRIP[3]  = vec2[](vec2(0., 0.55), vec2(-0.02, 0.53), vec2(0.294, -0.27));
 const float CV_PSPLIT  = -0.26;
 
-// the weld room (cells -7..7 x 8..17) and its two arms: 0 sets the "." on
-// the J (floor mounted), 1 the P (ceiling mounted)
 const vec4  CV_WELDROOM = vec4(-7., 6., 7., 17.);
 const vec2  CV_PICK[2] = vec2[](vec2(CVX(-5.), CVR(9.)), vec2(CVX(2.), CVR(12.)));
 const vec2  CV_JOIN[2] = vec2[](vec2(CVX(-1.), CVR(15.)), vec2(CVX(5.), CVR(15.)));
@@ -128,8 +103,6 @@ const vec2  CV_SEAM[2] = vec2[](vec2(0.22, -0.33), vec2(0.05, -0.05));
 
 #define CVZ min(iFrame, 0)
 
-// the mask bit of station k: masks are floats, exact to 2^24, so the stations
-// past 23 reuse foundry bits of the lines a finished amp never ran on
 int cvBit(int k){ return k < 24 ? k : k == CS_GRIND ? 0 : k == CS_XRAY ? 2 : k == CS_BOOT ? 3 : k == CS_FLICK ? 5 : k == CS_POLISH ? 18 : k == CS_HAT ? 4 : 1; }
 
 int cvI(float x){ return int(round(x)); }
@@ -172,7 +145,6 @@ vec2 cvDirAt(int t, float s){
     return vec2(1., 0.);
 }
 
-// arc length of the point of track t nearest q
 float cvSAtP(int t, vec2 q){
     t = clamp(t, 0, CV_NT - 1);
     float best = 1e9, sb = 0., acc = 0.;
@@ -194,11 +166,9 @@ float cvSAtSt(int k){ return cvSAtP(CV_ST_T[k], cvStPos(k)); }
 float cvPackEnd(){ return cvSAtP(CT_PACK, vec2(CVX(-28.), CVR(-11.))); }
 float cvBounceS(){ return cvSAtP(CT_PACK, vec2(CVX(-17.), CVR(-15.))); }
 
-// the foundry line (0 P, 1 J, 2 ".") of a track or a piece, -1 if none
 int cvLineOfTrack(int t){ return t == CT_P ? 0 : t == CT_J ? 1 : t == CT_D ? 2 : -1; }
 int cvLineOfKind(int kind){ return kind == 0 ? 1 : kind == 1 ? 0 : 2; }
 
-// how many moulds station k works on at once, 0 if it is not a batch station
 int cvBatchN(int k){ return k < 3 ? CV_BATCH[k] : k == CS_CAUSTIC ? 8 : k == CS_CLASS ? 12 : 0; }
 
 int cvBatchSlot(int k, float s){
@@ -207,9 +177,6 @@ int cvBatchSlot(int k, float s){
     return abs(b - r) < 0.05 && r >= 0. && r < float(cvBatchN(k)) - 0.5 ? int(r) : -1;
 }
 
-// on the main run: drying on the heater belt, hanging from the rail over the
-// caustic pit, flung up the shaft by the centrifuge, along the gallery over the
-// paint hall and tumbling down the zigzag to the airbrush row
 bool cvHeatAt(vec2 p){ return p.x > CVG(2.) && p.x < CVG(10.) && p.y > CVG(-10.) && p.y < CVG(-2.); }
 bool cvLaunchAt(vec2 p){ return abs(p.x - CVX(26.)) < 0.001 && p.y > CV_HUB.y + 0.001 && p.y < CVR(9.) - 0.001; }
 bool cvRailAt(vec2 p){ return abs(p.y - CVR(-4.)) < 0.001 && p.x > CVX(9.) + 0.0005 && p.x < CVX(18.) + 0.001; }
@@ -219,9 +186,6 @@ bool cvMainZig(vec2 p){ return false; }
 
 bool cvRampAt(vec2 p){ return p.y > CVG(1.17) + 0.001 && p.x > CVX(19.) + 0.0005 && p.x < CVG(22.42) - 0.0005; }
 
-// the batch on the rail, T seconds into its cycle: 0..3 dipped in the pit,
-// 3..4.2 swung onto the centrifuge, spun up, each amp let go as its arm
-// points right so it flies straight up the shaft, then spun down
 float cvSpin(float T){
     if(T < 4.2) return 0.;
     if(T < 5.4) return CV_SPIN_W * (T - 4.2) * (T - 4.2) / 2.4;
@@ -277,9 +241,6 @@ float cvSpeed(int t, float s, vec2 p){
     return CV_BELT_V;
 }
 
-// the plinko chute the welded amps fall down into the water: off the end of
-// the top belt and down twenty staggered rows of brass pegs, each bounce
-// left or right, the chute walls turning them back
 const float CV_PLK_X = CVX(30.);
 const float CV_PLK_H = CVG(1.2);
 const float CV_PLK_W = CVG(0.6);
@@ -304,8 +265,6 @@ vec2 cvPlkPos(int i, float s, inout float ang){
     return vec2(CV_PLK_X + off, cvAt(CT_DROP, s).y);
 }
 
-// an amp v of the way through the tumbler: carried up the rising wall by a
-// lifter, dropped back to the bottom, again and again on its own beat
 vec2 cvDrumLift(float ph, float rin, float tw){
     vec2 d = vec2(cos(ph), sin(ph));
     return CV_DRUM + (CV_DRUMR - CVG(0.5) - rin) * d + tw * vec2(-d.y, d.x);
@@ -340,8 +299,6 @@ vec2 cvDrumPos(int i, float v, float tt, inout float ang){
     return mix(CV_DRUM + vec2(CV_DRUMR - CVG(0.55), 0.), p, e0);
 }
 
-// the flick arm over the drum's left edge: reaches in for an amp that has
-// tumbled its time, lifts it clear and flings it out onto the exit belt
 const vec2 CV_FLK_P = vec2(CVG(19.), CVG(14.) - 0.002);
 const vec2 CV_FLK_H = vec2(CVG(22.), CVG(11.));
 vec2 cvFlickPos(int i, float x, float tt, inout float ang){
@@ -440,7 +397,6 @@ vec2 cvPaintPos(int k, float x, inout float ang){
     return pp + vec2(CVG(0.14) * b, 0.);
 }
 
-// glyph origin of the piece in arm a, `ph` through its weld
 vec2 cvArmP(int a, float ph){
     float u = smoothstep(0.08, 0.42, ph);
     vec2 st = CV_PICK[a] - CV_PO[CV_ARMK[a]] * CV_SIZE;
@@ -459,8 +415,6 @@ vec2 cvArmTip(int a, float ph, bool busy){
 
 float cvFit(float asp){ return min(0.5 * asp / CV_HALF_W, 0.5 / CV_HALF_H); }
 
-// ---- drawing ------------------------------------------------------------------
-
 vec4 cvState(int x, int y){ return texelFetch(iChannel17, ivec2(x, y), 0); }
 
 int cvSlot(ivec2 c, int k){
@@ -477,8 +431,6 @@ vec3 cvLavaRamp(float t){
     return mix(c, vec3(1.9, 1.7, 1.1), smoothstep(0.85, 1., t));
 }
 
-// molten metal: a dark crust broken by bright cracks that drift and churn;
-// `heat` 1 is all liquid, 0 a cold crust
 vec3 cvLava(vec2 p, float heat){
     vec2 w = p * 70. + vec2(iTime * 0.35, -iTime * 0.2);
     vec2 warp = vec2(tcNoise(w * 0.6 + iTime * 0.4), tcNoise(w * 0.6 - iTime * 0.3 + 5.2));
@@ -520,7 +472,6 @@ float cvSeg7(vec2 p, int dg){
     return on < off ? on : off + 10.;
 }
 
-// n digits of v, cell h tall, left edge at o
 vec3 cvDigits(vec3 col, vec2 q, vec2 o, float h, int n, float v, vec3 lit){
     vec2 p = (q - o) / h;
     float w = 0.8;
@@ -566,19 +517,12 @@ vec3 cvMach(vec3 col, float d, float shade){
     return mix(col, CV_MC * shade * 0.55, S(abs(d) - 0.0006) * 0.7);
 }
 
-// the P carved by the J's design gap falls apart into the bowl and the tail
 float cvPcut(vec2 g){ return max(sdP(g), PAD - sdJ(g)); }
 float cvPmain(vec2 g){ return max(cvPcut(g), CV_PSPLIT - g.y); }
 float cvPdot(vec2 g){ return max(cvPcut(g), g.y - CV_PSPLIT); }
 
 float cvMouldD(vec2 g, int kind){ return sdRoundBox(g - CV_MCEN[kind], CV_MHALF[kind], 0.06); }
 
-// ---- moulds: one standard steel flask for every line. The hammer smashes the
-// sand and drops the flask through a hatch into the return tunnel; flasks
-// and sand ride left and fall down the tower shaft into the blast pit, where
-// air jets strip the sand off. A paternoster lifts the flasks through a wash,
-// a dryer and the one sand filler into the head of each line; a bucket
-// elevator carries the sand from the pit back up to the hopper
 const float CV_RET_X   = CVX(-10.);
 const float CV_RET_Y   = CVG(7.);
 const float CV_DROP_X  = CVX(-31.);
@@ -594,7 +538,6 @@ const vec2  CV_WASHX   = vec2(CVG(-33.3), CVG(-32.));
 const vec2  CV_DRYX    = vec2(CVG(-34.4), CVG(-33.3));
 const vec2  CV_FILLX   = vec2(CVG(-35.4), CVG(-34.4));
 
-// an empty flask, open at the top, around glyph point g of a piece's mould
 float cvFlask(vec2 g, int kind){
     float md = cvMouldD(g, kind);
     return max(max(md, -(md + 0.1)), g.y - CV_MCEN[kind].y - CV_MHALF[kind].y + 0.04) * CV_DSIZE;
@@ -608,9 +551,6 @@ float cvCarveReturn(vec2 q){
     return min(d, sdBox(q - vec2(CV_PAT_X, (CV_TOPY + CV_RUNF) * 0.5 + 0.01), vec2(CVG(0.5), (CV_TOPY - CV_RUNF) * 0.5 + 0.01)));
 }
 
-// the mould knocked off a piece `f` seconds after the hammer hit its top:
-// the shatter transition's log-polar Voronoi round the impact, every shard
-// flying out from it, tumbling and falling
 vec3 cvShards(vec3 col, vec2 g, float f, float key, int kind){
     vec2 c = vec2(0., CV_MCEN[kind].y + CV_MHALF[kind].y);
     float px = 1. / (iResolution.y * CV_SIZE);
@@ -645,8 +585,6 @@ vec3 cvShards(vec3 col, vec2 g, float f, float key, int kind){
     return col;
 }
 
-// the finish after `stage` airbrush passes: bare metal, primer, base coat,
-// the brand gradient, then clear coat with a travelling glint
 vec3 cvPaint(int stage, vec2 g, float fi){
     if(stage <= 0) return vec3(0.4, 0.41, 0.43);
     if(stage == 1) return vec3(0.9, 0.9, 0.88);
@@ -664,7 +602,6 @@ vec3 cvGoop(vec2 g, float fi){
     return vec3(0.36, 0.21, 0.1) * (0.75 + 0.45 * n) + vec3(0.3, 0.2, 0.1) * 0.6 * exp(-pow((g.x - g.y * 0.3 - 0.1) * 4., 2.));
 }
 
-// a mortarboard with a gold tassel, in glyph units of the amp wearing it
 vec3 cvCap(vec3 col, vec2 gp){
     gp = (gp - vec2(0., 0.52)) / 1.3 + vec2(0., 0.52);
     float cap = min(sdBox(gp - vec2(0., 0.6), vec2(0.22, 0.08)), sdBox(gp - vec2(0., 0.7), vec2(0.46, 0.03))) * CV_DSIZE * 1.3;
@@ -702,8 +639,6 @@ float cvStressK(vec4 st){ return st.x >= 0. ? smoothstep(0.1, 0.4, st.x) * (1. -
 
 vec3 cvTowerFlask(vec3 col, vec2 q, vec2 c, float id, float dirt, float wet, float fill);
 
-// a returning flask at p: caked in sand until the blast pit, then on the
-// paternoster wet from the wash, drying, filling with fresh sand
 vec3 cvFrameItem(vec3 col, vec2 q, vec2 p, float id){
     vec3 st = vec3(1., 0., 0.);
     bool pat = abs(p.x - CV_PAT_X) < 0.001 && p.y > CV_RUN_Y + 0.001;
@@ -719,8 +654,6 @@ vec3 cvFrameItem(vec3 col, vec2 q, vec2 p, float id){
     return cvTowerFlask(col, q, c, id, st.x, st.y, st.z);
 }
 
-// one item: a molten, rough, knocked-out piece, the J as the others are welded
-// on, painted pass by pass, then a box, taped and labelled
 vec3 cvItem(vec3 col, vec2 q, int i){
     vec4 r0 = cvState(i, 0), r1 = cvState(i, 1);
     int t = cvI(r1.x);
@@ -867,8 +800,6 @@ vec3 cvItem(vec3 col, vec2 q, int i){
     return col;
 }
 
-// ---- the slab: one grey block with the tunnels cut out of it -------------------
-
 float cvCarve(vec2 q){
     float d = 1e9;
     for(int t = 0; t < CV_NT + CVZ; t++){
@@ -961,9 +892,6 @@ vec3 cvSlab(vec2 q, vec2 tp, float carve){
     return carve < 0. ? hole : col;
 }
 
-// ---- the shell: the factory is a box with a one tile outer wall and a roof,
-// a furnace tower over the lava riser, the reception glazed onto the street;
-// beyond it the night city above the street, earth below
 const float CV_GROUND = CVG(-15.);
 
 float cvFactory(vec2 q){
@@ -978,8 +906,6 @@ float cvInterior(vec2 q){
 
 float cvGlass(vec2 q){ return sdBox(q - vec2(CVG(-37.5), CVG(-10.)), vec2(CVG(0.5), CVG(5.))); }
 
-// a visitor every CV_VISIT_P seconds: in off the street, rings at the desk,
-// gets a badge, joins the guide and leaves through the tour door
 const float CV_VISIT_P = 26.;
 float cvVisitT(){ return mod(iTime + 3., CV_VISIT_P); }
 float cvVisitorX(float t, out float walk, out float alpha){
@@ -1113,8 +1039,6 @@ vec3 cvBelts(vec3 col, vec2 q){
     return col;
 }
 
-// lava veins in the slab: a riser from above feeding a channel over each
-// foundry, four nozzles down to its batch of moulds
 vec3 cvVeins(vec3 col, vec2 q, float carve){
     if(q.x > CVG(-23.) || q.y < CVG(10.)) return col;
     float fl = 0.85 + 0.15 * tcNoise(vec2(iTime * 5., 3.));
@@ -1168,8 +1092,6 @@ vec3 cvPours(vec3 col, vec2 q){
 
 const vec2 CV_WIND = vec2(CVG(-23.), CVG(-11.));
 
-// a fan at the downstream end of each wind tunnel, behind the moulds,
-// blowing back against them
 vec3 cvFans(vec3 col, vec2 q){
     if(q.x < CV_WIND.y - 0.06 || q.x > CV_WIND.y + 0.03 || q.y < CVG(9.) || q.y > CVG(18.)) return col;
     for(int li = 0; li < 3 + CVZ; li++){
@@ -1187,7 +1109,6 @@ vec3 cvFans(vec3 col, vec2 q){
     return col;
 }
 
-// streaks of air blowing back through each wind tunnel, over the moulds
 vec3 cvWind(vec3 col, vec2 q){
     if(q.x < CV_WIND.x || q.x > CV_WIND.y || q.y < CVG(9.) || q.y > CVG(18.)) return col;
     float fade = smoothstep(CV_WIND.x, CV_WIND.x + 0.08, q.x) * smoothstep(CV_WIND.y, CV_WIND.y - 0.03, q.x);
@@ -1210,8 +1131,6 @@ vec3 cvWind(vec3 col, vec2 q){
     return col;
 }
 
-// the heater room: three storeys of slow belt between glowing heater walls,
-// steam lifting off the wet amps
 const vec2 CV_CAM = vec2(CVG(12.3), CVG(13.2));
 
 vec3 cvCamera(vec3 col, vec2 q){
@@ -1480,9 +1399,6 @@ vec3 cvHeater(vec3 col, vec2 q, float carve){
     return col;
 }
 
-// the stress test on the quality-control run: two plates drop beside each
-// amp and squeeze it thin, then a gripper takes its head and pulls it tall
-// while the belt holds its feet; a gauge by each rig reads the load
 vec3 cvStress(vec3 col, vec2 q, vec4 sq, vec4 sr){
     for(int g = 0; g < 2 + CVZ; g++){
         int k = g == 0 ? CS_SQUEEZE : CS_STRETCH;
@@ -1565,8 +1481,6 @@ vec3 cvBasin(vec3 col, vec2 q, vec2 spl){
     return col;
 }
 
-// the caustic bath under the rail past the heater: a square pit of sickly
-// green lye, bubbling and fuming, boiling up while a batch is dipped
 vec3 cvCaustic(vec3 col, vec2 q, vec4 cs){
     vec2 c = vec2(CVG(15.), CVG(-7.)), h = vec2(CVG(4.), CVG(3.));
     if(abs(q.x - c.x) > h.x + 0.03 || q.y < c.y - h.y - 0.01 || q.y > c.y + h.y + 0.12) return col;
@@ -1644,10 +1558,6 @@ vec3 cvHangRod(vec3 col, vec2 q, vec2 top, float c){
     return col;
 }
 
-// the gripper arms on the rail out of the heater: one drops from the ceiling
-// to take each amp off the top heater belt and runs it along to the pit;
-// eight at a time dip their amps into the lye, then swing them over onto the
-// centrifuge and let go
 vec3 cvHangers(vec3 col, vec2 q, float asp){
     if(q.x < CVG(8.) || q.x > CVG(27.) || q.y < CVG(-10.) || q.y > CVG(-2.)) return col;
     vec4 cs = cvState(CS_CAUSTIC, CV_ROW);
@@ -1683,8 +1593,6 @@ vec3 cvHangers(vec3 col, vec2 q, float asp){
     return col;
 }
 
-// the centrifuge: eight arms on a hub that take the dipped batch, whirl it
-// round and fling each amp off as it points right, straight up the shaft
 vec3 cvRotor(vec3 col, vec2 q, vec4 cs){
     vec2 h = CV_HUB;
     if(abs(q.x - h.x) > CVG(4.) || q.y < CVG(-10.) || q.y > CVG(-2.)) return col;
@@ -1728,8 +1636,6 @@ vec3 cvPlinko(vec3 col, vec2 q){
     return col;
 }
 
-// the x-ray booth: a dark lead-lined cell where a beam sweeps each amp and
-// shows its welds glowing through; the lamp on top gives the verdict
 vec3 cvXray(vec3 col, vec2 q, vec4 st, bool front){
     vec2 c = vec2(CV_ST_X[CS_XRAY], CVG(16.));
     if(abs(q.x - c.x) > CVG(0.8) || abs(q.y - c.y) > CVG(1.)) return col;
@@ -1750,8 +1656,6 @@ vec3 cvXray(vec3 col, vec2 q, vec4 st, bool front){
     return col + (lit ? lc * 0.3 * exp(-length(q - lp) / 0.004) : vec3(0.));
 }
 
-// the grinder: a wheel on a ceiling ram drops onto the seam where the P was
-// welded on and grinds it flush in a fan of sparks
 vec3 cvGrinder(vec3 col, vec2 q, vec4 st){
     vec2 a = cvStPos(CS_GRIND);
     if(abs(q.x - a.x) > 0.17 || abs(q.y - a.y) > 0.17) return col;
@@ -1771,9 +1675,6 @@ vec3 cvGrinder(vec3 col, vec2 q, vec4 st){
     return cvSparks(col, q, wc - vec2(-0.002, rw), normalize(vec2(1., 0.35)), grind, 57., 0.9);
 }
 
-// the reject boot: hangs cocked back under the ceiling right of the amp,
-// and when the x-ray has marked one it winds up and punts it back left, clean
-// out of the factory (drawn mirrored about the station)
 vec3 cvBootAt(vec3 col, vec2 q, vec2 sa, float ceil, float x, float since){
     q.x = 2. * sa.x - q.x;
     vec2 P = vec2(sa.x - CVG(0.9), ceil - 0.002);
@@ -1800,8 +1701,6 @@ vec3 cvBootAt(vec3 col, vec2 q, vec2 sa, float ceil, float x, float since){
     return col;
 }
 
-// a punted amp: up in a big arc, then right across the screen at the
-// camera, tumbling and swelling, a smear of ghosts behind it
 vec3 cvKickedAt(vec3 col, vec2 q, vec2 s0, float since, float asp, float fit, bool fin){
     float T = since / 1.8;
     if(T >= 1.) return col;
@@ -1833,9 +1732,6 @@ vec3 cvKickedAt(vec3 col, vec2 q, vec2 s0, float since, float asp, float fit, bo
     return col;
 }
 
-// the tumbler: a big drum turning in the primer room, seen end on through
-// its cut-away face; lifters carry the amps up the rising wall and drop them
-// back through the grey slurry pooled in its bottom
 vec3 cvDrum(vec3 col, vec2 q){
     vec2 r = q - CV_DRUM;
     float rr = length(r);
@@ -1906,8 +1802,6 @@ vec3 cvFlickArm(vec3 col, vec2 q, vec4 st){
     return col;
 }
 
-// the drip rack after the drum: rollers with gaps under the wet amps, white
-// slurry dripping off them into a tray on the floor, less as they dry
 vec3 cvDripBack(vec3 col, vec2 q){
     if(q.x < CVG(8.) || q.x > CVG(21.) || q.y < CVG(6.) || q.y > CVG(7.5)) return col;
     float ty = CVG(6.6) + 0.0007 * sin(q.x * 300. + iTime * 3.);
@@ -1947,8 +1841,6 @@ vec3 cvDripFront(vec3 col, vec2 q, float asp){
     return col;
 }
 
-// the splat on the primer room's left wall where the flick arm throws the
-// amps: a white blot with runs down the rock, fresh spray on every hit
 vec3 cvSplat(vec3 col, vec2 q, vec4 st){
     vec2 w = vec2(CVG(8.), CVG(10.5));
     if(abs(q.x - w.x) > 0.04 || abs(q.y - w.y) > 0.06) return col;
@@ -1986,8 +1878,6 @@ vec3 cvMelt(vec3 col, vec2 q){
     return mix(col, cvLava(q * 0.9 + 5., 0.9) * fl, S(d));
 }
 
-// a head hanging in the ceiling shaft (h tall) of station k: `drop` 0 up in
-// it, 1 down on `bot`
 vec3 cvHead(vec3 col, vec2 q, int k, float drop, vec2 size, float shade, float h, float bot){
     size *= CV_K; h *= CV_K;
     float top = cvCeil(k) + h - 0.004;
@@ -2045,8 +1935,6 @@ vec3 cvArm(vec3 col, vec2 q, int a, vec4 st){
     return col;
 }
 
-// ---- the paint hall: four booths, each a gilded alcove with a turntable
-// spinning the amp under a spotlight while two gold arms spray it ----------
 const vec3 CV_GOLD = vec3(0.72, 0.56, 0.24);
 
 vec3 cvMistColour(int k){
@@ -2263,10 +2151,6 @@ vec3 cvAirbrush(vec3 col, vec2 q, int k, vec4 st){
     return col;
 }
 
-// the polishing shrine after the goop booth: crimson velvet in a gold arch,
-// a spotlight fades up, two cloth wheels on gold arms swing in from the
-// sides and buff the goop away, then withdraw and the amp is unveiled in a
-// flash of sparkles
 float cvPolishOn(vec4 st){ return st.x >= 0. ? smoothstep(0., 0.12, st.x) * (1. - smoothstep(0.88, 1., st.x)) : 0.; }
 
 vec3 cvPolishBack(vec3 col, vec2 q, vec4 st){
@@ -2346,9 +2230,6 @@ vec3 cvPolishFront(vec3 col, vec2 q, vec4 st){
     return col;
 }
 
-// the classroom the finished amps sit a lecture in before packing: twelve
-// seats on wooden steps rising from the teacher, who taps the chalk amp on
-// the board with a long pointer until the class files out
 vec3 cvTrapDoor(vec3 col, vec2 q, float asp){
     vec2 hg = vec2(CVG(-8.), CVG(-4.));
     if(q.x < hg.x - 0.005 || q.x > hg.x + CVG(1.) + 0.005 || q.y > hg.y + 0.005 || q.y < hg.y - CVG(1.2)) return col;
@@ -2371,8 +2252,6 @@ vec3 cvTrapDoor(vec3 col, vec2 q, float asp){
     return cvMach(col, length(q - hg - vec2(0.002, -0.002)) - 0.0022, 1.1);
 }
 
-// the reception in the bottom left corner: a waiting sofa, the brand on the
-// wall, the front desk, and the door guided tours will leave by
 vec3 cvAmpStand(vec3 col, vec2 q, vec2 p, float f, float seed){
     vec2 g = (q - p) / CV_SIZE;
     g.x *= f;
@@ -2682,9 +2561,6 @@ vec3 cvVentSmoke(vec3 col, vec2 q){
     return col;
 }
 
-// the coronation room under the classroom: purple banners and a spotlight;
-// each graduate lands on the floor and a mortarboard tumbles down out of the
-// dark onto its head
 vec3 cvCoronBack(vec3 col, vec2 q, vec4 st){
     vec2 a = cvStPos(CS_HAT);
     if(q.x < CVG(-15.) || q.x > CVG(-7.) || q.y < CVG(-15.) || q.y > CVG(-5.)) return col;
@@ -2740,8 +2616,6 @@ vec3 cvHatRig(vec3 col, vec2 q, vec4 st){
     return cvCap(col, Rot(ang) * (q - o) / CV_SIZE);
 }
 
-// the cap knocked off at the top of the bounce: it flips up and away and
-// tumbles down the shaft
 vec3 cvBounceRoom(vec3 col, vec2 q, float t){
     if(q.x < CVG(-19.) || q.x > CVG(-16.) || q.y < CVG(-15.) || q.y > CVG(-5.)) return col;
     float rm = sdBox(q - vec2(CVG(-17.5), CVG(-10.)), vec2(CVG(1.5), CVG(5.)));
@@ -2769,10 +2643,6 @@ vec3 cvHatFly(vec3 col, vec2 q, float t){
     return mix(col, c, 1. - smoothstep(0.9, 1.2, t));
 }
 
-// the QC column: amps hauled up a pure vertical shaft, each by its own arm
-// running on a rail up the left wall, stopping at every step: a stamp, a
-// squeeze, a scale, a stretch and a scanner, each in a niche in the right
-// wall beside a boot for the ones that fail
 vec3 cvColumn(vec3 col, vec2 q, float asp){
     if(q.x < CVG(-6.5) || q.x > CVG(-1.8) || q.y < CVG(-15.5) || q.y > CVG(4.)) return col;
     col = cvMach(col, sdBox(q - vec2(CVG(-6.) + 0.003, CVG(-5.75)), vec2(0.003, CVG(9.25))), 0.6);
@@ -2969,8 +2839,6 @@ vec3 cvPanel(vec3 col, vec2 q, float shipped){
     return col;
 }
 
-// sand running through a pipe from a to b; crossing a tunnel it runs in a
-// casing
 vec3 cvSandSeg(vec3 col, vec2 q, vec2 a, vec2 b, float carve, float speed){
     float d = sdSegment(q, a, b) - 0.0032;
     if(d > 0.006) return col;
@@ -2983,8 +2851,6 @@ vec3 cvSandSeg(vec3 col, vec2 q, vec2 a, vec2 b, float carve, float speed){
     return mix(col, CV_SAND * (0.5 + 0.55 * g), S(d));
 }
 
-// a flask standing at (c.x, bottom c.y): `dirt` caked in sand, `wet` from the
-// wash, `fill` how full of fresh sand
 vec3 cvTowerFlask(vec3 col, vec2 q, vec2 c, float id, float dirt, float wet, float fill){
     vec2 g = (q - c) / CV_SIZE + vec2(0., CV_MCEN[0].y - CV_MHALF[0].y);
     float fl = cvFlask(g, 0);
@@ -3106,8 +2972,6 @@ vec3 cvSand(vec3 col, vec2 q, float carve){
     return col;
 }
 
-// the mould press at the head of foundry line k - CS_PRESS: its head
-// stamps the piece into a fresh block of sand
 vec3 cvMouldPress(vec3 col, vec2 q, int k, vec4 st, vec4 jam){
     vec2 sp = cvStPos(k);
     if(abs(q.x - sp.x) > 0.04 || q.y < sp.y - 0.02 || q.y > sp.y + 0.07) return col;
@@ -3130,8 +2994,6 @@ vec3 cvMouldPress(vec3 col, vec2 q, int k, vec4 st, vec4 jam){
     return col;
 }
 
-// the paternoster's pistons, one in the wall by the head of each line, out
-// when they have just pushed a flask across
 vec3 cvPistons(vec3 col, vec2 q){
     if(q.x < CVG(-38.) || q.x > CVG(-36.) || q.y < CVG(8.) || q.y > CVG(17.)) return col;
     for(int li = 0; li < 3 + CVZ; li++){

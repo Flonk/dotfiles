@@ -39,7 +39,6 @@ export function Step6() {
 
     (async () => {
       try {
-        // Wait until SSH-as-user works — activation may still be wrapping up.
         await waitForSsh(userTarget);
 
         setSub("cloning");

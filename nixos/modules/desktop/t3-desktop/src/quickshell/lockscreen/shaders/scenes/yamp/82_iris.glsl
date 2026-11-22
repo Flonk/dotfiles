@@ -1,10 +1,3 @@
-// --- iris: the old scene shrinks into an amp-shaped window -------------------
-// A transition, T_IRIS long. The amp starts IR_ZOOM times too big, held so
-// IR_ANCHOR (a point well inside the stroke) sits mid-screen, and shrinks
-// to TC_AMP over IR_SHRINK: the old scene shows only through it, black
-// round it. It fills with the brand gradient, the tagline pops in under it,
-// and from IR_GROW_AT the window opens on the new scene and grows until it
-// covers the screen. irWindow is the window's distance at zoom z.
 const float IR_ZOOM    = 60.;
 const vec2  IR_ANCHOR  = vec2(0.111, -0.353);
 const float IR_SHRINK  = 1.6;

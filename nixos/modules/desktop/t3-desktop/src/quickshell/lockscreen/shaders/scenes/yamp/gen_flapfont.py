@@ -1,12 +1,4 @@
 #!/usr/bin/env python3
-# Bakes the split-flap font into flap_font.png: an 8x9 atlas of signed
-# distance fields of CHARS (cell CW x CH, height = 1 tile unit, distances
-# clamped to +-RANGE/2 and mapped to [0, 255], inside < 0.5), caps centred
-# on the cell, CAP of the cell tall, in Montserrat SemiBold.
-#
-# Run: just gen-flapfont, or by hand:
-#      nix-shell -p "python3.withPackages(p: [p.pillow p.numpy p.scipy])" \
-#        --run "python3 gen_flapfont.py <Montserrat-SemiBold.ttf>"
 
 import sys
 import numpy as np

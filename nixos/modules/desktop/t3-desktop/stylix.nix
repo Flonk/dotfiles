@@ -15,8 +15,6 @@ in
   config = lib.mkIf (config.programs.t3-desktop.hyprland.enable && cfg.enable) (
     lib.mkMerge [
       {
-        # New stylix sets gtk.gtk4.theme itself; mkForce keeps our "no GTK4 theming" intent
-        # and resolves the null-vs-not-null conflict.
         gtk.gtk4.theme = lib.mkForce null;
 
         stylix = {

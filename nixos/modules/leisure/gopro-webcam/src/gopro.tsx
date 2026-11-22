@@ -5,14 +5,11 @@ import { execSync } from "node:child_process";
 import { join } from "node:path";
 import { $, quote } from "zx";
 
-// --- Config ------------------------------------------------------------------
-
 $.verbose = false;
 $.quiet = true;
 $.shell = "/bin/sh";
 $.quote = quote;
 
-// Above the IPU6 raw range (video0-47) and dock-webcam numbers; relay is 60.
 const VIDEO_NR = 61;
 const PORT = 8554;
 const PID_FILE = "/run/gopro-webcam-ffmpeg.pid";
@@ -26,7 +23,7 @@ const GOPRO_USER = process.env.GOPRO_USER;
 const RESOLUTIONS: Record<string, [gopro: string, size: string]> = {
   "1080": ["1080", "1920x1080"],
   "720": ["720", "1280x720"],
-  "480": ["720", "854x480"], // GoPro rejects native 480; scale locally
+  "480": ["720", "854x480"],
 };
 
 const FOV_IDS: Record<string, number> = {
@@ -35,8 +32,6 @@ const FOV_IDS: Record<string, number> = {
   superview: 3,
   linear: 4,
 };
-
-// --- Types -------------------------------------------------------------------
 
 interface Ctx {
   resolution: string;
@@ -53,7 +48,7 @@ type Status = "pending" | "running" | "done" | "failed";
 interface StepDef {
   label: string;
   run: (ctx: Ctx) => Promise<string | undefined>;
-  soft?: boolean; // failure shows warning but doesn't abort
+  soft?: boolean;
 }
 
 interface StepUI {
@@ -63,12 +58,8 @@ interface StepUI {
   error?: string;
 }
 
-// --- Helpers -----------------------------------------------------------------
-
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-// When running as root (systemd service), drop sudo.
-// zx template helper: await root`cmd args` runs with sudo when needed.
 function root(pieces: TemplateStringsArray, ...args: any[]) {
   if (isRoot) return $(pieces, ...args);
   const sudoPieces = [`sudo ${pieces[0]}`, ...pieces.slice(1)] as unknown as TemplateStringsArray;
@@ -84,8 +75,6 @@ async function exists(path: string): Promise<boolean> {
     return false;
   }
 }
-
-// --- User-context helpers (for running as root from systemd) -----------------
 
 let _userUid: string | undefined;
 async function getUserUid(): Promise<string> {
@@ -104,12 +93,9 @@ async function sendNotify(...args: string[]): Promise<void> {
   }
 }
 
-// --- Steps: shared -----------------------------------------------------------
-
 async function stopFfmpeg(): Promise<string | undefined> {
   let killed = false;
 
-  // Stop the transient systemd service (preferred)
   const status = await root`systemctl is-active gopro-ffmpeg.service`.nothrow();
   if (status.stdout.trim() === "active") {
     await root`systemctl stop gopro-ffmpeg.service`.nothrow();
@@ -117,7 +103,6 @@ async function stopFfmpeg(): Promise<string | undefined> {
   }
   await root`systemctl reset-failed gopro-ffmpeg.service`.nothrow();
 
-  // Kill by PID file (fallback for old-style launches)
   if (await exists(PID_FILE)) {
     const pid = (await root`cat ${PID_FILE}`.nothrow()).stdout.trim();
     if (pid) {
@@ -132,7 +117,6 @@ async function stopFfmpeg(): Promise<string | undefined> {
     await root`rm -f ${PID_FILE}`.nothrow();
   }
 
-  // Catch strays
   const r1 = await root`pkill -f 'ffmpeg.*v4l2'`.nothrow();
   const r2 = await root`pkill -f 'ffmpeg.*8554'`.nothrow();
   if (r1.exitCode === 0 || r2.exitCode === 0) killed = true;
@@ -140,8 +124,6 @@ async function stopFfmpeg(): Promise<string | undefined> {
   if (killed) await sleep(1000);
   return killed ? undefined : "nothing running";
 }
-
-// --- Steps: start ------------------------------------------------------------
 
 async function loadModule(ctx: Ctx): Promise<string> {
   // Never rmmod: the IPU6 relay holds /dev/video60 on the same module.
@@ -153,7 +135,6 @@ async function loadModule(ctx: Ctx): Promise<string> {
   await root`v4l2loopback-ctl delete ${VIDEO_NR}`.nothrow();
   await root`v4l2loopback-ctl add -b 2 -x 1 -n GoPro ${VIDEO_NR}`.nothrow();
 
-  // Find the device in sysfs
   const base = "/sys/devices/virtual/video4linux";
   let found = false;
   for (const dir of await readdir(base)) {
@@ -169,8 +150,6 @@ async function loadModule(ctx: Ctx): Promise<string> {
   }
   if (!found) throw new Error("v4l2loopback loaded but no GoPro device appeared");
 
-  // Set caps immediately so wireplumber sees a capture device (not just
-  // output) when it processes the add event.
   const caps = `YU12:${ctx.videoSize}`;
   await root`v4l2loopback-ctl set-caps ${ctx.videoDev!} ${caps}`;
 
@@ -178,7 +157,6 @@ async function loadModule(ctx: Ctx): Promise<string> {
 }
 
 async function discoverGoPro(ctx: Ctx): Promise<string> {
-  // When triggered by udev, the network interface may not be ready yet.
   const maxAttempts = headless ? 15 : 3;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -206,22 +184,17 @@ async function activateWebcam(ctx: Ctx): Promise<string | undefined> {
   const r =
     await $`curl -sf --connect-timeout 3 ${ctx.goProApi}/gp/gpWebcam/START?res=${ctx.resolution}&port=${PORT}`.nothrow();
 
-  // Set FOV (best effort)
   await $`curl -sf --connect-timeout 3 ${ctx.goProApi}/gp/gpWebcam/SETTINGS?fov=${ctx.fovId}`.nothrow();
 
   return r.exitCode !== 0 ? "already streaming" : undefined;
 }
 
 async function startFfmpeg(ctx: Ctx): Promise<string> {
-  // Raise kernel UDP buffer limit
   await root`sysctl -w net.core.rmem_max=16777216`.nothrow();
 
-  // Stop any leftover transient unit from a previous run
   await root`systemctl stop gopro-ffmpeg.service`.nothrow();
   await root`systemctl reset-failed gopro-ffmpeg.service`.nothrow();
 
-  // Launch ffmpeg as a transient systemd service with memory limits.
-  // This keeps it in a tracked cgroup so it can't OOM the whole system.
   const cmd = [
     `systemd-run`,
     `--unit=gopro-ffmpeg`,
@@ -230,18 +203,12 @@ async function startFfmpeg(ctx: Ctx): Promise<string> {
     // death spiral; see obsidian://claude/video-setup.
     `--property=MemoryMax=512M`,
     `--property=MemoryHigh=256M`,
-    // When the system thrashes (post-call swap-in storm), ffmpeg can stop
-    // responding to SIGTERM. Cap stop time so it can't block shutdown.
     `--property=TimeoutStopSec=5s`,
     `--property=KillMode=mixed`,
-    // truncate: prefix wipes the log on each start so it can't grow forever
     `--property=StandardOutput=truncate:${LOG_FILE}`,
     `--property=StandardError=truncate:${LOG_FILE}`,
     `--`,
     `ffmpeg`,
-    // -nostats: drop per-frame progress lines (they were filling the log
-    //   with megabytes of "elapsed=... frame=..." with no \n).
-    // -loglevel error: only log actual problems (jam, crash, EAGAIN floods).
     `-nostdin -nostats -loglevel error -use_wallclock_as_timestamps 1`,
     `-f mpegts -fflags nobuffer+discardcorrupt -flags low_delay`,
     `-max_delay 0`,
@@ -260,13 +227,10 @@ async function startFfmpeg(ctx: Ctx): Promise<string> {
     await $({ input: cmd })`sudo bash`;
   }
 
-  // Give ffmpeg a moment to start (or crash)
   await sleep(2000);
 
-  // Verify it's alive via systemd
   const status = await root`systemctl is-active gopro-ffmpeg.service`.nothrow();
   if (status.stdout.trim() === "active") {
-    // Write PID file for the stop function
     const mainPid = (await root`systemctl show -p MainPID --value gopro-ffmpeg.service`.nothrow()).stdout.trim();
     if (mainPid && mainPid !== "0") {
       await root`bash -c ${`echo ${mainPid} > ${PID_FILE}`}`.nothrow();
@@ -277,8 +241,6 @@ async function startFfmpeg(ctx: Ctx): Promise<string> {
   const log = (await $`tail -20 ${LOG_FILE}`.nothrow()).stdout;
   throw new Error(`ffmpeg exited:\n${log}`);
 }
-
-// --- Steps: stop -------------------------------------------------------------
 
 async function unloadModule(): Promise<string | undefined> {
   if ((await $`test -e /dev/video${VIDEO_NR}`.nothrow()).exitCode !== 0) {
@@ -299,8 +261,6 @@ async function unloadModule(): Promise<string | undefined> {
   await root`rm -f ${DEVICE_FILE}`.nothrow();
   return "device still present (harmless)";
 }
-
-// --- Headless runner ---------------------------------------------------------
 
 async function runHeadless(
   stepDefs: StepDef[],
@@ -325,8 +285,6 @@ async function runHeadless(
   }
   if (onDone) await onDone(ctx);
 }
-
-// --- UI Components -----------------------------------------------------------
 
 const FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
@@ -371,8 +329,6 @@ function StepRow({ step }: { step: StepUI }) {
   );
 }
 
-// --- App ---------------------------------------------------------------------
-
 function App({
   stepDefs,
   title,
@@ -411,12 +367,10 @@ function App({
             exit();
             return;
           }
-          // Soft failure — mark done with warning and continue
           update(i, { status: "done", detail: msg });
         }
       }
 
-      // Send desktop notification on success
       if (onDone) await onDone(ctx);
 
       await sleep(100);
@@ -440,8 +394,6 @@ function App({
     </Box>
   );
 }
-
-// --- Main --------------------------------------------------------------------
 
 async function main() {
   const args = process.argv.slice(2);
@@ -478,7 +430,6 @@ async function main() {
   const [resolution, videoSize] = RESOLUTIONS[resKey];
   const ctx: Ctx = { resolution, videoSize, fovId: FOV_IDS[fovKey] };
 
-  // Authenticate sudo before ink takes over the terminal (skip when already root)
   if (!isRoot) {
     try {
       await $`sudo -v`;
@@ -488,7 +439,6 @@ async function main() {
     }
   }
 
-  // Fire-and-forget low priority notification at the start
   if (action === "start") {
     sendNotify("-t", "2000", "-u", "low", "-i", "camera-web", "🎥 GoPro starting...");
   } else if (action === "stop") {

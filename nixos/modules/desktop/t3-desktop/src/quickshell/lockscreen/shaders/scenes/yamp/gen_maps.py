@@ -1,102 +1,3 @@
-# Bake real road networks from OpenStreetMap into ../../assets/maps.png for
-# the traffic scene's map sub-modes (96_map.glsl).
-#
-# For each map in MAPS: fetch the drivable ways round the centre (Overpass,
-# cached in the data dir), project them to screen units (R metres = half the
-# screen height), split them at junctions into directed lanes (one per
-# direction, offset to the driving side, trimmed back from the junction),
-# join every allowed turn with a curved connector, find roundabouts (tagged,
-# or small cycles of one-way roads; driven at the map's ring_speed, m/s, if
-# it has one), and work out which connectors cross or
-# merge and who gives way: ring traffic over traffic entering, then the
-# higher road class, then straight on over turning, then traffic from the
-# right.
-#
-# The texture is 1024 wide, RGB, read as a flat array of 24-bit words
-# (texel i = (i % 1024, i / 1024), r << 16 | g << 8 | b). Fixed-point
-# values: f = (v + FX_OFF) / FX_RANGE * 2^24.
-#   word 0           map count, then per map its base word
-#   map header (at base, offsets relative to base):
-#     0 lane count (lanes first, connectors after), 1 edge count,
-#     2 edge table, 3 points, 4 successor lists, 5 give-way lists,
-#     6 entry lanes, 7 entry count, 8 segments, 9 segment count,
-#     10 grid cells, 11 cell lists, 12 grid nx, 13 grid ny,
-#     14 grid min x (fx), 15 grid min y (fx), 16 cell size (fx),
-#     17 car length (fx), 18 km per unit (fx; past 3.9 km as minus tens
-#     of km), 19 name start, 20 name
-#     length, 21 drive left (bit 0) and cars coming in anywhere on the map
-#     rather than at the edge of the screen (bit 1, the map's scatter, for one
-#     whose roads all lie on the screen), a treeline and snowline after its terrain
-#     (bit 2), 23 building count, 24 buildings, 25 their
-#     corners, 26 building grid cells, 27 their lists, 22 car count (the map's
-#     max_cars, the most it carries without jamming, else one per CAR_EVERY
-#     metres of lane; at most MAX_CARS); entry lanes are those starting off
-#     the screen
-#   edge (14 words): first point (index into the points), point count,
-#     length (fx), successors start, count, give-way start, count (edges
-#     whose cars this one gives way to), flags (bit 0 connector, bit 1
-#     ring, bits 2-4 layer + 2, bits 8-15 speed in units/s * 1000, bits
-#     16-19 lanes, 20-23 lanes at the far end: a lane edge is a whole
-#     carriageway, its centre line between its lanes, OSM lanes tags),
-#     the carriageway's width at the start and at the far end (fx; OSM
-#     width, shared out by lanes on two-way roads, else lanes * LANE_W),
-#     and for a connector how far right of the centre line of the lane
-#     before it it starts and of the lane after it it ends (fx; a car
-#     moving on shifts by them so it stays where it is), and its traffic
-#     light + 1 (0 none; bits 0-15 the junction's lights, 16 the phase;
-#     bit 20 set on a piece that just carries on the lane before it), and
-#     for a connector the lane it comes out of + 1 (0 for a lane)
-#   spawn list (header 41 count, 42 start): lanes to start cars on, each
-#     as often as its length * lanes * flow; entry lanes are listed as
-#     often as their flow * lanes (ENTRY_MAX at most)
-#   traffic light head (4 words): x, y (fx), lights + 1 as for edges,
-#     height / 4 (fx);
-#     cells as buildings, header 37 count, 38 table, 39 cells, 40 lists
-#   point (3 words): x, y, height in deck levels / 4 (fx)
-#   segment (9 words): a.xy, b.xy, half width, arc length at a (all fx),
-#     kind (bits 0-3: 0 a strip of road, 2 a dashed centre line, 4 a
-#     footpath (PATHS: paths and service roads are only drawn), 5 a
-#     waterway (WATERWAYS), 6 a triangle of a junction's area, its third
-#     corner in place of half width and arc length and that corner's
-#     height * 256 in bits 12-23), 7 a wall (WALLS), its height in decks for
-#     the heights); bits 4-7
-#     layer + 2; bit 8 bridge; on a strip bits 9-11: of a connector, one
-#     that gives way, one on a ring). Layers come from the OSM layer / bridge /
-#     tunnel tags; a bridge deck stands DECK_H metres per layer and its
-#     shadow falls along SHADOW, so cells also list the segments whose
-#     shadow reaches them; then the heights at a and b / 4 (fx). Roads off a
-#     bridge ramp down one level per RAMP metres.
-#   cell (2 words): list start, count (into the cell lists)
-#   parked car (3 words): x, y (fx), heading in 4096ths of a turn; cells
-#     as buildings, header 33 count, 34 table, 35 cells, 36 cell lists
-#   green (7 words): first corner, corner count, kind (0 lawn, 1 park, 2
-#     woods, 3 water), bounds min.xy max.xy (fx); corners and cells as buildings,
-#     header 28 count, 29 table, 30 corners, 31 cells, 32 cell lists
-#   building (7 words): first corner, corner count, height (fx, screen
-#     units), footprint bounds min.xy max.xy (fx); corner (2 words): x, y (fx). Building cells (2 words, on the
-#     road grid) list the buildings whose footprint, roof (BLD_VIEW of its
-#     height up the screen) or shadow (BLD_SUN of it along SHADOW) reach
-#     them.
-#   lights' greens (header 44 start): for each set of lights the green of
-#     phase 0 and of phase 1, in tenths of a second
-#   terrain (header 43 start): the ground's height (fx, screen units above
-#     its lowest) at each corner of the road grid, (nx + 1) * (ny + 1) of
-#     them row by row, from Terrarium elevation tiles (DEM_ZOOM, cached in
-#     the data dir; 0 for a test map), smoothed over TERRAIN_SMOOTH metres
-#     (roads do not follow every bump, nor the grid's)
-#     followed, for a map with treeline and snowline (metres; header 21 bit
-#     2), by those two (fx, screen units above its lowest ground)
-#   way out (header 45 start): for each edge the metres from its start to
-#     the nearest end of a lane leaving the map, driving (AWAY if none)
-#   spawn weight (header 46 start): for each edge * 16 how strongly cars come
-#     in where it crosses the edge of the screen (the OSM spawn tag, e.g. from
-#     PATCHES; 1 by default), plus ORPHAN on a lane nothing leads
-#     into (cars pull out of its start, there being no other way onto it)
-#
-# Run: just gen-maps, or by hand:
-#      nix-shell -p "python3.withPackages(p: [p.pillow p.numpy])" \
-#        --run "python3 gen_maps.py <data dir>"
-
 import hashlib
 import heapq
 import json
@@ -144,9 +45,6 @@ MAPS = [
     dict(name="Newark Split B", lat=40.6932, lon=-74.1828, r=60, left=False, crop_of="Newark Liberty Airport"),
 ]
 
-# fixes to the OSM data, by map: ways' tags set (None drops one) and
-# nodes moved (lat, lon), applied whenever the data is read so they
-# outlast refetches
 PATCHES = {
     "Huangjuewan, Chongqing": dict(nodes={}, ways={137433740: dict(layer=None)}),
     "Spaghetti Junction, Birmingham": dict(nodes={}, ways={22924839: dict(deck="2"), 22924841: dict(deck="2")}),
@@ -372,8 +270,6 @@ def fetch(m, data, what="roads"):
         for i, n in enumerate(e.get("nodes", [])):
             if n in patch.get("nodes", {}) and "geometry" in e:
                 e["geometry"][i] = dict(lat=patch["nodes"][n][0], lon=patch["nodes"][n][1])
-    # a coarse map (one seen from far off) keeps only what shows from there:
-    # roads from COARSE_CLASS up, town walls, no paths or parking
     if m.get("coarse"):
         if what in ("paths", "parking"):
             return []
@@ -888,7 +784,6 @@ DEM_TILES = {}
 
 
 def build(m, data):
-    # a new map's queries all go out at once, each starting on its own mirror
     kinds = KINDS + (["coastline"] if m.get("sea") else [])
     with ThreadPoolExecutor(len(kinds)) as pool:
         list(pool.map(lambda what: fetch(m, data, what), kinds))
@@ -962,13 +857,6 @@ def build(m, data):
                 run = []
             prev = n
 
-    # a bridge over nothing drawn (a stream, a railway) stays on the
-    # ground: a deck only lifts if some piece of its viaduct (bridge ways
-    # joined end to end) crosses a road or path below it (or a patch says
-    # lifted=yes: one shortened by a moved node). OSM layers only
-    # order what crosses what (pieces of one viaduct are tagged anything
-    # from 1 to 5), so a lifted deck stands one level over the highest
-    # deck it crosses (lowest first), at least 1
     def lines_cross(a, b):
         if min(p[0] for p in a) > max(p[0] for p in b) or min(p[0] for p in b) > max(p[0] for p in a):
             return False
@@ -1025,10 +913,6 @@ def build(m, data):
                     roads.append(dict(w, ids=ids[start:i + 1]))
                 start = i
 
-    # a short one-way piece with fewer lanes than the piece before it and
-    # the pieces after it leave room for (less any roads merging in there)
-    # is often a mistagged stub (3, 1, 2 lanes): it gets as many, so it is
-    # no bottleneck
     by_start, by_end = defaultdict(list), defaultdict(list)
     for r in roads:
         by_start[r["ids"][0]].append(r)
@@ -1046,7 +930,6 @@ def build(m, data):
                 r["wf"] = r["wf"] * want / r["nf"]
                 r["nf"] = want
 
-    # directed lanes
     side = -1 if m["left"] else 1
     lanes = []
     for ri, r in enumerate(roads):
@@ -1058,13 +941,6 @@ def build(m, data):
             lanes.append(dict(road=ri, a=ids[0], b=ids[-1], pts=p, rank=r["rank"], speed=r["speed"], ring=r["ring"], oneway=r["oneway"], rev=k,
                               layer=r["layer"], bridge=r["bridge"], n=n, rw=rw, spawn=r["spawn"]))
 
-    # roundabouts: small cycles of one-way lanes on one level that turn one
-    # way all round, once, and either all bear one name (as the Magic
-    # Roundabout's do) and are compact (perimeter squared over 4 pi area
-    # under RING_COMPACT, not a dual carriageway joined at both ends) or are
-    # round (their distances from their centre spread by under RING_ROUND
-    # of the mean): not a knot of ramps in an interchange, nor one-way
-    # streets round a block
     def round_once(path):
         pts = dedupe([q for j in path for q in lanes[j]["pts"]], 0.5 * u)
         if math.dist(pts[0], pts[-1]) < 0.5 * u:
@@ -1108,12 +984,6 @@ def build(m, data):
             for j in best:
                 lanes[j]["ring"] = True
 
-    # heights: a bridge deck stands at its layer, but where decks of
-    # different layers join end to end (viaducts come in pieces) the joint
-    # sits at their mean and each deck eases back to its own level; roads
-    # leading off a bridge slope down one layer per RAMP metres, along the
-    # network (each node gets the highest height any bridge end reaches it
-    # with)
     H = defaultdict(float)
     decks = defaultdict(list)
     for r in roads:
@@ -1147,7 +1017,6 @@ def build(m, data):
             return t + ease(H[l["a"]] - t, x) + ease(H[l["b"]] - t, l["len0"] - x)
         return max(0., H[l["a"]] - x / RAMP, H[l["b"]] - (l["len0"] - x) / RAMP)
 
-    # trim at junctions
     width_at = defaultdict(float)
     deg = defaultdict(set)
     for r_i, r in enumerate(roads):
@@ -1155,20 +1024,6 @@ def build(m, data):
         for n in (r["ids"][0], r["ids"][-1]):
             width_at[n] = max(width_at[n], hwid)
             deg[n].add(r_i)
-    # where a road just continues into the next piece but changes width
-    # (lanes added or dropped), both ends are cut back so the connector
-    # between them is a taper, TAPER metres per metre of width change;
-    # where one-way roads merge into one (or one splits) the wide road is
-    # cut back by as much (MERGE_MIN at least) and the narrow ones back to
-    # where they still lie MERGE_APART of their widths apart (MERGE_MAX at
-    # most: OSM draws them meeting at a point), so they run on side by side
-    # into its lanes;
-    # and where one piece runs on into the next round a bend, or a branch
-    # turns off a split, both are cut back BEND_CUT metres per degree of it
-    # (a third of the piece at most) so the connector rounds it off. A split
-    # or merge is one whose branches all lie within MERGE_TURN of the lane
-    # they leave or join; one-way streets meeting at a sharper corner are
-    # an ordinary junction
     starts, ends = defaultdict(list), defaultdict(list)
     for l in lanes:
         starts[l["a"]].append(l)
@@ -1217,12 +1072,7 @@ def build(m, data):
             return max(0.4 * u, smooth)
         return max(0.5 * min(max(TAPER * dw, TAPER_MIN), TAPER_MAX) * u, smooth)
 
-    # (a lane cut back at both ends keeps a fifth of itself; the end where
-    # it runs side by side into a merge or out of a split keeps its cut
-    # first)
     side_cut = lambda l, at_end: (len(starts[l["b"] if at_end else l["a"]]) > 1) != (len(ends[l["b"] if at_end else l["a"]]) > 1)
-    # a road meeting a ring (OSM joins it to the ring's centre line) ends
-    # no further in than the ring's edge, RING_CLEAR metres out from it
     def clear(l, at_end):
         node = l["b"] if at_end else l["a"]
         rings = [p["rw"] for p in starts[node] + ends[node] if p["ring"]]
@@ -1251,10 +1101,6 @@ def build(m, data):
             hs.append(height(l, x))
         l["h"] = hs
 
-    # connectors (one where a road just runs on into the next, as at a
-    # change of width, is drawn on the one of their layers nearer the
-    # ground, so its taper is part of that surface rather than a wedge of
-    # its own)
     into = defaultdict(list)
     for i, l in enumerate(lanes):
         into[l["b"]].append(i)
@@ -1271,10 +1117,6 @@ def build(m, data):
             for o in cands:
                 t2 = end_dir(lanes[o]["pts"], False, u)
                 turns[o] = math.degrees(math.atan2(t0[0] * t2[1] - t0[1] * t2[0], t0[0] * t2[0] + t0[1] * t2[1]))
-            # turns sharper than U_TURN, or than BACK_TURN onto a road that
-            # BACK_LOOK metres on still runs within BACK_NEAR road widths of
-            # this one (back along the other side of a dual carriageway), go
-            # where the lane has a gentler one
             def back(o):
                 lo = lanes[o]
                 q = trim(lo["pts"], min(BACK_LOOK * u, 0.9 * plen(lo["pts"])), 0.)[0]
@@ -1293,22 +1135,6 @@ def build(m, data):
                                   ring=li["ring"] and lo["ring"], entering=lo["ring"] and not li["ring"],
                                   rank=li["rank"], speed=min(li["speed"], lo["speed"]) * (0.55 if abs(turn) > 40 else 0.9)))
 
-    # every connector is one lane, from a lane of the road in to a lane of
-    # the road out. The ways on out of a road share its lanes from the
-    # driving side across in the order they lie (seen from its end, where
-    # each is BRANCH_LOOK metres on; on the right first under right-hand
-    # traffic): a turn gets as many lanes as the road it goes
-    # into has (off a ring just the outer one, the ring itself going on in
-    # all its lanes), the ways straight on (within
-    # STRAIGHT_TURN) the rest, each at least one (more ways than lanes share
-    # them). A turn to the driving side keeps to that side of the road it
-    # goes into, one across to the far side, straight on a lane stays the
-    # lane it is counted from the driving side, and lanes with no lane left
-    # to go to squeeze into the last; lanes going into a road with more
-    # lanes than they are, the only road going into it or onto a ring,
-    # fan out over all of them in order (4 into 12: each to 3). So no two
-    # connectors out of one road cross, and cars change lanes on the roads
-    # only
     side = -1 if m["left"] else 1
     lat_of = lambda l, j: side * (0.5 * l["rw"] - (j + 0.5) * l["rw"] / l["n"])
     lane_at = lambda l, off: min(range(l["n"]), key=lambda j: abs(lat_of(l, j) - off))
@@ -1353,11 +1179,6 @@ def build(m, data):
         if li["ring"]:
             spans = [(0, n) if lanes[c["o"]]["ring"] else sp for c, sp in zip(cs, spans)]
         plans += [(c, st, a, cn) for c, st, (a, cn) in zip(cs, straight, spans)]
-    # one-way roads merging into one (each within MERGE_TURN of straight,
-    # not a ring, which keeps its lanes as they are, joined onto)
-    # share its lanes out side by side, in the order they lie across it:
-    # lane for lane where they bring as many as it has, fanned out where
-    # fewer, squeezed where more
     merged, into = {}, defaultdict(list)
     for pl in plans:
         into[pl[0]["o"]].append(pl)
@@ -1445,15 +1266,7 @@ def build(m, data):
                 break
         return True
 
-    # each junction's area: where its connectors run (half a lane either
-    # side of them), within the hull of the ends of the lanes meeting
-    # there, less buildings and parks, woods and water and a SIDEWALK
-    # round them (keeping the piece that is most of it). A turn keeps its
-    # full sweep (the asphalt drawn grows to take it) unless its lane runs
-    # into one of those, when it is drawn tighter
     turning = [shape(c) for c in conns]
-    # the connectors out of one lane are drawn alike (all cubics if any is),
-    # so one following the road never bows across the others
     kinds = defaultdict(set)
     for c, t in zip(conns, turning):
         kinds[c["i"]].add(t)
@@ -1487,8 +1300,6 @@ def build(m, data):
     for c, t in zip(conns, turning):
         if t and obst is not None and obst.intersects(LineString(c["pts"]).buffer(0.5 * c["rw"])):
             shape(c, avoid=obst)
-    # the lanes of one turn share the tightest of their curves, so they
-    # stay evenly side by side
     tight = defaultdict(lambda: 1.)
     for c, t in zip(conns, turning):
         if t:
@@ -1497,12 +1308,6 @@ def build(m, data):
         if t and c.get("shrink", 1.) != tight[(c["i"], c["o"])]:
             shape(c, shrinks=(tight[(c["i"], c["o"])],))
 
-    # junctions with a lane under STUB metres lying all inside their areas
-    # (a stub between two close junctions, the ring of a mini roundabout)
-    # are one intersection: those lanes go, and each way through it, lane
-    # by lane, becomes one connector across its whole area (no U-turns);
-    # where one of those would not fit in the area or would cut across a
-    # building or park, the junctions stay apart
     def collapse(internal):
         group = {}
         find = lambda n: n if group.get(n, n) == n else find(group[n])
@@ -1580,9 +1385,6 @@ def build(m, data):
         lanes = [lanes[k] for k in keep]
         for c in conns:
             c["i"], c["o"] = index[c["i"]], index[c["o"]]
-    # every lane into a junction leads on and every lane out of one is led
-    # into: a lane left out takes the connector of the nearest lane that
-    # has one, moved across to it
     for c in conns:
         c.setdefault("group", c["node"])
     for end, off, pk, tk in ((("i", "offin", "p0", "t0")), (("o", "offout", "p2", "t2"))):
@@ -1604,17 +1406,6 @@ def build(m, data):
     for c in conns:
         at_node[c["group"]].append(c)
 
-    # traffic lights: each OSM signal belongs to the junction nearest it
-    # on the ground (within SIG_REACH), junctions with lights within SIG_CLUSTER of each
-    # other (the two carriageways of a road) work as one; every connector
-    # taken from a lane coming into the group from outside it is signalled,
-    # in phase 0 or 1 by whether its lane comes in along the group's first
-    # approach or across it; a head stands by the end of each such lane,
-    # on the driving side, else further out, else on the other side: the
-    # first of those spots off the asphalt (where carriageways cross, as
-    # in a diverging diamond, beside one is on the other). Approaches in
-    # one phase whose ways straight on cross (the crossovers of a diverging
-    # diamond) are put in different ones
     decked = {n for r in roads if r["bridge"] for n in r["ids"]}
     junctions = [n for n in deg if len(deg[n]) >= 3 and H[n] < 0.3 and n not in decked]
     lit = set()
@@ -1664,9 +1455,6 @@ def build(m, data):
             break
     heads = list(heads.values())
 
-    # who gives way to whom (not across the phases of one set of lights,
-    # nor between lanes of one road, nor into different lanes of one road
-    # without crossing)
     by_node = defaultdict(list)
     for k, c in enumerate(conns):
         by_node[c["group"]].append(k)
@@ -1703,12 +1491,6 @@ def build(m, data):
                 else:
                     give[a].append(b)
 
-    # edge list: lanes then connectors; a lane lists each connector out of
-    # it as often as traffic should take it: each way on by the lanes of
-    # this road it takes (TURN_RES times, shared out over its connectors),
-    # so a one-lane exit beside four lanes on gets a fifth, except that
-    # off a ring the ways straight on (within STRAIGHT_TURN) get at least
-    # STRAIGHT_SHARE, so cars do not wander round the block. A road that runs off the map is left there, not turned back
     edges = []
     for l in lanes:
         edges.append(dict(pts=l["pts"], h=l["h"], ring=l["ring"], conn=False, speed=l["speed"], succ=[], give=[], layer=l["layer"], bridge=l["bridge"], rank=l["rank"],
@@ -1729,7 +1511,6 @@ def build(m, data):
         edges[-1]["rank"] = lanes[c["o"]]["rank"]
         edges[c["i"]]["succ"] += [len(lanes) + k] * max(1, round(TURN_RES * weight[k]))
 
-    # split long lanes so each edge has at most MAX_PTS points
     final = []
     remap = {}
     for idx, e in enumerate(edges):
@@ -1753,9 +1534,6 @@ def build(m, data):
                 f["succ"] = [remap[s][0] for s in e["succ"]]
                 f["give"] = [remap[g][0] + remap[g][1] - 1 for g in e["give"]]
             f["pred"] = remap[e["pred"]][0] + remap[e["pred"]][1] - 1 if "pred" in e and ci == 0 else -1
-    # a turn into what never leads off the map (a turning loop the box cut
-    # off from its road) is dropped where there is another way on, and
-    # nobody starts in there
     back = {}
     for i, e in enumerate(final):
         for s in e["succ"]:
@@ -1779,20 +1557,7 @@ def build(m, data):
     entries = [i for i in range(lane_count) if i in out and not final[i]["conn"] and (abs(final[i]["pts"][0][0]) > 0.95 or abs(final[i]["pts"][0][1]) > 0.55)]
     entries = [i for i in entries for _ in range(min(ENTRY_MAX, flow(final[i]["rank"]) * final[i]["n"]))]
 
-    # render segments: every lane and connector as a strip as wide as its
-    # lanes (a connector tapering from one end's to the other's), so the
-    # asphalt is exactly where the cars drive, and as dashed line-only
-    # pieces the centre line of two-way roads and the lines between lanes
-    # (not on roads wider than MAX_MARKED lanes, like the Etoile's ring,
-    # nor on pieces shorter than MARK_MIN metres)
     segs = []
-    # junction areas as triangles, a set for each layer its connectors
-    # are on: just the asphalt they take there (gaps they close in and
-    # notches under JUNCTION_GAP lanes filled, outlines to within
-    # JUNCTION_SIMPLE metres), shrunk by JUNCTION_PAD, which the shader
-    # grows back, so the seams between them never show; each corner as
-    # high as the connector nearest it, so a junction climbing to a deck
-    # climbs with it
     for nd in areas:
         by_layer = defaultdict(list)
         for c in at_node[nd]:
@@ -1823,7 +1588,6 @@ def build(m, data):
         for i in range(len(pts) - 1):
             segs.append((pts[i], pts[i + 1], 0., arc, 2, layer, bridge, hs[i], hs[i + 1]))
             arc += math.dist(pts[i], pts[i + 1])
-    # markings stop where a road runs onto a roundabout's asphalt
     ring_strips = [(l["pts"], 0.5 * l["rw"] + 1.5 * u) for l in lanes if l["ring"]]
 
     def on_ring(p):
@@ -1854,7 +1618,6 @@ def build(m, data):
         for k in range(1, l["n"] if l["n"] <= MAX_MARKED else 0):
             dashes(offset(pts, l["rw"] * (k / l["n"] - 0.5)), hs, l["layer"], l["bridge"])
 
-    # waterways as blue ribbons (kind 5) under everything else
     for e in fetch(m, data, "water"):
         t = e.get("tags", {})
         if e.get("type") != "way" or t.get("waterway") not in WATERWAYS or "geometry" not in e:
@@ -1870,9 +1633,6 @@ def build(m, data):
             for i in range(len(pts) - 1):
                 segs.append((pts[i], pts[i + 1], wid * 0.5 * u, 0., 5, 0, False, 0., 0.))
 
-    # paths and service roads, only drawn: service roads as narrow asphalt
-    # (kind 0, like the roads), the rest as pale lines (kind 4); like
-    # waterways, rounded off and then thinned to within PATH_SIMPLE metres
     for e in fetch(m, data, "paths"):
         if e.get("type") != "way" or "geometry" not in e:
             continue
@@ -1886,10 +1646,6 @@ def build(m, data):
             for i in range(len(pts) - 1):
                 segs.append((pts[i], pts[i + 1], hwid, 0., kind, layer, bridge, float(layer), float(layer)))
 
-    # walls (kind 7): town walls and retaining walls, and a plain wall where
-    # named or historic, WALLS[barrier] metres wide and high, kept angular
-    # (bastions are corners); their height, in decks, stands where a deck's
-    # would, so they cast shadows the same way
     for e in fetch(m, data, "walls"):
         t = e.get("tags", {})
         if e.get("type") != "way" or "geometry" not in e or t.get("barrier") not in WALLS:
@@ -1948,8 +1704,6 @@ def build(m, data):
             for cy in range(max(0, int((y0 - miny) / cell)), min(ny, int((y1 - miny) / cell) + 1)):
                 gcells[(cx, cy)].append(gi)
 
-    # parked cars: those whose amp covers more than PARK_ON_ROAD of asphalt
-    # dropped (the rest are drawn over it), then only PARK_FILL of them kept
     sz = max(CAR_LEN * u * CAR_DRAW, CAR_MIN_DRAW)
     probe = [(i / 3 * 0.5 * sz, j / 3 * 0.5 * sz) for i in range(-3, 4) for j in range(-3, 4) if i * i + j * j <= 9]
 
@@ -2128,10 +1882,6 @@ def build(m, data):
     hdr[37], hdr[38] = len(heads), len(words)
     for x, y, sg, h in heads:
         words += [fx(x), fx(y), sg + 1, fx(h / 4)]
-    # each set of lights shares SIG_CYCLE seconds of green between its two
-    # phases by how much traffic comes in on them (the lanes in, each by
-    # the flow of its road), SIG_GREEN_MIN to SIG_GREEN_MAX each; a phase
-    # no road comes in on (a crossing's, for people on foot) gets SIG_WALK
     demand = defaultdict(float)
     for i, off in {(c["i"], round(c["offin"], 6)): 0 for c in conns if c["sig"] >= 0}:
         for c in conns:
@@ -2145,7 +1895,6 @@ def build(m, data):
         for f, d in ((share, d0), (1 - share, d1)):
             green = SIG_WALK if d == 0 and d0 + d1 > 0 else min(max(SIG_CYCLE * f, SIG_GREEN_MIN), SIG_GREEN_MAX)
             words.append(int(round(green * 10)))
-    # how far each edge is from leaving the map, driving on
     back = defaultdict(list)
     for i, e in enumerate(final):
         for s in e["succ"]:

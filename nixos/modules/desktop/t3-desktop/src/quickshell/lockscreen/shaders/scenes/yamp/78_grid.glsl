@@ -1,18 +1,3 @@
-// --- grid: flying through an endless lattice of flat amps ---------------------
-// Flat amps face the camera on planes z = (k + 0.5) GRID_S, each plane a grid
-// of amps GRID_S apart, so together they fill space. Nothing is marched: for
-// each pixel the ray is intersected with the planes ahead, front to back,
-// and at each crossing only the amp of that cell is tested (one glyph lookup,
-// skipped outside its bounding circle), composited with coverage-based AA
-// until opaque. The camera glides down the corridor along x = y = 0 with a
-// gentle sway and roll, so the amps stream past on all sides. Each amp runs
-// the usual clock (counter-spin, fill wipes) on its own phase and speed, and
-// distance fog fades the far planes into a haze that runs from the brand
-// gradient up close to pale cyan far off (GRID_DEPTH_K), with a slowly
-// pulsing light at the end of the tunnel, round the forward axis. The
-// fog factors step by a constant ratio per plane. Amps past GRID_LOD don't
-// animate: a plain glyph, lit (blue) with the share of the loop an amp
-// spends filled (GRID_LOD_LIT), else black.
 const float GRID_S      = 1.6;
 const float GRID_AMP    = 0.432;
 const float GRID_BOUND  = 0.325;

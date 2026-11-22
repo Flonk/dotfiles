@@ -1,10 +1,3 @@
-// --- glitch: the old scene breaks up into the card and on into the new ------
-// A transition, T_GLITCH long. Over GL_OUT the old scene tears into
-// horizontal bands that flip one by one to the card (the amp and the
-// tagline, RGB-split and shoved sideways while it lasts), some bands
-// corrupted to posterized, channel-swapped colour and stray blocks; the
-// card holds with a twitch every so often, and over GL_IN it breaks the
-// same way into the new scene. The bands reroll GL_FPS times a second.
 const vec2  GL_OUT = vec2(0.2, 1.3);
 const vec2  GL_IN  = vec2(4.5, 5.8);
 const float GL_FPS = 24.;

@@ -16,8 +16,6 @@ in
             matches = [{ device.name = "~alsa_card.pci-*" }]
             actions = {
               update-props = {
-                # Keep the duplex profile when headphones are plugged in
-                # so the internal mic stays available
                 "api.acp.auto-profile" = false
               }
             }

@@ -28,8 +28,6 @@ FAST_INTERVAL=1
 FAST_AVAIL_PCT=35
 ROTATE_BYTES=$((40 * 1024 * 1024))
 
-# Tab-separated column names. *_kb = kB, psi_* = % stalled, counters are
-# cumulative-since-boot, *_frozen / v4l2lb are 0/1.
 COLS=$(printf '%s' \
 'ts	epoch	uptime	mem_total	mem_free	mem_avail	anon	cached	buffers	shmem	'\
 'slab	sreclaim	sunreclaim	pagetables	kstack	committed	swap_total	swap_free	'\
@@ -45,21 +43,18 @@ header() {
   printf '%s\n' "$COLS"
 }
 
-# read a single unsigned int from a file, 0 on any failure
 read_uint() {
   local v=0
   [[ -r $1 ]] && read -r v <"$1" 2>/dev/null
   [[ $v =~ ^[0-9]+$ ]] && printf '%s' "$v" || printf '0'
 }
 
-# emit one TSV row to stdout; also sets global AVAIL_PCT
 collect() {
   local epoch ts uptime
   epoch=$(date +%s)
   ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
   uptime=$(awk '{print int($1)}' /proc/uptime)
 
-  # /proc/meminfo — pure-bash, no fork
   local -A M=()
   local k v _rest
   while read -r k v _rest; do M["${k%:}"]=$v; done </proc/meminfo
@@ -70,7 +65,6 @@ collect() {
   local ptbl=${M[PageTables]:-0} kstk=${M[KernelStack]:-0} commit=${M[Committed_AS]:-0}
   local swap_total=${M[SwapTotal]:-0} swap_free=${M[SwapFree]:-0}
 
-  # zram (mm_stat: orig_data_size compr_data_size mem_used_total ...)
   local zram_orig=0 zram_compr=0 zo zc
   if [[ -r /sys/block/zram0/mm_stat ]]; then
     read -r zo zc _rest </sys/block/zram0/mm_stat 2>/dev/null
@@ -78,7 +72,6 @@ collect() {
     zram_compr=$(( ${zc:-0} / 1024 ))
   fi
 
-  # PSI memory pressure
   local psi_some10=0 psi_some60=0 psi_full10=0
   if [[ -r /proc/pressure/memory ]]; then
     read -r psi_some10 psi_some60 psi_full10 < <(
@@ -86,13 +79,11 @@ collect() {
                     END{printf "%s %s %s", s10+0, s60+0, f10+0}' /proc/pressure/memory)
   fi
 
-  # vmstat cumulative counters
   local pswpin=0 pswpout=0 oomk=0 pgmf=0
   read -r pswpin pswpout oomk pgmf < <(
     awk '$1=="pswpin"{a=$2} $1=="pswpout"{b=$2} $1=="oom_kill"{c=$2} $1=="pgmajfault"{d=$2}
          END{printf "%s %s %s %s", a+0, b+0, c+0, d+0}' /proc/vmstat)
 
-  # dma-buf total — the prime uncapped suspect (kernel DRM buffers)
   local dmabuf_kb=0 dmabuf_n=0
   if [[ -r /sys/kernel/debug/dma_buf/bufinfo ]]; then
     read -r dmabuf_kb dmabuf_n < <(
@@ -100,7 +91,6 @@ collect() {
         /sys/kernel/debug/dma_buf/bufinfo)
   fi
 
-  # gopro-ffmpeg cgroup memory + freeze state
   local fcg=/sys/fs/cgroup/system.slice/gopro-ffmpeg.service
   local ffmpeg_cg=0 ffmpeg_frozen=0
   if [[ -d $fcg ]]; then
@@ -108,20 +98,13 @@ collect() {
     ffmpeg_frozen=$(read_uint "$fcg/cgroup.freeze")
   fi
 
-  # v4l2loopback loaded?
   local v4l2lb=0
   [[ -d /sys/module/v4l2loopback ]] && v4l2lb=1
 
-  # teams-jail scope cgroup — aggregates ALL chromium (renderers, GPU,
-  # WebRTC, teams-gateway, Meet/Teams JS) in one capped number
   local teamsjail_cg=0 d
   d=$(find /sys/fs/cgroup -maxdepth 7 -type d -name 'teams-jail-*.scope' 2>/dev/null | head -1)
   [[ -n $d && -r $d/memory.current ]] && teamsjail_cg=$(( $(read_uint "$d/memory.current") / 1024 ))
 
-  # per-process RSS aggregation — one ps, one awk. Classify on the
-  # executable basename ($4 of the ps line), NOT anywhere in args: nix
-  # store paths embed version suffixes like ".../xdg-desktop-portal-1.20.4/"
-  # which would otherwise misclassify the main portal as a backend.
   local pw=0 wp=0 por=0 pbe=0 cgpu=0 top=0 topn=- topp=0
   read -r pw wp por pbe cgpu top topn topp < <(
     ps -eo pid=,rss=,comm=,args= 2>/dev/null | awk '
@@ -137,18 +120,12 @@ collect() {
       END { printf "%d %d %d %d %d %d %s %d",
             pw+0, wp+0, por+0, pbe+0, cgpu+0, top+0, (topn==""?"-":topn), topp+0 }')
 
-  # full cmdline of the top process (sanitized, truncated) — so the actor
-  # behind a generic comm like "python3.13" is unambiguous in the log,
-  # even after the process is gone
   local top_cmd=-
   if [[ ''${topp:-0} -gt 0 && -r /proc/$topp/cmdline ]]; then
     top_cmd=$(tr '\0\t' '  ' </proc/$topp/cmdline 2>/dev/null | cut -c1-160)
     [[ -z ''${top_cmd// /} ]] && top_cmd=-
   fi
 
-  # unaccounted: RAM not explained by anon/cache/slab/pagetables/kstack.
-  # If THIS spikes during the explosion, the leak is kernel/driver memory
-  # (dma-buf / GPU) rather than any userspace process.
   local used_known=$(( anon + cached + buffers + sre + sun + ptbl + kstk ))
   local unacc=$(( mem_total - mem_free - used_known ))
 
@@ -179,9 +156,6 @@ case "${1:-print}" in
     ;;
   daemon)
     mkdir -p "$LOG_DIR"
-    # rotate a single old generation if the log got large OR the column
-    # schema changed (so every row in a file matches its header). The COLS
-    # header is always line 2 (line 1 is the '# skynet-memwatch' comment).
     if [[ -f $LOG ]]; then
       sz=$(stat -c %s "$LOG" 2>/dev/null || echo 0)
       cur_hdr=""
@@ -191,7 +165,6 @@ case "${1:-print}" in
       fi
     fi
     [[ -s $LOG ]] || header >"$LOG"
-    # boot marker so the time series can be segmented per boot
     bootid=$(read_uint /dev/null; cat /proc/sys/kernel/random/boot_id 2>/dev/null || echo unknown)
     printf '# daemon start %s boot=%s interval=%ss\n' \
       "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$bootid" "$INTERVAL" >>"$LOG"

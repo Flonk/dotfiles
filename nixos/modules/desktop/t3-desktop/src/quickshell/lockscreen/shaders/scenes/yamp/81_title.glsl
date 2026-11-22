@@ -1,9 +1,3 @@
-// --- title: the amp and the tagline -----------------------------------------
-// A transition, T_TITLE long on its own clock: the old scene dims away over
-// TI_FADE, then the amp (TI_AMP tall) and FLAP_TEXT pop in one
-// after the other on an ease-out-back (TI_AT, TI_IN), hold, shrink away in
-// turn (TI_OUT) and the new scene comes up over the last TI_FADE. Text is
-// Montserrat from the flap font atlas, TI_TAG_ADV advances in cell heights.
 const float TI_FADE   = 0.45;
 const vec2  TI_AT     = vec2(0.35, 0.6);
 const float TI_IN     = 0.6;
@@ -51,10 +45,6 @@ vec3 title(vec2 q, vec2 tp){
     return col;
 }
 
-// --- shared by the transitions after this one --------------------------------
-// tcCard draws the amp (TC_AMP tall) and the tagline under it round c, each
-// scaled about its own centre (as, ts); tcBack is the ease-out-back the cards
-// pop in on, tcPop one in at `at` and out from `leave`; tcFbm is value noise
 const float TC_AMP     = 0.5 * TRANS_AMP;
 const vec2  TC_AMP_OFF = vec2(0., 0.07);
 const vec2  TC_TAG_OFF = vec2(0., -0.125);

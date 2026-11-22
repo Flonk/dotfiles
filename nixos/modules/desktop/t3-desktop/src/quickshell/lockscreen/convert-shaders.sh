@@ -1,10 +1,4 @@
 #!/usr/bin/env bash
-# Convert Shadertoy-style GLSL shaders to Qt 6 .frag.qsb files.
-#
-# Usage: ./convert-shaders.sh [qsb-path]
-#   qsb-path defaults to "qsb" on PATH.
-#   ONLY_SCENE=<name>  compile just that one scene (still refreshes default.vert
-#                      and assets, which are cheap and shared).
 
 set -euo pipefail
 
@@ -16,16 +10,12 @@ QSB="${1:-qsb}"
 
 mkdir -p "$OUTPUT_DIR"
 
-# Copy texture assets
 ASSETS_SRC="$SCRIPT_DIR/shaders/assets"
 ASSETS_DST="$OUTPUT_DIR/assets"
 mkdir -p "$ASSETS_DST"
 cp "$ASSETS_SRC"/*.jpg "$ASSETS_SRC"/*.png "$ASSETS_DST/" 2>/dev/null || true
 echo "Assets copied to $ASSETS_DST"
 
-# Compile shared vertex shader, batchable: the scene renderer batches opaque
-# ShaderEffects and needs that variant, or the pipeline fails to build.
-# Only replaced when it changed, so a running preview keeps its copy.
 "$QSB" --batchable --glsl "300 es,440" -o "$OUTPUT_DIR/default.vert.qsb.tmp" "$SCRIPT_DIR/default.vert"
 if cmp -s "$OUTPUT_DIR/default.vert.qsb.tmp" "$OUTPUT_DIR/default.vert.qsb"; then
     rm -f "$OUTPUT_DIR/default.vert.qsb.tmp"
@@ -48,7 +38,6 @@ for scene_dir in "$SHADER_SRC"/*/; do
     output_frag="$OUTPUT_DIR/$name.frag"
     output_qsb="$OUTPUT_DIR/$name.frag.qsb"
 
-    # Helper: build and compile a single .frag from preamble + body parts + main wrapper
     compile_pass() {
         local out_frag="$1" out_qsb="$2" label="$3"
         shift 3
@@ -60,7 +49,6 @@ for scene_dir in "$SHADER_SRC"/*/; do
         done
         cat >> "$out_frag" << 'WRAPPER'
 
-// --- Qt entry point ---
 void main() {
     vec2 fragCoord = qt_TexCoord0 * iResolution.xy;
     fragCoord.y = iResolution.y - fragCoord.y;
@@ -85,8 +73,6 @@ WRAPPER
         [ -f "$part" ] && parts+=("$part")
     done
 
-    # Compile buffer passes (buffer*: shared NN_ parts + the buffer body) and
-    # post passes (post*: standalone)
     for buf in "$scene_dir"/buffer*.glsl "$scene_dir"/post*.glsl; do
         buf_parts=("$buf")
         case "$(basename "$buf")" in buffer*) buf_parts=("${parts[@]}" "$buf") ;; esac
@@ -101,7 +87,6 @@ WRAPPER
         fi
     done
 
-    # Compile main (image) pass: sorted NN_*.glsl parts first, shader.glsl last
     body_parts=("${parts[@]}" "$shader")
     if compile_pass "$output_frag" "$output_qsb" "$name" "${body_parts[@]}"; then
         ok=$((ok + 1))
@@ -110,7 +95,6 @@ WRAPPER
     fi
 done
 
-# Copy scene.qml files
 SCENES_DST="$OUTPUT_DIR/scenes"
 mkdir -p "$SCENES_DST"
 scenes=0

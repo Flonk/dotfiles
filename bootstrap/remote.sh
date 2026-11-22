@@ -8,8 +8,6 @@ installations_dir="$config_dir/installations"
 user_age_key_file="$HOME/.config/sops/age/keys.txt"
 host_key_pub="/etc/ssh/ssh_host_ed25519_key.pub"
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
 info()  { printf '\033[1;34m→\033[0m %s\n' "$*"; }
 ok()    { printf '\033[1;32m✓\033[0m %s\n' "$*"; }
 err()   { printf '\033[1;31m✗\033[0m %s\n' "$*" >&2; }
@@ -20,8 +18,6 @@ confirm() {
   read -r ans
   case "$ans" in y|Y|yes|YES) return 0 ;; *) return 1 ;; esac
 }
-
-# ── Phase 0: Select or Create Installation ──────────────────────────────────
 
 echo ""
 echo "╔══════════════════════════════════════╗"
@@ -45,26 +41,21 @@ if [[ "$choice" == "1" ]]; then
   installation="$(printf '%s\n' "${existing_installations[@]}" | fzf --prompt='Select installation > ' --height=40% --reverse)"
   [[ -z "$installation" ]] && { err "No selection made"; exit 1; }
 
-  # Derive user and host from installation name
   user_name="${installation%%-*}"
   host_name="${installation#*-}"
 else
-  # Pick user
   mapfile -t users < <(find "$config_dir/users" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort)
   user_name="$(printf '%s\n' "${users[@]}" | fzf --prompt='Select user > ' --height=40% --reverse)"
   [[ -z "$user_name" ]] && { err "No selection made"; exit 1; }
 
-  # Pick host
   mapfile -t hosts < <(find "$config_dir/hosts" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort)
   host_name="$(printf '%s\n' "${hosts[@]}" | fzf --prompt='Select host > ' --height=40% --reverse)"
   [[ -z "$host_name" ]] && { err "No selection made"; exit 1; }
 
-  # Installation name
   ask "Installation name (e.g. ${user_name}-${host_name}):"
   read -r installation
   [[ -z "$installation" ]] && { err "Name cannot be empty"; exit 1; }
 
-  # Generate installation file
   cat > "$installations_dir/$installation.nix" <<NIXEOF
 { ... }:
 {
@@ -83,9 +74,6 @@ fi
 
 info "Installation: $installation (user: $user_name, host: $host_name)"
 
-# ── Phase 1: Key Setup ──────────────────────────────────────────────────────
-
-# Check for duplicates in .sops.yaml
 if grep -q "&user_${installation}" "$sops_yaml" 2>/dev/null; then
   err "Key '&user_${installation}' already exists in .sops.yaml"
   exit 1
@@ -95,7 +83,6 @@ if grep -q "&host_${installation}" "$sops_yaml" 2>/dev/null; then
   exit 1
 fi
 
-# Ensure SSH host key
 if [[ ! -f "$host_key_pub" ]]; then
   info "Host SSH key missing, generating..."
   sudo ssh-keygen -A
@@ -103,7 +90,6 @@ fi
 [[ -f "$host_key_pub" ]] || { err "Could not find $host_key_pub"; exit 1; }
 ok "SSH host key exists"
 
-# Generate age user key
 if [[ ! -f "$user_age_key_file" ]]; then
   info "Generating age user key at $user_age_key_file..."
   mkdir -p "$(dirname "$user_age_key_file")"
@@ -111,7 +97,6 @@ if [[ ! -f "$user_age_key_file" ]]; then
 fi
 ok "Age user key exists"
 
-# Derive age recipients
 host_age_recipient="$(nix-shell -p ssh-to-age --run "ssh-to-age < '$host_key_pub'" 2>/dev/null)"
 user_age_recipient="$(nix-shell -p age --run "age-keygen -y '$user_age_key_file'" 2>/dev/null)"
 
@@ -122,7 +107,6 @@ echo ""
 info "User age recipient (&user_${installation}):"
 echo "  $user_age_recipient"
 
-# Add to .sops.yaml keys section ONLY (before creation_rules:)
 info "Adding keys to .sops.yaml (keys section only)..."
 sed -i "/^creation_rules:/i\\  - \&user_${installation} ${user_age_recipient}" "$sops_yaml"
 sed -i "/^creation_rules:/i\\  - \&host_${installation} ${host_age_recipient}" "$sops_yaml"
@@ -131,8 +115,6 @@ ok "Updated .sops.yaml keys section"
 echo ""
 info "Current .sops.yaml:"
 cat "$sops_yaml"
-
-# ── Phase 2: Wait for manual creation_rules update ──────────────────────────
 
 echo ""
 echo "┌──────────────────────────────────────────────────────────────────┐"
@@ -151,8 +133,6 @@ while true; do
   [[ "$ans" == "done" ]] && break
   ask "Type 'done' when ready:"
 done
-
-# ── Phase 3: Pull and Build ─────────────────────────────────────────────────
 
 info "Pulling latest changes..."
 cd "$repo_root"

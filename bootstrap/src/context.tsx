@@ -11,12 +11,10 @@ interface BootstrapContextValue {
   phase: Phase;
   setPhase: (phase: Phase) => void;
 
-  // Step dispatch (1-indexed). currentStep tracks which Step component renders.
   currentStep: number;
   advanceStep: () => void;
   skipStep: () => void;
 
-  // Installation
   installationName: string;
   setInstallationName: (name: string) => void;
   selectedUser: string;
@@ -30,29 +28,23 @@ interface BootstrapContextValue {
   isNewUser: boolean;
   setIsNewUser: (v: boolean) => void;
 
-  // SSH
   target: string;
   setTarget: (target: string) => void;
 
-  // Age recipients — host set in step 5, user set in step 7
   hostAgeRecipient: string | null;
   setHostAgeRecipient: (key: string) => void;
   userAgeRecipient: string | null;
   setUserAgeRecipient: (key: string) => void;
 
-  // Step status list (0-indexed, parallel to STEP_LABELS)
   steps: StepInfo[];
 
-  // Error / status
   errorMsg: string;
   setErrorMsg: (msg: string) => void;
   statusMsg: string;
   setStatusMsg: (msg: string) => void;
 
-  // Fail handler used by step components on thrown errors
   fail: (msg: string) => void;
 
-  // Derived
   hostFromInstallation: () => string;
 }
 

@@ -1,14 +1,3 @@
-// preview.qml — standalone lockscreen-shader preview.
-//
-// Renders yamp in a normal floating window (no session lock, no bar),
-// reusing the real LockContext so the clock/envelope uniforms behave exactly as
-// they do on the lockscreen. Run against the working tree so it picks up freshly
-// compiled .qsb files — the installed shell reads its shaders from /nix/store and
-// will not see your edits.
-//
-//   qs -p ./quickshell/shell/preview.qml
-//
-// See the `shader-dev` just recipe for the watch-recompile-reload loop.
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -57,7 +46,6 @@ FloatingWindow {
             onTriggered: ctx.frameTick(surface)
         }
 
-        // 1x1 dummy texture for unused iChannel slots (mirrors LockSurface).
         ShaderEffectSource {
             id: dummyTexture
             sourceItem: Rectangle { width: 1; height: 1; color: "#111" }
@@ -69,9 +57,6 @@ FloatingWindow {
             anchors.fill: parent
         }
 
-        // the scene is loaded here, outside quickshell's own reload, so watch
-        // the built scene file and reload it ourselves; a bumped query makes
-        // the engine compile it afresh instead of reusing its cached copy
         property int sceneRev: 0
         function loadScene() {
             sceneLoader.setSource("shaders/scenes/yamp.qml" + (sceneRev ? "?r=" + sceneRev : ""), {
@@ -92,7 +77,6 @@ FloatingWindow {
             onTriggered: { surface.sceneRev++; surface.loadScene(); }
         }
 
-        // Interactive scenes read key envelopes; let the preview drive them.
         MouseArea {
             anchors.fill: parent
             onClicked: keyInput.forceActiveFocus()

@@ -1,30 +1,4 @@
 #!/usr/bin/env python3
-# Bakes the night sky into sky.png (RGB8, SKY_W wide, alpha unused so nothing
-# gets premultiplied) for the stars mode. Data: d3-celestial's stars.6.json,
-# constellations.lines.json and constellations.json (Hipparcos positions,
-# J2000). A unit vector is packed into two texels as three 16-bit numbers.
-#   rows 0..31   star records, 3 texels each: vector, (mag, b-v, 0); sorted by
-#                sky cell, a star is listed in every cell its disk (MARGIN)
-#                touches, so the shader only ever reads its own cell
-#   rows 32..35  cell table, CELLS_RA x CELLS_DEC cells (RA fastest): first
-#                record (16 bit), count
-#   rows 36..41  tour targets, 32 texels each: (first segment 16 bit,
-#                segment count), (name length, type, deep-sky kind or planet),
-#                label vector, then one texel per name character (flap font
-#                index, 255 blank; advance); deep-sky objects also (axes * 40,
-#                position angle) at 29 and their colour at 30. Types: 0
-#                constellation, 1 asterism, 2 deep-sky object, 3 named star,
-#                4 planet, 5 star-hopping guide, 6 Moon, 7 ISS (the last
-#                three placed by the shader)
-#   rows 42..55  figure segments, 6 texels: two vectors, then (mag, b-v) of
-#                the star at each end
-#   rows 56..119 the satellite emoji (Noto Color Emoji), 64 x 64: colour
-#                premultiplied at x 0..63, coverage at x 64..127; the shark
-#                emoji for the fish scene the same way at x 128..255
-#
-# Run: just gen-sky (fetches data and font), or by hand:
-#      nix-shell -p "python3.withPackages(p: [p.pillow p.numpy])" \
-#        --run "python3 gen_sky.py <data dir> <Montserrat-SemiBold.ttf> <NotoColorEmoji.ttf>"
 
 import json
 import unicodedata
@@ -72,8 +46,6 @@ GUIDES = [
     ("FIND SIRIUS", [[25930, 26727, 32349]]),
     ("FIND ALDEBARAN", [[26727, 25930, 21421]]),
 ]
-# name, RA, Dec (deg), kind (0 galaxy, 1 cluster, 2 nebula, 3 ring), display
-# axes (deg), position angle (deg, north through east), colour
 DSO = [
     ("M31 ANDROMEDA GALAXY", 10.68, 41.27, 0, 3.2, 1.0, 35, (0.95, 0.88, 0.78)),
     ("M33 TRIANGULUM GALAXY", 23.46, 30.66, 0, 1.1, 0.7, 23, (0.85, 0.88, 0.95)),

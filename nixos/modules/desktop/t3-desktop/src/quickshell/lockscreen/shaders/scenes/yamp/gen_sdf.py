@@ -1,14 +1,4 @@
 #!/usr/bin/env python3
-# Bakes the and& ampersand SDFs into yamp_sdf.png (R = J piece, G = P piece,
-# B = glyph-space coastline fbm for terra mode — summed onto the distances
-# in-shader so the wobble is constant in the glyph frame).
-# Numpy port of the exact bezier SDF that used to live in shader.glsl
-# (iq's quadratic bezier distance + even-odd winding).
-#
-# Texture covers glyph space [-BOX, BOX]^2, row 0 = y = +BOX (Qt v-down UVs).
-# Distances are clamped to +-RANGE/2 and mapped to [0, 255].
-#
-# Run: nix-shell -p "python3.withPackages(ps: [ps.numpy ps.pillow])" --run "python3 gen_sdf.py"
 
 import numpy as np
 from PIL import Image

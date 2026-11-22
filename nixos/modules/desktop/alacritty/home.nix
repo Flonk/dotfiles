@@ -14,7 +14,6 @@
 
         keyboard = {
           bindings = [
-            # Ctrl+Enter → send CSI u sequence
             {
               key = "Enter";
               mods = "Control";

@@ -7,8 +7,6 @@ export async function fetchHardwareConfig(
   host: string,
   target: string,
 ): Promise<void> {
-  // Prefer the existing file (nixos-infect writes boot loader config there).
-  // Fall back to regenerating if it doesn't exist.
   const exists = await sshRun(target, "test -f /etc/nixos/hardware-configuration.nix && echo yes || echo no");
   let config: string;
   if (exists === "yes") {

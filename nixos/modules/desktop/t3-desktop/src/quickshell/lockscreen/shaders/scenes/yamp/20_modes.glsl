@@ -1,24 +1,8 @@
-// --- mode sequencer ------------------------------------------------------------
-// The playlist (scenes with a transition after each) is walked once a frame
-// in LockContext (seqInfo), which hands over the slot playing as u_seq (mode,
-// seconds into it, a number unique to this showing, the mode before) and
-// u_seq2 (the mode after, how long this slot runs, how long the one before
-// ran; scene lengths live in LockContext's sceneTable). Scenes cut
-// straight into transitions and out of them; each transition draws the
-// scene before it and the one after it (gPrevCol, gNextCol) into its own
-// handover.
-
 float W[MODE_COUNT];
-// each mode's own clock (seconds since its slot began) and a number unique
-// to that showing, for the transitions
 float gModeT[MODE_COUNT];
 float gModeK[MODE_COUNT];
 float gDropStart = 0.;
 
-// the slot playing at time (dev jumps restart the playlist at the chosen
-// mode): a scene (gScene), or a transition (gTrans) between gPrev and gNext;
-// every mode it touches gets its own clock in gModeT and a number unique to
-// this showing in gModeK
 int gScene = 0, gTrans = -1, gPrev = 0, gNext = 0;
 vec3 gPrevCol = vec3(0.), gNextCol = vec3(0.);
 

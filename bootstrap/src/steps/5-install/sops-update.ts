@@ -11,15 +11,6 @@ export interface SopsEntry {
   ageKey: string;
 }
 
-/**
- * Add (or verify) anchored age keys in .sops.yaml's `keys:` section. The user
- * still has to add the corresponding `*anchor` references to creation_rules by
- * hand.
- *
- *   - "added"     — at least one entry was new and was written
- *   - "unchanged" — every anchor already exists with the same value
- *   - "conflict"  — at least one anchor exists with a different value
- */
 export function updateSopsYamlEntries(
   repoRoot: string,
   entries: SopsEntry[],

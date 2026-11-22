@@ -1,9 +1,3 @@
-// --- typewriter: the tagline typed out, then selected and deleted ------------
-// A transition, T_TYPE long. The old scene fades to black (TY_FADE) and a
-// cursor types FLAP_TEXT one letter per TY_STEP from TY_AT, a small amp as
-// the last character, then blinks. At TY_SEL_AT the line is selected left
-// to right over TY_SEL, at TY_DEL_AT it is deleted, and the cursor blinks
-// alone while the new scene comes up behind it. TY_H is the text cell height.
 const float TY_FADE   = 0.4;
 const float TY_AT     = 0.6;
 const float TY_STEP   = 0.075;

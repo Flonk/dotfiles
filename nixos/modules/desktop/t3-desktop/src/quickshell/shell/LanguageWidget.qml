@@ -1,4 +1,3 @@
-// LanguageWidget.qml - Current input method (via t3-desktop-i18n)
 pragma Singleton
 
 import Quickshell

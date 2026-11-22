@@ -1,6 +1,3 @@
-// --- scope: XY oscilloscope tracing the amp outline ---------------------------
-// iChannel8: beam path (gen_scope.py), iChannel9: phosphor feedback buffer
-// (bufferScope: R = fast decay, G = slow decay, A = time of the last frame)
 const vec3  SCOPE_HOT      = vec3(0.85, 0.97, 1.);
 const float SCOPE_H        = 0.84;
 const vec3  SCOPE_GRID_COL = vec3(0.7);
@@ -36,7 +33,6 @@ vec3 scopeVertex(int i){
     return vec3(v, a.b > 127. ? 1. : 0.);
 }
 
-// beam position (screen space) and lit flag at time t
 vec3 scopeBeam(float t){
     float s = mod(t, SCOPE_LOOP) / SCOPE_LOOP;
     float fi = s * float(SCOPE_N);
@@ -54,8 +50,6 @@ vec3 scopeBeam(float t){
     return vec3(p, mix(mix(SCOPE_RETRACE, 1., a.z), 1., m));
 }
 
-// phosphor energy deposited at q by the beam between t0 and t1; segment
-// bodies only (no caps) so consecutive segments tile without beading
 vec2 scopeDeposit(vec2 q, float t0, float t1){
     float dt = t1 - t0;
     if(dt <= 0.) return vec2(0.);

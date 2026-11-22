@@ -1,13 +1,6 @@
-// and& logo — J / P decomposition, exact SDFs from the brand SVG
-// The mark is two shapes: sdP = upper loop whose tail runs continuously
-// down to the bottom-right triangle, sdJ = hook + diagonal laid OVER it.
-// sdLogo carves the dilated J out of P, re-creating the designed split.
-// PAD is the actual gap measured from the artwork (~20.5 svg units).
-// Shape lives in ~[-0.43,0.43] x [-0.5,0.5].
-
-const int NJ = 41;              // segments [0,NJ) = J
-const int NSEG = 76;         // segments [NJ,NSEG) = P
-const float PAD = 0.0464;      // design gap, measured from the artwork
+const int NJ = 41;
+const int NSEG = 76;
+const float PAD = 0.0464;
 const vec2 S[228] = vec2[228](
 vec2(0.0145,-0.2568),vec2(-0.0054,-0.2725),vec2(-0.0252,-0.2885),vec2(-0.0252,-0.2885),vec2(-0.0755,-0.3300),vec2(-0.1287,-0.3307),
 vec2(-0.1287,-0.3307),vec2(-0.1819,-0.3314),vec2(-0.2145,-0.2930),vec2(-0.2145,-0.2930),vec2(-0.2470,-0.2530),vec2(-0.2433,-0.2057),
@@ -50,7 +43,6 @@ vec2(-0.1923,0.0189),vec2(-0.1748,-0.0066),vec2(-0.1563,-0.0325),vec2(-0.1563,-0
 );
 float dot2(vec2 v) { return dot(v,v); }
 
-// unsigned distance to a quadratic bezier — iq, https://iquilezles.org/articles/distfunctions2d
 float udBezier(vec2 pos, vec2 A, vec2 B, vec2 C)
 {
     vec2 a = B - A, b = A - 2.0*B + C, c = a*2.0, d = A - pos;
@@ -81,7 +73,6 @@ float udBezier(vec2 pos, vec2 A, vec2 B, vec2 C)
     return sqrt(res);
 }
 
-// exact SDF of segments [i0,i1) of S — one closed even-odd shape
 float sdShape(vec2 p, int i0, int i1)
 {
     float d = 1e9;
@@ -91,7 +82,6 @@ float sdShape(vec2 p, int i0, int i1)
         vec2 A = S[3*i], B = S[3*i+1], C = S[3*i+2];
         d = min(d, udBezier(p, A, B, C));
 
-        // even-odd: horizontal +x ray, roots of y(t) = p.y on this segment
         float ay = A.y - 2.0*B.y + C.y;
         float by = B.y - A.y;
         float cy = A.y - p.y;
@@ -110,7 +100,6 @@ float sdShape(vec2 p, int i0, int i1)
             float disc = by*by - ay*cy;
             if (disc > 0.0)
             {
-                // numerically stable quadratic roots (citardauq)
                 float r  = sqrt(disc) * (by >= 0.0 ? 1.0 : -1.0);
                 float hh = -(by + r);
                 float t1 = hh/ay;
@@ -123,14 +112,10 @@ float sdShape(vec2 p, int i0, int i1)
     return inside ? -d : d;
 }
 
-// the J: bottom-left hook + long diagonal sweep
 float sdJ(vec2 p) { return sdShape(p, 0, NJ); }
 
-// the P: upper loop + tail, one continuous stroke through to the
-// bottom-right triangle (the artwork's cut is undone)
 float sdP(vec2 p) { return sdShape(p, NJ, NSEG); }
 
-// full mark: J over P — carve the J (dilated by the design gap) out of P
 float sdLogo(vec2 p)
 {
     float dj = sdJ(p);
@@ -144,7 +129,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     p *= 1.35;
 
     float d  = sdLogo(p);
-    float px = 2.7 / iResolution.y;   // ~1 pixel in SDF units
+    float px = 2.7 / iResolution.y;
 
     vec3 col = vec3(smoothstep(px, -px, d));
     fragColor = vec4(col, 1.0);

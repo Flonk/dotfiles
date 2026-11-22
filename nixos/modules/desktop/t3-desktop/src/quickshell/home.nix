@@ -38,8 +38,6 @@ let
       success600 = c.base0B;
     };
 
-  # graphical-session.target can fire before the compositor's socket exists;
-  # wait for it so quickshell doesn't crash-loop during session startup.
   launchScript = pkgs.writeShellScript "t3-desktop-quickshell-launch" ''
     if [ -z "''${XDG_RUNTIME_DIR:-}" ]; then
       export XDG_RUNTIME_DIR="/run/user/$(id -u)"

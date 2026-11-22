@@ -20,7 +20,6 @@
           "8.8.8.8"
         ];
 
-        # (i.e., DON'T set domain-needed=true)
         bogus-priv = true;
         cache-size = 1000;
       };

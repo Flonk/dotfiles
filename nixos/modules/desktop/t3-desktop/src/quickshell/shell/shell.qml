@@ -1,4 +1,3 @@
-// shell.qml
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
@@ -25,8 +24,6 @@ ShellRoot {
         id: lock
         locked: false
 
-        // the shader renders only on the largest screen; every other
-        // surface stays black
         readonly property var renderScreen: {
             let best = null;
             for (const s of Quickshell.screens) {

@@ -26,9 +26,6 @@ async function attempt(
   remotePath: string,
   onStatus?: (msg: string) => void,
 ): Promise<AttemptResult> {
-  // Run nixos-rebuild ON the remote, against the cloned repo. Pulling from the
-  // binary cache over the remote's network is much faster than nix-copy-closure
-  // from a local build.
   const cmd = `cd ${remotePath}/nixos && sudo nixos-rebuild switch --flake .#${host}`;
   const proc = $`ssh ${SSH_OPTS} ${target} ${cmd}`.nothrow();
 
@@ -79,21 +76,6 @@ async function attempt(
   return { kind: "failure", exitCode: result.exitCode ?? -1, stderr };
 }
 
-/**
- * Run nixos-rebuild on the remote against the repo at `remotePath`. SSH-based
- * execution lets the remote pull from the binary cache directly, instead of
- * nix-copy-closure pushing a multi-GB closure over the local uplink.
- *
- * sshd / networking restarts during activation are normal; sshd hiccups also
- * happen on the first switch from nixos-infect's stub config to the real one.
- * Both look the same to us — once the build's SSH session dies, the remote is
- * effectively wedged and needs a power cycle. We surface that, wait for sshd
- * to come back, and retry up to MAX_TRANSIENT_RETRIES (rebuild is idempotent).
- *
- * The watchdog probes sshCheck during the build; if it sees the remote stop
- * answering for ~30 s, it switches the status line to a hard "force-restart
- * now" message so the user doesn't sit watching a zombie.
- */
 export async function rebuildSystem(
   target: string,
   host: string,

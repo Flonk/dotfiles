@@ -8,11 +8,9 @@
 let
   scripts = config.skynet.cli.scripts;
 
-  # Theme colors from Stylix
   s = config.lib.stylix.colors.withHashtag;
   accent = config.skynet.module.desktop.stylix.accent;
 
-  # Common fzf theme args shared across all skynet fzf UIs
   fzfThemeArgs = lib.concatStringsSep " " [
     "--style full"
     "--border --padding 1,2"
@@ -27,7 +25,6 @@ let
     "--bind 'focus:transform-preview-label:[[ -n {1} ]] && printf \" %s \" {1}'"
   ];
 
-  # Build the scripts directory with all registered scripts
   scriptsDir = pkgs.runCommand "skynet-scripts" { } ''
     mkdir -p $out
 
@@ -45,10 +42,8 @@ let
     ) scripts}
   '';
 
-  # Command string for each script, e.g. "wifi connect"
   cmdStr = s: lib.concatStringsSep " " s.command;
 
-  # Relative path in scripts dir, e.g. "wifi/connect.sh"
   scriptRelPath =
     s:
     let
@@ -57,7 +52,6 @@ let
     in
     "${dir}/${filename}";
 
-  # Generate the dispatch case for a single script
   mkDispatchCase =
     s:
     let
@@ -71,23 +65,15 @@ let
         exec "$SCRIPTS_DIR/${relPath}" "$@"
         ;;'';
 
-  # Sort scripts by command length descending so more-specific commands match
-  # before their shorter prefixes — bash `case` is first-match-wins and the
-  # pattern `"foo"|"foo "*` would otherwise shadow `"foo bar"`.
   dispatchScripts = lib.sort (a: b: builtins.length a.command > builtins.length b.command) scripts;
 
-  # --- Zsh completions ---
-  # Group scripts by their first command word
   firstWords = lib.unique (map (s: builtins.head s.command) scripts);
 
-  # For a given first word, get all scripts that start with it and have more words
   subCommandsFor =
     word: builtins.filter (s: builtins.length s.command > 1 && builtins.head s.command == word) scripts;
 
-  # First words that have subcommands
   categories = builtins.filter (w: (subCommandsFor w) != [ ]) firstWords;
 
-  # Generate the _skynet completion function
   skynetCompletion = pkgs.writeText "_skynet" ''
     #compdef skynet
 
@@ -154,13 +140,11 @@ let
     _skynet "$@"
   '';
 
-  # The main skynet CLI script
   skynetBin = pkgs.writeShellScriptBin "skynet" ''
     set -euo pipefail
 
     SCRIPTS_DIR="$HOME/.skynet/scripts"
 
-    # --- Colorize toilet output with accent ---
     _skynet_colorize() {
       local hex="${accent}"
       hex="''${hex#\#}"
@@ -170,10 +154,8 @@ let
       ${pkgs.gnused}/bin/sed "s/\x1b\[0m/\x1b[0m/g; s/^/\x1b[38;2;''${r};''${g};''${b}m/; s/$/\x1b[0m/"
     }
 
-    # --- Render preview for a command ---
     _skynet_preview() {
       local cmd="$1"
-      # Render ASCII art, one word per line
       if [[ "$cmd" == "skynet" ]]; then
         for word in skynet system config; do
           ${pkgs.toilet}/bin/toilet -f future "$word" | _skynet_colorize
@@ -186,7 +168,6 @@ let
 
       echo ""
 
-      # Show usage text
       case "$cmd" in
         ${lib.concatMapStringsSep "\n        " (s: ''"${cmdStr s}") echo "${s.usage}" ;;'') scripts}
         "skynet") echo "Welcome to skynet." ;;
@@ -194,13 +175,10 @@ let
       esac
     }
 
-    # --- All registered commands ---
     _SKYNET_CMDS=(
       ${lib.concatMapStringsSep "\n      " (s: ''"${cmdStr s}"'') scripts}
     )
 
-    # --- Resolve prefix-abbreviated args to full command words ---
-    # e.g. "w c" -> "wifi connect"
     _skynet_resolve() {
       local -a resolved=()
       local -a candidates=("''${_SKYNET_CMDS[@]}")
@@ -228,7 +206,6 @@ let
           candidates=("''${next_candidates[@]}")
           pos=$((pos + 1))
         else
-          # No unique prefix match — pass arg through verbatim
           resolved+=("$arg")
         fi
       done
@@ -236,7 +213,6 @@ let
       _RESOLVED=("''${resolved[@]}")
     }
 
-    # --- Dispatch subcommands ---
     dispatch() {
       local args=""
       for arg in "$@"; do
@@ -251,7 +227,6 @@ let
       esac
     }
 
-    # --- Help ---
     show_help() {
       echo "skynet - module script runner"
       echo ""
@@ -265,7 +240,6 @@ let
       ) scripts}
     }
 
-    # --- Interactive fzf picker ---
     interactive() {
       local entries
       entries=$(printf '%b\n' \
@@ -290,11 +264,9 @@ let
       if [[ "$cmd" == "skynet" ]]; then
         exec skynet
       fi
-      # shellcheck disable=SC2086
       dispatch $cmd
     }
 
-    # --- Main ---
     if [[ $# -eq 0 ]]; then
       interactive
     elif [[ "$1" == "--help" || "$1" == "-h" ]]; then
@@ -303,14 +275,12 @@ let
       shift
       _skynet_preview "$*"
     else
-      # Resolve prefix-abbreviated args (e.g. "w c" -> "wifi connect")
       _skynet_resolve "$@"
 
       if dispatch "''${_RESOLVED[@]}"; then
         exit 0
       fi
 
-      # Check if it's a partial match (category)
       prefix="''${_RESOLVED[*]}"
       matches=()
       ${lib.concatMapStringsSep "\n      " (s: ''
@@ -334,10 +304,8 @@ let
 in
 {
   config = {
-    # Expose the fzf theme args for other modules to use
     skynet.cli.fzfThemeArgs = fzfThemeArgs;
 
-    # Built-in skynet scripts
     skynet.cli.scripts = [
       {
         command = [ "upgrade" ];
@@ -417,16 +385,13 @@ in
       }
     ];
 
-    # Symlink the scripts directory to ~/.skynet/scripts
     home.file.".skynet/scripts".source = scriptsDir;
 
-    # Zsh completions — fpath must be added before compinit (order 570)
     home.file.".skynet/completions/_skynet".source = skynetCompletion;
     programs.zsh.initContent = lib.mkOrder 550 ''
       fpath=(~/.skynet/completions $fpath)
     '';
 
-    # Add the skynet CLI to PATH
     home.packages = [ skynetBin ];
   };
 }

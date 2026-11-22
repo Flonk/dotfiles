@@ -1,10 +1,3 @@
-// --- stamp: the amp slammed onto the old scene -------------------------------
-// A transition, T_STAMP long. The amp drops onto the old scene from ST_DROP
-// times its size, its shadow tightening under it, and slams down at ST_HIT
-// with a shake and a soft shockwave running out from its edge (stWave);
-// the tagline stamps down the same way at ST_TAG. At ST_LIFT both lift off and fade, and where the
-// amp stood its imprint is a window onto the new scene, which opens out
-// (irWindow) until it covers the screen.
 const float ST_DROP = 2.6;
 const float ST_FALL = 0.45;
 const float ST_HIT  = 0.65;

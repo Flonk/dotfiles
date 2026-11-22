@@ -26,7 +26,6 @@
       mimeType = [ "text/csv" ];
     };
 
-    # convert excel to csv and use csvlens to view
     xdg.desktopEntries.xlsx2csv = {
       name = "xlsx2csv";
       genericName = "XLSX Viewer";

@@ -26,8 +26,6 @@ let
     ]
   );
 
-  # Kitty config for the greeter session — no decorations,
-  # themed background, custom font rendering.
   kittyConf = pkgs.writeText "t3greet-kitty.conf" (''
     font_family ${cfg.font.name}
     font_size ${toString cfg.font.size}
@@ -44,12 +42,8 @@ let
     foreground ${t.fg_primary}
   '');
 
-  # The terminal + greeter the kiosk compositor launches.
   greeterClient = "${pkgs.kitty}/bin/kitty --config=${kittyConf} ${greeterPkg}/bin/t3greet ${greeterFlags}";
 
-  # Minimal sway kiosk config used when the greeter is pinned to a single
-  # output: disable every output, then enable only the requested one, so the
-  # greeter never spans multiple monitors.
   swayKioskConf = pkgs.writeText "t3greet-sway.conf" ''
     output * disable
     output ${cfg.output} enable
@@ -60,7 +54,6 @@ let
     exec "${greeterClient}; ${pkgs.sway}/bin/swaymsg exit"
   '';
 
-  # cage spans all outputs (extend); sway pins to one named output.
   greeterCommand =
     if cfg.output == null
     then "${pkgs.cage}/bin/cage -s -- ${greeterClient}"
@@ -74,11 +67,6 @@ let
 in
 {
   config = mkIf cfg.enable {
-    # The greeter runs inside a minimal kiosk Wayland compositor (cage when
-    # spanning all outputs, sway when pinned to greeter.output) with kitty as
-    # the terminal emulator.  This gives full TrueType / Nerd Font rendering
-    # via kitty's GPU-accelerated text pipeline — something the raw Linux TTY
-    # (even with kmscon) cannot match.
     services.greetd = {
       enable = true;
       settings = {
@@ -106,7 +94,6 @@ in
     environment.systemPackages = [ greeterPkg pkgs.kitty ]
       ++ (if cfg.output == null then [ pkgs.cage ] else [ pkgs.sway ]);
 
-    # Make the greeter font available system-wide so kitty can find it
     fonts.packages = mkIf (cfg.font.package != null) [ cfg.font.package ];
 
     security.polkit.enable = true;
@@ -130,7 +117,6 @@ in
       TTYReset = true;
       TTYVHangup = true;
       TTYVTDisallocate = true;
-      # Suppress kernel messages (e.g. ucsi_acpi) from printing over the greeter
       ExecStartPre = "${pkgs.util-linux}/bin/dmesg --console-off";
       ExecStopPost = "${pkgs.util-linux}/bin/dmesg --console-on";
     };

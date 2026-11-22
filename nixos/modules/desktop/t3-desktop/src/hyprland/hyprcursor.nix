@@ -5,5 +5,4 @@
   ...
 }:
 {
-  # Cursor theming is managed by Stylix
 }

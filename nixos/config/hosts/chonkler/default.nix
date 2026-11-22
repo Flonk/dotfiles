@@ -16,15 +16,12 @@
     ./chonkler-hostconfig.nix
   ];
 
-  # Bootloader config
   boot.loader.grub.efiSupport = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.devices = [ "nodev" ];
-  # /boot is a 1 GB ESP; without a limit GRUB keeps a kernel+initrd per generation
-  # and fills it. Cap how many entries (and thus /boot kernels) are retained.
   boot.loader.grub.configurationLimit = 20;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest; # currently 7.0.12
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.initrd.kernelModules = [ "xe" ];
   boot.blacklistedKernelModules = [ "i915" ];
@@ -32,13 +29,9 @@
     "xe.force_probe=7d51"
     "i915.force_probe=!7d51"
     "printk.always_kmsg_dump"
-    "nmi_watchdog=1" # hardlockup detector is off at runtime; force it on so hardlockup_panic can fire
+    "nmi_watchdog=1"
   ];
 
-  # Crash forensics: the 2026-06-14 and 2026-06-18 freezes left nothing in the
-  # journal or EFI pstore. Turn lockups/oopses into panics so the kernel log is
-  # dumped to pstore before reboot. hardlockup_panic is the one that can catch a
-  # true silent freeze (NMI-detected CPU stuck with IRQs off).
   boot.kernel.sysctl = {
     "kernel.panic" = 20;
     "kernel.panic_on_oops" = 1;
@@ -56,40 +49,25 @@
     ${config.systemd.package}/bin/journalctl --sync
     sync
   '';
-  # Disabled: forced a from-source kernel rebuild on every switch. The patch only
-  # silences buggy-firmware UCSI duplicate-altmode errors (USB-C dock/Thunderbolt
-  # altmode setup) — cosmetic enough to not be worth daily kernel compiles.
-  # Re-enable if a USB-C dock / external display misbehaves. Upstream-bound (Cc: stable).
-  # boot.kernelPatches = [
-  #   {
-  #     name = "ucsi-fix-duplicate-altmodes";
-  #     patch = ./ucsi-fix-duplicate-altmodes.patch;
-  #   }
-  # ];
   boot.kernelModules = [
-    # "nvidia"
-    # "nvidia_modeset"
-    # "nvidia_uvm"
-    # "nvidia_drm"
   ];
 
   boot.extraModprobeConfig = "options nvidia-drm modeset=1";
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    open = true; # Blackwell (GB207 / RTX PRO 1000) REQUIRES the open kernel module
+    open = true;
     modesetting.enable = true;
-    powerManagement.enable = true; # NVreg_DynamicPowerManagement=0x02 + nvidia-powerd
+    powerManagement.enable = true;
     prime = {
-      offload.enable = true; # iGPU drives display; dGPU only on demand
-      offload.enableOffloadCmd = true; # sets up __NV_PRIME_RENDER_OFFLOAD=1 etc.
-      intelBusId = "PCI:0:2:0"; # from lspci: 00:02.0  -- TODO: update for chonkler
-      nvidiaBusId = "PCI:1:0:0"; # from lspci: 01:00.0  -- TODO: update for chonkler
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
     };
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Hardware graphics acceleration
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -110,7 +88,6 @@
     GSK_RENDERER = "cairo";
   };
 
-  # Define a user account. Don't forget to set a password with 'passwd'.
   users.groups.plugdev = { };
   users.users.flo = {
     isNormalUser = true;

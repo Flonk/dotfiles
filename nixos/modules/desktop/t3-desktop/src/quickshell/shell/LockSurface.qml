@@ -6,12 +6,8 @@ Item {
     id: root
     required property var context
 
-    // Only the largest screen renders the shader; the rest stay black
-    // (bar and input still work) — one GPU-heavy render per lock
     property bool renderScene: true
 
-    // Per-surface frame counter; also drives the shared clock in LockContext
-    // (frameTick ignores all but the first surface that ever ticked)
     property int _iFrame: 0
     property bool _presented: false
     Connections {
@@ -22,14 +18,11 @@ Item {
                 root._presented = true;
                 root._reloadShader();
             }
-            // black surfaces barely repaint — they can't sustain the clock
-            // loop, so never own it
             if (root.renderScene) root.context.frameTick(root);
         }
     }
     Component.onDestruction: root.context.releaseClock(root)
 
-    // 1x1 dummy texture for unused iChannel slots
     ShaderEffectSource {
         id: dummyTexture
         sourceItem: Rectangle { width: 1; height: 1; color: "#111" }
@@ -38,7 +31,6 @@ Item {
 
     property string authorText: shaderLoader.item?.authorText ?? ""
 
-    // Black base so shaders with partial alpha don't bleed through
     Rectangle {
         anchors.fill: parent
         color: "black"
@@ -62,14 +54,12 @@ Item {
         });
     }
 
-    // ---- Shader background (loaded per-shader, render surface only) ----
     Loader {
         id: shaderLoader
         anchors.fill: parent
         asynchronous: true
     }
 
-    // ---- Keypress dot indicator (for shaders without built-in feedback) ----
     Rectangle {
         id: keypressDot
         visible: shaderLoader.item && !shaderLoader.item.interactive
@@ -115,7 +105,6 @@ Item {
         interactive: false
     }
 
-    // ---- Hidden password input ----
     TextInput {
         id: passwordInput
         focus: true
@@ -143,13 +132,11 @@ Item {
         }
     }
 
-    // Keep password input focused
     MouseArea {
         anchors.fill: parent
         onClicked: passwordInput.forceActiveFocus()
     }
 
-    // ---- Failure flash overlay (for shaders without built-in feedback) ----
     Rectangle {
         anchors.fill: parent
         visible: shaderLoader.item && !shaderLoader.item.interactive

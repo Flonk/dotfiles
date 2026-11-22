@@ -1,27 +1,3 @@
-// --- map: the traffic scene on real road networks -----------------------------
-// The traffic scene drives map u_traffic_map from maps.png in
-// iChannel20 (gen_maps.py: OpenStreetMap roads baked into a lane graph; see
-// there for the layout, read here as 24-bit words). Cars (bufferTraffic;
-// row 0: position, speed, heading; row 1: edge, distance along it, the
-// edge after it, time stopped) follow their lane, keep MP_GAP car lengths
-// behind the car ahead (on their edge or the next two), slow for the
-// curves of the connectors through junctions, and at a give-way connector
-// wait at the end of their lane while any car with right of way is inside a
-// conflicting connector or about to take one: within MP_LOOK and either
-// MP_CLOSE metres or MP_ACCEPT seconds away at its speed (gap acceptance:
-// a slow or queued main road still lets the ramp in; a car below MP_CRAWL
-// is not coming at all). A car stopped
-// (below MP_CRAWL, creeping counts) for MP_PATIENCE stops waiting. At each junction a car picks a random
-// turn (the whole simulation runs MP_TIME times real time). Roads are
-// drawn layer by layer (OSM layer + MP_GROUND, from the bridge / tunnel
-// tags): decks MP_DECK metres up per layer, lighter, with parapets,
-// casting shadows along MP_SHADOW on what is under them; cars under a deck
-// are hidden, cars on one are a touch bigger (by height: a car hides only
-// under a surface well above it, so it never blinks crossing joints).
-// Tunnels show faintly. A car that leaves the map waits off it (MP_AWAY)
-// for a gate at the edge of the screen to clear and comes in there.
-// The map sets how many cars drive (by its lane length); the rest stay
-// parked off it.
 const int   MP_W        = 1024;
 const int   MP_N        = 1023;
 const float MP_LABEL    = 0.03;
@@ -120,7 +96,6 @@ int mpWord(int i){
 
 float mpFx(int i){ return float(mpWord(i)) / 16777216. * 8. - 4.; }
 
-// the map's header, read once per pixel / agent
 int gMpBase, gMpLanes, gMpEdge, gMpPts, gMpSucc, gMpGive, gMpEntry, gMpEntries, gMpCars;
 float gMpCar, gMpU;
 
@@ -148,11 +123,6 @@ int mpE(int e, int k){ return mpWord(gMpEdge + MP_EDGE_WORDS * e + k); }
 
 float mpLen(int e){ return mpFx(gMpEdge + MP_EDGE_WORDS * e + 2); }
 
-// traffic lights (gen_maps: an edge's lights + 1, bits 0-15 the junction's
-// lights, 16 the phase): the two phases take turns on the simulation
-// clock, each green as long as gen_maps gave it (by the traffic coming in
-// on it), amber MP_SIG_AMBER, then red for both for MP_SIG_CLEAR, every
-// junction at its own offset; 0 green, 1 amber, 2 red, -1 no light
 int mpLight(int sig){
     if(sig <= 0) return -1;
     int g = (sig - 1) & 65535, ph = (sig - 1) >> 16;
@@ -171,7 +141,6 @@ float mpOff(int e, bool far){ return mpFx(gMpEdge + MP_EDGE_WORDS * e + (far ? 1
 
 vec3 mpPoint(int k){ return vec3(mpFx(gMpPts + 3 * k), mpFx(gMpPts + 3 * k + 1), mpFx(gMpPts + 3 * k + 2) * 4.); }
 
-// a car's heading and height (deck levels) share row 0's w
 float mpPack(float heading, float h){ return heading + 8. * floor(h * 32. + 0.5); }
 float mpHeight(float w){ return floor((w + 4.) / 8.) / 32.; }
 float mpHeading(float w){ return w - 8. * floor((w + 4.) / 8.); }
@@ -184,11 +153,8 @@ int mpSucc(int e, float pick){
 
 int mpLanes(int e, bool far){ return max(mpE(e, 7) >> (far ? 20 : 16) & 15, 1); }
 
-// the lane a connector comes out of (-1 for a lane)
 int mpPred(int e){ return mpE(e, 13) - 1; }
 
-// the connector out of e starting nearest lat (ring: 1 only those going
-// on round, 0 only those leaving it, else any)
 int mpNearest(int e, float lat, int ring){
     int n = mpE(e, 4), st = gMpSucc + mpE(e, 3), best = -1;
     float bd = 1e9;
@@ -202,17 +168,10 @@ int mpNearest(int e, float lat, int ring){
     return best;
 }
 
-// on a ring of MP_RING_LANES lanes or more a car knows which exit it takes (on a
-// narrower ring it picks at each junction as anywhere else): k, counted
-// from where it is, kept with its next edge (nx + MP_NX_SPAN * k). It
-// drives in the k-th lane from the outside (as far as there are lanes),
-// moves out one lane each exit it passes, and takes the road off at k == 1
 const float MP_NX_SPAN = 16384.;
 const int MP_RING_LANES = 3;
 bool mpRing(int e){ return (mpE(e, 7) & 2) != 0; }
 
-// top speed on e: MP_SPEEDUP of its baked one, but a ring keeps its own
-// (already slow), as does a connector onto it, so cars join at its pace
 float mpSpeedOf(int e){ return float(mpE(e, 7) >> 8 & 255) * 0.001; }
 float mpSpeed(int e){
     if(mpRing(e)) return mpSpeedOf(e);
@@ -224,7 +183,6 @@ int mpNx(float z){ return z < -0.5 ? -1 : int(mod(z + 0.5, MP_NX_SPAN)); }
 float mpExitsLeft(float z){ return z < -0.5 ? 0. : floor((z + 0.5) / MP_NX_SPAN); }
 float mpPackNx(int nx, float k){ return nx < 0 ? -1. : float(nx) + MP_NX_SPAN * k; }
 
-// whether ring lane e has a road off it, and the ring edge after it
 bool mpRingExit(int e, out int on){
     int n = mpE(e, 4), st = gMpSucc + mpE(e, 3);
     bool off = false;
@@ -237,8 +195,6 @@ bool mpRingExit(int e, out int on){
     return off && (mpE(e, 7) & 1) == 0;
 }
 
-// the exit a car joining the ring at e takes: any but the one back the way
-// it came (the roads off it once round)
 float mpPickExit(int i, int e){
     int exits = 0, x = e, on;
     for(int j = 0; j < 64; j++){
@@ -251,7 +207,6 @@ float mpPickExit(int i, int e){
     return 1. + floor(random(vec2(i, iTime * 0.37)) * float(max(exits - 1, 1)));
 }
 
-// where on ring edge e at s a car with k exits to go drives
 float mpRingLat(int e, float s, float k){
     float f = clamp(s / max(mpLen(e), 1e-6), 0., 1.);
     float n = mix(float(mpLanes(e, false)), float(mpLanes(e, true)), f);
@@ -260,9 +215,6 @@ float mpRingLat(int e, float s, float k){
     return ((mpWord(gMpBase + 21) & 1) == 1 ? -1. : 1.) * (0.5 * w - (d + 0.5) * w / n);
 }
 
-// how backed up each edge is (counted in the traffic buffer from row
-// MP_CONG_ROW, AG_W edges a row): its stopped cars, and whether one is
-// stopped within MP_CONG_NEAR cars of its start (full to the junction)
 vec4 mpCong(sampler2D ch, int e){ return texelFetch(ch, ivec2(e % AG_W, MP_CONG_ROW + e / AG_W), 0); }
 
 vec4 mpCongest(sampler2D ch, int e){
@@ -277,26 +229,18 @@ vec4 mpCongest(sampler2D ch, int e){
     return vec4(stopped, full, 0., 0.);
 }
 
-// a turn's share: its flow weight, less for every car stopped on it and the
-// road it leads to, next to nothing (MP_FULL) where that road is full
 float mpRoom(sampler2D ch, int c){
     int r = (mpE(c, 7) & 1) == 1 ? mpSucc(c, 0.) : c;
     vec4 a = mpCong(ch, c), b = mpCong(ch, r);
     return (b.y > 0.5 ? MP_FULL : 1.) / (1. + MP_CONG * (a.x + b.x));
 }
 
-// what row MP_CAR_ROW keeps of car i: the edge it came onto the map by (or
-// first stood on), when, and the edge it was on last frame
 vec4 mpCarMem(sampler2D ch, int i){ return texelFetch(ch, ivec2(i, MP_CAR_ROW), 0); }
 
-// metres from the start of e to the nearest way off the map
 float mpAway(int e){ return float(mpWord(gMpBase + mpWord(gMpBase + 45) + e)); }
 
-// how much a car that has roamed past MP_ROAM wants to leave (0 to 1)
 float mpHome(sampler2D ch, int i){ return clamp((iTime - mpCarMem(ch, i).y - MP_ROAM) / MP_ROAM_RAMP, 0., 1.); }
 
-// the edge after e at random, by flow and by how backed up each way is,
-// and, as much as home, against ways that lead further from leaving
 float mpTurnWeight(sampler2D ch, int e, int c, float home){
     float extra = max(mpAway(c) - mpAway(e) + mpLen(e) / gMpU, 0.);
     return mpRoom(ch, c) * exp(-home * extra / MP_HOME_M);
@@ -319,7 +263,6 @@ int mpPickTurn(sampler2D ch, int e, float pick, float home){
     return mpWord(st + min(n, 64) - 1);
 }
 
-// the freest connector out of e (-1 if none)
 int mpFreest(sampler2D ch, int e, out float room){
     int n = mpE(e, 4), st = gMpSucc + mpE(e, 3), best = -1;
     room = 0.;
@@ -333,8 +276,6 @@ int mpFreest(sampler2D ch, int e, out float room){
     return best;
 }
 
-// the edge after e for a car with k exits to go; one heading onto a ring
-// picks its exit now, and the lane onto the ring that leads to its lane
 int mpChoose(sampler2D ch, int i, int e, float pick, float home, inout float k){
     int on;
     int c = mpPickTurn(ch, e, pick, home), r = c >= 0 && (mpE(c, 7) & 1) == 1 ? mpSucc(c, 0.) : -1;
@@ -369,7 +310,6 @@ int mpChoose(sampler2D ch, int i, int e, float pick, float home, inout float k){
     return on;
 }
 
-// position and direction at distance s along edge e
 void mpAt(int e, float s, out vec2 pos, out vec2 dir, out float h){
     int ps = mpE(e, 0), pc = mpE(e, 1);
     vec3 a = mpPoint(ps);
@@ -393,19 +333,6 @@ void mpAt(int e, float s, out vec2 pos, out vec2 dir, out float h){
     }
 }
 
-// lanes: a car keeps one place across the road (mpPick), its lane on an
-// edge of n lanes floor(pick * n); edges are whole carriageways (lanes
-// share out its width), so a car's place is offset from the centre line
-// into its lane, a connector moving it across from its lane at one end to
-// its lane at the other. A car drifts toward its place at no more than
-// MP_SHIFT sideways per distance driven, and turns toward the road's
-// heading at MP_STEER but no faster than a car of MP_TURN_R turning
-// circle could at its speed, so it never jumps, snaps or spins. Besides
-// the cars ahead in its lane, any car within MP_BODY car lengths of its
-// path and MP_SEE ahead (not oncoming, and at its height: not on a deck
-// above or a road beneath) holds it back too, so cars never
-// drive through each other; one stuck for MP_PATIENCE only still minds
-// cars going its way
 float mpPick(int i){ return random(vec2(float(i), 4.2)); }
 
 int mpLaneOf(float pick, int e){ return int(pick * float(mpLanes(e, true))); }
@@ -418,17 +345,12 @@ float mpLat(int i, int e, float s){
     return mix(a, b, clamp(s / max(mpLen(e), 1e-6), 0., 1.));
 }
 
-// the connector out of e whose start lanes take in lat (nx if its do)
 int mpBranchAt(int e, float lat, int nx){
     if(abs(lat - mpOff(nx, false)) <= 0.5 * mpFx(gMpEdge + MP_EDGE_WORDS * nx + 8)) return nx;
     int best = mpNearest(e, lat, -1);
     return best < 0 ? nx : best;
 }
 
-// row 0 for car i at s along e
-// row 0 for a car at s along e, lat across from the centre line (square
-// to the car's own heading, which turns toward the road's by follow, 1 at
-// once, so kinks where pieces join never throw it sideways)
 vec4 mpPlace(int e, float s, float v, float lat, float heading, float follow, float maxTurn){
     vec2 p, d;
     float h;
@@ -439,13 +361,10 @@ vec4 mpPlace(int e, float s, float v, float lat, float heading, float follow, fl
     return vec4(p + vec2(sin(hd), -cos(hd)) * lat, v, mpPack(hd, h));
 }
 
-// row 1's w holds both how long a car has been stopped and where across
-// the road it is (decimetres)
 float mpPackWait(float wait, float lat){ return (floor(clamp(lat / gMpU * 10., -900., 900.) + 0.5) + 1000.) * 256. + min(wait, 255.); }
 float mpWait(float w){ return w - 256. * floor(w / 256.); }
 float mpLatOf(float w){ return (floor(w / 256.) - 1000.) * 0.1 * gMpU; }
 
-// which lane of e a car lat across from its centre line at s is in
 int mpLaneAt(int e, float s, float lat){
     float f = clamp(s / max(mpLen(e), 1e-6), 0., 1.);
     float n = f < 0.5 ? float(mpLanes(e, false)) : float(mpLanes(e, true));
@@ -453,17 +372,8 @@ int mpLaneAt(int e, float s, float lat){
     return int(clamp(floor((lat / max(w, 1e-6) + 0.5) * n), 0., n - 1.));
 }
 
-// off the screen (by MP_OFF): where cars appear and vanish, and where one
-// stopped twice MP_PATIENCE gives up and enters again, so a jam nobody
-// sees never holds cars back
 bool mpOffscreen(vec2 p){ return abs(p.x) > 0.5 * u_aspect + MP_OFF || abs(p.y) > 0.5 + MP_OFF; }
 
-// the screen's gates (rows from MP_GATE_ROW, AG_W edges a row): where edge e
-// first comes in across the edge of the screen, the place on it
-// MP_GATE_BACK short of that (-1 if it never does; the start of a lane
-// nothing leads into that starts on it), its lanes times its baked spawn
-// weight, and how many cars on the map came in by it; worked
-// out once, the count every frame
 vec4 mpGate(sampler2D ch, int e){ return texelFetch(ch, ivec2(e % AG_W, MP_GATE_ROW + e / AG_W), 0); }
 
 bool mpInView(vec2 p){ return abs(p.x) < 0.5 * u_aspect + MP_OFF && abs(p.y) < 0.5 + MP_OFF; }
@@ -499,11 +409,6 @@ vec4 mpGateRow(sampler2D ch, int e){
     return g;
 }
 
-// on a map whose roads all lie on the screen (header 21 bit 1, the map's
-// scatter) a car comes in anywhere on them instead of at a gate: on a lane
-// of the spawn list at random, on the screen, once no car is within
-// MP_GATE_GAP cars of it there; one car in MP_SCATTER_EVERY a frame tries, so
-// cars placed in one frame (which cannot see each other) are few
 void mpScatter(sampler2D ch, int i, out vec4 r0, out vec4 r1){
     r0 = vec4(MP_AWAY, MP_AWAY, 0., 0.);
     r1 = vec4(-1., 0., -1., 0.);
@@ -526,10 +431,6 @@ void mpScatter(sampler2D ch, int i, out vec4 r0, out vec4 r1){
     r1 = vec4(float(e), s, mpPackNx(nx, ex), mpPackWait(0., lat));
 }
 
-// a car that left the map (or the screen) waits off it (edge -1) for a
-// gate with fewer of the cars on the map that came in by it than its share
-// (by lanes): it takes one of those at random, by lanes, once the car before
-// it there is MP_GATE_GAP cars on
 void mpEnter(sampler2D ch, int i, out vec4 r0, out vec4 r1){
     if((mpWord(gMpBase + 21) & 2) != 0){ mpScatter(ch, i, r0, r1); return; }
     r0 = vec4(MP_AWAY, MP_AWAY, 0., 0.);
@@ -569,7 +470,6 @@ void mpEnter(sampler2D ch, int i, out vec4 r0, out vec4 r1){
     r1 = vec4(float(e), s, mpPackNx(nx, ex), mpPackWait(0., lat));
 }
 
-// whether b is a, or one or two edges on from it
 bool mpFollows(int a, int b){
     if(a == b) return true;
     int n = mpE(a, 4), st = gMpSucc + mpE(a, 3);
@@ -586,9 +486,6 @@ bool mpFollows(int a, int b){
     return false;
 }
 
-// row MP_CAR_ROW for car i, a frame behind its step: a car on an edge it
-// could not have driven to from last frame's came onto the map there now;
-// w is set once it has been on the screen
 vec4 mpRemember(sampler2D ch, int i, bool fresh){
     if(fresh || i >= gMpCars) return vec4(-1., iTime, -1., 0.);
     vec4 m = mpCarMem(ch, i);
@@ -599,8 +496,6 @@ vec4 mpRemember(sampler2D ch, int i, bool fresh){
     return came ? vec4(e, iTime, e, seen) : vec4(m.xy, e, max(m.w, seen));
 }
 
-// what holds car i back: the nearest car ahead in its lane (on its edge or
-// the next two), the nearest car in its path, and whether it must give way
 void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float nearGap, out bool yield){
     int e = int(s1.x + 0.5), nx = mpNx(s1.z);
     float s = s1.y, v = s0.z, wait = mpWait(s1.w), lat = mpLatOf(s1.w);
@@ -623,13 +518,9 @@ void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float
     float hd = mpHeading(s0.w);
     vec2 fw = vec2(cos(hd), sin(hd));
     bool stuck = wait > MP_PATIENCE;
-    // the lane this car merges into and how far it has to go to its start
     bool onConn = (mpE(e, 7) & 1) == 1, nxConn = nx >= 0 && (mpE(nx, 7) & 1) == 1;
     int tgt = onConn ? nx : nxConn ? mpSucc(nx, 0.) : -1;
     float toTgt = onConn ? left : left + Ln;
-    // nothing it minds lies further than MP_REACH metres off (along the
-    // road is never shorter than straight), so cars beyond it are passed over
-    // before anything else is read of them
     float reach = MP_REACH * gMpU;
     for(int j = 0; j < MP_N; j++){
         if(j >= gMpCars) break;
@@ -642,36 +533,24 @@ void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float
         int oe = int(o.x + 0.5);
         float ahead = dot(rel, fw), side = abs(dot(rel, vec2(-fw.y, fw.x)));
         bool level = abs(mpHeight(op.w) - mpHeight(s0.w)) < 0.5;
-        // two cars on top of each other: the one behind waits (on a tie, or
-        // when each has the other ahead as where two roads meet, the higher
-        // index), so they part
         if(level && dot(rel, rel) < 0.25 * gMpCar * gMpCar){
             float oh = mpHeading(op.w);
             bool mutual = ahead > 1e-6 && dot(-rel, vec2(cos(oh), sin(oh))) > 1e-6;
             if(mutual ? j < i : ahead > 1e-6 || ahead > -1e-6 && j < i) nearGap = 0.;
         }
-        // a car known to be in another lane (of this road, the next ones,
-        // or the one both are about to take) is never in the way
         int ol = oe == e || oe == nx || oe == nn ? mpLaneAt(oe, o.y, mpLatOf(o.w)) : -1;
         int on = mpNx(o.z);
-        // nor one on (or about to take) another lane's connector out of the
-        // same road, or one into another lane of the same road from another
-        // lane
         int mc = onConn ? e : nxConn ? nx : -1;
         int oc = (mpE(oe, 7) & 1) == 1 ? oe : on >= 0 && (mpE(on, 7) & 1) == 1 ? on : -1;
         bool sameIn = mc >= 0 && oc >= 0 && mc != oc && mpPred(mc) == mpPred(oc);
         bool sameOut = mc >= 0 && oc >= 0 && mc != oc && mpSucc(mc, 0.) == mpSucc(oc, 0.);
         bool intoLane = sameOut && abs(mpOff(mc, true) - mpOff(oc, true)) < 1e-4;
-        // two cars on one road making for the same lane past the junction
-        // queue as one lane already (so they reach it one by one)
         bool oNx = on >= 0 && (mpE(on, 7) & 1) == 1;
         bool sameLane = oe == e && nxConn && oNx && mpSucc(on, 0.) == mpSucc(nx, 0.) && abs(mpOff(on, true) - mpOff(nx, true)) < 1e-4;
         bool apart = oe == e && ol != le && !sameLane || oe == nx && ol != lx || oe == nn && ol != ln
                   || nx >= 0 && on == nx && oe != e && mpLaneAt(nx, 0., mpLatOf(o.w) + mpOff(oe, true) - mpOff(nx, false)) != lx
                   || sameIn && abs(mpOff(mc, false) - mpOff(oc, false)) > 1e-4 && !intoLane
                   || sameOut && !intoLane && !(sameIn && abs(mpOff(mc, false) - mpOff(oc, false)) < 1e-4);
-        // two cars about to merge into one lane from different roads: the
-        // one further from the merge follows the nearer one (a zipper)
         bool oConn = (mpE(oe, 7) & 1) == 1, oNxConn = on >= 0 && (mpE(on, 7) & 1) == 1;
         int otgt = oConn ? on : oNxConn ? mpSucc(on, 0.) : -1;
         bool partner = tgt >= 0 && otgt == tgt && oe != e && (on != nx || onConn && oConn) && level && (mc < 0 || oc < 0 || intoLane);
@@ -682,9 +561,6 @@ void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float
         if(!apart && !partner && ahead > 0. && ahead < MP_SEE * gMpCar && side < MP_BODY * gMpCar && level){
             float oh = mpHeading(op.w);
             vec2 ofw = vec2(cos(oh), sin(oh));
-            // two cars each seeing the other in front (lanes merging): the
-            // lower index goes first; one stuck past its patience minds only
-            // cars that are moving
             bool mutual = dot(-rel, ofw) > 0. && abs(dot(rel, vec2(-ofw.y, ofw.x))) < MP_BODY * gMpCar;
             bool still = op.z < MP_CRAWL * gMpU;
             if(dot(ofw, fw) > (stuck ? 0.7 : -0.3) && !(mutual && j > i) && !(stuck && still)) nearGap = min(nearGap, ahead);
@@ -692,8 +568,6 @@ void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float
         if(oe == e && (o.y > s || (o.y == s && j < i)) && (ol == le || sameLane)) laneGap = min(laneGap, o.y - s);
         else if(oe == nx && ol == lx) laneGap = min(laneGap, left + o.y);
         else if(oe == nn && ol == ln) laneGap = min(laneGap, left + Ln + o.y);
-        // courtesy at a merge: one waiting at its line to give way into the
-        // connector this car is about to take is let in
         if(!yield && nx >= 0 && on >= 0 && left < MP_APPROACH * gMpU && wait < MP_PATIENCE && mpWait(o.w) > MP_COURTESY
            && op.z < MP_CRAWL * gMpU && mpLen(oe) - o.y < 2. * gMpCar){
             int g0 = mpE(on, 5), gn = min(mpE(on, 6), MP_MAX_GIVE);
@@ -702,9 +576,6 @@ void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float
                 if(mpWord(gMpGive + g0 + k) == nx){ yield = true; break; }
             }
         }
-        // giving way (to a car within MP_LOOK on a connector it gives way to)
-        // into the road it joins, only to a car that ends up in
-        // the same lane of it
         if(ng > 0 && !yield){
             for(int k = 0; k < MP_MAX_GIVE; k++){
                 if(k >= ng) break;
@@ -718,12 +589,9 @@ void mpSense(sampler2D ch, int i, vec4 s0, vec4 s1, out float laneGap, out float
             }
         }
     }
-    // stopped for twice its patience a car minds only its lane: whatever
-    // standoff held it, it drives out of it
     if(wait > 2. * MP_PATIENCE) nearGap = 1e9;
 }
 
-// whether a car at s on e has another in the lane of e at lat beside it
 bool mpBeside(sampler2D ch, int i, int e, float s, float lat){
     int want = mpLaneAt(e, s, lat);
     for(int j = 0; j < MP_N; j++){
@@ -736,12 +604,6 @@ bool mpBeside(sampler2D ch, int i, int e, float s, float lat){
     return false;
 }
 
-// on a big ring a car makes for the lane for the exits it has left (k): of
-// its own lane and the two beside it it takes the one with the most room
-// ahead (cars on the ring up to MP_RING_SEE cars on, sorted into lanes by
-// how far across they are), a lane nearer that lane counting
-// 1.5 MP_RING_FREER cars more and staying put MP_RING_FREER, where there is
-// room beside; for its own exit (k 1) always the outer lane
 float mpRingTarget(sampler2D ch, int i, int e, float s, float lat, float k, vec2 pos, float hd){
     float want = mpRingLat(e, s, k);
     if(k < 1.5) return want;
@@ -776,13 +638,8 @@ float mpRingTarget(sampler2D ch, int i, int e, float s, float lat, float k, vec2
     return best != cur && mpBeside(ch, i, e, s, to) ? lat : to;
 }
 
-// how far round a screen cell the bins list cars: as far as one is drawn
-// (its headlights, on the highest deck) and drives between two rescans of
-// that cell (MP_BIN_MOVE metres)
 float mpBinReach(){ return 1.8 * max(gMpCar * MP_CAR_DRAW, 0.008) * (1. + 0.08 * MP_LIFT_TOP) + MP_BIN_MOVE * gMpU; }
 
-// row MP_SENSE_ROW for car i: what holds it back (mpSense), worked out once a
-// frame for both its rows to read the next (a frame late)
 vec4 mpSensed(sampler2D ch, int i, bool fresh){
     vec4 s0 = agGet(ch, i, 0), s1 = agGet(ch, i, 1);
     if(fresh || i >= gMpCars || s1.x < -0.5) return vec4(1e9, 1e9, 0., 0.);
@@ -831,9 +688,6 @@ void mpStep(sampler2D ch, int i, float dt, bool fresh, out vec4 r0, out vec4 r1)
         nx = mpChoose(ch, i, e, random(vec2(float(i) + floor(iTime * 7.), float(e) * 0.37)), mpHome(ch, i), exits);
     }
     s = min(s, L);
-    // a car near a junction making for a connector whose road is backed up
-    // takes a clearly freer one out of the same road, changing lanes for it
-    // (even late, even from a standstill) where there is room beside
     bool shift = false;
     if(nx >= 0 && !mpRing(e) && (mpE(nx, 7) & 1) == 1 && L - s < MP_LANE_CHOOSE * gMpU){
         float room;
@@ -844,13 +698,7 @@ void mpStep(sampler2D ch, int i, float dt, bool fresh, out vec4 r0, out vec4 r1)
         float ownRoom = mpRoom(ch, own);
         shift = own != nx && ownRoom < 2. * MP_FULL && mpRoom(ch, nx) > 2. * ownRoom;
     }
-    // before a junction a car moves into the lane that feeds the connector
-    // it takes (a split's own lanes, an exit's side) over MP_LANE_CHOOSE;
-    // over the last MP_LANE_LOCK it keeps its lane, and if that lane feeds
-    // another branch it takes that one instead
     float target = mpLat(i, e, s), step = MP_SHIFT * v * dt;
-    // and over the first MP_LANE_LOCK after a junction it keeps it too, as
-    // far as the road it is on has lanes there
     if((mpE(e, 7) & 1) == 0 && (mpE(e, 12) >> 20 & 1) == 0 && s < MP_LANE_LOCK * gMpU) target = lat;
     if(shift){
         target = mpBeside(ch, i, e, s, mpOff(nx, false)) ? lat : mpOff(nx, false);
@@ -865,8 +713,6 @@ void mpStep(sampler2D ch, int i, float dt, bool fresh, out vec4 r0, out vec4 r1)
             nx = mpBranchAt(e, lat, nx);
         }
     }
-    // and an exit whose road is backed up to the ring it passes, going
-    // round again to take the next one
     int again;
     if(mpRing(e) && nx >= 0 && !mpRing(nx) && mpRingExit(e, again) && again >= 0 && L - s < MP_LANE_CHOOSE * gMpU){
         int after = mpSucc(nx, 0.);
@@ -892,14 +738,11 @@ void mpStep(sampler2D ch, int i, float dt, bool fresh, out vec4 r0, out vec4 r1)
     r0 = mpPlace(e, s, v, lat, mpHeading(s0.w), 1. - exp(-dt * MP_STEER), (v / (MP_TURN_R * gMpU) + 0.3) * dt);
     r1 = vec4(float(e), s, mpPackNx(nx, exits), mpPackWait(wait, lat));
     float hd = mpHeading(r0.w);
-    // off the screen a car is no use: one that has been on it goes at once,
-    // one still coming in after MP_COMING
     vec4 mem = mpCarMem(ch, i);
     bool known = mem.z > -0.5 && mpFollows(int(mem.z + 0.5), e);
     if(mpOffscreen(r0.xy) && (dot(r0.xy, vec2(cos(hd), sin(hd))) > 0. || known && (mem.w > 0.5 || iTime - mem.y > MP_COMING))) mpEnter(ch, i, r0, r1);
 }
 
-// signed distance from p to a footprint (corners v[0..n), negative inside)
 float mpPoly(vec2 v[MP_BLD_MAX_V], int n, vec2 p){
     vec2 a = v[n - 1];
     float d = 1e9;
@@ -915,13 +758,6 @@ float mpPoly(vec2 v[MP_BLD_MAX_V], int n, vec2 p){
     return (inside ? -1. : 1.) * sqrt(d);
 }
 
-// the buildings at q: how much shadow they cast on the ground there, and
-// their walls and roofs (grey, lit window, -, coverage) to lay over the
-// rest. A
-// building of height h (screen units) rises MP_BLD_VIEW * h up the screen,
-// its walls the footprint swept up there (MP_BLD_WALL samples), lit
-// windows at random; its shadow falls MP_BLD_SUN * h along MP_SHADOW.
-// Footprints in front (lower on screen) cover those behind.
 vec4 mpBuildings(vec2 q, int ci, out float shade){
     shade = 0.;
     vec4 o = vec4(0.);
@@ -970,11 +806,6 @@ vec4 mpBuildings(vec2 q, int ci, out float shade){
     return o;
 }
 
-// the map's static layer, baked once per map into bufferMapStatic: r the
-// ground and roads (grey) + 2 * how green there, + 32 * how much water
-// and + 512 * how much parked car (all in 15ths), g the height of the top
-// surface / 4 + 4 * the parked car's shade (15ths), b the
-// buildings' grey (+ 2 on a lit window), a their coverage
 float mpPolyG(vec2 v[MP_GREEN_MAX_V], int n, vec2 p){
     vec2 a = v[n - 1];
     float d = 1e9;
@@ -990,14 +821,6 @@ float mpPolyG(vec2 v[MP_GREEN_MAX_V], int n, vec2 p){
     return (inside ? -1. : 1.) * sqrt(d);
 }
 
-// green areas at q (gen_maps GREEN: lawns, parks, woods): how green, and
-// the ground there as grey (water first, then grass texture, then tree
-// crowns lit from the top left, overhanging banks, their shadows along
-// MP_SHADOW). Trees stand on a jittered grid,
-// sparse in parks and dense in woods; one is kept if its trunk is inside
-// the nearest green area, and its crown may overhang the edge. The crowns
-// and their shadows come back apart (crown: coverage, grey; shadow) so
-// they can go over the footpaths
 float mpGreen(vec2 q, int ci, inout float grey, inout float water, out vec2 crown, out float shadow){
     int n = mpWord(ci + 1), st = gMpBase + mpWord(gMpBase + 32) + mpWord(ci);
     int tg = gMpBase + mpWord(gMpBase + 29), tv = gMpBase + mpWord(gMpBase + 30);
@@ -1050,9 +873,6 @@ float mpGreen(vec2 q, int ci, inout float grey, inout float water, out vec2 crow
     return g;
 }
 
-// parked cars at q (gen_maps parked): amps in their bays, each its own
-// shade of the car colours (shade out), with a small shadow; returns how
-// much of q they cover
 float mpParked(vec2 q, int ci, inout vec3 col, out float shade){
     int n = mpWord(ci + 1), st = gMpBase + mpWord(gMpBase + 36) + mpWord(ci);
     int tb = gMpBase + mpWord(gMpBase + 34);
@@ -1072,7 +892,6 @@ float mpParked(vec2 q, int ci, inout vec3 col, out float shade){
     return cov;
 }
 
-// signed distance from p to triangle abc (negative inside)
 float mpTri(vec2 p, vec2 a, vec2 b, vec2 c){
     vec2 e0 = b - a, e1 = c - b, e2 = a - c, v0 = p - a, v1 = p - b, v2 = p - c;
     vec2 p0 = v0 - e0 * clamp(dot(v0, e0) / dot(e0, e0), 0., 1.);
@@ -1084,7 +903,6 @@ float mpTri(vec2 p, vec2 a, vec2 b, vec2 c){
     return -sqrt(d.x) * sign(d.y);
 }
 
-// the ground's height at q (screen units), across the terrain grid
 float mpTerrain(vec2 q){
     int nx = mpWord(gMpBase + 12), ny = mpWord(gMpBase + 13);
     vec2 g = clamp((q - vec2(mpFx(gMpBase + 14), mpFx(gMpBase + 15))) / mpFx(gMpBase + 16), vec2(0.), vec2(nx, ny) - 0.001);
@@ -1094,9 +912,6 @@ float mpTerrain(vec2 q){
     return mix(mix(mpFx(t), mpFx(t + 1), f.x), mix(mpFx(t + nx + 1), mpFx(t + nx + 2), f.x), f.y);
 }
 
-// hillshade: the ground lit from the sun (against MP_SHADOW), its slopes
-// MP_HILL_EXAG times as steep, 1 on the flat; worked out at the corners of
-// the terrain grid (from their neighbours' heights) and blended across it
 float mpHillAt(int t0, int nx, int ny, int x, int y, float cs){
     x = clamp(x, 1, nx - 1); y = clamp(y, 1, ny - 1);
     int t = t0 + y * (nx + 1) + x;
@@ -1115,10 +930,6 @@ float mpHill(vec2 q){
                mix(mpHillAt(t0, nx, ny, c.x, c.y + 1, cs), mpHillAt(t0, nx, ny, c.x + 1, c.y + 1, cs), f.x), f.y);
 }
 
-// the terrain stands up the screen as buildings do (MP_BLD_VIEW of its
-// height, MP_TERRAIN_EXAG times as high): the ground a pixel shows is the
-// one nearest the viewer (lowest on the screen) whose lifted place is it,
-// found by marching up from MP_TERRAIN_LMAX below and halving in on it
 vec2 mpGround(vec2 q, out float lift){
     float k = MP_BLD_VIEW * MP_TERRAIN_EXAG, lo = q.y - MP_TERRAIN_LMAX, dy = MP_TERRAIN_LMAX / float(MP_TERRAIN_STEPS);
     float y0 = lo, y1 = q.y;
@@ -1205,8 +1016,6 @@ vec4 mpStatic(vec2 q){
             ts = clamp(dot(qs - a, ab) / ab2, 0., 1.);
             bare = min(bare, length(qs - a - ab * ts) - hw);
         }
-        // decks shade the surfaces of the layers under them by how far
-        // above those surfaces (where they are here) they stand
         for(int k = 0; k < MP_SEG_CELL; k++){
             if(k >= n) break;
             int o = seg + 9 * mpWord(st + k);
@@ -1234,8 +1043,6 @@ vec4 mpStatic(vec2 q){
             }
         }
     }
-    // ground, then each layer up: a layer's surface in the shadow of the
-    // decks above it, bridge decks lighter with parapets, tunnels faint
     float topH = 0.;
     float green = 0., tshadow = 0.;
     vec2 crown = vec2(0.);
@@ -1246,9 +1053,6 @@ vec4 mpStatic(vec2 q){
         col = vec3(grey);
     }
     green *= 1. - water;
-    // on a map with a treeline and snowline (header 21 bit 2, the two after
-    // its terrain) no green or trees above the one and snow above the other,
-    // their edges ragged by MP_LINE_RAG metres
     float snow = 0.;
     if((mpWord(gMpBase + 21) & 4) != 0){
         int tl = gMpBase + mpWord(gMpBase + 43) + (nx + 1) * (ny + 1);
@@ -1263,7 +1067,6 @@ vec4 mpStatic(vec2 q){
     col = mix(col, vec3(MP_PATH_GREY), S(path));
     green *= 1. - S(path - 0.0014);
     water *= 1. - S(path - 0.0014);
-    // walls: a pale stone ridge with a lit rim, its shadow cast like a deck's
     col *= 1. - 0.45 * S(wallShade) * (1. - S(wall));
     col = mix(col, vec3(MP_WALL_GREY), S(wall));
     col = mix(col, vec3(MP_WALL_GREY + 0.045), S(abs(wall + 0.0005) - 0.0003) * S(wall + 0.0002));
@@ -1284,9 +1087,6 @@ vec4 mpStatic(vec2 q){
         if(road[l] > 0.01) continue;
         float cov = S(road[l]);
         float lift = hgt[l], dk = smoothstep(0.08, 0.6, lift);
-        // where a deck runs on into road of about its height on any other
-        // layer (the ramp it joins, the deck it splits from), its end and
-        // edges are not drawn: one surface
         float edge = 1.;
         for(int m = MP_GROUND; m < MP_LAYERS; m++)
             if(m != l) edge = min(edge, 1. - S(road[m] + 0.002) * (1. - smoothstep(0.15, 0.45, abs(hgt[m] - lift))));
@@ -1320,9 +1120,6 @@ vec4 mpStatic(vec2 q){
                 topH / 4. + 4. * floor(pshade * 15. + 0.5) + 256. * floor(lift * MP_LIFT_Q + 0.5), bld.r + 2. * step(0.5, bld.g), bld.a);
 }
 
-// traffic light heads at q: a dark housing with the lit lamp glowing red,
-// amber or green; hidden, like cars, under a surface well above them
-// (topH)
 vec3 mpHeads(vec2 q, vec3 col, float topH){
     int nx = mpWord(gMpBase + 12), ny = mpWord(gMpBase + 13);
     ivec2 c = ivec2(floor((q - vec2(mpFx(gMpBase + 14), mpFx(gMpBase + 15))) / mpFx(gMpBase + 16)));
@@ -1344,11 +1141,6 @@ vec3 mpHeads(vec2 q, vec3 col, float topH){
     return col;
 }
 
-// with a dev car count set, a bar along the top: of the cars on the map,
-// those stopped over MP_JAMMED (white: jammed, longer than any light),
-// stopped (red), moving (green), and waiting off it (blue)
-// every car on a small map of the screen and around it (the preview's
-// minimap button): green moving, red stopped, magenta jammed
 vec3 mpMinimap(vec2 q, vec3 col){
     vec2 mc = vec2(0.5 * u_aspect - 0.12, 0.36), mq = (q - mc) / 0.1 * 1.4;
     if(abs(mq.x) < 1.4 && abs(mq.y) < 1.4){
@@ -1392,9 +1184,6 @@ vec3 mpMeter(vec2 q, vec3 col){
     return x < stk ? vec3(1.) : x < stk + stp ? vec3(1., 0., 0.) : x < stk + stp + mov ? vec3(0., 1., 0.) : vec3(0., 0., 1.);
 }
 
-// the map's name in the bottom left corner (gen_maps labels: a strip of
-// LABEL_W x LABEL_H per map in iChannel22), MP_LABEL tall a strip, over a
-// soft shadow
 vec3 mpLabel(vec2 q, vec3 col){
     vec2 ts = vec2(textureSize(iChannel22, 0));
     float rows = floor(ts.y / MP_LABEL_PX + 0.5), w = ts.x / MP_LABEL_PX;
@@ -1405,10 +1194,6 @@ vec3 mpLabel(vec2 q, vec3 col){
     return mix(col, vec3(0.88), S(d));
 }
 
-// the lane graph over the map (the preview's lanes button): each lane's
-// centre line dim, connectors through junctions green, orange where they
-// give way, blue on a ring, over each junction's area tinted; a road with
-// stopped cars washed amber, red where it is backed up to its start
 vec3 mpLanes(sampler2D ch, vec2 q, vec3 col){
     int nx = mpWord(gMpBase + 12), ny = mpWord(gMpBase + 13);
     ivec2 c = ivec2(floor((q - vec2(mpFx(gMpBase + 14), mpFx(gMpBase + 15))) / mpFx(gMpBase + 16)));

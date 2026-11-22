@@ -1,11 +1,3 @@
-// --- blinds: three-sided slats turning old scene -> card -> new scene --------
-// A transition, T_BLINDS long. The screen is cut into vertical slats
-// BL_W wide, each a triangular prism seen side on: one face the old scene,
-// the next the card (the amp and the tagline), the third the new scene. At
-// BL_AT.x and again at BL_AT.y the slats turn a third of the way round on
-// an ease-out-back over BL_TURN, in a sweep left to right (BL_SWEEP), each
-// face shaded by how far it faces away. The slats fade in out of the old
-// scene over BL_FADE and out into the new one over the last BL_FADE.
 const float BL_W     = 1. / 7.;
 const vec2  BL_AT    = vec2(0.6, 4.4);
 const float BL_FADE  = 0.5;

@@ -215,7 +215,6 @@ in
         ];
       };
 
-      # Static keybindings live in bindings.lua; only host-dynamic config below.
       extraLuaFiles.bindings = ./bindings.lua;
 
       extraConfig = ''

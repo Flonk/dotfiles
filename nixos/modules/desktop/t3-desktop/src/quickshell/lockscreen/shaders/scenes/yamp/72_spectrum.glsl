@@ -1,8 +1,3 @@
-// --- spectrum: spectrogram waterfall with the amp hidden in the signal ---------
-// frequency runs left to right, time scrolls down from the live spectrum strip
-// at the top; every cell is a pure function of (bin, frame), so rows scroll
-// without a feedback buffer. Every SPEC_PERIOD the amp is transmitted, one
-// glyph row per frame, so it builds up under the strip and scrolls away.
 const int   SPEC_BINS      = 320;
 const float SPEC_SPEED     = 0.03;
 const float SPEC_ROW       = 0.004;
@@ -68,7 +63,6 @@ float specPower(int bin, int frame){
 
 float specLevel(float P){ return clamp((log(P) - SPEC_LO) / (SPEC_HI - SPEC_LO), 0., 1.); }
 
-// bilinear between the four (bin, frame) cells around (fb, ff)
 float specAt(float fb, float ff){
     vec2 c = vec2(fb, ff) - 0.5;
     ivec2 i = ivec2(floor(c));

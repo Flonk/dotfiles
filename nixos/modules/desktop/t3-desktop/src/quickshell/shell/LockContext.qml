@@ -23,8 +23,6 @@ Scope {
     property real devPrevAt: 0
     property real devSwitchAt: -1000
     property vector2d prismBeam: Qt.vector2d(0, 0)
-    // traffic sub-modes: -1 the grid, else a map baked by gen_maps.py (same
-    // order as its MAPS); rolled each time the scene comes on unless pinned
     readonly property var trafficMapNames: ["magic roundabout", "arc de triomphe", "spaghetti junction", "newark airport", "katy freeway", "auckland cmj", "putrajaya", "puxi viaduct", "nanpu bridge", "diverging diamond", "praterstern", "votivkirche", "mixing bowl", "squirrel hill", "huangjuewan", "central park south", "acropolis", "salzburg", "monaco", "le quesnoy"]
     property int trafficMap: 0
     property bool trafficMapPinned: false
@@ -164,11 +162,6 @@ Scope {
     property bool unlockInProgress: false
     property bool showFailure: false
 
-    // Envelope timing state (seconds since lock start)
-    // Advanced from the clock-owner surface's frameSwapped signal (frameTick):
-    // vsync-locked wall-clock time, driven once — not N times — on N monitors.
-    // Each tick dirties the ShaderEffects, which schedules the next frame,
-    // so the loop is self-sustaining while any surface exists.
     property real elapsedTime: 0
     property double clockStart: 0
     property var _clockOwner: null
@@ -181,7 +174,6 @@ Scope {
         const t = _anchorMs === 0
             ? (now - clockStart) / 1000
             : _anchorT + (now - _anchorMs) / 1000 * timeScale;
-        // always advance so the repaint chain never stalls
         elapsedTime = t > elapsedTime ? t : elapsedTime + 0.0005;
     }
     function releaseClock(owner) {
@@ -191,14 +183,12 @@ Scope {
     property real lastFailedUnlockTime: -1000.0
     property real authStartedTime: -1000.0
 
-    // Envelope base values for seamless mid-animation keypresses
     property real keypulseBase: 0.0
     property real keyBase: 0.0
 
     onCurrentTextChanged: showFailure = false
 
     function recordKeypress() {
-        // Sample current envelope values as bases for the next animation
         let age = elapsedTime - lastKeyTime;
         if (age < 0.11) {
             let ramp = Math.min(age / 0.03, 1.0);

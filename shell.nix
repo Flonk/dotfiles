@@ -41,13 +41,3 @@ mkShell {
   '';
 }
 
-/*
-  # Need a new secret?
-
-  sops ./assets/secrets/mysecret.json
-
-  or if its binary..
-
-  sops -e ~/blah.bin > ./assets/secrets/mysecret.bin
-  sops -d ./assets/secrets/mysecret.bin > ~/blah.bin # decrypt
-*/

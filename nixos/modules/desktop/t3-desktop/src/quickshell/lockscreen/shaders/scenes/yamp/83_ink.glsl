@@ -1,9 +1,3 @@
-// --- ink: the amp drops into the old scene like ink into water ---------------
-// A transition, T_INK long. The amp falls onto the old scene and lands at
-// INK_DROP, then bleeds out as swirling deep-teal ink, its edge torn up by
-// noise, until the screen is ink (INK_SPREAD). The amp and the tagline
-// surface out of it, sink again, and from INK_CLEAR_AT a second noisy front
-// clears the ink from the middle outwards onto the new scene.
 const float INK_DROP     = 0.6;
 const float INK_SPREAD   = 2.;
 const float INK_CLEAR_AT = 4.9;

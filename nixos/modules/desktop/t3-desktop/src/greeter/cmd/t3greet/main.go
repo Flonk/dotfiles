@@ -154,9 +154,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case tea.KeyboardEnhancementsMsg:
-		// Non-US layouts need alternate-key and associated-text reporting to
-		// type shifted characters correctly; mode 2 adds flags without
-		// dropping the lock-key reporting used for CapsLock detection.
 		if !m.kittyUpgraded {
 			m.kittyUpgraded = true
 			flags := ansi.KittyReportAlternateKeys | ansi.KittyReportAssociatedKeys
@@ -232,8 +229,6 @@ func (m model) handleKey(msg tea.KeyMsg) (model, tea.Cmd) {
 		if msg.String() == "f7" {
 			action = "reboot"
 		}
-		// Stay alive: systemd 260+ kills all processes in the session scope
-		// on greeter exit.
 		exec.Command("systemctl", action).Start()
 		m.loading = true
 		return m, nil
