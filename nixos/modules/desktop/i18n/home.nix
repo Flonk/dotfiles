@@ -30,11 +30,11 @@ in
       {
         command = [
           "settings"
-          "input"
+          "language"
           "list"
         ];
         title = "List input methods";
-        script = pkgs.writeShellScript "input-list.sh" ''
+        script = pkgs.writeShellScript "language-list.sh" ''
           set -euo pipefail
           cur=$(${i18n} current)
           ${i18n} list | while IFS=$'\t' read -r im label; do
@@ -47,11 +47,11 @@ in
       {
         command = [
           "settings"
-          "input"
+          "language"
           "cycle"
         ];
         title = "Switch to the next input method";
-        script = pkgs.writeShellScript "input-cycle.sh" ''
+        script = pkgs.writeShellScript "language-cycle.sh" ''
           set -euo pipefail
           ${i18n} cycle
           ${i18n} status
@@ -61,16 +61,16 @@ in
       {
         command = [
           "settings"
-          "input"
+          "language"
           "set"
         ];
         title = "Switch to a specific input method";
-        script = pkgs.writeShellScript "input-set.sh" ''
+        script = pkgs.writeShellScript "language-set.sh" ''
           set -euo pipefail
-          ${i18n} set "''${1:?usage: t3os settings input set <im> (see t3os settings input list)}"
+          ${i18n} set "''${1:?usage: t3os settings language set <im> (see t3os settings language list)}"
           ${i18n} status
         '';
-        usage = "Usage: `t3os settings input set <im>`, e.g. `keyboard-de` or `pinyin`.";
+        usage = "Usage: `t3os settings language set <im>`, e.g. `keyboard-de` or `pinyin`.";
       }
     ];
   };
