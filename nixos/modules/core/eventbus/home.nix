@@ -14,6 +14,19 @@ let
     buildInputs = [ pkgs.sqlite ];
   };
   cfg = config.t3os.module.core.eventbus;
+  screenshot = pkgs.writeShellApplication {
+    name = "t3os-screenshot";
+    runtimeInputs = [
+      t3cron
+      pkgs.hyprshot
+      pkgs.jq
+      pkgs.wl-clipboard
+      pkgs.libnotify
+      pkgs.tesseract
+      pkgs.coreutils
+    ];
+    text = builtins.readFile ./screenshot.sh;
+  };
   registry = lib.importJSON ../../../.registry.json;
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
     listener 1883 127.0.0.1
@@ -202,21 +215,53 @@ in
         '';
         usage = "Prints every message on the local mosquitto bus with its topic.";
       }
-      {
-        command = [ "screenshot" ];
-        title = "Screenshot the active monitor and announce it on the bus";
-        script = pkgs.writeShellScript "screenshot.sh" ''
-          set -euo pipefail
-          dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
-          mkdir -p "$dir"
-          file="$dir/$(date +%Y-%m-%d-%H%M%S)_t3os.png"
-          ${t3cron}/bin/t3cron emit screenshot/taken info "somebody has taken a screenshot" --source t3os --data "$(${pkgs.jq}/bin/jq -nc --arg path "$file" '{path: $path, detail: ($path | split("/") | last)}')"
-          ${pkgs.hyprshot}/bin/hyprshot -m output -m active -r png > "$file" || true
-          [ -s "$file" ] || { echo "screenshot failed" >&2; exit 1; }
-          echo "$file"
+    ]
+    ++ map
+      (s: {
+        command = [
+          "screen"
+          "shot"
+        ]
+        ++ lib.optional (s.mode != "monitor") s.mode;
+        inherit (s) title;
+        usage = s.usage + " Add -c to copy it to the clipboard and -n for a desktop notification.";
+        script = pkgs.writeShellScript "screenshot-${s.mode}.sh" ''
+          exec ${screenshot}/bin/t3os-screenshot ${s.mode} "$@"
         '';
-        usage = "Emits screenshot/taken on the bus (fire and forget) and saves a screenshot of the active monitor to ~/Pictures/Screenshots and prints the path.";
-      }
+      })
+      [
+        {
+          mode = "monitor";
+          title = "Screenshot a monitor and announce it on the bus";
+          usage = "Saves the active monitor, or the one named as an argument (e.g. `t3os screen shot DP-2`), to ~/Pictures/Screenshots, prints the path and emits screenshot/taken with the path and mode. Bound to SUPER + SHIFT + PRINT.";
+        }
+        {
+          mode = "window";
+          title = "Screenshot the active window";
+          usage = "Saves the focused window, prints the path and emits screenshot/taken. Bound to SUPER + PRINT.";
+        }
+        {
+          mode = "region";
+          title = "Drag a region to screenshot";
+          usage = "Lets you drag a rectangle with the mouse, then saves it, prints the path and emits screenshot/taken. Cancelling exits without a file or event. Bound to PRINT.";
+        }
+        {
+          mode = "pick-window";
+          title = "Click a window to screenshot";
+          usage = "Lets you click any visible window, then saves it, prints the path and emits screenshot/taken.";
+        }
+        {
+          mode = "pick-monitor";
+          title = "Click a monitor to screenshot";
+          usage = "Lets you click a monitor, then saves it, prints the path and emits screenshot/taken. Not bound to a key.";
+        }
+        {
+          mode = "ocr";
+          title = "Drag a region and copy its text";
+          usage = "Lets you drag a rectangle, reads the German/English text in it with tesseract, copies it to the clipboard, prints it and emits screenshot/ocr with the text. No image is saved. Bound to SUPER + O.";
+        }
+      ]
+    ++ [
       {
         command = [
           "bus"

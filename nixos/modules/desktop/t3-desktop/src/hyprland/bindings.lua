@@ -10,12 +10,10 @@ hl.bind(mainMod .. " + CTRL + RETURN", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("obsidian daily"))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 
-hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("hyprshot -m window -m active"))
-hl.bind(mainMod .. " + O",
-  hl.dsp.exec_cmd(
-    [[bash -lc 'text="$(hyprshot -m region --raw | tesseract stdin stdout -l deu 2>/dev/null)"; wl-copy <<< "$text"; notify-send "📸 OCR copied" "$(echo "$text" | head -c 300)"']]))
-hl.bind(mainMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd("hyprshot -m output -m active"))
-hl.bind("PRINT", hl.dsp.exec_cmd("hyprshot -m region"))
+hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("t3os screen shot window -c -n"))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("t3os screen shot ocr -n"))
+hl.bind(mainMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd("t3os screen shot monitor -c -n"))
+hl.bind("PRINT", hl.dsp.exec_cmd("t3os screen shot region -c -n"))
 
 hl.bind(mainMod .. " + A", hl.plugin.hy3.change_focus("raise"))
 hl.bind(mainMod .. " + E", hl.plugin.hy3.change_group("opposite"))
