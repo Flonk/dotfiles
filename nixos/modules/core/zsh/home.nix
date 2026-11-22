@@ -123,7 +123,7 @@
       shellAliases = {
 
         bat = "command bat -P -p --color always --theme 'Visual Studio Dark+'";
-        t = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
+        tt = "tree -L 2 -a -I '.git' --gitignore --dirsfirst";
         l = "eza -l --group --color-scale=size --git-ignore -I '.git' --group-directories-first -a --git -o --color=always";
         c = "cd_fzf";
         o = "open_fzf";
@@ -131,7 +131,7 @@
         ne = "nix-instantiate --eval";
         nb = "nix-build";
         ns = "nix-shell";
-        s = "t3os";
+        t = "t3os";
         nr = "t3os rebuild";
         p = "nix-shell -p";
         run = "_nix-shell-run";
