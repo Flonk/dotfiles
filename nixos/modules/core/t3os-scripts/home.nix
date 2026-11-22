@@ -145,7 +145,7 @@ let
         // {
           inherit accent;
         };
-      entries = map (e: { inherit (e) command title usage; }) scripts;
+      entries = map (e: { inherit (e) command title usage pinned preview; }) scripts;
     }
   );
 
@@ -163,7 +163,7 @@ let
           art=$(toilet -f future -- ${lib.escapeShellArg p})
           jq --arg k ${lib.escapeShellArg p} --arg v "$art" '. + {($k): $v}' banners.json > b.tmp
           mv b.tmp banners.json
-        '') prefixes}
+        '') ([ "t3os" ] ++ prefixes)}
         jq --slurpfile b banners.json '. + {banners: $b[0]}' ${manifestBase} > $out
       '';
 
@@ -279,6 +279,49 @@ in
     t3os.cli.fzfThemeArgs = fzfThemeArgs;
 
     t3os.cli.scripts = [
+      {
+        command = [ "info" ];
+        title = "Welcome to T3 OS";
+        pinned = true;
+        preview = true;
+        script = pkgs.writeShellScript "info.sh" ''
+          set -uo pipefail
+          flake="$HOME/repos/personal/dotfiles/nixos"
+          if [ -t 1 ] || [ -n "''${T3OS_COLOR:-}" ]; then
+            hex=${lib.escapeShellArg accent}
+            hex=''${hex#\#}
+            A=$(printf '\033[38;2;%d;%d;%dm' 0x''${hex:0:2} 0x''${hex:2:2} 0x''${hex:4:2})
+            D=$'\033[2m'
+            B=$'\033[1m'
+            R=$'\033[0m'
+          else
+            A= D= B= R=
+          fi
+          row() { printf '%s%-13s%s %s\n' "$D" "$1" "$R" "$2"; }
+
+          printf '%sWelcome to T3 OS.%s\n\n' "$B" "$R"
+          row user "$(id -un)"
+          row host ${lib.escapeShellArg config.t3os.whoami.host}
+          row installation ${lib.escapeShellArg config.t3os.whoami.installation}
+          row os "$(. /etc/os-release 2>/dev/null && echo "$PRETTY_NAME")"
+          row kernel "$(uname -r)"
+          s=$(cut -d. -f1 /proc/uptime)
+          row uptime "$((s / 86400))d $((s % 86400 / 3600))h $((s % 3600 / 60))m"
+          gen=$(readlink /nix/var/nix/profiles/system 2>/dev/null | tr -dc '0-9')
+          [ -n "$gen" ] && row generation "$gen, built $(date -d "@$(stat -c %Y /nix/var/nix/profiles/system)" '+%Y-%m-%d %H:%M')"
+          echo
+          row flake "''${flake/#$HOME/\~}"
+          if [ -d "$flake/.git" ] || git -C "$flake" rev-parse >/dev/null 2>&1; then
+            row commit "$A$(git -C "$flake" log -1 --format='%h' 2>/dev/null)$R $(git -C "$flake" log -1 --format='%s' 2>/dev/null)"
+            row branch "$(git -C "$flake" branch --show-current 2>/dev/null)"
+            dirty=$(git -C "$flake" status --porcelain 2>/dev/null | wc -l)
+            if [ "$dirty" -gt 0 ]; then row changes "$dirty uncommitted"; else row changes "clean"; fi
+          fi
+          echo
+          row commands "${toString (builtins.length scripts)}"
+        '';
+        usage = "Shows who and where you are: user, host, installation, OS, kernel, uptime, system generation, and the dotfiles flake with its latest commit.";
+      }
       {
         command = [ "upgrade" ];
         title = "Upgrade flake inputs and pinned packages";

@@ -19,6 +19,8 @@ type Entry struct {
 	Command []string `json:"command"`
 	Title   string   `json:"title"`
 	Usage   string   `json:"usage"`
+	Pinned  bool     `json:"pinned"`
+	Preview bool     `json:"preview"`
 }
 
 type Manifest struct {
@@ -38,6 +40,8 @@ type Node struct {
 }
 
 func (n *Node) key() string { return strings.Join(n.Path, " ") }
+
+func (n *Node) pinned() bool { return n.Entry != nil && n.Entry.Pinned }
 
 func (n *Node) child(name string) *Node {
 	for _, c := range n.Children {
@@ -61,7 +65,13 @@ func buildTree(entries []Entry) *Node {
 	}
 	var sortRec func(*Node)
 	sortRec = func(n *Node) {
-		sort.Slice(n.Children, func(a, b int) bool { return n.Children[a].Name < n.Children[b].Name })
+		sort.Slice(n.Children, func(a, b int) bool {
+			pa, pb := n.Children[a].pinned(), n.Children[b].pinned()
+			if pa != pb {
+				return pa
+			}
+			return n.Children[a].Name < n.Children[b].Name
+		})
 		for _, c := range n.Children {
 			sortRec(c)
 		}
@@ -119,6 +129,7 @@ type model struct {
 	filter   textinput.Model
 	args     textinput.Model
 	run      []string
+	previews map[string]string
 	runArgs  string
 	selected *Node
 }
@@ -133,7 +144,7 @@ func newModel(m Manifest) model {
 	a := textinput.New()
 	a.TextStyle = lipgloss.NewStyle().Foreground(st.base06)
 	a.Cursor.Style = lipgloss.NewStyle().Foreground(st.accent)
-	md := model{m: m, st: st, root: buildTree(m.Entries), filter: f, args: a}
+	md := model{m: m, st: st, root: buildTree(m.Entries), filter: f, args: a, previews: map[string]string{}}
 	md.refresh()
 	return md
 }
@@ -220,7 +231,7 @@ func (m *model) sync() {
 	}
 }
 
-func (m model) listHeight() int { return max(m.height-4, 1) }
+func (m model) listHeight() int { return max(m.height-3, 1) }
 
 func (m *model) jumpToMatch() {
 	q := strings.TrimSpace(m.filter.Value())
@@ -253,10 +264,36 @@ func (m *model) move(d int) {
 	m.sync()
 }
 
-func (m model) Init() tea.Cmd { return nil }
+type previewMsg struct{ key, out string }
+
+func runPreview(e Entry) tea.Cmd {
+	return func() tea.Msg {
+		c := exec.Command("t3os", e.Command...)
+		c.Env = append(os.Environ(), "T3OS_COLOR=1")
+		out, err := c.Output()
+		s := strings.TrimRight(string(out), "\n")
+		if err != nil && s == "" {
+			s = err.Error()
+		}
+		return previewMsg{key: strings.Join(e.Command, " "), out: s}
+	}
+}
+
+func (m model) Init() tea.Cmd {
+	var cmds []tea.Cmd
+	for _, e := range m.m.Entries {
+		if e.Preview {
+			cmds = append(cmds, runPreview(e))
+		}
+	}
+	return tea.Batch(cmds...)
+}
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case previewMsg:
+		m.previews[msg.key] = msg.out
+		return m, nil
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
 		m.sync()
@@ -274,7 +311,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if msg.Action != tea.MouseActionPress || msg.X >= m.leftWidth() {
 				break
 			}
-			i := msg.Y - 2 + m.offset
+			i := msg.Y - 1 + m.offset
 			if i >= 0 && i < len(m.rows) {
 				if i == m.cursor {
 					return m.activate()
@@ -424,14 +461,7 @@ func (m model) activate() (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func track(s string) string {
-	r := []rune(strings.ToUpper(s))
-	out := make([]string, len(r))
-	for i, c := range r {
-		out[i] = string(c)
-	}
-	return strings.Join(out, " ")
-}
+func upper(s string) string { return strings.ToUpper(s) }
 
 func (m model) leftWidth() int {
 	w := 18
@@ -447,7 +477,7 @@ func (m model) box(title string, lines []string, w, h int, border lipgloss.Color
 	inner := w - 2
 	label := ""
 	if title != "" {
-		label = " " + track(title) + " "
+		label = " " + upper(title) + " "
 	}
 	label = ansi.Truncate(label, max(inner-2, 0), "")
 	top := bs.Render("╭─") + ts.Render(label) + bs.Render(strings.Repeat("─", max(inner-1-lipgloss.Width(label), 0))+"╮")
@@ -549,7 +579,11 @@ func (m model) detailLines(w int) []string {
 		}
 	}
 	lines = append(lines, "")
-	banner := strings.TrimRight(m.m.Banners[n.key()], "\n")
+	bk := n.key()
+	if n.pinned() {
+		bk = "t3os"
+	}
+	banner := strings.TrimRight(m.m.Banners[bk], "\n")
 	bw := 0
 	for _, l := range strings.Split(banner, "\n") {
 		bw = max(bw, lipgloss.Width(l))
@@ -559,9 +593,18 @@ func (m model) detailLines(w int) []string {
 			add(accent.Render(l))
 		}
 	} else {
-		add(accent.Bold(true).Render(track(n.key())))
+		add(accent.Bold(true).Render(upper(n.key())))
 	}
 	add("")
+	if n.Entry != nil && n.Entry.Preview {
+		out, ok := m.previews[n.key()]
+		if !ok {
+			out = muted.Render("loading…")
+		}
+		add(strings.Split(out, "\n")...)
+		add("", cmd.Render(" $ t3os "+n.key()+" "))
+		return lines
+	}
 	if n.Entry != nil {
 		add(m.wrap(n.Entry.Title, inner, title)...)
 	} else {
@@ -570,11 +613,11 @@ func (m model) detailLines(w int) []string {
 	add("")
 	add(cmd.Render(" $ t3os " + n.key() + " "))
 	if n.Entry != nil && strings.TrimSpace(n.Entry.Usage) != "" {
-		add("", label.Render(track("usage")), "")
+		add("", label.Render(upper("usage")), "")
 		add(m.wrap(n.Entry.Usage, inner, text)...)
 	}
 	if len(n.Children) > 0 {
-		add("", label.Render(track("subcommands")), "")
+		add("", label.Render(upper("subcommands")), "")
 		nw := 0
 		for _, c := range n.Children {
 			nw = max(nw, lipgloss.Width(c.Name))
@@ -602,15 +645,9 @@ func (m model) View() string {
 	if m.width == 0 {
 		return ""
 	}
-	brand := lipgloss.NewStyle().Background(m.st.accent).Foreground(m.st.base00).Bold(true).Render(" " + track("t3os") + " ")
-	host := lipgloss.NewStyle().Foreground(m.st.base04).Render(" " + track(m.m.Installation))
-	count := lipgloss.NewStyle().Foreground(m.st.base03).Render(fmt.Sprintf("%d commands ", len(m.m.Entries)))
-	gap := max(m.width-lipgloss.Width(brand)-lipgloss.Width(host)-lipgloss.Width(count), 0)
-	header := brand + host + strings.Repeat(" ", gap) + count
-
 	lw := m.leftWidth()
 	rw := max(m.width-lw, 10)
-	bodyH := max(m.height-2, 3)
+	bodyH := max(m.height-1, 3)
 	treeTitle := "commands"
 	if q := m.filter.Value(); q != "" {
 		treeTitle = "filter"
@@ -637,7 +674,7 @@ func (m model) View() string {
 		footer = " " + strings.Join(parts, "  ")
 	}
 	footer = ansi.Truncate(footer, m.width, "")
-	return header + "\n" + body + "\n" + footer
+	return body + "\n" + footer
 }
 
 func main() {

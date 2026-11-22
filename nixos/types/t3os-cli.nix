@@ -32,6 +32,16 @@ in
                 default = "";
                 description = "Usage description shown in the t3os TUI detail pane";
               };
+              pinned = mkOption {
+                type = types.bool;
+                default = false;
+                description = "Pin the command to the top of the t3os TUI tree";
+              };
+              preview = mkOption {
+                type = types.bool;
+                default = false;
+                description = "Run the command when the t3os TUI starts and show its output in the detail pane instead of the usage text; it must be quick and side-effect free";
+              };
             };
           }
         );

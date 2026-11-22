@@ -31,6 +31,8 @@ t3os.cli.scripts = [{
   title = "Human-readable title";     # shown in the t3os TUI tree and --help
   script = ./path-to-script.sh;       # .sh or a derivation bin path
   usage = "Description shown in the TUI detail pane below the banner";
+  pinned = false;                     # pin to the top of the TUI tree
+  preview = false;                    # run on TUI start, show output in the detail pane
 }];
 ```
 
