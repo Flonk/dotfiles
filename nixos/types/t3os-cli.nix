@@ -21,7 +21,7 @@ in
               };
               title = mkOption {
                 type = types.str;
-                description = "Human-readable title shown in fzf selection list";
+                description = "Human-readable title shown in the t3os TUI and --help";
               };
               script = mkOption {
                 type = types.path;
@@ -30,7 +30,7 @@ in
               usage = mkOption {
                 type = types.str;
                 default = "";
-                description = "Usage description shown below the ASCII art in preview";
+                description = "Usage description shown in the t3os TUI detail pane";
               };
             };
           }

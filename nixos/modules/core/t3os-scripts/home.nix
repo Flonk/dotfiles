@@ -140,40 +140,53 @@ let
     _t3os "$@"
   '';
 
+  t3osTui = pkgs.buildGoModule {
+    pname = "t3os-tui";
+    version = "0.1.0";
+    src = ./tui;
+    vendorHash = "sha256-V0HT1olsh/6L60VNGqYXLR39Hky+HeON+fDQP9YPi/g=";
+  };
+
+  prefixes = lib.unique (
+    lib.concatMap (
+      e: map (n: lib.concatStringsSep " " (lib.take n e.command)) (lib.range 1 (builtins.length e.command))
+    ) scripts
+  );
+
+  manifestBase = pkgs.writeText "t3os-manifest-base.json" (
+    builtins.toJSON {
+      installation = config.t3os.whoami.installation;
+      theme =
+        (lib.genAttrs (map (i: "base0${i}") (lib.stringToCharacters "0123456789ABCDEF")) (b: s.${b}))
+        // {
+          inherit accent;
+        };
+      entries = map (e: { inherit (e) command title usage; }) scripts;
+    }
+  );
+
+  manifest =
+    pkgs.runCommand "t3os-manifest.json"
+      {
+        nativeBuildInputs = [
+          pkgs.toilet
+          pkgs.jq
+        ];
+      }
+      ''
+        echo '{}' > banners.json
+        ${lib.concatMapStringsSep "\n" (p: ''
+          art=$(toilet -f future -- ${lib.escapeShellArg p})
+          jq --arg k ${lib.escapeShellArg p} --arg v "$art" '. + {($k): $v}' banners.json > b.tmp
+          mv b.tmp banners.json
+        '') prefixes}
+        jq --slurpfile b banners.json '. + {banners: $b[0]}' ${manifestBase} > $out
+      '';
+
   t3osBin = pkgs.writeShellScriptBin "t3os" ''
     set -euo pipefail
 
     SCRIPTS_DIR="$HOME/.t3os/scripts"
-
-    _t3os_colorize() {
-      local hex="${accent}"
-      hex="''${hex#\#}"
-      local r=$((16#''${hex:0:2}))
-      local g=$((16#''${hex:2:2}))
-      local b=$((16#''${hex:4:2}))
-      ${pkgs.gnused}/bin/sed "s/\x1b\[0m/\x1b[0m/g; s/^/\x1b[38;2;''${r};''${g};''${b}m/; s/$/\x1b[0m/"
-    }
-
-    _t3os_preview() {
-      local cmd="$1"
-      if [[ "$cmd" == "t3os" ]]; then
-        for word in t3os system config; do
-          ${pkgs.toilet}/bin/toilet -f future "$word" | _t3os_colorize
-        done
-      else
-        for word in t3os $cmd; do
-          ${pkgs.toilet}/bin/toilet -f future "$word" | _t3os_colorize
-        done
-      fi
-
-      echo ""
-
-      case "$cmd" in
-        ${lib.concatMapStringsSep "\n        " (s: ''"${cmdStr s}") echo "${s.usage}" ;;'') scripts}
-        "t3os") echo "Welcome to t3os." ;;
-        *) echo "No usage info available" ;;
-      esac
-    }
 
     _T3OS_CMDS=(
       ${lib.concatMapStringsSep "\n      " (s: ''"${cmdStr s}"'') scripts}
@@ -231,49 +244,23 @@ let
       echo "t3os - module script runner"
       echo ""
       echo "Usage: t3os <command> [args...]"
-      echo "       t3os              Interactive script picker (fzf)"
+      echo "       t3os              Interactive command browser"
       echo "       t3os --help       Show this help"
       echo ""
       echo "Available commands:"
       ${lib.concatMapStringsSep "\n      " (
-        s: ''echo "  ${lib.fixedWidthString 30 " " (cmdStr s)}${s.title}"''
+        s: ''printf '  %-30s%s\n' ${lib.escapeShellArg (cmdStr s)} ${lib.escapeShellArg s.title}''
       ) scripts}
     }
 
     interactive() {
-      local entries
-      entries=$(printf '%b\n' \
-        "t3os\tT3 OS System Config" \
-        ${lib.concatMapStringsSep " \\\n        " (s: ''"${cmdStr s}\t${s.title}"'') scripts}
-      )
-
-      local selected
-      selected=$(echo "$entries" | ${pkgs.fzf}/bin/fzf \
-        ${fzfThemeArgs} \
-        --border-label ' T3 OS TUI ' \
-        --header-label ' T3 OS ' \
-        --header 'Select a script to run' \
-        --delimiter=$'\t' \
-        --with-nth=2 \
-        --preview='t3os _preview {1}' \
-        --bind 'focus:+transform-header:{2}' \
-      ) || exit 0
-
-      local cmd
-      cmd=$(echo "$selected" | cut -f1)
-      if [[ "$cmd" == "t3os" ]]; then
-        exec t3os
-      fi
-      dispatch $cmd
+      exec ${t3osTui}/bin/t3os-tui ${manifest}
     }
 
     if [[ $# -eq 0 ]]; then
       interactive
     elif [[ "$1" == "--help" || "$1" == "-h" ]]; then
       show_help
-    elif [[ "$1" == "_preview" ]]; then
-      shift
-      _t3os_preview "$*"
     else
       _t3os_resolve "$@"
 

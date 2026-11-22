@@ -28,9 +28,9 @@ To register a new T3 OS CLI script, add to the module's `home.nix`:
 ```nix
 t3os.cli.scripts = [{
   command = [ "category" "action" ];  # becomes `t3os category action`
-  title = "Human-readable title";     # shown in fzf list
+  title = "Human-readable title";     # shown in the t3os TUI tree and --help
   script = ./path-to-script.sh;       # .sh or a derivation bin path
-  usage = "Description shown in preview pane below ASCII art";
+  usage = "Description shown in the TUI detail pane below the banner";
 }];
 ```
 
