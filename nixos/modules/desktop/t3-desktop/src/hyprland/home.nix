@@ -5,7 +5,7 @@
   ...
 }:
 let
-  borderSize = 2;
+  borderSize = 4;
   lockCommand = config.programs.t3-desktop.quickshell.lockCommand;
   t3Pkgs = import ../../packages.nix {
     inherit pkgs;
@@ -97,7 +97,12 @@ in
 
           general = {
             layout = "hy3";
-            gaps_in = 0;
+            gaps_in = {
+              top = -borderSize;
+              right = 0;
+              bottom = 0;
+              left = -borderSize;
+            };
             gaps_out = 0;
             border_size = borderSize;
           };

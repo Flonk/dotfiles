@@ -25,7 +25,7 @@ QtObject {
     readonly property int border: 4
     readonly property int radius: 13
     readonly property int outerRadius: 17
-    readonly property int windowBorder: 2
+    readonly property int windowBorder: 4
     readonly property int markSize: 26
 
     readonly property color accent2: _palette.accent2
