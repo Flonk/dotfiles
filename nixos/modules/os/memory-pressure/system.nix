@@ -36,32 +36,5 @@ in
       "vm.watermark_scale_factor" = lib.mkDefault 125;
       "vm.page-cluster" = lib.mkDefault 0;
     };
-
-    # memwatch: samples per-actor memory metrics to a persistent TSV so the
-    # post-call OOM explosion can be diagnosed from the time series after a
-    # forced reboot. OOMScoreAdjust=-1000 keeps the sampler itself alive
-    # while everything else thrashes. See obsidian://claude/video-setup.
-    systemd.services.t3os-memwatch = lib.mkIf cfg.memwatch {
-      description = "Aggregated memory metrics sampler (post-call OOM debugging)";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.bash}/bin/bash ${./memwatch.sh} daemon";
-        Restart = "always";
-        RestartSec = "2s";
-        Nice = -5;
-        OOMScoreAdjust = -1000;
-        LogsDirectory = "t3os-memwatch";
-        Environment = [ "MEMWATCH_INTERVAL=${toString cfg.memwatchInterval}" ];
-        TimeoutStopSec = "3s";
-        KillMode = "mixed";
-      };
-      path = [
-        pkgs.coreutils
-        pkgs.procps
-        pkgs.gawk
-        pkgs.findutils
-      ];
-    };
   };
 }

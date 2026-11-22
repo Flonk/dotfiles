@@ -39,13 +39,11 @@
     ../../modules/desktop/vicinae/home.nix
     ../../modules/desktop/vicinae-askpass/home.nix
     ../../modules/desktop/vicinae-bitwarden/home.nix
-    ../../modules/leisure/gopro-webcam/home.nix
     ../../modules/leisure/minecraft/home.nix
     ../../modules/leisure/lutris/home.nix
     ../../modules/leisure/obs-studio/home.nix
     ../../modules/leisure/artcraft/home.nix
     ../../modules/leisure/spotify/home.nix
-    ../../modules/os/memory-pressure/home.nix
     ../../modules/os/network-scripts/home.nix
     ../../modules/projects/home.nix
   ];

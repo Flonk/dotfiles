@@ -40,9 +40,6 @@
         dnsmasq.enable = true;
         qemu.enable = true;
       };
-      leisure = {
-        "gopro-webcam".enable = true;
-      };
       os = {
         # IPU6 webcam — uses in-tree intel_cvs since 7.2 (see obsidian://claude/video-setup).
         ipu6.enable = true;

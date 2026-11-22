@@ -40,7 +40,6 @@
     ../modules/development/vscode/options.nix
     ../modules/development/zed-editor/options.nix
 
-    ../modules/leisure/gopro-webcam/options.nix
     ../modules/leisure/minecraft/options.nix
     ../modules/leisure/lutris/options.nix
     ../modules/leisure/obs-studio/options.nix
