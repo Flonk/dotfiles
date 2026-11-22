@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.core.zsh.enable {
+  config = lib.mkIf config.t3os.module.core.zsh.enable {
     home.packages = with pkgs; [
       fortune
       cowsay
@@ -43,7 +43,7 @@
 
       initContent =
         let
-          motdCommand = config.skynet.host.motd.command;
+          motdCommand = config.t3os.host.motd.command;
 
           init = lib.mkBefore ''
             source ${./zshrc.sh}
@@ -131,8 +131,8 @@
         ne = "nix-instantiate --eval";
         nb = "nix-build";
         ns = "nix-shell";
-        s = "skynet";
-        nr = "skynet rebuild";
+        s = "t3os";
+        nr = "t3os rebuild";
         p = "nix-shell -p";
         run = "_nix-shell-run";
         appimage = "nix run nixpkgs#appimage-run --";

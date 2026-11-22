@@ -6,7 +6,7 @@
 {
   imports = [ ./vicinae.nix ];
 
-  config = lib.mkIf config.skynet.module.desktop.i18n.enable {
+  config = lib.mkIf config.t3os.module.desktop.i18n.enable {
     programs.t3-desktop.i18n = {
       enable = true;
       defaultLayout = "de";

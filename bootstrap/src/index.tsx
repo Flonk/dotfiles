@@ -27,7 +27,7 @@ function ActiveStep() {
   if (phase === "done") {
     return (
       <Box paddingX={1}>
-        <Text bold>Bootstrap complete! Welcome to skynet.</Text>
+        <Text bold>Bootstrap complete! Welcome to T3 OS.</Text>
       </Box>
     );
   }

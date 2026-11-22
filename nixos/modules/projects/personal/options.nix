@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.projects.personal = {
+  options.t3os.module.projects.personal = {
     smallweb = {
       enable = mkOption {
         type = types.bool;

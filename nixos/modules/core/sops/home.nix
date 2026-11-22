@@ -6,9 +6,9 @@
 }:
 
 let
-  fzfThemeArgs = config.skynet.cli.fzfThemeArgs;
+  fzfThemeArgs = config.t3os.cli.fzfThemeArgs;
 
-  sopsFzf = pkgs.writeShellScriptBin "skynet-sops" ''
+  sopsFzf = pkgs.writeShellScriptBin "t3os-sops" ''
     set -euo pipefail
 
     export REPO_ROOT="$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || echo "$HOME/repos/personal/dotfiles")"
@@ -27,8 +27,8 @@ let
 
     selected=$(echo "$entries" | ${pkgs.fzf}/bin/fzf \
       ${fzfThemeArgs} \
-      --border-label ' SKYNET SECRETS ' \
-      --header-label ' SKYNET SECRETS ' \
+      --border-label ' T3 OS SECRETS ' \
+      --header-label ' T3 OS SECRETS ' \
       --header 'Select a secrets file to edit' \
       --preview='${pkgs.sops}/bin/sops -d $REPO_ROOT/{} | ${pkgs.bat}/bin/bat -p -l json --color=always' \
       --preview-window=right:60%:wrap \
@@ -37,7 +37,7 @@ let
     exec ${pkgs.sops}/bin/sops "$REPO_ROOT/$selected"
   '';
 
-  sopsRegenerate = pkgs.writeShellScript "skynet-sops-regenerate.sh" ''
+  sopsRegenerate = pkgs.writeShellScript "t3os-sops-regenerate.sh" ''
     set -euo pipefail
     shopt -s nullglob
 
@@ -62,14 +62,14 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.core.sops.enable {
+  config = lib.mkIf config.t3os.module.core.sops.enable {
     sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
 
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [ "secrets" ];
         title = "Browse and edit encrypted secrets";
-        script = "${sopsFzf}/bin/skynet-sops";
+        script = "${sopsFzf}/bin/t3os-sops";
         usage = "Browse and edit all sops-nix secrets in the dotfiles repository.";
       }
       {

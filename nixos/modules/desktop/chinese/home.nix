@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.chinese;
+  cfg = config.t3os.module.desktop.chinese;
 
   makemeahanziRev = "bddc96d41bef78427ed0e034e9f7e31d71fd1b92";
   dictionary = pkgs.fetchurl {
@@ -17,7 +17,7 @@ let
     url = "https://raw.githubusercontent.com/skishore/makemeahanzi/${makemeahanziRev}/graphics.txt";
     hash = "sha256-ooxHi1F46Y9n9RCy1S/eCKadxmRlTvQ0mCU7m3ZNRu4=";
   };
-  data = pkgs.runCommand "skynet-chinese-data" { nativeBuildInputs = [ pkgs.python3 ]; } ''
+  data = pkgs.runCommand "t3os-chinese-data" { nativeBuildInputs = [ pkgs.python3 ]; } ''
     python3 ${./prepare-data.py} ${dictionary} ${graphics} $out
   '';
 
@@ -29,7 +29,7 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    xdg.dataFile."skynet-chinese".source = data;
+    xdg.dataFile."t3os-chinese".source = data;
     programs.vicinae.extensions = [ extension ];
 
     wayland.windowManager.hyprland.extraConfig = lib.mkIf config.programs.t3-desktop.hyprland.enable ''

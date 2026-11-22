@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.leisure."gopro-webcam";
+  cfg = config.t3os.module.leisure."gopro-webcam";
 
   startScript = pkgs.writeShellScript "gopro-start.sh" ''
     exec gopro-webcam start "$@"
@@ -17,7 +17,7 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [
           "gopro"

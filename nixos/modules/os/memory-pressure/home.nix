@@ -5,9 +5,9 @@
   ...
 }:
 let
-  cfg = config.skynet.module.os.memory-pressure;
+  cfg = config.t3os.module.os.memory-pressure;
 
-  snapshotScript = pkgs.writeShellScript "skynet-mem-snapshot.sh" ''
+  snapshotScript = pkgs.writeShellScript "t3os-mem-snapshot.sh" ''
     set -u
 
     PATH=${
@@ -25,12 +25,12 @@ let
 
     label="''${1:-snapshot}"
     safe_label=$(printf '%s' "$label" | tr -c 'A-Za-z0-9._-' '_')
-    out="/tmp/skynet-mem-''${safe_label}.txt"
+    out="/tmp/t3os-mem-''${safe_label}.txt"
     ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
     uptime_s=$(awk '{print int($1)}' /proc/uptime)
 
     {
-      echo "# skynet mem snapshot"
+      echo "# t3os mem snapshot"
       echo "label:     $label"
       echo "timestamp: $ts"
       echo "uptime_s:  $uptime_s"
@@ -148,10 +148,10 @@ let
     echo "wrote $out"
     awk '/^Mem/ { used=$3; total=$2; gsub(/[^0-9.]/,"",used); gsub(/[^0-9.]/,"",total); if (total>0) printf "memory: %.0f%% used\n", used/total*100 }' < <(free)
 
-    ls -1t /tmp/skynet-mem-*.txt 2>/dev/null | head -5 | sed 's/^/  /'
+    ls -1t /tmp/t3os-mem-*.txt 2>/dev/null | head -5 | sed 's/^/  /'
   '';
 
-  logScript = pkgs.writeShellScript "skynet-mem-log.sh" ''
+  logScript = pkgs.writeShellScript "t3os-mem-log.sh" ''
     set -u
     PATH=${
       lib.makeBinPath [
@@ -163,15 +163,15 @@ let
       ]
     }:$PATH
 
-    LOG=/var/log/skynet-memwatch/metrics.tsv
+    LOG=/var/log/t3os-memwatch/metrics.tsv
     N="''${1:-30}"
 
     if [ ! -r "$LOG" ]; then
       echo "no memwatch log at $LOG"
-      if systemctl is-active --quiet skynet-memwatch.service; then
+      if systemctl is-active --quiet t3os-memwatch.service; then
         echo "(daemon is running — give it a few seconds, then retry)"
       else
-        echo "(daemon not running — rebuild, then check: systemctl status skynet-memwatch)"
+        echo "(daemon not running — rebuild, then check: systemctl status t3os-memwatch)"
       fi
       exit 1
     fi
@@ -196,12 +196,12 @@ let
     echo
     rows=$(grep -vc '^#' "$LOG" 2>/dev/null || echo "?")
     printf 'full TSV (%s rows, 41 cols): %s\n' "$rows" "$LOG"
-    systemctl is-active --quiet skynet-memwatch.service \
+    systemctl is-active --quiet t3os-memwatch.service \
       && echo "daemon: running" \
-      || echo "daemon: NOT running — systemctl status skynet-memwatch"
+      || echo "daemon: NOT running — systemctl status t3os-memwatch"
   '';
 
-  memScript = pkgs.writeShellScript "skynet-mem.sh" ''
+  memScript = pkgs.writeShellScript "t3os-mem.sh" ''
     set -u
 
     PATH=${
@@ -272,7 +272,7 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [ "mem" ];
         title = "Memory + swap pressure status";
@@ -286,16 +286,16 @@ in
         ];
         title = "Capture a labeled mem/swap/v4l2/pipewire/oomd snapshot to /tmp";
         script = snapshotScript;
-        usage = "Usage: skynet mem snapshot <label>. Writes /tmp/skynet-mem-<label>.txt with a diff-friendly dump of memory state, v4l2/pipewire holders of /dev/video61, gopro-ffmpeg internals, and recent oomd/kernel OOM events. Run pre-call and post-call to isolate leaks at call boundaries.";
+        usage = "Usage: t3os mem snapshot <label>. Writes /tmp/t3os-mem-<label>.txt with a diff-friendly dump of memory state, v4l2/pipewire holders of /dev/video61, gopro-ffmpeg internals, and recent oomd/kernel OOM events. Run pre-call and post-call to isolate leaks at call boundaries.";
       }
       {
         command = [
           "mem"
           "log"
         ];
-        title = "Show recent rows from the skynet-memwatch daemon TSV";
+        title = "Show recent rows from the t3os-memwatch daemon TSV";
         script = logScript;
-        usage = "Usage: skynet mem log [N]. Prints the last N (default 30) samples from the skynet-memwatch daemon — a curated column subset of /var/log/skynet-memwatch/metrics.tsv. The full TSV persists across reboot; hand it over after the next post-call OOM to diagnose which actor exploded.";
+        usage = "Usage: t3os mem log [N]. Prints the last N (default 30) samples from the t3os-memwatch daemon — a curated column subset of /var/log/t3os-memwatch/metrics.tsv. The full TSV persists across reboot; hand it over after the next post-call OOM to diagnose which actor exploded.";
       }
     ];
   };

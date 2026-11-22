@@ -6,7 +6,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.desktop.mazama.enable {
+  config = lib.mkIf config.t3os.module.desktop.mazama.enable {
     programs.mazama.enable = true;
 
     xdg.desktopEntries.mazama = {

@@ -2,9 +2,9 @@
 {
   config.xdg.mimeApps.enable = true;
 
-  config.skynet.whoami.user = "flo";
+  config.t3os.whoami.user = "flo";
 
-  config.skynet.module = {
+  config.t3os.module = {
     core = {
       direnv.enable = true;
       eventbus = {

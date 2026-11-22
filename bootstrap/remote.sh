@@ -21,7 +21,7 @@ confirm() {
 
 echo ""
 echo "╔══════════════════════════════════════╗"
-echo "║       skynet bootstrap (remote)      ║"
+echo "║       T3 OS bootstrap (remote)       ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
 
@@ -65,7 +65,7 @@ else
     ../users/${user_name}
   ];
 
-  skynet.whoami.installation = "${installation}";
+  t3os.whoami.installation = "${installation}";
 
 }
 NIXEOF
@@ -153,4 +153,4 @@ fi
 ok "Home Manager rebuild complete"
 
 echo ""
-ok "Bootstrap complete! Welcome to skynet."
+ok "Bootstrap complete! Welcome to T3 OS."

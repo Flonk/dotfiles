@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# skynet-memwatch — periodic aggregated memory snapshot for debugging the
+# t3os-memwatch — periodic aggregated memory snapshot for debugging the
 # post-meeting OOM explosion on chonkler. Appends one TSV row per sample to
 # $LOGS_DIRECTORY/metrics.tsv. The log lives on /var/log so it survives the
-# reboot — read it afterward with `skynet mem log`.
+# reboot — read it afterward with `t3os mem log`.
 #
 # Modes:
 #   memwatch.sh            one sample to stdout (manual test)
@@ -21,7 +21,7 @@
 
 set -u
 
-LOG_DIR="${LOGS_DIRECTORY:-/var/log/skynet-memwatch}"
+LOG_DIR="${LOGS_DIRECTORY:-/var/log/t3os-memwatch}"
 LOG="$LOG_DIR/metrics.tsv"
 INTERVAL="${MEMWATCH_INTERVAL:-5}"
 FAST_INTERVAL=1
@@ -39,7 +39,7 @@ COLS=$(printf '%s' \
 AVAIL_PCT=100
 
 header() {
-  printf '# skynet-memwatch  *_kb=kB  psi=%%stall  counters cumulative since boot\n'
+  printf '# t3os-memwatch  *_kb=kB  psi=%%stall  counters cumulative since boot\n'
   printf '%s\n' "$COLS"
 }
 

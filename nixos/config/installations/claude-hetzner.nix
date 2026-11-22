@@ -6,7 +6,7 @@
     ../users/claude
   ];
 
-  skynet.whoami.installation = "claude-hetzner";
+  t3os.whoami.installation = "claude-hetzner";
 
   dconf.enable = false;
 

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.qutebrowser;
+  cfg = config.t3os.module.desktop.qutebrowser;
 
   # qutebrowser package, shadowed so every launch path (desktop entry,
   # hyprland $browser keybind, terminal, xdg-open link handler) runs inside
@@ -211,7 +211,7 @@ let
   mergeAll       = mkMergeScript false;
 in
 {
-  config = lib.mkIf config.skynet.module.desktop.qutebrowser.enable {
+  config = lib.mkIf config.t3os.module.desktop.qutebrowser.enable {
     xdg.desktopEntries.qutebrowser = {
       name = "qutebrowser";
       exec = "env LIBVA_DRIVER_NAME=iHD qutebrowser %u";

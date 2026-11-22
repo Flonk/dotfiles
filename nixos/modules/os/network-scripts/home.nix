@@ -5,9 +5,9 @@
   ...
 }:
 let
-  cfg = config.skynet.module.os."network-scripts";
+  cfg = config.t3os.module.os."network-scripts";
 
-  wifiLimit = pkgs.writeShellScriptBin "skynet-wifi-limit" ''
+  wifiLimit = pkgs.writeShellScriptBin "t3os-wifi-limit" ''
     set -euo pipefail
 
     IFB_DEV="ifb4wifi0"
@@ -159,7 +159,7 @@ let
       case "$command" in
         set)
           if [[ -z "$rate" || $# -ne 2 ]]; then
-            echo "Usage: skynet-wifi-limit set <rate>" >&2
+            echo "Usage: t3os-wifi-limit set <rate>" >&2
             exit 1
           fi
 
@@ -180,7 +180,7 @@ let
           show_status
           ;;
         *)
-          echo "Usage: skynet-wifi-limit <set <rate>|clear|status>" >&2
+          echo "Usage: t3os-wifi-limit <set <rate>|clear|status>" >&2
           exit 1
           ;;
       esac
@@ -193,19 +193,19 @@ let
     name: command:
     pkgs.writeShellScript "${name}.sh" ''
       set -euo pipefail
-      exec ${wifiLimit}/bin/skynet-wifi-limit ${command}
+      exec ${wifiLimit}/bin/t3os-wifi-limit ${command}
     '';
 
   mkWifiForwardingScript =
     name: command:
     pkgs.writeShellScript "${name}.sh" ''
       set -euo pipefail
-      exec ${wifiLimit}/bin/skynet-wifi-limit ${command} "$@"
+      exec ${wifiLimit}/bin/t3os-wifi-limit ${command} "$@"
     '';
 in
 {
   config = lib.mkIf cfg.enable {
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [
           "wifi"
@@ -249,7 +249,7 @@ in
         ];
         title = "Throttle Wi-Fi to a custom rate";
         script = mkWifiForwardingScript "wifi-custom" "set";
-        usage = "Limit Wi-Fi download speed to any tc rate, e.g. 'skynet wifi custom 8mbit'. Requires sudo.";
+        usage = "Limit Wi-Fi download speed to any tc rate, e.g. 't3os wifi custom 8mbit'. Requires sudo.";
       }
       {
         command = [

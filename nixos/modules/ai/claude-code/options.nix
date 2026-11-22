@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.ai."claude-code" = {
+  options.t3os.module.ai."claude-code" = {
     enable = mkOption {
       type = types.bool;
       default = false;

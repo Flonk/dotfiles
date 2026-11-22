@@ -24,6 +24,6 @@ export const STEP_LABELS = [
   "Connect via SSH",
   "Check for NixOS",
   "Add config to repo",
-  "Install Skynet",
+  "Install T3 OS",
   "Create User",
 ] as const;

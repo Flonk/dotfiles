@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.audio;
+  cfg = config.t3os.module.desktop.audio;
 in
 {
   config = lib.mkIf cfg.enable {

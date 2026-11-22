@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.host.ssh.knock;
+  cfg = config.t3os.host.ssh.knock;
   serverConf = pkgs.writeText "fwknopd.conf" ''
     PCAP_INTF ${cfg.interface};
   '';

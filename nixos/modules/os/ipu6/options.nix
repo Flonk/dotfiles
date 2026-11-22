@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.os.ipu6 = {
+  options.t3os.module.os.ipu6 = {
     enable = mkOption {
       type = types.bool;
       default = false;

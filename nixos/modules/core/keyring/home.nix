@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.core.keyring.enable {
+  config = lib.mkIf config.t3os.module.core.keyring.enable {
     home.packages = with pkgs; [
       gnome-keyring
       libsecret
@@ -28,7 +28,7 @@
       };
     };
 
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [
           "init-keyring"

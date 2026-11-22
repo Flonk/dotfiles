@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.core.git.enable = mkOption {
+  options.t3os.module.core.git.enable = mkOption {
     type = types.bool;
     default = true;
   };

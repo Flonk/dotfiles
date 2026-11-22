@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.desktop.fastfetch.enable {
+  config = lib.mkIf config.t3os.module.desktop.fastfetch.enable {
     programs.fastfetch = {
       enable = true;
       settings = {
@@ -14,7 +14,7 @@
           title = lib.mkDefault "blue";
         };
         logo = {
-          source = builtins.toString config.skynet.module.desktop.stylix.lockscreenImage;
+          source = builtins.toString config.t3os.module.desktop.stylix.lockscreenImage;
           padding = {
             top = 10;
             right = 3;

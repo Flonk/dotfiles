@@ -11,7 +11,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.audio;
+  cfg = config.t3os.module.desktop.audio;
 
   trustScript = pkgs.writeShellScript "bluetooth-trust-headsets" (
     lib.concatMapStrings (p: ''
@@ -270,7 +270,7 @@ in
         ''
       );
 
-      skynet.cli.scripts = [
+      t3os.cli.scripts = [
         {
           command = [ "audio" "reload" ];
           title = "Restart audio services and reset to defaults";

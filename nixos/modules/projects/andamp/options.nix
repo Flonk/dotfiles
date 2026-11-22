@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.projects.andamp = {
+  options.t3os.module.projects.andamp = {
     enable = mkOption {
       type = types.bool;
       default = false;

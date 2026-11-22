@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop."vicinae-askpass";
+  cfg = config.t3os.module.desktop."vicinae-askpass";
 
   askpass = pkgs.writeShellApplication {
     name = "vicinae-askpass";

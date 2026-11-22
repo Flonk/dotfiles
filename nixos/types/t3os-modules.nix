@@ -12,7 +12,7 @@
     ../modules/core/eventbus/options.nix
     ../modules/core/git/options.nix
     ../modules/core/keyring/options.nix
-    ../modules/core/skynet-scripts/options.nix
+    ../modules/core/t3os-scripts/options.nix
     ../modules/core/sops/options.nix
     ../modules/core/ssh/options.nix
     ../modules/core/zsh/options.nix

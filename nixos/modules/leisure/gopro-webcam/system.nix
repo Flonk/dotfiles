@@ -5,8 +5,8 @@
   ...
 }:
 let
-  cfg = config.skynet.module.leisure."gopro-webcam";
-  adminUser = config.skynet.host.adminUser;
+  cfg = config.t3os.module.leisure."gopro-webcam";
+  adminUser = config.t3os.host.adminUser;
 
   gopro-webcam = pkgs.buildNpmPackage {
     pname = "gopro-webcam";

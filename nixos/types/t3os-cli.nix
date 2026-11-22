@@ -3,12 +3,12 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet = {
+  options.t3os = {
     cli = {
       fzfThemeArgs = mkOption {
         type = types.str;
         default = "";
-        description = "Common fzf theme args (style + colors) set by skynet-scripts module";
+        description = "Common fzf theme args (style + colors) set by t3os-scripts module";
       };
 
       scripts = mkOption {
@@ -17,7 +17,7 @@ in
             options = {
               command = mkOption {
                 type = types.listOf types.str;
-                description = "Command path, e.g. ['fingerprint' 'enroll'] becomes `skynet fingerprint enroll`";
+                description = "Command path, e.g. ['fingerprint' 'enroll'] becomes `t3os fingerprint enroll`";
               };
               title = mkOption {
                 type = types.str;
@@ -36,7 +36,7 @@ in
           }
         );
         default = [ ];
-        description = "Scripts registered by modules, collected into the skynet CLI";
+        description = "Scripts registered by modules, collected into the t3os CLI";
       };
 
       updaters = mkOption {
@@ -45,17 +45,17 @@ in
             options = {
               name = mkOption {
                 type = types.str;
-                description = "Name shown while `skynet upgrade` runs this updater";
+                description = "Name shown while `t3os upgrade` runs this updater";
               };
               script = mkOption {
                 type = types.path;
-                description = "Script that bumps pinned versions in the repo; runs with SKYNET_REPO set to the dotfiles checkout";
+                description = "Script that bumps pinned versions in the repo; runs with T3OS_REPO set to the dotfiles checkout";
               };
             };
           }
         );
         default = [ ];
-        description = "Updaters registered by modules, run by `skynet upgrade` after `nix flake update`";
+        description = "Updaters registered by modules, run by `t3os upgrade` after `nix flake update`";
       };
     };
   };

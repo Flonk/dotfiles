@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop."vicinae-bitwarden";
+  cfg = config.t3os.module.desktop."vicinae-bitwarden";
 
   pinentry-rbw = pkgs.writeShellApplication {
     name = "pinentry-rbw";

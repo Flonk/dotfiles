@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.leisure.artcraft;
+  cfg = config.t3os.module.leisure.artcraft;
   versions = lib.importJSON ./versions.json;
   jq = "${pkgs.jq}/bin/jq";
 
@@ -46,7 +46,7 @@ let
 
   updater = pkgs.writeShellScript "artcraft-update.sh" ''
     set -euo pipefail
-    file="$SKYNET_REPO/nixos/modules/leisure/artcraft/versions.json"
+    file="$T3OS_REPO/nixos/modules/leisure/artcraft/versions.json"
     for app in ${lib.concatStringsSep " " (builtins.attrNames versions)}; do
       current=$(${jq} -r --arg a "$app" '.[$a].version' "$file")
       latest=$(${pkgs.curl}/bin/curl -fsSL "https://api.github.com/repos/storytold/$app/releases/latest" | ${jq} -r '.tag_name | ltrimstr("v")')
@@ -66,7 +66,7 @@ in
 {
   config = lib.mkMerge [
     (lib.mkIf (cfg.photocraft.enable || cfg.filmcraft.enable || cfg.vectorcraft.enable) {
-      skynet.cli.updaters = [
+      t3os.cli.updaters = [
         {
           name = "artcraft";
           script = updater;

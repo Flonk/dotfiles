@@ -5,14 +5,14 @@
   ...
 }:
 let
-  scheme = config.skynet.module.desktop.stylix.scheme;
+  scheme = config.t3os.module.desktop.stylix.scheme;
 in
 {
-  config = lib.mkIf config.skynet.module.desktop.stylix.enable {
+  config = lib.mkIf config.t3os.module.desktop.stylix.enable {
     stylix = {
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/${scheme}.yaml";
-      image = lib.mkIf (config.skynet.module.desktop.stylix.lockscreenImage != null) config.skynet.module.desktop.stylix.lockscreenImage;
+      image = lib.mkIf (config.t3os.module.desktop.stylix.lockscreenImage != null) config.t3os.module.desktop.stylix.lockscreenImage;
       fonts = {
         monospace = {
           package = pkgs.nerd-fonts.dejavu-sans-mono;

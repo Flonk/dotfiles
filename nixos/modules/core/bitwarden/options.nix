@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.core.bitwarden.enable = mkOption {
+  options.t3os.module.core.bitwarden.enable = mkOption {
     type = types.bool;
     default = false;
   };

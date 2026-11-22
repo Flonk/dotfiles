@@ -1,9 +1,9 @@
 { lib, ... }:
 {
   imports = [
-    ./skynet-cli.nix
-    ./skynet-host.nix
-    ./skynet-modules.nix
-    ./skynet-whoami.nix
+    ./t3os-cli.nix
+    ./t3os-host.nix
+    ./t3os-modules.nix
+    ./t3os-whoami.nix
   ];
 }

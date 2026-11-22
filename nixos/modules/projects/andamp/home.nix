@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.projects.andamp;
+  cfg = config.t3os.module.projects.andamp;
   mutexWatch = pkgs.writeShellScript "andamp-mutex-watch" ''
     export PATH=${
       lib.makeBinPath [

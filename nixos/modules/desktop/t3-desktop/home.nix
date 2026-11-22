@@ -18,7 +18,7 @@
     ./src/vicinae/home.nix
   ];
 
-  config = lib.mkIf config.skynet.module.desktop.t3-desktop.enable {
+  config = lib.mkIf config.t3os.module.desktop.t3-desktop.enable {
     programs.t3-desktop.quickshell.enable = true;
     programs.t3-desktop.hyprland.enable = true;
   };

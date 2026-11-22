@@ -1,10 +1,10 @@
 { ... }:
 {
-  config.skynet = {
+  config.t3os = {
     whoami.host = "hetzner";
     host = {
       adminUser = "claude";
-      motd.command = "printf '%b' '\\nWelcome to \\033[94mSKYNET\\033[0m.\\n'";
+      motd.command = "printf '%b' '\\nWelcome to \\033[94mT3 OS\\033[0m.\\n'";
       ssh.knock = {
         enable = true;
         interface = "enp1s0";

@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.i18n;
+  cfg = config.t3os.module.desktop.i18n;
 
   extension = inputs.vicinae.lib.${pkgs.stdenv.hostPlatform.system}.mkVicinaeExtension {
     name = "vicinae-i18n";

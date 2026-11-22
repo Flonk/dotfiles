@@ -6,7 +6,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.development."zed-editor".enable {
+  config = lib.mkIf config.t3os.module.development."zed-editor".enable {
     home.packages = with pkgs; [
       nil
       nixd
@@ -62,8 +62,8 @@
 
         buffer_font_family = lib.mkDefault config.stylix.fonts.monospace.name;
         ui_font_family = lib.mkDefault config.stylix.fonts.monospace.name;
-        buffer_font_size = lib.mkDefault config.skynet.module.desktop.stylix.fontSizePx;
-        ui_font_size = lib.mkDefault (config.skynet.module.desktop.stylix.fontSizePx + 2);
+        buffer_font_size = lib.mkDefault config.t3os.module.desktop.stylix.fontSizePx;
+        ui_font_size = lib.mkDefault (config.t3os.module.desktop.stylix.fontSizePx + 2);
 
         tab_size = 2;
         soft_wrap = "editor_width";

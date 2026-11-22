@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.development.qemu.enable {
+  config = lib.mkIf config.t3os.module.development.qemu.enable {
     virtualisation.libvirtd = {
       enable = true;
       qemu = {

@@ -54,7 +54,7 @@ let
   };
 in
 {
-  config = lib.mkIf config.skynet.module.assorted.autoclicker.enable {
+  config = lib.mkIf config.t3os.module.assorted.autoclicker.enable {
     home.packages = [ autoclicker ];
 
     wayland.windowManager.hyprland.extraConfig = ''

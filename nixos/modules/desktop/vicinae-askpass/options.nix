@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.desktop."vicinae-askpass" = {
+  options.t3os.module.desktop."vicinae-askpass" = {
     enable = mkOption {
       type = types.bool;
       default = false;

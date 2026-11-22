@@ -9,7 +9,7 @@ let
   };
 in
 {
-  options.skynet.module.leisure.artcraft = {
+  options.t3os.module.leisure.artcraft = {
     photocraft = app;
     filmcraft = app;
     vectorcraft = app;

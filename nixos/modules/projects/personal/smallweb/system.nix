@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.projects.personal.smallweb;
+  cfg = config.t3os.module.projects.personal.smallweb;
   state = "/var/lib/smallweb";
   repo = "${state}/homepage";
   site = "${repo}/t3";

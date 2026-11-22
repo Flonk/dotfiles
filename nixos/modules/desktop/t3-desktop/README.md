@@ -13,7 +13,7 @@ A complete Hyprland desktop: hyprland + hy3, quickshell bar and lockscreen, vici
 - `src/vicinae/` — launcher service and binds
 - `t3-desktop-options.nix` — every `programs.t3-desktop.*` option and its default
 - `stylix.nix` — stylix theming for the session
-- `home.nix` / `system.nix` — entry points importing the above; they also map `skynet.module.desktop.t3-desktop.enable` onto `programs.t3-desktop.*`
+- `home.nix` / `system.nix` — entry points importing the above; they also map `t3os.module.desktop.t3-desktop.enable` onto `programs.t3-desktop.*`
 - `packages.nix` — the `t3-desktop` and `greeter` packages, exposed as `packages.x86_64-linux` of the nixos flake
 
 ## Wiring

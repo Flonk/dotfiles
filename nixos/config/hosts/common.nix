@@ -5,15 +5,15 @@
   ...
 }:
 let
-  adminUser = config.skynet.host.adminUser;
-  authorizedKeys = config.skynet.host.ssh.authorizedKeys;
+  adminUser = config.t3os.host.adminUser;
+  authorizedKeys = config.t3os.host.ssh.authorizedKeys;
 in
 {
   imports = [
     ../../modules/assorted/avahi/system.nix
     ../../modules/assorted/autoclicker/system.nix
     ../../modules/core/eventbus/system.nix
-    ../../modules/core/skynet-scripts/system.nix
+    ../../modules/core/t3os-scripts/system.nix
     ../../modules/core/ssh/system.nix
     ../../modules/desktop/stylix/system.nix
     ../../modules/desktop/audio/system.nix
@@ -31,7 +31,7 @@ in
 
   config = lib.mkMerge [
     {
-      networking.hostName = config.skynet.whoami.host;
+      networking.hostName = config.t3os.whoami.host;
 
       nixpkgs.config.allowUnfree = true;
 

@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.desktop.audio = {
+  options.t3os.module.desktop.audio = {
     enable = mkOption {
       type = types.bool;
       default = false;

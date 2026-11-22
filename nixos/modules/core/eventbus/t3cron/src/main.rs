@@ -604,12 +604,12 @@ fn print_jobs(jobs: &[Value]) {
 
 fn usage() -> ! {
     eprintln!(
-        "usage: skynet cron [list]
-       skynet cron add <key> <schedule> <topic> [payload]
-       skynet cron rm <key>
-       skynet cron run <key>
-       skynet cron watch
-       skynet bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]
+        "usage: t3os cron [list]
+       t3os cron add <key> <schedule> <topic> [payload]
+       t3os cron rm <key>
+       t3os cron run <key>
+       t3os cron watch
+       t3os bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]
 
 schedule: a cron expression (\"0 9 * * 1-5\", \"*/15 * * * *\", @daily, @hourly)
           or a one-shot: \"in 10m\", \"in 1h30m\", \"at 18:00\", \"at 2026-12-24 18:00\"

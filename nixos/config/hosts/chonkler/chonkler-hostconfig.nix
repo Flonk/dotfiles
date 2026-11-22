@@ -1,6 +1,6 @@
 { ... }:
 {
-  config.skynet = {
+  config.t3os = {
     whoami.host = "chonkler";
     host = {
       adminUser = "flo";

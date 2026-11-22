@@ -120,7 +120,7 @@ export function createInstallation(repoRoot: string, user: string, host: string)
     ../users/${user}
   ];
 
-  skynet.whoami.installation = "${name}";
+  t3os.whoami.installation = "${name}";
 
 }
 `;

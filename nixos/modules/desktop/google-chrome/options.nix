@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.desktop."google-chrome".enable = mkOption {
+  options.t3os.module.desktop."google-chrome".enable = mkOption {
     type = types.bool;
     default = false;
   };

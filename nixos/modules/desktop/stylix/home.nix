@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.stylix;
+  cfg = config.t3os.module.desktop.stylix;
 in
 {
   config = lib.mkMerge [

@@ -37,7 +37,7 @@ let
 in
 {
   config =
-    lib.mkIf (config.skynet.module.desktop.vicinae.enable && config.programs.t3-desktop.hyprland.enable)
+    lib.mkIf (config.t3os.module.desktop.vicinae.enable && config.programs.t3-desktop.hyprland.enable)
       {
         home.packages = [ open-bitwarden ];
 

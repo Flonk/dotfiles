@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.leisure."gopro-webcam" = {
+  options.t3os.module.leisure."gopro-webcam" = {
     enable = mkOption {
       type = types.bool;
       default = false;

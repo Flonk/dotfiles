@@ -5,12 +5,12 @@
   ...
 }:
 let
-  adminUser = config.skynet.host.adminUser;
+  adminUser = config.t3os.host.adminUser;
   ip = "${pkgs.iproute2}/bin/ip";
 in
 {
   config =
-    lib.mkIf (config.skynet.module.projects.andamp.CEFKM || config.skynet.module.projects.andamp.CEIFRS)
+    lib.mkIf (config.t3os.module.projects.andamp.CEFKM || config.t3os.module.projects.andamp.CEIFRS)
       {
         sops = {
           secrets."vpn3itdnsmasq" = {

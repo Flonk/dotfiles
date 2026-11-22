@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.desktop.foot.enable {
+  config = lib.mkIf config.t3os.module.desktop.foot.enable {
     programs.foot = {
       enable = true;
 

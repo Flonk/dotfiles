@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.leisure."obs-studio".enable {
+  config = lib.mkIf config.t3os.module.leisure."obs-studio".enable {
     programs.obs-studio = {
       enable = true;
 

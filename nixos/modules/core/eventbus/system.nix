@@ -30,7 +30,7 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.core.eventbus.enable {
+  config = lib.mkIf config.t3os.module.core.eventbus.enable {
     services.mosquitto = {
       enable = true;
       listeners = [

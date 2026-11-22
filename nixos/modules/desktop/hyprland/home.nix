@@ -4,8 +4,8 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.hyprland;
-  mon = config.skynet.host.primaryMonitor;
+  cfg = config.t3os.module.desktop.hyprland;
+  mon = config.t3os.host.primaryMonitor;
 in
 {
   config = lib.mkIf (cfg.enable && config.programs.t3-desktop.hyprland.enable) {

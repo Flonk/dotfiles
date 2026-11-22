@@ -13,7 +13,7 @@ let
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.sqlite ];
   };
-  cfg = config.skynet.module.core.eventbus;
+  cfg = config.t3os.module.core.eventbus;
   registry = lib.importJSON ../../../.registry.json;
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
     listener 1883 127.0.0.1
@@ -25,7 +25,7 @@ let
     name:
     let
       host = registry.${name};
-      knock = config.skynet.module.core.ssh.knockScript;
+      knock = config.t3os.module.core.ssh.knockScript;
       pub = "${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1";
     in
     pkgs.writeShellScript "eventbus-bridge-${name}" ''
@@ -182,14 +182,14 @@ in
       })
     ];
 
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [ "cron" ];
         title = "Manage t3cron jobs on the bus";
         script = pkgs.writeShellScript "cron.sh" ''
           exec ${t3cron}/bin/t3cron "$@"
         '';
-        usage = "List, add, remove, run and watch t3cron jobs: skynet cron [list|add <key> <schedule> <topic> [payload]|rm <key>|run <key>|watch]. Schedules are cron expressions or one-shots like 'in 10m' / 'at 18:00'.";
+        usage = "List, add, remove, run and watch t3cron jobs: t3os cron [list|add <key> <schedule> <topic> [payload]|rm <key>|run <key>|watch]. Schedules are cron expressions or one-shots like 'in 10m' / 'at 18:00'.";
       }
       {
         command = [
@@ -209,8 +209,8 @@ in
           set -euo pipefail
           dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
           mkdir -p "$dir"
-          file="$dir/$(date +%Y-%m-%d-%H%M%S)_skynet.png"
-          ${t3cron}/bin/t3cron emit screenshot/taken info "somebody has taken a screenshot" --source skynet --data "$(${pkgs.jq}/bin/jq -nc --arg path "$file" '{path: $path, detail: ($path | split("/") | last)}')"
+          file="$dir/$(date +%Y-%m-%d-%H%M%S)_t3os.png"
+          ${t3cron}/bin/t3cron emit screenshot/taken info "somebody has taken a screenshot" --source t3os --data "$(${pkgs.jq}/bin/jq -nc --arg path "$file" '{path: $path, detail: ($path | split("/") | last)}')"
           ${pkgs.hyprshot}/bin/hyprshot -m output -m active -r png > "$file" || true
           [ -s "$file" ] || { echo "screenshot failed" >&2; exit 1; }
           echo "$file"
@@ -226,7 +226,7 @@ in
         script = pkgs.writeShellScript "bus-emit.sh" ''
           exec ${t3cron}/bin/t3cron emit "$@"
         '';
-        usage = "skynet bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]. Levels: error warn info http verbose debug silly. See nixos/modules/core/eventbus/event.schema.json.";
+        usage = "t3os bus emit <topic> <level> <description> [--attention] [--data <json>] [--source <name>]. Levels: error warn info http verbose debug silly. See nixos/modules/core/eventbus/event.schema.json.";
       }
     ];
   };

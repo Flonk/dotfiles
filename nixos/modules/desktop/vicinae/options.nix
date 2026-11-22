@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.desktop.vicinae.enable = mkOption {
+  options.t3os.module.desktop.vicinae.enable = mkOption {
     type = types.bool;
     default = false;
   };

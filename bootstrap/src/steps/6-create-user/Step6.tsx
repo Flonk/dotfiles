@@ -83,7 +83,7 @@ export function Step6() {
   if (sub === "cloning") {
     return (
       <Box>
-        <Text>Cloning Skynet into {ctx.selectedUser}'s home…</Text>
+        <Text>Cloning T3 OS into {ctx.selectedUser}'s home…</Text>
       </Box>
     );
   }

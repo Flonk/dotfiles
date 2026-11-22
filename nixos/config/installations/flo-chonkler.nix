@@ -6,6 +6,6 @@
     ../users/flo
   ];
 
-  skynet.whoami.installation = "flo-chonkler";
+  t3os.whoami.installation = "flo-chonkler";
 
 }

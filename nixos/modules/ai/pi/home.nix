@@ -12,7 +12,7 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.ai.pi.enable {
+  config = lib.mkIf config.t3os.module.ai.pi.enable {
     home.packages = [ piScript ];
   };
 }

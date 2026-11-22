@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.whoami = {
+  options.t3os.whoami = {
     host = mkOption {
       type = types.str;
       description = "The hostname of this machine";

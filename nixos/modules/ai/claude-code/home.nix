@@ -22,8 +22,8 @@ let
     done
     wait $pid
   '';
-  rc = config.skynet.module.ai.claude-code.service;
-  agentName = model: "${config.skynet.whoami.installation}-${model}";
+  rc = config.t3os.module.ai.claude-code.service;
+  agentName = model: "${config.t3os.whoami.installation}-${model}";
   modelRank = [
     "haiku"
     "sonnet"
@@ -145,7 +145,7 @@ let
 in
 {
   config = lib.mkMerge [
-    (lib.mkIf config.skynet.module.ai.claude-code.enable {
+    (lib.mkIf config.t3os.module.ai.claude-code.enable {
       home.file.".claude/CLAUDE.md".source = ../../../../CLAUDE.global.md;
 
       home.packages = [
@@ -163,7 +163,7 @@ in
           { match = { class = "^Xephyr$"; title = "^auto-xephyr$"; }; suppress_event = "activatefocus"; }
         ];
     })
-    (lib.mkIf config.skynet.module.ai.claude-code.service.enable {
+    (lib.mkIf config.t3os.module.ai.claude-code.service.enable {
       systemd.user.services = lib.listToAttrs (
         lib.imap0 (i: model: {
           name = "claude-remote-control-${model}";

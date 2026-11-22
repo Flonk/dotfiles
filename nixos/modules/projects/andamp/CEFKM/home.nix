@@ -4,6 +4,6 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.projects.andamp.CEFKM {
+  config = lib.mkIf config.t3os.module.projects.andamp.CEFKM {
   };
 }

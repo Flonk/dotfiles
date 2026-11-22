@@ -53,7 +53,7 @@ let
         --set CRDP_PORT_FILE ${config.sops.secrets.rdp3itport.path} \
         --set CRDP_USER_FILE ${config.sops.secrets.rdp3ituser.path} \
         --set CRDP_PASS_FILE ${config.sops.secrets.rdp3itpass.path} \
-        --set CRDP_BACKEND ${config.skynet.module.projects.andamp.crdpBackend} \
+        --set CRDP_BACKEND ${config.t3os.module.projects.andamp.crdpBackend} \
         --set CRDP_WORKSPACES ${
           lib.escapeShellArg (
             builtins.toJSON (lib.mapAttrs (_: key: config.sops.secrets.${key}.path) workspaces)
@@ -75,7 +75,7 @@ let
   };
 in
 {
-  config = lib.mkIf config.skynet.module.projects.andamp.CEIFRS {
+  config = lib.mkIf config.t3os.module.projects.andamp.CEIFRS {
     wayland.windowManager.hyprland.settings.window_rule = [
       { match.class = "xfreerdp"; float = false; }
       { match.tag = "crdp-locked"; border_color = "rgb(FF0000) rgb(880808)"; }
@@ -86,7 +86,7 @@ in
       crdp
     ];
 
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [
           "3it"

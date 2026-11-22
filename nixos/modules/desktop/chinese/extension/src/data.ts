@@ -14,7 +14,7 @@ export interface StrokeData {
 
 const dataDir = path.join(
   process.env.XDG_DATA_HOME ?? path.join(os.homedir(), ".local", "share"),
-  "skynet-chinese",
+  "t3os-chinese",
 );
 
 let dictionary: Record<string, { d?: string; p?: string[] }> | null = null;

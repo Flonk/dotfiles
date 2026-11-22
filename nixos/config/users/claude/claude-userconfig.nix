@@ -1,8 +1,8 @@
 { ... }:
 {
-  config.skynet.whoami.user = "claude";
+  config.t3os.whoami.user = "claude";
 
-  config.skynet.module = {
+  config.t3os.module = {
     core = {
       direnv.enable = true;
       eventbus = {

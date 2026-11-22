@@ -8,7 +8,7 @@ interface InputMethod {
 }
 
 function listMethods(): InputMethod[] {
-  const out = execFileSync("skynet-i18n", ["list"], { encoding: "utf-8" });
+  const out = execFileSync("t3os-i18n", ["list"], { encoding: "utf-8" });
   return out
     .trim()
     .split("\n")
@@ -21,14 +21,14 @@ function listMethods(): InputMethod[] {
 
 function currentMethod(): string {
   try {
-    return execFileSync("skynet-i18n", ["current"], { encoding: "utf-8" }).trim();
+    return execFileSync("t3os-i18n", ["current"], { encoding: "utf-8" }).trim();
   } catch {
     return "";
   }
 }
 
 function switchTo(method: InputMethod) {
-  execFileSync("skynet-i18n", ["set", method.im]);
+  execFileSync("t3os-i18n", ["set", method.im]);
   execFileSync("notify-send", ["⌨️ Keyboard switched", method.label]);
   execFileSync("vicinae", ["close"]);
 }

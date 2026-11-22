@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.skynet.module.os.memory-pressure;
+  cfg = config.t3os.module.os.memory-pressure;
 in
 {
   config = lib.mkIf cfg.enable {
@@ -41,7 +41,7 @@ in
     # post-call OOM explosion can be diagnosed from the time series after a
     # forced reboot. OOMScoreAdjust=-1000 keeps the sampler itself alive
     # while everything else thrashes. See obsidian://claude/video-setup.
-    systemd.services.skynet-memwatch = lib.mkIf cfg.memwatch {
+    systemd.services.t3os-memwatch = lib.mkIf cfg.memwatch {
       description = "Aggregated memory metrics sampler (post-call OOM debugging)";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -51,7 +51,7 @@ in
         RestartSec = "2s";
         Nice = -5;
         OOMScoreAdjust = -1000;
-        LogsDirectory = "skynet-memwatch";
+        LogsDirectory = "t3os-memwatch";
         Environment = [ "MEMWATCH_INTERVAL=${toString cfg.memwatchInterval}" ];
         TimeoutStopSec = "3s";
         KillMode = "mixed";

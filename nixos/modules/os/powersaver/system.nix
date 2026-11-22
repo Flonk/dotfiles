@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.os.powersaver.enable {
+  config = lib.mkIf config.t3os.module.os.powersaver.enable {
     services.upower.enable = true;
 
     services.tlp.enable = true;

@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.os.memory-pressure = {
+  options.t3os.module.os.memory-pressure = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -19,7 +19,7 @@ in
     memwatch = mkOption {
       type = types.bool;
       default = true;
-      description = "Run the skynet-memwatch daemon: samples per-actor memory metrics to /var/log/skynet-memwatch/metrics.tsv for debugging the post-call OOM explosion. Disable once that bug is resolved.";
+      description = "Run the t3os-memwatch daemon: samples per-actor memory metrics to /var/log/t3os-memwatch/metrics.tsv for debugging the post-call OOM explosion. Disable once that bug is resolved.";
     };
 
     memwatchInterval = mkOption {

@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.module.desktop.stylix = {
+  options.t3os.module.desktop.stylix = {
     enable = mkOption {
       type = types.bool;
       default = false;

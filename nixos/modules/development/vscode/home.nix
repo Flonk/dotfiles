@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.skynet.module.development.vscode.enable {
+  config = lib.mkIf config.t3os.module.development.vscode.enable {
     programs.vscode = {
       enable = true;
 
@@ -50,7 +50,7 @@
 
       profiles.default.userSettings = {
         "editor.fontFamily" = lib.mkDefault config.stylix.fonts.monospace.name;
-        "editor.fontSize" = lib.mkDefault config.skynet.module.desktop.stylix.fontSizePx;
+        "editor.fontSize" = lib.mkDefault config.t3os.module.desktop.stylix.fontSizePx;
         "window.zoomLevel" = -1;
 
         "workbench.editor.showTabs" = "none";

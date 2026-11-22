@@ -6,10 +6,10 @@
 }:
 
 let
-  scripts = config.skynet.cli.scripts;
+  scripts = config.t3os.cli.scripts;
 
   s = config.lib.stylix.colors.withHashtag;
-  accent = config.skynet.module.desktop.stylix.accent;
+  accent = config.t3os.module.desktop.stylix.accent;
 
   fzfThemeArgs = lib.concatStringsSep " " [
     "--style full"
@@ -25,7 +25,7 @@ let
     "--bind 'focus:transform-preview-label:[[ -n {1} ]] && printf \" %s \" {1}'"
   ];
 
-  scriptsDir = pkgs.runCommand "skynet-scripts" { } ''
+  scriptsDir = pkgs.runCommand "t3os-scripts" { } ''
     mkdir -p $out
 
     ${lib.concatMapStringsSep "\n" (
@@ -74,10 +74,10 @@ let
 
   categories = builtins.filter (w: (subCommandsFor w) != [ ]) firstWords;
 
-  skynetCompletion = pkgs.writeText "_skynet" ''
-    #compdef skynet
+  t3osCompletion = pkgs.writeText "_t3os" ''
+    #compdef t3os
 
-    _skynet() {
+    _t3os() {
       local curcontext="$curcontext" state line
 
       _arguments -C \
@@ -105,7 +105,7 @@ let
       "    '${w}:${lib.escape [ "'" ":" ] desc}'"
     ) firstWords}
           )
-          _describe 'skynet command' top_commands
+          _describe 't3os command' top_commands
           ;;
         sub)
           case "$line[1]" in
@@ -137,15 +137,15 @@ let
       esac
     }
 
-    _skynet "$@"
+    _t3os "$@"
   '';
 
-  skynetBin = pkgs.writeShellScriptBin "skynet" ''
+  t3osBin = pkgs.writeShellScriptBin "t3os" ''
     set -euo pipefail
 
-    SCRIPTS_DIR="$HOME/.skynet/scripts"
+    SCRIPTS_DIR="$HOME/.t3os/scripts"
 
-    _skynet_colorize() {
+    _t3os_colorize() {
       local hex="${accent}"
       hex="''${hex#\#}"
       local r=$((16#''${hex:0:2}))
@@ -154,15 +154,15 @@ let
       ${pkgs.gnused}/bin/sed "s/\x1b\[0m/\x1b[0m/g; s/^/\x1b[38;2;''${r};''${g};''${b}m/; s/$/\x1b[0m/"
     }
 
-    _skynet_preview() {
+    _t3os_preview() {
       local cmd="$1"
-      if [[ "$cmd" == "skynet" ]]; then
-        for word in skynet system config; do
-          ${pkgs.toilet}/bin/toilet -f future "$word" | _skynet_colorize
+      if [[ "$cmd" == "t3os" ]]; then
+        for word in t3os system config; do
+          ${pkgs.toilet}/bin/toilet -f future "$word" | _t3os_colorize
         done
       else
-        for word in skynet $cmd; do
-          ${pkgs.toilet}/bin/toilet -f future "$word" | _skynet_colorize
+        for word in t3os $cmd; do
+          ${pkgs.toilet}/bin/toilet -f future "$word" | _t3os_colorize
         done
       fi
 
@@ -170,18 +170,18 @@ let
 
       case "$cmd" in
         ${lib.concatMapStringsSep "\n        " (s: ''"${cmdStr s}") echo "${s.usage}" ;;'') scripts}
-        "skynet") echo "Welcome to skynet." ;;
+        "t3os") echo "Welcome to t3os." ;;
         *) echo "No usage info available" ;;
       esac
     }
 
-    _SKYNET_CMDS=(
+    _T3OS_CMDS=(
       ${lib.concatMapStringsSep "\n      " (s: ''"${cmdStr s}"'') scripts}
     )
 
-    _skynet_resolve() {
+    _t3os_resolve() {
       local -a resolved=()
-      local -a candidates=("''${_SKYNET_CMDS[@]}")
+      local -a candidates=("''${_T3OS_CMDS[@]}")
       local pos=0
 
       for arg in "$@"; do
@@ -228,11 +228,11 @@ let
     }
 
     show_help() {
-      echo "skynet - module script runner"
+      echo "t3os - module script runner"
       echo ""
-      echo "Usage: skynet <command> [args...]"
-      echo "       skynet              Interactive script picker (fzf)"
-      echo "       skynet --help       Show this help"
+      echo "Usage: t3os <command> [args...]"
+      echo "       t3os              Interactive script picker (fzf)"
+      echo "       t3os --help       Show this help"
       echo ""
       echo "Available commands:"
       ${lib.concatMapStringsSep "\n      " (
@@ -243,26 +243,26 @@ let
     interactive() {
       local entries
       entries=$(printf '%b\n' \
-        "skynet\tSkynet System Config" \
+        "t3os\tT3 OS System Config" \
         ${lib.concatMapStringsSep " \\\n        " (s: ''"${cmdStr s}\t${s.title}"'') scripts}
       )
 
       local selected
       selected=$(echo "$entries" | ${pkgs.fzf}/bin/fzf \
         ${fzfThemeArgs} \
-        --border-label ' SKYNET TUI ' \
-        --header-label ' SKYNET ' \
+        --border-label ' T3 OS TUI ' \
+        --header-label ' T3 OS ' \
         --header 'Select a script to run' \
         --delimiter=$'\t' \
         --with-nth=2 \
-        --preview='skynet _preview {1}' \
+        --preview='t3os _preview {1}' \
         --bind 'focus:+transform-header:{2}' \
       ) || exit 0
 
       local cmd
       cmd=$(echo "$selected" | cut -f1)
-      if [[ "$cmd" == "skynet" ]]; then
-        exec skynet
+      if [[ "$cmd" == "t3os" ]]; then
+        exec t3os
       fi
       dispatch $cmd
     }
@@ -273,9 +273,9 @@ let
       show_help
     elif [[ "$1" == "_preview" ]]; then
       shift
-      _skynet_preview "$*"
+      _t3os_preview "$*"
     else
-      _skynet_resolve "$@"
+      _t3os_resolve "$@"
 
       if dispatch "''${_RESOLVED[@]}"; then
         exit 0
@@ -289,14 +289,14 @@ let
         fi'') scripts}
 
       if [[ ''${#matches[@]} -gt 0 ]]; then
-        echo "skynet $prefix — available subcommands:"
+        echo "t3os $prefix — available subcommands:"
         echo ""
         for m in "''${matches[@]}"; do
           printf "  %s\n" "$m"
         done
       else
-        echo "skynet: unknown command '$*'" >&2
-        echo "Run 'skynet --help' for available commands." >&2
+        echo "t3os: unknown command '$*'" >&2
+        echo "Run 't3os --help' for available commands." >&2
         exit 1
       fi
     fi
@@ -304,9 +304,9 @@ let
 in
 {
   config = {
-    skynet.cli.fzfThemeArgs = fzfThemeArgs;
+    t3os.cli.fzfThemeArgs = fzfThemeArgs;
 
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [ "upgrade" ];
         title = "Upgrade flake inputs and pinned packages";
@@ -316,41 +316,41 @@ in
           echo ""
           echo "Updating flake inputs..."
           nix flake update --flake ~/repos/personal/dotfiles/nixos
-          export SKYNET_REPO=~/repos/personal/dotfiles
+          export T3OS_REPO=~/repos/personal/dotfiles
           failed=()
           ${lib.concatMapStringsSep "\n" (u: ''
             echo ""
             echo "Running updater: ${u.name}"
             ${u.script} || failed+=(${lib.escapeShellArg u.name})
-          '') config.skynet.cli.updaters}
+          '') config.t3os.cli.updaters}
           if ((''${#failed[@]})); then
             echo ""
             echo "Failed updaters: ''${failed[*]}" >&2
             exit 1
           fi
         '';
-        usage = "Runs nix flake update, then every updater registered via skynet.cli.updaters.";
+        usage = "Runs nix flake update, then every updater registered via t3os.cli.updaters.";
       }
       {
         command = [ "rebuild" ];
         title = "Rebuild home-manager and NixOS config";
         script = pkgs.writeShellScript "rebuild.sh" ''
           set -euo pipefail
-          emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source skynet >/dev/null 2>&1 || true; }
+          emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source t3os >/dev/null 2>&1 || true; }
           start=$(date +%s)
           stage=home-manager
-          emit rebuild/started info "skynet rebuild started" --data "{\"detail\":\"${config.skynet.whoami.installation}\"}"
-          trap 'emit rebuild/failed error "skynet rebuild failed in $stage after $(( $(date +%s) - start ))s" --attention' ERR
+          emit rebuild/started info "t3os rebuild started" --data "{\"detail\":\"${config.t3os.whoami.installation}\"}"
+          trap 'emit rebuild/failed error "t3os rebuild failed in $stage after $(( $(date +%s) - start ))s" --attention' ERR
           echo "Rebuilding home-manager configuration..."
-          home-manager switch --flake ~/repos/personal/dotfiles/nixos#${config.skynet.whoami.installation}
+          home-manager switch --flake ~/repos/personal/dotfiles/nixos#${config.t3os.whoami.installation}
           echo ""
           echo "Rebuilding NixOS system configuration..."
           stage=nixos
           sudo /run/current-system/sw/bin/nixos-rebuild switch --no-reexec --flake $HOME/repos/personal/dotfiles/nixos
           gen=$(readlink /nix/var/nix/profiles/system | tr -dc '0-9' || true)
-          emit rebuild/done info "skynet rebuild finished in $(( $(date +%s) - start ))s" --data "{\"detail\":\"system generation $gen\"}"
+          emit rebuild/done info "t3os rebuild finished in $(( $(date +%s) - start ))s" --data "{\"detail\":\"system generation $gen\"}"
         '';
-        usage = "Runs home-manager switch for ${config.skynet.whoami.installation}, then nixos-rebuild switch for ${config.skynet.whoami.host}.";
+        usage = "Runs home-manager switch for ${config.t3os.whoami.installation}, then nixos-rebuild switch for ${config.t3os.whoami.host}.";
       }
       {
         command = [ "keys" ];
@@ -385,13 +385,13 @@ in
       }
     ];
 
-    home.file.".skynet/scripts".source = scriptsDir;
+    home.file.".t3os/scripts".source = scriptsDir;
 
-    home.file.".skynet/completions/_skynet".source = skynetCompletion;
+    home.file.".t3os/completions/_t3os".source = t3osCompletion;
     programs.zsh.initContent = lib.mkOrder 550 ''
-      fpath=(~/.skynet/completions $fpath)
+      fpath=(~/.t3os/completions $fpath)
     '';
 
-    home.packages = [ skynetBin ];
+    home.packages = [ t3osBin ];
   };
 }

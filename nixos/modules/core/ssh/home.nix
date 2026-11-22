@@ -6,7 +6,7 @@
 }:
 
 let
-  pickHost = pkgs.writeShellScript "skynet-ssh-pick.sh" ''
+  pickHost = pkgs.writeShellScript "t3os-ssh-pick.sh" ''
     set -euo pipefail
 
     REGISTRY="$HOME/repos/personal/dotfiles/nixos/.registry.json"
@@ -34,9 +34,9 @@ let
       --query="''${1:-}" --select-1 --exit-0
   '';
 
-  sops = config.skynet.module.core.sops.enable;
+  sops = config.t3os.module.core.sops.enable;
 
-  knock = pkgs.writeShellScript "skynet-ssh-knock.sh" (
+  knock = pkgs.writeShellScript "t3os-ssh-knock.sh" (
     if sops then
       ''
         set -euo pipefail
@@ -55,7 +55,7 @@ let
       ''
   );
 
-  sshScript = pkgs.writeShellScript "skynet-ssh.sh" ''
+  sshScript = pkgs.writeShellScript "t3os-ssh.sh" ''
     set -euo pipefail
 
     selected=$(${pickHost} "''${1:-}") || { [[ $# -eq 0 ]] && exit 0 || { echo "No host matched '$1'" >&2; exit 1; }; }
@@ -70,7 +70,7 @@ let
     exec ${pkgs.openssh}/bin/ssh "$user@$ip"
   '';
 
-  rebuildScript = pkgs.writeShellScript "skynet-ssh-rebuild.sh" ''
+  rebuildScript = pkgs.writeShellScript "t3os-ssh-rebuild.sh" ''
     set -euo pipefail
 
     DOTFILES="$HOME/repos/personal/dotfiles"
@@ -97,26 +97,26 @@ let
   '';
 in
 {
-  config = lib.mkIf config.skynet.module.core.ssh.enable {
-    skynet.module.core.ssh.knockScript = knock;
+  config = lib.mkIf config.t3os.module.core.ssh.enable {
+    t3os.module.core.ssh.knockScript = knock;
 
     sops.secrets = lib.mkIf sops {
       fwknop-key.sopsFile = ./secrets/fwknop.json;
       fwknop-hmac.sopsFile = ./secrets/fwknop.json;
     };
 
-    skynet.cli.scripts = [
+    t3os.cli.scripts = [
       {
         command = [ "ssh" ];
         title = "SSH into a registered host";
         script = sshScript;
-        usage = "Pick a host from .registry.json and SSH into it. Pass a query to fuzzy-match and connect directly (e.g. `skynet ssh cl` connects to claude-hetzner).";
+        usage = "Pick a host from .registry.json and SSH into it. Pass a query to fuzzy-match and connect directly (e.g. `t3os ssh cl` connects to claude-hetzner).";
       }
       {
         command = [ "deploy" ];
         title = "Push dotfiles and rebuild a remote host";
         script = rebuildScript;
-        usage = "Commits local dotfiles changes (--wip--), pushes, SSHes to the host, pulls, and runs home-manager switch. Pass a query to skip the picker (e.g. `skynet deploy cl`).";
+        usage = "Commits local dotfiles changes (--wip--), pushes, SSHes to the host, pulls, and runs home-manager switch. Pass a query to skip the picker (e.g. `t3os deploy cl`).";
       }
     ];
   };

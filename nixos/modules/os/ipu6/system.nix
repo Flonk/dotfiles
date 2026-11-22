@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.skynet.module.os.ipu6;
+  cfg = config.t3os.module.os.ipu6;
 in
 {
   config = lib.mkIf cfg.enable {

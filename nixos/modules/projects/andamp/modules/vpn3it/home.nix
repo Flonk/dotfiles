@@ -91,7 +91,7 @@ let
     exec ${./doubletunnel.sh} "$@"
   '';
 
-  cfg = config.skynet.module.projects.andamp;
+  cfg = config.t3os.module.projects.andamp;
 in
 {
   config = lib.mkMerge [
@@ -114,7 +114,7 @@ in
     (lib.mkIf (cfg.CEFKM || cfg.CEIFRS) {
       home.packages = [ vpn3itToggle ];
 
-      skynet.cli.scripts = [
+      t3os.cli.scripts = [
         {
           command = [
             "3it"
@@ -127,7 +127,7 @@ in
       ];
     })
     (lib.mkIf cfg.doubletunnel {
-      skynet.cli.scripts = [
+      t3os.cli.scripts = [
         {
           command = [ "doubletunnel" ];
           title = "Connect to 3it through andamp";

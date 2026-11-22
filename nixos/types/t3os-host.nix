@@ -3,7 +3,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.skynet.host = {
+  options.t3os.host = {
     adminUser = mkOption {
       type = types.nullOr types.str;
       default = null;

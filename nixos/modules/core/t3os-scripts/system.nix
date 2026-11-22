@@ -4,7 +4,7 @@
   ...
 }:
 let
-  adminUser = config.skynet.host.adminUser;
+  adminUser = config.t3os.host.adminUser;
 in
 {
   config = lib.mkIf (adminUser != null) {

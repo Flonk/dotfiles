@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.skynet.module.desktop.t3-desktop;
+  cfg = config.t3os.module.desktop.t3-desktop;
   s = config.lib.stylix.colors.withHashtag;
-  border = config.skynet.module.desktop.stylix.accent;
-  mon = config.skynet.host.primaryMonitor;
+  border = config.t3os.module.desktop.stylix.accent;
+  mon = config.t3os.host.primaryMonitor;
   fontFamily = config.stylix.fonts.monospace.name;
 in
 {
@@ -36,7 +36,7 @@ in
       output = "eDP-1";
       settings = {
         exec = "start-hyprland >/dev/null 2>&1";
-        user = config.skynet.host.adminUser;
+        user = config.t3os.host.adminUser;
       };
       font = {
         name = config.stylix.fonts.monospace.name;
