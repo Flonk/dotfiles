@@ -8,6 +8,8 @@ Singleton {
     id: root
 
     property real brightness: 0
+    property string device: ""
+    property int max: 0
 
     function setBrightness(value: real): void {
         brightness = Math.max(0, Math.min(1, value));
@@ -15,22 +17,35 @@ Singleton {
     }
 
     Process {
-        id: poll
-        command: ["brightnessctl", "-m"]
+        running: true
+        command: ["brightnessctl", "-m", "-c", "backlight"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const f = text.trim().split(",");
-                if (f.length >= 5 && parseInt(f[4]) > 0)
-                    root.brightness = parseInt(f[2]) / parseInt(f[4]);
+                const f = text.trim().split("\n")[0].split(",");
+                if (f.length >= 5 && parseInt(f[4]) > 0) {
+                    root.max = parseInt(f[4]);
+                    root.brightness = parseInt(f[2]) / root.max;
+                    root.device = f[0];
+                }
             }
         }
     }
 
+    FileView {
+        id: level
+        path: root.device ? `/sys/class/backlight/${root.device}/brightness` : ""
+        blockLoading: true
+        onLoaded: {
+            const v = parseInt(text());
+            if (root.max > 0 && !isNaN(v))
+                root.brightness = v / root.max;
+        }
+    }
+
     Timer {
-        interval: 1000
-        running: true
+        interval: 150
+        running: root.device !== ""
         repeat: true
-        triggeredOnStart: true
-        onTriggered: if (!poll.running) poll.running = true
+        onTriggered: level.reload()
     }
 }

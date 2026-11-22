@@ -54,7 +54,7 @@ Item {
         const at = ev ? new Date(ev.timestamp) : new Date();
         if (current)
             current.leave();
-        current = line.createObject(ticker, {
+        current = line.createObject(lines, {
             time: Qt.formatTime(isNaN(at) ? new Date() : at, "HH:mm:ss"),
             source: ev ? ev.source : "",
             topic: topic,
@@ -67,6 +67,20 @@ Item {
     }
 
     clip: true
+
+    Item {
+        id: lines
+        anchors.fill: parent
+        opacity: osd.active ? 0 : 1
+        Behavior on opacity {
+            NumberAnimation { duration: 220 }
+        }
+    }
+
+    MediaOsd {
+        id: osd
+        anchors.fill: parent
+    }
 
     Process {
         id: feed

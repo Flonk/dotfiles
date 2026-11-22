@@ -1,44 +1,30 @@
 pragma Singleton
 
 import Quickshell
-import Quickshell.Io
+import Quickshell.Services.Pipewire
 import QtQuick
 
 Singleton {
     id: root
 
-    property real volume: 0
-    property bool muted: false
+    readonly property var sink: Pipewire.defaultAudioSink
+    readonly property var source: Pipewire.defaultAudioSource
+    readonly property real volume: sink?.audio?.volume ?? 0
+    readonly property bool muted: sink?.audio?.muted ?? false
+    readonly property bool micMuted: source?.audio?.muted ?? false
+    readonly property string sinkName: sink?.description || sink?.nickname || sink?.name || ""
 
     function setVolume(value: real): void {
-        volume = Math.max(0, Math.min(1, value));
-        Quickshell.execDetached(["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", `${Math.round(volume * 100)}%`]);
+        if (sink?.audio)
+            sink.audio.volume = Math.max(0, Math.min(1, value));
     }
 
     function toggleMute(): void {
-        muted = !muted;
-        Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"]);
+        if (sink?.audio)
+            sink.audio.muted = !sink.audio.muted;
     }
 
-    Process {
-        id: poll
-        command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const m = text.match(/Volume:\s+([\d.]+)(\s+\[MUTED\])?/);
-                if (m) {
-                    root.volume = parseFloat(m[1]) || 0;
-                    root.muted = !!m[2];
-                }
-            }
-        }
-    }
-
-    Timer {
-        interval: 1000
-        running: true
-        repeat: true
-        triggeredOnStart: true
-        onTriggered: if (!poll.running) poll.running = true
+    PwObjectTracker {
+        objects: [root.sink, root.source]
     }
 }
