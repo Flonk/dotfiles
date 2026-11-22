@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -9,6 +10,35 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && config.programs.t3-desktop.hyprland.enable) {
+    t3os.cli.scripts = map (d: {
+      command = [
+        "settings"
+        "display"
+        "scale"
+        d.name
+      ];
+      inherit (d) title usage;
+      script = pkgs.writeShellScript "display-scale-${d.name}.sh" ''
+        exec ${config.home.profileDirectory}/bin/hypr-scale ${d.name}
+      '';
+    }) [
+      {
+        name = "up";
+        title = "Make everything bigger on the focused monitor";
+        usage = "Steps the focused monitor's scale up one rung (0.8, 1.0, 1.25, 1.67, 2.0, 2.5). Same as SUPER + plus.";
+      }
+      {
+        name = "down";
+        title = "Make everything smaller on the focused monitor";
+        usage = "Steps the focused monitor's scale down one rung. Same as SUPER + minus.";
+      }
+      {
+        name = "reset";
+        title = "Reset the focused monitor to scale 1";
+        usage = "Sets the focused monitor back to scale 1.0. Same as SUPER + CTRL + 0.";
+      }
+    ];
+
     wayland.windowManager.hyprland.settings = {
       config.input.kb_layout = "de";
 

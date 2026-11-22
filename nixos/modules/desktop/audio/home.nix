@@ -218,6 +218,20 @@ in
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       home.packages = [ inputs.balaclava.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+
+      t3os.cli.scripts = [
+        {
+          command = [
+            "settings"
+            "bluetooth"
+          ];
+          title = "Manage Bluetooth devices";
+          script = pkgs.writeShellScript "bluetooth.sh" ''
+            exec ${pkgs.bluetui}/bin/bluetui "$@"
+          '';
+          usage = "Opens `bluetui` to scan, pair, connect and trust Bluetooth devices and toggle the adapter.";
+        }
+      ];
     }
 
     (lib.mkIf (cfg.trustedBluetoothHeadsets != [ ]) {
@@ -272,13 +286,13 @@ in
 
       t3os.cli.scripts = [
         {
-          command = [ "audio" "reload" ];
+          command = [ "settings" "audio" "reload" ];
           title = "Restart audio services and reset to defaults";
           script = reloadScript;
           usage = "Restarts easyeffects + auto-preset services, sets default sink to speakers, disables bypass, and shows status.";
         }
         {
-          command = [ "easyeffects" "sync" ];
+          command = [ "settings" "audio" "easyeffects" ];
           title = "Sync EasyEffects db to repo";
           script = syncScript;
           usage = "Copies ~/.config/easyeffects/db into the dotfiles repo at config/hosts/$host/cache/easyeffects/db/.";

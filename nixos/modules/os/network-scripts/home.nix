@@ -208,7 +208,33 @@ in
     t3os.cli.scripts = [
       {
         command = [
+          "settings"
           "wifi"
+          "connect"
+        ];
+        title = "Connect to a Wi-Fi network";
+        script = pkgs.writeShellScript "wifi-connect.sh" ''
+          exec ${pkgs.networkmanager}/bin/nmtui connect "$@"
+        '';
+        usage = "Opens NetworkManager's `nmtui connect` to pick a network and enter its password. Pass an SSID to connect to it directly.";
+      }
+      {
+        command = [
+          "settings"
+          "wifi"
+          "list"
+        ];
+        title = "List visible Wi-Fi networks";
+        script = pkgs.writeShellScript "wifi-list.sh" ''
+          exec ${pkgs.networkmanager}/bin/nmcli device wifi list --rescan auto
+        '';
+        usage = "Shows the networks in range with signal, security and the one you're connected to, via `nmcli device wifi list`.";
+      }
+      {
+        command = [
+          "settings"
+          "wifi"
+          "throttle"
           "ultraslow"
         ];
         title = "Throttle Wi-Fi to ultraslow (128 kbit/s)";
@@ -217,7 +243,9 @@ in
       }
       {
         command = [
+          "settings"
           "wifi"
+          "throttle"
           "3g"
         ];
         title = "Throttle Wi-Fi to 3G (1500 kbit/s)";
@@ -226,7 +254,9 @@ in
       }
       {
         command = [
+          "settings"
           "wifi"
+          "throttle"
           "4g"
         ];
         title = "Throttle Wi-Fi to 4G (12 mbit/s)";
@@ -235,7 +265,9 @@ in
       }
       {
         command = [
+          "settings"
           "wifi"
+          "throttle"
           "5g"
         ];
         title = "Throttle Wi-Fi to 5G (80 mbit/s)";
@@ -244,16 +276,20 @@ in
       }
       {
         command = [
+          "settings"
           "wifi"
+          "throttle"
           "custom"
         ];
         title = "Throttle Wi-Fi to a custom rate";
         script = mkWifiForwardingScript "wifi-custom" "set";
-        usage = "Limit Wi-Fi download speed to any tc rate, e.g. 't3os wifi custom 8mbit'. Requires sudo.";
+        usage = "Limit Wi-Fi download speed to any tc rate, e.g. 't3os settings wifi throttle custom 8mbit'. Requires sudo.";
       }
       {
         command = [
+          "settings"
           "wifi"
+          "throttle"
           "off"
         ];
         title = "Disable Wi-Fi throttling";
@@ -262,7 +298,9 @@ in
       }
       {
         command = [
+          "settings"
           "wifi"
+          "throttle"
           "status"
         ];
         title = "Show Wi-Fi throttling status";

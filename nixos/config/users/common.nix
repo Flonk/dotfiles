@@ -44,7 +44,9 @@
     ../../modules/leisure/obs-studio/home.nix
     ../../modules/leisure/artcraft/home.nix
     ../../modules/leisure/spotify/home.nix
+    ../../modules/os/ipu6/home.nix
     ../../modules/os/network-scripts/home.nix
+    ../../modules/os/powersaver/home.nix
     ../../modules/projects/home.nix
   ];
 }

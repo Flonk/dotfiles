@@ -67,74 +67,58 @@ let
 
   dispatchScripts = lib.sort (a: b: builtins.length a.command > builtins.length b.command) scripts;
 
-  firstWords = lib.unique (map (s: builtins.head s.command) scripts);
+  childrenOf =
+    p:
+    let
+      n = if p == "" then 0 else builtins.length (lib.splitString " " p);
+    in
+    lib.unique (
+      lib.concatMap (
+        e:
+        if builtins.length e.command > n && lib.concatStringsSep " " (lib.take n e.command) == p then
+          [ (builtins.elemAt e.command n) ]
+        else
+          [ ]
+      ) scripts
+    );
 
-  subCommandsFor =
-    word: builtins.filter (s: builtins.length s.command > 1 && builtins.head s.command == word) scripts;
+  describe =
+    path:
+    let
+      hit = builtins.filter (e: cmdStr e == path) scripts;
+    in
+    if hit != [ ] then (builtins.head hit).title else "${path} commands";
 
-  categories = builtins.filter (w: (subCommandsFor w) != [ ]) firstWords;
+  zshItem =
+    word: desc:
+    "'${lib.replaceStrings [ "'" ":" ] [ "'\\''" "\\:" ] word}:${lib.replaceStrings [ "'" ":" ] [ "'\\''" "\\:" ] desc}'";
 
   t3osCompletion = pkgs.writeText "_t3os" ''
     #compdef t3os
 
     _t3os() {
-      local curcontext="$curcontext" state line
-
-      _arguments -C \
-        '1:command:->cmd' \
-        '2:subcommand:->sub' \
-        && return
-
-      case "$state" in
-        cmd)
-          local -a top_commands
-          top_commands=(
+      local prefix="''${(j: :)words[2,CURRENT-1]}"
+      local -a items
+      case "$prefix" in
     ${lib.concatMapStringsSep "\n" (
-      w:
+      p:
       let
-        subs = subCommandsFor w;
-        leaf = builtins.filter (s: builtins.head s.command == w && builtins.length s.command == 1) scripts;
-        desc =
-          if leaf != [ ] then
-            (builtins.head leaf).title
-          else if subs != [ ] then
-            "${w} commands"
-          else
-            w;
+        kids = childrenOf p;
       in
-      "    '${w}:${lib.escape [ "'" ":" ] desc}'"
-    ) firstWords}
+      lib.optionalString (kids != [ ]) ''
+        ${lib.escapeShellArg p})
+          items=(
+            ${lib.concatMapStringsSep "\n        " (
+              k: zshItem k (describe (lib.concatStringsSep " " (lib.filter (x: x != "") [ p k ])))
+            ) kids}
           )
-          _describe 't3os command' top_commands
-          ;;
-        sub)
-          case "$line[1]" in
-    ${lib.concatMapStringsSep "\n" (
-      w:
-      let
-        subs = subCommandsFor w;
-        subEntries = lib.concatMapStringsSep "\n" (
-          s:
-          let
-            sub = lib.concatStringsSep " " (builtins.tail s.command);
-          in
-          "            '${sub}:${lib.escape [ "'" ":" ] s.title}'"
-        ) subs;
-      in
-      ''
-            ${w})
-                  local -a ${w}_commands
-                  ${w}_commands=(
-        ${subEntries}
-                  )
-                  _describe '${w} subcommand' ${w}_commands
-                  ;;''
-    ) categories}
-            *)
-              ;;
-          esac
+          ;;''
+    ) ([ "" ] ++ prefixes)}
+        *)
+          return 1
           ;;
       esac
+      _describe 't3os command' items
     }
 
     _t3os "$@"
@@ -249,7 +233,7 @@ let
       echo ""
       echo "Available commands:"
       ${lib.concatMapStringsSep "\n      " (
-        s: ''printf '  %-30s%s\n' ${lib.escapeShellArg (cmdStr s)} ${lib.escapeShellArg s.title}''
+        s: ''printf '  %-34s%s\n' ${lib.escapeShellArg (cmdStr s)} ${lib.escapeShellArg s.title}''
       ) scripts}
     }
 
@@ -272,7 +256,8 @@ let
       matches=()
       ${lib.concatMapStringsSep "\n      " (s: ''
         if [[ "${cmdStr s}" == "$prefix "* || "${cmdStr s}" == "$prefix" ]]; then
-          matches+=("${cmdStr s}\t${s.title}")
+          printf -v line '%-34s%s' ${lib.escapeShellArg (cmdStr s)} ${lib.escapeShellArg s.title}
+          matches+=("$line")
         fi'') scripts}
 
       if [[ ''${#matches[@]} -gt 0 ]]; then

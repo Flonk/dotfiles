@@ -117,8 +117,9 @@ in
       t3os.cli.scripts = [
         {
           command = [
-            "3it"
+            "settings"
             "vpn"
+            "3it"
           ];
           title = "Connect to vpn3it VPN";
           script = "${vpn3it}/bin/vpn3it";
@@ -129,7 +130,7 @@ in
     (lib.mkIf cfg.doubletunnel {
       t3os.cli.scripts = [
         {
-          command = [ "doubletunnel" ];
+          command = [ "settings" "vpn" "doubletunnel" ];
           title = "Connect to 3it through andamp";
           script = "${doubletunnel}/bin/doubletunnel";
           usage = "Connect the andamp VPN without taking the default route, then connect vpn3it through it. Prompts for the Authy token.";

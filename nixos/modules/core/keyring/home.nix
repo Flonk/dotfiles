@@ -31,7 +31,9 @@
     t3os.cli.scripts = [
       {
         command = [
-          "init-keyring"
+          "settings"
+          "keyring"
+          "init"
         ];
         title = "Initialize GNOME Keyring";
         script = pkgs.writeShellScript "init-keyring.sh" ''

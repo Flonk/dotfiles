@@ -34,6 +34,7 @@ t3os.cli.scripts = [{
 }];
 ```
 
+- Commands that view or change system settings (network, audio, display, power, input, theme, devices, VPN) go under `[ "settings" <area> ... ]`, registered from the module that owns the area
 - For sub-fzf scripts (like sops), use `config.t3os.cli.fzfThemeArgs` for consistent styling
 
 ## T3 OS Updaters
