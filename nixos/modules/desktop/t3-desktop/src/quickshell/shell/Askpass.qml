@@ -51,7 +51,7 @@ Scope {
     }
 
     component Label: Text {
-        color: T3.ink
+        color: T3.accent2
         font.family: Theme.fontFamily
         font.pixelSize: T3.labelSize
         font.weight: Font.Bold
@@ -89,9 +89,9 @@ Scope {
                 width: 380
                 height: col.implicitHeight + 2 * 14
                 radius: T3.radius
-                color: T3.accent2
-                border.width: 1
-                border.color: T3.lighten(T3.accent2, 0.25)
+                color: Theme.app100
+                border.width: 2
+                border.color: Theme.error400
 
                 Column {
                     id: col
@@ -120,7 +120,7 @@ Scope {
                         wrapMode: Text.Wrap
                         maximumLineCount: 4
                         elide: Text.ElideRight
-                        color: T3.ink
+                        color: T3.accent2
                         font.family: Theme.fontFamily
                         font.pixelSize: T3.titleSize
                     }
@@ -129,9 +129,9 @@ Scope {
                         width: parent.width
                         height: 30
                         radius: 6
-                        color: T3.ink
+                        color: Theme.app150
                         border.width: 1
-                        border.color: input.activeFocus ? T3.cream : T3.lighten(T3.ink, 0.25)
+                        border.color: input.activeFocus ? T3.accent2 : Theme.app700
 
                         TextInput {
                             id: input
@@ -143,8 +143,8 @@ Scope {
                             focus: win.here
                             echoMode: win.r && win.r.secret ? TextInput.Password : TextInput.Normal
                             passwordCharacter: "•"
-                            color: T3.cream
-                            selectionColor: T3.accent2
+                            color: T3.accent2
+                            selectionColor: Theme.app700
                             font.family: Theme.fontFamily
                             font.pixelSize: T3.titleSize
                             Keys.onReturnPressed: root.answer("+" + text)

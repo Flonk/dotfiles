@@ -206,7 +206,7 @@ Scope {
                             anchors.fill: parent
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
-                            onClicked: Quickshell.execDetached(["t3os", "screen", "record", "stop"])
+                            onClicked: Quickshell.execDetached(["t3os", "screen", "record", "stop", "-c"])
                         }
                     }
                 }

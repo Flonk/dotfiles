@@ -151,6 +151,7 @@ record)
       [ -f "$run/pid" ] || break
       sleep 0.1
     done
+    [ "$clip" = 1 ] && [ -s "$run/last" ] && wl-copy --type text/uri-list <<<"file://$(cat "$run/last")"
     cat "$run/last" 2>/dev/null
     exit 0
     ;;
