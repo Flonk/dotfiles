@@ -57,7 +57,13 @@ let
         ${pkgs.openssh}/bin/ssh -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=20 -o ServerAliveCountMax=3 ${tunnel} \
           ${host.user}@${host.ip} 'PATH="$HOME/.nix-profile/bin:$PATH" exec mosquitto_sub -h 127.0.0.1 -v -t "agent/#"' \
           | while IFS=' ' read -r topic payload; do
-              ${pkgs.gnugrep}/bin/grep -qxF "$topic" "$seen" || echo "$topic" >> "$seen"
+              case "$topic" in
+              */event)
+                [ -n "$payload" ] && ${pub} -t "$topic" -m "$payload"
+                continue
+                ;;
+              */state) ${pkgs.gnugrep}/bin/grep -qxF "$topic" "$seen" || echo "$topic" >> "$seen" ;;
+              esac
               if [ -n "$payload" ]; then ${pub} -r -t "$topic" -m "$payload"; else ${pub} -r -n -t "$topic"; fi
             done
         while read -r topic; do ${pub} -r -t "$topic" -m offline; done < "$seen"
