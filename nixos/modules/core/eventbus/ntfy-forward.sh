@@ -23,9 +23,8 @@ mosquitto_sub -h 127.0.0.1 -q 1 -c -i t3bus-ntfy-forward -t '#' -F '%r %t %p' | 
     from=$first
     topic=${topic#*/}
   fi
-  channel=$(tr -c 'a-zA-Z0-9_\n-' '-' <<<"${topic%%/*}")
 
-  body=$(jq -c --arg topic "t3-$channel" --arg from "$from" --arg path "$topic" '
+  body=$(jq -c --arg topic t3 --arg from "$from" --arg path "$topic" '
     ({error: 4, warn: 3, info: 2}[.level] // 1) as $p
     | ((.data | objects | .detail | strings) // "") as $d
     | {
