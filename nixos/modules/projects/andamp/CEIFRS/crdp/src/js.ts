@@ -92,8 +92,8 @@ export async function js(args: string[]): Promise<void> {
     if (existsSync(unverified)) {
       if (!focused)
         die(
-          `refusing to paste: "crdp ${readFileSync(unverified, "utf8")}" ran since the last js call and may have moved focus off the DevTools console, ` +
-            `so the code could land in the page (Genie box, notebook cell). Run crdp shot, make sure the Console prompt has the cursor ` +
+          `refusing to paste: "vpn3it crdp ${readFileSync(unverified, "utf8")}" ran since the last js call and may have moved focus off the DevTools console, ` +
+            `so the code could land in the page (Genie box, notebook cell). Run vpn3it crdp shot, make sure the Console prompt has the cursor ` +
             `(click into it if not), then rerun with --focused`,
         );
       rmSync(unverified);

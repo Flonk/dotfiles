@@ -41,7 +41,17 @@ let
     pkgs.chafa
   ];
 
-  vpn3it = pkgs.writeShellScriptBin "vpn3it" ''
+  hubEnv = {
+    VPN3IT_PRIORITY = if cfg.vpn3itPriority then "1" else "0";
+    VPN3IT_HOST_NAME = host;
+  }
+  // lib.optionalAttrs bus.enable {
+    VPN3IT_HUB_PORT = if bus.upstream != null then "18830" else "1883";
+    VPN3IT_HUB_NAME = if bus.upstream != null then lib.last (lib.splitString "-" bus.upstream) else host;
+    VPN3IT_SELF_TOPIC = "${lib.optionalString (bus.upstream != null) "${host}/"}mutex/vpn3it/state";
+  };
+
+  vpn3itRun = pkgs.writeShellScriptBin "vpn3it-run" ''
     export IP="${pkgs.iproute2}/bin/ip"
     export AWK="${pkgs.gawk}/bin/awk"
     export BAT="${pkgs.bat}/bin/bat"
@@ -53,37 +63,16 @@ let
     export VPN_HOST_FILE="${config.sops.secrets.vpn3ithost.path}"
     export VPN_USER_FILE="${config.sops.secrets.vpn3ituser.path}"
     export VPN_PASS_FILE="${config.sops.secrets.vpn3itpass.path}"
+    export MOSQUITTO_SUB="${pkgs.mosquitto}/bin/mosquitto_sub"
+    export MOSQUITTO_PUB="${pkgs.mosquitto}/bin/mosquitto_pub"
+    ${lib.concatStringsSep "\n    " (lib.mapAttrsToList (k: v: "export ${k}=${lib.escapeShellArg v}") hubEnv)}
     exec ${./vpn3it.sh} "$@"
   '';
 
-  vpn3itToggle = pkgs.writeShellScriptBin "vpn3it-toggle" ''
-    export PATH="${
-      lib.makeBinPath [
-        pkgs.coreutils
-        pkgs.procps
-        pkgs.systemd
-      ]
-    }:$PATH"
-    emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source vpn3it-toggle >/dev/null 2>&1 || true; }
-    if systemctl --user is-active -q vpn3it-click || pgrep -x openconnect >/dev/null; then
-      emit vpn3it/disconnecting info "Disconnecting 3it VPN."
-      systemctl --user stop vpn3it-click 2>/dev/null || sudo pkill -SIGINT openconnect
-      exit 0
-    fi
-    token=$(t3-askpass "Authy token for 3it") || exit 0
-    [ -n "$token" ] || exit 0
-    file="''${XDG_RUNTIME_DIR:-/tmp}/vpn3it-token"
-    (umask 077; printf '%s\n' "$token" > "$file")
-    emit vpn3it/connecting info "Connecting 3it VPN."
-    systemctl --user reset-failed vpn3it-click 2>/dev/null || true
-    systemd-run --user --unit=vpn3it-click --collect --setenv=PATH="$PATH" \
-      sh -c 'tok=$(cat "$0"); rm -f "$0"; printf "%s\n" "$tok" | exec ${vpn3it}/bin/vpn3it' "$file" >/dev/null
-  '';
-
-  doubletunnel = pkgs.writeShellScriptBin "doubletunnel" ''
+  doubletunnelRun = pkgs.writeShellScriptBin "doubletunnel-run" ''
     export AWK="${pkgs.gawk}/bin/awk"
     export OPENVPN="${pkgs.openvpn}/bin/openvpn"
-    export VPN3IT="${vpn3it}/bin/vpn3it"
+    export VPN3IT="${vpn3itRun}/bin/vpn3it-run"
     export VPN_HOST_FILE="${config.sops.secrets.vpn3ithost.path}"
     export ANDAMP_OVPN_FILE="${config.sops.secrets.andamp-vpn.path}"
     export ANDAMP_USER_FILE="${config.sops.secrets.andamp-vpn-user.path}"
@@ -91,11 +80,61 @@ let
     exec ${./doubletunnel.sh} "$@"
   '';
 
+  vpn3it = pkgs.writeShellApplication {
+    name = "vpn3it";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.gawk
+      pkgs.gnused
+      pkgs.iproute2
+      pkgs.mosquitto
+      pkgs.procps
+      pkgs.systemd
+    ];
+    runtimeEnv =
+      hubEnv
+      // {
+        VPN3IT_RUN = "${vpn3itRun}/bin/vpn3it-run";
+      }
+      // lib.optionalAttrs cfg.doubletunnel {
+        DOUBLETUNNEL_RUN = "${doubletunnelRun}/bin/doubletunnel-run";
+      }
+      // lib.optionalAttrs (cfg.crdpPackage != null) {
+        CRDP = "${cfg.crdpPackage}/bin/crdp";
+      };
+    excludeShellChecks = [ "SC2016" ];
+    text = builtins.readFile ./vpn3it-cli.sh;
+  };
+
+  vpn3itToggle = pkgs.writeShellScriptBin "vpn3it-toggle" ''
+    if ${vpn3it}/bin/vpn3it status | grep -qE '^this host: (connected|connecting)'; then
+      exec ${vpn3it}/bin/vpn3it down
+    fi
+    exec ${vpn3it}/bin/vpn3it up
+  '';
+
+  vpn3itMutex = pkgs.writeShellApplication {
+    name = "vpn3it-mutex";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.iproute2
+      pkgs.jq
+      pkgs.mosquitto
+      pkgs.procps
+    ];
+    runtimeEnv.VPN3IT_PRIORITY = if cfg.vpn3itPriority then "1" else "0";
+    text = builtins.readFile ./vpn3it-mutex.sh;
+  };
+
   cfg = config.t3os.module.projects.andamp;
+  bus = config.t3os.module.core.eventbus;
+  host = config.t3os.whoami.host;
 in
 {
   config = lib.mkMerge [
     (lib.mkIf (cfg.CEFKM || cfg.CEIFRS || cfg.doubletunnel) {
+      home.packages = [ vpn3it ];
+
       sops.secrets.vpn3ithost = {
         key = "vpn3ithost";
         sopsFile = ./secrets/secrets.json;
@@ -111,6 +150,17 @@ in
         sopsFile = ./secrets/secrets.json;
       };
     })
+    (lib.mkIf ((cfg.CEFKM || cfg.CEIFRS || cfg.doubletunnel) && bus.enable) {
+      systemd.user.services.vpn3it-mutex = {
+        Unit.Description = "Publish the 3it VPN mutex state and release it when a priority host asks";
+        Service = {
+          ExecStart = lib.getExe vpn3itMutex;
+          Restart = "always";
+          RestartSec = "5s";
+        };
+        Install.WantedBy = [ "default.target" ];
+      };
+    })
     (lib.mkIf (cfg.CEFKM || cfg.CEIFRS) {
       home.packages = [ vpn3itToggle ];
 
@@ -122,17 +172,19 @@ in
             "3it"
           ];
           title = "Connect to vpn3it VPN";
-          script = "${vpn3it}/bin/vpn3it";
+          script = "${vpn3itRun}/bin/vpn3it-run";
           usage = "Connect to vpn3it VPN. Prompts for Authy token only when needed.";
         }
       ];
     })
     (lib.mkIf cfg.doubletunnel {
+      home.file.".claude/skills/doubletunnel/SKILL.md".source = ./doubletunnel-skill.md;
+
       t3os.cli.scripts = [
         {
           command = [ "settings" "vpn" "doubletunnel" ];
           title = "Connect to 3it through andamp";
-          script = "${doubletunnel}/bin/doubletunnel";
+          script = "${doubletunnelRun}/bin/doubletunnel-run";
           usage = "Connect the andamp VPN without taking the default route, then connect vpn3it through it. Prompts for the Authy token.";
         }
       ];

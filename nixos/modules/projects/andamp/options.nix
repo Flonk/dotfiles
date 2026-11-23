@@ -27,5 +27,15 @@ in
       type = types.bool;
       default = false;
     };
+    crdpPackage = mkOption {
+      type = types.nullOr types.package;
+      default = null;
+      internal = true;
+    };
+    vpn3itPriority = mkOption {
+      type = types.bool;
+      default = false;
+      description = "This installation wins the 3it VPN: it asks other hosts holding it to release instead of refusing to connect.";
+    };
   };
 }

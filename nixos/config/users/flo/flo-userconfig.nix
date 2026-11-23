@@ -86,6 +86,7 @@
         enable = true;
         CEFKM = true;
         CEIFRS = true;
+        vpn3itPriority = true;
       };
     };
   };

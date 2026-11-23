@@ -81,10 +81,9 @@ in
       { match.tag = "crdp-locked"; border_color = "rgb(FF0000) rgb(880808)"; }
     ];
 
-    home.packages = [
-      pkgs-2405.freerdp
-      crdp
-    ];
+    t3os.module.projects.andamp.crdpPackage = crdp;
+
+    home.packages = [ pkgs-2405.freerdp ];
 
     t3os.cli.scripts = [
       {

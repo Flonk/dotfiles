@@ -48,11 +48,6 @@ let
       [ "$waiting" -gt 0 ] && what="$what, $waiting waiting"
       what="$what."
       report crdp "$crdp" "$waiting" "$what"
-      if ip link show tun0 >/dev/null 2>&1 && pgrep -x openconnect >/dev/null; then
-        report vpn3it held 0 "3it VPN connected."
-      else
-        report vpn3it free 0 "3it VPN disconnected."
-      fi
       sleep 2
     done
   '';
@@ -81,7 +76,7 @@ in
     })
     (lib.mkIf cfg.enable {
       systemd.user.services.andamp-mutex-watch = {
-        Unit.Description = "Publish crdp and 3it vpn mutex states onto the bus";
+        Unit.Description = "Publish the crdp mutex state onto the bus";
         Service = {
           ExecStart = "${mutexWatch}";
           Restart = "always";
