@@ -74,7 +74,7 @@ let
     esac
     body=$(${pkgs.jq}/bin/jq -nc \
       --arg ts "$(${pkgs.coreutils}/bin/date +%Y-%m-%dT%H:%M:%S.%3N%:z)" --arg src "claude/$T3_AGENT" --arg level "$level" \
-      --argjson attention "$attention" --arg desc "$T3_AGENT $what" --arg state "$state" --argjson subs "$subs" \
+      --argjson attention "$attention" --arg desc "$T3_AGENT $what." --arg state "$state" --argjson subs "$subs" \
       '{timestamp: $ts, source: $src, level: $level, attention: $attention, description: $desc, data: {state: $state, subagents: $subs}}')
     pub -t "agent/$T3_AGENT/event" -m "$body"
   '';

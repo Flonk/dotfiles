@@ -43,14 +43,15 @@ let
         off) what="crdp is not running" ;;
         free) what="crdp is free" ;;
         busy) what="crdp is running a command" ;;
-        held) what="a crdp transaction holds the screen" ;;
+        held) what="A crdp transaction holds the screen" ;;
       esac
       [ "$waiting" -gt 0 ] && what="$what, $waiting waiting"
+      what="$what."
       report crdp "$crdp" "$waiting" "$what"
       if ip link show tun0 >/dev/null 2>&1 && pgrep -x openconnect >/dev/null; then
-        report vpn3it held 0 "3it vpn connected"
+        report vpn3it held 0 "The 3it VPN connected."
       else
-        report vpn3it free 0 "3it vpn disconnected"
+        report vpn3it free 0 "The 3it VPN disconnected."
       fi
       sleep 2
     done

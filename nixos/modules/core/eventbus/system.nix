@@ -18,10 +18,10 @@ let
     case "$iface" in lo | veth* | docker* | br-* | virbr*) exit 0 ;; esac
     name="''${CONNECTION_ID:-$iface}"
     case "$action" in
-      up) desc="$name connected" ;;
-      down) desc="$name disconnected" ;;
-      vpn-up) desc="vpn $name connected" ;;
-      vpn-down) desc="vpn $name disconnected" ;;
+      up) desc="$name connected." ;;
+      down) desc="$name disconnected." ;;
+      vpn-up) desc="VPN $name connected." ;;
+      vpn-down) desc="VPN $name disconnected." ;;
       *) exit 0 ;;
     esac
     body=$(jq -nc --arg ts "$(date +%Y-%m-%dT%H:%M:%S.%3N%:z)" --arg desc "$desc" --arg iface "$iface" --arg action "$action" \

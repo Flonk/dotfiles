@@ -41,10 +41,10 @@ hush() {
 }
 
 announce() {
-  local what=$1
+  local what=$1 sentence=$2
   local data
   data=$(jq -cn --arg mode "$what" --argjson layout "$(layout)" '{mode: $mode, detail: ($layout | map(select(.disabled | not) | .description) | join(", ")), layout: $layout}')
-  "$T3OS_BIN" bus emit display/changed info "Displays: $what" --data "$data" >/dev/null 2>&1 || true
+  "$T3OS_BIN" bus emit display/changed info "$sentence" --data "$data" >/dev/null 2>&1 || true
   if [ "${NOTIFY:-}" = 1 ]; then
     notify-send -t 2000 -h "string:x-canonical-private-synchronous:t3os-display" "🖥 Displays" "$what"
   fi
@@ -113,7 +113,9 @@ extend() {
       ;;
     esac
   done < <(monitors | jq -r --arg n "$int" '.[] | select(.name != $n) | [.name, ((if .transform % 2 == 1 then .height else .width end) / .scale | floor), ((if .transform % 2 == 1 then .width else .height end) / .scale | floor)] | @tsv')
-  announce "extend $side"
+  local where="$side"
+  case "$side" in left | right) where="to the $side of" ;; esac
+  announce "extend $side" "External displays now extend $where the built-in screen."
 }
 
 mirror() {
@@ -129,7 +131,7 @@ mirror() {
   while read -r name; do
     rule "$name" preferred auto 1 ", mirror = \"$src\""
   done < <(monitors | jq -r --arg n "$src" '.[] | select(.name != $n) | .name')
-  announce "mirror $src"
+  announce "mirror $src" "All displays now mirror $src."
 }
 
 only() {
@@ -153,13 +155,17 @@ only() {
   while read -r name; do
     lua "hl.monitor({ output = \"$name\", disabled = true })"
   done < <(monitors | jq -r --argjson k "$keepers" '.[] | select(.name as $n | $k | index($n) | not) | .name')
-  announce "only $want"
+  case "$want" in
+  internal) announce "only $want" "Only the built-in display is on." ;;
+  external) announce "only $want" "Only the external displays are on." ;;
+  *) announce "only $want" "Only display $want is on." ;;
+  esac
 }
 
 cycle() {
   case "$(current_mode)" in
   single)
-    NOTIFY=1 announce "only one display connected"
+    NOTIFY=1 announce "only one display connected" "Only one display is connected, so there is nothing to cycle."
     return
     ;;
   extend) mirror ;;
@@ -176,7 +182,7 @@ save() {
   [ -s "$store" ] || echo '{}' >"$store"
   jq --arg k "$k" --argjson l "$(layout)" --arg at "$(date -Iseconds)" '.[$k] = {saved: $at, layout: $l}' "$store" >"$store.tmp" && mv "$store.tmp" "$store"
   echo "saved layout for: $k"
-  announce "saved layout"
+  announce "saved layout" "Saved the current display layout."
 }
 
 saved() {
@@ -205,7 +211,7 @@ restore() {
   while read -r name; do
     lua "hl.monitor({ output = \"$name\", disabled = true })"
   done < <(jq -r --argjson snap "$snap" '.[] | select(.disabled) | . as $l | $snap[] | select(.description == $l.description) | .name' <<<"$want")
-  announce "restored saved layout"
+  announce "restored saved layout" "Restored the saved display layout."
 }
 
 forget() {
@@ -243,7 +249,10 @@ watch() {
       [ $((now - last)) -lt 3 ] && continue
       sleep 1
       if ! restore auto && [ "${ev%%>>*}" != configreloaded ]; then
-        announce "${ev%%>>*} ${ev#*>>}"
+        case "${ev%%>>*}" in
+        monitoradded) announce "${ev%%>>*} ${ev#*>>}" "Display ${ev#*>>} was connected." ;;
+        *) announce "${ev%%>>*} ${ev#*>>}" "Display ${ev#*>>} was disconnected." ;;
+        esac
       fi
       ;;
     esac

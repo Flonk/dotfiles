@@ -103,7 +103,7 @@ shot)
 
   [ "$clip" = 1 ] && wl-copy --type image/png <"$file"
   [ "$notify" = 1 ] && notify-send -i "$file" "📸 Screenshot saved" "$(basename "$file")$([ "$clip" = 1 ] && echo " · copied")"
-  emit screen/shot "screenshot of $what" \
+  emit screen/shot "Took a screenshot of $what." \
     "$(jq -nc --arg path "$file" --arg mode "$mode" --argjson interactive "$interactive" '{path: $path, detail: ($path | split("/") | last), mode: $mode, interactive: $interactive}')"
   echo "$file"
   ;;
@@ -117,7 +117,7 @@ ocr)
   fi
   wl-copy <<<"$text"
   [ "$notify" = 1 ] && notify-send "📸 OCR copied" "$(head -c 300 <<<"$text")"
-  emit screen/ocr "text was read off the screen" \
+  emit screen/ocr "Read $(wc -w <<<"$text") words of text off the screen." \
     "$(jq -nc --arg t "$text" '{detail: ($t | gsub("\\s+"; " ") | .[0:80]), text: $t[0:2000], chars: ($t | length)}')"
   printf '%s\n' "$text"
   ;;
@@ -130,7 +130,7 @@ color-pick)
   fi
   [ "$clip" = 1 ] && wl-copy <<<"$color"
   [ "$notify" = 1 ] && notify-send "🎨 Colour $([ "$clip" = 1 ] && echo copied || echo picked)" "$color"
-  emit screen/color "colour $color was picked" "$(jq -nc --arg c "$color" '{detail: $c, color: $c}')"
+  emit screen/color "Picked the colour $color." "$(jq -nc --arg c "$color" '{detail: $c, color: $c}')"
   echo "$color"
   ;;
 
@@ -250,7 +250,7 @@ _supervise)
   wf-recorder "${args[@]}" -f "$file" >"$run/wf-recorder.log" 2>&1 &
   echo $! >"$run/pid"
   mosquitto_pub -h 127.0.0.1 -r -t screen/record/state -m "$session" >/dev/null 2>&1 || true
-  emit screen/record/started "recording $what" "$(jq -c '{detail: (.path | split("/") | last), path, mode, interactive}' <<<"$session")"
+  emit screen/record/started "Started recording $what." "$(jq -c '{detail: (.path | split("/") | last), path, mode, interactive}' <<<"$session")"
   wait "$(cat "$run/pid")" || true
   rm -f "$run/pid"
   mosquitto_pub -h 127.0.0.1 -r -t screen/record/state -m idle >/dev/null 2>&1 || true
@@ -260,10 +260,10 @@ _supervise)
     echo "$file" >"$run/last"
     [ "${T3OS_REC_CLIP:-0}" = 1 ] && wl-copy --type text/uri-list <<<"file://$file"
     [ "${T3OS_REC_NOTIFY:-0}" = 1 ] && notify-send "⏹ Recording saved" "$(basename "$file") · ${secs}s"
-    emit screen/record/stopped "recorded $what for ${secs}s" "$(jq -nc --arg path "$file" --argjson secs "$secs" --argjson s "$session" '{detail: ($path | split("/") | last), path: $path, seconds: $secs, mode: $s.mode}')"
+    emit screen/record/stopped "Recorded $what for ${secs}s." "$(jq -nc --arg path "$file" --argjson secs "$secs" --argjson s "$session" '{detail: ($path | split("/") | last), path: $path, seconds: $secs, mode: $s.mode}')"
   else
     rm -f "$file"
-    t3cron emit screen/record/failed error "recording $what failed" --source t3os --data "$(jq -nc --arg log "$(tail -c 500 "$run/wf-recorder.log")" '{detail: "wf-recorder produced no file", log: $log}')" >/dev/null 2>&1 || true
+    t3cron emit screen/record/failed error "Recording $what failed, wf-recorder produced no file." --source t3os --data "$(jq -nc --arg log "$(tail -c 500 "$run/wf-recorder.log")" '{detail: "wf-recorder produced no file", log: $log}')" >/dev/null 2>&1 || true
   fi
   ;;
 

@@ -88,13 +88,13 @@ let
         scope=''${k%%:*}
         unit=''${k#*:}
         if [ "$scope" = user ]; then line=$(journalctl --user -u "$unit" -n 1 -o cat --no-pager 2>/dev/null); else line=$(journalctl -u "$unit" -n 1 -o cat --no-pager 2>/dev/null); fi
-        t3cron emit "systemd/''${unit%.*}/failed" error "$unit failed" --attention --source systemd \
+        t3cron emit "systemd/''${unit%.*}/failed" error "$unit failed." --attention --source systemd \
           --data "$(jq -nc --arg detail "$line" --arg scope "$scope" '{detail: $detail, scope: $scope}')"
       done
       for k in "''${!seen[@]}"; do
         [ -n "''${now[$k]:-}" ] && continue
         unit=''${k#*:}
-        t3cron emit "systemd/''${unit%.*}/recovered" info "$unit is no longer failed" --source systemd
+        t3cron emit "systemd/''${unit%.*}/recovered" info "$unit is no longer failed." --source systemd
       done
       unset seen
       declare -A seen
@@ -115,7 +115,7 @@ let
       | while read -r n; do
           app=$(jq -r '.app | if . == "" then "unknown" else . end' <<<"$n")
           slug=$(tr -c 'a-zA-Z0-9\n' '-' <<<"$app" | tr 'A-Z' 'a-z')
-          summary=$(jq -r .summary <<<"$n")
+          summary=$(jq -r -f ${./notify-sentence.jq} <<<"$n")
           set -- --source "$app" --data "$(jq -c '{detail: (.body | split("\n")[0]), app: .app}' <<<"$n")"
           if [ "$(jq -r .urgency <<<"$n")" = 2 ]; then
             t3cron emit "notify/$slug" warn "$summary" --attention "$@"

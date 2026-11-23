@@ -354,8 +354,8 @@ in
           emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source t3os >/dev/null 2>&1 || true; }
           start=$(date +%s)
           stage=home-manager
-          emit rebuild/started info "t3os rebuild started" --data "{\"detail\":\"${config.t3os.whoami.installation}\"}"
-          trap 'emit rebuild/failed error "t3os rebuild failed in $stage after $(( $(date +%s) - start ))s" --attention' ERR
+          emit rebuild/started info "Started a t3os rebuild of ${config.t3os.whoami.installation}." --data "{\"detail\":\"${config.t3os.whoami.installation}\"}"
+          trap 'emit rebuild/failed error "The t3os rebuild failed in $stage after $(( $(date +%s) - start ))s." --attention' ERR
           echo "Rebuilding home-manager configuration..."
           home-manager switch --flake ~/repos/personal/dotfiles/nixos#${config.t3os.whoami.installation}
           echo ""
@@ -363,7 +363,7 @@ in
           stage=nixos
           sudo /run/current-system/sw/bin/nixos-rebuild switch --no-reexec --flake $HOME/repos/personal/dotfiles/nixos
           gen=$(readlink /nix/var/nix/profiles/system | tr -dc '0-9' || true)
-          emit rebuild/done info "t3os rebuild finished in $(( $(date +%s) - start ))s" --data "{\"detail\":\"system generation $gen\"}"
+          emit rebuild/done info "The t3os rebuild finished in $(( $(date +%s) - start ))s." --data "{\"detail\":\"system generation $gen\"}"
         '';
         usage = "Runs home-manager switch for ${config.t3os.whoami.installation}, then nixos-rebuild switch for ${config.t3os.whoami.host}.";
       }

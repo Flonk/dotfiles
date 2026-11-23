@@ -326,8 +326,8 @@ fn job_event(key: &str, payload: &str) -> Value {
             v["timestamp"] = json!(Local::now().to_rfc3339_opts(SecondsFormat::Millis, false));
             v
         }
-        Ok(v) => event("t3cron", "info", false, key, v),
-        Err(_) if payload.trim().is_empty() => event("t3cron", "info", false, key, json!({})),
+        Ok(v) => event("t3cron", "info", false, &format!("Cron job {key} fired."), v),
+        Err(_) if payload.trim().is_empty() => event("t3cron", "info", false, &format!("Cron job {key} fired."), json!({})),
         Err(_) => event("t3cron", "info", false, payload.trim(), json!({ "key": key })),
     }
 }
@@ -362,7 +362,7 @@ impl Daemon {
         eprintln!("fire {key} -> {topic}");
         let body = job_event(key, payload).to_string();
         self.publish(topic, body.as_bytes(), false);
-        let fired = event("t3cron", "verbose", false, &format!("fired {key} -> {topic}"), json!({ "key": key, "topic": topic })).to_string();
+        let fired = event("t3cron", "verbose", false, &format!("Cron job {key} fired on {topic}."), json!({ "key": key, "topic": topic })).to_string();
         self.publish("cron/fired", fired.as_bytes(), false);
     }
 
@@ -373,14 +373,14 @@ impl Daemon {
                 let v: Value = match serde_json::from_slice(&msg.payload) {
                     Ok(v) => v,
                     Err(e) => {
-                        self.error(None, format!("cron/set: invalid json: {e}"));
+                        self.error(None, format!("A cron/set request was not valid JSON: {e}."));
                         return false;
                     }
                 };
                 let (Some(key), Some(schedule), Some(topic)) =
                     (v["key"].as_str(), v["schedule"].as_str(), v["topic"].as_str())
                 else {
-                    self.error(v["key"].as_str(), "cron/set needs key, schedule and topic".into());
+                    self.error(v["key"].as_str(), "A cron/set request needs a key, a schedule and a topic.".into());
                     return false;
                 };
                 match parse_schedule(schedule, now) {
@@ -396,7 +396,7 @@ impl Daemon {
                         true
                     }
                     Err(e) => {
-                        self.error(Some(key), e);
+                        self.error(Some(key), format!("Cron job {key} has an invalid schedule: {e}."));
                         false
                     }
                 }
@@ -405,7 +405,7 @@ impl Daemon {
                 Some(key) => {
                     let n = self.db.execute("DELETE FROM jobs WHERE key = ?1", params![key]).unwrap_or(0);
                     if n == 0 {
-                        self.error(Some(&key), format!("no job '{key}'"));
+                        self.error(Some(&key), format!("There is no cron job called {key}."));
                     } else {
                         eprintln!("delete {key}");
                     }
@@ -422,7 +422,7 @@ impl Daemon {
                     .unwrap_or(None);
                 match job {
                     Some((topic, payload)) => self.fire(&key, &topic, &payload),
-                    None => self.error(Some(&key), format!("no job '{key}'")),
+                    None => self.error(Some(&key), format!("There is no cron job called {key}.")),
                 }
                 false
             }
@@ -455,7 +455,7 @@ impl Daemon {
                     }
                     Err(e) => {
                         self.db.execute("DELETE FROM jobs WHERE key = ?1", params![key]).unwrap();
-                        self.error(Some(key), e);
+                        self.error(Some(key), format!("Cron job {key} has an invalid schedule: {e}."));
                     }
                 }
             }
