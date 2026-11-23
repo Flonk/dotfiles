@@ -90,6 +90,13 @@ up)
     echo "error: a connection attempt is already running, check with: vpn3it status" >&2
     exit 1
   fi
+  if [ "${VPN3IT_PRIORITY:-0}" != 1 ]; then
+    h=$(holders | head -1)
+    if [ -n "$h" ]; then
+      echo "error: 3it VPN is held by $h, which has priority. Not connecting." >&2
+      exit 75
+    fi
+  fi
   token=${1:-}
   if [ -z "$token" ]; then
     token=$(ask_token) || {
