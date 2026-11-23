@@ -20,6 +20,7 @@ let
     runtimeEnv = {
       T3BUS_HOST = host;
       T3BUS_PEERS = lib.concatStringsSep " " peers;
+      T3BUS_RULES = pkgs.writeText "t3bus-ntfy-rules.json" (builtins.toJSON cfg.push.rules);
     };
     text = builtins.readFile ./ntfy-forward.sh;
   };

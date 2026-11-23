@@ -15,7 +15,17 @@
       ];
     };
 
-    module.core.eventbus.push.enable = true;
+    module.core.eventbus.push = {
+      enable = true;
+      rules = {
+        "+/display/#" = "drop";
+        "+/screen/#" = "drop";
+        "+/network/#" = "drop";
+        "+/vpn3it/#" = "drop";
+        "+/rebuild/started" = "drop";
+        "+/screen/record/failed" = 4;
+      };
+    };
 
     module.projects.personal.smallweb = {
       enable = true;

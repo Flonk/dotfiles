@@ -40,6 +40,15 @@ in
         type = types.port;
         default = 8443;
       };
+      rules = mkOption {
+        type = types.attrsOf (types.either (types.enum [ "drop" ]) (types.ints.between 1 5));
+        default = { };
+        example = {
+          "+/display/#" = "drop";
+          "+/agent/+/waiting" = 5;
+        };
+        description = "MQTT patterns matched against <host>/<topic>, mapped to a fixed ntfy priority or \"drop\". The longest matching pattern wins; unmatched events keep the level-based priority.";
+      };
     };
   };
 }
