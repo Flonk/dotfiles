@@ -33,3 +33,4 @@ SysmonHole 1.0 SysmonHole.qml
 AudioSwitcher 1.0 AudioSwitcher.qml
 RecordBar 1.0 RecordBar.qml
 MediaOsd 1.0 MediaOsd.qml
+Askpass 1.0 Askpass.qml

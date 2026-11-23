@@ -37,7 +37,7 @@
     ../../modules/desktop/qutebrowser/home.nix
     ../../modules/desktop/stylix/home.nix
     ../../modules/desktop/vicinae/home.nix
-    ../../modules/desktop/vicinae-askpass/home.nix
+    ../../modules/desktop/askpass/home.nix
     ../../modules/desktop/vicinae-bitwarden/home.nix
     ../../modules/leisure/minecraft/home.nix
     ../../modules/leisure/lutris/home.nix

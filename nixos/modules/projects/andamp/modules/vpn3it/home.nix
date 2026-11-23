@@ -70,7 +70,7 @@ let
       systemctl --user stop vpn3it-click 2>/dev/null || sudo pkill -SIGINT openconnect
       exit 0
     fi
-    token=$(vicinae-askpass "Authy token for 3it") || exit 0
+    token=$(t3-askpass "Authy token for 3it") || exit 0
     [ -n "$token" ] || exit 0
     file="''${XDG_RUNTIME_DIR:-/tmp}/vpn3it-token"
     (umask 077; printf '%s\n' "$token" > "$file")

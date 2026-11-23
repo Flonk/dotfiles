@@ -31,7 +31,7 @@
     ../modules/desktop/t3-desktop/options.nix
     ../modules/desktop/stylix/options.nix
     ../modules/desktop/vicinae/options.nix
-    ../modules/desktop/vicinae-askpass/options.nix
+    ../modules/desktop/askpass/options.nix
     ../modules/desktop/vicinae-bitwarden/options.nix
 
     ../modules/development/dnsmasq/options.nix

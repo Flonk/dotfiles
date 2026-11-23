@@ -11,6 +11,8 @@ ShellRoot {
 
     RecordBar {}
 
+    Askpass {}
+
     LockContext {
         id: lockContext
 
