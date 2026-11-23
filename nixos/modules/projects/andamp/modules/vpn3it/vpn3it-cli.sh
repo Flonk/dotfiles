@@ -56,7 +56,7 @@ status)
     echo "this host: disconnected"
   fi
   h=$(holders | paste -sd, -)
-  echo "other hosts: ${h:+$h holds 3it}${h:-none holds 3it}"
+  if [ -n "$h" ]; then echo "other hosts: $h holds 3it"; else echo "other hosts: none holds 3it"; fi
   c=$(timeout 2 mosquitto_sub -h 127.0.0.1 -t mutex/crdp/state --retained-only -C 1 -W 1 2>/dev/null || true)
   [ -n "$c" ] && echo "crdp: $c"
   exit 0

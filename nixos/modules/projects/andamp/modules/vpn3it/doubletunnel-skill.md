@@ -15,7 +15,7 @@ The 3it VPN allows one session at a time. chonkler (Flo's work laptop) has prior
 ## Connect
 
 1. Run `vpn3it status`.
-2. If it says "chonkler holds 3it": stop. Tell Flo chonkler holds the VPN. Do not connect.
+2. If it says "other hosts: chonkler holds 3it": stop. Tell Flo chonkler holds the VPN. Do not connect.
 3. If it says "this host: connected": tell Flo it is already connected. Stop.
 4. You need Flo's current Authy token (6 digits). If Flo did not give you one in this message, ask for it and stop. Never guess or reuse an old token.
 5. Run `vpn3it doubletunnel up <token>` with a 180 second timeout. It waits until the VPN is up.
