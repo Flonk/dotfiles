@@ -56,7 +56,7 @@ shot)
       what="monitor $target"
     else
       args=(-m output -m active)
-      what="active monitor"
+      what="the active monitor"
     fi
     mode=monitor
     ;;
@@ -66,7 +66,7 @@ shot)
       what="monitor $target"
     elif [ "$active" = 1 ]; then
       args=(-m output -m active)
-      what="active monitor"
+      what="the active monitor"
     else
       args=(-m output)
       what="a picked monitor"
@@ -76,7 +76,7 @@ shot)
   window)
     if [ "$active" = 1 ]; then
       args=(-m window -m active)
-      what="active window"
+      what="the active window"
     else
       args=(-m window)
       what="a picked window"
@@ -194,7 +194,7 @@ record)
   window)
     if [ "$active" = 1 ]; then
       read -r x y w h < <(hyprctl -j activewindow | jq -r '[.at[0], .at[1], .size[0], .size[1]] | @tsv') || true
-      what="active window"
+      what="the active window"
     else
       interactive=true
       ws=$(jq -c '[.[].activeWorkspace.id]' <<<"$monitors")

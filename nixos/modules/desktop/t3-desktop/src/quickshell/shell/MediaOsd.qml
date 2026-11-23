@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Services.Mpris
+import Quickshell.Services.Pipewire
 
 Item {
     id: osd
@@ -15,6 +16,7 @@ Item {
     property int hold: 1600
 
     readonly property var player: MediaControlWidget.currentPlayer
+    readonly property var playbackStreams: (Pipewire.nodes?.values ?? []).filter(n => n?.isStream && n.properties?.["media.class"] === "Stream/Output/Audio")
 
     function pop(k, i, l, d, v, c) {
         if (!armed)
@@ -35,9 +37,14 @@ Item {
         pop("volume", m ? "\u{f0581}" : v < 0.34 ? "\u{f057f}" : v < 0.67 ? "\u{f0580}" : "\u{f057e}", m ? "muted" : "volume", VolumeWidget.sinkName, m ? 0 : v, Theme.wm800);
     }
 
+    function audible(p) {
+        const id = (p.identity || "").toLowerCase();
+        return id !== "" && playbackStreams.some(n => (n.properties["application.name"] || "").toLowerCase() === id);
+    }
+
     function media() {
         const p = player;
-        if (!p)
+        if (!p || !audible(p))
             return;
         const playing = p.isPlaying;
         pop("media", playing ? "\u{f040a}" : "\u{f03e4}", [p.trackArtist, p.trackTitle].filter(s => s).join(" — ") || p.identity, playing ? "playing" : "paused", p.lengthSupported && p.length > 0 ? p.position / p.length : -1, T3.accent2);
@@ -49,6 +56,16 @@ Item {
         running: true
         interval: 2500
         onTriggered: osd.armed = true
+    }
+
+    PwObjectTracker {
+        objects: (Pipewire.nodes?.values ?? []).filter(n => n?.isStream)
+    }
+
+    Timer {
+        id: mediaSettle
+        interval: 800
+        onTriggered: osd.media()
     }
 
     Timer {
@@ -86,8 +103,8 @@ Item {
 
     Connections {
         target: MediaControlWidget
-        function onIsPlayingChanged() { osd.media(); }
-        function onCurrentTitleChanged() { if (MediaControlWidget.currentTitle) osd.media(); }
+        function onIsPlayingChanged() { mediaSettle.restart(); }
+        function onCurrentTitleChanged() { if (MediaControlWidget.currentTitle) mediaSettle.restart(); }
     }
 
     Item {
