@@ -10,6 +10,7 @@
       eventbus = {
         enable = true;
         bridges = [ "claude-hetzner" ];
+        upstream = "claude-hetzner";
       };
       git.enable = true;
       bitwarden.enable = true;

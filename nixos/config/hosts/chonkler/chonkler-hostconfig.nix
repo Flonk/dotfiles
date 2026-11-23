@@ -18,7 +18,10 @@
         avahi.enable = false;
         autoclicker.enable = true;
       };
-      core.eventbus.enable = true;
+      core.eventbus = {
+        enable = true;
+        upstream = "claude-hetzner";
+      };
       desktop = {
         audio = {
           enable = true;

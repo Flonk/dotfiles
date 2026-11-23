@@ -15,6 +15,8 @@
       ];
     };
 
+    module.core.eventbus.push.enable = true;
+
     module.projects.personal.smallweb = {
       enable = true;
       gopherHost = "gopher.t3.at";

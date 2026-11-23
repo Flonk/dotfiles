@@ -38,6 +38,7 @@ let
     listener 1883 127.0.0.1
     allow_anonymous true
     persistence true
+    queue_qos0_messages true
     persistence_location ${config.home.homeDirectory}/.local/state/mosquitto/
   '';
   bridgeScript =
@@ -46,13 +47,14 @@ let
       host = registry.${name};
       knock = config.t3os.module.core.ssh.knockScript;
       pub = "${pkgs.mosquitto}/bin/mosquitto_pub -h 127.0.0.1";
+      tunnel = lib.optionalString (cfg.upstream == name) "-o ExitOnForwardFailure=yes -L 127.0.0.1:18830:127.0.0.1:1883";
     in
     pkgs.writeShellScript "eventbus-bridge-${name}" ''
       seen=$(${pkgs.coreutils}/bin/mktemp)
       trap '${pkgs.coreutils}/bin/rm -f "$seen"' EXIT
       while true; do
         ${lib.optionalString ((host.knock or false) && knock != null) "${knock} ${host.ip} >/dev/null 2>&1 || true"}
-        ${pkgs.openssh}/bin/ssh -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=20 -o ServerAliveCountMax=3 \
+        ${pkgs.openssh}/bin/ssh -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=20 -o ServerAliveCountMax=3 ${tunnel} \
           ${host.user}@${host.ip} 'PATH="$HOME/.nix-profile/bin:$PATH" exec mosquitto_sub -h 127.0.0.1 -v -t "agent/#"' \
           | while IFS=' ' read -r topic payload; do
               ${pkgs.gnugrep}/bin/grep -qxF "$topic" "$seen" || echo "$topic" >> "$seen"
@@ -162,7 +164,7 @@ in
             };
             Install.WantedBy = [ "default.target" ];
           };
-        }) cfg.bridges
+        }) (lib.unique (cfg.bridges ++ lib.optional (cfg.upstream != null) cfg.upstream))
       ))
       {
         t3cron = {
