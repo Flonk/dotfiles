@@ -56,7 +56,7 @@ shot)
       what="monitor $target"
     else
       args=(-m output -m active)
-      what="the active monitor"
+      what="active monitor"
     fi
     mode=monitor
     ;;
@@ -66,7 +66,7 @@ shot)
       what="monitor $target"
     elif [ "$active" = 1 ]; then
       args=(-m output -m active)
-      what="the active monitor"
+      what="active monitor"
     else
       args=(-m output)
       what="a picked monitor"
@@ -76,7 +76,7 @@ shot)
   window)
     if [ "$active" = 1 ]; then
       args=(-m window -m active)
-      what="the active window"
+      what="active window"
     else
       args=(-m window)
       what="a picked window"
@@ -117,7 +117,7 @@ ocr)
   fi
   wl-copy <<<"$text"
   [ "$notify" = 1 ] && notify-send "📸 OCR copied" "$(head -c 300 <<<"$text")"
-  emit screen/ocr "Read $(wc -w <<<"$text") words of text off the screen." \
+  emit screen/ocr "OCR read $(wc -w <<<"$text") words." \
     "$(jq -nc --arg t "$text" '{detail: ($t | gsub("\\s+"; " ") | .[0:80]), text: $t[0:2000], chars: ($t | length)}')"
   printf '%s\n' "$text"
   ;;
@@ -130,7 +130,7 @@ color-pick)
   fi
   [ "$clip" = 1 ] && wl-copy <<<"$color"
   [ "$notify" = 1 ] && notify-send "🎨 Colour $([ "$clip" = 1 ] && echo copied || echo picked)" "$color"
-  emit screen/color "Picked the colour $color." "$(jq -nc --arg c "$color" '{detail: $c, color: $c}')"
+  emit screen/color "Picked colour $color." "$(jq -nc --arg c "$color" '{detail: $c, color: $c}')"
   echo "$color"
   ;;
 
@@ -194,7 +194,7 @@ record)
   window)
     if [ "$active" = 1 ]; then
       read -r x y w h < <(hyprctl -j activewindow | jq -r '[.at[0], .at[1], .size[0], .size[1]] | @tsv') || true
-      what="the active window"
+      what="active window"
     else
       interactive=true
       ws=$(jq -c '[.[].activeWorkspace.id]' <<<"$monitors")

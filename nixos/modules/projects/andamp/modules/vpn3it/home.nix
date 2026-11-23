@@ -66,7 +66,7 @@ let
     }:$PATH"
     emit() { command -v t3cron >/dev/null 2>&1 && t3cron emit "$@" --source vpn3it-toggle >/dev/null 2>&1 || true; }
     if systemctl --user is-active -q vpn3it-click || pgrep -x openconnect >/dev/null; then
-      emit vpn3it/disconnecting info "Disconnecting the 3it VPN."
+      emit vpn3it/disconnecting info "Disconnecting 3it VPN."
       systemctl --user stop vpn3it-click 2>/dev/null || sudo pkill -SIGINT openconnect
       exit 0
     fi
@@ -74,7 +74,7 @@ let
     [ -n "$token" ] || exit 0
     file="''${XDG_RUNTIME_DIR:-/tmp}/vpn3it-token"
     (umask 077; printf '%s\n' "$token" > "$file")
-    emit vpn3it/connecting info "Connecting the 3it VPN."
+    emit vpn3it/connecting info "Connecting 3it VPN."
     systemctl --user reset-failed vpn3it-click 2>/dev/null || true
     systemd-run --user --unit=vpn3it-click --collect --setenv=PATH="$PATH" \
       sh -c 'tok=$(cat "$0"); rm -f "$0"; printf "%s\n" "$tok" | exec ${vpn3it}/bin/vpn3it' "$file" >/dev/null

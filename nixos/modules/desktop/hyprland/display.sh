@@ -114,8 +114,8 @@ extend() {
     esac
   done < <(monitors | jq -r --arg n "$int" '.[] | select(.name != $n) | [.name, ((if .transform % 2 == 1 then .height else .width end) / .scale | floor), ((if .transform % 2 == 1 then .width else .height end) / .scale | floor)] | @tsv')
   local where="$side"
-  case "$side" in left | right) where="to the $side of" ;; esac
-  announce "extend $side" "External displays now extend $where the built-in screen."
+  case "$side" in left | right) where="$side of" ;; esac
+  announce "extend $side" "External displays placed $where built-in display."
 }
 
 mirror() {
@@ -156,8 +156,8 @@ only() {
     lua "hl.monitor({ output = \"$name\", disabled = true })"
   done < <(monitors | jq -r --argjson k "$keepers" '.[] | select(.name as $n | $k | index($n) | not) | .name')
   case "$want" in
-  internal) announce "only $want" "Only the built-in display is on." ;;
-  external) announce "only $want" "Only the external displays are on." ;;
+  internal) announce "only $want" "Switched to built-in display only." ;;
+  external) announce "only $want" "Switched to external displays only." ;;
   *) announce "only $want" "Only display $want is on." ;;
   esac
 }
@@ -182,7 +182,7 @@ save() {
   [ -s "$store" ] || echo '{}' >"$store"
   jq --arg k "$k" --argjson l "$(layout)" --arg at "$(date -Iseconds)" '.[$k] = {saved: $at, layout: $l}' "$store" >"$store.tmp" && mv "$store.tmp" "$store"
   echo "saved layout for: $k"
-  announce "saved layout" "Saved the current display layout."
+  announce "saved layout" "Saved current display layout."
 }
 
 saved() {
@@ -211,7 +211,7 @@ restore() {
   while read -r name; do
     lua "hl.monitor({ output = \"$name\", disabled = true })"
   done < <(jq -r --argjson snap "$snap" '.[] | select(.disabled) | . as $l | $snap[] | select(.description == $l.description) | .name' <<<"$want")
-  announce "restored saved layout" "Restored the saved display layout."
+  announce "restored saved layout" "Restored saved display layout."
 }
 
 forget() {
