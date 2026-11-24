@@ -99,7 +99,18 @@ Item {
         screenSize: Qt.vector2d(size, size)
         bandHeight: size
         outerRadius: size / 2
-        markRect: Qt.vector4d(size * 0.06, size * 0.06, size * 0.88, size * 0.88)
+
+        Text {
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            topPadding: height * 0.05
+            text: "T3"
+            color: "black"
+            font.family: Theme.fontFamily
+            font.pixelSize: Math.round(parent.size * 15 / 40)
+            font.weight: Font.Bold
+        }
     }
 
     ChromeSurface {
