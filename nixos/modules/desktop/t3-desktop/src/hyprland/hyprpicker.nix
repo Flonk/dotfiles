@@ -11,7 +11,7 @@
     ];
 
     wayland.windowManager.hyprland.extraConfig = ''
-      hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("t3os screen color-pick -c -n"))
+      hl.bind("MOD3 + C", hl.dsp.exec_cmd("t3os screen color-pick -c -n"))
     '';
   };
 }

@@ -31,9 +31,5 @@ in
   config = lib.mkIf cfg.enable {
     xdg.dataFile."t3os-chinese".source = data;
     programs.vicinae.extensions = [ extension ];
-
-    wayland.windowManager.hyprland.extraConfig = lib.mkIf config.programs.t3-desktop.hyprland.enable ''
-      hl.bind("MOD3 + C", hl.dsp.exec_cmd("xdg-open vicinae://launch/@flo/vicinae-chinese/lookup"))
-    '';
   };
 }

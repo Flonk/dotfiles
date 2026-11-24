@@ -16,7 +16,6 @@
     module = {
       assorted = {
         avahi.enable = false;
-        autoclicker.enable = true;
       };
       core.eventbus = {
         enable = true;

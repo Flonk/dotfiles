@@ -11,7 +11,6 @@ in
 {
   imports = [
     ../../modules/assorted/avahi/system.nix
-    ../../modules/assorted/autoclicker/system.nix
     ../../modules/core/eventbus/system.nix
     ../../modules/core/t3os-scripts/system.nix
     ../../modules/core/ssh/system.nix

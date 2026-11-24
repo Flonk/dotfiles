@@ -45,7 +45,6 @@ in
           hl.bind("MOD3 + B", hl.dsp.exec_cmd("xdg-open vicinae://launch/@Gelei/store.vicinae.bluetooth/devices"))
           hl.bind("MOD3 + P", hl.dsp.exec_cmd("open-bitwarden"))
           hl.bind("MOD3 + A", hl.dsp.exec_cmd("open-bitwarden autofill"))
-          hl.bind("MOD3 + T", hl.dsp.exec_cmd("xdg-open vicinae://launch/@gebeto/store.raycast.translate/quick-translate"))
         '';
       };
 }

@@ -5,7 +5,6 @@
     ../modules/ai/pi/options.nix
 
     ../modules/assorted/avahi/options.nix
-    ../modules/assorted/autoclicker/options.nix
 
     ../modules/core/bitwarden/options.nix
     ../modules/core/direnv/options.nix

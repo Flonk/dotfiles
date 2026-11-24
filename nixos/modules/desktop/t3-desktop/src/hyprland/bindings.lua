@@ -7,11 +7,10 @@ hl.exec_cmd("systemctl start docker")
 
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + CTRL + RETURN", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("obsidian daily"))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd("t3os screen shot window --active -c -n"))
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("t3os screen ocr -n"))
+hl.bind("MOD3 + O", hl.dsp.exec_cmd("t3os screen ocr -n"))
 hl.bind(mainMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd("t3os screen shot monitor --active -c -n"))
 hl.bind("PRINT", hl.dsp.exec_cmd("t3os screen shot region -c -n"))
 

@@ -99,12 +99,6 @@ in
           };
         };
       }
-
-      (lib.mkIf config.programs.t3-desktop.hyprland.enable {
-        wayland.windowManager.hyprland.extraConfig = ''
-          hl.bind("MOD3 + I", hl.dsp.exec_cmd("t3-desktop-i18n cycle"))
-        '';
-      })
     ]
   );
 }

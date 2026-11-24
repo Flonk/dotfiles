@@ -118,7 +118,7 @@ in
     };
 
     i18n = {
-      enable = mkEnableOption "fcitx5 input-method switching (t3-desktop-i18n CLI, bar widget, MOD3+I cycle)";
+      enable = mkEnableOption "fcitx5 input-method switching (t3-desktop-i18n CLI, bar widget)";
 
       defaultLayout = mkOption {
         type = types.str;

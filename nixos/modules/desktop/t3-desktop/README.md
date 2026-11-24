@@ -7,7 +7,7 @@ A complete Hyprland desktop: hyprland + hy3, quickshell bar and lockscreen, vici
 - `src/greeter/` — `t3greet`, a Bubble Tea terminal greeter for greetd (Go)
 - `src/grub/` — GRUB theme asset generator and QEMU preview
 - `src/hyprland/` — hyprland session config, keybindings, styling
-- `src/i18n/` — fcitx5 input-method switching (`t3-desktop-i18n` CLI + MOD3+I cycle)
+- `src/i18n/` — fcitx5 input-method switching (`t3-desktop-i18n` CLI)
 - `src/mako/` — notification daemon
 - `src/quickshell/` — bar and lockscreen (QML)
 - `src/vicinae/` — launcher service and binds

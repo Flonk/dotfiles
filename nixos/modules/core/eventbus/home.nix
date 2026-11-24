@@ -333,7 +333,7 @@ in
             "ocr"
           ];
           title = "Drag a region and copy its text";
-          usage = "Drag a rectangle; its German/English text is read with tesseract, copied to the clipboard, printed and emitted as screen/ocr. No image is saved. -n notifies. Bound to SUPER + O.";
+          usage = "Drag a rectangle; its German/English text is read with tesseract, copied to the clipboard, printed and emitted as screen/ocr. No image is saved. -n notifies. Bound to HYPER + O.";
         }
         {
           command = [
@@ -341,7 +341,7 @@ in
             "color-pick"
           ];
           title = "Pick a colour from the screen";
-          usage = "Opens hyprpicker's zoom lens; click a pixel to print its hex colour and emit screen/color. -c copies it, -n notifies. SUPER + C runs it with -c -n.";
+          usage = "Opens hyprpicker's zoom lens; click a pixel to print its hex colour and emit screen/color. -c copies it, -n notifies. HYPER + C runs it with -c -n.";
         }
       ]
     ++ [
