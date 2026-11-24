@@ -123,7 +123,7 @@ ocr)
   ;;
 
 color-pick)
-  color=$(hyprpicker -l -q 2>/dev/null | tail -n 1) || true
+  color=$(hyprpicker -l -b 2>/dev/null | sed "s/\x1b\[[0-9;]*m//g" | grep -oE "#[0-9a-f]{6}" | tail -n 1) || true
   if [ -z "$color" ]; then
     echo "no colour picked" >&2
     exit 1
