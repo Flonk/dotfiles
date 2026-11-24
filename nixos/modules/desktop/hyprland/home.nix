@@ -23,6 +23,8 @@ let
     { name = "cycle"; title = "Cycle extend, mirror, external only, internal only"; usage = "Steps to the next arrangement, like Win+P. SUPER + P opens a picker instead."; }
     { name = "save"; title = "Remember the current arrangement for these displays"; usage = "Saves modes, positions, scale, rotation, mirroring and which displays are off, keyed by the set of connected displays (by name and model, not port). It is restored automatically whenever exactly these displays are plugged in again and after Hyprland reloads. Stored in ~/.config/t3os/displays.json."; }
     { name = "restore"; title = "Apply the saved arrangement for these displays"; usage = "Re-applies the layout saved with t3os settings display save for the displays currently connected."; }
+    { name = "snapshot"; title = "Remember the current arrangement for one undo"; usage = "Stores the current layout in the runtime dir so t3os settings display undo can put it back. The SUPER + P picker does this before applying a choice."; }
+    { name = "undo"; title = "Put back the arrangement from the last snapshot"; usage = "Re-applies the layout stored by t3os settings display snapshot, then forgets it. The SUPER + P picker runs this when a new layout is not confirmed within 15 seconds."; }
     { name = "forget"; title = "Forget the saved arrangement for these displays"; usage = "Deletes the saved layout for the current set of displays, so plugging them in falls back to Hyprland's defaults."; }
     { name = "profiles"; title = "List every saved display arrangement"; usage = "Shows each saved set of displays with when it was saved and how each display was set up."; }
   ];

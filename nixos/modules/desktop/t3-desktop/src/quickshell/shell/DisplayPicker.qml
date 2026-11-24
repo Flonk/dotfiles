@@ -11,6 +11,9 @@ Scope {
     property string output: ""
     property string mode: ""
     property int selected: 0
+    property bool confirming: false
+    property int left: 0
+    readonly property int grace: 15
 
     readonly property var choices: [
         { icon: "\u{f037a}", label: "extend right", hint: "external right of laptop", args: ["extend", "right"], mode: "extend" },
@@ -23,6 +26,8 @@ Scope {
     ]
 
     function toggle() {
+        if (confirming)
+            return;
         if (open) {
             open = false;
             return;
@@ -38,7 +43,41 @@ Scope {
         if (i < 0 || i >= choices.length)
             return;
         open = false;
-        Quickshell.execDetached(["t3os", "settings", "display"].concat(choices[i].args).concat(["-n"]));
+        apply.command = ["sh", "-c", "t3os settings display snapshot && exec t3os settings display \"$@\" -n", "sh"].concat(choices[i].args);
+        apply.running = true;
+    }
+
+    function keep() {
+        confirming = false;
+        countdown.stop();
+    }
+
+    function revert() {
+        confirming = false;
+        countdown.stop();
+        Quickshell.execDetached(["t3os", "settings", "display", "undo", "-n"]);
+    }
+
+    Process {
+        id: apply
+        onExited: code => {
+            if (code !== 0)
+                return;
+            root.left = root.grace;
+            root.confirming = true;
+            countdown.restart();
+        }
+    }
+
+    Timer {
+        id: countdown
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            root.left -= 1;
+            if (root.left <= 0)
+                root.revert();
+        }
     }
 
     Process {
@@ -195,6 +234,120 @@ Scope {
                         topPadding: 6
                         text: "1-7 or enter picks · esc closes"
                         opacity: 0.55
+                    }
+                }
+            }
+        }
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        PanelWindow {
+            id: ask
+            required property var modelData
+            readonly property bool focusHere: modelData.name === (Hyprland.focusedMonitor?.name ?? "")
+
+            screen: modelData
+            visible: root.confirming
+            exclusionMode: ExclusionMode.Ignore
+            implicitWidth: prompt.width
+            implicitHeight: prompt.height
+            color: "transparent"
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.namespace: "t3-desktop-display-confirm"
+            WlrLayershell.keyboardFocus: root.confirming && focusHere ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+
+            onVisibleChanged: if (visible) answer.forceActiveFocus()
+            onFocusHereChanged: if (visible && focusHere) answer.forceActiveFocus()
+
+            Rectangle {
+                id: prompt
+                width: 380
+                height: lines.implicitHeight + 2 * 14
+                radius: T3.radius
+                color: Theme.app100
+                border.width: 2
+                border.color: T3.accent2
+
+                Item {
+                    id: answer
+                    focus: root.confirming
+                    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Space || event.key === Qt.Key_Y)
+                            root.keep();
+                        else if (event.key === Qt.Key_Escape || event.key === Qt.Key_N || event.key === Qt.Key_Backspace)
+                            root.revert();
+                        else
+                            return;
+                        event.accepted = true;
+                    }
+                }
+
+                Column {
+                    id: lines
+                    anchors.fill: parent
+                    anchors.margins: 14
+                    spacing: 10
+
+                    Label {
+                        text: "\u{f037a}  keep this layout?"
+                    }
+
+                    Text {
+                        width: parent.width
+                        text: "Reverting in " + root.left + "s"
+                        color: T3.accent2
+                        font.family: Theme.fontFamily
+                        font.pixelSize: T3.titleSize
+                    }
+
+                    Rectangle {
+                        width: parent.width
+                        height: 4
+                        radius: 2
+                        color: Theme.app150
+
+                        Rectangle {
+                            width: parent.width * root.left / root.grace
+                            height: parent.height
+                            radius: 2
+                            color: T3.accent2
+                            Behavior on width {
+                                NumberAnimation { duration: 1000 }
+                            }
+                        }
+                    }
+
+                    Row {
+                        spacing: 8
+
+                        Repeater {
+                            model: [["keep", "enter"], ["revert", "esc"]]
+
+                            Rectangle {
+                                required property var modelData
+                                width: 120
+                                height: 30
+                                radius: 6
+                                color: Theme.app150
+                                border.width: 1
+                                border.color: keepHover.containsMouse ? T3.accent2 : Theme.app700
+
+                                Label {
+                                    anchors.centerIn: parent
+                                    text: parent.modelData[0] + "  ·  " + parent.modelData[1]
+                                }
+
+                                MouseArea {
+                                    id: keepHover
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: parent.modelData[0] === "keep" ? root.keep() : root.revert()
+                                }
+                            }
+                        }
                     }
                 }
             }

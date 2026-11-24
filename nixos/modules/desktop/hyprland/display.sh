@@ -1,5 +1,6 @@
 store="${XDG_CONFIG_HOME:-$HOME/.config}/t3os/displays.json"
 quiet="${XDG_RUNTIME_DIR:-/tmp}/t3os-display-quiet"
+undo="${XDG_RUNTIME_DIR:-/tmp}/t3os-display-undo.json"
 
 monitors() {
   hyprctl -j monitors all
@@ -189,14 +190,8 @@ saved() {
   if [ -s "$store" ]; then jq -c --arg k "$(key)" '.[$k].layout // empty' "$store"; fi
 }
 
-restore() {
-  local want
-  want=$(saved)
-  if [ -z "$want" ]; then
-    [ "${1:-}" = auto ] || echo "no saved layout for: $(key)" >&2
-    return 1
-  fi
-  [ "$(layout)" = "$want" ] && return 0
+apply() {
+  local want=$1
   hush
   local snap
   snap=$(monitors)
@@ -211,7 +206,32 @@ restore() {
   while read -r name; do
     lua "hl.monitor({ output = \"$name\", disabled = true })"
   done < <(jq -r --argjson snap "$snap" '.[] | select(.disabled) | . as $l | $snap[] | select(.description == $l.description) | .name' <<<"$want")
+}
+
+restore() {
+  local want
+  want=$(saved)
+  if [ -z "$want" ]; then
+    [ "${1:-}" = auto ] || echo "no saved layout for: $(key)" >&2
+    return 1
+  fi
+  [ "$(layout)" = "$want" ] && return 0
+  apply "$want"
   announce "restored saved layout" "Restored saved display layout."
+}
+
+snapshot() {
+  layout >"$undo"
+}
+
+undo() {
+  [ -s "$undo" ] || {
+    echo "nothing to undo" >&2
+    return 1
+  }
+  apply "$(cat "$undo")"
+  rm -f "$undo"
+  announce "reverted layout" "Reverted to the previous display layout."
 }
 
 forget() {
@@ -279,11 +299,13 @@ internal | external) only "$cmd" ;;
 cycle) cycle ;;
 save) save ;;
 restore) restore ;;
+snapshot) snapshot ;;
+undo) undo ;;
 forget) forget ;;
 profiles) profiles ;;
 _watch) watch ;;
 *)
-  echo "usage: t3os-display <status|extend [side]|mirror [source]|only <internal|external|NAME>|cycle|save|restore|forget|profiles> [-n]" >&2
+  echo "usage: t3os-display <status|extend [side]|mirror [source]|only <internal|external|NAME>|cycle|save|restore|snapshot|undo|forget|profiles> [-n]" >&2
   exit 1
   ;;
 esac
