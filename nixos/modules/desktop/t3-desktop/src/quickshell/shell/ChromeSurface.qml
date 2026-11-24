@@ -14,10 +14,10 @@ ShaderEffect {
     property vector4d cutout4: Qt.vector4d(0, 0, 0, 0)
 
     readonly property vector2d itemSize: Qt.vector2d(width, height)
-    readonly property real bandHeight: T3.band
+    property real bandHeight: T3.band
     readonly property real border: T3.border
     readonly property real radius: T3.radius
-    readonly property real outerRadius: T3.outerRadius
+    property real outerRadius: T3.outerRadius
     readonly property color ground: T3.ground
     readonly property color accent: Theme.wm800
 

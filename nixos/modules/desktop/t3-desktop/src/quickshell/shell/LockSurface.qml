@@ -20,8 +20,13 @@ Item {
             }
             if (root.renderScene) root.context.frameTick(root);
         }
+        function onActiveChanged() {
+            if (root.Window.window.active)
+                passwordInput.forceActiveFocus();
+        }
     }
     Component.onDestruction: root.context.releaseClock(root)
+    Component.onCompleted: passwordInput.forceActiveFocus()
 
     ShaderEffectSource {
         id: dummyTexture
@@ -86,6 +91,19 @@ Item {
     }
 
     ChromeSurface {
+        readonly property real size: Math.round(Math.min(root.width, root.height) * 0.2)
+        visible: !root.renderScene
+        anchors.centerIn: parent
+        width: size
+        height: size
+        screenSize: Qt.vector2d(size, size)
+        bandHeight: size
+        outerRadius: size / 2
+        markRect: Qt.vector4d(size * 0.06, size * 0.06, size * 0.88, size * 0.88)
+    }
+
+    ChromeSurface {
+        visible: root.renderScene
         anchors.fill: parent
         overlayMode: 1
         cutout: lockHeader.cutout
@@ -96,6 +114,7 @@ Item {
 
     ChromeHeader {
         id: lockHeader
+        visible: root.renderScene
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right

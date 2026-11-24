@@ -41,6 +41,7 @@ ShellRoot {
             id: lockWindow
             Loader {
                 anchors.fill: parent
+                focus: true
                 sourceComponent: root.loginMode ? loginComponent : lockComponent
             }
 
