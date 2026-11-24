@@ -67,10 +67,11 @@ Item {
             spacing: meter.ringGap
 
             Repeater {
-                model: meter.rings
+                model: meter.rings.length
 
                 Label {
-                    required property var modelData
+                    required property int index
+                    readonly property var modelData: meter.rings[index]
                     width: widest.advanceWidth
                     height: meter.ringSize
                     horizontalAlignment: Text.AlignRight
@@ -85,11 +86,12 @@ Item {
             spacing: meter.ringGap
 
             Repeater {
-                model: meter.rings
+                model: meter.rings.length
 
                 Canvas {
                     id: ring
-                    required property var modelData
+                    required property int index
+                    readonly property var modelData: meter.rings[index]
                     readonly property real level: Math.max(0, Math.min(1, modelData.value))
                     readonly property color ink: meter.tint(level)
                     width: meter.ringSize

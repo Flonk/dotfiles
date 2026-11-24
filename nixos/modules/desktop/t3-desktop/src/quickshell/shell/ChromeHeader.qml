@@ -177,10 +177,11 @@ Item {
                 width: rateMetrics.advanceWidth + 13
 
                 Repeater {
-                    model: [[true, WifiWidget.uploadRate], [false, WifiWidget.downloadRate]]
+                    model: 2
 
                     Row {
-                        required property var modelData
+                        required property int index
+                        readonly property var modelData: [index === 0, index === 0 ? WifiWidget.uploadRate : WifiWidget.downloadRate]
                         spacing: 3
                         anchors.right: parent.right
                         LayoutMirroring.enabled: true
