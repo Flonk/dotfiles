@@ -111,7 +111,7 @@ shot)
 ocr)
   text=$(hyprshot -m region -r png 2>/dev/null | tesseract stdin stdout -l deu+eng 2>/dev/null) || true
   if [ -z "${text//[[:space:]]/}" ]; then
-    [ "$notify" = 1 ] && notify-send "📸 OCR" "no text found"
+    [ "$notify" = 1 ] && notify-send "OCR" "no text found"
     echo "no text recognised" >&2
     exit 1
   fi

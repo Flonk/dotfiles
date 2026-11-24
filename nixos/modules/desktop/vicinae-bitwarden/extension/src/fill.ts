@@ -46,6 +46,6 @@ export async function autofillCredentials(item: VaultItem, masterPassword: strin
       stdio: "ignore",
     }).unref();
   }
-  execFileSync("notify-send", ["🔑 Autofilled", item.name]);
+  execFileSync("notify-send", ["Autofilled", item.name]);
   execFileSync("vicinae", ["close"]);
 }

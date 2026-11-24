@@ -62,8 +62,8 @@ done < <(jq -r --argjson id "$id" ".[] | select(.id != \$id) | $fields" <<<"$sna
 if [ "$out" = "ok" ]; then
   actual=$(hyprctl -j monitors | jq -r --argjson id "$id" '.[] | select(.id == $id) | .scale')
   notify-send -t 1500 -h "string:x-canonical-private-synchronous:hypr-scale" \
-    "🖥 $name" "scale $scale → $actual"
+    "$name" "scale $scale → $actual"
 else
   notify-send -t 3000 -h "string:x-canonical-private-synchronous:hypr-scale" \
-    "🖥 $name" "scale $new rejected: $out"
+    "$name" "scale $new rejected: $out"
 fi

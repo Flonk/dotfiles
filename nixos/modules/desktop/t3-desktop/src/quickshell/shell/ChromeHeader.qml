@@ -225,7 +225,7 @@ Item {
                     width: parent.width
                     elide: Text.ElideRight
                     value: WifiWidget.localIp
-                    title: "🏠 Local IP copied!"
+                    title: "Local IP copied!"
                 }
 
                 Copy {
@@ -233,7 +233,7 @@ Item {
                     width: parent.width
                     elide: Text.ElideRight
                     value: WifiWidget.gatewayIp
-                    title: "🚪 Gateway IP copied!"
+                    title: "Gateway IP copied!"
                 }
 
                 Copy {
@@ -241,7 +241,7 @@ Item {
                     width: parent.width
                     elide: Text.ElideRight
                     value: WifiWidget.publicIp
-                    title: "🌐 Public IP copied!"
+                    title: "Public IP copied!"
                 }
             }
         }

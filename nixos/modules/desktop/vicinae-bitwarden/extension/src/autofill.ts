@@ -14,7 +14,7 @@ export default async function Autofill(props: LaunchProps<{ arguments: { query: 
   }
   const [item] = matchItems(listItems(), query);
   if (!item) {
-    execFileSync("notify-send", ["🔑 No vault match", query]);
+    execFileSync("notify-send", ["No vault match", query]);
     return;
   }
   await autofillCredentials(item, "");
