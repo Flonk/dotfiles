@@ -8,6 +8,7 @@ Item {
     property string topic
     property string text
     property string detail
+    property string icon
     property string level
     property bool attention
     property bool conforming: true
@@ -21,6 +22,8 @@ Item {
     property bool columns: false
 
     readonly property var levelColor: ({ error: Theme.error400, warn: "#d6b13c", info: T3.cream })
+    readonly property var iconColor: ({ error: Theme.error400, warn: "#d6b13c", info: T3.accent2 })
+    readonly property real indent: icon ? 30 : 9
     readonly property string flag: conforming ? "" : "? "
     readonly property string head: [showTime ? time : "", showSource ? source : "", showTopic ? topic : ""].filter(s => s).join("  ")
     readonly property var rows: inline
@@ -40,8 +43,22 @@ Item {
         font.weight: Font.Medium
     }
 
+    Text {
+        visible: ev.icon !== ""
+        width: 22
+        height: parent.height
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        text: ev.icon
+        color: ev.attention ? Theme.error400 : ev.iconColor[ev.level] ?? ev.ink
+        opacity: ev.attention || ev.level in ev.iconColor ? 1 : 0.55
+        font.family: Theme.fontFamily
+        font.pixelSize: Math.round(T3.labelSize * 1.6)
+    }
+
     Rectangle {
         width: 3
+        visible: ev.icon === ""
         height: parent.height
         radius: 1
         color: ev.attention ? Theme.error400 : ev.levelColor[ev.level] ?? ev.ink
@@ -51,7 +68,7 @@ Item {
     Column {
         id: lines
         visible: !ev.columns
-        x: 9
+        x: ev.indent
         width: parent.width - x
         spacing: 1
 
@@ -78,7 +95,7 @@ Item {
     Text {
         id: message
         visible: ev.columns
-        x: 9
+        x: ev.indent
         width: parent.width - x - meta.width - 16
         anchors.verticalCenter: parent.verticalCenter
         text: ev.flag + ev.text

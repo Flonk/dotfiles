@@ -13,6 +13,23 @@ Item {
     property Item frame: null
     property Item join: null
     property int padding: 12
+    readonly property var icons: [
+        ["screen/shot", "\u{f0100}"],
+        ["screen/record/#", "\u{f044a}"],
+        ["screen/ocr", "\u{f113a}"],
+        ["screen/color", "\u{f020a}"],
+        ["rebuild/#", "\u{f313}"],
+        ["notify/blueman", "\u{f00af}"],
+        ["notify/#", "\u{f009a}"],
+        ["agent/#", "\u{f06a9}"],
+        ["vpn3it/#", "\u{f0582}"],
+        ["mutex/vpn3it/#", "\u{f0582}"],
+        ["mutex/crdp/#", "\u{f08b9}"],
+        ["display/#", "\u{f0379}"],
+        ["network/#", "\u{f05a9}"],
+        ["systemd/#", "\u{f0493}"],
+        ["cron/#", "\u{f0954}"]
+    ]
 
     readonly property vector4d cutout: {
         x; y; width; height; visible; parent?.x; parent?.y; frame?.width; join?.x; join?.width; join?.visible; join?.parent?.x;
@@ -47,6 +64,14 @@ Item {
         return data && typeof data.detail === "string" ? data.detail : "";
     }
 
+    function iconFor(topic, data) {
+        if (data && typeof data.icon === "string")
+            return data.icon;
+        const local = topic.replace(/^[^/]+\/(?=(screen|rebuild|notify|agent|vpn3it|mutex|display|network|systemd|cron)\/)/, "");
+        const hit = icons.find(i => matches(i[0], local));
+        return hit ? hit[1] : "";
+    }
+
     function show(topic, payload) {
         if (ignore.some(f => matches(f, topic)))
             return;
@@ -60,6 +85,7 @@ Item {
             topic: topic,
             text: ev ? ev.description : payload,
             detail: ev ? details(ev.data) : "",
+            icon: iconFor(topic, ev ? ev.data : null),
             level: ev ? ev.level : "",
             attention: ev ? ev.attention : false,
             conforming: ev !== null
@@ -111,6 +137,7 @@ Item {
             property string topic
             property string text
             property string detail
+            property string icon
             property string level
             property bool attention
             property bool conforming
@@ -166,6 +193,7 @@ Item {
                 topic: entry.topic
                 text: entry.text
                 detail: entry.detail
+                icon: entry.icon
                 level: entry.level
                 attention: entry.attention
                 conforming: entry.conforming

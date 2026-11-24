@@ -102,8 +102,8 @@ shot)
   fi
 
   [ "$clip" = 1 ] && wl-copy --type image/png <"$file"
-  [ "$notify" = 1 ] && notify-send -i "$file" "📸 Screenshot saved" "$(basename "$file")$([ "$clip" = 1 ] && echo " · copied")"
-  emit screen/shot "Took a screenshot of $what." \
+  [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip -i "$file" "📸 Screenshot saved$([ "$clip" = 1 ] && echo " and copied to clipboard")" "$(basename "$file")"
+  emit screen/shot "Screenshot saved$([ "$clip" = 1 ] && echo " and copied to clipboard")." \
     "$(jq -nc --arg path "$file" --arg mode "$mode" --argjson interactive "$interactive" '{path: $path, detail: ($path | split("/") | last), mode: $mode, interactive: $interactive}')"
   echo "$file"
   ;;
@@ -116,7 +116,7 @@ ocr)
     exit 1
   fi
   wl-copy <<<"$text"
-  [ "$notify" = 1 ] && notify-send "📸 OCR copied" "$(head -c 300 <<<"$text")"
+  [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip "📸 OCR copied" "$(head -c 300 <<<"$text")"
   emit screen/ocr "OCR read $(wc -w <<<"$text") words." \
     "$(jq -nc --arg t "$text" '{detail: ($t | gsub("\\s+"; " ") | .[0:80]), text: $t[0:2000], chars: ($t | length)}')"
   printf '%s\n' "$text"
@@ -129,7 +129,7 @@ color-pick)
     exit 1
   fi
   [ "$clip" = 1 ] && wl-copy <<<"$color"
-  [ "$notify" = 1 ] && notify-send "🎨 Colour $([ "$clip" = 1 ] && echo copied || echo picked)" "$color"
+  [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip "🎨 Colour $([ "$clip" = 1 ] && echo copied || echo picked)" "$color"
   emit screen/color "Picked colour $color." "$(jq -nc --arg c "$color" '{detail: $c, color: $c}')"
   echo "$color"
   ;;
@@ -236,7 +236,7 @@ record)
     echo "wf-recorder did not start, see $run/wf-recorder.log" >&2
     exit 1
   fi
-  [ "$notify" = 1 ] && notify-send -t 2000 "⏺ Recording" "$what"
+  [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip -t 2000 "⏺ Recording" "$what"
   echo "$file"
   ;;
 
@@ -260,7 +260,7 @@ _supervise)
   if [ -s "$file" ]; then
     echo "$file" >"$run/last"
     [ "${T3OS_REC_CLIP:-0}" = 1 ] && wl-copy --type text/uri-list <<<"file://$file"
-    [ "${T3OS_REC_NOTIFY:-0}" = 1 ] && notify-send "⏹ Recording saved" "$(basename "$file") · ${secs}s"
+    [ "${T3OS_REC_NOTIFY:-0}" = 1 ] && notify-send -h string:x-t3bus:skip "⏹ Recording saved" "$(basename "$file") · ${secs}s"
     emit screen/record/stopped "Recorded $what for ${secs}s." "$(jq -nc --arg path "$file" --argjson secs "$secs" --argjson s "$session" '{detail: ($path | split("/") | last), path: $path, seconds: $secs, mode: $s.mode}')"
   else
     rm -f "$file"

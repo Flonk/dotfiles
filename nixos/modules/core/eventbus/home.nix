@@ -119,7 +119,7 @@ let
       ]
     }
     busctl --user monitor --json=short --match="type='method_call',interface='org.freedesktop.Notifications',member='Notify'" \
-      | jq --unbuffered -c 'select(.member == "Notify") | .payload.data | {app: (.[0] // ""), summary: (.[3] // ""), body: (.[4] // ""), urgency: (.[6].urgency.data // 1)}' \
+      | jq --unbuffered -c 'select(.member == "Notify") | .payload.data | select(.[6]["x-t3bus"].data != "skip") | {app: (.[0] // ""), summary: (.[3] // ""), body: (.[4] // ""), urgency: (.[6].urgency.data // 1)}' \
       | while read -r n; do
           app=$(jq -r '.app | if . == "" then "unknown" else . end' <<<"$n")
           slug=$(tr -c 'a-zA-Z0-9\n' '-' <<<"$app" | tr 'A-Z' 'a-z')
