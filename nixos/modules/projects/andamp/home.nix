@@ -37,6 +37,7 @@ let
       crdp=free
       if [ -e "$d/queue.lock" ] && [ $(( $(date +%s) - $(stat -c %Y "$d/queue.lock") )) -lt 10 ]; then crdp=busy; fi
       if find "$d" -maxdepth 1 -regex '.*/transaction-[0-9a-f]+' 2>/dev/null | grep -q .; then crdp=held; fi
+      if find "$d" -maxdepth 1 -name 'transaction-*.user' 2>/dev/null | grep -q .; then crdp=yours; fi
       if [ $crdp = free ] && ! { [ -s "$d/freerdp.pid" ] && kill -0 "$(cat "$d/freerdp.pid")" 2>/dev/null; }; then crdp=off; fi
       waiting=$(find "$d/queue" -type f -newermt "-10 seconds" 2>/dev/null | wc -l)
       case $crdp in
@@ -44,6 +45,7 @@ let
         free) what="crdp is free" ;;
         busy) what="crdp is running a command" ;;
         held) what="A crdp transaction is in progress" ;;
+        yours) what="You hold the crdp screen" ;;
       esac
       [ "$waiting" -gt 0 ] && what="$what, $waiting waiting"
       what="$what."

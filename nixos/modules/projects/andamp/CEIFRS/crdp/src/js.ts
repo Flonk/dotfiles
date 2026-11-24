@@ -94,12 +94,22 @@ export async function js(args: string[]): Promise<void> {
         die(
           `refusing to paste: "vpn3it crdp ${readFileSync(unverified, "utf8")}" ran since the last js call and may have moved focus off the DevTools console, ` +
             `so the code could land in the page (Genie box, notebook cell). Run vpn3it crdp shot, make sure the Console prompt has the cursor ` +
-            `(click into it if not), then rerun with --focused`,
+            `(click into it if not, inside a transaction of your own), then rerun with --focused. ` +
+            `Don't ask the user for the screen: it is free unless another transaction holds it, and then this call just waits in the queue`,
         );
       rmSync(unverified);
     }
     if (workspace !== undefined && url !== undefined && previousUrl() !== url) await open(workspace, url);
-    const result = (await evaluate(code, Number(process.env.CRDP_JS_TIMEOUT || 30))) ?? die("no result, is the DevTools console focused?");
+    const result =
+      (await evaluate(code, Number(process.env.CRDP_JS_TIMEOUT || 30))) ??
+      die(
+        "no result: either the code is still running past CRDP_JS_TIMEOUT, or it never reached a DevTools console because something else has focus " +
+          "(another tab or window in front, the page itself, an address bar that turns the paste into a web search). " +
+          "Fix it yourself, don't ask the user: the screen is free unless another transaction holds it. " +
+          "T=$(vpn3it crdp transaction start), vpn3it crdp shot, bring the tab with the open DevTools console to the front (close a search tab the paste opened), " +
+          "click its Console prompt, shot again, then rerun with --transaction $T --focused and vpn3it crdp transaction stop $T. " +
+          "If the code has side effects, check whether it already ran before retrying.",
+      );
     if (!result.ok) {
       console.error(result.error);
       process.exit(1);

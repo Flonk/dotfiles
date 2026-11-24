@@ -3,10 +3,14 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { js, markUnverified } from "./js.js";
 import { die, display, run, state } from "./proc.js";
 import { keepalive, start, status, stop } from "./session.js";
-import { begin, end, hold, transactionFlag, unlock, within } from "./transaction.js";
+import { begin, end, grab, hold, transactionFlag, unlock, within } from "./transaction.js";
 import { paste, xdotool } from "./x11.js";
 
-const usage = `vpn3it crdp start [WxH]       Xephyr on ${display} (workspace 9) + xfreerdp, sized to the tiled window
+const usage = `The screen is shared through transactions only: while one is held everything else waits, otherwise it is free.
+Never ask the user whether you may use it. Holding a transaction, whatever is on screen is yours to rearrange:
+bring the window and tab you need to the front and focus its DevTools console yourself.
+
+vpn3it crdp start [WxH]     Xephyr on ${display} (workspace 9) + xfreerdp, sized to the tiled window
                               also starts a keepalive that nudges the mouse 1px and back every minute so the session never locks
 vpn3it crdp stop | status
 vpn3it crdp shot [file]       screenshot, prints the path
@@ -27,6 +31,7 @@ vpn3it crdp js [--workspace W] [--focused] CODE|FILE|-
 vpn3it crdp transaction start take the screen exclusively: queues, then prints a token; js and other transactions wait
                               expires after CRDP_TRANSACTION_IDLE seconds (default 600) without a js call using it
 vpn3it crdp transaction stop T release the screen
+vpn3it crdp transaction grab  the user's bar button, toggles a hold for the human; agents never run it
 vpn3it crdp transaction unlock force-release: drops every transaction and the queue lock, the next waiter goes`;
 
 const [cmd, ...given] = process.argv.slice(2);
@@ -85,7 +90,8 @@ async function main(): Promise<void> {
       if (args[0] === "stop") return end(arg(1));
       if (args[0] === "hold") return hold(arg(1));
       if (args[0] === "unlock") return unlock();
-      return die("usage: vpn3it crdp transaction start | stop TOKEN | unlock");
+      if (args[0] === "grab") return grab();
+      return die("usage: vpn3it crdp transaction start | stop TOKEN | grab | unlock");
     default:
       console.log(usage);
   }
