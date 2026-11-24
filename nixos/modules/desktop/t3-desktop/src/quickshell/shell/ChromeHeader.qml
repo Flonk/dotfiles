@@ -366,7 +366,7 @@ Item {
         id: ticker
         frame: root
         join: agents
-        x: root.center + root.markGap
+        x: Math.max(root.center + root.markGap, rightRow.x - 446)
         width: Math.max(0, rightRow.x - x)
         height: root.height
     }

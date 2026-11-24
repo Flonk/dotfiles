@@ -98,7 +98,7 @@ Item {
         visible: ev.columns
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        width: Math.min(implicitWidth, parent.width * 0.45)
+        width: Math.min(implicitWidth, parent.width * 0.3)
         spacing: 1
 
         Repeater {
@@ -107,7 +107,7 @@ Item {
             Text {
                 required property string modelData
                 anchors.right: parent.right
-                width: Math.min(implicitWidth, meta.parent.width * 0.45)
+                width: Math.min(implicitWidth, meta.parent.width * 0.3)
                 horizontalAlignment: Text.AlignRight
                 text: modelData
                 elide: Text.ElideLeft
