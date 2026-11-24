@@ -111,6 +111,10 @@ let
             matcher = "permission_prompt|elicitation_dialog";
             hooks = [ { type = "command"; command = "${agentState} waiting"; } ];
           }
+          {
+            matcher = "idle_prompt";
+            hooks = [ { type = "command"; command = "${agentState} idle"; } ];
+          }
         ];
         PreToolUse = [
           {

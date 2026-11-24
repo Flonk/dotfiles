@@ -16,8 +16,8 @@ active() { systemctl --user is-active -q "$1"; }
 
 holders() {
   [ -n "${VPN3IT_HUB_PORT:-}" ] || return 0
-  timeout 3 mosquitto_sub -h 127.0.0.1 -p "$VPN3IT_HUB_PORT" -t mutex/vpn3it/state -t '+/mutex/vpn3it/state' -v --retained-only -W 2 2>/dev/null |
-    awk -v self="$VPN3IT_SELF_TOPIC" -v hub="$VPN3IT_HUB_NAME" '$2 == "held" && $1 != self { n = split($1, p, "/"); print (n == 3 ? hub : p[1]) }' || true
+  timeout 3 mosquitto_sub -h 127.0.0.1 -p "$VPN3IT_HUB_PORT" -t mutex/vpn3it/state -t '+/mutex/vpn3it/state' -t '$SYS/broker/connection/+/state' -v --retained-only -W 2 2>/dev/null |
+    awk -v self="$VPN3IT_SELF_TOPIC" -v hub="$VPN3IT_HUB_NAME" -f "$VPN3IT_HOLDERS_AWK" || true
 }
 
 ask_token() {

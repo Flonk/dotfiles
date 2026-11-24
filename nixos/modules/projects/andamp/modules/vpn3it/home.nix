@@ -44,6 +44,7 @@ let
   hubEnv = {
     VPN3IT_PRIORITY = if cfg.vpn3itPriority then "1" else "0";
     VPN3IT_HOST_NAME = host;
+    VPN3IT_HOLDERS_AWK = "${./holders.awk}";
   }
   // lib.optionalAttrs bus.enable {
     VPN3IT_HUB_PORT = if bus.upstream != null then "18830" else "1883";
