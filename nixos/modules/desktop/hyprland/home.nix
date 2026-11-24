@@ -20,7 +20,7 @@ let
     { name = "internal"; title = "Use only the laptop panel"; usage = "Switches every external display off and keeps the laptop panel on."; }
     { name = "external"; title = "Use only the external displays"; usage = "Switches the laptop panel off and keeps every external display on, side by side."; }
     { name = "only"; title = "Use only one named display"; usage = "Keeps one display on and switches the rest off: t3os settings display only DP-2 (also accepts internal or external)."; }
-    { name = "cycle"; title = "Cycle extend, mirror, external only, internal only"; usage = "Steps to the next arrangement, like Win+P. Same as SUPER + P."; }
+    { name = "cycle"; title = "Cycle extend, mirror, external only, internal only"; usage = "Steps to the next arrangement, like Win+P. SUPER + P opens a picker instead."; }
     { name = "save"; title = "Remember the current arrangement for these displays"; usage = "Saves modes, positions, scale, rotation, mirroring and which displays are off, keyed by the set of connected displays (by name and model, not port). It is restored automatically whenever exactly these displays are plugged in again and after Hyprland reloads. Stored in ~/.config/t3os/displays.json."; }
     { name = "restore"; title = "Apply the saved arrangement for these displays"; usage = "Re-applies the layout saved with t3os settings display save for the displays currently connected."; }
     { name = "forget"; title = "Forget the saved arrangement for these displays"; usage = "Deletes the saved layout for the current set of displays, so plugging them in falls back to Hyprland's defaults."; }
@@ -107,7 +107,7 @@ in
     };
 
     wayland.windowManager.hyprland.extraConfig = ''
-      hl.bind("SUPER + P", hl.dsp.exec_cmd("t3os settings display cycle -n"))
+      hl.bind("SUPER + P", hl.dsp.exec_cmd("quickshell ipc call display toggle"))
       hl.monitor({ output = "eDP-1", mode = "${toString mon.width}x${toString mon.height}@${toString mon.hz}", position = "0x0", scale = 1.00 })
       hl.monitor({ output = "DP-2", mode = "5120x1440@120", position = "${toString mon.width}x0", scale = 1.00 })
     '';

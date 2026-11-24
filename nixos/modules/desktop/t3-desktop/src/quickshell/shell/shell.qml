@@ -12,6 +12,7 @@ ShellRoot {
     RecordBar {}
 
     Askpass {}
+    DisplayPicker {}
 
     LockContext {
         id: lockContext
