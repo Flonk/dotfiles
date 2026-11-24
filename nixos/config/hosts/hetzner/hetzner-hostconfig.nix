@@ -23,6 +23,7 @@
         "+/network/#" = "drop";
         "+/vpn3it/#" = "drop";
         "+/rebuild/started" = "drop";
+        "+/notify/blueman" = "drop";
         "+/screen/record/failed" = 4;
       };
     };
