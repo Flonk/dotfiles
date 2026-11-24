@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 
 Item {
     id: root
@@ -111,28 +110,6 @@ Item {
             font.pixelSize: Math.round(parent.size * 15 / 40)
             font.weight: Font.Bold
         }
-    }
-
-    ChromeSurface {
-        visible: root.renderScene
-        anchors.fill: parent
-        overlayMode: 1
-        cutout: lockHeader.cutout
-        cutout2: lockHeader.cutout2
-        cutout3: lockHeader.cutout3
-        cutout4: lockHeader.cutout4
-    }
-
-    ChromeHeader {
-        id: lockHeader
-        visible: root.renderScene
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: T3.band
-        screenSize: Qt.vector2d(root.width, root.height)
-        monitor: Hyprland.focusedMonitor
-        interactive: false
     }
 
     TextInput {
