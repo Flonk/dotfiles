@@ -34,7 +34,7 @@ lua() {
 
 rule() {
   local name=$1 mode=$2 pos=$3 scale=$4 extra=${5:-}
-  lua "hl.monitor({ output = \"$name\", mode = \"$mode\", position = \"$pos\", scale = $scale$extra })"
+  lua "hl.monitor({ output = \"$name\", mode = \"$mode\", position = \"$pos\", scale = $scale, disabled = false, mirror = \"\"$extra })"
 }
 
 hush() {
@@ -47,7 +47,7 @@ announce() {
   data=$(jq -cn --arg mode "$what" --argjson layout "$(layout)" '{mode: $mode, detail: ($layout | map(select(.disabled | not) | .description) | join(", ")), layout: $layout}')
   "$T3OS_BIN" bus emit display/changed info "$sentence" --data "$data" >/dev/null 2>&1 || true
   if [ "${NOTIFY:-}" = 1 ]; then
-    notify-send -t 2000 -h "string:x-canonical-private-synchronous:t3os-display" "🖥 Displays" "$what"
+    notify-send -t 2000 -h string:x-t3bus:skip -h "string:x-canonical-private-synchronous:t3os-display" "🖥 Displays" "$what"
   fi
 }
 

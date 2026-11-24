@@ -77,15 +77,17 @@ Item {
             return;
         const ev = parse(payload);
         const at = ev ? new Date(ev.timestamp) : new Date();
+        const icon = iconFor(topic, ev ? ev.data : null);
+        const said = ev ? ev.description : payload;
         if (current)
             current.leave();
         current = line.createObject(lines, {
             time: Qt.formatTime(isNaN(at) ? new Date() : at, "HH:mm:ss"),
             source: ev ? ev.source : "",
             topic: topic,
-            text: ev ? ev.description : payload,
+            text: icon ? said.replace(/^(?:[\u2190-\u2BFF\u2600-\u27BF]|[\uD83C-\uD83E][\uDC00-\uDFFF])[\uFE0F\u200D]*\s*/, "") : said,
             detail: ev ? details(ev.data) : "",
-            icon: iconFor(topic, ev ? ev.data : null),
+            icon: icon,
             level: ev ? ev.level : "",
             attention: ev ? ev.attention : false,
             conforming: ev !== null
