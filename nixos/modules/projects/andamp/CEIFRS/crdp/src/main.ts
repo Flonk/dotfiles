@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { markUnverified } from "./focus.js";
 import { js, open } from "./js.js";
-import { linkNames, links } from "./links.js";
+import { links } from "./links.js";
 import { die, display, run, state } from "./proc.js";
 import { keepalive, start, status, stop } from "./session.js";
 import { begin, end, grab, hold, tokenPattern, unlock, within } from "./transaction.js";
@@ -15,7 +15,7 @@ holding a transaction is the permission, and whatever is on screen is yours to r
 vpn3it crdp start [WxH]       Xephyr on ${display} (workspace 9) + xfreerdp, sized to the tiled window,
                               plus a keepalive that nudges the mouse every minute so the session never locks
 vpn3it crdp stop | status     stop refuses while a transaction is held
-vpn3it crdp links [NAME]      known web apps as NAME URL, or just the URL of NAME (${linkNames().join(", ")})
+vpn3it crdp links             the known web apps as NAME URL, open takes either
 
 vpn3it crdp begin [ID] [--timeout S] [--idle S]
                               wait for the screen, then print a transaction token T
@@ -105,7 +105,7 @@ async function main(): Promise<void> {
     case "status":
       return status();
     case "links":
-      return links(rest[0]);
+      return links();
     case "begin":
       return begin(rest);
     case "grab":
