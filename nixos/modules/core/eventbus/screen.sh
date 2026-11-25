@@ -94,7 +94,7 @@ shot)
   mkdir -p "$dir"
   file="$dir/$(date +%Y-%m-%d-%H%M%S)_$mode.png"
 
-  hyprshot "${args[@]}" -r png >"$file" 2>/dev/null || true
+  { hyprshot "${args[@]}" -r png 2>/dev/null || true; } | cat >"$file"
   if ! [ -s "$file" ]; then
     rm -f "$file"
     if [ "$interactive" = true ]; then echo "screenshot cancelled" >&2; else echo "screenshot failed" >&2; fi
