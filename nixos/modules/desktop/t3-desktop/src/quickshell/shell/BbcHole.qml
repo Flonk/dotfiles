@@ -20,7 +20,7 @@ Item {
     readonly property var mutexColor: ({ off: "#6b7078", free: T3.accent2, busy: "#d6b13c", held: "#d6b13c", yours: "#d6b13c" })
     readonly property var mutexColorFor: ({ vpn3it: { free: "#6b7078", held: T3.accent2 } })
     readonly property var mutexLabel: ({ crdp: "R", vpn3it: "3" })
-    readonly property var mutexAction: ({ vpn3it: ["vpn3it-toggle"], crdp: ["vpn3it", "crdp", "transaction", "grab"] })
+    readonly property var mutexAction: ({ vpn3it: ["vpn3it-toggle"], crdp: ["vpn3it", "crdp", "grab"] })
     readonly property var mutexes: Object.keys(mutexStates).sort()
     readonly property var hosts: {
         const seen = {};

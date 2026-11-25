@@ -1,43 +1,51 @@
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { js, markUnverified } from "./js.js";
+import { markUnverified } from "./focus.js";
+import { js, open } from "./js.js";
+import { linkNames, links } from "./links.js";
 import { die, display, run, state } from "./proc.js";
 import { keepalive, start, status, stop } from "./session.js";
-import { begin, end, grab, hold, transactionFlag, unlock, within } from "./transaction.js";
+import { begin, end, grab, hold, tokenPattern, unlock, within } from "./transaction.js";
 import { paste, xdotool } from "./x11.js";
 
-const usage = `The screen is shared through transactions only: while one is held everything else waits, otherwise it is free.
-Never ask the user whether you may use it. Holding a transaction, whatever is on screen is yours to rearrange:
-bring the window and tab you need to the front and focus its DevTools console yourself.
+const usage = `Everything on the screen goes through a transaction. One holds the screen at a time, the others wait in the queue.
+Between transactions the window takes no input at all. Never ask the user whether you may use the screen:
+holding a transaction is the permission, and whatever is on screen is yours to rearrange.
 
-vpn3it crdp start [WxH]     Xephyr on ${display} (workspace 9) + xfreerdp, sized to the tiled window
-                              also starts a keepalive that nudges the mouse 1px and back every minute so the session never locks
-vpn3it crdp stop | status
-vpn3it crdp shot [file]       screenshot, prints the path
-                              the commands below until edge drive the screen and need --transaction T (or CRDP_TRANSACTION=T) first
-vpn3it crdp click X Y [btn] | dclick X Y | move X Y | scroll up|down [n]
-vpn3it crdp type TEXT         type via the de keymap
-vpn3it crdp key KEY...        e.g. ctrl+s super+r Return
-vpn3it crdp paste TEXT        put TEXT on the session clipboard and ctrl+v it
-vpn3it crdp clip              print the session clipboard
-vpn3it crdp edge [url]        open url in InPrivate Edge via Win+R (new tab if an InPrivate window exists)
-vpn3it crdp js [--workspace W] [--focused] CODE|FILE|-
+vpn3it crdp start [WxH]       Xephyr on ${display} (workspace 9) + xfreerdp, sized to the tiled window,
+                              plus a keepalive that nudges the mouse every minute so the session never locks
+vpn3it crdp stop | status     stop refuses while a transaction is held
+vpn3it crdp links [NAME]      known web apps as NAME URL, or just the URL of NAME (${linkNames().join(", ")})
+
+vpn3it crdp begin [ID] [--timeout S] [--idle S]
+                              wait for the screen, then print a transaction token T
+                              ID names you (letters, digits, . _ -); without one you get a short random id on stderr, keep it
+                              if you held the screen last, carry on; if someone else did, begin tells you what to check first
+                              --timeout gives up after S seconds in the queue (exit 75)
+                              --idle ends T after S seconds without a command (default CRDP_TRANSACTION_IDLE or 600)
+vpn3it crdp T end             release the screen, always before waiting on anything
+
+vpn3it crdp T shot [file]     screenshot, prints the path
+vpn3it crdp T click X Y [btn] | dclick X Y | move X Y | scroll up|down [n]
+vpn3it crdp T type TEXT       type via the de keymap (garbles : / - y z, use paste for anything else)
+vpn3it crdp T key KEY...      e.g. ctrl+s super+r Return
+vpn3it crdp T paste TEXT      put TEXT on the session clipboard and ctrl+v it
+vpn3it crdp T clip            print the session clipboard
+vpn3it crdp T edge [url]      open url in InPrivate Edge via Win+R
+vpn3it crdp T js [--focused] CODE|FILE|-
                               run CODE as an async function body in the focused DevTools console, prints the returned value as JSON
-                              after start, click, dclick, type, key, paste or edge it refuses to paste until rerun with --focused:
-                              check vpn3it crdp shot first that the Console prompt has the cursor, otherwise the code lands in the page
-                              W is ${Object.keys(JSON.parse(process.env.CRDP_WORKSPACES ?? "{}")).join(" | ")}, the tab is navigated there first unless it's already open
-                              calls are queued globally and run one at a time, waiters report their position on stderr
-                              --transaction T (or CRDP_TRANSACTION=T) runs inside transaction T, skipping the queue
-vpn3it crdp transaction start take the screen exclusively: queues, then prints a token; js and other transactions wait
-                              expires after CRDP_TRANSACTION_IDLE seconds (default 600) without a js call using it
-vpn3it crdp transaction stop T release the screen
-vpn3it crdp transaction grab  the user's bar button, toggles a hold for the human; agents never run it
-vpn3it crdp transaction unlock force-release: drops every transaction and the queue lock, the next waiter goes`;
+vpn3it crdp T open [--focused] NAME|URL
+                              navigate the tab of the focused DevTools console to a link or URL and wait until it has loaded
+                              js and open refuse to paste until rerun with --focused whenever focus may have moved:
+                              after a begin that followed someone else, after click, dclick, type, key, paste or edge,
+                              and after a js or open without result. Check with T shot that the Console prompt has the cursor first
 
-const [cmd, ...given] = process.argv.slice(2);
-const screen = ["click", "dclick", "move", "scroll", "type", "key", "paste", "edge"];
-const { token, rest: args } = screen.includes(cmd) ? transactionFlag(given) : { token: undefined, rest: given };
-const arg = (i: number) => args[i] ?? die(`${cmd}: missing argument ${i + 1}, see vpn3it crdp without arguments`);
+vpn3it crdp grab              the user's bar button: toggles a hold for t3os, the only holder whose mouse and keyboard reach the window
+                              agents never run it
+vpn3it crdp unlock            force-release: drops every transaction and the queue lock, only when the user asks`;
+
+const focusMoving = ["click", "dclick", "type", "key", "paste", "edge"];
+const screen = ["shot", "click", "dclick", "move", "scroll", "type", "key", "paste", "clip", "edge", "js", "open", "end"];
 
 function shot(out = join(state, "shot.png")): void {
   run("import", "-window", "root", out);
@@ -51,16 +59,14 @@ async function edge(url = ""): Promise<void> {
   xdotool("key", "Return");
 }
 
-async function main(): Promise<void> {
-  if (screen.includes(cmd)) within(token ?? die(`${cmd} needs --transaction T (or CRDP_TRANSACTION=T), see vpn3it crdp transaction start`));
-  if (["start", "click", "dclick", "type", "key", "paste", "edge"].includes(cmd)) markUnverified([cmd, ...args].join(" ").slice(0, 80));
+async function inside(token: string, cmd: string | undefined, args: string[]): Promise<void> {
+  const arg = (i: number) => args[i] ?? die(`${cmd}: missing argument ${i + 1}, see vpn3it crdp without arguments`);
+  if (cmd === undefined || !screen.includes(cmd)) die(`unknown command ${cmd ?? "(none)"} for transaction ${token}, see vpn3it crdp without arguments`);
+  within(token);
+  if (focusMoving.includes(cmd)) markUnverified(`"vpn3it crdp T ${[cmd, ...args].join(" ").slice(0, 80)}" ran since the last js`);
   switch (cmd) {
-    case "start":
-      return start(args[0]);
-    case "stop":
-      return stop();
-    case "status":
-      return status();
+    case "end":
+      return end(token);
     case "shot":
       return shot(args[0]);
     case "click":
@@ -81,20 +87,39 @@ async function main(): Promise<void> {
       return run("xclip", "-selection", "clipboard", "-o");
     case "edge":
       return edge(args[0]);
+    case "js":
+      return js(token, args);
+    case "open":
+      return open(token, args);
+  }
+}
+
+async function main(): Promise<void> {
+  const [first, ...rest] = process.argv.slice(2);
+  if (first !== undefined && tokenPattern.test(first)) return inside(first, rest[0], rest.slice(1));
+  switch (first) {
+    case "start":
+      return start(rest[0]);
+    case "stop":
+      return stop();
+    case "status":
+      return status();
+    case "links":
+      return links(rest[0]);
+    case "begin":
+      return begin(rest);
+    case "grab":
+      return grab();
+    case "unlock":
+      return unlock();
     case "keepalive":
       return keepalive();
-    case "js":
-      return js(args);
-    case "transaction":
-      if (args[0] === "start") return begin();
-      if (args[0] === "stop") return end(arg(1));
-      if (args[0] === "hold") return hold(arg(1));
-      if (args[0] === "unlock") return unlock();
-      if (args[0] === "grab") return grab();
-      return die("usage: vpn3it crdp transaction start | stop TOKEN | grab | unlock");
-    default:
-      console.log(usage);
+    case "hold":
+      return hold(rest[0] ?? die("hold: missing token"));
   }
+  if (first !== undefined && screen.includes(first))
+    die(`${first} runs inside a transaction: T=$(vpn3it crdp begin [ID]), then vpn3it crdp $T ${first} ..., and vpn3it crdp $T end`);
+  console.log(usage);
 }
 
 main().catch((e) => {

@@ -1,19 +1,11 @@
-import { existsSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, statSync } from "node:fs";
 import { setTimeout as sleep } from "node:timers/promises";
-import { die, readSecret, state } from "./proc.js";
-import { queued } from "./queue.js";
-import { within } from "./transaction.js";
+import { clearUnverified, markUnverified, unverified } from "./focus.js";
+import { resolve } from "./links.js";
+import { die } from "./proc.js";
 import { paste, readClipboard, xdotool } from "./x11.js";
 
 type Result = { crdp: string; ok: true; value?: unknown } | { crdp: string; ok: false; error: string };
-
-const lastUrl = join(state, "js-url");
-const unverified = join(state, "js-focus-unverified");
-
-export function markUnverified(command: string): void {
-  writeFileSync(unverified, command);
-}
 
 function source(args: string[]): string {
   if (args.length === 0 || args[0] === "-") return readFileSync(0, "utf8");
@@ -21,33 +13,21 @@ function source(args: string[]): string {
   return args.join(" ");
 }
 
-function parse(args: string[]): { workspace?: string; transaction?: string; focused: boolean; rest: string[] } {
-  const flags: Record<string, string> = {};
-  let i = 0;
-  for (; i < args.length; i++) {
-    if (args[i] === "--focused") {
-      flags.focused = "";
-      continue;
-    }
-    const flag = /^--(workspace|transaction)(?:=(.*))?$/.exec(args[i]);
-    if (!flag) break;
-    flags[flag[1]] = flag[2] ?? args[++i] ?? die(`--${flag[1]} needs a value`);
-  }
-  return { workspace: flags.workspace, transaction: flags.transaction ?? process.env.CRDP_TRANSACTION, focused: "focused" in flags, rest: args.slice(i) };
+function parse(args: string[]): { focused: boolean; rest: string[] } {
+  const focused = args[0] === "--focused";
+  return { focused, rest: focused ? args.slice(1) : args };
 }
 
-function workspaceUrl(workspace: string): string {
-  const paths: Record<string, string> = JSON.parse(process.env.CRDP_WORKSPACES ?? "{}");
-  if (!(workspace in paths)) die(`unknown workspace ${workspace}, expected one of ${Object.keys(paths).join(", ")}`);
-  return new URL(readSecret(paths[workspace])).href;
-}
-
-function previousUrl(): string | null {
-  try {
-    return readFileSync(lastUrl, "utf8");
-  } catch {
-    return null;
-  }
+function guard(token: string, focused: boolean): void {
+  const reason = unverified();
+  if (reason === null) return;
+  if (!focused)
+    die(
+      `refusing to paste: ${reason}, so focus may be off the DevTools console and the code could land in the page (Genie box, notebook cell). ` +
+        `Run vpn3it crdp ${token} shot, make sure the Console prompt has the cursor (click into it if not), then rerun with --focused. ` +
+        `Don't ask the user for the screen, your transaction is the permission`,
+    );
+  clearUnverified();
 }
 
 async function submit(code: string): Promise<void> {
@@ -68,8 +48,33 @@ async function evaluate(code: string, seconds: number): Promise<Result | null> {
   return null;
 }
 
-async function open(workspace: string, url: string): Promise<void> {
-  console.error(`crdp: js opening workspace ${workspace}`);
+function noResult(token: string): never {
+  markUnverified("the last js or open got no result");
+  return die(
+    "no result: either the code is still running past CRDP_JS_TIMEOUT, or it never reached a DevTools console because something else has focus " +
+      "(another tab or window in front, the page itself, an address bar that turns the paste into a web search). " +
+      `Fix it yourself, don't ask the user: vpn3it crdp ${token} shot, bring the tab with the open DevTools console to the front ` +
+      "(close a search tab the paste opened), click its Console prompt, shot again, then rerun with --focused. " +
+      "If the code has side effects, check whether it already ran before retrying.",
+  );
+}
+
+export async function js(token: string, args: string[]): Promise<void> {
+  const { focused, rest } = parse(args);
+  const code = source(rest);
+  guard(token, focused);
+  const result = (await evaluate(code, Number(process.env.CRDP_JS_TIMEOUT || 30))) ?? noResult(token);
+  if (!result.ok) {
+    console.error(result.error);
+    process.exit(1);
+  }
+  console.log(JSON.stringify(result.value ?? null, null, 2));
+}
+
+export async function open(token: string, args: string[]): Promise<void> {
+  const { focused, rest } = parse(args);
+  const url = resolve(rest[0] ?? die("open: missing NAME or URL, see vpn3it crdp links"));
+  guard(token, focused);
   await submit(`location.href = ${JSON.stringify(url)}`);
   const origin = new URL(url).origin;
   const deadline = Date.now() + 60_000;
@@ -77,46 +82,9 @@ async function open(workspace: string, url: string): Promise<void> {
     await sleep(1000);
     const probe = await evaluate(`return document.readyState === "complete" && location.origin`, 5);
     if (probe?.ok && probe.value === origin) {
-      writeFileSync(lastUrl, url);
+      console.log(url);
       return;
     }
   }
-  die(`workspace ${workspace} did not finish loading at ${origin}, is a login in the way?`);
-}
-
-export async function js(args: string[]): Promise<void> {
-  const { workspace, transaction, focused, rest } = parse(args);
-  const url = workspace === undefined ? undefined : workspaceUrl(workspace);
-  const code = source(rest);
-  const task = async () => {
-    if (existsSync(unverified)) {
-      if (!focused)
-        die(
-          `refusing to paste: "vpn3it crdp ${readFileSync(unverified, "utf8")}" ran since the last js call and may have moved focus off the DevTools console, ` +
-            `so the code could land in the page (Genie box, notebook cell). Run vpn3it crdp shot, make sure the Console prompt has the cursor ` +
-            `(click into it if not, inside a transaction of your own), then rerun with --focused. ` +
-            `Don't ask the user for the screen: it is free unless another transaction holds it, and then this call just waits in the queue`,
-        );
-      rmSync(unverified);
-    }
-    if (workspace !== undefined && url !== undefined && previousUrl() !== url) await open(workspace, url);
-    const result =
-      (await evaluate(code, Number(process.env.CRDP_JS_TIMEOUT || 30))) ??
-      die(
-        "no result: either the code is still running past CRDP_JS_TIMEOUT, or it never reached a DevTools console because something else has focus " +
-          "(another tab or window in front, the page itself, an address bar that turns the paste into a web search). " +
-          "Fix it yourself, don't ask the user: the screen is free unless another transaction holds it. " +
-          "T=$(vpn3it crdp transaction start), vpn3it crdp shot, bring the tab with the open DevTools console to the front (close a search tab the paste opened), " +
-          "click its Console prompt, shot again, then rerun with --transaction $T --focused and vpn3it crdp transaction stop $T. " +
-          "If the code has side effects, check whether it already ran before retrying.",
-      );
-    if (!result.ok) {
-      console.error(result.error);
-      process.exit(1);
-    }
-    console.log(JSON.stringify(result.value ?? null, null, 2));
-  };
-  if (transaction === undefined) return queued("js", task);
-  within(transaction);
-  await task();
+  die(`${origin} did not finish loading within 60s, take a vpn3it crdp ${token} shot: is a login in the way?`);
 }

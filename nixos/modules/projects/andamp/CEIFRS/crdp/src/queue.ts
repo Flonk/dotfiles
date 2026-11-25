@@ -30,6 +30,14 @@ function waiting(): string[] {
     .sort();
 }
 
+export function queueLength(): number {
+  try {
+    return waiting().length;
+  } catch {
+    return 0;
+  }
+}
+
 function acquire(ticket: string): boolean {
   if (stale(lock)) {
     console.error("crdp: queue lock went stale, taking over");
@@ -69,7 +77,7 @@ export function heartbeat(): NodeJS.Timeout {
   }, 1000);
 }
 
-export async function claim(label: string): Promise<string> {
+export async function claim(label: string, timeoutMs = Infinity): Promise<string | null> {
   mkdirSync(dir, { recursive: true });
   const ticket = `${String(Date.now()).padStart(15, "0")}-${process.pid}-${Math.floor(Math.random() * 32768)}`;
   const cleanup = () => release(ticket);
@@ -83,6 +91,11 @@ export async function claim(label: string): Promise<string> {
     writeFileSync(join(dir, ticket), "");
     const queue = waiting();
     if (queue[0] === ticket && acquire(ticket)) break;
+    if (Date.now() - since > timeoutMs) {
+      release(ticket);
+      process.off("exit", cleanup);
+      return null;
+    }
     const ahead = queue.indexOf(ticket) + (existsSync(lock) ? 1 : 0);
     if (ahead !== shown) console.error(`crdp: ${label} waiting, ${ahead} ahead in queue`);
     shown = ahead;
@@ -92,20 +105,6 @@ export async function claim(label: string): Promise<string> {
   process.off("exit", cleanup);
   if (shown !== undefined) console.error(`crdp: ${label} running after ${Math.round((Date.now() - since) / 1000)}s in queue`);
   return ticket;
-}
-
-export async function queued(label: string, task: () => Promise<void>): Promise<void> {
-  const ticket = await claim(label);
-  const cleanup = () => release(ticket);
-  process.on("exit", cleanup);
-  const beat = heartbeat();
-  try {
-    await task();
-  } finally {
-    clearInterval(beat);
-    release(ticket);
-    process.off("exit", cleanup);
-  }
 }
 
 export function forceRelease(): void {

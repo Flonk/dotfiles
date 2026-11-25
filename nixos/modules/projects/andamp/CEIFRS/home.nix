@@ -29,7 +29,7 @@ let
       -gfx +rfx
   '';
 
-  workspaces = {
+  links = {
     rf-test = "dtbxrftest";
     rf-preprod = "dtbxrfpreprod";
     rf-prod = "dtbxrfprod";
@@ -54,9 +54,9 @@ let
         --set CRDP_USER_FILE ${config.sops.secrets.rdp3ituser.path} \
         --set CRDP_PASS_FILE ${config.sops.secrets.rdp3itpass.path} \
         --set CRDP_BACKEND ${config.t3os.module.projects.andamp.crdpBackend} \
-        --set CRDP_WORKSPACES ${
+        --set CRDP_LINKS ${
           lib.escapeShellArg (
-            builtins.toJSON (lib.mapAttrs (_: key: config.sops.secrets.${key}.path) workspaces)
+            builtins.toJSON (lib.mapAttrs (_: key: config.sops.secrets.${key}.path) links)
           )
         } \
         --prefix PATH : ${
@@ -106,7 +106,7 @@ in
         "rdp3ituser"
         "rdp3itpass"
       ]
-      ++ lib.attrValues workspaces
+      ++ lib.attrValues links
     ) (key: { inherit key sopsFile; });
   };
 }
