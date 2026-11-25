@@ -18,12 +18,10 @@
     module.core.eventbus.push = {
       enable = true;
       rules = {
-        "+/display/#" = "drop";
-        "+/screen/#" = "drop";
-        "+/network/#" = "drop";
-        "+/vpn3it/#" = "drop";
-        "+/rebuild/started" = "drop";
-        "+/notify/blueman" = "drop";
+        "+/agent/+/event" = "attention";
+        "+/notify/#" = "attention";
+        "+/rebuild/failed" = "level";
+        "+/systemd/+/failed" = "level";
         "+/screen/record/failed" = 4;
       };
     };

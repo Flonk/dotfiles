@@ -121,7 +121,7 @@ in
     ];
 
     systemd.services.t3bus-ntfy-forward = {
-      description = "Forward every bus event to ntfy";
+      description = "Forward whitelisted bus events to ntfy";
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"

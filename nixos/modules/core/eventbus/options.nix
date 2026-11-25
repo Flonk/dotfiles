@@ -30,7 +30,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Run ntfy behind caddy and forward every bus event to it.";
+        description = "Run ntfy behind caddy and forward whitelisted bus events to it.";
       };
       domain = mkOption {
         type = types.str;
@@ -41,13 +41,20 @@ in
         default = 8443;
       };
       rules = mkOption {
-        type = types.attrsOf (types.either (types.enum [ "drop" ]) (types.ints.between 1 5));
+        type = types.attrsOf (
+          types.either (types.enum [
+            "drop"
+            "level"
+            "attention"
+          ]) (types.ints.between 1 5)
+        );
         default = { };
         example = {
-          "+/display/#" = "drop";
-          "+/agent/+/waiting" = 5;
+          "+/agent/+/event" = "attention";
+          "+/rebuild/failed" = "level";
+          "+/screen/record/failed" = 4;
         };
-        description = "MQTT patterns matched against <host>/<topic>, mapped to a fixed ntfy priority or \"drop\". The longest matching pattern wins; unmatched events keep the level-based priority.";
+        description = "Whitelist of MQTT patterns matched against <host>/<topic>. The longest matching pattern wins and maps to a fixed ntfy priority, \"level\" (level-based priority), \"attention\" (only attention events, level-based priority) or \"drop\". Unmatched events are dropped.";
       };
     };
   };

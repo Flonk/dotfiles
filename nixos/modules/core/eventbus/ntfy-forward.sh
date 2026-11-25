@@ -36,14 +36,15 @@ mosquitto_sub -h 127.0.0.1 -q 1 -c -i t3bus-ntfy-forward -t '#' -F '%r %t %p' | 
       | "^" + . + "$";
     "\($from)/\($path)" as $full
     | ([$rules | to_entries[] | select(.key as $k | $full | test($k | rx))] | max_by(.key | length) | .value) as $rule
-    | select($rule != "drop")
+    | select($rule != null and $rule != "drop")
+    | select($rule != "attention" or .attention == true)
     | ({error: 4, warn: 3, info: 2}[.level] // 1) as $p
     | ((.data | objects | .detail | strings) // "") as $d
     | {
         topic: $topic,
         title: "\($from) · \(.source)",
         message: (.description + (if $d != "" then "\n" + $d else "" end)),
-        priority: ($rule // ([$p + (if .attention then 1 else 0 end), 5] | min)),
+        priority: (if ($rule | type) == "number" then $rule else [$p + (if .attention then 1 else 0 end), 5] | min end),
         tags: [$from, .level, $path]
       }' <<<"$payload") || continue
   [ -n "$body" ] || continue
