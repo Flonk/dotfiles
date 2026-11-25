@@ -6,9 +6,6 @@
   ...
 }:
 {
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.allowReboot = true;
-
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
   systemd.services.NetworkManager-wait-online.enable = false;

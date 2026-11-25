@@ -21,6 +21,7 @@ in
     ../../modules/os/ipu6/system.nix
     ../../modules/os/memory-pressure/system.nix
     ../../modules/os/powersaver/system.nix
+    ../../modules/projects/andamp/system.nix
     ../../modules/projects/andamp/CEFKM/system.nix
     ../../modules/projects/andamp/CEIFRS/system.nix
     ../../modules/projects/andamp/modules/vpn3it/system.nix

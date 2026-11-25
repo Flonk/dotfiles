@@ -86,45 +86,6 @@ in
         };
         Install.WantedBy = [ "default.target" ];
       };
-
-      systemd.user.services.import-andamp-vpn = {
-        Unit = {
-          Description = "Import andamp-vpn profile to NetworkManager (idempotent)";
-          After = [
-            "default.target"
-            "sops-nix.service"
-          ];
-          ConditionPathExists = [
-            "${config.sops.secrets.andamp-vpn.path}"
-            "${config.sops.secrets.andamp-vpn-user.path}"
-            "${config.sops.secrets.andamp-vpn-pass.path}"
-          ];
-        };
-        Service = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = (
-            pkgs.writeShellScript "import-andamp-vpn" ''
-              set -euo pipefail
-              NAME="andamp-vpn"
-              NMCLI="${pkgs.networkmanager}/bin/nmcli"
-              if $NMCLI -t -f NAME con show | ${pkgs.gnugrep}/bin/grep -Fxq "$NAME"; then
-                echo "$NAME already present; skipping import."
-              else
-                echo "Importing $NAME from ${config.sops.secrets.andamp-vpn.path}"
-                $NMCLI connection import type openvpn file "${config.sops.secrets.andamp-vpn.path}"
-              fi
-              $NMCLI connection modify "$NAME" \
-                +vpn.data "username=$(cat "${config.sops.secrets.andamp-vpn-user.path}")" \
-                +vpn.data "password-flags=0" \
-                vpn.secrets "password=$(cat "${config.sops.secrets.andamp-vpn-pass.path}")"
-            ''
-          );
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
     })
   ];
 }
