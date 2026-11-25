@@ -51,7 +51,7 @@ let
       [ "$waiting" -gt 0 ] && what="$what, $waiting waiting"
       what="$what."
       report crdp "$crdp" "$waiting" "$what"
-      sleep 2
+      sleep 1
     done
   '';
 in

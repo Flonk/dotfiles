@@ -16,7 +16,6 @@ const defaultIdle = Number(process.env.CRDP_TRANSACTION_IDLE || 180);
 const file = (token: string) => join(state, `transaction-${token}`);
 const log = (token: string) => join(state, `transaction-${token}.holder.log`);
 const lastHolderFile = join(state, "last-holder");
-const grabbing = join(state, "grab.pid");
 
 function read(token: string): Transaction | null {
   try {
@@ -110,16 +109,6 @@ export async function begin(args: string[]): Promise<void> {
   console.log(token);
 }
 
-function pendingGrab(): number | null {
-  try {
-    const pid = Number(readFileSync(grabbing, "utf8"));
-    process.kill(pid, 0);
-    return pid;
-  } catch {
-    return null;
-  }
-}
-
 export async function grab(): Promise<void> {
   const mine = tokens().filter((token) => read(token)?.id === human);
   if (mine.length > 0) {
@@ -127,16 +116,13 @@ export async function grab(): Promise<void> {
     console.error("crdp: released your hold on the screen");
     return;
   }
-  const pending = pendingGrab();
-  if (pending !== null) {
-    process.kill(pending);
-    rmSync(grabbing, { force: true });
-    console.error("crdp: cancelled your waiting grab");
-    return;
-  }
-  writeFileSync(grabbing, String(process.pid));
-  process.on("exit", () => rmSync(grabbing, { force: true }));
-  await take(human, Infinity);
+  const busy = () => {
+    const now = current();
+    console.error(`crdp: ${now?.id ?? "someone"} holds the screen, try again when it is free`);
+    process.exit(75);
+  };
+  if (holder() !== null) busy();
+  if ((await take(human, Infinity, 2)) === null) busy();
   console.error("crdp: the screen is yours until you grab again, agents wait meanwhile");
 }
 

@@ -121,15 +121,49 @@ Item {
             model: hole.mutexes
 
             HoleSquare {
+                id: mutexSquare
                 required property string modelData
-                readonly property string state: hole.mutexStates[modelData] ?? "free"
+                readonly property string mstate: hole.mutexStates[modelData] ?? "free"
                 readonly property int waiting: parseInt(hole.mutexWaiting[modelData] ?? "0") || 0
-                ink: waiting > 0 && state !== "yours" ? Theme.error400 : (hole.mutexColorFor[modelData] ?? hole.mutexColor)[state] ?? hole.stateColor.offline
-                dark: !(state === "off" || (modelData in hole.mutexColorFor && state === "free"))
-                label: waiting > 0 ? String(waiting) : hole.mutexLabel[modelData] ?? modelData.slice(0, 2)
-                glow: state === "yours"
-                clickable: modelData in hole.mutexAction
-                onClicked: Quickshell.execDetached(hole.mutexAction[modelData])
+                property bool pending: false
+                property bool failed: false
+                onMstateChanged: pending = false
+                ink: failed || (waiting > 0 && mstate !== "yours") ? Theme.error400 : (hole.mutexColorFor[modelData] ?? hole.mutexColor)[mstate] ?? hole.stateColor.offline
+                dark: failed || !(mstate === "off" || (modelData in hole.mutexColorFor && mstate === "free"))
+                label: failed ? "!" : waiting > 0 ? String(waiting) : hole.mutexLabel[modelData] ?? modelData.slice(0, 2)
+                glow: mstate === "yours" && !failed
+                busy: pending && !failed
+                clickable: modelData in hole.mutexAction && !pending
+                onClicked: {
+                    failed = false;
+                    pending = true;
+                    settle.restart();
+                    action.command = hole.mutexAction[modelData];
+                    action.running = true;
+                }
+
+                Process {
+                    id: action
+                    onExited: code => {
+                        if (code === 0)
+                            return;
+                        mutexSquare.pending = false;
+                        mutexSquare.failed = true;
+                        failure.restart();
+                    }
+                }
+
+                Timer {
+                    id: settle
+                    interval: 5000
+                    onTriggered: mutexSquare.pending = false
+                }
+
+                Timer {
+                    id: failure
+                    interval: 2000
+                    onTriggered: mutexSquare.failed = false
+                }
             }
         }
     }
