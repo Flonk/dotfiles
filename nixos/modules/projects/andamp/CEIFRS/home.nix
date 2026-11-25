@@ -54,6 +54,7 @@ let
         --set CRDP_USER_FILE ${config.sops.secrets.rdp3ituser.path} \
         --set CRDP_PASS_FILE ${config.sops.secrets.rdp3itpass.path} \
         --set CRDP_BACKEND ${config.t3os.module.projects.andamp.crdpBackend} \
+        --set CRDP_TRANSACTION_IDLE ${toString config.t3os.module.projects.andamp.crdpTransactionIdle} \
         --set CRDP_LINKS ${
           lib.escapeShellArg (
             builtins.toJSON (lib.mapAttrs (_: key: config.sops.secrets.${key}.path) links)

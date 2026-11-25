@@ -22,7 +22,7 @@ vpn3it crdp begin [ID] [--timeout S] [--idle S]
                               ID names you (letters, digits, . _ -); without one you get a short random id on stderr, keep it
                               if you held the screen last, carry on; if someone else did, begin tells you what to check first
                               --timeout gives up after S seconds in the queue (exit 75)
-                              --idle ends T after S seconds without a command (default CRDP_TRANSACTION_IDLE or 600)
+                              --idle ends T after S seconds without a command (default CRDP_TRANSACTION_IDLE, ${process.env.CRDP_TRANSACTION_IDLE || 180}s here)
 vpn3it crdp T end             release the screen, always before waiting on anything
 
 vpn3it crdp T shot [file]     screenshot, prints the path

@@ -23,6 +23,11 @@ in
       ];
       default = "xephyr";
     };
+    crdpTransactionIdle = mkOption {
+      type = types.ints.positive;
+      default = 180;
+      description = "Seconds a crdp transaction may sit without a command before it ends.";
+    };
     doubletunnel = mkOption {
       type = types.bool;
       default = false;

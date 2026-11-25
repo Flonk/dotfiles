@@ -12,7 +12,7 @@ export const tokenPattern = /^[0-9a-f]{8}$/;
 
 type Transaction = { ticket: string; id: string; idle: number };
 
-const defaultIdle = Number(process.env.CRDP_TRANSACTION_IDLE || 600);
+const defaultIdle = Number(process.env.CRDP_TRANSACTION_IDLE || 180);
 const file = (token: string) => join(state, `transaction-${token}`);
 const log = (token: string) => join(state, `transaction-${token}.holder.log`);
 const lastHolderFile = join(state, "last-holder");
