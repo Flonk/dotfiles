@@ -45,6 +45,7 @@ in
           "nix-command"
           "flakes"
         ];
+        auto-optimise-store = true;
         max-jobs = "auto";
         cores = 0;
         substituters = [
