@@ -20,6 +20,8 @@
     ../../modules/ai/copilot-cli/home.nix
     ../../modules/ai/pi/home.nix
 
+    ../../modules/development/gh/home.nix
+    ../../modules/development/lean/home.nix
     ../../modules/development/obsidian/home.nix
     ../../modules/development/vscode/home.nix
     ../../modules/development/zed-editor/home.nix

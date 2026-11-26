@@ -21,6 +21,7 @@
       };
     };
     development = {
+      gh.enable = true;
       obsidian.enable = true;
     };
     projects.andamp = {

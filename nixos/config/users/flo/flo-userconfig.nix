@@ -60,6 +60,8 @@
       pi.enable = true;
     };
     development = {
+      gh.enable = true;
+      lean.enable = true;
       obsidian = {
         enable = true;
         ui.enable = true;

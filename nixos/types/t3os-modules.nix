@@ -34,6 +34,8 @@
     ../modules/desktop/vicinae-bitwarden/options.nix
 
     ../modules/development/dnsmasq/options.nix
+    ../modules/development/gh/options.nix
+    ../modules/development/lean/options.nix
     ../modules/development/obsidian/options.nix
     ../modules/development/qemu/options.nix
     ../modules/development/vscode/options.nix

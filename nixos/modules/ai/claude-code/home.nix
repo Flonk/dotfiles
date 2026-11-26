@@ -153,7 +153,6 @@ in
       home.file.".claude/CLAUDE.md".source = ../../../../CLAUDE.global.md;
 
       home.packages = [
-        pkgs.gh
         claudeScript
         claudeChromeScript
         autoXephyrScript
