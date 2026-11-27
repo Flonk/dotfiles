@@ -52,10 +52,7 @@
       "vicinae-bitwarden".enable = true;
     };
     ai = {
-      "claude-code" = {
-        enable = true;
-        service.enable = true;
-      };
+      "claude-code".enable = true;
       "copilot-cli".enable = true;
       pi.enable = true;
     };

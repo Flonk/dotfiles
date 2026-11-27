@@ -13,6 +13,7 @@
     ../../modules/core/git/home.nix
     ../../modules/core/keyring/home.nix
     ../../modules/core/t3os-scripts/home.nix
+    ../../modules/core/agents/home.nix
     ../../modules/core/sops/home.nix
     ../../modules/core/ssh/home.nix
     ../../modules/core/zsh/home.nix

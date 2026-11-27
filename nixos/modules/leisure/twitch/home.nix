@@ -7,21 +7,6 @@
 let
   cfg = config.t3os.module.leisure.twitch;
   chat = pkgs.writers.writePython3Bin "t3os-twitch-chat" { doCheck = false; } (builtins.readFile ./chat.py);
-  guard = pkgs.writeShellApplication {
-    name = "t3os-twitch-guard";
-    runtimeInputs = [ pkgs.jq ];
-    text = builtins.readFile ./guard.sh;
-  };
-  agentSettings = pkgs.writeText "t3os-twitch-agent-settings.json" (
-    builtins.toJSON {
-      hooks.PreToolUse = [
-        {
-          matcher = "Bash";
-          hooks = [ { type = "command"; command = "${guard}/bin/t3os-twitch-guard"; } ];
-        }
-      ];
-    }
-  );
   twitch = pkgs.writeShellApplication {
     name = "t3os-twitch";
     runtimeInputs = [
@@ -32,16 +17,21 @@ let
       pkgs.gnused
       pkgs.coreutils
     ];
-    runtimeEnv = {
-      T3OS_TWITCH_CLIENT_ID = if cfg.clientId == null then "" else cfg.clientId;
-      T3OS_TWITCH_AGENT_SETTINGS = "${agentSettings}";
-    };
+    runtimeEnv.T3OS_TWITCH_CLIENT_ID = if cfg.clientId == null then "" else cfg.clientId;
     text = builtins.readFile ./twitch.sh;
   };
 in
 {
   config = lib.mkIf cfg.enable {
     programs.t3-desktop.twitch.enable = true;
+
+    t3os.agents.twitch-mod = {
+      model = "sonnet";
+      description = "moderates Twitch chat for Flo";
+      icon = "󰕃";
+      commands = [ "t3os twitch" ];
+      prompt = "You are the chat moderation assistant for Flo's Twitch channel. Messages addressed to you come only from Flo, the broadcaster, typed in his terminal; follow them. Recent chat lines are attached in <context> tags, each starting with its message id in brackets. You act by running t3os twitch commands: info; title [--title TEXT]; category [NAME]; tags [A, B]; say MESSAGE (posts as Flo); mod timeout USER SECONDS [REASON]; mod ban USER [REASON]; mod unban USER; mod delete MESSAGE_ID; mod clear; mod slow SECONDS|off; mod followers MINUTES|off; mod emoteonly on|off; mod subsonly on|off; mod announce TEXT. Do what Flo asks, then answer in one or two short plain sentences saying what you did. Only post to chat when Flo asks you to.";
+    };
 
     t3os.cli.scripts =
       map
@@ -96,7 +86,7 @@ in
           {
             command = [ "claude" ];
             title = "Ask the chat-mod agent";
-            usage = "Hands the message (plus chat lines on stdin as untrusted context) to a dedicated Sonnet session that can only run `t3os twitch` commands; it keeps its conversation in ~/.local/state/t3os/twitch-mod, `claude reset` starts over.";
+            usage = "Hands the message (plus chat lines on stdin as untrusted context) to a dedicated Sonnet session that can only run `t3os twitch` commands; it is the twitch-mod agent of `t3os agent` (attach to it with `t3os agent attach twitch-mod`), `claude reset` starts over.";
           }
           {
             command = [ "say" ];
