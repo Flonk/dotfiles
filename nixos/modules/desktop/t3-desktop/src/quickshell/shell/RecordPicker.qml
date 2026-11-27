@@ -398,7 +398,7 @@ Scope {
             anchors { top: true; bottom: true; left: true; right: true }
             exclusionMode: ExclusionMode.Ignore
             color: "transparent"
-            mask: root.interactive ? null : nothing
+            mask: root.interactive ? null : root.phase === "rec" ? camOnly : nothing
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.namespace: "t3-desktop-recorder-picker"
             WlrLayershell.keyboardFocus: root.focused && (root.phase === "pick" || mine) ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
@@ -416,6 +416,11 @@ Scope {
 
             Region {
                 id: nothing
+            }
+
+            Region {
+                id: camOnly
+                item: square
             }
 
             Item {
@@ -650,7 +655,7 @@ Scope {
 
                 MouseArea {
                     anchors.fill: parent
-                    enabled: root.phase === "adjust"
+                    enabled: root.phase === "adjust" || root.phase === "rec"
                     cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
                     property point grab
                     onPressed: mouse => grab = Qt.point(mouse.x, mouse.y)
