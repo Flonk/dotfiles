@@ -4,7 +4,7 @@ import Quickshell.Io
 Item {
     id: ticker
 
-    property var ignore: ["cron/jobs", "mutex/crdp/#", "+/status", "+/+/state", "+/+/subagents", "+/+/waiting"]
+    property var ignore: ["cron/jobs", "mutex/crdp/#", "+/status", "+/+/state", "+/+/meta", "+/+/subagents", "+/+/waiting"]
     readonly property var levels: ["error", "warn", "info", "http", "verbose", "debug", "silly"]
     readonly property var levelColor: ({ error: Theme.error400, warn: "#d6b13c", info: T3.accent2 })
     property int hold: 30000

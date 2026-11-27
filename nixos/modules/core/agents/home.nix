@@ -143,11 +143,11 @@ let
       "${settingsFor name a}"
       "--append-system-prompt"
       (promptFor a)
-      "--strict-mcp-config"
     ]
     ++ (
       if restricted a then
         [
+          "--strict-mcp-config"
           "--setting-sources"
           "project"
           "--disable-slash-commands"
