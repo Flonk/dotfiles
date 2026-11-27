@@ -6,6 +6,7 @@
     model = "opus";
     mode = "remote";
     description = "general agent on hetzner";
+    icon = "H";
     cwd = "/home/claude/repos/personal/dotfiles";
     subagents = [
       "sonnet"
