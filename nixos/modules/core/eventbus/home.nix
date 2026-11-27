@@ -26,6 +26,8 @@ let
       pkgs.hyprpicker
       pkgs.wf-recorder
       pkgs.slurp
+      pkgs.quickshell
+      pkgs.pulseaudio
       pkgs.mosquitto
       pkgs.util-linux
       pkgs.coreutils
@@ -280,7 +282,7 @@ in
             "record"
           ];
           title = "Record the active monitor";
-          usage = "Starts recording the active monitor, or the one named as an argument, to ~/Videos/Recordings and returns at once with the file path. Takes `monitor`, `window` or `region` as a mode like `screen shot`, `--audio` for the default microphone, -c to copy the file when it stops and -n for notifications. Emits screen/record/started, then screen/record/stopped with the path and length; a timer and stop button sit under the recorded area while it runs.";
+          usage = "Starts recording the active monitor, or the one named as an argument, to ~/Videos/Recordings and returns at once with the file path. Takes `monitor`, `window` or `region` as a mode like `screen shot`, `--audio` for the default microphone, `--system-audio` for what the default output plays (both are mixed), `--stream [--title TITLE]` to go live on Twitch instead of writing a file (needs the twitch module; it reconnects when the connection drops and relays chat to the bus), -c to copy the file when it stops and -n for notifications. Emits screen/record/started, then screen/record/stopped with the path and length; a timer and stop button sit under the recorded area while it runs.";
         }
         {
           command = [
@@ -307,7 +309,7 @@ in
             "region"
           ];
           title = "Drag a region to record";
-          usage = "A white veil covers the screen; drag a rectangle to record it. A timer and stop button appear below the rectangle. Stop with the bar or `t3os screen record stop`.";
+          usage = "A white veil covers the screen; drag a rectangle to record it, or press Enter for the whole monitor under the cursor. Hold Shift for advanced mode: Shift+drag or Shift+Enter shows toggles for webcam (w), microphone (m) and system audio (s) plus cancel and ok; the webcam square can be moved and resized inside the region. Ok starts a 3-2-1 countdown, after the camera delivers frames if the webcam is on. Plain drags and Enter record system audio only. A timer and stop button appear below the rectangle. Stop with the bar or `t3os screen record stop`.";
         }
         {
           command = [

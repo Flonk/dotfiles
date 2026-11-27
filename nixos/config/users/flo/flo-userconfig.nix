@@ -70,6 +70,10 @@
       "zed-editor".enable = true;
     };
     leisure = {
+      twitch = {
+        enable = true;
+        clientId = "gic9a4s3nclt4smisv60y0q2biw28u";
+      };
       minecraft.enable = true;
       lutris.enable = true;
       "obs-studio".enable = true;

@@ -159,7 +159,7 @@ Scope {
                     }
 
                     Label {
-                        text: "rec"
+                        text: win.s && win.s.stream ? "live" : "rec"
                     }
 
                     Label {

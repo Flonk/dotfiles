@@ -13,11 +13,14 @@ Item {
     property Item frame: null
     property Item join: null
     property int padding: 12
+    property var only: []
+
+    onOnlyChanged: if (current) current.leave()
     readonly property var icons: [
         ["screen/shot", "\u{f0100}"],
-        ["screen/record/#", "\u{f044a}"],
-        ["screen/ocr", "\u{f113a}"],
-        ["screen/color", "\u{f020a}"],
+        ["screen/record/#", "\u{f0ec2}"],
+        ["screen/ocr", "\u{f021a}"],
+        ["screen/color", "\u{f020b}"],
         ["rebuild/#", "\u{f313}"],
         ["notify/blueman", "\u{f00af}"],
         ["notify/#", "\u{f009a}"],
@@ -28,7 +31,8 @@ Item {
         ["display/#", "\u{f0379}"],
         ["network/#", "\u{f05a9}"],
         ["systemd/#", "\u{f0493}"],
-        ["cron/#", "\u{f0954}"]
+        ["cron/#", "\u{f0954}"],
+        ["twitch/#", "\u{f0543}"]
     ]
 
     readonly property vector4d cutout: {
@@ -74,6 +78,8 @@ Item {
 
     function show(topic, payload) {
         if (ignore.some(f => matches(f, topic)))
+            return;
+        if (only.length > 0 && !only.some(f => matches(f, topic)))
             return;
         const ev = parse(payload);
         const at = ev ? new Date(ev.timestamp) : new Date();

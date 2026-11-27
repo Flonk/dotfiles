@@ -22,8 +22,8 @@ Item {
     readonly property color textColor: T3.lighten(color, 0.35)
 
     readonly property vector4d cutout: {
-        x; y; width; height; parent?.x; parent?.y; parent?.parent?.x; parent?.parent?.y; frame?.width;
-        if (!frame)
+        x; y; width; height; visible; parent?.x; parent?.y; parent?.parent?.x; parent?.parent?.y; frame?.width;
+        if (!frame || !visible)
             return Qt.vector4d(0, 0, 0, 0);
         const p = mapToItem(frame, 0, 0);
         return Qt.vector4d(Math.round(p.x) + 1, Math.round(p.y), width - 2, height);

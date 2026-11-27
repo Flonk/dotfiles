@@ -46,6 +46,7 @@
     ../modules/leisure/obs-studio/options.nix
     ../modules/leisure/artcraft/options.nix
     ../modules/leisure/spotify/options.nix
+    ../modules/leisure/twitch/options.nix
 
     ../modules/os/ipu6/options.nix
     ../modules/os/memory-pressure/options.nix

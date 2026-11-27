@@ -56,4 +56,5 @@ QtObject {
     readonly property string fontFamily: _data.fontFamily
     readonly property int labelSize: _data.labelSize ?? 10
     readonly property real labelTracking: _data.labelTracking ?? 1.2
+    readonly property bool twitch: _data.twitch ?? false
 }

@@ -10,6 +10,7 @@ ShellRoot {
     Chrome {}
 
     RecordBar {}
+    RecordPicker {}
 
     Askpass {}
     DisplayPicker {}

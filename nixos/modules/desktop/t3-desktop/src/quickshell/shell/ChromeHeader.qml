@@ -14,7 +14,9 @@ Item {
     readonly property vector4d cutout2: agents.cutout
     readonly property vector4d cutout4: ticker.cutout
     readonly property vector4d cutout3: {
-        meters.x; meters.y; meters.width; meters.height; meters.parent?.x; meters.parent?.y; width;
+        meters.x; meters.y; meters.width; meters.height; meters.visible; meters.parent?.x; meters.parent?.y; width;
+        if (!meters.visible)
+            return Qt.vector4d(0, 0, 0, 0);
         const p = meters.mapToItem(root, 0, 0);
         return Qt.vector4d(Math.round(p.x), Math.round(p.y), meters.width, meters.height);
     }
@@ -105,6 +107,7 @@ Item {
 
         Row {
             spacing: 2
+            visible: !root.twitch
 
             Repeater {
                 model: root.workspaces
@@ -146,6 +149,7 @@ Item {
 
         Row {
             spacing: 10
+            visible: !root.twitch
 
             TextMetrics {
                 id: rateMetrics
@@ -249,6 +253,7 @@ Item {
         SysmonHole {
             id: sysmon
             frame: root
+            visible: !root.twitch
             values: SystemMonitor.coreUsages
             label: "CPU " + Math.round(SystemMonitor.cpuUsage * 100)
             rings: [
@@ -258,7 +263,7 @@ Item {
         }
 
         Item {
-            visible: MediaControlWidget.currentPlayer !== null
+            visible: !root.twitch && MediaControlWidget.currentPlayer !== null
             width: 270
             height: root.height
             opacity: mediaMouse.containsMouse ? 1 : 0.8
@@ -326,7 +331,15 @@ Item {
         running: true
         command: ["mosquitto_sub", "-h", "127.0.0.1", "-t", "screen/record/state"]
         stdout: SplitParser {
-            onRead: data => root.recording = data.trim().startsWith("{")
+            onRead: data => {
+                const d = data.trim();
+                root.recording = d.startsWith("{");
+                let s = null;
+                try {
+                    s = root.recording ? JSON.parse(d) : null;
+                } catch (e) {}
+                root.streaming = s !== null && s.stream === true;
+            }
         }
         onExited: recordRetry.start()
     }
@@ -338,6 +351,8 @@ Item {
     }
 
     property bool recording: false
+    property bool streaming: false
+    readonly property bool twitch: streaming || TwitchMode.preview
 
     Row {
         id: tools
@@ -346,10 +361,10 @@ Item {
 
         Repeater {
             model: [
-                { icon: "\u{f019e}", cmd: ["t3os", "screen", "shot", "region", "-c", "-n"] },
-                { icon: root.recording ? "\u{f04db}" : "\u{f044a}", cmd: root.recording ? ["t3os", "screen", "record", "stop"] : ["t3os", "screen", "record", "region", "-n"], hot: root.recording },
-                { icon: "\u{f113a}", cmd: ["t3os", "screen", "ocr", "-n"] },
-                { icon: "\u{f020a}", cmd: ["t3os", "screen", "color-pick", "-c", "-n"] }
+                { icon: "\u{f0100}", cmd: ["t3os", "screen", "shot", "region", "-c", "-n"] },
+                { icon: root.recording ? "\u{f04db}" : "\u{f0ec2}", cmd: root.recording ? ["t3os", "screen", "record", "stop"] : ["t3os", "screen", "record", "region", "-n"], hot: root.recording },
+                { icon: "\u{f021a}", cmd: ["t3os", "screen", "ocr", "-n"] },
+                { icon: "\u{f020b}", cmd: ["t3os", "screen", "color-pick", "-c", "-n"] }
             ]
 
             Status {
@@ -367,6 +382,7 @@ Item {
         id: ticker
         frame: root
         join: agents
+        only: root.twitch ? ["twitch/#"] : []
         x: Math.max(root.center + root.markGap, rightRow.x - 446)
         width: Math.max(0, rightRow.x - x)
         height: root.height
@@ -376,15 +392,19 @@ Item {
         id: rightRow
         anchors.right: parent.right
         anchors.rightMargin: 16
+        height: T3.band
+        leftPadding: root.twitch ? 16 : 0
         spacing: 16
 
         BbcHole {
             id: agents
             frame: root
+            hidden: root.twitch
         }
 
         Row {
             spacing: 10
+            visible: !root.twitch
 
             Label {
                 text: "\u{f025}"
@@ -400,6 +420,7 @@ Item {
 
         Row {
             id: meters
+            visible: !root.twitch
             spacing: 1
             leftPadding: 1
             rightPadding: 1
@@ -457,7 +478,7 @@ Item {
             Status {
                 anchors.right: parent.right
                 height: 12
-                visible: LanguageWidget.available
+                visible: !root.twitch && LanguageWidget.available
                 text: LanguageWidget.label
                 clickable: true
                 onClicked: LanguageWidget.cycle()

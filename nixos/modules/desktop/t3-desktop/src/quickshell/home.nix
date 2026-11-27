@@ -36,6 +36,7 @@ let
       error400 = c.base08;
       error600 = c.base09;
       success600 = c.base0B;
+      twitch = config.programs.t3-desktop.twitch.enable;
     };
 
   launchScript = pkgs.writeShellScript "t3-desktop-quickshell-launch" ''
@@ -43,6 +44,8 @@ let
       export XDG_RUNTIME_DIR="/run/user/$(id -u)"
     fi
     : "''${WAYLAND_DISPLAY:?WAYLAND_DISPLAY missing}"
+    export QML_IMPORT_PATH="${pkgs.qt6.qtmultimedia}/lib/qt-6/qml''${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}"
+    export QT_PLUGIN_PATH="${pkgs.qt6.qtmultimedia}/lib/qt-6/plugins''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}"
     for _ in $(seq 50); do
       if [ -S "''${XDG_RUNTIME_DIR}/''${WAYLAND_DISPLAY}" ]; then
         exec ${pkgs.quickshell}/bin/quickshell

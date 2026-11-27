@@ -49,7 +49,9 @@ Item {
         return Qt.vector4d(Math.round(p.x) + 1, Math.round(p.y), width - 2, height);
     }
 
-    visible: hosts.length > 0 || mutexes.length > 0
+    property bool hidden: false
+
+    visible: !hidden && (hosts.length > 0 || mutexes.length > 0)
     implicitWidth: 2 + 2 * padding + content.implicitWidth
     implicitHeight: T3.band
 

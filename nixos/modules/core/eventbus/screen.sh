@@ -7,6 +7,9 @@ active=0
 clip=0
 notify=0
 audio=0
+sysaudio=0
+live=0
+title=""
 sub=""
 while [ "$cmd" != _supervise ] && [ $# -gt 0 ]; do
   case "$1" in
@@ -14,6 +17,12 @@ while [ "$cmd" != _supervise ] && [ $# -gt 0 ]; do
   -c | --clipboard) clip=1 ;;
   -n | --notify) notify=1 ;;
   --audio) audio=1 ;;
+  --system-audio) sysaudio=1 ;;
+  --stream) live=1 ;;
+  --title)
+    shift
+    title="${1:-}"
+    ;;
   -*)
     echo "unknown option: $1" >&2
     exit 2
@@ -35,10 +44,11 @@ emit() {
   t3cron emit "$1" info "$2" --source t3os --data "$3" >/dev/null 2>&1 || true
 }
 
+
 usage() {
   cat >&2 <<'USAGE'
 usage: t3os screen shot [monitor [--active|NAME]|window [--active]|region] [-c] [-n]
-       t3os screen record [monitor [--active|NAME]|window [--active]|region] [--audio] [-c] [-n]
+       t3os screen record [monitor [--active|NAME]|window [--active]|region] [--audio] [--system-audio] [--stream [--title TITLE]] [-c] [-n]
        t3os screen record stop|status
        t3os screen ocr [-n]
        t3os screen color-pick [-c] [-n]
@@ -152,7 +162,7 @@ record)
       sleep 0.1
     done
     [ "$clip" = 1 ] && [ -s "$run/last" ] && wl-copy --type text/uri-list <<<"file://$(cat "$run/last")"
-    cat "$run/last" 2>/dev/null
+    cat "$run/last" 2>/dev/null || true
     exit 0
     ;;
   status)
@@ -174,6 +184,7 @@ record)
   logical='{name, x, y, w: (.width / .scale | floor), h: (.height / .scale | floor)}'
   pick() { slurp -b '#ffffff33' -c "${T3OS_ACCENT:-#1d9eb6}ff" -w 2 -f '%x %y %w %h' "$@"; }
   output=""
+  cam=null
   interactive=false
   case "${mode:-monitor}" in
   monitor)
@@ -205,8 +216,38 @@ record)
     ;;
   region)
     interactive=true
-    read -r x y w h < <(pick) || true
     what="a region"
+    fifo="$run/pick"
+    rm -f "$fifo"
+    mkfifo "$fifo"
+    exec 3<>"$fifo"
+    if ipc=$(qs ipc call recorder pick "$fifo" 2>&1) && [ -z "$ipc" ]; then
+      IFS= read -r -t 900 -u 3 picked || picked=""
+      exec 3>&-
+      rm -f "$fifo"
+      if [ -z "$picked" ] || jq -e '.cancel' <<<"$picked" >/dev/null 2>&1; then
+        echo "recording cancelled" >&2
+        exit 1
+      fi
+      read -r x y w h < <(jq -r '[.x, .y, .w, .h] | @tsv' <<<"$picked")
+      cam=$(jq -c '.cam' <<<"$picked")
+      [ "$(jq -r '.mic' <<<"$picked")" = true ] && audio=1
+      [ "$(jq -r '.sys' <<<"$picked")" = true ] && sysaudio=1
+      if [ "$(jq -r '.live' <<<"$picked")" = true ]; then
+        live=1
+        title=$(jq -r '.title // ""' <<<"$picked")
+      fi
+      if [ "$(jq -r '.full' <<<"$picked")" = true ]; then
+        output=$(jq -r '.output' <<<"$picked")
+        wf=(-o "$output")
+        mode=monitor
+        what="monitor $output"
+      fi
+    else
+      exec 3>&-
+      rm -f "$fifo"
+      read -r x y w h < <(pick) || true
+    fi
     ;;
   esac
   [ -n "${w:-}" ] && [ "$w" -gt 1 ] && [ "$h" -gt 1 ] || { echo "recording cancelled" >&2; exit 1; }
@@ -217,17 +258,53 @@ record)
     output=$(jq -r --argjson x "$x" --argjson y "$y" 'first(.[] | select(.x <= $x and .y <= $y and $x < .x + (.width / .scale) and $y < .y + (.height / .scale)) | .name) // (first(.[] | select(.focused)) | .name)' <<<"$monitors")
     wf=(-g "$x,$y ${w}x$h")
   fi
-  [ "$audio" = 1 ] && wf+=(--audio)
+  if [ "$live" = 1 ]; then
+    fail() {
+      [ "$notify" = 1 ] && notify-send -u critical -h string:x-t3bus:skip "Twitch" "$1"
+      t3cron emit screen/stream/failed error "$1" --source t3os >/dev/null 2>&1 || true
+      echo "$1" >&2
+      exit 1
+    }
+    if [ -n "$title" ]; then
+      stream_url=$(t3os twitch ingest --title "$title" 2>"$run/twitch.err") || fail "Twitch: $(cat "$run/twitch.err")"
+    else
+      stream_url=$(t3os twitch ingest 2>"$run/twitch.err") || fail "Twitch: $(cat "$run/twitch.err")"
+    fi
+    if [ -e /dev/dri/renderD128 ]; then
+      wf+=(-c h264_vaapi -d /dev/dri/renderD128 -p rc_mode=CBR -p b=6000k -p maxrate=6000k -p g=60)
+    else
+      wf+=(-c libx264 -p preset=veryfast -p b=6000k -p maxrate=6000k -p bufsize=12000k -p g=60)
+    fi
+    wf+=(-r 30 -C aac -P b=160k --muxer=flv)
+  fi
+  rm -f "$run/modules"
+  if [ "$audio" = 1 ] || [ "$sysaudio" = 1 ]; then
+    mic=$(pactl get-default-source)
+    monitor="$(pactl get-default-sink).monitor"
+    if [ "$audio" = 1 ] && [ "$sysaudio" = 1 ]; then
+      {
+        pactl load-module module-null-sink sink_name=t3os-rec sink_properties=device.description=t3os-rec
+        pactl load-module module-loopback source="$mic" sink=t3os-rec latency_msec=20
+        pactl load-module module-loopback source="$monitor" sink=t3os-rec latency_msec=20
+      } >"$run/modules"
+      wf+=(--audio=t3os-rec.monitor)
+    elif [ "$audio" = 1 ]; then
+      wf+=(--audio="$mic")
+    else
+      wf+=(--audio="$monitor")
+    fi
+  fi
 
   dir="${XDG_VIDEOS_DIR:-$HOME/Videos}/Recordings"
   mkdir -p "$dir"
   file="$dir/$(date +%Y-%m-%d-%H%M%S)_${mode:-monitor}.mp4"
+  [ "$live" = 1 ] && file=twitch
   jq -nc --arg output "$output" --argjson x "$x" --argjson y "$y" --argjson w "$w" --argjson h "$h" \
     --arg path "$file" --arg mode "${mode:-monitor}" --arg what "$what" --argjson interactive "$interactive" \
-    --argjson started "$(date +%s%3N)" '{output: $output, x: $x, y: $y, w: $w, h: $h, path: $path, mode: $mode, what: $what, interactive: $interactive, started: $started}' >"$run/session"
+    --argjson cam "$cam" --argjson mic "$audio" --argjson sys "$sysaudio" --argjson live "$live" --arg title "$title" --argjson started "$(date +%s%3N)" '{output: $output, x: $x, y: $y, w: $w, h: $h, path: $path, mode: $mode, what: $what, interactive: $interactive, cam: $cam, audio: {mic: ($mic == 1), system: ($sys == 1)}, stream: ($live == 1), title: $title, started: $started}' >"$run/session"
   rm -f "$run/last"
 
-  T3OS_REC_CLIP=$clip T3OS_REC_NOTIFY=$notify setsid -f "$0" _supervise "${wf[@]}" >/dev/null 2>&1 </dev/null
+  T3OS_STREAM_URL=${stream_url:-} T3OS_REC_CLIP=$clip T3OS_REC_NOTIFY=$notify setsid -f "$0" _supervise "${wf[@]}" >/dev/null 2>&1 </dev/null
   for _ in $(seq 30); do
     alive && break
     sleep 0.1
@@ -236,8 +313,13 @@ record)
     echo "wf-recorder did not start, see $run/wf-recorder.log" >&2
     exit 1
   fi
-  [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip -t 2000 "⏺ Recording" "$what"
-  echo "$file"
+  if [ "$live" = 1 ]; then
+    [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip -t 2000 "🔴 Live on Twitch" "${title:-$what}"
+    echo live
+  else
+    [ "$notify" = 1 ] && notify-send -h string:x-t3bus:skip -t 2000 "⏺ Recording" "$what"
+    echo "$file"
+  fi
   ;;
 
 _supervise)
@@ -248,16 +330,50 @@ _supervise)
   started=$(jq -r .started <<<"$session")
   args=()
   while [ $# -gt 0 ]; do args+=("$1"); shift; done
-  wf-recorder "${args[@]}" -f "$file" >"$run/wf-recorder.log" 2>&1 &
-  echo $! >"$run/pid"
-  mosquitto_pub -h 127.0.0.1 -r -t screen/record/state -m "$session" >/dev/null 2>&1 || true
-  emit screen/record/started "Started recording $what." "$(jq -c '{detail: (.path | split("/") | last), path, mode, interactive}' <<<"$session")"
-  wait "$(cat "$run/pid")" || true
+  if [ -n "${T3OS_STREAM_URL:-}" ]; then
+    echo $$ >"$run/pid"
+    stopping=0
+    child=""
+    trap 'stopping=1; [ -n "$child" ] && kill -INT "$child" 2>/dev/null' INT TERM
+    mosquitto_pub -h 127.0.0.1 -r -t screen/record/state -m "$session" >/dev/null 2>&1 || true
+    emit screen/stream/started "Went live on Twitch." "$(jq -c '{detail: .title, title, mode, cam: (.cam != null)}' <<<"$session")"
+    setsid t3os twitch relay >/dev/null 2>&1 </dev/null &
+    chat=$!
+    : >"$run/wf-recorder.log"
+    backoff=2
+    while [ "$stopping" = 0 ]; do
+      began=$(date +%s)
+      wf-recorder "${args[@]}" -f "$T3OS_STREAM_URL" > >(sed -u "s#/app/[^ ?']*#/app/<key>#g" >>"$run/wf-recorder.log") 2>&1 &
+      child=$!
+      while kill -0 "$child" 2>/dev/null; do wait "$child" || true; done
+      child=""
+      [ "$stopping" = 1 ] && break
+      [ $(($(date +%s) - began)) -gt 30 ] && backoff=2
+      t3cron emit screen/stream/reconnecting warn "Twitch stream dropped, reconnecting in ${backoff}s." --source t3os --data "$(jq -nc --arg log "$(tail -c 300 "$run/wf-recorder.log")" '{detail: "stream dropped", log: $log}')" >/dev/null 2>&1 || true
+      sleep "$backoff" &
+      wait $! || true
+      backoff=$((backoff < 30 ? backoff * 2 : 30))
+    done
+    kill -- -"$chat" 2>/dev/null || true
+  else
+    wf-recorder "${args[@]}" -f "$file" >"$run/wf-recorder.log" 2>&1 &
+    echo $! >"$run/pid"
+    mosquitto_pub -h 127.0.0.1 -r -t screen/record/state -m "$session" >/dev/null 2>&1 || true
+    emit screen/record/started "Started recording $what." "$(jq -c '{detail: (.path | split("/") | last), path, mode, interactive, cam: (.cam != null)}' <<<"$session")"
+    wait "$(cat "$run/pid")" || true
+  fi
+  if [ -f "$run/modules" ]; then
+    while read -r id; do pactl unload-module "$id" >/dev/null 2>&1 || true; done <"$run/modules"
+    rm -f "$run/modules"
+  fi
   rm -f "$run/pid"
   mosquitto_pub -h 127.0.0.1 -r -t screen/record/state -m idle >/dev/null 2>&1 || true
   now=$(date +%s%3N)
   secs=$(((now - started) / 1000))
-  if [ -s "$file" ]; then
+  if [ -n "${T3OS_STREAM_URL:-}" ]; then
+    [ "${T3OS_REC_NOTIFY:-0}" = 1 ] && notify-send -h string:x-t3bus:skip "⏹ Stream ended" "live for ${secs}s"
+    emit screen/stream/stopped "Twitch stream ended after ${secs}s." "$(jq -nc --argjson secs "$secs" '{detail: "\($secs)s live", seconds: $secs}')"
+  elif [ -s "$file" ]; then
     echo "$file" >"$run/last"
     [ "${T3OS_REC_CLIP:-0}" = 1 ] && wl-copy --type text/uri-list <<<"file://$file"
     [ "${T3OS_REC_NOTIFY:-0}" = 1 ] && notify-send -h string:x-t3bus:skip "⏹ Recording saved" "$(basename "$file") · ${secs}s"

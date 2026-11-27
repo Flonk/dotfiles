@@ -27,6 +27,8 @@ in
       };
     };
 
+    twitch.enable = lib.mkEnableOption "the go-live toggle in the recorder and the twitch mode of the bar";
+
     label = {
       size = mkOption {
         type = types.int;
